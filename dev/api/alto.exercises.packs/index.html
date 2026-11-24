@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,18 +676,21 @@
         <article>
           <h1>alto.exercises.packs</h1>
           
-<p>Load third-party instrument packs from ZIP archives and authoring folders.</p>
+<p>Load third-party instrument packs from ZIP archives and authoring
+folders.</p>
 
 <h2 id="packexercise">PackExercise</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PackExercise</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>A finite set of illustrated multiple-choice cards declared by an instrument pack.</p>
+<p>A finite set of illustrated multiple-choice cards declared by an
+instrument pack.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The viola pack contributes one practice card for every eligible string and pitch.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The viola pack contributes one practice card for every eligible
+string and pitch.
 </code></pre></div></div>
 
 <h3 id="packexerciseoptions">PackExercise.options</h3>
@@ -696,7 +699,8 @@
 <span class="k">def</span> <span class="nf">options</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">settings</span><span class="p">.</span><span class="n">PackExerciseSettings</span>
 </code></pre></div></div>
 
-<p>Return the learner’s options for this exercise, creating the defaults the first time.</p>
+<p>Return the learner’s options for this exercise, creating the
+defaults the first time.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -709,7 +713,10 @@
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">span</span> <span class="o">=</span> <span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">range_clef</span> <span class="o">=</span> <span class="s">"alto"</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">.</span><span class="n">options</span><span class="p">().</span><span class="n">range_for</span><span class="p">(</span><span class="s">"alto"</span><span class="p">),</span> <span class="n">Demo</span><span class="p">.</span><span class="n">options</span><span class="p">().</span><span class="n">sound</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Demo</span><span class="p">.</span><span class="n">options</span><span class="p">().</span><span class="n">range_for</span><span class="p">(</span><span class="s">"alto"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Demo</span><span class="p">.</span><span class="n">options</span><span class="p">().</span><span class="n">sound</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">((21, 30), None)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -753,7 +760,10 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">key_span</span><span class="p">,</span> <span class="n">key_default</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span> <span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key_span</span><span class="p">,</span> <span class="n">key_default</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">.</span><span class="n">chosen_keys</span><span class="p">()</span>
 <span class="go">(48, 72)
 </span></code></pre></div></div>
@@ -764,7 +774,8 @@
 <span class="k">def</span> <span class="nf">chosen_span</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Name the lowest and highest key a keyboard exercise asks, for drawing the keyboards over that range.</p>
+<p>Name the lowest and highest key a keyboard exercise asks, for
+drawing the keyboards over that range.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -775,7 +786,10 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">key_span</span><span class="p">,</span> <span class="n">key_default</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span> <span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key_span</span><span class="p">,</span> <span class="n">key_default</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">.</span><span class="n">chosen_span</span><span class="p">()</span>
 <span class="go">('C3', 'C5')
 </span></code></pre></div></div>
@@ -808,7 +822,8 @@
 <span class="k">def</span> <span class="nf">chosen_manuals</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div></div>
 
-<p>Find the keyboards a keyboard exercise puts its highlighted keys on.</p>
+<p>Find the keyboards a keyboard exercise puts its highlighted keys
+on.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -819,7 +834,10 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">manual_names</span> <span class="o">=</span> <span class="p">(</span><span class="s">"Upper manual"</span><span class="p">,</span> <span class="s">"Lower manual"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">manual_names</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"Upper manual"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"Lower manual"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">.</span><span class="n">chosen_manuals</span><span class="p">()</span>
 <span class="go">('Upper manual', 'Lower manual')
 </span></code></pre></div></div>
@@ -829,7 +847,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_cards</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Question</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div></div>
 
-<p>Build the cards for the learner’s settings: the sharps and flats, the octave, and the range they chose.</p>
+<p>Build the cards for the learner’s settings: the sharps and
+flats, the octave, and the range they chose.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -839,7 +858,8 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>An exercise whose pack declares no settings always asks every card.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>An exercise whose pack declares no settings always asks every
+card.
 </code></pre></div></div>
 
 <h3 id="packexercisesound_instrument">PackExercise.sound_instrument</h3>
@@ -847,7 +867,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sound_instrument</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Play the pack’s own sound unless the pack offers the choice and the learner chose another instrument.</p>
+<p>Play the pack’s own sound unless the pack offers the choice and
+the learner chose another instrument.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -863,7 +884,8 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>An exercise with no sound setting always plays the pack's instrument.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>An exercise with no sound setting always plays the pack's
+instrument.
 </code></pre></div></div>
 
 <h3 id="packexercisesound_options">PackExercise.sound_options</h3>
@@ -872,10 +894,13 @@
 <span class="k">def</span> <span class="nf">sound_options</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]]</span>
 </code></pre></div></div>
 
-<p>List the instruments a learner can choose to sound in this exercise, in the order they are offered.</p>
+<p>List the instruments a learner can choose to sound in this
+exercise, in the order they are offered.</p>
 
-<p>The instruments that came with the plugin come first, then other instruments of the same kind (other harpsichords
-for a harpsichord), then every other installed instrument, whatever its kind. An instrument with no recordings on
+<p>The instruments that came with the plugin come first, then other
+instruments of the same kind (other harpsichords
+for a harpsichord), then every other installed instrument,
+whatever its kind. An instrument with no recordings on
 disk is left out.</p>
 
 <p><strong>Returns</strong></p>
@@ -890,7 +915,10 @@ disk is left out.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">pack_name</span> <span class="o">=</span> <span class="s">"Demo pack"</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">instruments</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">heading</span> <span class="k">for</span> <span class="n">heading</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">Demo</span><span class="p">.</span><span class="n">sound_options</span><span class="p">()]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">heading</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">heading</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">Demo</span><span class="p">.</span><span class="n">sound_options</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">['Other instruments']
 </span></code></pre></div></div>
 
@@ -909,7 +937,8 @@ disk is left out.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Adding an eligible pitch changes the signature, and so does asking sharps and flats or the octave.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Adding an eligible pitch changes the signature, and so does
+asking sharps and flats or the octave.
 </code></pre></div></div>
 
 <h3 id="packexerciserefresh">PackExercise.refresh</h3>
@@ -917,7 +946,8 @@ disk is left out.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
-<p>Restore the instrument reference on cards saved by the single-instrument prototype.</p>
+<p>Restore the instrument reference on cards saved by the
+single-instrument prototype.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -933,7 +963,8 @@ disk is left out.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>An existing D-string card keeps its original position when a pack is upgraded.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>An existing D-string card keeps its original position when a
+pack is upgraded.
 </code></pre></div></div>
 
 <h3 id="packexercisemake_question">PackExercise.make_question</h3>
@@ -1036,9 +1067,16 @@ disk is left out.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_controls</span><span class="p">({</span><span class="s">"range"</span><span class="p">:</span> <span class="s">"alto"</span><span class="p">,</span> <span class="s">"octave"</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.notes"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_controls</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="s">"range"</span><span class="p">:</span> <span class="s">"alto"</span><span class="p">,</span> <span class="s">"octave"</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">where</span><span class="o">=</span><span class="s">"pack.v.notes"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">{'range': 'alto', 'octave': True}
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_controls</span><span class="p">({</span><span class="s">"range"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">"intervals"</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.keys"</span><span class="p">,</span> <span class="n">kinds</span><span class="o">=</span><span class="n">KEYBOARD_CONTROL_KINDS</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_controls</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="s">"range"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">"intervals"</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">where</span><span class="o">=</span><span class="s">"pack.v.keys"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">kinds</span><span class="o">=</span><span class="n">KEYBOARD_CONTROL_KINDS</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">{'range': True, 'intervals': True}
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_controls</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.notes"</span><span class="p">)</span>
 <span class="go">{}
@@ -1049,7 +1087,8 @@ disk is left out.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_pack</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">PackExercise</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Read and validate every exercise before making any of them available.</p>
+<p>Read and validate every exercise before making any of them
+available.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1071,7 +1110,8 @@ disk is left out.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The viola example contributes note identification and instrument anatomy exercises.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The viola example contributes note identification and instrument
+anatomy exercises.
 </code></pre></div></div>
 
 <h2 id="pack_manifests">pack_manifests</h2>
@@ -1079,7 +1119,8 @@ disk is left out.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">pack_manifests</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Find each installed ZIP or folder manifest, including packs that failed validation.</p>
+<p>Find each installed ZIP or folder manifest, including packs that
+failed validation.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1103,7 +1144,8 @@ disk is left out.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_pack_info</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
 </code></pre></div></div>
 
-<p>Read a pack’s manifest for display or duplicate detection without loading its media.</p>
+<p>Read a pack’s manifest for display or duplicate detection without
+loading its media.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1147,7 +1189,12 @@ disk is left out.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">plugin</span> <span class="o">=</span> <span class="n">InstalledPlugin</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">"Viola"</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"viola.zip"</span><span class="p">),</span> <span class="n">manifest</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"viola.zip"</span><span class="p">),</span> <span class="n">snapshot</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="n">stat</span><span class="p">(</span><span class="s">"."</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">plugin</span> <span class="o">=</span> <span class="n">InstalledPlugin</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"Viola"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"viola.zip"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">manifest</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"viola.zip"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">snapshot</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="n">stat</span><span class="p">(</span><span class="s">"."</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">plugin</span><span class="p">.</span><span class="n">title</span>
 <span class="go">'Viola'
 </span></code></pre></div></div>
@@ -1157,7 +1204,8 @@ disk is left out.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_plugins</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">InstalledPlugin</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>List the packs in the plugins folder, including damaged ones, so each can be removed.</p>
+<p>List the packs in the plugins folder, including damaged ones, so
+each can be removed.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1174,7 +1222,9 @@ disk is left out.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">installed_plugins</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">installed_plugins</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">([], [])
 </span></code></pre></div></div>
 
@@ -1189,7 +1239,8 @@ disk is left out.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Validate a copy of the selected ZIP and install it for the next startup.</p>
+<p>Validate a copy of the selected ZIP and install it for the next
+startup.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1215,7 +1266,8 @@ disk is left out.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Installing a downloaded viola.zip adds both of its exercises on the next launch.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Installing a downloaded viola.zip adds both of its exercises on the
+next launch.
 </code></pre></div></div>
 
 <h2 id="load_packs">load_packs</h2>
@@ -1223,7 +1275,8 @@ disk is left out.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_packs</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Register valid packs and return readable errors for any packs that were skipped.</p>
+<p>Register valid packs and return readable errors for any packs that
+were skipped.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1409,8 +1462,8 @@ disk is left out.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

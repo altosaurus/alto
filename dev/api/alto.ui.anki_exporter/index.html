@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.ui.anki_exporter</h1>
           
-<p>Modeless Anki deck exporter using Alto’s exercise controls and music engraving.</p>
+<p>Modeless Anki deck exporter using Alto’s exercise controls and music
+engraving.</p>
 
 <h2 id="card_fields">card_fields</h2>
 
@@ -713,7 +714,8 @@
 
 <p><strong>Constructor</strong></p>
 
-<p>Build the deck navigation, card preview, and private exercise settings.</p>
+<p>Build the deck navigation, card preview, and private exercise
+settings.</p>
 
 <h3 id="ankiexporterchangeevent">AnkiExporter.changeEvent</h3>
 
@@ -727,14 +729,16 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Keep the export process alive until the destination dialog can close.</p>
+<p>Keep the export process alive until the destination dialog can
+close.</p>
 
 <h2 id="exportersession">ExporterSession</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ExporterSession</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>Manage a modeless Qt window with its own exercise settings and Qt settings store.</p>
+<p>Manage a modeless Qt window with its own exercise settings and Qt
+settings store.</p>
 
 <p><strong>Constructor</strong></p>
 
@@ -749,7 +753,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Raise the existing exporter or spawn a window for the active profile.</p>
+<p>Raise the existing exporter or spawn a window for the active
+profile.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -769,14 +774,16 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sync_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Forward the selected palette and any custom colors to an open exporter.</p>
+<p>Forward the selected palette and any custom colors to an open
+exporter.</p>
 
 <h3 id="exportersessionclose">ExporterSession.close</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">close</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Close the command pipe so the exporter can finish its current write and exit normally.</p>
+<p>Close the command pipe so the exporter can finish its current
+write and exit normally.</p>
 
 
           
@@ -987,8 +994,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

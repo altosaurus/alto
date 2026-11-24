@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,14 +676,18 @@
         <article>
           <h1>alto.ui.icons</h1>
           
-<p>Small monochrome icons drawn from SVG, tinted with the current theme’s text color.</p>
+<p>Small monochrome icons drawn from SVG, tinted with the current theme’s
+text color.</p>
 
-<p>Each icon is the inside of a 24 by 24 SVG, written with the word COLOR where the theme color goes. <code class="language-plaintext highlighter-rouge">svg_icon</code> turns one
+<p>Each icon is the inside of a 24 by 24 SVG, written with the word COLOR
+where the theme color goes. <code class="language-plaintext highlighter-rouge">svg_icon</code> turns one
 into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">svg_icon</span><span class="p">(</span><span class="n">HELP</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">)).</span><span class="n">isNull</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">svg_icon</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">HELP</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -695,7 +699,8 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Assign a native Qt icon and refresh it whenever the application palette changes.</p>
+<p>Assign a native Qt icon and refresh it whenever the application
+palette changes.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -708,7 +713,12 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="n">QPushButton</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_palette_icon</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">palette</span><span class="p">:</span> <span class="n">svg_icon</span><span class="p">(</span><span class="n">HELP</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">.</span><span class="n">text</span><span class="p">().</span><span class="n">color</span><span class="p">()))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_palette_icon</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">button</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span> <span class="n">palette</span><span class="p">:</span> <span class="n">svg_icon</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">HELP</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">.</span><span class="n">text</span><span class="p">().</span><span class="n">color</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">icon</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
@@ -724,7 +734,8 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Tint an SVG icon with the control’s current foreground or accent color.</p>
+<p>Tint an SVG icon with the control’s current foreground or accent
+color.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -752,7 +763,8 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Recolor the current rows of a navigation list or tree without rebuilding it.</p>
+<p>Recolor the current rows of a navigation list or tree without
+rebuilding it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -763,7 +775,8 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A category tree keeps its checked and expanded items when the theme changes.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A category tree keeps its checked and expanded items when the theme
+changes.
 </code></pre></div></div>
 
 <h2 id="svg_icon">svg_icon</h2>
@@ -796,7 +809,9 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">icon</span> <span class="o">=</span> <span class="n">svg_icon</span><span class="p">(</span><span class="n">PLAY</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#336699"</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">icon</span> <span class="o">=</span> <span class="n">svg_icon</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">PLAY</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#336699"</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">icon</span><span class="p">.</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
@@ -1046,8 +1061,8 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

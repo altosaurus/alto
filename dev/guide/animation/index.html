@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -761,19 +761,27 @@ to build a transition by hand:</p>
 </span>    <span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">currentWidget</span><span class="p">(),</span> <span class="bp">self</span><span class="p">.</span><span class="n">widget</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
     <span class="n">w</span><span class="p">,</span> <span class="n">sign</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">width</span><span class="p">(),</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">currentIndex</span><span class="p">()</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
     <span class="n">new</span><span class="p">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">height</span><span class="p">())</span>
-    <span class="n">new</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">sign</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># park the new page just outside, on the side it enters from
+    <span class="n">new</span><span class="p">.</span><span class="n">move</span><span class="p">(</span>
+        <span class="n">sign</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="p">)</span>  <span class="c1"># park the new page just outside, on the side it enters from
 </span>    <span class="n">new</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
     <span class="n">new</span><span class="p">.</span><span class="n">raise_</span><span class="p">()</span>
     <span class="n">group</span> <span class="o">=</span> <span class="n">QParallelAnimationGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">widget</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="p">((</span><span class="n">old</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">sign</span> <span class="o">*</span> <span class="n">w</span><span class="p">),</span> <span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
-        <span class="n">anim</span> <span class="o">=</span> <span class="n">QPropertyAnimation</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="sa">b</span><span class="s">"pos"</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>  <span class="c1"># animate the widget's own position property
+        <span class="n">anim</span> <span class="o">=</span> <span class="n">QPropertyAnimation</span><span class="p">(</span>
+            <span class="n">widget</span><span class="p">,</span> <span class="sa">b</span><span class="s">"pos"</span><span class="p">,</span> <span class="n">group</span>
+        <span class="p">)</span>  <span class="c1"># animate the widget's own position property
 </span>        <span class="n">anim</span><span class="p">.</span><span class="n">setDuration</span><span class="p">(</span><span class="mi">220</span><span class="p">)</span>
         <span class="n">anim</span><span class="p">.</span><span class="n">setEasingCurve</span><span class="p">(</span><span class="n">QEasingCurve</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">OutCubic</span><span class="p">)</span>
         <span class="n">anim</span><span class="p">.</span><span class="n">setStartValue</span><span class="p">(</span><span class="n">QPoint</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="n">anim</span><span class="p">.</span><span class="n">setEndValue</span><span class="p">(</span><span class="n">QPoint</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="n">group</span><span class="p">.</span><span class="n">addAnimation</span><span class="p">(</span><span class="n">anim</span><span class="p">)</span>
-    <span class="n">group</span><span class="p">.</span><span class="n">finished</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>  <span class="c1"># setCurrentIndex(index) and put both pages at (0, 0)
-</span>    <span class="n">motion</span><span class="p">.</span><span class="n">play</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>  <span class="c1"># group.start(), held still in tests until they settle it
+    <span class="n">group</span><span class="p">.</span><span class="n">finished</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="n">done</span>
+    <span class="p">)</span>  <span class="c1"># setCurrentIndex(index) and put both pages at (0, 0)
+</span>    <span class="n">motion</span><span class="p">.</span><span class="n">play</span><span class="p">(</span>
+        <span class="n">group</span>
+    <span class="p">)</span>  <span class="c1"># group.start(), held still in tests until they settle it
 </span></code></pre></div></div>
 
 <p>Points to copy: the new page is positioned off-screen <em>before</em> it is shown (otherwise it flashes in place for one frame); the two
@@ -890,7 +898,9 @@ the test takes, until the test calls <code class="language-plaintext highlighter
 looks like this:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">view</span><span class="p">.</span><span class="n">answer_button</span><span class="p">.</span><span class="n">click</span><span class="p">()</span>
-<span class="k">assert</span> <span class="n">view</span><span class="p">.</span><span class="n">missed</span> <span class="ow">and</span> <span class="n">view</span><span class="p">.</span><span class="n">scale_input</span><span class="p">.</span><span class="n">locked</span>  <span class="c1"># the wrong-answer feedback is showing
+<span class="k">assert</span> <span class="p">(</span>
+    <span class="n">view</span><span class="p">.</span><span class="n">missed</span> <span class="ow">and</span> <span class="n">view</span><span class="p">.</span><span class="n">scale_input</span><span class="p">.</span><span class="n">locked</span>
+<span class="p">)</span>  <span class="c1"># the wrong-answer feedback is showing
 </span><span class="n">motion</span><span class="p">.</span><span class="n">settle</span><span class="p">()</span>  <span class="c1"># the feedback ends
 </span><span class="k">assert</span> <span class="ow">not</span> <span class="n">view</span><span class="p">.</span><span class="n">scale_input</span><span class="p">.</span><span class="n">locked</span>  <span class="c1"># cleared to try again
 </span></code></pre></div></div>
@@ -1069,8 +1079,8 @@ w3.org/TR/WCAG21: on motion and people who are sensitive to it.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

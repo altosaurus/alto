@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.ui.circle_colors</h1>
           
-<p>The pages of the circle of fifths settings that choose its colors: a grid of schemes to pick from, and an editor to make one.</p>
+<p>The pages of the circle of fifths settings that choose its colors: a
+grid of schemes to pick from, and an editor to make one.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -690,7 +691,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">blank</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CustomRecord</span>
 </code></pre></div></div>
 
-<p>Make the scheme a new one starts as: colors by key signature, from cyan through blue to indigo, on dark wedges.</p>
+<p>Make the scheme a new one starts as: colors by key signature, from
+cyan through blue to indigo, on dark wedges.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -706,7 +708,10 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blank</span><span class="p">(</span><span class="s">"custom-3"</span><span class="p">)[</span><span class="s">"id"</span><span class="p">],</span> <span class="n">blank</span><span class="p">(</span><span class="s">"custom-3"</span><span class="p">)[</span><span class="s">"mode"</span><span class="p">]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">blank</span><span class="p">(</span><span class="s">"custom-3"</span><span class="p">)[</span><span class="s">"id"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">blank</span><span class="p">(</span><span class="s">"custom-3"</span><span class="p">)[</span><span class="s">"mode"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('custom-3', 'signature')
 </span></code></pre></div></div>
 
@@ -722,7 +727,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
 
-<p>A small picture of the circle in a color scheme, to click to choose the scheme.</p>
+<p>A small picture of the circle in a color scheme, to click to choose
+the scheme.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -735,7 +741,8 @@
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">thumb</span> <span class="o">=</span> <span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">thumb</span><span class="p">.</span><span class="n">isCheckable</span><span class="p">(),</span> <span class="n">thumb</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
-<span class="go">(True, 'Pastel wedges of every hue with dark names, which deepen when lit.')
+<span class="go">(True, 'Pastel wedges of every hue with dark names, which deepen
+when lit.')
 </span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
@@ -753,7 +760,9 @@
 <p><strong>Constructor examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">80</span><span class="p">).</span><span class="n">width</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">80</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">width</span><span class="p">()</span>
 <span class="go">80
 </span></code></pre></div></div>
 
@@ -773,7 +782,9 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">90</span><span class="p">).</span><span class="n">sizeHint</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">90</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">sizeHint</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
 <span class="go">90
 </span></code></pre></div></div>
 
@@ -782,7 +793,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the circle, with one cell asked and its relative lit, and a ring around it when it is the chosen scheme.</p>
+<p>Draw the circle, with one cell asked and its relative lit, and a
+ring around it when it is the chosen scheme.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -793,7 +805,9 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"midnight"</span><span class="p">)).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">preset</span><span class="p">(</span><span class="s">"midnight"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -804,7 +818,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The page that lists the color schemes: the presets, the user’s own, and a button to make another.</p>
+<p>The page that lists the color schemes: the presets, the user’s own,
+and a button to make another.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -819,7 +834,10 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">SchemePage</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">current</span><span class="o">=</span><span class="s">"midnight"</span><span class="p">,</span> <span class="n">customs</span><span class="o">=</span><span class="p">[])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"midnight"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"midnight"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, 14)
 </span></code></pre></div></div>
 
@@ -848,7 +866,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Fill the page: a picture and a name for each scheme, with the current one marked.</p>
+<p>Fill the page: a picture and a name for each scheme, with the
+current one marked.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -861,9 +880,19 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">SchemePage</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">record_of</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">mine</span> <span class="o">=</span> <span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"single"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">current</span><span class="o">=</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">customs</span><span class="o">=</span><span class="p">[</span><span class="n">mine</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"custom-1"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span> <span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"midnight"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">mine</span> <span class="o">=</span> <span class="n">record_of</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"custom-1"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"single"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">load</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">current</span><span class="o">=</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">customs</span><span class="o">=</span><span class="p">[</span><span class="n">mine</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"custom-1"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"midnight"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, False)
 </span></code></pre></div></div>
 
@@ -874,9 +903,11 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The editor for a color scheme of the user’s own: a name, how its colors are made, and the colors.</p>
+<p>The editor for a color scheme of the user’s own: a name, how its
+colors are made, and the colors.</p>
 
-<p>The colors are what a cell looks like when lit; the quiet cells are made from them. A picture shows the result as it is
+<p>The colors are what a cell looks like when lit; the quiet cells are
+made from them. A picture shows the result as it is
 edited.</p>
 
 <p><strong>Attributes</strong></p>
@@ -896,7 +927,10 @@ edited.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">SchemeEditor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">taken</span><span class="o">=</span><span class="p">[])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"mode"</span><span class="p">],</span> <span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"id"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"mode"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"id"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('signature', 'custom-1')
 </span></code></pre></div></div>
 
@@ -938,7 +972,10 @@ edited.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">SchemeEditor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">taken</span><span class="o">=</span><span class="p">[])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">editor</span><span class="p">.</span><span class="n">delete_button</span><span class="p">.</span><span class="n">isHidden</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">editor</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">editor</span><span class="p">.</span><span class="n">delete_button</span><span class="p">.</span><span class="n">isHidden</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('My colors', True)
 </span></code></pre></div></div>
 
@@ -1213,8 +1250,8 @@ edited.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

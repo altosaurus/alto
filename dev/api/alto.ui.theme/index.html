@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,9 +676,11 @@
         <article>
           <h1>alto.ui.theme</h1>
           
-<p>The color theme: follow the system, force light or dark, or use a theme with colors of its own.</p>
+<p>The color theme: follow the system, force light or dark, or use a theme
+with colors of its own.</p>
 
-<p>A theme with colors of its own is a <code class="language-plaintext highlighter-rouge">CustomTheme</code>: a fixed palette that is light or dark whatever the desktop is set to.</p>
+<p>A theme with colors of its own is a <code class="language-plaintext highlighter-rouge">CustomTheme</code>: a fixed palette that
+is light or dark whatever the desktop is set to.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -725,7 +727,11 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">key</span><span class="p">,</span> <span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dark</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">CUSTOM_THEMES</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">key</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dark</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">CUSTOM_THEMES</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('studio', False, 50)
 </span></code></pre></div></div>
 
@@ -757,7 +763,14 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">hsl_hex</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">lightness</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span> <span class="n">hsl_hex</span><span class="p">(</span><span class="mi">210</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lightness</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">hsl_hex</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">0</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">lightness</span><span class="o">=</span><span class="mi">50</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">hsl_hex</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">210</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lightness</span><span class="o">=</span><span class="mi">100</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('#ff0000', '#ffffff')
 </span></code></pre></div></div>
 
@@ -766,7 +779,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">seeded_themes</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CustomTheme</span><span class="p">,</span> <span class="n">CustomTheme</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Make the light and the dark theme of a seed: neutrals tinted by one hue, and an accent of another.</p>
+<p>Make the light and the dark theme of a seed: neutrals tinted by one
+hue, and an accent of another.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -808,8 +822,15 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">family_of</span><span class="p">(</span><span class="s">"sage_dark"</span><span class="p">),</span> <span class="n">family_of</span><span class="p">(</span><span class="s">"sage"</span><span class="p">),</span> <span class="n">family_of</span><span class="p">(</span><span class="s">"sage_auto"</span><span class="p">),</span> <span class="n">family_of</span><span class="p">(</span><span class="s">"dark"</span><span class="p">),</span> <span class="n">family_of</span><span class="p">(</span><span class="s">"system"</span><span class="p">)</span>
-<span class="go">(('sage', 'dark'), ('sage', 'light'), ('sage', 'system'), ('default', 'dark'), ('default', 'system'))
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">family_of</span><span class="p">(</span><span class="s">"sage_dark"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">family_of</span><span class="p">(</span><span class="s">"sage"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">family_of</span><span class="p">(</span><span class="s">"sage_auto"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">family_of</span><span class="p">(</span><span class="s">"dark"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">family_of</span><span class="p">(</span><span class="s">"system"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(('sage', 'dark'), ('sage', 'light'), ('sage', 'system'),
+('default', 'dark'), ('default', 'system'))
 </span></code></pre></div></div>
 
 <h2 id="variant_key">variant_key</h2>
@@ -838,7 +859,11 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">variant_key</span><span class="p">(</span><span class="s">"sage"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">"dark"</span><span class="p">),</span> <span class="n">variant_key</span><span class="p">(</span><span class="s">"sage"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">"system"</span><span class="p">),</span> <span class="n">variant_key</span><span class="p">(</span><span class="s">"default"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">"dark"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">variant_key</span><span class="p">(</span><span class="s">"sage"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">"dark"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">variant_key</span><span class="p">(</span><span class="s">"sage"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">"system"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">variant_key</span><span class="p">(</span><span class="s">"default"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">"dark"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('sage_dark', 'sage_auto', 'dark')
 </span></code></pre></div></div>
 
@@ -847,11 +872,17 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ThemeRecord</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>A theme the user made, as it is saved: its key, its name, and the colors of its light and dark versions.</p>
+<p>A theme the user made, as it is saved: its key, its name, and the
+colors of its light and dark versions.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeRecord</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">"my_1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">light</span><span class="o">=</span><span class="p">{},</span> <span class="n">dark</span><span class="o">=</span><span class="p">{})[</span><span class="s">"name"</span><span class="p">]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeRecord</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">id</span><span class="o">=</span><span class="s">"my_1"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">light</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">dark</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="s">"name"</span><span class="p">]</span>
 <span class="go">'Mine'
 </span></code></pre></div></div>
 
@@ -919,7 +950,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">upsert_user_theme</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">ThemeRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Save a theme the user made, replacing the one with the same key if there is one.</p>
+<p>Save a theme the user made, replacing the one with the same key if
+there is one.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -931,9 +963,26 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">remove</span><span class="p">(</span><span class="s">"ui/userThemes"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="n">part</span><span class="p">:</span> <span class="s">"#112233"</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">PARTS</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">upsert_user_theme</span><span class="p">(</span><span class="n">ThemeRecord</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">"my_a"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">light</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">dark</span><span class="o">=</span><span class="n">colors</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">upsert_user_theme</span><span class="p">(</span><span class="n">ThemeRecord</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">"my_a"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Renamed"</span><span class="p">,</span> <span class="n">light</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">dark</span><span class="o">=</span><span class="n">colors</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[(</span><span class="n">r</span><span class="p">[</span><span class="s">"id"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"name"</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">user_records</span><span class="p">()]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">upsert_user_theme</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ThemeRecord</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="nb">id</span><span class="o">=</span><span class="s">"my_a"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">light</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">dark</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">upsert_user_theme</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ThemeRecord</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="nb">id</span><span class="o">=</span><span class="s">"my_a"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">name</span><span class="o">=</span><span class="s">"Renamed"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">light</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">dark</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s">"id"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"name"</span><span class="p">])</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">user_records</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">[('my_a', 'Renamed')]
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">remove</span><span class="p">(</span><span class="s">"ui/userThemes"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -955,10 +1004,58 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">remove</span><span class="p">(</span><span class="s">"ui/userThemes"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="n">part</span><span class="p">:</span> <span class="s">"#112233"</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">PARTS</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">upsert_user_theme</span><span class="p">(</span><span class="n">ThemeRecord</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">"my_a"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">light</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">dark</span><span class="o">=</span><span class="n">colors</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">upsert_user_theme</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ThemeRecord</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="nb">id</span><span class="o">=</span><span class="s">"my_a"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">light</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">dark</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">delete_user_theme</span><span class="p">(</span><span class="s">"my_a"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">user_records</span><span class="p">()</span>
 <span class="go">[]
+</span></code></pre></div></div>
+
+<h2 id="theme_of">theme_of</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">theme_of</span><span class="p">(</span>
+    <span class="n">colors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">dark</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">family</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CustomTheme</span>
+</code></pre></div></div>
+
+<p>Build a custom theme from its saved or preview colors.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">colors</code> (<em>dict of str to str</em>): A color for every part, as “#rrggbb”.</li>
+  <li><code class="language-plaintext highlighter-rouge">dark</code> (<em>bool</em>): True if it is the dark version. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): Saved theme identifier, or empty for a preview.</li>
+  <li><code class="language-plaintext highlighter-rouge">family</code> (<em>str</em>): Identifier shared by the light and dark versions.</li>
+  <li><code class="language-plaintext highlighter-rouge">label</code> (<em>str</em>): Name displayed in settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>str</em>): Description displayed with the theme.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>CustomTheme</em>: The theme with the supplied colors and identifiers.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">theme_of</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="n">part</span><span class="p">:</span> <span class="s">"#102030"</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">PARTS</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">dark</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">window</span>
+<span class="go">'#102030'
 </span></code></pre></div></div>
 
 <h2 id="user_themes">user_themes</h2>
@@ -1006,7 +1103,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">custom_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CustomTheme</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Find a theme with colors of its own, one of the built-in ones or one the user made.</p>
+<p>Find a theme with colors of its own, one of the built-in ones or one
+the user made.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1022,7 +1120,11 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">custom_theme</span><span class="p">(</span><span class="s">"studio_dark"</span><span class="p">)</span> <span class="ow">is</span> <span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">custom_theme</span><span class="p">(</span><span class="s">"dark"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">custom_theme</span><span class="p">(</span><span class="s">"studio_dark"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">is</span> <span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">custom_theme</span><span class="p">(</span><span class="s">"dark"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, None)
 </span></code></pre></div></div>
 
@@ -1031,7 +1133,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">scheme_of</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ColorScheme</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Say which color scheme a theme uses: light, dark, or the desktop’s own.</p>
+<p>Say which color scheme a theme uses: light, dark, or the desktop’s
+own.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1047,7 +1150,13 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scheme_of</span><span class="p">(</span><span class="s">"dark"</span><span class="p">)</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ColorScheme</span><span class="p">.</span><span class="n">Dark</span><span class="p">,</span> <span class="n">scheme_of</span><span class="p">(</span><span class="s">"sage_auto"</span><span class="p">)</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ColorScheme</span><span class="p">.</span><span class="n">Unknown</span><span class="p">,</span> <span class="n">scheme_of</span><span class="p">(</span><span class="s">"nonsense"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">scheme_of</span><span class="p">(</span><span class="s">"dark"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ColorScheme</span><span class="p">.</span><span class="n">Dark</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">scheme_of</span><span class="p">(</span><span class="s">"sage_auto"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ColorScheme</span><span class="p">.</span><span class="n">Unknown</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">scheme_of</span><span class="p">(</span><span class="s">"nonsense"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True, None)
 </span></code></pre></div></div>
 
@@ -1072,7 +1181,14 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview_colors</span><span class="p">(</span><span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="s">"window"</span><span class="p">],</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">preview_colors</span><span class="p">(</span><span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">]))[:</span><span class="mi">3</span><span class="p">]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">preview_colors</span><span class="p">(</span><span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"window"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">sorted</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">preview_colors</span><span class="p">(</span><span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)[:</span><span class="mi">3</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('#eceef1', ['accent', 'faint', 'ink'])
 </span></code></pre></div></div>
 
@@ -1098,7 +1214,14 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">colors</span> <span class="o">=</span> <span class="n">theme_palette</span><span class="p">(</span><span class="n">CUSTOM_THEMES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">colors</span><span class="p">.</span><span class="n">color</span><span class="p">(</span><span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">Window</span><span class="p">).</span><span class="n">name</span><span class="p">(),</span> <span class="n">colors</span><span class="p">.</span><span class="n">color</span><span class="p">(</span><span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">Highlight</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">colors</span><span class="p">.</span><span class="n">color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">Window</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">name</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">colors</span><span class="p">.</span><span class="n">color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">Highlight</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">name</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('#eceef1', '#2f7fc1')
 </span></code></pre></div></div>
 
@@ -1149,9 +1272,11 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">system_is_dark</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Say whether the desktop is set to dark, as long as the app is not forcing a color scheme of its own.</p>
+<p>Say whether the desktop is set to dark, as long as the app is not
+forcing a color scheme of its own.</p>
 
-<p>A theme that follows the desktop does not force one, so this is what it asks.</p>
+<p>A theme that follows the desktop does not force one, so this is what
+it asks.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1170,7 +1295,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">apply_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Switch the application’s color scheme and rebuild the stylesheet from the new palette.</p>
+<p>Switch the application’s color scheme and rebuild the stylesheet
+from the new palette.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1185,10 +1311,14 @@
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">app</span><span class="p">.</span><span class="n">styleSheet</span><span class="p">()</span> <span class="o">!=</span> <span class="s">""</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">apply_theme</span><span class="p">(</span><span class="s">"studio"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QApplication</span><span class="p">.</span><span class="n">palette</span><span class="p">().</span><span class="n">color</span><span class="p">(</span><span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">Window</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QApplication</span><span class="p">.</span><span class="n">palette</span><span class="p">().</span><span class="n">color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">Window</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
 <span class="go">'#eceef1'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">apply_theme</span><span class="p">(</span><span class="s">"system"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QApplication</span><span class="p">.</span><span class="n">palette</span><span class="p">().</span><span class="n">color</span><span class="p">(</span><span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">Window</span><span class="p">).</span><span class="n">name</span><span class="p">()</span> <span class="o">!=</span> <span class="s">"#eceef1"</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QApplication</span><span class="p">.</span><span class="n">palette</span><span class="p">().</span><span class="n">color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">Window</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span><span class="p">()</span> <span class="o">!=</span> <span class="s">"#eceef1"</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1501,8 +1631,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,11 +676,15 @@
         <article>
           <h1>alto.lessons.packs</h1>
           
-<p>Turn the lessons that an instrument plugin declares into <code class="language-plaintext highlighter-rouge">Lesson</code>s that Alto lists and shows.</p>
+<p>Turn the lessons that an instrument plugin declares into <code class="language-plaintext highlighter-rouge">Lesson</code>s that
+Alto lists and shows.</p>
 
-<p>A plugin describes each lesson in its manifest as plain text and small objects: paragraphs, an optional picture of its own
-instrument, notes to hear, and a question with buttons. This module checks all of that and builds the same <code class="language-plaintext highlighter-rouge">Lesson</code> and <code class="language-plaintext highlighter-rouge">Step</code>
-objects the built-in lessons use, so the lesson pages need to know nothing about any particular plugin or instrument.</p>
+<p>A plugin describes each lesson in its manifest as plain text and small
+objects: paragraphs, an optional picture of its own
+instrument, notes to hear, and a question with buttons. This module
+checks all of that and builds the same <code class="language-plaintext highlighter-rouge">Lesson</code> and <code class="language-plaintext highlighter-rouge">Step</code>
+objects the built-in lessons use, so the lesson pages need to know
+nothing about any particular plugin or instrument.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -693,7 +697,8 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">inline</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Escape plain text for a lesson page, turning <code class="language-plaintext highlighter-rouge">**word**</code> into bold type for a term being defined.</p>
+<p>Escape plain text for a lesson page, turning <code class="language-plaintext highlighter-rouge">**word**</code> into bold
+type for a term being defined.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -726,7 +731,8 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Lesson</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div></div>
 
-<p>Validate the optional <code class="language-plaintext highlighter-rouge">lessons</code> list of a plugin manifest and build its lessons.</p>
+<p>Validate the optional <code class="language-plaintext highlighter-rouge">lessons</code> list of a plugin manifest and
+build its lessons.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -753,7 +759,13 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_lessons</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">instruments</span><span class="o">=</span><span class="p">{},</span> <span class="n">exercises</span><span class="o">=</span><span class="p">{})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_lessons</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">instruments</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercises</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">()
 </span></code></pre></div></div>
 
@@ -768,7 +780,8 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PicturePosition</span> <span class="o">|</span> <span class="n">FingerboardPosition</span>
 </code></pre></div></div>
 
-<p>Build a step’s instrument picture: a note on a string, or a marked place on the picture.</p>
+<p>Build a step’s instrument picture: a note on a string, or a marked
+place on the picture.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -986,8 +999,8 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

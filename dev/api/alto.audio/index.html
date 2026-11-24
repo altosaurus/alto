@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,11 +676,15 @@
         <article>
           <h1>alto.audio</h1>
           
-<p>Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes.</p>
+<p>Note playback: recorded instrument samples (University of Iowa), with
+pitch-shifting for missing notes.</p>
 
-<p><code class="language-plaintext highlighter-rouge">Sounds</code> plays notes through Qt’s <code class="language-plaintext highlighter-rouge">QSoundEffect</code>, one effect per note, created the first time it is needed. A note with
-no recording is made by shifting the nearest recording (or, for the piano outside its sampled range, by synthesis).
-Instrument previews render the phrase as one cached clip, with fixed spacing between its notes.
+<p><code class="language-plaintext highlighter-rouge">Sounds</code> plays notes through Qt’s <code class="language-plaintext highlighter-rouge">QSoundEffect</code>, one effect per note,
+created the first time it is needed. A note with
+no recording is made by shifting the nearest recording (or, for the
+piano outside its sampled range, by synthesis).
+Instrument previews render the phrase as one cached clip, with fixed
+spacing between its notes.
 The module-level <code class="language-plaintext highlighter-rouge">sounds</code> is the one the interface uses.</p>
 
 <p><strong>Examples</strong></p>
@@ -702,8 +706,10 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p>Synthesize a piano note, for notes outside the recorded range.</p>
 
-<p>An additive model: stretched partials, a decay for each partial, a detuned string pair, and a hammer thump. Each partial
-is a decaying sine made by rotating a complex number one sample at a time, which needs no sine or exponential per sample.</p>
+<p>An additive model: stretched partials, a decay for each partial, a
+detuned string pair, and a hammer thump. Each partial
+is a decaying sine made by rotating a complex number one sample at a
+time, which needs no sine or exponential per sample.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -745,7 +751,8 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>An instrument that notes can be played on, and where its recordings are.</p>
+<p>An instrument that notes can be played on, and where its recordings
+are.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -765,9 +772,17 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Instrument</span><span class="p">(</span><span class="s">"flute"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">"Flute"</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s">"samples/flute"</span><span class="p">,</span> <span class="n">sustained</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">gain</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Instrument</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"flute"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">label</span><span class="o">=</span><span class="s">"Flute"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">folder</span><span class="o">=</span><span class="s">"samples/flute"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">sustained</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">gain</span>
 <span class="go">1.0
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"piano"</span><span class="p">].</span><span class="n">damped</span><span class="p">,</span> <span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"marimba"</span><span class="p">].</span><span class="n">damped</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"piano"</span><span class="p">].</span><span class="n">damped</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"marimba"</span><span class="p">].</span><span class="n">damped</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, False)
 </span></code></pre></div></div>
 
@@ -787,7 +802,12 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"viola_bowed"</span><span class="p">].</span><span class="n">kind_name</span><span class="p">,</span> <span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"flute"</span><span class="p">].</span><span class="n">kind_name</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"viola_bowed"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">].</span><span class="n">kind_name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"flute"</span><span class="p">].</span><span class="n">kind_name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('viola', 'flute')
 </span></code></pre></div></div>
 
@@ -807,7 +827,9 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"viola_bowed"</span><span class="p">].</span><span class="n">picker_group</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"viola_bowed"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">picker_group</span>
 <span class="go">'Viola'
 </span></code></pre></div></div>
 
@@ -816,7 +838,8 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">playback_volume</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Return the output volume for a note or clip played on this instrument.</p>
+<p>Return the output volume for a note or clip played on this
+instrument.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -855,7 +878,12 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">instrument_groups</span><span class="p">()]</span>
 <span class="go">['Piano', 'Flute', 'French Horn', 'Viola', 'Marimba', 'Vibraphone']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">inst_</span><span class="p">.</span><span class="n">variant</span> <span class="k">for</span> <span class="n">inst_</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">instrument_groups</span><span class="p">())[</span><span class="s">"Viola"</span><span class="p">]]</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">inst_</span><span class="p">.</span><span class="n">variant</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">inst_</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">instrument_groups</span><span class="p">())[</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"Viola"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">['Arco', 'Pizzicato']
 </span></code></pre></div></div>
 
@@ -881,8 +909,12 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">path_</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s">"silence.wav"</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">path_</span><span class="p">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">to_wav_bytes</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">path_</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s">"silence.wav"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">path_</span><span class="p">.</span><span class="n">write_bytes</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">to_wav_bytes</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">samples</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">read_wav</span><span class="p">(</span><span class="n">path_</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">),</span> <span class="n">rate</span>
 <span class="go">(10, 44100)
@@ -916,7 +948,9 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">shift_pitch</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">semitones</span><span class="o">=</span><span class="mi">12</span><span class="p">))</span>  <span class="c1"># an octave up: half as long
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">shift_pitch</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">semitones</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># an octave up: half as long
 </span><span class="go">50
 </span></code></pre></div></div>
 
@@ -949,9 +983,16 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">to_wav_bytes</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)[:</span><span class="mi">4</span><span class="p">]</span>
 <span class="go">b'RIFF'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clipped</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s">"clipped.wav"</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">clipped</span><span class="p">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">to_wav_bytes</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">read_wav</span><span class="p">(</span><span class="n">clipped</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>  <span class="c1"># beyond full scale is clipped
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clipped</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s">"clipped.wav"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">clipped</span><span class="p">.</span><span class="n">write_bytes</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">to_wav_bytes</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">read_wav</span><span class="p">(</span><span class="n">clipped</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>  <span class="c1"># beyond full scale is clipped
 </span><span class="go">[1.0, -1.0, 0.5]
 </span></code></pre></div></div>
 
@@ -964,9 +1005,11 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Write a file so that nothing ever reads it half written, even another copy of Alto writing the same file.</p>
+<p>Write a file so that nothing ever reads it half written, even
+another copy of Alto writing the same file.</p>
 
-<p>The bytes go to a file of the writer’s own first and then replace the file in one step.</p>
+<p>The bytes go to a file of the writer’s own first and then replace
+the file in one step.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -978,8 +1021,13 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_file_atomically</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"note.wav"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s">"RIFF"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"note.wav"</span><span class="p">).</span><span class="n">read_bytes</span><span class="p">(),</span> <span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">folder</span><span class="p">.</span><span class="n">iterdir</span><span class="p">()]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_file_atomically</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">folder</span> <span class="o">/</span> <span class="s">"note.wav"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s">"RIFF"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"note.wav"</span><span class="p">).</span><span class="n">read_bytes</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">folder</span><span class="p">.</span><span class="n">iterdir</span><span class="p">()],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(b'RIFF', ['note.wav'])
 </span></code></pre></div></div>
 
@@ -988,7 +1036,8 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Sounds</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>A lazy cache of notes played through <code class="language-plaintext highlighter-rouge">QSoundEffect</code>, in the chosen instrument.</p>
+<p>A lazy cache of notes played through <code class="language-plaintext highlighter-rouge">QSoundEffect</code>, in the chosen
+instrument.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1038,7 +1087,9 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="mi">60</span> <span class="ow">in</span> <span class="n">Sounds</span><span class="p">().</span><span class="n">recordings</span><span class="p">(</span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"piano"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="mi">60</span> <span class="ow">in</span> <span class="n">Sounds</span><span class="p">().</span><span class="n">recordings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"piano"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1047,9 +1098,11 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">unrecorded</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>List the notes within an instrument’s recorded range that have no recording of their own, nearest middle C first.</p>
+<p>List the notes within an instrument’s recorded range that have
+no recording of their own, nearest middle C first.</p>
 
-<p>Each is made the first time it plays, by shifting the nearest recording. <code class="language-plaintext highlighter-rouge">alto.ui.warmup</code> makes them ahead of time with
+<p>Each is made the first time it plays, by shifting the nearest
+recording. <code class="language-plaintext highlighter-rouge">alto.ui.warmup</code> makes them ahead of time with
 <code class="language-plaintext highlighter-rouge">prepare</code>, so that even a first play is quick.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1066,7 +1119,9 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">notes</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">().</span><span class="n">unrecorded</span><span class="p">(</span><span class="s">"piano"</span><span class="p">)</span>  <span class="c1"># the piano is recorded every third semitone
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">notes</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">().</span><span class="n">unrecorded</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"piano"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the piano is recorded every third semitone
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">notes</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">60</span> <span class="ow">in</span> <span class="n">notes</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">notes</span><span class="p">)</span>
 <span class="go">([61, 59], False, 58)
 </span></code></pre></div></div>
@@ -1080,7 +1135,8 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Make the file a note plays, if it has no recording and was not made before, so that its first play is quick.</p>
+<p>Make the file a note plays, if it has no recording and was not
+made before, so that its first play is quick.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1103,7 +1159,8 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Read the playback length of a note for synchronized instrument animations.</p>
+<p>Read the playback length of a note for synchronized instrument
+animations.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1120,7 +1177,8 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A one-second sample has the same 1000 ms feedback interval when muted.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A one-second sample has the same 1000 ms feedback interval when
+muted.
 </code></pre></div></div>
 
 <h3 id="soundsplay_midi">Sounds.play_midi</h3>
@@ -1137,10 +1195,13 @@ is a decaying sine made by rotating a complex number one sample at a time, which
 
 <p>Play a note in the chosen instrument (or another one).</p>
 
-<p>A sustained instrument (bowed or blown) ends the notes still sounding first, as a player would, and so does a damped
-one (the piano, played without the pedal), unless <code class="language-plaintext highlighter-rouge">release_previous</code> is False, which is for the notes of a chord
+<p>A sustained instrument (bowed or blown) ends the notes still
+sounding first, as a player would, and so does a damped
+one (the piano, played without the pedal), unless
+<code class="language-plaintext highlighter-rouge">release_previous</code> is False, which is for the notes of a chord
 that start together. Nothing plays while muted unless
-<code class="language-plaintext highlighter-rouge">force</code> is set. A failure to play is reported but never raised, so audio can never break an exercise.</p>
+<code class="language-plaintext highlighter-rouge">force</code> is set. A failure to play is reported but never raised,
+so audio can never break an exercise.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1182,9 +1243,11 @@ that start together. Nothing plays while muted unless
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Play notes one after another in an instrument, even while muted, to hear what it sounds like.</p>
+<p>Play notes one after another in an instrument, even while muted,
+to hear what it sounds like.</p>
 
-<p>The phrase is rendered as one audio clip, so first-use loading cannot change the spacing between notes.
+<p>The phrase is rendered as one audio clip, so first-use loading
+cannot change the spacing between notes.
 Starting a preview silences the one before it.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1197,7 +1260,9 @@ Starting a preview silences the one before it.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">preview</span><span class="p">(</span><span class="s">"flute"</span><span class="p">,</span> <span class="n">midis</span><span class="o">=</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">67</span><span class="p">])</span>  <span class="c1"># doctest: +SKIP
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">preview</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"flute"</span><span class="p">,</span> <span class="n">midis</span><span class="o">=</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">67</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># doctest: +SKIP
 </span></code></pre></div></div>
 
 <h3 id="soundsplay_notes">Sounds.play_notes</h3>
@@ -1215,7 +1280,8 @@ Starting a preview silences the one before it.</p>
 
 <p>Play staff columns left to right, evenly spaced.</p>
 
-<p>The notes within a column sound together, a little quieter the more there are.</p>
+<p>The notes within a column sound together, a little quieter the
+more there are.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1232,7 +1298,15 @@ Starting a preview silences the one before it.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">play_notes</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">)]])</span>  <span class="c1"># muted: nothing sounds
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">play_notes</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># muted: nothing sounds
 </span></code></pre></div></div>
 
 <h3 id="soundsstop_sample">Sounds.stop_sample</h3>
@@ -1266,7 +1340,8 @@ Starting a preview silences the one before it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Play a displayed sample and report the sounding column until it ends or is interrupted.</p>
+<p>Play a displayed sample and report the sounding column until it
+ends or is interrupted.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1283,7 +1358,11 @@ Starting a preview silences the one before it.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">play_sample</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]],</span> <span class="n">gap_ms</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="k">print</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">play_sample</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">gap_ms</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">on_step</span><span class="o">=</span><span class="k">print</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">0
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">stop_sample</span><span class="p">(</span><span class="k">print</span><span class="p">)</span>
 <span class="go">None
@@ -1294,7 +1373,8 @@ Starting a preview silences the one before it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_correct</span><span class="p">(</span><span class="n">streak</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Play a note that climbs the C major scale (C5 to C6) as the streak grows, then wraps.</p>
+<p>Play a note that climbs the C major scale (C5 to C6) as the
+streak grows, then wraps.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1448,8 +1528,8 @@ Starting a preview silences the one before it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

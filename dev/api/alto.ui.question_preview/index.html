@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,12 +676,19 @@
         <article>
           <h1>alto.ui.question_preview</h1>
           
-<p>A popup showing a stored question the way the exercise showed it, with its answer.</p>
+<p>A popup showing a stored question the way the exercise showed it, with
+its answer.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Name the note."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QuestionPreview</span><span class="p">(</span><span class="s">"Note Identification"</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">).</span><span class="n">windowTitle</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Name the note."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QuestionPreview</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Note Identification"</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">windowTitle</span><span class="p">()</span>
 <span class="go">'Note Identification'
 </span></code></pre></div></div>
 
@@ -699,7 +706,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
-<p>A question as it appeared (the notes on the staff, or the highlighted key), then what the answer is.</p>
+<p>A question as it appeared (the notes on the staff, or the
+highlighted key), then what the answer is.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -710,8 +718,17 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.theory.pitch</span> <span class="kn">import</span> <span class="n">Note</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Name the note."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">QuestionPreview</span><span class="p">(</span><span class="s">"Note Identification"</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span> <span class="n">details</span><span class="o">=</span><span class="p">[</span><span class="s">"You answered: D"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Name the note."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">QuestionPreview</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Note Identification"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">details</span><span class="o">=</span><span class="p">[</span><span class="s">"You answered: D"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">question</span><span class="p">.</span><span class="n">answer</span>
 <span class="go">'C'
 </span></code></pre></div></div>
@@ -733,8 +750,16 @@
 <p><strong>Constructor examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.theory.pitch</span> <span class="kn">import</span> <span class="n">Note</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question_</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">keyboard</span><span class="o">=</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QuestionPreview</span><span class="p">(</span><span class="s">"Keyboard Note Identification"</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question_</span><span class="p">).</span><span class="n">minimumWidth</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question_</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="o">=</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QuestionPreview</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Keyboard Note Identification"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">question</span><span class="o">=</span><span class="n">question_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">minimumWidth</span><span class="p">()</span>
 <span class="go">560
 </span></code></pre></div></div>
 
@@ -1021,8 +1046,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

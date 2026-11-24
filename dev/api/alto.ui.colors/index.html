@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,11 +676,16 @@
         <article>
           <h1>alto.ui.colors</h1>
           
-<p>Mixing colors. The interface blends palette colors to get its soft tints and highlights.</p>
+<p>Mixing colors. The interface blends palette colors to get its soft tints
+and highlights.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blend_name</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#000000"</span><span class="p">),</span> <span class="n">b</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#ffffff"</span><span class="p">),</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blend_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QColor</span><span class="p">(</span><span class="s">"#000000"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">b</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#ffffff"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">t</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'#808080'
 </span></code></pre></div></div>
 
@@ -694,7 +699,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QColor</span>
 </code></pre></div></div>
 
-<p>Return the color a given fraction of the way from one color to another.</p>
+<p>Return the color a given fraction of the way from one color to
+another.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -712,9 +718,17 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blend</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#000000"</span><span class="p">),</span> <span class="n">b</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#ffffff"</span><span class="p">),</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.0</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blend</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QColor</span><span class="p">(</span><span class="s">"#000000"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">b</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#ffffff"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">t</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
 <span class="go">'#000000'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blend</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#ff0000"</span><span class="p">),</span> <span class="n">b</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#0000ff"</span><span class="p">),</span> <span class="n">t</span><span class="o">=</span><span class="mf">1.0</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blend</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QColor</span><span class="p">(</span><span class="s">"#ff0000"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">b</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#0000ff"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">t</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
 <span class="go">'#0000ff'
 </span></code></pre></div></div>
 
@@ -746,7 +760,11 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blend_name</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#000000"</span><span class="p">),</span> <span class="n">b</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#ffffff"</span><span class="p">),</span> <span class="n">t</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blend_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QColor</span><span class="p">(</span><span class="s">"#000000"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">b</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#ffffff"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">t</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'#ffffff'
 </span></code></pre></div></div>
 
@@ -975,8 +993,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

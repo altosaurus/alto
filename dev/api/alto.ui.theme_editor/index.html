@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.ui.theme_editor</h1>
           
-<p>The editor for a theme of the user’s own: a name, and a color for every part of its light and dark versions.</p>
+<p>The editor for a theme of the user’s own: a name, and a color for every
+part of its light and dark versions.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -686,36 +687,6 @@
 <span class="go">'My theme'
 </span></code></pre></div></div>
 
-<h2 id="theme_of">theme_of</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">theme_of</span><span class="p">(</span>
-    <span class="n">colors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">dark</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CustomTheme</span>
-</code></pre></div></div>
-
-<p>Make a theme from a set of colors, to draw a picture of it.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">colors</code> (<em>dict of str to str</em>): A color for every part, as “#rrggbb”.</li>
-  <li><code class="language-plaintext highlighter-rouge">dark</code> (<em>bool</em>): True if it is the dark version. Keyword-only.</li>
-</ul>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>CustomTheme</em>: The theme, without a key or a name of its own.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">theme_of</span><span class="p">({</span><span class="n">part</span><span class="p">:</span> <span class="s">"#102030"</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">PARTS</span><span class="p">},</span> <span class="n">dark</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">window</span>
-<span class="go">'#102030'
-</span></code></pre></div></div>
-
 <h2 id="themeeditor">ThemeEditor</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ThemeEditor</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
@@ -723,9 +694,11 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>A form to make a theme, or change one: its name, and the colors of its light and dark versions.</p>
+<p>A form to make a theme, or change one: its name, and the colors of
+its light and dark versions.</p>
 
-<p>A small picture of each version follows the colors as they are chosen. Choosing a theme in the “Start from” list takes its
+<p>A small picture of each version follows the colors as they are
+chosen. Choosing a theme in the “Start from” list takes its
 colors at once.</p>
 
 <p><strong>Attributes</strong></p>
@@ -773,7 +746,8 @@ colors at once.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Light up the code written beside a color while the pointer is over the color.</p>
+<p>Light up the code written beside a color while the pointer is
+over the color.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -792,11 +766,19 @@ colors at once.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">ThemeEditor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"accent"</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Enter</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"bold"</span> <span class="ow">in</span> <span class="n">editor</span><span class="p">.</span><span class="n">_values</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"accent"</span><span class="p">].</span><span class="n">styleSheet</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">button</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Enter</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"bold"</span> <span class="ow">in</span> <span class="n">editor</span><span class="p">.</span><span class="n">_values</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"accent"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">styleSheet</span><span class="p">()</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Leave</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"bold"</span> <span class="ow">in</span> <span class="n">editor</span><span class="p">.</span><span class="n">_values</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"accent"</span><span class="p">].</span><span class="n">styleSheet</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">button</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Leave</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"bold"</span> <span class="ow">in</span> <span class="n">editor</span><span class="p">.</span><span class="n">_values</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"accent"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">styleSheet</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -805,7 +787,8 @@ colors at once.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">ThemeRecord</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Fill the form from a theme that was saved, or for a new one that starts as Studio.</p>
+<p>Fill the form from a theme that was saved, or for a new one that
+starts as Studio.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -817,7 +800,10 @@ colors at once.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">ThemeEditor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">delete_button</span><span class="p">.</span><span class="n">isHidden</span><span class="p">(),</span> <span class="n">editor</span><span class="p">.</span><span class="n">name_edit</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">editor</span><span class="p">.</span><span class="n">delete_button</span><span class="p">.</span><span class="n">isHidden</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">editor</span><span class="p">.</span><span class="n">name_edit</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, 'My theme')
 </span></code></pre></div></div>
 
@@ -837,7 +823,9 @@ colors at once.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">ThemeEditor</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"window"</span><span class="p">]</span> <span class="o">==</span> <span class="n">editor</span><span class="p">.</span><span class="n">colors</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"window"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"light"</span><span class="p">][</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"window"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span> <span class="o">==</span> <span class="n">editor</span><span class="p">.</span><span class="n">colors</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"window"</span><span class="p">]</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1154,8 +1142,8 @@ colors at once.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

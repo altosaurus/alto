@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,13 +678,18 @@
           
 <p>The transitions between the exercises and the lessons on the home page.</p>
 
-<p>A transition moves between two sets of cards. Each card is photographed first, as a sprite, and a sprite can be faded, slid,
-scaled, blurred or cut away from one side. A transition is a function that sets how every sprite looks at each moment, so ten
+<p>A transition moves between two sets of cards. Each card is photographed
+first, as a sprite, and a sprite can be faded, slid,
+scaled, blurred or cut away from one side. A transition is a function
+that sets how every sprite looks at each moment, so ten
 different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">transition</span><span class="p">.</span><span class="n">key</span> <span class="k">for</span> <span class="n">transition</span> <span class="ow">in</span> <span class="n">TRANSITIONS</span><span class="p">][:</span><span class="mi">3</span><span class="p">]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">transition</span><span class="p">.</span><span class="n">key</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">transition</span> <span class="ow">in</span> <span class="n">TRANSITIONS</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">][:</span><span class="mi">3</span><span class="p">]</span>
 <span class="go">['none', 'cascade', 'fade']
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">DEFAULT_TRANSITION</span>
 <span class="go">'cascade'
@@ -727,7 +732,10 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sprite</span> <span class="o">=</span> <span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sprite</span> <span class="o">=</span> <span class="n">Sprite</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sprite</span><span class="p">.</span><span class="n">opacity</span><span class="p">,</span> <span class="n">sprite</span><span class="p">.</span><span class="n">reveal</span>
 <span class="go">(1.0, 1.0)
 </span></code></pre></div></div>
@@ -742,7 +750,8 @@ different ones share one player.</p>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>What a transition is given at each moment: the time, the two sets of sprites and the direction.</p>
+<p>What a transition is given at each moment: the time, the two sets of
+sprites and the direction.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -755,7 +764,9 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="p">[],</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">direction</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="p">[],</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">direction</span>
 <span class="go">1
 </span></code></pre></div></div>
 
@@ -764,7 +775,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ease_out</span><span class="p">(</span><span class="n">progress</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Ease a progress from 0 to 1 so that it starts fast and slows to a stop.</p>
+<p>Ease a progress from 0 to 1 so that it starts fast and slows to a
+stop.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -794,7 +806,8 @@ different ones share one player.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Say how far along a part of a transition is, from 0 before it starts to 1 once it has finished.</p>
+<p>Say how far along a part of a transition is, from 0 before it starts
+to 1 once it has finished.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -812,7 +825,11 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ramp</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span> <span class="n">ramp</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span> <span class="n">ramp</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ramp</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ramp</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ramp</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0.0, 0.5, 1.0)
 </span></code></pre></div></div>
 
@@ -831,7 +848,9 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">Sprite</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">hide</span><span class="p">([</span><span class="n">card</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">opacity</span>
 <span class="go">0.0
@@ -842,7 +861,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fade_in</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a fade in: the new cards fade up from clear, and nothing of the old remains.</p>
+<p>Set the sprites for a fade in: the new cards fade up from clear, and
+nothing of the old remains.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -852,8 +872,14 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fade_in</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fade_in</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
 <span class="go">0.0
 </span></code></pre></div></div>
@@ -863,7 +889,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">crossfade</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a crossfade: the old cards fade out as the new ones fade in.</p>
+<p>Set the sprites for a crossfade: the old cards fade out as the new
+ones fade in.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -873,8 +900,26 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())],</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">crossfade</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Sprite</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Sprite</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">crossfade</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">old</span><span class="o">=</span><span class="n">old</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">old</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
 <span class="go">(0.0, 1.0)
 </span></code></pre></div></div>
@@ -884,7 +929,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slide</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a slide: both sets move sideways, toward the side of the switch that was pressed.</p>
+<p>Set the sprites for a slide: both sets move sideways, toward the
+side of the switch that was pressed.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -894,8 +940,14 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slide</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slide</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dx</span>
 <span class="go">60.0
 </span></code></pre></div></div>
@@ -905,7 +957,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rise</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a rise: the old cards sink and fade, and the new ones rise into place.</p>
+<p>Set the sprites for a rise: the old cards sink and fade, and the new
+ones rise into place.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -915,8 +968,14 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">rise</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">rise</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dy</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
 <span class="go">(22.0, 0.0)
 </span></code></pre></div></div>
@@ -926,7 +985,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cascade</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a cascade: the new cards arrive one after another, each rising a little as it appears.</p>
+<p>Set the sprites for a cascade: the new cards arrive one after
+another, each rising a little as it appears.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -936,8 +996,18 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cascade</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cascade</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">old</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span> <span class="o">&gt;</span> <span class="n">new</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">opacity</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -947,7 +1017,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">zoom</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a zoom: the old cards grow a little as they fade, and the new ones grow into place.</p>
+<p>Set the sprites for a zoom: the old cards grow a little as they
+fade, and the new ones grow into place.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -957,8 +1028,14 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">zoom</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">zoom</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">sx</span>
 <span class="go">0.92
 </span></code></pre></div></div>
@@ -968,7 +1045,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flip</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a flip: each old card turns edge on and goes, then each new one turns face on.</p>
+<p>Set the sprites for a flip: each old card turns edge on and goes,
+then each new one turns face on.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -978,8 +1056,14 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">flip</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">flip</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
 <span class="go">0.0
 </span></code></pre></div></div>
@@ -989,7 +1073,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">blur</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a blur: the old cards dissolve into a blur and the new ones come into focus.</p>
+<p>Set the sprites for a blur: the old cards dissolve into a blur and
+the new ones come into focus.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -999,8 +1084,14 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blur</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blur</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">blur</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
 <span class="go">(1.0, 0.0)
 </span></code></pre></div></div>
@@ -1010,7 +1101,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wipe</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a wipe: the new cards are uncovered from one side while the old ones fade.</p>
+<p>Set the sprites for a wipe: the new cards are uncovered from one
+side while the old ones fade.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1020,8 +1112,17 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wipe</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wipe</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">old</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">direction</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">reveal</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">reveal_from</span>
 <span class="go">(0.0, -1)
 </span></code></pre></div></div>
@@ -1031,7 +1132,8 @@ different ones share one player.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">drop</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for drop and pop: the old cards drop away one by one, then the new ones pop in with a small bounce.</p>
+<p>Set the sprites for drop and pop: the old cards drop away one by
+one, then the new ones pop in with a small bounce.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1041,8 +1143,14 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">drop</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">drop</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
 <span class="go">0.0
 </span></code></pre></div></div>
@@ -1097,9 +1205,11 @@ different ones share one player.</p>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>How one set of cards moves in a transition built from parts: when each card starts, how long it takes, and what it does.</p>
+<p>How one set of cards moves in a transition built from parts: when
+each card starts, how long it takes, and what it does.</p>
 
-<p>Every card goes between its resting look and a look given here, so the same description serves for cards arriving (from that
+<p>Every card goes between its resting look and a look given here, so
+the same description serves for cards arriving (from that
 look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Attributes</strong></p>
@@ -1137,7 +1247,8 @@ look to rest) and leaving (from rest to that look).</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Time a progress from 0 to 1 in one of the ways a motion can be eased.</p>
+<p>Time a progress from 0 to 1 in one of the ways a motion can be
+eased.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1154,7 +1265,11 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">eased</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"linear"</span><span class="p">),</span> <span class="n">eased</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"back"</span><span class="p">),</span> <span class="n">eased</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"in"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">eased</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"linear"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">eased</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"back"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">eased</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"in"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0.5, 1.0, 0.25)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">eased</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"back"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1.0</span>
 <span class="go">True
@@ -1186,8 +1301,18 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">)]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"index"</span><span class="p">),</span> <span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"reverse"</span><span class="p">),</span> <span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"outward"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"index"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"reverse"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"outward"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">([0, 1, 2], [2, 1, 0], [1, 0, 2])
 </span></code></pre></div></div>
 
@@ -1200,7 +1325,8 @@ look to rest) and leaving (from rest to that look).</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Say how long a motion takes for a number of cards, from when it starts to when the last card has finished.</p>
+<p>Say how long a motion takes for a number of cards, from when it
+starts to when the last card has finished.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1217,7 +1343,14 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">(</span><span class="n">Motion</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="n">per_card</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span> <span class="n">count</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Motion</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">length</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">per_card</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">start</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">count</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">460.0
 </span></code></pre></div></div>
 
@@ -1231,7 +1364,8 @@ look to rest) and leaving (from rest to that look).</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the sprites for a transition built from a motion for the cards that leave and one for the cards that arrive.</p>
+<p>Set the sprites for a transition built from a motion for the cards
+that leave and one for the cards that arrive.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1243,8 +1377,16 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">move</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mi">20</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">move</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dy</span>
 <span class="go">(0.0, 20.0)
 </span></code></pre></div></div>
@@ -1258,7 +1400,8 @@ look to rest) and leaving (from rest to that look).</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Scene</span><span class="p">],</span> <span class="bp">None</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Scene</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Make the frame and length functions of a transition built from motions.</p>
+<p>Make the frame and length functions of a transition built from
+motions.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1275,8 +1418,26 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw</span><span class="p">,</span> <span class="n">lasts</span> <span class="o">=</span> <span class="n">built</span><span class="p">(</span><span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">per_card</span><span class="o">=</span><span class="mi">50</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lasts</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw</span><span class="p">,</span> <span class="n">lasts</span> <span class="o">=</span> <span class="n">built</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">length</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">per_card</span><span class="o">=</span><span class="mi">50</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lasts</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Scene</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">old</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">new</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">Sprite</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">                 </span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">                 </span><span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">             </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">]</span>
+<span class="gp">...</span><span class="w">         </span><span class="o">*</span> <span class="mi">3</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">400.0
 </span></code></pre></div></div>
 
@@ -1312,7 +1473,13 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">made</span><span class="p">(</span><span class="s">"x"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">"X"</span><span class="p">,</span> <span class="n">about</span><span class="o">=</span><span class="s">"Does x."</span><span class="p">,</span> <span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">()).</span><span class="n">key</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">made</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"x"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">label</span><span class="o">=</span><span class="s">"X"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">about</span><span class="o">=</span><span class="s">"Does x."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">key</span>
 <span class="go">'x'
 </span></code></pre></div></div>
 
@@ -1337,7 +1504,10 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">transition_named</span><span class="p">(</span><span class="s">"flip"</span><span class="p">).</span><span class="n">label</span><span class="p">,</span> <span class="n">transition_named</span><span class="p">(</span><span class="s">"nonsense"</span><span class="p">).</span><span class="n">key</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">transition_named</span><span class="p">(</span><span class="s">"flip"</span><span class="p">).</span><span class="n">label</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">transition_named</span><span class="p">(</span><span class="s">"nonsense"</span><span class="p">).</span><span class="n">key</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('Flip', 'cascade')
 </span></code></pre></div></div>
 
@@ -1403,9 +1573,19 @@ look to rest) and leaving (from rest to that look).</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brush</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">paint_sprites</span><span class="p">(</span><span class="n">brush</span><span class="p">,</span> <span class="n">sprites</span><span class="o">=</span><span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">paint_sprites</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">brush</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">sprites</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Sprite</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brush</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -1417,7 +1597,8 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>A see-through sheet laid over the cards, on which a transition is drawn.</p>
+<p>A see-through sheet laid over the cards, on which a transition is
+drawn.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1456,7 +1637,8 @@ look to rest) and leaving (from rest to that look).</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="n">old</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sprite</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the old cards on the canvas as they are, so that they can be swapped for the new ones unseen.</p>
+<p>Show the old cards on the canvas as they are, so that they can
+be swapped for the new ones unseen.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1482,7 +1664,8 @@ look to rest) and leaving (from rest to that look).</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Play a transition from the old cards that cover the canvas to the new ones.</p>
+<p>Play a transition from the old cards that cover the canvas to
+the new ones.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1496,7 +1679,9 @@ look to rest) and leaving (from rest to that look).</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">TransitionCanvas</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">cover</span><span class="p">([])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">play</span><span class="p">(</span><span class="n">TRANSITIONS</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">new</span><span class="o">=</span><span class="p">[],</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">play</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">TRANSITIONS</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">new</span><span class="o">=</span><span class="p">[],</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">running</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">stop</span><span class="p">()</span>
@@ -1856,8 +2041,8 @@ look to rest) and leaving (from rest to that look).</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

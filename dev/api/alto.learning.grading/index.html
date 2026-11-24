@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.learning.grading</h1>
           
-<p>Answer-button intervals for Anki’s default SM-2 and FSRS-6 deck settings.</p>
+<p>Answer-button intervals for Anki’s default SM-2 and FSRS-6 deck
+settings.</p>
 
 <h2 id="sm2state">Sm2State</h2>
 
@@ -690,7 +691,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>SM-2 learning step, review history, and actual delay for the current presentation.</p>
+<p>SM-2 learning step, review history, and actual delay for the current
+presentation.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -736,7 +738,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Translate one saved calendar schedule into the other scheduler’s initial state.</p>
+<p>Translate one saved calendar schedule into the other scheduler’s
+initial state.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -756,10 +759,47 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">result</span> <span class="o">=</span> <span class="n">inherited_state</span><span class="p">(</span><span class="s">"abc"</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s">"[8, 180, 2.5]"</span><span class="p">,</span> <span class="n">due</span><span class="o">=</span><span class="mi">200</span> <span class="o">*</span> <span class="n">DAY</span><span class="p">,</span> <span class="n">rating</span><span class="o">=</span><span class="n">Rating</span><span class="p">.</span><span class="n">Good</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">result</span> <span class="o">=</span> <span class="n">inherited_state</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"abc"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">source</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">state</span><span class="o">=</span><span class="s">"[8, 180, 2.5]"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">due</span><span class="o">=</span><span class="mi">200</span> <span class="o">*</span> <span class="n">DAY</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">rating</span><span class="o">=</span><span class="n">Rating</span><span class="p">.</span><span class="n">Good</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Card</span><span class="p">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="n">stability</span>
 <span class="go">180.0
 </span></code></pre></div></div>
+
+<h2 id="read_fsrs_card">read_fsrs_card</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_fsrs_card</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">previous</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">due</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Card</span>
+</code></pre></div></div>
+
+<p>Restore a saved FSRS card or start one for the question.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The question’s stable card key.</li>
+  <li><code class="language-plaintext highlighter-rouge">previous</code> (<em>str or None</em>): The saved JSON, if the question has been reviewed.</li>
+  <li><code class="language-plaintext highlighter-rouge">due</code> (<em>datetime</em>): Initial due time for a new card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Card</em>: The restored or newly scheduled card.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A new card is due at the time of its first review.
+</code></pre></div></div>
 
 <h2 id="review_options">review_options</h2>
 
@@ -773,7 +813,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Rating</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Calculate a consistent set of answer-button intervals from one scheduling state.</p>
+<p>Calculate a consistent set of answer-button intervals from one
+scheduling state.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -793,7 +834,13 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">review_options</span><span class="p">(</span><span class="s">"abc"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">due</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">Rating</span><span class="p">.</span><span class="n">Again</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">review_options</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"abc"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">previous</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">due</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="n">Rating</span><span class="p">.</span><span class="n">Again</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">60
 </span></code></pre></div></div>
 
@@ -972,8 +1019,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

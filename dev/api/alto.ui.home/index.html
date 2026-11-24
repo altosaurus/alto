@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.ui.home</h1>
           
-<p>The start screen: a card for every exercise, or for every lesson, in rows.</p>
+<p>The start screen: a card for every exercise, or for every lesson, in
+rows.</p>
 
 <p>A switch at the top chooses between the exercises and the lessons.</p>
 
@@ -693,7 +694,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">category_tree</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QTreeWidget</span>
 </code></pre></div></div>
 
-<p>Build a navigation tree with themed checkboxes and right-aligned expansion arrows.</p>
+<p>Build a navigation tree with themed checkboxes and right-aligned
+expansion arrows.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -728,16 +730,27 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
 
-<p>A big button: an icon on top, then a category, a name and a short description, and optionally a lesson’s progress.</p>
+<p>A big button: an icon on top, then a category, a name and a short
+description, and optionally a lesson’s progress.</p>
 
-<p>Progress takes no room in the layout: a strip along the bottom edge shows it, and “Step N/M” sits in the top-right
-corner, both only once the lesson has been begun. A card with or without progress therefore has the same size and the
+<p>Progress takes no room in the layout: a strip along the bottom edge
+shows it, and “Step N/M” sits in the top-right
+corner, both only once the lesson has been begun. A card with or
+without progress therefore has the same size and the
 same icon.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">TileCard</span><span class="p">(</span><span class="n">icon</span><span class="o">=</span><span class="n">icons</span><span class="p">.</span><span class="n">EXERCISE_CIRCLE</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s">"Scales &amp; Keys"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Circle of Fifths"</span><span class="p">,</span> <span class="n">about</span><span class="o">=</span><span class="s">"Find keys."</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">card</span><span class="p">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">card</span><span class="p">.</span><span class="n">height</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span><span class="n">CARD_W</span><span class="p">,</span> <span class="n">CARD_H</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">TileCard</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">icon</span><span class="o">=</span><span class="n">icons</span><span class="p">.</span><span class="n">EXERCISE_CIRCLE</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">category</span><span class="o">=</span><span class="s">"Scales &amp; Keys"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"Circle of Fifths"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">about</span><span class="o">=</span><span class="s">"Find keys."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">card</span><span class="p">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">card</span><span class="p">.</span><span class="n">height</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">CARD_W</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">CARD_H</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">accessibleName</span><span class="p">()</span>
 <span class="go">'Circle of Fifths, Scales &amp; Keys'
@@ -760,7 +773,13 @@ same icon.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">TileCard</span><span class="p">(</span><span class="n">icon</span><span class="o">=</span><span class="n">icons</span><span class="p">.</span><span class="n">HELP</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s">"Help"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Help"</span><span class="p">,</span> <span class="n">about</span><span class="o">=</span><span class="s">"Get help."</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">TileCard</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">icon</span><span class="o">=</span><span class="n">icons</span><span class="p">.</span><span class="n">HELP</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">category</span><span class="o">=</span><span class="s">"Help"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"Help"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">about</span><span class="o">=</span><span class="s">"Get help."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">progress</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">toolTip</span><span class="p">(),</span> <span class="n">card</span><span class="p">.</span><span class="n">accessibleDescription</span><span class="p">()</span>
 <span class="go">('Get help.', 'Get help. Continue at step 2 of 8.')
 </span></code></pre></div></div>
@@ -781,7 +800,9 @@ same icon.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">lesson_card</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">changeEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">PaletteChange</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">changeEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">PaletteChange</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="exercise_icon">exercise_icon</h2>
@@ -789,7 +810,8 @@ same icon.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">exercise_icon</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Find the icon for an exercise: the one its plugin supplies, or Alto’s own.</p>
+<p>Find the icon for an exercise: the one its plugin supplies, or
+Alto’s own.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -805,9 +827,13 @@ same icon.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">exercise_icon</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">)</span> <span class="o">==</span> <span class="n">icons</span><span class="p">.</span><span class="n">EXERCISE_NOTE_NAMES</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">exercise_icon</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"NoteNames"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">icons</span><span class="p">.</span><span class="n">EXERCISE_NOTE_NAMES</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">exercise_icon</span><span class="p">(</span><span class="s">"pack.nothing.here"</span><span class="p">)</span> <span class="o">==</span> <span class="n">icons</span><span class="p">.</span><span class="n">EXERCISE_NOTE_NAMES</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">exercise_icon</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"pack.nothing.here"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">icons</span><span class="p">.</span><span class="n">EXERCISE_NOTE_NAMES</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -816,7 +842,8 @@ same icon.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">lesson_icon</span><span class="p">(</span><span class="n">lesson</span><span class="p">:</span> <span class="n">Lesson</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Find the icon for a lesson’s tile: its own if a plugin gave it one, otherwise its primary exercise’s.</p>
+<p>Find the icon for a lesson’s tile: its own if a plugin gave it one,
+otherwise its primary exercise’s.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -832,7 +859,9 @@ same icon.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lesson_icon</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="n">exercise_icon</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">exercise</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lesson_icon</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="n">exercise_icon</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">exercise</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -847,7 +876,8 @@ same icon.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">TileCard</code></p>
 
-<p>The card of an exercise: its icon on top, then its category, name and a one-line description.</p>
+<p>The card of an exercise: its icon on top, then its category, name
+and a one-line description.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -855,7 +885,10 @@ same icon.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">ExerciseCard</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span> <span class="o">==</span> <span class="n">NoteNames</span><span class="p">.</span><span class="n">description</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">card</span><span class="p">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">card</span><span class="p">.</span><span class="n">height</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span><span class="n">CARD_W</span><span class="p">,</span> <span class="n">CARD_H</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">card</span><span class="p">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">card</span><span class="p">.</span><span class="n">height</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">CARD_W</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">CARD_H</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -872,7 +905,9 @@ same icon.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">IntervalNames</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">IntervalNames</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExerciseCard</span><span class="p">(</span><span class="n">IntervalNames</span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
 <span class="go">'Name the interval between two notes.'
 </span></code></pre></div></div>
@@ -882,7 +917,8 @@ same icon.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_counts</span><span class="p">(</span><span class="n">counts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show due reviews, new cards, and outstanding incorrect cards in the upper right corner.</p>
+<p>Show due reviews, new cards, and outstanding incorrect cards in
+the upper right corner.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -910,7 +946,8 @@ Green — 2 reviews due
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TileCard</span>
 </code></pre></div></div>
 
-<p>Make the card of a lesson: the icon of the exercise that practices the same topic, and a bar for how far through it you are.</p>
+<p>Make the card of a lesson: the icon of the exercise that practices
+the same topic, and a bar for how far through it you are.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -969,7 +1006,9 @@ Green — 2 reviews due
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises</span> <span class="kn">import</span> <span class="n">REGISTRY</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">HomePage</span><span class="p">(</span><span class="n">REGISTRY</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chosen</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">page</span><span class="p">.</span><span class="n">exercise_chosen</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">chosen</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">page</span><span class="p">.</span><span class="n">exercise_chosen</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chosen</span><span class="p">.</span><span class="n">append</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">cards</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">click</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chosen</span> <span class="o">==</span> <span class="p">[</span><span class="n">REGISTRY</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 <span class="go">True
@@ -1000,7 +1039,8 @@ Green — 2 reviews due
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_search</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show only tiles matching a title, description or category search.</p>
+<p>Show only tiles matching a title, description or category
+search.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1026,7 +1066,8 @@ Green — 2 reviews due
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Check whether a tile matches the search text and the selection for its section.</p>
+<p>Check whether a tile matches the search text and the selection
+for its section.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1045,7 +1086,9 @@ Green — 2 reviews due
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">HomePage</span><span class="p">([</span><span class="n">NoteNames</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">matches_filter</span><span class="p">(</span><span class="n">page</span><span class="p">.</span><span class="n">cards</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">section</span><span class="o">=</span><span class="s">"exercises"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">matches_filter</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">page</span><span class="p">.</span><span class="n">cards</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">section</span><span class="o">=</span><span class="s">"exercises"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1074,7 +1117,8 @@ Green — 2 reviews due
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Dragging the navigation divider resizes the space available for the filters.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Dragging the navigation divider resizes the space available for
+the filters.
 </code></pre></div></div>
 
 <h3 id="homepageset_filter_available">HomePage.set_filter_available</h3>
@@ -1082,7 +1126,8 @@ Green — 2 reviews due
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_filter_available</span><span class="p">(</span><span class="n">available</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the filter control on browsing and exercise pages, remembering the sidebar’s open state.</p>
+<p>Show the filter control on browsing and exercise pages,
+remembering the sidebar’s open state.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1126,7 +1171,8 @@ Green — 2 reviews due
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_category</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Select the tiles of one category, or all tiles when the category is absent.</p>
+<p>Select the tiles of one category, or all tiles when the category
+is absent.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1150,7 +1196,8 @@ Green — 2 reviews due
 
 <p>Show the exercises or the lessons, and remember which.</p>
 
-<p>The cards change with the transition that is chosen in the settings. The new cards are in place at once, so nothing
+<p>The cards change with the transition that is chosen in the
+settings. The new cards are in place at once, so nothing
 waits on it.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1175,7 +1222,8 @@ waits on it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">page_changed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Animate the tiles from an empty grid on return, or stop the animation when leaving.</p>
+<p>Animate the tiles from an empty grid on return, or stop the
+animation when leaving.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1190,7 +1238,8 @@ waits on it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh_counts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Refresh each exercise tile and the totals for the current filters.</p>
+<p>Refresh each exercise tile and the totals for the current
+filters.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1202,7 +1251,8 @@ waits on it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">showEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QShowEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Bring the lesson cards up to date each time the page is shown, so they say where each lesson was left.</p>
+<p>Bring the lesson cards up to date each time the page is shown,
+so they say where each lesson was left.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1483,8 +1533,8 @@ waits on it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

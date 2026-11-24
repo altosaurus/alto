@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,11 +676,15 @@
         <article>
           <h1>alto.ui.engraving</h1>
           
-<p>Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others).</p>
+<p>Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma,
+MuseJazz and others).</p>
 
-<p>A SMuFL font has the parts of a note rather than whole notes: the head, the flag, and the clef and accidental glyphs,
-all measured in staff spaces (four to the em). The stem is a plain rectangle that the code draws, placed using the stem
-anchors the font publishes for each head. Heights are measured upward, so they are flipped on screen.</p>
+<p>A SMuFL font has the parts of a note rather than whole notes: the head,
+the flag, and the clef and accidental glyphs,
+all measured in staff spaces (four to the em). The stem is a plain
+rectangle that the code draws, placed using the stem
+anchors the font publishes for each head. Heights are measured upward,
+so they are flipped on screen.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -700,7 +704,8 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPainterPath</span>
 </code></pre></div></div>
 
-<p>Read a score marking from a bundled font at four staff spaces per em.</p>
+<p>Read a score marking from a bundled font at four staff spaces per
+em.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -717,7 +722,9 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">notation_glyph</span><span class="p">(</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">codepoint</span><span class="o">=</span><span class="mh">0xE260</span><span class="p">).</span><span class="n">isEmpty</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">notation_glyph</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">codepoint</span><span class="o">=</span><span class="mh">0xE260</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">isEmpty</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -781,6 +788,47 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 <span class="go">True
 </span></code></pre></div></div>
 
+<h2 id="fill_path">fill_path</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fill_path</span><span class="p">(</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">QPainterPath</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Fill a path with a color and no outline.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">p</code> (<em>QPainter</em>): The painter to draw with.</li>
+  <li><code class="language-plaintext highlighter-rouge">path</code> (<em>QPainterPath</em>): What to fill. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor</em>): The color. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">square</span> <span class="o">=</span> <span class="n">QPainterPath</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">square</span><span class="p">.</span><span class="n">addRect</span><span class="p">(</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fill_path</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">path</span><span class="o">=</span><span class="n">square</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span>
+<span class="go">True
+</span></code></pre></div></div>
+
 <h2 id="draw_note">draw_note</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_note</span><span class="p">(</span>
@@ -799,7 +847,8 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 
 <p>Draw a note with its head centered on a point.</p>
 
-<p>The head, then a stem and (for the short values) a flag, placed on the font’s anchors.</p>
+<p>The head, then a stem and (for the short values) a flag, placed on
+the font’s anchors.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -818,10 +867,20 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_note</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"eighth"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_note</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">value</span><span class="o">=</span><span class="s">"eighth"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">x</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">y</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span>
@@ -859,13 +918,28 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_clef</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_clef</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">bottom</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">gap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">y</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">90</span><span class="p">))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">y</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">&lt;</span> <span class="mi">128</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -879,7 +953,8 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Return how wide a sharp, flat or natural is drawn, so that it can be placed beside other things.</p>
+<p>Return how wide a sharp, flat or natural is drawn, so that it can be
+placed beside other things.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -897,7 +972,11 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">accidental_width</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">accidental_width</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">accidental_width</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">accidental_width</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">8</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -940,10 +1019,29 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">normal</span> <span class="o">=</span> <span class="n">draw_accidental</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">squeezed</span> <span class="o">=</span> <span class="n">draw_accidental</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span> <span class="n">fit</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">normal</span> <span class="o">=</span> <span class="n">draw_accidental</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">squeezed</span> <span class="o">=</span> <span class="n">draw_accidental</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">fit</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">squeezed</span> <span class="o">&lt;=</span> <span class="mf">5.0</span> <span class="o">&lt;</span> <span class="n">normal</span>
@@ -964,7 +1062,8 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Draw the font’s brace stretched between two heights, for a grand staff.</p>
+<p>Draw the font’s brace stretched between two heights, for a grand
+staff.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -987,9 +1086,19 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_brace</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y1</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_brace</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">x</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">y0</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">y1</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">width</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 <span class="go">True
@@ -1228,8 +1337,8 @@ anchors the font publishes for each head. Heights are measured upward, so they a
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

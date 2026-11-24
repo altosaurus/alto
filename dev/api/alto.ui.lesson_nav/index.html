@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.ui.lesson_nav</h1>
           
-<p>The list on the left in lesson mode: the lessons, and the steps of the one that is open.</p>
+<p>The list on the left in lesson mode: the lessons, and the steps of the
+one that is open.</p>
 
 <p>It is the lessons’ counterpart of the exercise list, and looks the same.</p>
 
@@ -697,7 +698,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QListWidgetItem</span>
 </code></pre></div></div>
 
-<p>Make a section label for a list: small, gray capitals that cannot be selected.</p>
+<p>Make a section label for a list: small, gray capitals that cannot be
+selected.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -714,7 +716,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">section_item</span><span class="p">(</span><span class="s">"Scales &amp; Keys"</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">QPalette</span><span class="p">()).</span><span class="n">text</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">section_item</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Scales &amp; Keys"</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">QPalette</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">text</span><span class="p">()</span>
 <span class="go">'SCALES &amp; KEYS'
 </span></code></pre></div></div>
 
@@ -725,7 +729,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QListWidget</code></p>
 
-<p>A flat list of the lessons by category, with the steps of the open lesson listed under it.</p>
+<p>A flat list of the lessons by category, with the steps of the open
+lesson listed under it.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1067,8 +1072,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

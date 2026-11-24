@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -687,12 +687,19 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Sorted millisecond timings and the profile’s fastest and slowest tail percentages.</p>
+<p>Sorted millisecond timings and the profile’s fastest and slowest
+tail percentages.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sample</span> <span class="o">=</span> <span class="n">ResponseTimes</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)),</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">name</span><span class="p">,</span> <span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">50</span><span class="p">).</span><span class="n">name</span><span class="p">,</span> <span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">100</span><span class="p">).</span><span class="n">name</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sample</span> <span class="o">=</span> <span class="n">ResponseTimes</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)),</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">50</span><span class="p">).</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">100</span><span class="p">).</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('Easy', 'Good', 'Hard')
 </span></code></pre></div></div>
 
@@ -721,7 +728,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">percentile</span><span class="p">(</span><span class="n">percent</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Interpolate a percentile between adjacent observations in a nonempty sample.</p>
+<p>Interpolate a percentile between adjacent observations in a
+nonempty sample.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -737,7 +745,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ResponseTimes</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">),</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">).</span><span class="n">percentile</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ResponseTimes</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">),</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">percentile</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
 <span class="go">1250.0
 </span></code></pre></div></div>
 
@@ -746,7 +756,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">grade</span><span class="p">(</span><span class="n">milliseconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rating</span>
 </code></pre></div></div>
 
-<p>Grade a correct first answer against earlier answers to this exercise.</p>
+<p>Grade a correct first answer against earlier answers to this
+exercise.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -762,7 +773,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ResponseTimes</span><span class="p">((</span><span class="mi">1000</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">).</span><span class="n">grade</span><span class="p">(</span><span class="mi">1000</span><span class="p">).</span><span class="n">name</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ResponseTimes</span><span class="p">((</span><span class="mi">1000</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">).</span><span class="n">grade</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">1000</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span>
 <span class="go">'Good'
 </span></code></pre></div></div>
 
@@ -945,8 +958,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

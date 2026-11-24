@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,11 +676,14 @@
         <article>
           <h1>alto.ui.database_page</h1>
           
-<p>A read-only look at what is stored: every answer, every question’s record, and the profiles.</p>
+<p>A read-only look at what is stored: every answer, every question’s
+record, and the profiles.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">_when</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># a timestamp as 'YYYY-MM-DD HH:MM:SS'
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">_when</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># a timestamp as 'YYYY-MM-DD HH:MM:SS'
 </span><span class="go">19
 </span></code></pre></div></div>
 
@@ -698,7 +701,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QAbstractTableModel</code></p>
 
-<p>Rows of (text shown, value to sort by) cells, as a table model. Numbers are right-aligned.</p>
+<p>Rows of (text shown, value to sort by) cells, as a table model.
+Numbers are right-aligned.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -711,10 +715,19 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span> <span class="o">=</span> <span class="n">RowsModel</span><span class="p">([</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Count"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">),</span> <span class="p">(</span><span class="s">"3"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]],</span> <span class="n">numeric</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span> <span class="o">=</span> <span class="n">RowsModel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Count"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">),</span> <span class="p">(</span><span class="s">"3"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">numeric</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">rowCount</span><span class="p">(),</span> <span class="n">model</span><span class="p">.</span><span class="n">columnCount</span><span class="p">()</span>
 <span class="go">(1, 2)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">SORT_ROLE</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">SORT_ROLE</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('3', 3)
 </span></code></pre></div></div>
 
@@ -734,7 +747,9 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RowsModel</span><span class="p">([</span><span class="s">"Name"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">)]]).</span><span class="n">extras</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RowsModel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Name"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">)]]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">extras</span>
 <span class="go">[{}]
 </span></code></pre></div></div>
 
@@ -759,7 +774,13 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RowsModel</span><span class="p">([</span><span class="s">"Name"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">)],</span> <span class="p">[(</span><span class="s">"Ben"</span><span class="p">,</span> <span class="s">"Ben"</span><span class="p">)]]).</span><span class="n">rowCount</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RowsModel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Name"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">rows</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">)],</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[(</span><span class="s">"Ben"</span><span class="p">,</span> <span class="s">"Ben"</span><span class="p">)],</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">rowCount</span><span class="p">()</span>
 <span class="go">2
 </span></code></pre></div></div>
 
@@ -784,7 +805,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RowsModel</span><span class="p">([</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Count"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[]).</span><span class="n">columnCount</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RowsModel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Count"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">columnCount</span><span class="p">()</span>
 <span class="go">2
 </span></code></pre></div></div>
 
@@ -813,11 +836,19 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span> <span class="o">=</span> <span class="n">RowsModel</span><span class="p">([</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Count"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">),</span> <span class="p">(</span><span class="s">"3"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]],</span> <span class="n">numeric</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span> <span class="o">=</span> <span class="n">RowsModel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Count"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">),</span> <span class="p">(</span><span class="s">"3"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">numeric</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 <span class="go">'Ada'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">align</span> <span class="o">=</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ItemDataRole</span><span class="p">.</span><span class="n">TextAlignmentRole</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">align</span><span class="p">)</span> <span class="o">!=</span> <span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">align</span><span class="p">)</span>  <span class="c1"># numbers are right-aligned
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">align</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">!=</span> <span class="n">model</span><span class="p">.</span><span class="n">data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">align</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># numbers are right-aligned
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -848,8 +879,12 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span> <span class="o">=</span> <span class="n">RowsModel</span><span class="p">([</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Count"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">headerData</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">Orientation</span><span class="p">.</span><span class="n">Horizontal</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span> <span class="o">=</span> <span class="n">RowsModel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Count"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">headerData</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">1</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">Orientation</span><span class="p">.</span><span class="n">Horizontal</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'Count'
 </span></code></pre></div></div>
 
@@ -858,7 +893,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">QuestionTexts</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>Describes stored questions in words, remembering each one so it is worked out only once.</p>
+<p>Describes stored questions in words, remembering each one so it is
+worked out only once.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -887,7 +923,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]]],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Turn answers read from the database into the cells of a table, and the hidden details of each row.</p>
+<p>Turn answers read from the database into the cells of a table, and
+the hidden details of each row.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -908,13 +945,26 @@
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answered_at</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">table</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">answer_cells</span><span class="p">(</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">attempt_rows</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">),</span> <span class="n">names</span><span class="o">=</span><span class="p">{</span><span class="s">"NoteNames"</span><span class="p">:</span> <span class="s">"Note Identification"</span><span class="p">},</span> <span class="n">texts</span><span class="o">=</span><span class="n">QuestionTexts</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">attempt_rows</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">names</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"NoteNames"</span><span class="p">:</span> <span class="s">"Note Identification"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">texts</span><span class="o">=</span><span class="n">QuestionTexts</span><span class="p">(),</span>
 <span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">text</span> <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">:]</span>
-<span class="go">['Note Identification', '(no longer stored)', 'C', 'Right', '1', '2.5 s', '—']
+<span class="go">['Note Identification', '(no longer stored)', 'C', 'Right', '1',
+'2.5 s', '—']
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">hidden</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">"exercise"</span><span class="p">]</span>
 <span class="go">'NoteNames'
 </span></code></pre></div></div>
@@ -930,7 +980,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the question behind a row of an answers table, if its record is still stored.</p>
+<p>Show the question behind a row of an answers table, if its record is
+still stored.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -943,8 +994,14 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span> <span class="o">=</span> <span class="n">RowsModel</span><span class="p">([</span><span class="s">"Name"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">)]])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">open_preview</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">names</span><span class="o">=</span><span class="p">{},</span> <span class="n">parent</span><span class="o">=</span><span class="n">QWidget</span><span class="p">())</span>  <span class="c1"># a row with no stored question shows nothing
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">model</span> <span class="o">=</span> <span class="n">RowsModel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Name"</span><span class="p">],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[[(</span><span class="s">"Ada"</span><span class="p">,</span> <span class="s">"Ada"</span><span class="p">)]]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">open_preview</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">model</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">names</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">parent</span><span class="o">=</span><span class="n">QWidget</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># a row with no stored question shows nothing
 </span></code></pre></div></div>
 
 <h2 id="answerlist">AnswerList</h2>
@@ -959,7 +1016,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QTableView</code></p>
 
-<p>A table of answers that sorts when a heading is clicked and opens the question behind a row on a double click.</p>
+<p>A table of answers that sorts when a heading is clicked and opens
+the question behind a row on a double click.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1029,7 +1087,8 @@
 
 <p>The tables behind the app.</p>
 
-<p>Answers and questions are the active profile’s own; profiles lists everyone.</p>
+<p>Answers and questions are the active profile’s own; profiles lists
+everyone.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1046,7 +1105,11 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">DatabasePage</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">DatabasePage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Learner</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">note</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
 <span class="go">'0 answers by Ada.'
 </span></code></pre></div></div>
@@ -1066,7 +1129,11 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">DatabasePage</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">DatabasePage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Learner</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">tabs</span><span class="p">[</span><span class="s">"answers"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">()</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -1093,7 +1160,11 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">DatabasePage</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">DatabasePage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Learner</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">show_table</span><span class="p">(</span><span class="s">"profiles"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">note</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
 <span class="go">'1 profile.'
@@ -1326,8 +1397,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

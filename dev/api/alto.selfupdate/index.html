@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,17 +676,26 @@
         <article>
           <h1>alto.selfupdate</h1>
           
-<p>Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over.</p>
+<p>Replacing a packaged copy of Alto with a newer release: whether it can,
+getting the update, checking it, and handing over.</p>
 
-<p>A packaged copy is Alto frozen with PyInstaller, in a folder the user owns: <code class="language-plaintext highlighter-rouge">~/.local/opt/alto</code> on Linux, made by <code class="language-plaintext highlighter-rouge">install.sh</code>,
-and a folder under <code class="language-plaintext highlighter-rouge">%LOCALAPPDATA%\Programs</code> on Windows, made by the installer. Neither needs administrator rights, so Alto can
-fetch the new package, check it, and start the program that installs it. Nothing is installed unless the signature on the list of
-checksums verifies against a key that came with Alto, the list names the file, and the file’s hash is the one listed (see
-<code class="language-plaintext highlighter-rouge">alto.updates</code>). This module has no Qt, so the interface runs it on a worker thread and shows its progress.</p>
+<p>A packaged copy is Alto frozen with PyInstaller, in a folder the user
+owns: <code class="language-plaintext highlighter-rouge">~/.local/opt/alto</code> on Linux, made by <code class="language-plaintext highlighter-rouge">install.sh</code>,
+and a folder under <code class="language-plaintext highlighter-rouge">%LOCALAPPDATA%\Programs</code> on Windows, made by the
+installer. Neither needs administrator rights, so Alto can
+fetch the new package, check it, and start the program that installs it.
+Nothing is installed unless the signature on the list of
+checksums verifies against a key that came with Alto, the list names the
+file, and the file’s hash is the one listed (see
+<code class="language-plaintext highlighter-rouge">alto.updates</code>). This module has no Qt, so the interface runs it on a
+worker thread and shows its progress.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/nowhere/alto"</span><span class="p">),</span> <span class="n">system</span><span class="o">=</span><span class="s">"linux"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/nowhere/alto"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"linux"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -695,7 +704,8 @@ checksums verifies against a key that came with Alto, the list names the file, a
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UpdateError</span><span class="p">(</span><span class="nb">Exception</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Something went wrong in getting or checking an update. The message says what, in words for the person.</p>
+<p>Something went wrong in getting or checking an update. The message
+says what, in words for the person.</p>
 
 <h2 id="updatecanceled">UpdateCanceled</h2>
 
@@ -725,7 +735,11 @@ checksums verifies against a key that came with Alto, the list names the file, a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Target</span><span class="p">(</span><span class="s">"windows"</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Alto"</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">None</span><span class="p">).</span><span class="n">system</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Target</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"windows"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">folder</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Alto"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">prefix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">system</span>
 <span class="go">'windows'
 </span></code></pre></div></div>
 
@@ -738,7 +752,8 @@ checksums verifies against a key that came with Alto, the list names the file, a
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>An update that has been downloaded and checked, and is ready to be handed over.</p>
+<p>An update that has been downloaded and checked, and is ready to be
+handed over.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -750,7 +765,11 @@ checksums verifies against a key that came with Alto, the list names the file, a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Prepared</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"/tmp/x"</span><span class="p">),</span> <span class="n">installer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/tmp/x/unpacked/alto-0.1.0"</span><span class="p">)).</span><span class="n">installer</span> <span class="ow">is</span> <span class="bp">None</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Prepared</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"/tmp/x"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">installer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">root</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/tmp/x/unpacked/alto-0.1.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">installer</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -763,10 +782,13 @@ checksums verifies against a key that came with Alto, the list names the file, a
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Target</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Say whether the running copy can replace itself, and if so where it is.</p>
+<p>Say whether the running copy can replace itself, and if so where it
+is.</p>
 
-<p>On Linux a copy can if it was put in <code class="language-plaintext highlighter-rouge">&lt;prefix&gt;/opt/alto</code> by <code class="language-plaintext highlighter-rouge">install.sh</code>, which links <code class="language-plaintext highlighter-rouge">&lt;prefix&gt;/bin/alto</code> to it; a folder that
-someone unpacked and ran from cannot. On Windows a copy can if the installer made it, which leaves <code class="language-plaintext highlighter-rouge">unins000.exe</code> beside it.</p>
+<p>On Linux a copy can if it was put in <code class="language-plaintext highlighter-rouge">&lt;prefix&gt;/opt/alto</code> by
+<code class="language-plaintext highlighter-rouge">install.sh</code>, which links <code class="language-plaintext highlighter-rouge">&lt;prefix&gt;/bin/alto</code> to it; a folder that
+someone unpacked and ran from cannot. On Windows a copy can if the
+installer made it, which leaves <code class="language-plaintext highlighter-rouge">unins000.exe</code> beside it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -783,9 +805,15 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/usr/bin/python3"</span><span class="p">),</span> <span class="n">system</span><span class="o">=</span><span class="s">"linux"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/usr/bin/python3"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"linux"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/nowhere/alto.exe"</span><span class="p">),</span> <span class="n">system</span><span class="o">=</span><span class="s">"windows"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/nowhere/alto.exe"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"windows"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -803,7 +831,8 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Fetch a file, checking the address, the size and the connection, and give its SHA-256 hash.</p>
+<p>Fetch a file, checking the address, the size and the connection, and
+give its SHA-256 hash.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -839,7 +868,8 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span>
 </code></pre></div></div>
 
-<p>Unpack the Linux download, refusing anything that would land outside the folder.</p>
+<p>Unpack the Linux download, refusing anything that would land outside
+the folder.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -868,7 +898,8 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Take a note of progress and do nothing with it, for a download whose progress nobody watches.</p>
+<p>Take a note of progress and do nothing with it, for a download whose
+progress nobody watches.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -898,7 +929,8 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Prepared</span>
 </code></pre></div></div>
 
-<p>Download a release for this copy and check it: its signed list of checksums, then the file against its listed hash.</p>
+<p>Download a release for this copy and check it: its signed list of
+checksums, then the file against its listed hash.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -932,11 +964,16 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">clean_environment</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Undo what PyInstaller did to the environment, for a program that this one starts.</p>
+<p>Undo what PyInstaller did to the environment, for a program that
+this one starts.</p>
 
-<p>A packaged program puts its own libraries first on the library path, which would make the system’s <code class="language-plaintext highlighter-rouge">sh</code>, <code class="language-plaintext highlighter-rouge">tar</code> and the next
-Alto load them. PyInstaller keeps the original in <code class="language-plaintext highlighter-rouge">LD_LIBRARY_PATH_ORIG</code>, and asks a program that restarts itself to reset
-what it passed on. The desktop’s start-up token is for this launch only, so it is dropped too.</p>
+<p>A packaged program puts its own libraries first on the library path,
+which would make the system’s <code class="language-plaintext highlighter-rouge">sh</code>, <code class="language-plaintext highlighter-rouge">tar</code> and the next
+Alto load them. PyInstaller keeps the original in
+<code class="language-plaintext highlighter-rouge">LD_LIBRARY_PATH_ORIG</code>, and asks a program that restarts itself to
+reset
+what it passed on. The desktop’s start-up token is for this launch
+only, so it is dropped too.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -952,9 +989,21 @@ what it passed on. The desktop’s start-up token is for this launch only, so it
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_environment</span><span class="p">({</span><span class="s">"LD_LIBRARY_PATH"</span><span class="p">:</span> <span class="s">"/app/lib"</span><span class="p">,</span> <span class="s">"LD_LIBRARY_PATH_ORIG"</span><span class="p">:</span> <span class="s">"/usr/lib"</span><span class="p">,</span> <span class="s">"_PYI_ARCHIVE_FILE"</span><span class="p">:</span> <span class="s">"x"</span><span class="p">})</span>
-<span class="go">{'LD_LIBRARY_PATH': '/usr/lib', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_environment</span><span class="p">({</span><span class="s">"LD_LIBRARY_PATH"</span><span class="p">:</span> <span class="s">"/app/lib"</span><span class="p">,</span> <span class="s">"LD_LIBRARY_PATH_ORIG"</span><span class="p">:</span> <span class="s">""</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_environment</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"LD_LIBRARY_PATH"</span><span class="p">:</span> <span class="s">"/app/lib"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"LD_LIBRARY_PATH_ORIG"</span><span class="p">:</span> <span class="s">"/usr/lib"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"_PYI_ARCHIVE_FILE"</span><span class="p">:</span> <span class="s">"x"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">{'LD_LIBRARY_PATH': '/usr/lib', 'PYINSTALLER_RESET_ENVIRONMENT':
+'1'}
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_environment</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"LD_LIBRARY_PATH"</span><span class="p">:</span> <span class="s">"/app/lib"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"LD_LIBRARY_PATH_ORIG"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">{'PYINSTALLER_RESET_ENVIRONMENT': '1'}
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_environment</span><span class="p">({</span><span class="s">"HOME"</span><span class="p">:</span> <span class="s">"/home/me"</span><span class="p">})</span>
 <span class="go">{'HOME': '/home/me', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
@@ -965,7 +1014,8 @@ what it passed on. The desktop’s start-up token is for this launch only, so it
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">log_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span>
 </code></pre></div></div>
 
-<p>Give the file the Linux helper writes to, so that a failed update can be looked into.</p>
+<p>Give the file the Linux helper writes to, so that a failed update
+can be looked into.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -989,10 +1039,13 @@ what it passed on. The desktop’s start-up token is for this launch only, so it
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Give the command that waits for Alto to end, runs the installer, and starts the old Alto again if the installer fails.</p>
+<p>Give the command that waits for Alto to end, runs the installer, and
+starts the old Alto again if the installer fails.</p>
 
-<p>The installer must not start while Alto is still closing: it would find Alto’s files in use and, with no one to answer, give
-up. So Alto starts this command and quits, and the command waits for Alto’s process to be gone before it begins.</p>
+<p>The installer must not start while Alto is still closing: it would
+find Alto’s files in use and, with no one to answer, give
+up. So Alto starts this command and quits, and the command waits for
+Alto’s process to be gone before it begins.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1010,10 +1063,20 @@ up. So Alto starts this command and quits, and the command waits for Alto’s pr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">command</span> <span class="o">=</span> <span class="n">windows_handoff_command</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Temp/setup.exe"</span><span class="p">),</span> <span class="n">pid</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">alto</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Alto/alto.exe"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">POWERSHELL_ARGUMENTS</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">command</span> <span class="o">=</span> <span class="n">windows_handoff_command</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Temp/setup.exe"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pid</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">alto</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Alto/alto.exe"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">POWERSHELL_ARGUMENTS</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('powershell.exe', True)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-16-le"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="n">decode</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"utf-16-le"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Wait-Process -Id 42"</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="s">"/RELAUNCH=1"</span> <span class="ow">in</span> <span class="n">text</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -1030,7 +1093,8 @@ up. So Alto starts this command and quits, and the command waits for Alto’s pr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Start the program that installs the update, and return at once so that Alto can quit.</p>
+<p>Start the program that installs the update, and return at once so
+that Alto can quit.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1053,7 +1117,8 @@ up. So Alto starts this command and quits, and the command waits for Alto’s pr
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">new_work_folder</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span>
 </code></pre></div></div>
 
-<p>Make a new temporary folder for an update, whose name says what it is for.</p>
+<p>Make a new temporary folder for an update, whose name says what it
+is for.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1064,7 +1129,9 @@ up. So Alto starts this command and quits, and the command waits for Alto’s pr
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">new_work_folder</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span><span class="p">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="n">folder</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">LEFTOVER_PREFIX</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span><span class="p">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="n">folder</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">LEFTOVER_PREFIX</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span><span class="p">.</span><span class="n">rmdir</span><span class="p">()</span>
 </code></pre></div></div>
@@ -1079,7 +1146,8 @@ up. So Alto starts this command and quits, and the command waits for Alto’s pr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Remove the temporary folders of earlier updates that were never cleaned up, such as a Windows installer that was run and left.</p>
+<p>Remove the temporary folders of earlier updates that were never
+cleaned up, such as a Windows installer that was run and left.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1097,7 +1165,9 @@ up. So Alto starts this command and quits, and the command waits for Alto’s pr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">remove_leftovers</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/no/such/folder"</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">remove_leftovers</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">root</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/no/such/folder"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">0
 </span></code></pre></div></div>
 
@@ -1256,8 +1326,8 @@ up. So Alto starts this command and quits, and the command waits for Alto’s pr
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

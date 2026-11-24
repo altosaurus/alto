@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -682,7 +682,9 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings</span> <span class="o">=</span> <span class="n">store</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">3
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -694,8 +696,10 @@
 
 <p>Return the app’s saved settings.</p>
 
-<p>The first time it is opened under the name “alto” it brings across anything saved under the old name (“mtheory”), so a
-rename does not reset anyone’s preferences. If <code class="language-plaintext highlighter-rouge">ALTO_HOME</code> is set the settings are kept in a file in that folder instead,
+<p>The first time it is opened under the name “alto” it brings across
+anything saved under the old name (“mtheory”), so a
+rename does not reset anyone’s preferences. If <code class="language-plaintext highlighter-rouge">ALTO_HOME</code> is set
+the settings are kept in a file in that folder instead,
 and nothing is brought across from the system’s own.</p>
 
 <p><strong>Returns</strong></p>
@@ -725,7 +729,8 @@ and nothing is brought across from the system’s own.</p>
 
 <p>Read an integer setting.</p>
 
-<p><code class="language-plaintext highlighter-rouge">QSettings</code> hands back whatever was saved, which may be a number or its text.</p>
+<p><code class="language-plaintext highlighter-rouge">QSettings</code> hands back whatever was saved, which may be a number or
+its text.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -751,12 +756,18 @@ and nothing is brought across from the system’s own.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span> <span class="o">=</span> <span class="n">store</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="s">"42"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">42
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/missing"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/missing"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">7</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">7
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="s">"many"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">Traceback (most recent call last):
 </span><span class="c">    ...
 </span><span class="go">ValueError: invalid literal for int() with base 10: 'many'
@@ -793,9 +804,17 @@ and nothing is brought across from the system’s own.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span> <span class="o">=</span> <span class="n">store</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/name"</span><span class="p">,</span> <span class="s">"viola"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/name"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">"piano"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="s">"demo/name"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">default</span><span class="o">=</span><span class="s">"piano"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'viola'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/missing"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">"piano"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="s">"demo/missing"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">default</span><span class="o">=</span><span class="s">"piano"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'piano'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -829,11 +848,26 @@ and nothing is brought across from the system’s own.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span> <span class="o">=</span> <span class="n">store</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_bool</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/on"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bool_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/on"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">bool_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/missing"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_bool</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/on"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">bool_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">settings_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">key</span><span class="o">=</span><span class="s">"demo/on"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">bool_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">settings_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">key</span><span class="o">=</span><span class="s">"demo/missing"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/on"</span><span class="p">,</span> <span class="s">"FALSE"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bool_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/on"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bool_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/on"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">False
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -848,7 +882,8 @@ and nothing is brought across from the system’s own.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Save a switch as the text “true” or “false”, the form <code class="language-plaintext highlighter-rouge">bool_value</code> reads.</p>
+<p>Save a switch as the text “true” or “false”, the form <code class="language-plaintext highlighter-rouge">bool_value</code>
+reads.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -861,7 +896,9 @@ and nothing is brought across from the system’s own.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span> <span class="o">=</span> <span class="n">store</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_bool</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/on"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_bool</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/on"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">"demo/on"</span><span class="p">)</span>
 <span class="go">'false'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"demo"</span><span class="p">)</span>
@@ -879,7 +916,8 @@ and nothing is brought across from the system’s own.</p>
 
 <p>Read a saved list of words, such as “treble,bass”.</p>
 
-<p><code class="language-plaintext highlighter-rouge">QSettings</code> may hand back text that contains commas as a list of its parts, so both forms are read.</p>
+<p><code class="language-plaintext highlighter-rouge">QSettings</code> may hand back text that contains commas as a list of its
+parts, so both forms are read.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -898,11 +936,24 @@ and nothing is brought across from the system’s own.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span> <span class="o">=</span> <span class="n">store</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/clefs"</span><span class="p">,</span> <span class="s">"treble,,bass"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">list_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/clefs"</span><span class="p">),</span> <span class="n">list_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/missing"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"demo/clefs"</span><span class="p">,</span> <span class="s">"treble,,bass"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">list_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/clefs"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">list_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/missing"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(['treble', 'bass'], [])
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/modes"</span><span class="p">,</span> <span class="p">[</span><span class="s">"major|minor"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">list_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/modes"</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s">"|"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"demo/modes"</span><span class="p">,</span> <span class="p">[</span><span class="s">"major|minor"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">list_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="s">"demo/modes"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">separator</span><span class="o">=</span><span class="s">"|"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">['major', 'minor']
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -918,7 +969,8 @@ and nothing is brought across from the system’s own.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Read a saved set of choices, keeping only the ones that are still offered.</p>
+<p>Read a saved set of choices, keeping only the ones that are still
+offered.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -938,8 +990,16 @@ and nothing is brought across from the system’s own.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span> <span class="o">=</span> <span class="n">store</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/clefs"</span><span class="p">,</span> <span class="s">"treble,gone,bass"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">choices_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/clefs"</span><span class="p">,</span> <span class="n">allowed</span><span class="o">=</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"demo/clefs"</span><span class="p">,</span> <span class="s">"treble,gone,bass"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">settings_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">key</span><span class="o">=</span><span class="s">"demo/clefs"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">allowed</span><span class="o">=</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">['bass', 'treble']
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -953,7 +1013,8 @@ and nothing is brought across from the system’s own.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Read a saved set of key signatures, each a number of sharps (positive) or flats (negative) up to seven.</p>
+<p>Read a saved set of key signatures, each a number of sharps
+(positive) or flats (negative) up to seven.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -971,8 +1032,12 @@ and nothing is brought across from the system’s own.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span> <span class="o">=</span> <span class="n">store</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">"demo/keys"</span><span class="p">,</span> <span class="s">"-2,0,9,x,3"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">keys_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/keys"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"demo/keys"</span><span class="p">,</span> <span class="s">"-2,0,9,x,3"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys_value</span><span class="p">(</span><span class="n">settings_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/keys"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">[-2, 0, 3]
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -986,7 +1051,8 @@ and nothing is brought across from the system’s own.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Write values as the text that <code class="language-plaintext highlighter-rouge">list_value</code>, <code class="language-plaintext highlighter-rouge">choices_value</code> and <code class="language-plaintext highlighter-rouge">keys_value</code> read back.</p>
+<p>Write values as the text that <code class="language-plaintext highlighter-rouge">list_value</code>, <code class="language-plaintext highlighter-rouge">choices_value</code> and
+<code class="language-plaintext highlighter-rouge">keys_value</code> read back.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1003,7 +1069,12 @@ and nothing is brought across from the system’s own.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">joined</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">joined</span><span class="p">([</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"minor"</span><span class="p">],</span> <span class="n">separator</span><span class="o">=</span><span class="s">"|"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">joined</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">joined</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"minor"</span><span class="p">],</span> <span class="n">separator</span><span class="o">=</span><span class="s">"|"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('-1,0,2', 'major|minor')
 </span></code></pre></div></div>
 
@@ -1034,10 +1105,13 @@ and nothing is brought across from the system’s own.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">import_settings</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Replace every saved preference with the ones from a backup, so the preferences are exactly as they were.</p>
+<p>Replace every saved preference with the ones from a backup, so the
+preferences are exactly as they were.</p>
 
-<p>Preferences saved now that the backup does not have are removed. The marker that stops old “mtheory” preferences being
-brought across again is kept, so an old installation’s leftovers cannot leak back in.</p>
+<p>Preferences saved now that the backup does not have are removed. The
+marker that stops old “mtheory” preferences being
+brought across again is kept, so an old installation’s leftovers
+cannot leak back in.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1047,8 +1121,15 @@ brought across again is kept, so an old installation’s leftovers cannot leak b
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">import_settings</span><span class="p">({</span><span class="s">"demo/name"</span><span class="p">:</span> <span class="s">"Ada"</span><span class="p">,</span> <span class="s">"demo/count"</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">value</span><span class="p">(</span><span class="s">"demo/name"</span><span class="p">),</span> <span class="n">int_value</span><span class="p">(</span><span class="n">store</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">import_settings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="s">"demo/name"</span><span class="p">:</span> <span class="s">"Ada"</span><span class="p">,</span> <span class="s">"demo/count"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">store</span><span class="p">().</span><span class="n">value</span><span class="p">(</span><span class="s">"demo/name"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">int_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">store</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo/count"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('Ada', 3)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">remove</span><span class="p">(</span><span class="s">"demo"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">remove</span><span class="p">(</span><span class="s">""</span><span class="p">)</span>
@@ -1359,8 +1440,8 @@ brought across again is kept, so an old installation’s leftovers cannot leak b
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

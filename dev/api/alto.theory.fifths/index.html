@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,13 +676,18 @@
         <article>
           <h1>alto.theory.fifths</h1>
           
-<p>The circle of fifths: the twelve keys in order, each major with its relative minor.</p>
+<p>The circle of fifths: the twelve keys in order, each major with its
+relative minor.</p>
 
-<p>Going clockwise from C at the top, each key is a fifth above the one before, so it has one more sharp (or one fewer flat).
-The relative minor of a major key has the same key signature and starts on its sixth note: A minor goes with C major.</p>
+<p>Going clockwise from C at the top, each key is a fifth above the one
+before, so it has one more sharp (or one fewer flat).
+The relative minor of a major key has the same key signature and starts
+on its sixth note: A minor goes with C major.</p>
 
-<p>A key has six chords that fit on the circle: the major triads I, IV and V on the outer ring, and the minor triads ii, iii and
-vi on the inner ring. They are the key’s own wedge and the wedge on each side of it, on both rings. (The seventh chord, vii°,
+<p>A key has six chords that fit on the circle: the major triads I, IV and
+V on the outer ring, and the minor triads ii, iii and
+vi on the inner ring. They are the key’s own wedge and the wedge on each
+side of it, on both rings. (The seventh chord, vii°,
 is diminished and has no wedge.)</p>
 
 <p><strong>Examples</strong></p>
@@ -724,7 +729,11 @@ is diminished and has no wedge.)</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">place_of_major</span><span class="p">(</span><span class="s">"A"</span><span class="p">),</span> <span class="n">place_of_major</span><span class="p">(</span><span class="s">"C♭"</span><span class="p">),</span> <span class="n">place_of_major</span><span class="p">(</span><span class="s">"G♭"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">place_of_major</span><span class="p">(</span><span class="s">"A"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">place_of_major</span><span class="p">(</span><span class="s">"C♭"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">place_of_major</span><span class="p">(</span><span class="s">"G♭"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(3, 5, 6)
 </span></code></pre></div></div>
 
@@ -749,7 +758,11 @@ is diminished and has no wedge.)</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">relative_minor</span><span class="p">(</span><span class="s">"C"</span><span class="p">),</span> <span class="n">relative_minor</span><span class="p">(</span><span class="s">"E♭"</span><span class="p">),</span> <span class="n">relative_minor</span><span class="p">(</span><span class="s">"C♯"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">relative_minor</span><span class="p">(</span><span class="s">"C"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">relative_minor</span><span class="p">(</span><span class="s">"E♭"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">relative_minor</span><span class="p">(</span><span class="s">"C♯"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('Am', 'Cm', 'B♭m')
 </span></code></pre></div></div>
 
@@ -758,7 +771,8 @@ is diminished and has no wedge.)</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cells_of_key</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the six wedges that hold the chords of a major key, and the Roman numeral of each.</p>
+<p>Return the six wedges that hold the chords of a major key, and the
+Roman numeral of each.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -775,11 +789,18 @@ is diminished and has no wedge.)</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cells</span> <span class="o">=</span> <span class="n">cells_of_key</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cells</span><span class="p">[(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">11</span><span class="p">)],</span> <span class="n">cells</span><span class="p">[(</span><span class="s">"inner"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span> <span class="n">cells</span><span class="p">[(</span><span class="s">"inner"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>  <span class="c1"># F is IV; Am is vi; Em is iii
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cells</span><span class="p">[(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">11</span><span class="p">)],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cells</span><span class="p">[(</span><span class="s">"inner"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cells</span><span class="p">[(</span><span class="s">"inner"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># F is IV; Am is vi; Em is iii
 </span><span class="go">('IV', 'vi', 'iii')
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cells</span><span class="p">[(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>  <span class="c1"># G is V
 </span><span class="go">'V'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">cells_of_key</span><span class="p">(</span><span class="mi">11</span><span class="p">)),</span> <span class="n">cells_of_key</span><span class="p">(</span><span class="mi">11</span><span class="p">)[(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>  <span class="c1"># in F major, B♭ is IV
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">cells_of_key</span><span class="p">(</span><span class="mi">11</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cells_of_key</span><span class="p">(</span><span class="mi">11</span><span class="p">)[(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># in F major, B♭ is IV
 </span><span class="go">(6, 'IV')
 </span></code></pre></div></div>
 
@@ -788,9 +809,11 @@ is diminished and has no wedge.)</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">numeral_chords</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the six chords of a major key that are on the circle, spelled as that key spells them.</p>
+<p>Return the six chords of a major key that are on the circle, spelled
+as that key spells them.</p>
 
-<p>A wedge with two names, such as D♭ and C♯, is the same chord, but the key decides which name is right: C♯ is the V of F♯.</p>
+<p>A wedge with two names, such as D♭ and C♯, is the same chord, but
+the key decides which name is right: C♯ is the V of F♯.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -808,7 +831,10 @@ is diminished and has no wedge.)</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">numeral_chords</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="go">{'I': 'C', 'ii': 'Dm', 'iii': 'Em', 'IV': 'F', 'V': 'G', 'vi': 'Am'}
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">numeral_chords</span><span class="p">(</span><span class="mi">6</span><span class="p">)[</span><span class="s">"V"</span><span class="p">],</span> <span class="n">numeral_chords</span><span class="p">(</span><span class="mi">7</span><span class="p">)[</span><span class="s">"IV"</span><span class="p">]</span>  <span class="c1"># in F♯ major the V is C♯; in D♭ major the IV is G♭
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">numeral_chords</span><span class="p">(</span><span class="mi">6</span><span class="p">)[</span><span class="s">"V"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">numeral_chords</span><span class="p">(</span><span class="mi">7</span><span class="p">)[</span><span class="s">"IV"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># in F♯ major the V is C♯; in D♭ major the IV is G♭
 </span><span class="go">('C♯', 'G♭')
 </span></code></pre></div></div>
 
@@ -817,7 +843,8 @@ is diminished and has no wedge.)</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">display_major</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the major key of a place as it is written to ask about it: “A major”, or “B major / C♭ major”.</p>
+<p>Return the major key of a place as it is written to ask about it: “A
+major”, or “B major / C♭ major”.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -842,7 +869,8 @@ is diminished and has no wedge.)</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">display_minor</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the minor key of a place as it is written to ask about it: “F♯ minor”, or “G♯ minor / A♭ minor”.</p>
+<p>Return the minor key of a place as it is written to ask about it:
+“F♯ minor”, or “G♯ minor / A♭ minor”.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -867,7 +895,8 @@ is diminished and has no wedge.)</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">accidentals_of</span><span class="p">(</span><span class="n">signature</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the sharps or flats of a key signature, in the order they are written.</p>
+<p>Return the sharps or flats of a key signature, in the order they are
+written.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -896,7 +925,8 @@ is diminished and has no wedge.)</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Explain a cell of the circle: its key signature, where it comes from, its relative key and its chords.</p>
+<p>Explain a cell of the circle: its key signature, where it comes
+from, its relative key and its chords.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -914,11 +944,19 @@ is diminished and has no wedge.)</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span> <span class="o">=</span> <span class="n">explain</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"&lt;b&gt;G major&lt;/b&gt;"</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="s">"1 sharp: F♯"</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="s">"a fifth above C"</span> <span class="ow">in</span> <span class="n">text</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"&lt;b&gt;G major&lt;/b&gt;"</span> <span class="ow">in</span> <span class="n">text</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">and</span> <span class="s">"1 sharp: F♯"</span> <span class="ow">in</span> <span class="n">text</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">and</span> <span class="s">"a fifth above C"</span> <span class="ow">in</span> <span class="n">text</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"relative major, &lt;b&gt;C major&lt;/b&gt;"</span> <span class="ow">in</span> <span class="n">explain</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"relative major, &lt;b&gt;C major&lt;/b&gt;"</span> <span class="ow">in</span> <span class="n">explain</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"&lt;b&gt;C♭ major&lt;/b&gt;"</span> <span class="ow">in</span> <span class="n">explain</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="ow">and</span> <span class="s">"7 flats"</span> <span class="ow">in</span> <span class="n">explain</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"&lt;b&gt;C♭ major&lt;/b&gt;"</span> <span class="ow">in</span> <span class="n">explain</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">and</span> <span class="s">"7 flats"</span> <span class="ow">in</span> <span class="n">explain</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1123,8 +1161,8 @@ is diminished and has no wedge.)</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

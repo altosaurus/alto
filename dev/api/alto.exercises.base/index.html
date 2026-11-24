@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,15 +676,22 @@
         <article>
           <h1>alto.exercises.base</h1>
           
-<p>Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks.</p>
+<p>Exercise framework. Register a ChoiceExercise for button answers or an
+Exercise for construction tasks.</p>
 
-<p>An <code class="language-plaintext highlighter-rouge">Exercise</code> makes <code class="language-plaintext highlighter-rouge">Question</code> objects. The <code class="language-plaintext highlighter-rouge">Question</code> says what to show (a staff, a keyboard or only text), which
-buttons to offer and which answer is right. The exercise screen and the scheduler work with those two classes only, so
+<p>An <code class="language-plaintext highlighter-rouge">Exercise</code> makes <code class="language-plaintext highlighter-rouge">Question</code> objects. The <code class="language-plaintext highlighter-rouge">Question</code> says what to show
+(a staff, a keyboard or only text), which
+buttons to offer and which answer is right. The exercise screen and the
+scheduler work with those two classes only, so
 a new exercise needs no new interface code.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Name this note."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">,</span> <span class="s">"E"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"D"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Name this note."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">,</span> <span class="s">"E"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"D"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"D"</span><span class="p">),</span> <span class="n">question</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"E"</span><span class="p">)</span>
 <span class="go">(True, False)
 </span></code></pre></div></div>
@@ -703,7 +710,9 @@ a new exercise needs no new interface code.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">FingerboardPosition</span><span class="p">((</span><span class="s">"C3"</span><span class="p">,</span> <span class="s">"G3"</span><span class="p">,</span> <span class="s">"D4"</span><span class="p">,</span> <span class="s">"A4"</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="s">"E4"</span><span class="p">).</span><span class="n">string</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">FingerboardPosition</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="s">"C3"</span><span class="p">,</span> <span class="s">"G3"</span><span class="p">,</span> <span class="s">"D4"</span><span class="p">,</span> <span class="s">"A4"</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="s">"E4"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">string</span>
 <span class="go">2
 </span></code></pre></div></div>
 
@@ -742,9 +751,15 @@ a new exercise needs no new interface code.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PicturePosition</span><span class="p">(</span><span class="s">"pack.studio.drum"</span><span class="p">,</span> <span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">50</span><span class="p">)).</span><span class="n">point</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PicturePosition</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"pack.studio.drum"</span><span class="p">,</span> <span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">point</span>
 <span class="go">(80, 50)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PicturePosition</span><span class="p">(</span><span class="s">"pack.studio.organ"</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">keys</span><span class="o">=</span><span class="p">((</span><span class="s">"Great"</span><span class="p">,</span> <span class="s">"C4"</span><span class="p">),</span> <span class="p">(</span><span class="s">"Swell"</span><span class="p">,</span> <span class="s">"E4"</span><span class="p">))).</span><span class="n">keys</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PicturePosition</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"pack.studio.organ"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">((</span><span class="s">"Great"</span><span class="p">,</span> <span class="s">"C4"</span><span class="p">),</span> <span class="p">(</span><span class="s">"Swell"</span><span class="p">,</span> <span class="s">"E4"</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">keys</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="go">('Swell', 'E4')
 </span></code></pre></div></div>
 
@@ -846,10 +861,17 @@ a new exercise needs no new interface code.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Which note is this?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">,</span> <span class="s">"E"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"D"</span><span class="p">,</span> <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Which note is this?"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">,</span> <span class="s">"E"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"D"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"D"</span><span class="p">)</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="o">==</span> <span class="n">q</span>  <span class="c1"># a question can be stored and asked again
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">.</span><span class="n">from_dict</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">q</span><span class="p">.</span><span class="n">to_dict</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">q</span>  <span class="c1"># a question can be stored and asked again
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -860,7 +882,8 @@ a new exercise needs no new interface code.</p>
 
 <p>Report whether a note placed on the staff is the one asked for.</p>
 
-<p>The spelling must match exactly. The octave must also match unless <code class="language-plaintext highlighter-rouge">any_octave</code> is set.</p>
+<p>The spelling must match exactly. The octave must also match
+unless <code class="language-plaintext highlighter-rouge">any_octave</code> is set.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -876,19 +899,45 @@ a new exercise needs no new interface code.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Place C4"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C4"</span><span class="p">,</span> <span class="n">construct</span><span class="o">=</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Place C4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">construct</span><span class="o">=</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_placed</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_placed</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"B#3"</span><span class="p">))</span>  <span class="c1"># sounds the same, but is spelled differently
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_placed</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"B#3"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># sounds the same, but is spelled differently
 </span><span class="go">False
 </span></code></pre></div></div>
+
+<h3 id="questionsounding_columns">Question.sounding_columns</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sounding_columns</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>Return pitches from the staff or keyboard in playback order.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of list of Note</em>: Each column contains the pitches sounding together.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A keyboard interval plays both of its highlighted pitches.
+</code></pre></div></div>
 
 <h3 id="questionplacement_columns">Question.placement_columns</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">placement_columns</span><span class="p">(</span><span class="n">note</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Return the given and placed notes grouped by onset, omitting the answer until it is placed.</p>
+<p>Return the given and placed notes grouped by onset, omitting the
+answer until it is placed.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -904,8 +953,17 @@ a new exercise needs no new interface code.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Place a major third."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"E4"</span><span class="p">,</span> <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">)]])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">placement_columns</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Place a major third."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"E4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">placement_columns</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -914,11 +972,15 @@ a new exercise needs no new interface code.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_scale</span><span class="p">(</span><span class="n">notes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Report whether the notes placed on the staff are the scale asked for.</p>
+<p>Report whether the notes placed on the staff are the scale asked
+for.</p>
 
-<p>The spelling and the order of the notes must match, so a G♯ is not an A♭. Unless <code class="language-plaintext highlighter-rouge">exact_octave</code> is set the octave
-does not matter, as long as the whole scale is in the same one: the same scale an octave higher or lower is right,
-but a scale with one note in the wrong octave is not. With <code class="language-plaintext highlighter-rouge">exact_octave</code> the scale has to be in the octave asked.</p>
+<p>The spelling and the order of the notes must match, so a G♯ is
+not an A♭. Unless <code class="language-plaintext highlighter-rouge">exact_octave</code> is set the octave
+does not matter, as long as the whole scale is in the same one:
+the same scale an octave higher or lower is right,
+but a scale with one note in the wrong octave is not. With
+<code class="language-plaintext highlighter-rouge">exact_octave</code> the scale has to be in the octave asked.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -935,17 +997,47 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">asked</span> <span class="o">=</span> <span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Place C D."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C4 D4"</span><span class="p">,</span> <span class="n">construct_scale</span><span class="o">=</span><span class="n">asked</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Place C D."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C4 D4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">construct_scale</span><span class="o">=</span><span class="n">asked</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C5"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D5"</span><span class="p">)])</span>  <span class="c1"># the same scale, an octave higher
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C5"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D5"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the same scale, an octave higher
 </span><span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D5"</span><span class="p">)])</span>  <span class="c1"># one note in another octave
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D5"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># one note in another octave
 </span><span class="go">False
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">)])</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">False
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">exact</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Place C D."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C4 D4"</span><span class="p">,</span> <span class="n">construct_scale</span><span class="o">=</span><span class="n">asked</span><span class="p">,</span> <span class="n">exact_octave</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">exact</span><span class="p">.</span><span class="n">check_scale</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]),</span> <span class="n">exact</span><span class="p">.</span><span class="n">check_scale</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C5"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D5"</span><span class="p">)])</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">exact</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Place C D."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C4 D4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">construct_scale</span><span class="o">=</span><span class="n">asked</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exact_octave</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exact</span><span class="p">.</span><span class="n">check_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exact</span><span class="p">.</span><span class="n">check_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C5"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D5"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, False)
 </span></code></pre></div></div>
 
@@ -954,7 +1046,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_steps</span><span class="p">(</span><span class="n">steps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Report whether the steps marked between the notes of a scale are the right ones.</p>
+<p>Report whether the steps marked between the notes of a scale are
+the right ones.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -970,10 +1063,21 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Mark the steps."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"W H"</span><span class="p">,</span> <span class="n">construct_steps</span><span class="o">=</span><span class="p">[</span><span class="s">"W"</span><span class="p">,</span> <span class="s">"H"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_steps</span><span class="p">([</span><span class="s">"W"</span><span class="p">,</span> <span class="s">"H"</span><span class="p">]),</span> <span class="n">q</span><span class="p">.</span><span class="n">check_steps</span><span class="p">([</span><span class="s">"H"</span><span class="p">,</span> <span class="s">"W"</span><span class="p">]),</span> <span class="n">q</span><span class="p">.</span><span class="n">check_steps</span><span class="p">([</span><span class="s">"W"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Mark the steps."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"W H"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">construct_steps</span><span class="o">=</span><span class="p">[</span><span class="s">"W"</span><span class="p">,</span> <span class="s">"H"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">q</span><span class="p">.</span><span class="n">check_steps</span><span class="p">([</span><span class="s">"W"</span><span class="p">,</span> <span class="s">"H"</span><span class="p">]),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">q</span><span class="p">.</span><span class="n">check_steps</span><span class="p">([</span><span class="s">"H"</span><span class="p">,</span> <span class="s">"W"</span><span class="p">]),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">q</span><span class="p">.</span><span class="n">check_steps</span><span class="p">([</span><span class="s">"W"</span><span class="p">]),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, False, False)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">(</span><span class="s">"No steps."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">""</span><span class="p">).</span><span class="n">check_steps</span><span class="p">([])</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"No steps."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">""</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">check_steps</span><span class="p">([])</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -982,7 +1086,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_built</span><span class="p">(</span><span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Report whether a key signature built with the fork is the one asked for.</p>
+<p>Report whether a key signature built with the fork is the one
+asked for.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -998,7 +1103,14 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Build D major."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"2 sharps"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">show_staff</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">build_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Build D major."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"2 sharps"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">show_staff</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">build_key</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_built</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">q</span><span class="p">.</span><span class="n">check_built</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">(True, False)
 </span></code></pre></div></div>
@@ -1009,7 +1121,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <span class="k">def</span> <span class="nf">places_sequence</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Report whether the learner enters successive positions on the staff.</p>
+<p>Report whether the learner enters successive positions on the
+staff.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1019,7 +1132,12 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">(</span><span class="s">"D major"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"F♯5 C♯5"</span><span class="p">,</span> <span class="n">place_signature</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">places_sequence</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"D major"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"F♯5 C♯5"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">place_signature</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">places_sequence</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1044,11 +1162,25 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"F♯"</span><span class="p">,</span> <span class="s">"G♭"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"F♯"</span><span class="p">,</span> <span class="n">accept</span><span class="o">=</span><span class="p">(</span><span class="s">"G♭"</span><span class="p">,))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"F♯"</span><span class="p">,</span> <span class="s">"G♭"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"F♯"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">accept</span><span class="o">=</span><span class="p">(</span><span class="s">"G♭"</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"F♯"</span><span class="p">),</span> <span class="n">q</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"G♭"</span><span class="p">),</span> <span class="n">q</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"A"</span><span class="p">)</span>
 <span class="go">(True, True, False)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">both</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"B"</span><span class="p">,</span> <span class="s">"C♭"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"B"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">(</span><span class="s">"B"</span><span class="p">,</span> <span class="s">"C♭"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">both</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"B"</span><span class="p">),</span> <span class="n">both</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"C♭"</span><span class="p">),</span> <span class="n">both</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"D"</span><span class="p">)</span>  <span class="c1"># each is right, but both are needed: see `complete`
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">both</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"B"</span><span class="p">,</span> <span class="s">"C♭"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"B"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">required</span><span class="o">=</span><span class="p">(</span><span class="s">"B"</span><span class="p">,</span> <span class="s">"C♭"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">both</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"B"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">both</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"C♭"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">both</span><span class="p">.</span><span class="n">check</span><span class="p">(</span><span class="s">"D"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># each is right, but both are needed: see `complete`
 </span><span class="go">(True, True, False)
 </span></code></pre></div></div>
 
@@ -1073,10 +1205,20 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">both</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"B"</span><span class="p">,</span> <span class="s">"C♭"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"B"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">(</span><span class="s">"B"</span><span class="p">,</span> <span class="s">"C♭"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">both</span><span class="p">.</span><span class="n">complete</span><span class="p">({</span><span class="s">"B"</span><span class="p">}),</span> <span class="n">both</span><span class="p">.</span><span class="n">complete</span><span class="p">({</span><span class="s">"C♭"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">both</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"B"</span><span class="p">,</span> <span class="s">"C♭"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"B"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">required</span><span class="o">=</span><span class="p">(</span><span class="s">"B"</span><span class="p">,</span> <span class="s">"C♭"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">both</span><span class="p">.</span><span class="n">complete</span><span class="p">({</span><span class="s">"B"</span><span class="p">}),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">both</span><span class="p">.</span><span class="n">complete</span><span class="p">({</span><span class="s">"C♭"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">}),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(False, True)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">).</span><span class="n">complete</span><span class="p">({</span><span class="s">"C"</span><span class="p">})</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">complete</span><span class="p">({</span><span class="s">"C"</span><span class="p">})</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1085,9 +1227,11 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">item_key</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return a stable identity for the question, so the same one can be recognized when it comes around again.</p>
+<p>Return a stable identity for the question, so the same one can
+be recognized when it comes around again.</p>
 
-<p>It covers what is asked and where it is drawn, but not the note value or the order of the buttons.</p>
+<p>It covers what is asked and where it is drawn, but not the note
+value or the order of the buttons.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1097,8 +1241,16 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">a</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Name it."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">b</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Name it."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"D"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">)</span>  <span class="c1"># the same question, buttons in another order
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">a</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Name it."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">b</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Name it."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"D"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the same question, buttons in another order
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">item_key</span><span class="p">()</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">item_key</span><span class="p">()</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">item_key</span><span class="p">())</span>
@@ -1110,7 +1262,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">to_dict</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
 </code></pre></div></div>
 
-<p>Return the question as plain data, so it can be stored and asked again.</p>
+<p>Return the question as plain data, so it can be stored and asked
+again.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1120,7 +1273,12 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">data</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Name it."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]]).</span><span class="n">to_dict</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">data</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Name it."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">to_dict</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="s">"answer"</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s">"staff"</span><span class="p">]</span>
 <span class="go">('C', [[{'octave': 4, 'letter': 0, 'accidental': 0}]])
 </span></code></pre></div></div>
@@ -1147,7 +1305,13 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Name it."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">accept</span><span class="o">=</span><span class="p">(</span><span class="s">"D"</span><span class="p">,))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Name it."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">accept</span><span class="o">=</span><span class="p">(</span><span class="s">"D"</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Question</span><span class="p">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="o">==</span> <span class="n">q</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -1173,7 +1337,13 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_from</span><span class="p">({</span><span class="s">"octave"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">"letter"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">"accidental"</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_from</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"octave"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"letter"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"accidental"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">Note(octave=4, letter=0, accidental=0)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_from</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
@@ -1184,7 +1354,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="o">*</span><span class="n">parts</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Describe the exercise settings in force, so a stored question is only asked again under the settings it was made for.</p>
+<p>Describe the exercise settings in force, so a stored question is
+only asked again under the settings it was made for.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1202,7 +1373,11 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signature</span><span class="p">({</span><span class="s">"clefs"</span><span class="p">:</span> <span class="p">{</span><span class="s">"bass"</span><span class="p">,</span> <span class="s">"treble"</span><span class="p">}},</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">'[{"clefs": ["bass", "treble"]}, 3]'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signature</span><span class="p">({</span><span class="s">"clefs"</span><span class="p">:</span> <span class="p">{</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">}},</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">signature</span><span class="p">({</span><span class="s">"clefs"</span><span class="p">:</span> <span class="p">{</span><span class="s">"bass"</span><span class="p">,</span> <span class="s">"treble"</span><span class="p">}},</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="s">"clefs"</span><span class="p">:</span> <span class="p">{</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">}},</span> <span class="mi">3</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="s">"clefs"</span><span class="p">:</span> <span class="p">{</span><span class="s">"bass"</span><span class="p">,</span> <span class="s">"treble"</span><span class="p">}},</span> <span class="mi">3</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1211,7 +1386,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Exercise</span><span class="p">(</span><span class="n">ABC</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>What every exercise provides: its name, how it makes questions and how long a good answer takes.</p>
+<p>What every exercise provides: its name, how it makes questions and
+how long a good answer takes.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1229,8 +1405,13 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">Exercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">name</span> <span class="o">=</span> <span class="s">"Demo"</span>
-<span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Pick A."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">)</span>
+<span class="c">...
+</span><span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"Pick A."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">)).</span><span class="n">answer</span>
 <span class="go">'A'
 </span></code></pre></div></div>
@@ -1257,7 +1438,9 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNames</span><span class="p">().</span><span class="n">sound_instrument</span><span class="p">(</span><span class="s">"pack.viola.bowed-viola"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNames</span><span class="p">().</span><span class="n">sound_instrument</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"pack.viola.bowed-viola"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'pack.viola.bowed-viola'
 </span></code></pre></div></div>
 
@@ -1268,7 +1451,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p>Return what identifies the settings that shape the questions.</p>
 
-<p>A stored question is only asked again while this is unchanged. Exercises with settings override it.</p>
+<p>A stored question is only asked again while this is unchanged.
+Exercises with settings override it.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1280,7 +1464,9 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">Exercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">()</span>
 <span class="go">''
 </span></code></pre></div></div>
@@ -1290,9 +1476,11 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Say what to do on a flashcard made from a question, where nothing on screen explains the task.</p>
+<p>Say what to do on a flashcard made from a question, where
+nothing on screen explains the task.</p>
 
-<p>Exercises whose on-screen prompt depends on the screen (buttons to press, a staff to click) override this.</p>
+<p>Exercises whose on-screen prompt depends on the screen (buttons
+to press, a staff to click) override this.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1310,11 +1498,25 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">Exercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">name</span> <span class="o">=</span> <span class="s">"Demo"</span>
-<span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Pick A."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">))</span>
+<span class="c">...
+</span><span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"Pick A."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'Demo'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">"Click the fermata."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"fermata"</span><span class="p">,</span> <span class="n">notation_target</span><span class="o">=</span><span class="p">(</span><span class="s">"fermata"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"Click the fermata."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"fermata"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">notation_target</span><span class="o">=</span><span class="p">(</span><span class="s">"fermata"</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'Locate the fermata.'
 </span></code></pre></div></div>
 
@@ -1323,7 +1525,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_groups</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Map playable examples to the skills that share a calendar review date.</p>
+<p>Map playable examples to the skills that share a calendar review
+date.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1333,7 +1536,9 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeyboardNotes</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeyboardNotes</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">card_groups</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -1343,7 +1548,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Count distinct cards possible with the current settings when the exercise has an exact catalog.</p>
+<p>Count distinct cards possible with the current settings when the
+exercise has an exact catalog.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1353,7 +1559,9 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeyboardNotes</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeyboardNotes</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">card_count</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -1363,7 +1571,8 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Yield distinct questions until 100 consecutive draws find no new playable item.</p>
+<p>Yield distinct questions until 100 consecutive draws find no new
+playable item.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1379,8 +1588,17 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeyboardNotes</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">daily_candidates</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))),</span> <span class="n">Question</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeyboardNotes</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">next</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">daily_candidates</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Question</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1410,10 +1628,14 @@ but a scale with one note in the wrong octave is not. With <code class="language
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeyboardNotes</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeyboardNotes</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span> <span class="o">=</span> <span class="n">KeyboardNotes</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">review_question</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">same_settings</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">==</span> <span class="n">q</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">review_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">q</span><span class="p">,</span> <span class="n">same_settings</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">q</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1422,9 +1644,11 @@ but a scale with one note in the wrong octave is not. With <code class="language
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
-<p>Bring a stored question up to date with how the exercise draws its questions now.</p>
+<p>Bring a stored question up to date with how the exercise draws
+its questions now.</p>
 
-<p>A question that is asked again comes from the copy stored when it was first asked, which an older version may
+<p>A question that is asked again comes from the copy stored when
+it was first asked, which an older version may
 have drawn differently. The default leaves it as it is.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1443,7 +1667,9 @@ have drawn differently. The default leaves it as it is.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">Exercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">().</span><span class="n">refresh</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="ow">is</span> <span class="n">q</span>
 <span class="go">True
@@ -1468,8 +1694,11 @@ have drawn differently. The default leaves it as it is.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">Exercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">description</span> <span class="o">=</span> <span class="s">"Spot the note."</span>
-<span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">)</span>
+<span class="c">...
+</span><span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Demo</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
 <span class="go">'Spot the note.'
 </span></code></pre></div></div>
@@ -1510,7 +1739,8 @@ have drawn differently. The default leaves it as it is.</p>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>An exercise’s choice of answer layout and maximum number of buttons per group.</p>
+<p>An exercise’s choice of answer layout and maximum number of buttons
+per group.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1525,11 +1755,14 @@ have drawn differently. The default leaves it as it is.</p>
 
 <p>A button-answer exercise with its own standard Buttons submenu.</p>
 
-<p>Supply the eligible choices in <code class="language-plaintext highlighter-rouge">make_question</code>. Set <code class="language-plaintext highlighter-rouge">default_limit</code> to start in Limited mode.</p>
+<p>Supply the eligible choices in <code class="language-plaintext highlighter-rouge">make_question</code>. Set <code class="language-plaintext highlighter-rouge">default_limit</code>
+to start in Limited mode.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">ChordQualities</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ChordQualities</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ChordQualities</span><span class="p">.</span><span class="n">button_settings</span><span class="p">().</span><span class="n">button_mode</span>
 <span class="go">'limited'
 </span></code></pre></div></div>
@@ -1541,7 +1774,8 @@ have drawn differently. The default leaves it as it is.</p>
 <span class="k">def</span> <span class="nf">button_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ButtonSettings</span>
 </code></pre></div></div>
 
-<p>Return the preferences shared by instances of this particular exercise.</p>
+<p>Return the preferences shared by instances of this particular
+exercise.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1561,7 +1795,8 @@ have drawn differently. The default leaves it as it is.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Include custom answer layouts when deciding which questions can be replayed.</p>
+<p>Include custom answer layouts when deciding which questions can
+be replayed.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1571,7 +1806,9 @@ have drawn differently. The default leaves it as it is.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">ChordQualities</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ChordQualities</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ChordQualities</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">()</span>
 <span class="go">''
 </span></code></pre></div></div>
@@ -1591,7 +1828,9 @@ have drawn differently. The default leaves it as it is.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">ChordQualities</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ChordQualities</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ChordQualities</span><span class="p">().</span><span class="n">practice_signature</span><span class="p">()</span>
 <span class="go">''
 </span></code></pre></div></div>
@@ -1617,8 +1856,14 @@ have drawn differently. The default leaves it as it is.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">ChordQualities</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ChordQualities</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">)).</span><span class="n">choices</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ChordQualities</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ChordQualities</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">.</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">.</span><span class="n">choices</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">5
 </span></code></pre></div></div>
 
@@ -1631,7 +1876,8 @@ have drawn differently. The default leaves it as it is.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
-<p>Limit each answer group while keeping all the buttons needed to complete the question.</p>
+<p>Limit each answer group while keeping all the buttons needed to
+complete the question.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1648,7 +1894,8 @@ have drawn differently. The default leaves it as it is.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A note and octave question keeps the correct name and octave in their respective groups.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A note and octave question keeps the correct name and octave in
+their respective groups.
 </code></pre></div></div>
 
 <h3 id="choiceexercisemake_question">ChoiceExercise.make_question</h3>
@@ -1657,7 +1904,8 @@ have drawn differently. The default leaves it as it is.</p>
 <span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
-<p>Generate the task and eligible answer choices before the button limit is applied.</p>
+<p>Generate the task and eligible answer choices before the button
+limit is applied.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1673,7 +1921,8 @@ have drawn differently. The default leaves it as it is.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Note Identification supplies the note names appropriate to the active clef and key settings.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Note Identification supplies the note names appropriate to the
+active clef and key settings.
 </code></pre></div></div>
 
 <h2 id="register">register</h2>
@@ -1683,7 +1932,8 @@ have drawn differently. The default leaves it as it is.</p>
 
 <p>Add an exercise to <code class="language-plaintext highlighter-rouge">REGISTRY</code>, next to the others of its category.</p>
 
-<p>The categories come in the order they first appear, so the home screen and the exercise list can show each category
+<p>The categories come in the order they first appear, so the home
+screen and the exercise list can show each category
 once, with all its exercises under it. Used as a class decorator.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1703,9 +1953,14 @@ once, with all its exercises under it. Used as a class decorator.</p>
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="o">@</span><span class="n">register</span>
 <span class="gp">...</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">Exercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">name</span> <span class="o">=</span> <span class="s">"Demo"</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">category</span> <span class="o">=</span> <span class="s">"A category no other exercise has"</span>
-<span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">category</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"A category no other exercise has"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="c">...
+</span><span class="gp">...</span><span class="w">     </span><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"A"</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">REGISTRY</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="n">Demo</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">REGISTRY</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">Demo</span><span class="p">)</span>
@@ -1722,7 +1977,8 @@ once, with all its exercises under it. Used as a class decorator.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Choose wrong answers to offer alongside the right one, and shuffle them all.</p>
+<p>Choose wrong answers to offer alongside the right one, and shuffle
+them all.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1741,7 +1997,12 @@ once, with all its exercises under it. Used as a class decorator.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choices_</span> <span class="o">=</span> <span class="n">pick_distractors</span><span class="p">(</span><span class="s">"C"</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">,</span> <span class="s">"E"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choices_</span> <span class="o">=</span> <span class="n">pick_distractors</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pool</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">,</span> <span class="s">"E"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">choices_</span><span class="p">),</span> <span class="s">"C"</span> <span class="ow">in</span> <span class="n">choices_</span>
 <span class="go">(3, True)
 </span></code></pre></div></div>
@@ -1909,8 +2170,8 @@ once, with all its exercises under it. Used as a class decorator.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

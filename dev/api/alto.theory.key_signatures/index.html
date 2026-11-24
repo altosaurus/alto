@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -687,10 +687,13 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the notes the sharps or flats of a key signature are written on, in a clef.</p>
+<p>Return the notes the sharps or flats of a key signature are written
+on, in a clef.</p>
 
-<p>Each accidental is a fourth up or a fifth down from the one before (sharps: F C G D A E B, flats: B E A D G C F), and the
-pattern is chosen so that all seven stay on the staff, or one step above or below it. This gives the usual signatures for
+<p>Each accidental is a fourth up or a fifth down from the one before
+(sharps: F C G D A E B, flats: B E A D G C F), and the
+pattern is chosen so that all seven stay on the staff, or one step
+above or below it. This gives the usual signatures for
 the treble, bass, alto and tenor clefs, and works out the rest.</p>
 
 <p><strong>Parameters</strong></p>
@@ -729,7 +732,8 @@ the treble, bass, alto and tenor clefs, and works out the rest.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Spell a key signature at its conventional staff positions, from left to right.</p>
+<p>Spell a key signature at its conventional staff positions, from left
+to right.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -746,7 +750,12 @@ the treble, bass, alto and tenor clefs, and works out the rest.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">written_signature</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">2</span><span class="p">)]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">written_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"bass"</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">2</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">['B♭2', 'E♭3']
 </span></code></pre></div></div>
 
@@ -953,8 +962,8 @@ the treble, bass, alto and tenor clefs, and works out the rest.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

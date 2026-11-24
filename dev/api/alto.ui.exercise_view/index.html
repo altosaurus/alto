@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,17 +676,24 @@
         <article>
           <h1>alto.ui.exercise_view</h1>
           
-<p>The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right.</p>
+<p>The exercise screen: a question, its answer buttons, the score, and a
+pane of settings that slides in from the right.</p>
 
-<p>One <code class="language-plaintext highlighter-rouge">ExerciseView</code> works for every exercise. It asks the exercise (or, with a profile, the learner) for the next
-<code class="language-plaintext highlighter-rouge">Question</code>, shows it as a staff, a keyboard or text, offers the answer buttons, and records each answer.</p>
+<p>One <code class="language-plaintext highlighter-rouge">ExerciseView</code> works for every exercise. It asks the exercise (or,
+with a profile, the learner) for the next
+<code class="language-plaintext highlighter-rouge">Question</code>, shows it as a staff, a keyboard or text, offers the answer
+buttons, and records each answer.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">question</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="p">[</span><span class="n">button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="k">for</span> <span class="n">button</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span><span class="p">]</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">question</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="k">for</span> <span class="n">button</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -695,12 +702,17 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">choice_keys</span><span class="p">(</span><span class="n">choices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Choose a key for each answer button, so that every answer can be given from the keyboard.</p>
+<p>Choose a key for each answer button, so that every answer can be
+given from the keyboard.</p>
 
-<p>Nine answers or fewer take the digits 1 to 9. More than that, as on the piano keyboard, take the notes’ own names: the
-letter for a natural, Shift and the letter for a sharp, Ctrl and the letter for a flat. A minor key, such as F♯m, is
-typed the same way as the major key of its name. Any other long list takes 1 to 9
-and then 0, and the rest can be reached with Tab. Scale-degree banks use the degree digit, with Shift for a sharp,
+<p>Nine answers or fewer take the digits 1 to 9. More than that, as on
+the piano keyboard, take the notes’ own names: the
+letter for a natural, Shift and the letter for a sharp, Ctrl and the
+letter for a flat. A minor key, such as F♯m, is
+typed the same way as the major key of its name. Any other long list
+takes 1 to 9
+and then 0, and the rest can be reached with Tab. Scale-degree banks
+use the degree digit, with Shift for a sharp,
 Ctrl for a flat, and Alt added for double alterations.</p>
 
 <p><strong>Parameters</strong></p>
@@ -717,9 +729,13 @@ Ctrl for a flat, and Alt added for double alterations.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choice_keys</span><span class="p">([</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"minor"</span><span class="p">,</span> <span class="s">"diminished"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choice_keys</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"minor"</span><span class="p">,</span> <span class="s">"diminished"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">['1', '2', '3']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choice_keys</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s">"CDEFGAB"</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s">"C♯"</span><span class="p">,</span> <span class="s">"B♭"</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s">"F♯"</span><span class="p">])</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choice_keys</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">list</span><span class="p">(</span><span class="s">"CDEFGAB"</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s">"C♯"</span><span class="p">,</span> <span class="s">"B♭"</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s">"F♯"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Shift+C', 'Ctrl+B', 'Shift+F']
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choice_keys</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)])[</span><span class="mi">8</span><span class="p">:]</span>
 <span class="go">['9', '0', '', '']
@@ -734,10 +750,13 @@ Ctrl for a flat, and Alt added for double alterations.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Choose a key for each button of the second row of a two-part answer, such as the octave or the inversion.</p>
+<p>Choose a key for each button of the second row of a two-part answer,
+such as the octave or the inversion.</p>
 
-<p>They must not be keys that the first row has. When the first row uses the digits the second row takes the home row,
-A S D F and so on; when the first row uses letters (the notes’ names) it takes the digits, and an octave that is a single
+<p>They must not be keys that the first row has. When the first row
+uses the digits the second row takes the home row,
+A S D F and so on; when the first row uses letters (the notes’
+names) it takes the digits, and an octave that is a single
 digit takes that digit.</p>
 
 <p><strong>Parameters</strong></p>
@@ -755,9 +774,17 @@ digit takes that digit.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second_row_keys</span><span class="p">([</span><span class="s">"1"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">"root position"</span><span class="p">,</span> <span class="s">"1st inversion"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second_row_keys</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"1"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">labels</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"root position"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"1st inversion"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">['A', 'S']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second_row_keys</span><span class="p">([</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"Shift+C"</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">"3"</span><span class="p">,</span> <span class="s">"4"</span><span class="p">,</span> <span class="s">"5"</span><span class="p">])</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second_row_keys</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"Shift+C"</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">"3"</span><span class="p">,</span> <span class="s">"4"</span><span class="p">,</span> <span class="s">"5"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">['3', '4', '5']
 </span></code></pre></div></div>
 
@@ -821,7 +848,11 @@ digit takes that digit.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">)),</span> <span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"Bb3"</span><span class="p">)),</span> <span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"Bb3"</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('F sharp 4', 'B flat 3', 'C 4')
 </span></code></pre></div></div>
 
@@ -872,7 +903,9 @@ digit takes that digit.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">score</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
 <span class="go">'0/0 (–)   streak 0'
 </span></code></pre></div></div>
@@ -892,10 +925,15 @@ digit takes that digit.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeySignatures</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">KeySignatures</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">settings_panel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>  <span class="c1"># the exercise has settings behind the gear button
-</span><span class="go">True
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeySignatures</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeySignatures</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># the exercise has settings behind the gear button
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">settings_panel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="go">True
 </span></code></pre></div></div>
 
 <h3 id="exerciseviewhideevent">ExerciseView.hideEvent</h3>
@@ -903,7 +941,8 @@ digit takes that digit.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hideEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QHideEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Pause automatic advancement and answer timing while browsing another page.</p>
+<p>Pause automatic advancement and answer timing while browsing
+another page.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -926,7 +965,8 @@ digit takes that digit.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">showEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QShowEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Resume the exercise’s answer clock and pending advance when it reappears.</p>
+<p>Resume the exercise’s answer clock and pending advance when it
+reappears.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -950,7 +990,8 @@ digit takes that digit.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_state</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Remember the exercise settings pane, selected page, and scroll position before a theme rebuild.</p>
+<p>Remember the exercise settings pane, selected page, and scroll
+position before a theme rebuild.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -961,7 +1002,9 @@ digit takes that digit.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)).</span><span class="n">settings_state</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExerciseView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">settings_state</span><span class="p">()</span>
 <span class="go">(False, 0, 0)
 </span></code></pre></div></div>
 
@@ -970,7 +1013,8 @@ digit takes that digit.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">restore_settings_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Restore exercise settings navigation immediately after rebuilding the view.</p>
+<p>Restore exercise settings navigation immediately after
+rebuilding the view.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -981,7 +1025,9 @@ digit takes that digit.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">restore_settings_state</span><span class="p">((</span><span class="bp">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">settings_state</span><span class="p">()</span>
 <span class="go">(True, 0, 0)
@@ -992,11 +1038,13 @@ digit takes that digit.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">scheduling_changed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Refresh the visible exercise or invalidate its queue until it is reopened.</p>
+<p>Refresh the visible exercise or invalidate its queue until it is
+reopened.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Lowering the daily allowance on the home page also applies to a previously opened exercise.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Lowering the daily allowance on the home page also applies to a
+previously opened exercise.
 </code></pre></div></div>
 
 <h3 id="exerciseviewnext_question">ExerciseView.next_question</h3>
@@ -1004,15 +1052,22 @@ digit takes that digit.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">next_question</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the next question: its staff, keyboard or text, and a fresh set of answer buttons.</p>
+<p>Show the next question: its staff, keyboard or text, and a fresh
+set of answer buttons.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">next_question</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">answered</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">buttons</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">question</span><span class="p">.</span><span class="n">choices</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">view</span><span class="p">.</span><span class="n">answered</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">buttons</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">question</span><span class="p">.</span><span class="n">choices</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(False, True)
 </span></code></pre></div></div>
 
@@ -1024,7 +1079,8 @@ digit takes that digit.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Handle staff clicks in notation questions and forward wheel turns to the fork or clef staff.</p>
+<p>Handle staff clicks in notation questions and forward wheel
+turns to the fork or clef staff.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1043,12 +1099,25 @@ digit takes that digit.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span><span class="p">,</span> <span class="n">QPointF</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QWheelEvent</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeySignatureConstruction</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">KeySignatureConstruction</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeySignatureConstruction</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeySignatureConstruction</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">turn</span> <span class="o">=</span> <span class="n">QWheelEvent</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">turn</span> <span class="o">=</span> <span class="n">QWheelEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">here</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">here</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">answer_button</span><span class="p">,</span> <span class="n">turn</span><span class="p">)</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
@@ -1064,10 +1133,13 @@ digit takes that digit.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Check an answer chosen with a button or by clicking the notation.</p>
+<p>Check an answer chosen with a button or by clicking the
+notation.</p>
 
-<p>A correct answer uses the selected Next Question setting. An incorrect button flashes red.
-In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS allow another answer on the same showing.</p>
+<p>A correct answer uses the selected Next Question setting. An
+incorrect button flashes red.
+In SM-2 and FSRS the card returns at its scheduled retry time.
+ASRS and ARTS allow another answer on the same showing.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1080,15 +1152,25 @@ In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS all
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="n">question</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wrong</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span> <span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">!=</span> <span class="n">question</span><span class="p">.</span><span class="n">answer</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wrong</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">b</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">!=</span> <span class="n">question</span><span class="p">.</span><span class="n">answer</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wrong</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">button</span><span class="o">=</span><span class="n">wrong</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">missed</span><span class="p">,</span> <span class="n">wrong</span><span class="p">.</span><span class="n">isEnabled</span><span class="p">()</span>
 <span class="go">(True, False)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">right</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span> <span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="n">question</span><span class="p">.</span><span class="n">answer</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">right</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">b</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="n">question</span><span class="p">.</span><span class="n">answer</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">question</span><span class="p">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="n">right</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">answered</span>
@@ -1334,8 +1416,8 @@ In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS all
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

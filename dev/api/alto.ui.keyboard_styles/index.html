@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,9 +676,11 @@
         <article>
           <h1>alto.ui.keyboard_styles</h1>
           
-<p>Keyboard styles: the colors and materials the on-screen piano keys are drawn in.</p>
+<p>Keyboard styles: the colors and materials the on-screen piano keys are
+drawn in.</p>
 
-<p>There are ready-made styles (<code class="language-plaintext highlighter-rouge">STYLES</code>) and a custom one built from colors chosen part by part.</p>
+<p>There are ready-made styles (<code class="language-plaintext highlighter-rouge">STYLES</code>) and a custom one built from
+colors chosen part by part.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -716,7 +718,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>How a keyboard looks: the colors of the keys and the case, and a few details of the drawing.</p>
+<p>How a keyboard looks: the colors of the keys and the case, and a few
+details of the drawing.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -842,7 +845,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_style</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Apply the saved style (Classic if none is saved or it is unknown), and the saved custom colors.</p>
+<p>Apply the saved style (Classic if none is saved or it is unknown),
+and the saved custom colors.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -858,7 +862,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_style</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Choose and save a style, and redraw every keyboard already on screen.</p>
+<p>Choose and save a style, and redraw every keyboard already on
+screen.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -883,7 +888,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Color one part of the custom keyboard and switch to the custom style.</p>
+<p>Color one part of the custom keyboard and switch to the custom
+style.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -894,10 +900,15 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_custom_color</span><span class="p">(</span><span class="s">"naturals"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">"#ffffff"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_custom_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"naturals"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">"#ffffff"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">().</span><span class="n">key</span><span class="p">,</span> <span class="n">custom_colors</span><span class="p">()[</span><span class="s">"naturals"</span><span class="p">]</span>
 <span class="go">('custom', '#ffffff')
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_custom_color</span><span class="p">(</span><span class="s">"naturals"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">DEFAULT_CUSTOM</span><span class="p">[</span><span class="s">"naturals"</span><span class="p">])</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_custom_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"naturals"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">DEFAULT_CUSTOM</span><span class="p">[</span><span class="s">"naturals"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_style</span><span class="p">(</span><span class="n">DEFAULT</span><span class="p">)</span>
 </code></pre></div></div>
 
@@ -908,7 +919,8 @@
 
 <p>Register a function to call whenever the keyboard style changes.</p>
 
-<p>The keyboard widgets live in a module that imports this one, so they register themselves here instead of being found by
+<p>The keyboard widgets live in a module that imports this one, so they
+register themselves here instead of being found by
 this module.</p>
 
 <p><strong>Parameters</strong></p>
@@ -938,7 +950,8 @@ this module.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Report whether a key has swapped colors, as the low preset keys of an organ do.</p>
+<p>Report whether a key has swapped colors, as the low preset keys of
+an organ do.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -958,7 +971,12 @@ this module.</p>
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">replace</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">reversed_key</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
 <span class="go">False
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">reversed_key</span><span class="p">(</span><span class="n">replace</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">reverse_below</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span> <span class="n">midi</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">reversed_key</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">replace</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">reverse_below</span><span class="o">=</span><span class="mi">50</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">midi</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -994,9 +1012,21 @@ this module.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_brush</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">100</span><span class="p">).</span><span class="n">color</span><span class="p">().</span><span class="n">name</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_brush</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">black</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">height</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">color</span><span class="p">().</span><span class="n">name</span><span class="p">()</span>
 <span class="go">'#fbfbfc'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_brush</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">100</span><span class="p">).</span><span class="n">gradient</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_brush</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">black</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">height</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">gradient</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1028,9 +1058,13 @@ this module.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">edge_color</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">edge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
 <span class="go">'#9a9a9f'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">edge_color</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">61</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">edge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">61</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
 <span class="go">'#111114'
 </span></code></pre></div></div>
 
@@ -1289,8 +1323,8 @@ this module.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

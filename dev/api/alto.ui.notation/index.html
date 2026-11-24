@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,9 +676,11 @@
         <article>
           <h1>alto.ui.notation</h1>
           
-<p>Notation styles: which music font the staff, clefs, notes and accidentals are engraved in.</p>
+<p>Notation styles: which music font the staff, clefs, notes and
+accidentals are engraved in.</p>
 
-<p>Also holds the choice of how the baritone clef is written (an F clef or a C clef).</p>
+<p>Also holds the choice of how the baritone clef is written (an F clef or
+a C clef).</p>
 
 <p><strong>Examples</strong></p>
 
@@ -764,7 +766,9 @@
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span><span class="s">"c"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clef_shape</span><span class="p">(</span><span class="s">"baritone"</span><span class="p">)</span>
 <span class="go">'baritone_c'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span><span class="s">"f"</span><span class="p">)</span>  <span class="c1"># back to the default
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"f"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># back to the default
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clef_shape</span><span class="p">(</span><span class="s">"baritone"</span><span class="p">)</span>
 <span class="go">'baritone_f'
 </span></code></pre></div></div>
@@ -774,7 +778,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_baritone_clef</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Choose and save how the baritone clef is written, and redraw every staff already on screen.</p>
+<p>Choose and save how the baritone clef is written, and redraw every
+staff already on screen.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -787,7 +792,9 @@
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span><span class="s">"c"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">baritone_clef</span><span class="p">()</span>
 <span class="go">'c'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span><span class="s">"sideways"</span><span class="p">)</span>  <span class="c1"># not a choice: the default
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"sideways"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># not a choice: the default
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">baritone_clef</span><span class="p">()</span>
 <span class="go">'f'
 </span></code></pre></div></div>
@@ -816,7 +823,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_style</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Apply the saved choices: the style (Finale Maestro if none is saved or it is unknown) and the baritone clef.</p>
+<p>Apply the saved choices: the style (Finale Maestro if none is saved
+or it is unknown) and the baritone clef.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -855,7 +863,8 @@
 
 <p>Register a function to call whenever the notation style changes.</p>
 
-<p>The staff widgets live in a module that imports this one, so they register themselves here instead of being found by
+<p>The staff widgets live in a module that imports this one, so they
+register themselves here instead of being found by
 this module.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1143,8 +1152,8 @@ this module.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

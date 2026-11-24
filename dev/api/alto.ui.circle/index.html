@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,16 +676,21 @@
         <article>
           <h1>alto.ui.circle</h1>
           
-<p>The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside.</p>
+<p>The circle of fifths: twelve wedges, the major keys on the outside and
+their relative minors on the inside.</p>
 
-<p>C is at the top and each step clockwise is a fifth up, so the keys gather sharps on the right and flats on the left. The
-disc in the middle shows the staff and key signature of the key being talked about. In an exercise one wedge is the question
+<p>C is at the top and each step clockwise is a fifth up, so the keys
+gather sharps on the right and flats on the left. The
+disc in the middle shows the staff and key signature of the key being
+talked about. In an exercise one wedge is the question
 and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"F♯ minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"F♯ minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span>
 <span class="go">('outer', 3)
 </span></code></pre></div></div>
@@ -720,8 +725,16 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">shape</span> <span class="o">=</span> <span class="n">wedge_path</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">inner</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">outer</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span> <span class="n">shape</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">170</span><span class="p">))</span>  <span class="c1"># the top of the circle, and the bottom
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">shape</span> <span class="o">=</span> <span class="n">wedge_path</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">inner</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">outer</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">shape</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">shape</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">170</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the top of the circle, and the bottom
 </span><span class="go">(True, False)
 </span></code></pre></div></div>
 
@@ -735,7 +748,8 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPointF</span>
 </code></pre></div></div>
 
-<p>Return the point in the middle of a wedge, at a given distance from the center.</p>
+<p>Return the point in the middle of a wedge, at a given distance from
+the center.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -753,9 +767,19 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wedge_middle</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>  <span class="c1"># straight up
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wedge_middle</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>  <span class="c1"># straight up
 </span><span class="go">(100.0, 50.0)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">wedge_middle</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">3</span><span class="p">).</span><span class="n">x</span><span class="p">())</span>  <span class="c1"># a quarter of the way around: to the right
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_middle</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">index</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">x</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># a quarter of the way around: to the right
 </span><span class="go">150
 </span></code></pre></div></div>
 
@@ -770,7 +794,8 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QColor</span>
 </code></pre></div></div>
 
-<p>Return the color of a wedge in a color scheme: quiet when it is not being talked about and bright when it is.</p>
+<p>Return the color of a wedge in a color scheme: quiet when it is not
+being talked about and bright when it is.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -791,14 +816,46 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spectrum</span> <span class="o">=</span> <span class="n">preset</span><span class="p">(</span><span class="s">"spectrum"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wedge_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">).</span><span class="n">hue</span><span class="p">(),</span> <span class="n">wedge_color</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">).</span><span class="n">hue</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">hue</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">6</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">hue</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0, 180)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lit</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="p">(</span><span class="n">wedge_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="n">amount</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">)</span> <span class="k">for</span> <span class="n">amount</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lit</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">lift</span><span class="o">=</span><span class="n">amount</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">amount</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lit</span><span class="p">.</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">quiet</span><span class="p">.</span><span class="n">lightness</span><span class="p">()</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># no wedge looks too bright for white names
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">every</span> <span class="o">=</span> <span class="p">[</span><span class="n">wedge_color</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">all</span><span class="p">(</span><span class="mf">0.299</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">redF</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.587</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">greenF</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.114</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">blueF</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">0.44</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">every</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">every</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">i</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">all</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">0.299</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">redF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="mf">0.587</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">greenF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="mf">0.114</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">blueF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">&lt;=</span> <span class="mf">0.44</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">every</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -816,10 +873,13 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Write a line of text centered on a point, with its sharps and flats drawn as the notation font draws them.</p>
+<p>Write a line of text centered on a point, with its sharps and flats
+drawn as the notation font draws them.</p>
 
-<p>The letters are in the app’s own font. Its ♭ is the shape of a small “b”, though, and does not look like a flat sign, so
-the sharps, flats and naturals are the glyphs of the notation style that the staff is drawn in, sized to the letters.</p>
+<p>The letters are in the app’s own font. Its ♭ is the shape of a small
+“b”, though, and does not look like a flat sign, so
+the sharps, flats and naturals are the glyphs of the notation style
+that the staff is drawn in, sized to the letters.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -836,13 +896,26 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">120</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_text</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s">"B♭m"</span><span class="p">,</span> <span class="n">pixels</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">QFont</span><span class="p">.</span><span class="n">Weight</span><span class="p">.</span><span class="n">Bold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_text</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">text</span><span class="o">=</span><span class="s">"B♭m"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pixels</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">weight</span><span class="o">=</span><span class="n">QFont</span><span class="p">.</span><span class="n">Weight</span><span class="p">.</span><span class="n">Bold</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">30</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">128</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">30</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">&gt;</span> <span class="mi">128</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -871,7 +944,9 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"outer"</span><span class="p">],</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span>
 <span class="go">({0}, 0)
@@ -912,6 +987,24 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 <span class="go">460
 </span></code></pre></div></div>
 
+<h3 id="fifthscircleset_question">FifthsCircle.set_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_question</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Display a circle question using its caption and selected cell.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The exercise question to display.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A numeral question highlights the selected chord's key.
+</code></pre></div></div>
+
 <h3 id="fifthscircleshow_question">FifthsCircle.show_question</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_question</span><span class="p">(</span>
@@ -924,10 +1017,13 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Ask about a cell, showing what the question needs and leaving the answer blank.</p>
+<p>Ask about a cell, showing what the question needs and leaving
+the answer blank.</p>
 
-<p>A “major” question shows the minor keys and asks for the major of one of them; a “minor” question shows the majors and
-asks for a minor; a “numeral” question shows every name, lights the six chords of a key with its staff in the middle, and
+<p>A “major” question shows the minor keys and asks for the major
+of one of them; a “minor” question shows the majors and
+asks for a minor; a “numeral” question shows every name, lights
+the six chords of a key with its staff in the middle, and
 asks for the Roman numeral of one of them.</p>
 
 <p><strong>Parameters</strong></p>
@@ -943,11 +1039,28 @@ asks for the Roman numeral of one of them.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"minor"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A major"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"outer"</span><span class="p">]</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)),</span> <span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">],</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"minor"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A major"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"outer"</span><span class="p">]</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(('inner', 3), True, set(), None)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"numeral"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">ring</span><span class="o">=</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"C major"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="n">lit</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">numerals</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"numeral"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">place</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ring</span><span class="o">=</span><span class="s">"outer"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"C major"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">sorted</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="n">lit</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">numerals</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">([0, 1, 11], 0, {})
 </span></code></pre></div></div>
 
@@ -956,14 +1069,21 @@ asks for the Roman numeral of one of them.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Clear everything: no question, no names shown, no animation running.</p>
+<p>Clear everything: no question, no names shown, no animation
+running.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"B minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"B minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">circle</span><span class="p">.</span><span class="n">title</span> <span class="o">==</span> <span class="s">""</span> <span class="ow">and</span> <span class="n">circle</span><span class="p">.</span><span class="n">lit</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">and</span> <span class="n">circle</span><span class="p">.</span><span class="n">title</span> <span class="o">==</span> <span class="s">""</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">and</span> <span class="n">circle</span><span class="p">.</span><span class="n">lit</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -975,9 +1095,11 @@ asks for the Roman numeral of one of them.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the answer: the key’s name in its cell, brightened, and its staff and key signature in the middle.</p>
+<p>Show the answer: the key’s name in its cell, brightened, and its
+staff and key signature in the middle.</p>
 
-<p>For a Roman numeral question every chord of the key shows its numeral, as the circle in the reference does.</p>
+<p>For a Roman numeral question every chord of the key shows its
+numeral, as the circle in the reference does.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -988,9 +1110,18 @@ asks for the Roman numeral of one of them.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"minor"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"B major / C♭ major"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"minor"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"B major / C♭ major"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">],</span> <span class="n">circle</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">title</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">({5}, 'G♯ minor', '5 sharps', 5)
 </span></code></pre></div></div>
 
@@ -999,7 +1130,8 @@ asks for the Roman numeral of one of them.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_subtitle</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Change the small text in the middle, for example to say that a second answer is wanted.</p>
+<p>Change the small text in the middle, for example to say that a
+second answer is wanted.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1020,12 +1152,15 @@ asks for the Roman numeral of one of them.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flash_wrong</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Flash the cell asked about in the red of a wrong answer, striped as well so that it still shows on the red wedge.</p>
+<p>Flash the cell asked about in the red of a wrong answer, striped
+as well so that it still shows on the red wedge.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">flash_wrong</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">_warning</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
 <span class="go">True
@@ -1040,10 +1175,13 @@ asks for the Roman numeral of one of them.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Return how bright a cell is drawn, from 0 (quiet) to 1 (fully lit).</p>
+<p>Return how bright a cell is drawn, from 0 (quiet) to 1 (fully
+lit).</p>
 
-<p>The cell asked about is half lit, and brightens when it is answered. The cell beside it on the other ring is a little
-lit, to show the pair; in a Roman numeral question the six chords of the key are lit instead.</p>
+<p>The cell asked about is half lit, and brightens when it is
+answered. The cell beside it on the other ring is a little
+lit, to show the pair; in a Roman numeral question the six
+chords of the key are lit instead.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1061,8 +1199,14 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0.5, 0.3, 0.0)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1076,7 +1220,8 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 
 <p>Return where the circle is drawn: its middle and its radius.</p>
 
-<p>The circle fits the widget as a square in the middle of it, but no larger than <code class="language-plaintext highlighter-rouge">MAX_RADIUS</code>.</p>
+<p>The circle fits the widget as a square in the middle of it, but
+no larger than <code class="language-plaintext highlighter-rouge">MAX_RADIUS</code>.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1101,7 +1246,8 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the two rings, the names, the question and the disc in the middle.</p>
+<p>Draw the two rings, the names, the question and the disc in the
+middle.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1113,10 +1259,36 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
+
+<h2 id="question_circle">question_circle</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">question_circle</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FifthsCircle</span>
+</code></pre></div></div>
+
+<p>Build a fixed-size circle for a question preview or export.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The exercise question to display.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>FifthsCircle</em>: A circle showing the question before revealing its answer.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Anki export reveals the answer after saving the front image.
+</code></pre></div></div>
 
 
           
@@ -1339,8 +1511,8 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

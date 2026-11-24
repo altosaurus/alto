@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,11 +676,17 @@
         <article>
           <h1>alto.ui.key_fork</h1>
           
-<p>The fork: a picker for a key signature, shaped like a tuning fork lying on its side.</p>
+<p>The fork: a picker for a key signature, shaped like a tuning fork lying
+on its side.</p>
 
-<p>The stem on the left ends in a natural sign (no sharps or flats, C major). At the right the stem opens into two tines:
-the top one has the sharps, 1 to 7, and the bottom one the flats, 1 to 7. A circle marks the chosen signature. Click a
-number to choose it, drag the circle along the fork, or turn the mouse wheel to move it.</p>
+<p>The stem on the left ends in a natural sign (no sharps or flats, C
+major). At the right the stem opens into two tines:
+the top one has the sharps, 1 to 7, and the bottom one the flats, 1 to</p>
+<ol>
+  <li>A circle marks the chosen signature. Click a
+number to choose it, drag the circle along the fork, or turn the mouse
+wheel to move it.</li>
+</ol>
 
 <p><strong>Examples</strong></p>
 
@@ -711,9 +717,13 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">x</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">x</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">x</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">x</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">x</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">x</span><span class="p">()</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">node_position</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="n">y</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">y</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">).</span><span class="n">y</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">node_position</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="n">y</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">y</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">).</span><span class="n">y</span><span class="p">()</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -722,7 +732,8 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">QPointF</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the way along the fork from the end of the stem to a signature.</p>
+<p>Return the way along the fork from the end of the stem to a
+signature.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -738,11 +749,18 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(1, True)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">route</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">3</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span><span class="p">())</span> <span class="o">==</span> <span class="nb">round</span><span class="p">(</span><span class="n">APEX_X</span><span class="p">)</span>  <span class="c1"># it leaves the stem at the apex of the U
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">3</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span><span class="p">())</span> <span class="o">==</span> <span class="nb">round</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">APEX_X</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># it leaves the stem at the apex of the U
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -757,7 +775,8 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <p>Return the way along the fork from one signature to another.</p>
 
-<p>The circle goes back along the tine it is on, around the U and out along the other, never across the gap between the tines.</p>
+<p>The circle goes back along the tine it is on, around the U and out
+along the other, never across the gap between the tines.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -776,9 +795,16 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">path_between</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">and</span> <span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">-</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">()</span> <span class="o">-</span> <span class="n">APEX_X</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-9</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># it goes around the U, through its apex
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">()</span> <span class="o">-</span> <span class="n">APEX_X</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-9</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># it goes around the U, through its apex
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -791,7 +817,8 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPointF</span>
 </code></pre></div></div>
 
-<p>Return the point a fraction of the way along a path made of short straight pieces.</p>
+<p>Return the point a fraction of the way along a path made of short
+straight pieces.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -808,9 +835,18 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point_along</span><span class="p">([</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)],</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.75</span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point_along</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">t</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>
 <span class="go">(10.0, 5.0)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point_along</span><span class="p">([</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)],</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.5</span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>  <span class="c1"># slanting pieces are measured along their length
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point_along</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)],</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>  <span class="c1"># slanting pieces are measured along their length
 </span><span class="go">(1.5, 2.0)
 </span></code></pre></div></div>
 
@@ -835,9 +871,17 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nearest_on_fork</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">x</span><span class="p">(),</span> <span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># straight above the number
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nearest_on_fork</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPointF</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">x</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">2</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># straight above the number
 </span><span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nearest_on_fork</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">y</span><span class="p">()))</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># past the end of the stem
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nearest_on_fork</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPointF</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">y</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># past the end of the stem
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -846,7 +890,8 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fork_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QPainterPath</span>
 </code></pre></div></div>
 
-<p>Return the outline of the fork: the stem, a half circle for the U, and the two tines.</p>
+<p>Return the outline of the fork: the stem, a half circle for the U,
+and the two tines.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -857,7 +902,10 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">outline</span> <span class="o">=</span> <span class="n">fork_path</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">outline</span><span class="p">.</span><span class="n">boundingRect</span><span class="p">().</span><span class="n">left</span><span class="p">()</span> <span class="o">==</span> <span class="n">STEM_X</span> <span class="ow">and</span> <span class="n">outline</span><span class="p">.</span><span class="n">boundingRect</span><span class="p">().</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="n">TOP_Y</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">outline</span><span class="p">.</span><span class="n">boundingRect</span><span class="p">().</span><span class="n">left</span><span class="p">()</span> <span class="o">==</span> <span class="n">STEM_X</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">and</span> <span class="n">outline</span><span class="p">.</span><span class="n">boundingRect</span><span class="p">().</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="n">TOP_Y</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -888,7 +936,12 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QPixmap</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">canvas</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_natural</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_natural</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">height</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 </code></pre></div></div>
 
@@ -902,7 +955,8 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>A tuning fork on its side, for choosing how many sharps or flats a key signature has.</p>
+<p>A tuning fork on its side, for choosing how many sharps or flats a
+key signature has.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1012,7 +1066,11 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)),</span> <span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(3, -4, 0)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">130</span><span class="p">))</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
@@ -1023,7 +1081,8 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Pick up the circle if it was pressed, or choose the number that was clicked.</p>
+<p>Pick up the circle if it was pressed, or choose the number that
+was clicked.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1036,8 +1095,16 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
 <span class="go">-2
 </span></code></pre></div></div>
@@ -1047,9 +1114,11 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Carry the circle along the fork while it is held, and light the number under the mouse otherwise.</p>
+<p>Carry the circle along the fork while it is held, and light the
+number under the mouse otherwise.</p>
 
-<p>The signature changes to the nearest number as the circle passes it.</p>
+<p>The signature changes to the nearest number as the circle passes
+it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1063,10 +1132,26 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">there</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">there</span><span class="p">,</span> <span class="n">there</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                 </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">here</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">here</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">there</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">there</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
 <span class="go">3
 </span></code></pre></div></div>
@@ -1089,10 +1174,19 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_dragging</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_marker</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mouseReleaseEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonRelease</span><span class="p">,</span> <span class="n">fork</span><span class="p">.</span><span class="n">_marker</span><span class="p">,</span> <span class="n">fork</span><span class="p">.</span><span class="n">_marker</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_marker</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mouseReleaseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonRelease</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">fork</span><span class="p">.</span><span class="n">_marker</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">fork</span><span class="p">.</span><span class="n">_marker</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_dragging</span>
 <span class="go">False
 </span></code></pre></div></div>
@@ -1124,9 +1218,11 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wheelEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QWheelEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Move the circle one number along the fork for each notch of the wheel.</p>
+<p>Move the circle one number along the fork for each notch of the
+wheel.</p>
 
-<p>Rolling up goes toward more sharps and down toward more flats, passing through the natural sign.</p>
+<p>Rolling up goes toward more sharps and down toward more flats,
+passing through the natural sign.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1139,8 +1235,18 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">QWheelEvent</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">120</span><span class="p">),</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                             </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QWheelEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">120</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
 <span class="go">-1
 </span></code></pre></div></div>
@@ -1150,7 +1256,8 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QKeyEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Move the circle with the arrow keys: up or right for a sharp, down or left for a flat.</p>
+<p>Move the circle with the arrow keys: up or right for a sharp,
+down or left for a flat.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1162,7 +1269,13 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">keyPressEvent</span><span class="p">(</span><span class="n">QKeyEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">KeyPress</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">Key</span><span class="p">.</span><span class="n">Key_Up</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">keyPressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QKeyEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">KeyPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">Key</span><span class="p">.</span><span class="n">Key_Up</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
 <span class="go">1
 </span></code></pre></div></div>
@@ -1437,8 +1550,8 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

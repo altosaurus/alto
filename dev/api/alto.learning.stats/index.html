@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,19 +676,32 @@
         <article>
           <h1>alto.learning.stats</h1>
           
-<p>Numbers and series for the statistics screen, worked out from the answers in the database. Pure Python, no Qt.</p>
+<p>Numbers and series for the statistics screen, worked out from the
+answers in the database. Pure Python, no Qt.</p>
 
-<p>A “question” here is one showing of a question, scored by its first answer: it is right if that answer was right.
-Later attempts at the same showing show up as extra attempts per question, not as extra questions.</p>
+<p>A “question” here is one showing of a question, scored by its first
+answer: it is right if that answer was right.
+Later attempts at the same showing show up as extra attempts per
+question, not as extra questions.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ok</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">((</span><span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">)):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="n">ok</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">1000.0</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span> <span class="o">=</span> <span class="n">collect</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="mf">1010.0</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item_key</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">correct</span><span class="o">=</span><span class="n">ok</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answered_at</span><span class="o">=</span><span class="mf">1000.0</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span> <span class="o">=</span> <span class="n">collect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="mf">1010.0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">questions</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">first_right</span>
 <span class="go">(3, 2)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
@@ -708,7 +721,8 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>The answers given in one period (an hour, day, week or month), for the charts.</p>
+<p>The answers given in one period (an hour, day, week or month), for
+the charts.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -722,7 +736,13 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bucket</span> <span class="o">=</span> <span class="n">Bucket</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span> <span class="n">questions</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">first_right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bucket</span> <span class="o">=</span> <span class="n">Bucket</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">questions</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">first_right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bucket</span><span class="p">.</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">bucket</span><span class="p">.</span><span class="n">median_seconds</span>
 <span class="go">(50.0, 3.0)
 </span></code></pre></div></div>
@@ -733,7 +753,8 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <span class="k">def</span> <span class="nf">accuracy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Return the percentage of questions in the period that were right on the first try.</p>
+<p>Return the percentage of questions in the period that were right
+on the first try.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -743,9 +764,16 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span> <span class="n">questions</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">first_right</span><span class="o">=</span><span class="mi">3</span><span class="p">).</span><span class="n">accuracy</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">questions</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">first_right</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">accuracy</span>
 <span class="go">75.0
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">).</span><span class="n">accuracy</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">accuracy</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -765,7 +793,11 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">]).</span><span class="n">median_seconds</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">median_seconds</span>
 <span class="go">2.0
 </span></code></pre></div></div>
 
@@ -793,7 +825,12 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExerciseStats</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">questions</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="mf">87.5</span><span class="p">,</span> <span class="n">median_seconds</span><span class="o">=</span><span class="mf">3.2</span><span class="p">).</span><span class="n">accuracy</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExerciseStats</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">questions</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">accuracy</span><span class="o">=</span><span class="mf">87.5</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">median_seconds</span><span class="o">=</span><span class="mf">3.2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">accuracy</span>
 <span class="go">87.5
 </span></code></pre></div></div>
 
@@ -811,7 +848,8 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>A question that needs practice, for the list on the statistics screen.</p>
+<p>A question that needs practice, for the list on the statistics
+screen.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -827,7 +865,13 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HardQuestion</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"Treble: G4"</span><span class="p">,</span> <span class="n">strain</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">wrong</span><span class="o">=</span><span class="mi">5</span><span class="p">).</span><span class="n">wrong</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HardQuestion</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">text</span><span class="o">=</span><span class="s">"Treble: G4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">strain</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">seen</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wrong</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">wrong</span>
 <span class="go">5
 </span></code></pre></div></div>
 
@@ -871,7 +915,9 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stats</span><span class="p">().</span><span class="n">accuracy</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c1"># nothing answered yet
 </span><span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stats</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">first_right</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">6</span><span class="p">).</span><span class="n">attempts_per_question</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stats</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">4</span><span class="p">,</span> <span class="n">first_right</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">6</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">attempts_per_question</span>
 <span class="go">1.5
 </span></code></pre></div></div>
 
@@ -881,7 +927,8 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <span class="k">def</span> <span class="nf">accuracy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Return the percentage of questions that were right on the first try.</p>
+<p>Return the percentage of questions that were right on the first
+try.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -924,7 +971,8 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span>
 </code></pre></div></div>
 
-<p>Return the moment a chart period ends, which is when the next one begins.</p>
+<p>Return the moment a chart period ends, which is when the next one
+begins.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -941,9 +989,14 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_end</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"week"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_end</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"week"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">datetime.datetime(2026, 1, 12, 0, 0)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_end</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"month"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_end</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">granularity</span><span class="o">=</span><span class="s">"month"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">datetime.datetime(2027, 1, 1, 0, 0)
 </span></code></pre></div></div>
 
@@ -952,7 +1005,8 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return a short line saying what a question was, for the list of questions that need practice.</p>
+<p>Return a short line saying what a question was, for the list of
+questions that need practice.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -969,7 +1023,13 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.base</span> <span class="kn">import</span> <span class="n">Question</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">describe</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">"What type of chord is this?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"minor"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"minor"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">describe</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"What type of chord is this?"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"minor"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"minor"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'What type of chord is this? → minor'
 </span></code></pre></div></div>
 
@@ -985,10 +1045,13 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">date</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return how many questions were answered on each day, for the review heatmap.</p>
+<p>Return how many questions were answered on each day, for the review
+heatmap.</p>
 
-<p>Looks back over the last <code class="language-plaintext highlighter-rouge">weeks</code> calendar weeks up to today, in local time. Days with no answers are left out. It
-counts questions (first attempts), not attempts, like everything else here.</p>
+<p>Looks back over the last <code class="language-plaintext highlighter-rouge">weeks</code> calendar weeks up to today, in
+local time. Days with no answers are left out. It
+counts questions (first attempts), not attempts, like everything
+else here.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1010,11 +1073,25 @@ counts questions (first attempts), not attempts, like everything else here.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">noon</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">12</span><span class="p">).</span><span class="n">timestamp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">noon</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">12</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">timestamp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">database</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="n">noon</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">daily_counts</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="n">noon</span> <span class="o">+</span> <span class="mi">60</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">database</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item_key</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answered_at</span><span class="o">=</span><span class="n">noon</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">daily_counts</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">database</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="n">noon</span> <span class="o">+</span> <span class="mi">60</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">{datetime.date(2026, 11, 13): 3}
 </span></code></pre></div></div>
 
@@ -1056,12 +1133,30 @@ counts questions (first attempts), not attempts, like everything else here.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span> <span class="o">=</span> <span class="n">collect</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="mf">1060.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">questions</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">median_seconds</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">practice_seconds</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answered_at</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span> <span class="o">=</span> <span class="n">collect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">database</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mf">1060.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">stats</span><span class="p">.</span><span class="n">questions</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">stats</span><span class="p">.</span><span class="n">median_seconds</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">stats</span><span class="p">.</span><span class="n">practice_seconds</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(1, 4.0, 4.0)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">collect</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="mi">999</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="mf">1060.0</span><span class="p">).</span><span class="n">questions</span>  <span class="c1"># nobody has answered anything
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">collect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">database</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="mi">999</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="mf">1060.0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">questions</span>  <span class="c1"># nobody has answered anything
 </span><span class="go">0
 </span></code></pre></div></div>
 
@@ -1248,8 +1343,8 @@ counts questions (first attempts), not attempts, like everything else here.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

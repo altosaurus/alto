@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -707,7 +707,11 @@
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span>
 <span class="n">app</span><span class="p">.</span><span class="n">setApplicationName</span><span class="p">(</span><span class="s">"Alto"</span><span class="p">)</span>
-<span class="n">app</span><span class="p">.</span><span class="n">setApplicationDisplayName</span><span class="p">(</span><span class="s">"Alto - Music Theory"</span> <span class="k">if</span> <span class="n">alto_home</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="s">"Alto (dev) - Music Theory"</span><span class="p">)</span>
+<span class="n">app</span><span class="p">.</span><span class="n">setApplicationDisplayName</span><span class="p">(</span>
+    <span class="s">"Alto - Music Theory"</span>
+    <span class="k">if</span> <span class="n">alto_home</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span>
+    <span class="k">else</span> <span class="s">"Alto (dev) - Music Theory"</span>
+<span class="p">)</span>
 <span class="n">apply_theme</span><span class="p">(</span><span class="n">saved_theme</span><span class="p">())</span>
 </code></pre></div></div>
 
@@ -951,8 +955,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

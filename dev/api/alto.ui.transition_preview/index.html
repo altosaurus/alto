@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,7 +678,8 @@
           
 <p>A preview of a transition for the settings.</p>
 
-<p>It is a mock of the home page, with the app’s own cards, that switches from the exercises to the lessons once.</p>
+<p>It is a mock of the home page, with the app’s own cards, that switches
+from the exercises to the lessons once.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -693,9 +694,11 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_sides</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">TileCard</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">TileCard</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Make the cards for the two sides of the preview: the app’s own exercise cards, and its lesson cards.</p>
+<p>Make the cards for the two sides of the preview: the app’s own
+exercise cards, and its lesson cards.</p>
 
-<p>The lessons side has the real lesson, and a few examples that are marked as such, so that a transition has more than one
+<p>The lessons side has the real lesson, and a few examples that are
+marked as such, so that a transition has more than one
 card to move.</p>
 
 <p><strong>Returns</strong></p>
@@ -718,7 +721,8 @@ card to move.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The page of the mock window: it draws the cards that are resting, and the transition plays on a canvas over it.</p>
+<p>The page of the mock window: it draws the cards that are resting,
+and the transition plays on a canvas over it.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -765,8 +769,10 @@ card to move.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span> <span class="o">=</span> <span class="n">Stage</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>  <span class="c1"># a hidden widget is only told about its size once it is shown
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># a hidden widget is only told about its size once it is
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># shown
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">canvas</span><span class="p">.</span><span class="n">geometry</span><span class="p">()</span> <span class="o">==</span> <span class="n">stage</span><span class="p">.</span><span class="n">rect</span><span class="p">()</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -799,10 +805,13 @@ card to move.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QFrame</code></p>
 
-<p>A mock home page that plays a transition between two sets of the app’s cards, once.</p>
+<p>A mock home page that plays a transition between two sets of the
+app’s cards, once.</p>
 
-<p>It has a bar with the same Exercises and Lessons switch as the real window. It follows the side that is showing, and pressing
-it plays the transition to the other side, so the learner can try it as often as they like.</p>
+<p>It has a bar with the same Exercises and Lessons switch as the real
+window. It follows the side that is showing, and pressing
+it plays the transition to the other side, so the learner can try it
+as often as they like.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -841,7 +850,8 @@ it plays the transition to the other side, so the learner can try it as often as
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_transition</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show a transition: the exercises appear, and after a moment they change to the lessons, once.</p>
+<p>Show a transition: the exercises appear, and after a moment they
+change to the lessons, once.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -877,9 +887,11 @@ it plays the transition to the other side, so the learner can try it as often as
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">go_to</span><span class="p">(</span><span class="n">side</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Switch to one side with the transition, as the switch does in the real window.</p>
+<p>Switch to one side with the transition, as the switch does in
+the real window.</p>
 
-<p>A transition that is still playing ends first. Nothing happens if that side is already showing.</p>
+<p>A transition that is still playing ends first. Nothing happens
+if that side is already showing.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -903,7 +915,8 @@ it plays the transition to the other side, so the learner can try it as often as
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Lay the cards out again for the new size, unless a transition is playing.</p>
+<p>Lay the cards out again for the new size, unless a transition is
+playing.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -915,7 +928,9 @@ it plays the transition to the other side, so the learner can try it as often as
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span> <span class="o">=</span> <span class="n">TransitionPreview</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">stage</span><span class="p">.</span><span class="n">resting</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">rect</span><span class="p">.</span><span class="n">width</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">CARD_W</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">stage</span><span class="p">.</span><span class="n">resting</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">rect</span><span class="p">.</span><span class="n">width</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">CARD_W</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1234,8 +1249,8 @@ it plays the transition to the other side, so the learner can try it as often as
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

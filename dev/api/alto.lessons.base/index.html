@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,13 +678,22 @@
           
 <p>What a lesson is made of: steps, and the small tasks inside them.</p>
 
-<p>A task is a soft exercise. It cannot be failed: a wrong answer gets a hint, a second wrong answer gets the answer, and nothing is
+<p>A task is a soft exercise. It cannot be failed: a wrong answer gets a
+hint, a second wrong answer gets the answer, and nothing is
 scored or recorded.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span> <span class="o">=</span> <span class="n">Task</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s">"Click the key."</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}),</span> <span class="n">hint</span><span class="o">=</span><span class="s">"Count."</span><span class="p">,</span> <span class="n">explanation</span><span class="o">=</span><span class="s">"One step."</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span><span class="p">.</span><span class="n">check</span><span class="p">((</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">task</span><span class="p">.</span><span class="n">check</span><span class="p">((</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span> <span class="o">=</span> <span class="n">Task</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">prompt</span><span class="o">=</span><span class="s">"Click the key."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cells</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">hint</span><span class="o">=</span><span class="s">"Count."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">explanation</span><span class="o">=</span><span class="s">"One step."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">task</span><span class="p">.</span><span class="n">check</span><span class="p">((</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">task</span><span class="p">.</span><span class="n">check</span><span class="p">((</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, False)
 </span></code></pre></div></div>
 
@@ -705,7 +714,8 @@ scored or recorded.</p>
 
 <p>One small question inside a lesson step.</p>
 
-<p>It is answered either by clicking a cell of the circle (<code class="language-plaintext highlighter-rouge">cells</code>) or by pressing one of <code class="language-plaintext highlighter-rouge">choices</code>.</p>
+<p>It is answered either by clicking a cell of the circle (<code class="language-plaintext highlighter-rouge">cells</code>) or
+by pressing one of <code class="language-plaintext highlighter-rouge">choices</code>.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -723,9 +733,20 @@ scored or recorded.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s">"Which?"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="s">"Count."</span><span class="p">,</span> <span class="n">explanation</span><span class="o">=</span><span class="s">"Five."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">(</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">),</span> <span class="n">correct</span><span class="o">=</span><span class="s">"B"</span><span class="p">).</span><span class="n">check</span><span class="p">(</span><span class="s">"B"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">prompt</span><span class="o">=</span><span class="s">"Which?"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">hint</span><span class="o">=</span><span class="s">"Count."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">explanation</span><span class="o">=</span><span class="s">"Five."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">(</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="s">"B"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">check</span><span class="p">(</span><span class="s">"B"</span><span class="p">)</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s">"Click it."</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">explanation</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">((</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),)).</span><span class="n">hits</span><span class="p">(</span><span class="mf">12.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">11.0</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">prompt</span><span class="o">=</span><span class="s">"Click it."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">hint</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">explanation</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">targets</span><span class="o">=</span><span class="p">((</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">hits</span><span class="p">(</span><span class="mf">12.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">11.0</span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -738,7 +759,8 @@ scored or recorded.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Say whether a click on the instrument picture is on one of the right places.</p>
+<p>Say whether a click on the instrument picture is on one of the
+right places.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -755,7 +777,12 @@ scored or recorded.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s">"?"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">explanation</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">((</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),)).</span><span class="n">hits</span><span class="p">(</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">prompt</span><span class="o">=</span><span class="s">"?"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">hint</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">explanation</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">targets</span><span class="o">=</span><span class="p">((</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">hits</span><span class="p">(</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -780,9 +807,20 @@ scored or recorded.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s">"?"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">explanation</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({(</span><span class="s">"inner"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)})).</span><span class="n">check</span><span class="p">((</span><span class="s">"inner"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">prompt</span><span class="o">=</span><span class="s">"?"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">hint</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">explanation</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cells</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({(</span><span class="s">"inner"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)}),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">check</span><span class="p">((</span><span class="s">"inner"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s">"?"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">explanation</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">(</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">),</span> <span class="n">correct</span><span class="o">=</span><span class="s">"A"</span><span class="p">).</span><span class="n">check</span><span class="p">((</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">prompt</span><span class="o">=</span><span class="s">"?"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">hint</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">explanation</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">choices</span><span class="o">=</span><span class="p">(</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="s">"A"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">check</span><span class="p">((</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -796,7 +834,8 @@ scored or recorded.</p>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>A staff to show beside the words of a step: a clef, and perhaps a note, with a line of words under it.</p>
+<p>A staff to show beside the words of a step: a clef, and perhaps a
+note, with a line of words under it.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -809,7 +848,11 @@ scored or recorded.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Staff</span><span class="p">(</span><span class="n">clef</span><span class="o">=</span><span class="s">"alto"</span><span class="p">,</span> <span class="n">note</span><span class="o">=</span><span class="s">"C4"</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"Alto clef"</span><span class="p">).</span><span class="n">note</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Staff</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clef</span><span class="o">=</span><span class="s">"alto"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">note</span><span class="o">=</span><span class="s">"C4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">caption</span><span class="o">=</span><span class="s">"Alto clef"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">note</span>
 <span class="go">'C4'
 </span></code></pre></div></div>
 
@@ -864,7 +907,9 @@ scored or recorded.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Step</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"&lt;p&gt;Hi.&lt;/p&gt;"</span><span class="p">).</span><span class="n">circle</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Step</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"&lt;p&gt;Hi.&lt;/p&gt;"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">circle</span>
 <span class="go">'none'
 </span></code></pre></div></div>
 
@@ -1100,8 +1145,8 @@ scored or recorded.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

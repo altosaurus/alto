@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,9 +676,11 @@
         <article>
           <h1>alto.ui.reference</h1>
           
-<p>The reference pane: an interactive circle of fifths to look things up on, with an explanation under it.</p>
+<p>The reference pane: an interactive circle of fifths to look things up
+on, with an explanation under it.</p>
 
-<p>Click a key on either ring, or move with the arrow keys, and the circle lights that key’s chords, shows its key signature in
+<p>Click a key on either ring, or move with the arrow keys, and the circle
+lights that key’s chords, shows its key signature in
 the middle, and the text underneath explains it.</p>
 
 <p><strong>Examples</strong></p>
@@ -726,7 +728,9 @@ the middle, and the text underneath explains it.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExplorableCircle</span><span class="p">().</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">]</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExplorableCircle</span><span class="p">().</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">]</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -735,7 +739,8 @@ the middle, and the text underneath explains it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_interactive</span><span class="p">(</span><span class="n">interactive</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Let the circle be clicked and moved with the keys, or make it a picture.</p>
+<p>Let the circle be clicked and moved with the keys, or make it a
+picture.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -747,7 +752,11 @@ the middle, and the text underneath explains it.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">set_interactive</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">interactive</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">focusPolicy</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">FocusPolicy</span><span class="p">.</span><span class="n">NoFocus</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">interactive</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">focusPolicy</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">FocusPolicy</span><span class="p">.</span><span class="n">NoFocus</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(False, True)
 </span></code></pre></div></div>
 
@@ -756,7 +765,8 @@ the middle, and the text underneath explains it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">clear</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Pick nothing: every key is named, none is lit and the middle says what to do.</p>
+<p>Pick nothing: every key is named, none is lit and the middle
+says what to do.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -776,9 +786,11 @@ the middle, and the text underneath explains it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Pick a cell: light the chords of its key, and show its name and key signature in the middle.</p>
+<p>Pick a cell: light the chords of its key, and show its name and
+key signature in the middle.</p>
 
-<p>A minor key has the key signature, and the chords, of its relative major.</p>
+<p>A minor key has the key signature, and the chords, of its
+relative major.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -791,7 +803,12 @@ the middle, and the text underneath explains it.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="n">lit</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">numerals</span><span class="p">[(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">title</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">sorted</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="n">lit</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">numerals</span><span class="p">[(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('F♯ minor', '3 sharps', [2, 3, 4], 'V')
 </span></code></pre></div></div>
 
@@ -819,9 +836,17 @@ the middle, and the text underneath explains it.</p>
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">middle</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">middle</span><span class="p">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">middle</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">size</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell_at</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">middle</span><span class="p">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">middle</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">size</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('outer', 0)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">middle</span><span class="p">.</span><span class="n">x</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">size</span><span class="p">,</span> <span class="n">middle</span><span class="p">.</span><span class="n">y</span><span class="p">()))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell_at</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">middle</span><span class="p">.</span><span class="n">x</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">size</span><span class="p">,</span> <span class="n">middle</span><span class="p">.</span><span class="n">y</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('inner', 3)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell_at</span><span class="p">(</span><span class="n">middle</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
@@ -836,7 +861,8 @@ the middle, and the text underneath explains it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Return how bright a cell is drawn: as for any question, and a little brighter under the pointer.</p>
+<p>Return how bright a cell is drawn: as for any question, and a
+little brighter under the pointer.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -855,7 +881,10 @@ the middle, and the text underneath explains it.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">hover</span> <span class="o">=</span> <span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">6</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0.2, 0.0)
 </span></code></pre></div></div>
 
@@ -864,7 +893,8 @@ the middle, and the text underneath explains it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Pick the cell that is clicked; a click in the middle clears the pick.</p>
+<p>Pick the cell that is clicked; a click in the middle clears the
+pick.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -879,7 +909,14 @@ the middle, and the text underneath explains it.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">center</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QTest</span><span class="p">.</span><span class="n">mouseClick</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">QPoint</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">x</span><span class="p">()),</span> <span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">radius</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QTest</span><span class="p">.</span><span class="n">mouseClick</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pos</span><span class="o">=</span><span class="n">QPoint</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">x</span><span class="p">()),</span>
+<span class="gp">...</span><span class="w">         </span><span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">radius</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span>
 <span class="go">('outer', 0)
 </span></code></pre></div></div>
@@ -889,7 +926,8 @@ the middle, and the text underneath explains it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Light the cell under the pointer, and show a hand over the ones that can be picked.</p>
+<p>Light the cell under the pointer, and show a hand over the ones
+that can be picked.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -905,7 +943,13 @@ the middle, and the text underneath explains it.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">center</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QTest</span><span class="p">.</span><span class="n">mouseMove</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">x</span><span class="p">()),</span> <span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">radius</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QTest</span><span class="p">.</span><span class="n">mouseMove</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPoint</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">x</span><span class="p">()),</span>
+<span class="gp">...</span><span class="w">         </span><span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">radius</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">hover</span>
 <span class="go">('outer', 0)
 </span></code></pre></div></div>
@@ -937,7 +981,8 @@ the middle, and the text underneath explains it.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QKeyEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Move the pick with the arrow keys: Left and Right around the circle, Up and Down between the rings.</p>
+<p>Move the pick with the arrow keys: Left and Right around the
+circle, Up and Down between the rings.</p>
 
 <p>Escape clears the pick, and Home picks C major.</p>
 
@@ -950,7 +995,11 @@ the middle, and the text underneath explains it.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">press</span> <span class="o">=</span> <span class="n">QKeyEvent</span><span class="p">(</span><span class="n">QKeyEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">KeyPress</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">Key</span><span class="p">.</span><span class="n">Key_Right</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">press</span> <span class="o">=</span> <span class="n">QKeyEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QKeyEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">KeyPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">Key</span><span class="p">.</span><span class="n">Key_Right</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">keyPressEvent</span><span class="p">(</span><span class="n">press</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span>
 <span class="go">('outer', 0)
@@ -966,7 +1015,8 @@ the middle, and the text underneath explains it.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The reference for the circle of fifths: a short description, the circle to explore, and what the picked key means.</p>
+<p>The reference for the circle of fifths: a short description, the
+circle to explore, and what the picked key means.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1009,7 +1059,8 @@ the middle, and the text underneath explains it.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The reference for the clefs: how they are made, and a picture of each with where its symbol goes.</p>
+<p>The reference for the clefs: how they are made, and a picture of
+each with where its symbol goes.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1022,13 +1073,18 @@ the middle, and the text underneath explains it.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ClefReferencePanel</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"C clef"</span> <span class="ow">in</span> <span class="n">panel</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="s">"mezzo"</span><span class="p">].</span><span class="n">text</span><span class="p">()</span> <span class="ow">and</span> <span class="s">"bottom line"</span> <span class="ow">in</span> <span class="n">panel</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="s">"french"</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"C clef"</span> <span class="ow">in</span> <span class="n">panel</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"mezzo"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">text</span><span class="p">()</span> <span class="ow">and</span> <span class="s">"bottom line"</span> <span class="ow">in</span> <span class="n">panel</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"french"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
 <span class="go">True
 </span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
-<p>Build the panel: the lesson button, a line of explanation and a row for each clef.</p>
+<p>Build the panel: the lesson button, a line of explanation and a
+row for each clef.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1038,7 +1094,9 @@ the middle, and the text underneath explains it.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ClefReferencePanel</span><span class="p">().</span><span class="n">rows</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">CLEF_BASICS_CLEFS</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ClefReferencePanel</span><span class="p">().</span><span class="n">rows</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings</span><span class="p">.</span><span class="n">CLEF_BASICS_CLEFS</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1062,7 +1120,8 @@ the middle, and the text underneath explains it.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>Hints for reading notes or intervals and a link to the associated lesson.</p>
+<p>Hints for reading notes or intervals and a link to the associated
+lesson.</p>
 
 <p><strong>Constructor</strong></p>
 
@@ -1076,7 +1135,9 @@ the middle, and the text underneath explains it.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteReferencePanel</span><span class="p">(</span><span class="n">KeyboardNotes</span><span class="p">()).</span><span class="n">lesson_button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteReferencePanel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeyboardNotes</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">lesson_button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
 <span class="go">'New to this? Take the full lesson  →'
 </span></code></pre></div></div>
 
@@ -1091,11 +1152,13 @@ the middle, and the text underneath explains it.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>What a plugin’s exercise offers to look up: what it asks, and a button for each lesson that teaches it.</p>
+<p>What a plugin’s exercise offers to look up: what it asks, and a
+button for each lesson that teaches it.</p>
 
 <p><strong>Constructor</strong></p>
 
-<p>Show the exercise’s description and a button for each lesson that goes with it.</p>
+<p>Show the exercise’s description and a button for each lesson
+that goes with it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1106,8 +1169,18 @@ the middle, and the text underneath explains it.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">demo</span> <span class="o">=</span> <span class="n">Lesson</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s">"pack.d.l"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"Parts"</span><span class="p">,</span> <span class="n">about</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s">"D"</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="p">(),</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"x"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginReferencePanel</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">lessons</span><span class="o">=</span><span class="p">[</span><span class="n">demo</span><span class="p">]).</span><span class="n">lesson_buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">demo</span> <span class="o">=</span> <span class="n">Lesson</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="s">"pack.d.l"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"Parts"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">about</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">summary</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">category</span><span class="o">=</span><span class="s">"D"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">steps</span><span class="o">=</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginReferencePanel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">lessons</span><span class="o">=</span><span class="p">[</span><span class="n">demo</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">lesson_buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
 <span class="go">'New to this? Take the lesson: Parts  →'
 </span></code></pre></div></div>
 
@@ -1127,15 +1200,25 @@ the middle, and the text underneath explains it.</p>
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>ReferencePanel or ClefReferencePanel or ScaleReferencePanel or NoteReferencePanel or None</em>: The panel, or None for an exercise with nothing to look up.</li>
+  <li><em>ReferencePanel or ClefReferencePanel or ScaleReferencePanel or</em></li>
+  <li><em>NoteReferencePanel or None</em>: The panel, or None for an exercise with nothing to look up.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">reference_panel_for</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">()),</span> <span class="n">NoteReferencePanel</span><span class="p">),</span> <span class="n">reference_panel_for</span><span class="p">(</span><span class="n">CircleOfFifths</span><span class="p">())</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">isinstance</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">reference_panel_for</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">()),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">NoteReferencePanel</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">reference_panel_for</span><span class="p">(</span><span class="n">CircleOfFifths</span><span class="p">())</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="n">reference_panel_for</span><span class="p">(</span><span class="n">ClefBasics</span><span class="p">())).</span><span class="n">__name__</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">reference_panel_for</span><span class="p">(</span><span class="n">ClefBasics</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">__name__</span>
 <span class="go">'ClefReferencePanel'
 </span></code></pre></div></div>
 
@@ -1424,8 +1507,8 @@ the middle, and the text underneath explains it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

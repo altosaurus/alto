@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -721,7 +721,9 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleExplorer</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s">"Dorian"</span><span class="p">,</span> <span class="n">tonic</span><span class="o">=</span><span class="s">"D4"</span><span class="p">).</span><span class="n">notes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleExplorer</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">scale</span><span class="o">=</span><span class="s">"Dorian"</span><span class="p">,</span> <span class="n">tonic</span><span class="o">=</span><span class="s">"D4"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">notes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span>
 <span class="go">'D'
 </span></code></pre></div></div>
 
@@ -735,7 +737,9 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span> <span class="o">=</span> <span class="n">ScaleExplorer</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span><span class="p">.</span><span class="n">mode</span><span class="p">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="s">"Harmonic minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span><span class="p">.</span><span class="n">mode</span><span class="p">.</span><span class="n">setCurrentText</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Harmonic minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span><span class="p">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">5</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
 <span class="go">'3H'
 </span></code></pre></div></div>
@@ -1069,8 +1073,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

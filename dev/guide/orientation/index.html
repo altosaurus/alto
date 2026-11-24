@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -789,7 +789,8 @@ every exercise, built from the rows and pages in <code class="language-plaintext
 <h3 id="layout">Layout</h3>
 
 <ul>
-  <li>Lines are at most 130 characters. Strings use double quotes.</li>
+  <li>Wrap Python code at 79 characters and docstrings and standalone comments
+at 72. Strings use double quotes.</li>
   <li>Anything with several elements that does not fit on a line (a list, dictionary, tuple, call or signature) goes <strong>one element
 per line with a trailing comma</strong>. A trailing comma you write yourself keeps even a short list exploded; that is how you ask
 for one-per-line. Function definitions with two or more parameters, and calls, collections and tuples with four or more
@@ -998,8 +999,8 @@ virtual environments, from the people who maintain the tools.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

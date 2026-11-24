@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -687,7 +687,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>One open pitch with its nut and bridge locations in the original image pixels.</p>
+<p>One open pitch with its nut and bridge locations in the original
+image pixels.</p>
 
 <h3 id="packstringpoint">PackString.point</h3>
 
@@ -710,7 +711,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>An author-supplied animated overlay and its alignment on the instrument.</p>
+<p>An author-supplied animated overlay and its alignment on the
+instrument.</p>
 
 <h2 id="packview">PackView</h2>
 
@@ -721,7 +723,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Another picture of an instrument, such as its back, with its own pixel size.</p>
+<p>Another picture of an instrument, such as its back, with its own
+pixel size.</p>
 
 <h2 id="packkeyboard">PackKeyboard</h2>
 
@@ -732,7 +735,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>One keyboard of an instrument, drawn by Alto from the range of keys the plugin gives it.</p>
+<p>One keyboard of an instrument, drawn by Alto from the range of keys
+the plugin gives it.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -793,7 +797,12 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackKeyboard</span><span class="p">(</span><span class="s">"M"</span><span class="p">,</span> <span class="s">"C4"</span><span class="p">,</span> <span class="s">"E4"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"C#4"</span><span class="p">),</span> <span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"E#4"</span><span class="p">),</span> <span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span> <span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"Db4"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"C#4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"E#4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"Db4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, False, False, False)
 </span></code></pre></div></div>
 
@@ -805,7 +814,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>How a plugin’s keyboards look: the colors of the keys and case, and the proportions of the keys.</p>
+<p>How a plugin’s keyboards look: the colors of the keys and case, and
+the proportions of the keys.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -816,7 +826,10 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style</span> <span class="o">=</span> <span class="n">PackKeyboardStyle</span><span class="p">(((</span><span class="s">"cap"</span><span class="p">,</span> <span class="s">"#eee3c8"</span><span class="p">),),</span> <span class="p">((</span><span class="s">"length"</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">),))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style</span> <span class="o">=</span> <span class="n">PackKeyboardStyle</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">((</span><span class="s">"cap"</span><span class="p">,</span> <span class="s">"#eee3c8"</span><span class="p">),),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">((</span><span class="s">"length"</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">),),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">dict</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="n">colors</span><span class="p">),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="n">numbers</span><span class="p">)</span>
 <span class="go">({'cap': '#eee3c8'}, {'length': 4.5})
 </span></code></pre></div></div>
@@ -853,10 +866,18 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboard_style</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboard_style</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboard_style</span><span class="p">({</span><span class="s">"cap"</span><span class="p">:</span> <span class="s">"#eee3c8"</span><span class="p">,</span> <span class="s">"white"</span><span class="p">:</span> <span class="p">[</span><span class="s">"#2a211c"</span><span class="p">,</span> <span class="s">"#120d0a"</span><span class="p">]},</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">).</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboard_style</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"cap"</span><span class="p">:</span> <span class="s">"#eee3c8"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"white"</span><span class="p">:</span> <span class="p">[</span><span class="s">"#2a211c"</span><span class="p">,</span> <span class="s">"#120d0a"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="go">('white', ('#2a211c', '#120d0a'))
 </span></code></pre></div></div>
 
@@ -901,8 +922,18 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keys</span> <span class="o">=</span> <span class="n">PackKeyboard</span><span class="p">(</span><span class="s">"Manual"</span><span class="p">,</span> <span class="s">"C4"</span><span class="p">,</span> <span class="s">"E4"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(),</span> <span class="bp">None</span><span class="p">,</span> <span class="n">keyboards</span><span class="o">=</span><span class="p">(</span><span class="n">keys</span><span class="p">,))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">keyboard</span><span class="p">(</span><span class="s">"Manual"</span><span class="p">)</span> <span class="ow">is</span> <span class="n">keys</span><span class="p">,</span> <span class="n">board</span><span class="p">.</span><span class="n">keyboard</span><span class="p">(</span><span class="s">"Pedals"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"pack.x.y"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboards</span><span class="o">=</span><span class="p">(</span><span class="n">keys</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">keyboard</span><span class="p">(</span><span class="s">"Manual"</span><span class="p">)</span> <span class="ow">is</span> <span class="n">keys</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">keyboard</span><span class="p">(</span><span class="s">"Pedals"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, None)
 </span></code></pre></div></div>
 
@@ -911,7 +942,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">picture</span><span class="p">(</span><span class="n">view</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Find the picture for a view: the instrument’s main picture for an empty name, otherwise the named extra picture.</p>
+<p>Find the picture for a view: the instrument’s main picture for
+an empty name, otherwise the named extra picture.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -927,10 +959,24 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">back</span> <span class="o">=</span> <span class="n">PackView</span><span class="p">(</span><span class="s">"back"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"back.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"front.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(),</span> <span class="bp">None</span><span class="p">,</span> <span class="n">views</span><span class="o">=</span><span class="p">(</span><span class="n">back</span><span class="p">,))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(),</span> <span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(</span><span class="s">"back"</span><span class="p">),</span> <span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(</span><span class="s">"side"</span><span class="p">)</span>
-<span class="go">((PosixPath('front.png'), (10, 20)), (PosixPath('back.png'), (30, 40)), None)
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">back</span> <span class="o">=</span> <span class="n">PackView</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"back"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"back.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"pack.x.y"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"front.png"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">views</span><span class="o">=</span><span class="p">(</span><span class="n">back</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(</span><span class="s">"back"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(</span><span class="s">"side"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">((PosixPath('front.png'), (10, 20)), (PosixPath('back.png'),
+(30, 40)), None)
 </span></code></pre></div></div>
 
 <h2 id="identifier">identifier</h2>
@@ -980,11 +1026,13 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Resolve only manifest-declared assets, from a folder or the root of a ZIP.</p>
+<p>Resolve only manifest-declared assets, from a folder or the root of
+a ZIP.</p>
 
 <p><strong>Constructor</strong></p>
 
-<p>Keep folder assets in place and give ZIP assets private, generated filenames.</p>
+<p>Keep folder assets in place and give ZIP assets private,
+generated filenames.</p>
 
 <p><strong>Raises</strong></p>
 
@@ -1068,7 +1116,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InstrumentInfo</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Validate the optional facts a pack gives about where its recordings came from.</p>
+<p>Validate the optional facts a pack gives about where its recordings
+came from.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1092,10 +1141,18 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">read_sound_info</span><span class="p">({</span><span class="s">"summary"</span><span class="p">:</span> <span class="s">"A viola."</span><span class="p">},</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Viola"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">read_sound_info</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="s">"summary"</span><span class="p">:</span> <span class="s">"A viola."</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack_name</span><span class="o">=</span><span class="s">"Viola"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">source</span> <span class="k">if</span> <span class="n">info</span> <span class="k">else</span> <span class="bp">None</span>
 <span class="go">'Viola'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_sound_info</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Viola"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_sound_info</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack_name</span><span class="o">=</span><span class="s">"Viola"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1108,7 +1165,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Check that a manifest entry is nonblank plain text of a reasonable length.</p>
+<p>Check that a manifest entry is nonblank plain text of a reasonable
+length.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1125,7 +1183,11 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">plain_text</span><span class="p">(</span><span class="s">"Name the note."</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">),</span> <span class="n">plain_text</span><span class="p">(</span><span class="s">"&lt;b&gt;Name&lt;/b&gt;"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">),</span> <span class="n">plain_text</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">plain_text</span><span class="p">(</span><span class="s">"Name the note."</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">plain_text</span><span class="p">(</span><span class="s">"&lt;b&gt;Name&lt;/b&gt;"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">plain_text</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, False, False)
 </span></code></pre></div></div>
 
@@ -1165,7 +1227,12 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_text</span><span class="p">(</span><span class="s">"  Hello "</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="s">"title"</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"lesson demo"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_text</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"  Hello "</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">what</span><span class="o">=</span><span class="s">"title"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">where</span><span class="o">=</span><span class="s">"lesson demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'Hello'
 </span></code></pre></div></div>
 
@@ -1203,7 +1270,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_focus</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_focus</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">300</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0.0, 10.0, 200.0, 100.0)
 </span></code></pre></div></div>
 
@@ -1247,7 +1316,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Read a plugin’s tile icon: a plain SVG of simple shapes, redrawn in the theme’s ink.</p>
+<p>Read a plugin’s tile icon: a plain SVG of simple shapes, redrawn in
+the theme’s ink.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1270,7 +1340,8 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The viola's icon is its own silhouette traced from the museum photograph.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The viola's icon is its own silhouette traced from the museum
+photograph.
 </code></pre></div></div>
 
 <h2 id="read_picture_file">read_picture_file</h2>
@@ -1313,7 +1384,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PackView</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div></div>
 
-<p>Validate the optional extra pictures of an instrument, such as a view of its back.</p>
+<p>Validate the optional extra pictures of an instrument, such as a
+view of its back.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1338,7 +1410,9 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_views</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_views</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">()
 </span></code></pre></div></div>
 
@@ -1351,7 +1425,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PackKeyboard</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div></div>
 
-<p>Validate the optional keyboards of an instrument, which Alto draws from their ranges.</p>
+<p>Validate the optional keyboards of an instrument, which Alto draws
+from their ranges.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1376,7 +1451,16 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboards</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span>
 <span class="go">()
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboards</span><span class="p">([{</span><span class="s">"name"</span><span class="p">:</span> <span class="s">"Manual"</span><span class="p">,</span> <span class="s">"lowest"</span><span class="p">:</span> <span class="s">"C4"</span><span class="p">,</span> <span class="s">"highest"</span><span class="p">:</span> <span class="s">"E4"</span><span class="p">}],</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">naturals</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboards</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">{</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"name"</span><span class="p">:</span> <span class="s">"Manual"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"lowest"</span><span class="p">:</span> <span class="s">"C4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"highest"</span><span class="p">:</span> <span class="s">"E4"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">naturals</span>
 <span class="go">3
 </span></code></pre></div></div>
 
@@ -1389,7 +1473,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="p">...]</span>
 </code></pre></div></div>
 
-<p>Validate the optional named positions along a string, which label the ruler beside the fingerboard.</p>
+<p>Validate the optional named positions along a string, which label
+the ruler beside the fingerboard.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1412,7 +1497,13 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_positions</span><span class="p">([{</span><span class="s">"name"</span><span class="p">:</span> <span class="s">"1st"</span><span class="p">,</span> <span class="s">"half_steps"</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s">"name"</span><span class="p">:</span> <span class="s">"2nd"</span><span class="p">,</span> <span class="s">"half_steps"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}],</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_positions</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">{</span><span class="s">"name"</span><span class="p">:</span> <span class="s">"1st"</span><span class="p">,</span> <span class="s">"half_steps"</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">{</span><span class="s">"name"</span><span class="p">:</span> <span class="s">"2nd"</span><span class="p">,</span> <span class="s">"half_steps"</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">((2, '1st'), (3, '2nd'))
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_positions</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span>
 <span class="go">()
@@ -1429,7 +1520,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PackInstrument</span>
 </code></pre></div></div>
 
-<p>Validate one declared instrument against its own artwork and recordings.</p>
+<p>Validate one declared instrument against its own artwork and
+recordings.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1588,8 +1680,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

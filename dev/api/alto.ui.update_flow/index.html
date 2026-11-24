@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,17 +676,25 @@
         <article>
           <h1>alto.ui.update_flow</h1>
           
-<p>Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards.</p>
+<p>Checking for a newer Alto and installing it: the questions asked, the
+progress shown, and the restart afterwards.</p>
 
-<p>The menu’s “Check for updates…” follows one of two channels, chosen in Settings: the newest release (the default), or the
-newest commit on the main branch. A copy installed with <code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code> can replace itself, from either, with
-<code class="language-plaintext highlighter-rouge">uv tool install</code>, showing its output, and restarts when OK is pressed. A packaged copy cannot replace itself, so it is told
-that a newer release exists and offered the page where it can be downloaded; it always follows releases. A copy run from a
+<p>The menu’s “Check for updates…” follows one of two channels, chosen in
+Settings: the newest release (the default), or the
+newest commit on the main branch. A copy installed with
+<code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code> can replace itself, from either, with
+<code class="language-plaintext highlighter-rouge">uv tool install</code>, showing its output, and restarts when OK is pressed.
+A packaged copy cannot replace itself, so it is told
+that a newer release exists and offered the page where it can be
+downloaded; it always follows releases. A copy run from a
 source folder is told to update with git.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brief</span><span class="p">(</span><span class="s">"fatal: unable to access 'https://example.org/': Could not resolve host</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brief</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"fatal: unable to access 'https://example.org/': Could not "</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"resolve host</span><span class="se">\n</span><span class="s">"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">"fatal: unable to access 'https://example.org/': Could not resolve host"
 </span></code></pre></div></div>
 
@@ -699,7 +707,8 @@ source folder is told to update with git.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Cut what a program printed down to what is worth showing in a message: the end of it, without the blank space around it.</p>
+<p>Cut what a program printed down to what is worth showing in a
+message: the end of it, without the blank space around it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -729,7 +738,8 @@ source folder is told to update with git.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QObject</code></p>
 
-<p>Run one program without freezing the window, handing on what it prints as it prints it, and how it ended.</p>
+<p>Run one program without freezing the window, handing on what it
+prints as it prints it, and how it ended.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -793,7 +803,13 @@ source folder is told to update with git.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span> <span class="o">=</span> <span class="n">CommandRunner</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="p">[</span><span class="s">"-c"</span><span class="p">,</span> <span class="s">"import time; time.sleep(30)"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span><span class="p">.</span><span class="n">start</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">arguments</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"-c"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"import time; time.sleep(30)"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span><span class="p">.</span><span class="n">stop</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span><span class="p">.</span><span class="n">running</span>
 <span class="go">False
@@ -804,7 +820,8 @@ source folder is told to update with git.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Stop the program, if it is running, without announcing that it has ended.</p>
+<p>Stop the program, if it is running, without announcing that it
+has ended.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -865,7 +882,8 @@ source folder is told to update with git.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
-<p>A small window with a bar that keeps moving and a Cancel button, shown while something is asked for.</p>
+<p>A small window with a bar that keeps moving and a Cancel button,
+shown while something is asked for.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -904,7 +922,8 @@ source folder is told to update with git.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">WaitDialog</code></p>
 
-<p>A waiting window while the address Alto came from is asked for the newest commit of its main branch.</p>
+<p>A waiting window while the address Alto came from is asked for the
+newest commit of its main branch.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -936,7 +955,14 @@ source folder is told to update with git.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CheckDialog</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="s">"https://example.org/a.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">),</span> <span class="n">git</span><span class="o">=</span><span class="s">"git"</span><span class="p">).</span><span class="n">canceled</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CheckDialog</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"https://example.org/a.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">git</span><span class="o">=</span><span class="s">"git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">canceled</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -947,7 +973,8 @@ source folder is told to update with git.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QObject</code></p>
 
-<p>Ask GitHub for the latest release on another thread, so that the window never freezes while it waits.</p>
+<p>Ask GitHub for the latest release on another thread, so that the
+window never freezes while it waits.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -991,7 +1018,8 @@ source folder is told to update with git.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cancel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up.</p>
+<p>Stop caring about the answer; the thread ends by itself when
+GitHub answers or the time is up.</p>
 
 <h2 id="dailyreleasecheck">DailyReleaseCheck</h2>
 
@@ -1000,7 +1028,8 @@ source folder is told to update with git.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QTimer</code></p>
 
-<p>Check for published releases in the background and honor the learner’s reminder choice at the exercise grid.</p>
+<p>Check for published releases in the background and honor the
+learner’s reminder choice at the exercise grid.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1074,10 +1103,13 @@ source folder is told to update with git.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
-<p>The window that shows an update being installed: a bar that keeps moving, what <code class="language-plaintext highlighter-rouge">uv</code> prints, and then what comes next.</p>
+<p>The window that shows an update being installed: a bar that keeps
+moving, what <code class="language-plaintext highlighter-rouge">uv</code> prints, and then what comes next.</p>
 
-<p>It cannot be closed while the update runs, because stopping it half way could leave the installed copy broken. When it has
-finished it says so, and its one button closes it. After a successful update the caller restarts Alto.</p>
+<p>It cannot be closed while the update runs, because stopping it half
+way could leave the installed copy broken. When it has
+finished it says so, and its one button closes it. After a
+successful update the caller restarts Alto.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1093,7 +1125,8 @@ finished it says so, and its one button closes it. After a successful update the
 
 <p><strong>Constructor</strong></p>
 
-<p>Build the window; the update does not start until <code class="language-plaintext highlighter-rouge">run</code> is called.</p>
+<p>Build the window; the update does not start until <code class="language-plaintext highlighter-rouge">run</code> is
+called.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1107,7 +1140,8 @@ finished it says so, and its one button closes it. After a successful update the
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Install the update, showing the window until the person has read how it went.</p>
+<p>Install the update, showing the window until the person has read
+how it went.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1118,7 +1152,13 @@ finished it says so, and its one button closes it. After a successful update the
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">UpdateDialog</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="p">(</span><span class="s">"uv"</span><span class="p">,</span> <span class="p">[</span><span class="s">"tool"</span><span class="p">,</span> <span class="s">"install"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">])).</span><span class="n">succeeded</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">UpdateDialog</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">command</span><span class="o">=</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"uv"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="s">"tool"</span><span class="p">,</span> <span class="s">"install"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">succeeded</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -1152,10 +1192,13 @@ finished it says so, and its one button closes it. After a successful update the
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Ask whether a newer Alto is available and, if the person agrees, install it and restart.</p>
+<p>Ask whether a newer Alto is available and, if the person agrees,
+install it and restart.</p>
 
-<p>What is asked depends on the copy: one run from a source folder is told how it is updated; a packaged copy asks for the
-latest release and is offered its download page; one installed with the script follows what Settings says, the latest release
+<p>What is asked depends on the copy: one run from a source folder is
+told how it is updated; a packaged copy asks for the
+latest release and is offered its download page; one installed with
+the script follows what Settings says, the latest release
 or the main branch, and can install it.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1183,7 +1226,8 @@ or the main branch, and can install it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Ask GitHub for the latest release and compare it with the version that is running.</p>
+<p>Ask GitHub for the latest release and compare it with the version
+that is running.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1214,7 +1258,8 @@ or the main branch, and can install it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Ask whether to upgrade using the installation’s supported update path.</p>
+<p>Ask whether to upgrade using the installation’s supported update
+path.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1243,7 +1288,8 @@ or the main branch, and can install it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Ask the address Alto came from for the newest commit on its main branch and compare it with the one that is running.</p>
+<p>Ask the address Alto came from for the newest commit on its main
+branch and compare it with the one that is running.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1269,7 +1315,8 @@ or the main branch, and can install it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Install a release, or the newest commit of the main branch, showing the progress, and restart if it worked.</p>
+<p>Install a release, or the newest commit of the main branch, showing
+the progress, and restart if it worked.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1296,7 +1343,8 @@ or the main branch, and can install it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Replace a packaged copy after the user agrees: download and check it, say that Alto will restart, and hand over.</p>
+<p>Replace a packaged copy after the user agrees: download and check
+it, say that Alto will restart, and hand over.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1631,8 +1679,8 @@ or the main branch, and can install it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

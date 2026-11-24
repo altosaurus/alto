@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,14 +676,22 @@
         <article>
           <h1>alto.terms</h1>
           
-<p>Glossary entries that an installed plugin supplies, kept apart from the built-in ones.</p>
+<p>Glossary entries that an installed plugin supplies, kept apart from the
+built-in ones.</p>
 
-<p>A plugin describes each entry in its manifest as plain text, and may show one of its own instrument pictures with it. The glossary
-page merges these with the built-in terms and lists them under their own names.</p>
+<p>A plugin describes each entry in its manifest as plain text, and may
+show one of its own instrument pictures with it. The glossary
+page merges these with the built-in terms and lists them under their own
+names.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">entry</span> <span class="o">=</span> <span class="n">PluginTerm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"scroll"</span><span class="p">,</span> <span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="s">"The carved end."</span><span class="p">,</span> <span class="n">lessons</span><span class="o">=</span><span class="p">(</span><span class="s">"pack.demo.parts"</span><span class="p">,))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">entry</span> <span class="o">=</span> <span class="n">PluginTerm</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"scroll"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">definition</span><span class="o">=</span><span class="s">"The carved end."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">lessons</span><span class="o">=</span><span class="p">(</span><span class="s">"pack.demo.parts"</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">register_term</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PLUGIN_TERMS</span><span class="p">[</span><span class="s">"scroll"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">entry</span>
 <span class="go">True
@@ -721,7 +729,11 @@ page merges these with the built-in terms and lists them under their own names.<
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginTerm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"nut"</span><span class="p">,</span> <span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="s">"It holds the strings."</span><span class="p">).</span><span class="n">exercises</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginTerm</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"nut"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">definition</span><span class="o">=</span><span class="s">"It holds the strings."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">exercises</span>
 <span class="go">()
 </span></code></pre></div></div>
 
@@ -746,8 +758,20 @@ page merges these with the built-in terms and lists them under their own names.<
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">register_term</span><span class="p">(</span><span class="n">PluginTerm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"bridge"</span><span class="p">,</span> <span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="s">"It lifts the strings."</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">register_term</span><span class="p">(</span><span class="n">PluginTerm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"bridge"</span><span class="p">,</span> <span class="n">pack</span><span class="o">=</span><span class="s">"Other"</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="s">"Again."</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">register_term</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">PluginTerm</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">name</span><span class="o">=</span><span class="s">"bridge"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">definition</span><span class="o">=</span><span class="s">"It lifts the strings."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">register_term</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">PluginTerm</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">name</span><span class="o">=</span><span class="s">"bridge"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">pack</span><span class="o">=</span><span class="s">"Other"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">definition</span><span class="o">=</span><span class="s">"Again."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">Traceback (most recent call last):
 </span><span class="c">...
 </span><span class="go">ValueError: The term bridge is already supplied by Demo.
@@ -794,10 +818,28 @@ page merges these with the built-in terms and lists them under their own names.<
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_terms</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">instruments</span><span class="o">=</span><span class="p">{},</span> <span class="n">exercises</span><span class="o">=</span><span class="p">{},</span> <span class="n">lessons</span><span class="o">=</span><span class="p">{})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_terms</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">instruments</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercises</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">lessons</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">()
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_terms</span><span class="p">([{</span><span class="s">"term"</span><span class="p">:</span> <span class="s">"nut"</span><span class="p">,</span> <span class="s">"definition"</span><span class="p">:</span> <span class="s">"It holds the strings."</span><span class="p">}],</span> <span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">            </span><span class="n">instruments</span><span class="o">=</span><span class="p">{},</span> <span class="n">exercises</span><span class="o">=</span><span class="p">{},</span> <span class="n">lessons</span><span class="o">=</span><span class="p">{})[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_terms</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">{</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"term"</span><span class="p">:</span> <span class="s">"nut"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"definition"</span><span class="p">:</span> <span class="s">"It holds the strings."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">instruments</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercises</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">lessons</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span>
 <span class="go">'nut'
 </span></code></pre></div></div>
 
@@ -960,8 +1002,8 @@ page merges these with the built-in terms and lists them under their own names.<
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

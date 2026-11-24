@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,7 +678,8 @@
           
 <p>The staffs you click to place notes or a clef.</p>
 
-<p>One note for the note construction exercise, a row of them for scale construction, and a clef for the clef exercise.</p>
+<p>One note for the note construction exercise, a row of them for scale
+construction, and a clef for the clef exercise.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -694,10 +695,13 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">StaffWidget</code></p>
 
-<p>A single staff you click to place a note, or place a note on with the keyboard.</p>
+<p>A single staff you click to place a note, or place a note on with
+the keyboard.</p>
 
-<p>The note snaps to the nearest line or space and follows the pointer until you click. Without the mouse, a caret marks
-the note that would be placed: <code class="language-plaintext highlighter-rouge">move_cursor</code> and <code class="language-plaintext highlighter-rouge">jump_to_letter</code> move it, and <code class="language-plaintext highlighter-rouge">place_caret</code> places it.</p>
+<p>The note snaps to the nearest line or space and follows the pointer
+until you click. Without the mouse, a caret marks
+the note that would be placed: <code class="language-plaintext highlighter-rouge">move_cursor</code> and <code class="language-plaintext highlighter-rouge">jump_to_letter</code>
+move it, and <code class="language-plaintext highlighter-rouge">place_caret</code> places it.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -715,7 +719,11 @@ the note that would be placed: <code class="language-plaintext highlighter-rouge
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]))</span>  <span class="c1"># the bottom line of the treble staff
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the bottom line of the treble staff
 </span><span class="go">'E4'
 </span></code></pre></div></div>
 
@@ -762,7 +770,11 @@ the note that would be placed: <code class="language-plaintext highlighter-rouge
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">accidental</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">locked</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">True</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">accidental</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">locked</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">key</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">accidental</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">locked</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">key</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, False, -2)
 </span></code></pre></div></div>
 
@@ -771,9 +783,11 @@ the note that would be placed: <code class="language-plaintext highlighter-rouge
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">note_at</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
 </code></pre></div></div>
 
-<p>Return the note on the line or space nearest to a height on the staff.</p>
+<p>Return the note on the line or space nearest to a height on the
+staff.</p>
 
-<p>The note is kept within five ledger lines of the staff. On a grand staff, a click in the upper half is on the treble
+<p>The note is kept within five ledger lines of the staff. On a
+grand staff, a click in the upper half is on the treble
 staff and the lower half on the bass staff.</p>
 
 <p><strong>Parameters</strong></p>
@@ -791,12 +805,20 @@ staff and the lower half on the bass staff.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># G major: F is sharp
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># G major: F is sharp
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bottom</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span><span class="n">bottom</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># three steps above E4
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">bottom</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># three steps above E4
 </span><span class="go">'A4'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span><span class="n">bottom</span> <span class="o">-</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># one step above E4: F, sharp in this key
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span><span class="n">bottom</span> <span class="o">-</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># one step above E4: F, sharp in this key
 </span><span class="go">'F♯4'
 </span></code></pre></div></div>
 
@@ -805,9 +827,11 @@ staff and the lower half on the bass staff.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">note_for</span><span class="p">(</span><span class="n">diatonic</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
 </code></pre></div></div>
 
-<p>Return the note on a staff step, with the chosen sign or the one the key signature gives it.</p>
+<p>Return the note on a staff step, with the chosen sign or the one
+the key signature gives it.</p>
 
-<p>The step is kept within five ledger lines of the staff, as clicking is.</p>
+<p>The step is kept within five ledger lines of the staff, as
+clicking is.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -824,11 +848,21 @@ staff and the lower half on the bass staff.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># G major: F is sharp
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_for</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">).</span><span class="n">diatonic</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># G major: F is sharp
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">note_for</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">).</span><span class="n">diatonic</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'F♯4'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">accidental</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_for</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">).</span><span class="n">diatonic</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">note_for</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">).</span><span class="n">diatonic</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'F4'
 </span></code></pre></div></div>
 
@@ -837,7 +871,8 @@ staff and the lower half on the bass staff.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">caret_start</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Return the staff step the caret starts from, when the keyboard first moves it.</p>
+<p>Return the staff step the caret starts from, when the keyboard
+first moves it.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -885,9 +920,11 @@ staff and the lower half on the bass staff.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">move_cursor</span><span class="p">(</span><span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Move the caret up (positive) or down (negative) by staff steps, and show the note there.</p>
+<p>Move the caret up (positive) or down (negative) by staff steps,
+and show the note there.</p>
 
-<p>The first move starts from <code class="language-plaintext highlighter-rouge">caret_start</code>. The caret stays within the furthest ledger lines.</p>
+<p>The first move starts from <code class="language-plaintext highlighter-rouge">caret_start</code>. The caret stays within
+the furthest ledger lines.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -905,7 +942,9 @@ staff and the lower half on the bass staff.</p>
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">())</span>
 <span class="go">'C4'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="o">-</span><span class="mi">500</span><span class="p">)</span>  <span class="c1"># no further than the ledger lines go
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">-</span><span class="mi">500</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># no further than the ledger lines go
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">caret</span> <span class="o">==</span> <span class="n">RANGE_LIMITS</span><span class="p">[</span><span class="s">"treble"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -915,7 +954,8 @@ staff and the lower half on the bass staff.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">jump_to_letter</span><span class="p">(</span><span class="n">letter</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Move the caret to the nearest note with a letter name, above or below where it is.</p>
+<p>Move the caret to the nearest note with a letter name, above or
+below where it is.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -929,10 +969,14 @@ staff and the lower half on the bass staff.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># B4, the middle line
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">jump_to_letter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">())</span>  <span class="c1"># the nearest C is the one just above
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the nearest C is the one just above
 </span><span class="go">'C5'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">jump_to_letter</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">())</span>  <span class="c1"># and the nearest G is the one just below
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># and the nearest G is the one just below
 </span><span class="go">'G4'
 </span></code></pre></div></div>
 
@@ -949,8 +993,9 @@ staff and the lower half on the bass staff.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">placed</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">placed</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_caret</span><span class="p">()</span>  <span class="c1"># the first press places the note at the start
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">placed</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># the first press places the note at the start
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_caret</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">placed</span><span class="p">]</span>
 <span class="go">['B4']
 </span></code></pre></div></div>
 
@@ -988,16 +1033,20 @@ staff and the lower half on the bass staff.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh_preview</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Redraw the note that would be placed, for example after the accidental changes.</p>
+<p>Redraw the note that would be placed, for example after the
+accidental changes.</p>
 
-<p>It is the pointer’s note while the pointer is over the staff, and otherwise the note at the caret, once the keyboard
+<p>It is the pointer’s note while the pointer is over the staff,
+and otherwise the note at the caret, once the keyboard
 has put the caret somewhere.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">refresh_preview</span><span class="p">()</span>  <span class="c1"># the pointer is not over the staff, and there is no caret: nothing to redraw
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># the pointer is not over the staff, and there is no caret:
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># nothing to redraw
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">refresh_preview</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span>
 <span class="go">[]
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -1024,9 +1073,19 @@ has put the caret somewhere.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 <span class="go">'E4'
 </span></code></pre></div></div>
@@ -1036,7 +1095,8 @@ has put the caret somewhere.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">leaveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Remove the pointer’s note when the pointer leaves the staff, showing the note at the caret instead if there is one.</p>
+<p>Remove the pointer’s note when the pointer leaves the staff,
+showing the note at the caret instead if there is one.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1058,7 +1118,8 @@ has put the caret somewhere.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Place the note on a left click, or step through the accidentals on a right click.</p>
+<p>Place the note on a left click, or step through the accidentals
+on a right click.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1074,9 +1135,19 @@ has put the caret somewhere.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">placed</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">placed</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                   </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">placed</span><span class="p">]</span>
 <span class="go">['E4']
 </span></code></pre></div></div>
@@ -1088,14 +1159,20 @@ has put the caret somewhere.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">StaffInput</code></p>
 
-<p>A staff you click to place the notes of a scale one after another, left to right, and then, if asked, its steps.</p>
+<p>A staff you click to place the notes of a scale one after another,
+left to right, and then, if asked, its steps.</p>
 
-<p>The next note follows the pointer, snapped to a line or space, in the place it will take. Each click puts it there and
-moves on to the next place. The places are all drawn from the start, so the notes do not move as more are placed.</p>
+<p>The next note follows the pointer, snapped to a line or space, in
+the place it will take. Each click puts it there and
+moves on to the next place. The places are all drawn from the start,
+so the notes do not move as more are placed.</p>
 
-<p>When steps are asked for, once all the notes are placed two lines rise from each pair of neighboring notes to a point
-above them (a wedge). The step to be marked next is shown there, in the preview color, as “W” (whole) or “H” (half).
-The mouse wheel or a right click changes it, and a left click marks it and moves on to the next pair.</p>
+<p>When steps are asked for, once all the notes are placed two lines
+rise from each pair of neighboring notes to a point
+above them (a wedge). The step to be marked next is shown there, in
+the preview color, as “W” (whole) or “H” (half).
+The mouse wheel or a right click changes it, and a left click marks
+it and moves on to the next pair.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1116,10 +1193,23 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                   </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(['E4'], 8)
 </span></code></pre></div></div>
 
@@ -1151,7 +1241,8 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Clear the staff for a new scale: a staff with room for its notes, and the key signature it is to have.</p>
+<p>Clear the staff for a new scale: a staff with room for its
+notes, and the key signature it is to have.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1166,9 +1257,19 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">slots</span> <span class="o">=</span> <span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)],</span> <span class="mi">3</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D Major"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">slots</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">caption</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">key</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">slots</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)],</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"bass"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D Major"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">slots</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">caption</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">key</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">([], 8, 'D Major', 0)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">key</span>
@@ -1206,7 +1307,8 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <span class="k">def</span> <span class="nf">placing_steps</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Report whether it is the turn of the steps: they are asked for, every note is placed and some step is still to mark.</p>
+<p>Report whether it is the turn of the steps: they are asked for,
+every note is placed and some step is still to mark.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1217,8 +1319,12 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">placing_steps</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">steps</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"W"</span><span class="p">)</span>
@@ -1232,7 +1338,8 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <span class="k">def</span> <span class="nf">done</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Report whether everything asked for is placed: every note and, if they are asked for, every step.</p>
+<p>Report whether everything asked for is placed: every note and,
+if they are asked for, every step.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1243,8 +1350,12 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">done</span>
 <span class="go">False
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">steps</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"W"</span><span class="p">)</span>
@@ -1295,9 +1406,13 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chosen</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_selected</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">chosen</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_selected</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chosen</span><span class="p">.</span><span class="n">append</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">set_pending_step</span><span class="p">(</span><span class="s">"H"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span><span class="p">,</span> <span class="n">chosen</span>
 <span class="go">('H', ['H'])
@@ -1308,12 +1423,15 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">toggle_step</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Switch the step that the next click marks between whole and half.</p>
+<p>Switch the step that the next click marks between whole and
+half.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">toggle_step</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span>
 <span class="go">'H'
@@ -1327,7 +1445,8 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">undo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Take back the last thing placed: the last step if there is one, otherwise the last note.</p>
+<p>Take back the last thing placed: the last step if there is one,
+otherwise the last note.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1344,10 +1463,13 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wheelEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QWheelEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Use the mouse wheel for what comes next: the sign of the note to place, or the step to mark.</p>
+<p>Use the mouse wheel for what comes next: the sign of the note to
+place, or the step to mark.</p>
 
-<p>While notes are placed each notch asks the owner to move on to the next sign (up) or back to the one before (down).
-While steps are marked each notch switches between whole and half. Once everything is placed it does nothing.</p>
+<p>While notes are placed each notch asks the owner to move on to
+the next sign (up) or back to the one before (down).
+While steps are marked each notch switches between whole and
+half. Once everything is placed it does nothing.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1359,16 +1481,30 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span><span class="p">,</span> <span class="n">QPointF</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signs</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">accidental_stepped</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">signs</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">accidental_stepped</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signs</span><span class="p">.</span><span class="n">append</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">turn</span> <span class="o">=</span> <span class="n">QWheelEvent</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">turn</span> <span class="o">=</span> <span class="n">QWheelEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">here</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">here</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">turn</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signs</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span>
 <span class="go">([1], 'W')
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)])</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">turn</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signs</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span>
 <span class="go">([1], 'H')
@@ -1379,7 +1515,8 @@ While steps are marked each notch switches between whole and half. Once everythi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">caret_start</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Return the staff step the caret starts from: that of the last note placed, or the middle line.</p>
+<p>Return the staff step the caret starts from: that of the last
+note placed, or the middle line.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1391,10 +1528,14 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">from_diatonic</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_start</span><span class="p">()))</span>  <span class="c1"># the middle line
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">from_diatonic</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_start</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the middle line
 </span><span class="go">'B4'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">from_diatonic</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_start</span><span class="p">()))</span>  <span class="c1"># the note before
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">from_diatonic</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_start</span><span class="p">())</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the note before
 </span><span class="go">'D4'
 </span></code></pre></div></div>
 
@@ -1403,7 +1544,8 @@ While steps are marked each notch switches between whole and half. Once everythi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_next</span><span class="p">(</span><span class="n">note</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Place the next note, or mark the next step once the notes are placed.</p>
+<p>Place the next note, or mark the next step once the notes are
+placed.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1414,11 +1556,14 @@ While steps are marked each notch switches between whole and half. Once everythi
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">()</span>  <span class="c1"># the notes are placed: this marks the first step
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">],</span> <span class="n">staff</span><span class="p">.</span><span class="n">steps</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># the notes are placed: this marks the first step
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">],</span> <span class="n">staff</span><span class="p">.</span><span class="n">steps</span>
 <span class="go">(['C4', 'D4'], ['W'])
 </span></code></pre></div></div>
 
@@ -1427,7 +1572,8 @@ While steps are marked each notch switches between whole and half. Once everythi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_caret</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Place the next note at the caret, or mark the next step, as a click would.</p>
+<p>Place the next note at the caret, or mark the next step, as a
+click would.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1444,7 +1590,8 @@ While steps are marked each notch switches between whole and half. Once everythi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Place the next note or mark the next step on a left click; change the sign or the step on a right click.</p>
+<p>Place the next note or mark the next step on a left click;
+change the sign or the step on a right click.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1458,11 +1605,21 @@ While steps are marked each notch switches between whole and half. Once everythi
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">press</span> <span class="o">=</span> <span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                     </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">press</span> <span class="o">=</span> <span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">press</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">press</span><span class="p">)</span>  <span class="c1"># every place is taken
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">press</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># every place is taken
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">]</span>
 <span class="go">['E4']
 </span></code></pre></div></div>
@@ -1472,12 +1629,15 @@ While steps are marked each notch switches between whole and half. Once everythi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SignatureInput</span><span class="p">(</span><span class="n">ScaleInput</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Place accidentals in consecutive key-signature slots immediately after the clef.</p>
+<p>Place accidentals in consecutive key-signature slots immediately
+after the clef.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">SignatureInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#5"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">columns</span>
 <span class="go">([Note(octave=5, letter=3, accidental=1)], [])
@@ -1494,7 +1654,8 @@ While steps are marked each notch switches between whole and half. Once everythi
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the fixed signs for this question and clear the learner’s entries.</p>
+<p>Set the fixed signs for this question and clear the learner’s
+entries.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1508,7 +1669,12 @@ While steps are marked each notch switches between whole and half. Once everythi
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">SignatureInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_signature</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span><span class="p">,</span> <span class="n">starting_slots</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">starting_slots</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">template</span><span class="p">),</span> <span class="n">staff</span><span class="p">.</span><span class="n">template</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="go">(7, Note(octave=5, letter=0, accidental=1))
 </span></code></pre></div></div>
@@ -1518,7 +1684,8 @@ While steps are marked each notch switches between whole and half. Once everythi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">entered_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Combine the fixed signs and the learner’s entries in staff order.</p>
+<p>Combine the fixed signs and the learner’s entries in staff
+order.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1529,9 +1696,18 @@ While steps are marked each notch switches between whole and half. Once everythi
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">SignatureInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_signature</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span><span class="p">,</span> <span class="n">starting_slots</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">starting_slots</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#5"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">entered_signature</span><span class="p">()</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">entered_signature</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">['F♯5', 'C♯5']
 </span></code></pre></div></div>
 
@@ -1540,7 +1716,8 @@ While steps are marked each notch switches between whole and half. Once everythi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the blank staff and caption, then the placed signs and the next sign under the pointer.</p>
+<p>Draw the blank staff and caption, then the placed signs and the
+next sign under the pointer.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1564,10 +1741,13 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">StaffWidget</code></p>
 
-<p>A blank staff on which you put a clef symbol: choose the G, C or F clef, then click where it goes.</p>
+<p>A blank staff on which you put a clef symbol: choose the G, C or F
+clef, then click where it goes.</p>
 
-<p>The symbol can go on any line or space of the staff and on the three ledger lines and spaces above and below it, and
-follows the pointer from place to place, in a lighter color, until you click. Without the mouse, <code class="language-plaintext highlighter-rouge">move_caret</code> moves it,
+<p>The symbol can go on any line or space of the staff and on the three
+ledger lines and spaces above and below it, and
+follows the pointer from place to place, in a lighter color, until
+you click. Without the mouse, <code class="language-plaintext highlighter-rouge">move_caret</code> moves it,
 <code class="language-plaintext highlighter-rouge">step_symbol</code> switches the symbol and <code class="language-plaintext highlighter-rouge">place_caret</code> places it.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1616,7 +1796,8 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Clear the staff for a new question and offer some symbols to choose from.</p>
+<p>Clear the staff for a new question and offer some symbols to
+choose from.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1628,8 +1809,15 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">],</span> <span class="n">caption</span><span class="o">=</span><span class="s">"Place the alto clef."</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed_symbol</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">caption</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">caption</span><span class="o">=</span><span class="s">"Place the alto clef."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">placed_symbol</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">caption</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('C', None, 'Place the alto clef.')
 </span></code></pre></div></div>
 
@@ -1660,7 +1848,8 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">step_symbol</span><span class="p">(</span><span class="n">direction</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Choose the next symbol of the options, or the one before, going around.</p>
+<p>Choose the next symbol of the options, or the one before, going
+around.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1702,7 +1891,12 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">floor</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="n">floor</span><span class="p">),</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="n">floor</span> <span class="o">-</span> <span class="mf">1.4</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span><span class="p">),</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="mi">10_000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="n">floor</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="n">floor</span> <span class="o">-</span> <span class="mf">1.4</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="mi">10_000</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0, 3, 14, -6)
 </span></code></pre></div></div>
 
@@ -1749,7 +1943,11 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"F"</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">where</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">symbol</span><span class="p">,</span> <span class="n">where</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">where</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="n">symbol</span><span class="p">,</span> <span class="n">where</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed_symbol</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed_step</span>
 <span class="go">([('F', 6)], 'F', 6)
@@ -1760,7 +1958,8 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_caret</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Place the symbol where the keyboard put it, or on the middle line if it has not moved.</p>
+<p>Place the symbol where the keyboard put it, or on the middle
+line if it has not moved.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1793,7 +1992,8 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_clef_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the placed symbol in a color, for feedback, or back in black.</p>
+<p>Draw the placed symbol in a color, for feedback, or back in
+black.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1814,7 +2014,8 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the symbol in the place under the pointer, in a lighter color.</p>
+<p>Show the symbol in the place under the pointer, in a lighter
+color.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1828,9 +2029,21 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">_hover</span>
 <span class="go">4
 </span></code></pre></div></div>
@@ -1862,7 +2075,8 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Place the symbol on a left click, or choose the next symbol on a right click.</p>
+<p>Place the symbol on a left click, or choose the next symbol on a
+right click.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1876,9 +2090,19 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">RightButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                   </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">RightButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">RightButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">RightButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span>
 <span class="go">'F'
 </span></code></pre></div></div>
@@ -1888,7 +2112,8 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wheelEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QWheelEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Choose the next symbol for each notch of the wheel turned up, and the one before for each turned down.</p>
+<p>Choose the next symbol for each notch of the wheel turned up,
+and the one before for each turned down.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1902,8 +2127,18 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">QWheelEvent</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                              </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QWheelEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">here</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">here</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span>
 <span class="go">'F'
 </span></code></pre></div></div>
@@ -1913,9 +2148,11 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the staff, then the symbol that was placed or, until one is, the one that would be placed.</p>
+<p>Draw the staff, then the symbol that was placed or, until one
+is, the one that would be placed.</p>
 
-<p>A symbol on a ledger line has the ledger lines it needs drawn behind it.</p>
+<p>A symbol on a ledger line has the ledger lines it needs drawn
+behind it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -2231,8 +2468,8 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

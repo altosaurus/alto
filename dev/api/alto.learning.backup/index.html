@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,12 +676,17 @@
         <article>
           <h1>alto.learning.backup</h1>
           
-<p>Backup files: everything Alto keeps, in one file that can be read back into a clean install. Pure Python (no Qt).</p>
+<p>Backup files: everything Alto keeps, in one file that can be read back
+into a clean install. Pure Python (no Qt).</p>
 
-<p>A backup is a zip file holding three things: the whole database (profiles, every answer, what is known about each question),
-the saved preferences (theme, fonts, instrument, every exercise’s settings, the last profile used) and a manifest that says
-which version of Alto made it and carries a checksum of each part. Reading a backup back checks the checksums and the database
-before anything is changed, so a damaged or foreign file is refused instead of half applied.</p>
+<p>A backup is a zip file holding three things: the whole database
+(profiles, every answer, what is known about each question),
+the saved preferences (theme, fonts, instrument, every exercise’s
+settings, the last profile used) and a manifest that says
+which version of Alto made it and carries a checksum of each part.
+Reading a backup back checks the checksums and the database
+before anything is changed, so a damaged or foreign file is refused
+instead of half applied.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -690,10 +695,16 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">write_backup</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{</span><span class="s">"ui/theme"</span><span class="p">:</span> <span class="s">"dark"</span><span class="p">},</span> <span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"ada.altobackup"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">write_backup</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings</span><span class="o">=</span><span class="p">{</span><span class="s">"ui/theme"</span><span class="p">:</span> <span class="s">"dark"</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"ada.altobackup"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">profiles</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">attempts</span>
 <span class="go">(1, 0)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">backup</span> <span class="o">=</span> <span class="n">read_backup</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"ada.altobackup"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">backup</span> <span class="o">=</span> <span class="n">read_backup</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">folder</span> <span class="o">/</span> <span class="s">"ada.altobackup"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">backup</span><span class="p">.</span><span class="n">settings</span>
 <span class="go">{'ui/theme': 'dark'}
 </span></code></pre></div></div>
@@ -703,11 +714,16 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BackupError</span><span class="p">(</span><span class="nb">Exception</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>A backup file could not be written or read: it is damaged, is not a backup, or was made by a newer Alto.</p>
+<p>A backup file could not be written or read: it is damaged, is not a
+backup, or was made by a newer Alto.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">BackupError</span><span class="p">(</span><span class="s">"This is not an Alto backup."</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">BackupError</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"This is not an Alto backup."</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'This is not an Alto backup.'
 </span></code></pre></div></div>
 
@@ -736,7 +752,13 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BackupInfo</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">profiles</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">30</span><span class="p">).</span><span class="n">profiles</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BackupInfo</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">100.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profiles</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempts</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">profiles</span>
 <span class="go">2
 </span></code></pre></div></div>
 
@@ -761,7 +783,17 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Backup</span><span class="p">(</span><span class="n">BackupInfo</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">profiles</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="n">database</span><span class="o">=</span><span class="sa">b</span><span class="s">""</span><span class="p">).</span><span class="n">settings</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Backup</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">BackupInfo</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">profiles</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempts</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">database</span><span class="o">=</span><span class="sa">b</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">settings</span>
 <span class="go">{}
 </span></code></pre></div></div>
 
@@ -791,8 +823,10 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 <p>Turn a saved preference into something JSON can hold.</p>
 
-<p>Text, numbers, true and false and lists of them are kept as they are. Bytes, which Qt settings can hold, become a small
-dictionary with the bytes in base64, so <code class="language-plaintext highlighter-rouge">decode_value</code> can bring them back.</p>
+<p>Text, numbers, true and false and lists of them are kept as they
+are. Bytes, which Qt settings can hold, become a small
+dictionary with the bytes in base64, so <code class="language-plaintext highlighter-rouge">decode_value</code> can bring
+them back.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -808,7 +842,11 @@ dictionary with the bytes in base64, so <code class="language-plaintext highligh
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">encode_value</span><span class="p">(</span><span class="s">"dark"</span><span class="p">),</span> <span class="n">encode_value</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">encode_value</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">encode_value</span><span class="p">(</span><span class="s">"dark"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">encode_value</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">encode_value</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">]),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('dark', 5, ['a', 'b'])
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">encode_value</span><span class="p">(</span><span class="sa">b</span><span class="s">"</span><span class="se">\x00\x01</span><span class="s">"</span><span class="p">)</span>
 <span class="go">{'bytes': 'AAE='}
@@ -880,7 +918,12 @@ dictionary with the bytes in base64, so <code class="language-plaintext highligh
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning.database</span> <span class="kn">import</span> <span class="n">Database</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_backup</span><span class="p">(</span><span class="n">Database</span><span class="p">(),</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"empty.altobackup"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">5.0</span><span class="p">).</span><span class="n">created</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_backup</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Database</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"empty.altobackup"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">created</span>
 <span class="go">5.0
 </span></code></pre></div></div>
 
@@ -889,7 +932,8 @@ dictionary with the bytes in base64, so <code class="language-plaintext highligh
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_backup</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Backup</span>
 </code></pre></div></div>
 
-<p>Read a backup file and check it all the way through, without changing anything.</p>
+<p>Read a backup file and check it all the way through, without
+changing anything.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -913,7 +957,9 @@ dictionary with the bytes in base64, so <code class="language-plaintext highligh
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"x.altobackup"</span><span class="p">).</span><span class="n">write_bytes</span><span class="p">(</span><span class="sa">b</span><span class="s">"not a zip"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"x.altobackup"</span><span class="p">).</span><span class="n">write_bytes</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="sa">b</span><span class="s">"not a zip"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">9
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_backup</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"x.altobackup"</span><span class="p">)</span>
 <span class="go">Traceback (most recent call last):
@@ -952,9 +998,18 @@ dictionary with the bytes in base64, so <code class="language-plaintext highligh
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">write_backup</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"a.altobackup"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">write_backup</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">source</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"a.altobackup"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">restore_database</span><span class="p">(</span><span class="n">clean</span><span class="p">,</span> <span class="n">backup</span><span class="o">=</span><span class="n">read_backup</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"a.altobackup"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">restore_database</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clean</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">backup</span><span class="o">=</span><span class="n">read_backup</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">folder</span> <span class="o">/</span> <span class="s">"a.altobackup"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">clean</span><span class="p">.</span><span class="n">profiles</span><span class="p">()]</span>
 <span class="go">['Ada']
 </span></code></pre></div></div>
@@ -1128,8 +1183,8 @@ dictionary with the bytes in base64, so <code class="language-plaintext highligh
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

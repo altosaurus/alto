@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,10 +676,13 @@
         <article>
           <h1>alto.ui.keyboard</h1>
           
-<p>The on-screen piano keyboard, drawn to real proportions, and a miniature of the whole piano for choosing a span of keys.</p>
+<p>The on-screen piano keyboard, drawn to real proportions, and a miniature
+of the whole piano for choosing a span of keys.</p>
 
-<p><code class="language-plaintext highlighter-rouge">KeyboardWidget</code> shows a range of keys and can highlight one. <code class="language-plaintext highlighter-rouge">KeyboardSpan</code> shows all 88 keys in miniature, shades the
-range that will be asked, and can be dragged to change it. Colors and materials come from <code class="language-plaintext highlighter-rouge">keyboard_styles</code>.</p>
+<p><code class="language-plaintext highlighter-rouge">KeyboardWidget</code> shows a range of keys and can highlight one.
+<code class="language-plaintext highlighter-rouge">KeyboardSpan</code> shows all 88 keys in miniature, shades the
+range that will be asked, and can be dragged to change it. Colors and
+materials come from <code class="language-plaintext highlighter-rouge">keyboard_styles</code>.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -700,7 +703,8 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>A piano keyboard drawn to real proportions that can highlight one or more keys.</p>
+<p>A piano keyboard drawn to real proportions that can highlight one or
+more keys.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -719,13 +723,17 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">keyboard</span><span class="p">.</span><span class="n">lo</span><span class="p">,</span> <span class="n">keyboard</span><span class="p">.</span><span class="n">hi</span><span class="p">)</span>  <span class="c1"># C3 to C5, until another range is shown
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">lo</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">hi</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># C3 to C5, until another range is shown
 </span><span class="go">(48, 72)
 </span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
-<p>Create a keyboard showing the default range, with no key highlighted.</p>
+<p>Create a keyboard showing the default range, with no key
+highlighted.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -757,7 +765,9 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">style_override</span> <span class="o">=</span> <span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">style_override</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">style</span><span class="p">.</span><span class="n">label</span>
 <span class="go">'Modern piano'
 </span></code></pre></div></div>
@@ -784,7 +794,8 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">full_width</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Measure the keyboard case when its keys reach their maximum width.</p>
+<p>Measure the keyboard case when its keys reach their maximum
+width.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -803,7 +814,8 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Change the height to match the new width, since keys are drawn to real proportions.</p>
+<p>Change the height to match the new width, since keys are drawn
+to real proportions.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -829,7 +841,8 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Highlight a key, and optionally choose the range of keys to show.</p>
+<p>Highlight a key, and optionally choose the range of keys to
+show.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -841,8 +854,14 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_key</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="p">(</span><span class="mi">49</span><span class="p">,</span> <span class="mi">71</span><span class="p">))</span>  <span class="c1"># C#3 is widened to C3
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">keyboard</span><span class="p">.</span><span class="n">lo</span><span class="p">,</span> <span class="n">keyboard</span><span class="p">.</span><span class="n">hi</span><span class="p">,</span> <span class="n">keyboard</span><span class="p">.</span><span class="n">highlight</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_key</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">60</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="p">(</span><span class="mi">49</span><span class="p">,</span> <span class="mi">71</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># C#3 is widened to C3
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">lo</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">hi</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">highlight</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(48, 71, 60)
 </span></code></pre></div></div>
 
@@ -855,7 +874,8 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Highlight several keys together, clearing highlights from the previous question.</p>
+<p>Highlight several keys together, clearing highlights from the
+previous question.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -868,7 +888,10 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_keys</span><span class="p">([</span><span class="mi">60</span><span class="p">,</span> <span class="mi">66</span><span class="p">],</span> <span class="n">span</span><span class="o">=</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">highlight</span><span class="p">,</span> <span class="n">keyboard</span><span class="p">.</span><span class="n">additional_highlights</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">highlight</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">additional_highlights</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(60, {66})
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_key</span><span class="p">(</span><span class="mi">62</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">additional_highlights</span>
@@ -891,7 +914,9 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">set_highlight_color</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#2e7d32"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">set_highlight_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QColor</span><span class="p">(</span><span class="s">"#2e7d32"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">highlight_color</span><span class="p">.</span><span class="n">name</span><span class="p">()</span>
 <span class="go">'#2e7d32'
 </span></code></pre></div></div>
@@ -901,7 +926,8 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the case, the keys, the highlighted key and the style’s extras.</p>
+<p>Draw the case, the keys, the highlighted key and the style’s
+extras.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -929,9 +955,11 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The whole 88-key piano in miniature, with the keys that will be asked shaded.</p>
+<p>The whole 88-key piano in miniature, with the keys that will be
+asked shaded.</p>
 
-<p>The full-size one can be dragged across to choose the span: <code class="language-plaintext highlighter-rouge">dragged</code> is emitted with the lowest and highest key as it
+<p>The full-size one can be dragged across to choose the span:
+<code class="language-plaintext highlighter-rouge">dragged</code> is emitted with the lowest and highest key as it
 changes.</p>
 
 <p><strong>Attributes</strong></p>
@@ -965,7 +993,9 @@ changes.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardSpan</span><span class="p">(</span><span class="n">compact</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">)).</span><span class="n">size</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardSpan</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">compact</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">size</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
 <span class="go">100
 </span></code></pre></div></div>
 
@@ -992,7 +1022,10 @@ changes.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">key_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span> <span class="n">span</span><span class="p">.</span><span class="n">key_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">499</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>  <span class="c1"># the lowest and highest keys
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">span</span><span class="p">.</span><span class="n">key_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">span</span><span class="p">.</span><span class="n">key_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">499</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the lowest and highest keys
 </span><span class="go">(21, 108)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">key_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
 <span class="go">64
@@ -1003,7 +1036,8 @@ changes.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Start choosing a span: grab an edge, pick the span up, or start a new one.</p>
+<p>Start choosing a span: grab an edge, pick the span up, or start
+a new one.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1017,10 +1051,20 @@ changes.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">span</span><span class="p">.</span><span class="n">dragged</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">span</span><span class="p">.</span><span class="n">dragged</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">))</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span>  <span class="c1"># a press outside the span starts a new one on that key
 </span><span class="go">[(21, 21)]
 </span></code></pre></div></div>
@@ -1030,7 +1074,8 @@ changes.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Drag the span, or (with no button held) show the cursor for what a press here would do.</p>
+<p>Drag the span, or (with no button held) show the cursor for what
+a press here would do.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1044,10 +1089,19 @@ changes.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">middle</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">span</span><span class="p">.</span><span class="n">_edges</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                 </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">cursor</span><span class="p">().</span><span class="n">shape</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">CursorShape</span><span class="p">.</span><span class="n">OpenHandCursor</span>  <span class="c1"># inside the span: it can be picked up
-</span><span class="go">True
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">middle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">middle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># inside the span: it can be picked up
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">cursor</span><span class="p">().</span><span class="n">shape</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">CursorShape</span><span class="p">.</span><span class="n">OpenHandCursor</span>
+<span class="go">True
 </span></code></pre></div></div>
 
 <h3 id="keyboardspanmousereleaseevent">KeyboardSpan.mouseReleaseEvent</h3>
@@ -1055,7 +1109,8 @@ changes.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseReleaseEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Finish a drag and refresh the cursor for where the pointer now is.</p>
+<p>Finish a drag and refresh the cursor for where the pointer now
+is.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1069,8 +1124,16 @@ changes.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mouseReleaseEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonRelease</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mouseReleaseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonRelease</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">_mode</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -1106,7 +1169,8 @@ changes.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the whole piano in miniature with the asked keys shaded and the span’s edges marked.</p>
+<p>Draw the whole piano in miniature with the asked keys shaded and
+the span’s edges marked.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1374,8 +1438,8 @@ changes.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

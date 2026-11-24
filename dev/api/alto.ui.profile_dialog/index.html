@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,14 +676,17 @@
         <article>
           <h1>alto.ui.profile_dialog</h1>
           
-<p>Choosing who is practicing. There is no password: a profile is just a name that keeps its own history.</p>
+<p>Choosing who is practicing. There is no password: a profile is just a
+name that keeps its own history.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">remember_profile</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">startup_profile</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">name</span>  <span class="c1"># the one used last time, with no dialog
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">startup_profile</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span>  <span class="c1"># the one used last time, with no dialog
 </span><span class="go">'Ada'
 </span></code></pre></div></div>
 
@@ -699,9 +702,11 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
-<p>Ask who is practicing: a first name on launch, then a list to switch between.</p>
+<p>Ask who is practicing: a first name on launch, then a list to switch
+between.</p>
 
-<p>On first launch (no profiles yet) it asks for a name. Afterwards it lists the profiles to switch between and lets you add
+<p>On first launch (no profiles yet) it asks for a name. Afterwards it
+lists the profiles to switch between and lets you add
 another.</p>
 
 <p><strong>Attributes</strong></p>
@@ -747,7 +752,8 @@ another.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">remember_profile</span><span class="p">(</span><span class="n">profile</span><span class="p">:</span> <span class="n">Profile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Remember which profile was used, so the next launch can open with it.</p>
+<p>Remember which profile was used, so the next launch can open with
+it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -758,7 +764,9 @@ another.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">remember_profile</span><span class="p">(</span><span class="n">Profile</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Ada"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span><span class="n">store</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="s">"profile/last"</span><span class="p">,</span> <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">store</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="s">"profile/last"</span><span class="p">,</span> <span class="n">default</span><span class="o">=-</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">7
 </span></code></pre></div></div>
 
@@ -1072,8 +1080,8 @@ another.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.ui.interval_range</h1>
           
-<p>A two-handle slider for selecting interval distances without changing the keyboard range.</p>
+<p>A two-handle slider for selecting interval distances without changing
+the keyboard range.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -693,7 +694,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>A draggable interval range with keyboard controls for either endpoint.</p>
+<p>A draggable interval range with keyboard controls for either
+endpoint.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -876,7 +878,10 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalRangeSlider</span><span class="p">().</span><span class="n">focusPolicy</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">FocusPolicy</span><span class="p">.</span><span class="n">StrongFocus</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">IntervalRangeSlider</span><span class="p">().</span><span class="n">focusPolicy</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">FocusPolicy</span><span class="p">.</span><span class="n">StrongFocus</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1129,8 +1134,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

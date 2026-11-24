@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,16 +676,24 @@
         <article>
           <h1>alto.ui.motion</h1>
           
-<p>Animations and feedback delays, run in one place so that tests decide when they happen.</p>
+<p>Animations and feedback delays, run in one place so that tests decide
+when they happen.</p>
 
-<p>The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
-through this module: <code class="language-plaintext highlighter-rouge">play</code> starts an animation, <code class="language-plaintext highlighter-rouge">later</code> runs a step after a delay and <code class="language-plaintext highlighter-rouge">start_timer</code> starts a timer that
-does. In the app they take their real time. A button is given its key with <code class="language-plaintext highlighter-rouge">set_shortcut</code>.</p>
+<p>The interface moves: pages slide, feedback stays on screen for a moment
+and the next question follows. Each of those goes
+through this module: <code class="language-plaintext highlighter-rouge">play</code> starts an animation, <code class="language-plaintext highlighter-rouge">later</code> runs a step
+after a delay and <code class="language-plaintext highlighter-rouge">start_timer</code> starts a timer that
+does. In the app they take their real time. A button is given its key
+with <code class="language-plaintext highlighter-rouge">set_shortcut</code>.</p>
 
-<p>Tests switch to instant motion with <code class="language-plaintext highlighter-rouge">set_instant</code>. Then nothing moves on by itself: animations hold still and delayed steps
-and timers wait in a queue, however long the test takes, until it calls <code class="language-plaintext highlighter-rouge">settle</code>. That runs everything waiting, in the order
-it was asked for, at once. So a test can look at the state just after an action (the feedback showing, a page about to
-slide), and the motion happens only when the test says so, never during some other wait. A button’s key clicks it at once,
+<p>Tests switch to instant motion with <code class="language-plaintext highlighter-rouge">set_instant</code>. Then nothing moves on
+by itself: animations hold still and delayed steps
+and timers wait in a queue, however long the test takes, until it calls
+<code class="language-plaintext highlighter-rouge">settle</code>. That runs everything waiting, in the order
+it was asked for, at once. So a test can look at the state just after an
+action (the feedback showing, a page about to
+slide), and the motion happens only when the test says so, never during
+some other wait. A button’s key clicks it at once,
 since its pressed look is all there is to see in the meantime.</p>
 
 <p><strong>Examples</strong></p>
@@ -693,7 +701,11 @@ since its pressed look is all there is to see in the meantime.</p>
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_instant</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">owner</span> <span class="o">=</span> <span class="n">QObject</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">done</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">later</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">done</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"cleared"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">later</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">900</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">step</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">done</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"cleared"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QCoreApplication</span><span class="p">.</span><span class="n">processEvents</span><span class="p">()</span>  <span class="c1"># nothing happens by itself
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">done</span><span class="p">,</span> <span class="n">busy</span><span class="p">()</span>
 <span class="go">([], True)
@@ -727,7 +739,8 @@ since its pressed look is all there is to see in the meantime.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_instant</span><span class="p">(</span><span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Make motion wait for <code class="language-plaintext highlighter-rouge">settle</code>, for tests, or give it back its real time.</p>
+<p>Make motion wait for <code class="language-plaintext highlighter-rouge">settle</code>, for tests, or give it back its real
+time.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -753,7 +766,8 @@ since its pressed look is all there is to see in the meantime.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Run a step after a delay, such as clearing wrong-answer feedback so the learner can try again.</p>
+<p>Run a step after a delay, such as clearing wrong-answer feedback so
+the learner can try again.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -768,7 +782,11 @@ since its pressed look is all there is to see in the meantime.</p>
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_instant</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">owner</span> <span class="o">=</span> <span class="n">QObject</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">done</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">later</span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">done</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"retry"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">later</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">450</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">step</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">done</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"retry"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settle</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">done</span>
 <span class="go">['retry']
@@ -784,7 +802,8 @@ since its pressed look is all there is to see in the meantime.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Start a single-shot timer whose timeout is part of the interface’s motion, such as moving on to the next question.</p>
+<p>Start a single-shot timer whose timeout is part of the interface’s
+motion, such as moving on to the next question.</p>
 
 <p>The timer can be stopped as usual, and then it does not fire.</p>
 
@@ -801,7 +820,9 @@ since its pressed look is all there is to see in the meantime.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">setSingleShot</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fired</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">timeout</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">fired</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">timeout</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span><span class="p">:</span> <span class="n">fired</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">start_timer</span><span class="p">(</span><span class="n">timer</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">isActive</span><span class="p">(),</span> <span class="n">busy</span><span class="p">()</span>
 <span class="go">(True, True)
@@ -821,7 +842,8 @@ since its pressed look is all there is to see in the meantime.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="n">animation</span><span class="p">:</span> <span class="n">QAbstractAnimation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Start an animation. With instant motion it holds still at its start until <code class="language-plaintext highlighter-rouge">settle</code> moves it to its end.</p>
+<p>Start an animation. With instant motion it holds still at its start
+until <code class="language-plaintext highlighter-rouge">settle</code> moves it to its end.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -838,10 +860,18 @@ since its pressed look is all there is to see in the meantime.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">animation</span><span class="p">.</span><span class="n">setStartValue</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">animation</span><span class="p">.</span><span class="n">setEndValue</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">play</span><span class="p">(</span><span class="n">animation</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">animation</span><span class="p">.</span><span class="n">state</span><span class="p">()</span> <span class="o">==</span> <span class="n">QAbstractAnimation</span><span class="p">.</span><span class="n">State</span><span class="p">.</span><span class="n">Stopped</span><span class="p">,</span> <span class="n">busy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">animation</span><span class="p">.</span><span class="n">state</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">QAbstractAnimation</span><span class="p">.</span><span class="n">State</span><span class="p">.</span><span class="n">Stopped</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">busy</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(False, True)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settle</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">animation</span><span class="p">.</span><span class="n">currentValue</span><span class="p">(),</span> <span class="n">animation</span><span class="p">.</span><span class="n">state</span><span class="p">()</span> <span class="o">==</span> <span class="n">QAbstractAnimation</span><span class="p">.</span><span class="n">State</span><span class="p">.</span><span class="n">Stopped</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">animation</span><span class="p">.</span><span class="n">currentValue</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">animation</span><span class="p">.</span><span class="n">state</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">QAbstractAnimation</span><span class="p">.</span><span class="n">State</span><span class="p">.</span><span class="n">Stopped</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(1.0, True)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_instant</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
 </code></pre></div></div>
@@ -851,7 +881,8 @@ since its pressed look is all there is to see in the meantime.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">busy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Say whether any motion is still to come: a delayed step, an active timer or a running animation.</p>
+<p>Say whether any motion is still to come: a delayed step, an active
+timer or a running animation.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -873,10 +904,13 @@ since its pressed look is all there is to see in the meantime.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Let every piece of motion happen: delayed steps run, timers fire and animations reach their end.</p>
+<p>Let every piece of motion happen: delayed steps run, timers fire and
+animations reach their end.</p>
 
-<p>With instant motion they happen at once, in the order they were asked for, and motion they start (feedback that leads to
-the next question, which slides in) happens too. In the app’s real time this waits for them instead.</p>
+<p>With instant motion they happen at once, in the order they were
+asked for, and motion they start (feedback that leads to
+the next question, which slides in) happens too. In the app’s real
+time this waits for them instead.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -919,7 +953,8 @@ A step that always asks for itself again never settles:
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Give a button a key that presses it. In the app Qt handles the key; with instant motion it clicks the button at once.</p>
+<p>Give a button a key that presses it. In the app Qt handles the key;
+with instant motion it clicks the button at once.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -937,7 +972,9 @@ A step that always asks for itself again never settles:
 <span class="go">'Backspace'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_instant</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">held</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s">"Answer"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_shortcut</span><span class="p">(</span><span class="n">held</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"Return"</span><span class="p">)</span>  <span class="c1"># in a test: the key clicks it at once
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_shortcut</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">held</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"Return"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># in a test: the key clicks it at once
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_instant</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
 </code></pre></div></div>
 
@@ -1206,8 +1243,8 @@ A step that always asks for itself again never settles:
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

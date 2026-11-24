@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,8 +678,10 @@
           
 <p>The settings panels of exercises that plugins add.</p>
 
-<p>A plugin exercise declares the controls it wants (a range, a sound, accidentals …) and gets a panel built from them, like
-the built-in exercises’ panels. Its options are saved under the exercise’s name.</p>
+<p>A plugin exercise declares the controls it wants (a range, a sound,
+accidentals …) and gets a panel built from them, like
+the built-in exercises’ panels. Its options are saved under the
+exercise’s name.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -696,12 +698,15 @@ the built-in exercises’ panels. Its options are saved under the exercise’s n
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">StaffRangePanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">NoteAnswerSettingsPanel</code></p>
 
-<p>The settings a plugin declared for one of its note exercises, drawn from a fixed set of controls.</p>
+<p>The settings a plugin declared for one of its note exercises, drawn
+from a fixed set of controls.</p>
 
-<p>The plugin picks which controls appear: a switch for its own sound, a range selector on one clef, and switches for
-accidentals and for the octave. Edits are live: each changes the options, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+<p>The plugin picks which controls appear: a switch for its own sound,
+a range selector on one clef, and switches for
+accidentals and for the octave. Edits are live: each changes the
+options, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -719,7 +724,9 @@ accidentals and for the octave. Edits are live: each changes the options, saves 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span><span class="s">"octave"</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">PackSettingsPanel</span><span class="p">(</span><span class="n">Demo</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">octave_row</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="s">"range_row"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">octave_row</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">panel</span><span class="p">,</span> <span class="s">"range_row"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -754,11 +761,13 @@ accidentals and for the octave. Edits are live: each changes the options, saves 
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">KeyboardRangePanel</code></p>
 
-<p>The settings a plugin declared for a keyboard interval exercise: its sound, the range of keys, and the intervals.</p>
+<p>The settings a plugin declared for a keyboard interval exercise: its
+sound, the range of keys, and the intervals.</p>
 
-<p>The plugin picks which controls appear. Edits are live: each changes the options, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+<p>The plugin picks which controls appear. Edits are live: each changes
+the options, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -776,13 +785,27 @@ accidentals and for the octave. Edits are live: each changes the options, saves 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span><span class="s">"range"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">"intervals"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">"manuals"</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"range"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"intervals"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"manuals"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">}</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">spec</span> <span class="o">=</span> <span class="p">{</span><span class="s">"type"</span><span class="p">:</span> <span class="s">"keyboard-intervals"</span><span class="p">}</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">key_span</span><span class="p">,</span> <span class="n">key_default</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span> <span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key_span</span><span class="p">,</span> <span class="n">key_default</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">interval_names</span> <span class="o">=</span> <span class="p">(</span><span class="s">"m2"</span><span class="p">,</span> <span class="s">"M2"</span><span class="p">,</span> <span class="s">"m3"</span><span class="p">)</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">manual_names</span> <span class="o">=</span> <span class="p">(</span><span class="s">"Upper manual"</span><span class="p">,</span> <span class="s">"Lower manual"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">manual_names</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"Upper manual"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"Lower manual"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">PackKeyboardSettingsPanel</span><span class="p">(</span><span class="n">Demo</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">(),</span> <span class="n">panel</span><span class="p">.</span><span class="n">low_label</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">panel</span><span class="p">.</span><span class="n">high_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">panel</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">panel</span><span class="p">.</span><span class="n">low_label</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">panel</span><span class="p">.</span><span class="n">high_label</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(4, 'C3', 'C5')
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Demo"</span><span class="p">)</span>
 </code></pre></div></div>
@@ -814,7 +837,8 @@ accidentals and for the octave. Edits are live: each changes the options, saves 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flush</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Save the options and ask a new question now, if an edit is waiting.</p>
+<p>Save the options and ask a new question now, if an edit is
+waiting.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1127,8 +1151,8 @@ accidentals and for the octave. Edits are live: each changes the options, saves 
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

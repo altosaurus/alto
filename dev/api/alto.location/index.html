@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,14 +676,19 @@
         <article>
           <h1>alto.location</h1>
           
-<p>Where Alto keeps its practice history and its settings, and how to keep them somewhere else with <code class="language-plaintext highlighter-rouge">ALTO_HOME</code>.</p>
+<p>Where Alto keeps its practice history and its settings, and how to keep
+them somewhere else with <code class="language-plaintext highlighter-rouge">ALTO_HOME</code>.</p>
 
-<p>Without <code class="language-plaintext highlighter-rouge">ALTO_HOME</code> they are in the usual places for the system. With it, both are in that folder instead, so a copy of Alto
-that is being worked on can have its own history and settings, apart from the copy that is used for practicing.</p>
+<p>Without <code class="language-plaintext highlighter-rouge">ALTO_HOME</code> they are in the usual places for the system. With
+it, both are in that folder instead, so a copy of Alto
+that is being worked on can have its own history and settings, apart
+from the copy that is used for practicing.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database_path</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}).</span><span class="n">as_posix</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database_path</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">as_posix</span><span class="p">()</span>
 <span class="go">'/tmp/alto-dev/data/alto.db'
 </span></code></pre></div></div>
 
@@ -715,9 +720,17 @@ that is being worked on can have its own history and settings, apart from the co
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">alto_home</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">""</span><span class="p">})</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">alto_home</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">alto_home</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">environ</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'/tmp/alto-dev'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">alto_home</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"~/alto-dev"</span><span class="p">})</span> <span class="o">==</span> <span class="n">Path</span><span class="p">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s">"alto-dev"</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">alto_home</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"~/alto-dev"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">Path</span><span class="p">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s">"alto-dev"</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -745,7 +758,9 @@ that is being worked on can have its own history and settings, apart from the co
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database_path</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}).</span><span class="n">as_posix</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database_path</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">as_posix</span><span class="p">()</span>
 <span class="go">'/tmp/alto-dev/data/alto.db'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database_path</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{}).</span><span class="n">name</span>
 <span class="go">'alto.db'
@@ -777,7 +792,13 @@ that is being worked on can have its own history and settings, apart from the co
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_folder</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{})</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">settings_folder</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">settings_folder</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">environ</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'/tmp/alto-dev/config'
 </span></code></pre></div></div>
 
@@ -789,7 +810,8 @@ that is being worked on can have its own history and settings, apart from the co
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Give the name the desktop uses to match Alto’s window to its menu entry, and so to its icon in the dock.</p>
+<p>Give the name the desktop uses to match Alto’s window to its menu
+entry, and so to its icon in the dock.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -805,7 +827,14 @@ that is being worked on can have its own history and settings, apart from the co
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">desktop_name</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{}),</span> <span class="n">desktop_name</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">desktop_name</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{}),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">desktop_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">environ</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">...</span><span class="w">             </span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('alto', 'alto-dev')
 </span></code></pre></div></div>
 
@@ -956,8 +985,8 @@ that is being worked on can have its own history and settings, apart from the co
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

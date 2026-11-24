@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,8 +678,10 @@
           
 <p>Daily exercise queues for SM-2 and FSRS.</p>
 
-<p>The scheduler controls when an introduced card is due. Each exercise supplies new
-questions under its current settings. Counting a prepared question does not introduce it.</p>
+<p>The scheduler controls when an introduced card is due. Each exercise
+supplies new
+questions under its current settings. Counting a prepared question does
+not introduce it.</p>
 
 <h2 id="reviewinterval">ReviewInterval</h2>
 
@@ -697,7 +699,11 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ReviewInterval</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">,</span> <span class="s">"FSRS"</span><span class="p">),</span> <span class="bp">None</span><span class="p">).</span><span class="n">seconds</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ReviewInterval</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">600</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">,</span> <span class="s">"FSRS"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">seconds</span>
 <span class="go">600
 </span></code></pre></div></div>
 
@@ -707,7 +713,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="k">def</span> <span class="nf">duration</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Format a review interval for display above a grade button or beside the music.</p>
+<p>Format a review interval for display above a grade button or
+beside the music.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -717,7 +724,11 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ReviewInterval</span><span class="p">(</span><span class="mi">330</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">,</span> <span class="s">"FSRS"</span><span class="p">),</span> <span class="bp">None</span><span class="p">).</span><span class="n">duration</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ReviewInterval</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">330</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">,</span> <span class="s">"FSRS"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">duration</span>
 <span class="go">'5 min 30 s'
 </span></code></pre></div></div>
 
@@ -726,7 +737,8 @@ questions under its current settings. Counting a prepared question does not intr
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Prepare daily exercise queues and store each scheduler’s review dates.</p>
+<p>Prepare daily exercise queues and store each scheduler’s review
+dates.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -760,7 +772,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Initialize missing schedules for this profile from the other calendar scheduler.</p>
+<p>Initialize missing schedules for this profile from the other
+calendar scheduler.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -771,7 +784,8 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Switching to FSRS carries over an SM-2 due date without consuming a review.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Switching to FSRS carries over an SM-2 due date without
+consuming a review.
 </code></pre></div></div>
 
 <h3 id="calendarpracticelimits">CalendarPractice.limits</h3>
@@ -830,7 +844,9 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">()).</span><span class="n">overrides</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">()).</span><span class="n">overrides</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">1</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(None, None)
 </span></code></pre></div></div>
 
@@ -861,8 +877,12 @@ questions under its current settings. Counting a prepared question does not intr
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">profile</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">new_cards</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">reviews</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">limits</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">set_limits</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="p">,</span> <span class="n">new_cards</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">reviews</span><span class="o">=</span><span class="mi">30</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">limits</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(5, 30)
 </span></code></pre></div></div>
 
@@ -881,7 +901,8 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Restoring defaults keeps the day's introductions and completed reviews.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Restoring defaults keeps the day's introductions and completed
+reviews.
 </code></pre></div></div>
 
 <h3 id="calendarpracticequeue">CalendarPractice.queue</h3>
@@ -895,7 +916,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Question</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Question</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Find due reviews and prepare the remaining new cards for this local day.</p>
+<p>Find due reviews and prepare the remaining new cards for this
+local day.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -917,7 +939,12 @@ questions under its current settings. Counting a prepared question does not intr
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">due</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">queue</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"FSRS"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">due</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">queue</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"FSRS"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="ow">not</span> <span class="n">due</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">==</span> <span class="n">DAILY_NEW</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -933,7 +960,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Count due reviews and unseen cards available with the selected settings.</p>
+<p>Count due reviews and unseen cards available with the selected
+settings.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -954,7 +982,12 @@ questions under its current settings. Counting a prepared question does not intr
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">counts</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">counts</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -969,7 +1002,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Count available reviews, new cards, and missed cards awaiting a correct review.</p>
+<p>Count available reviews, new cards, and missed cards awaiting a
+correct review.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -990,7 +1024,12 @@ questions under its current settings. Counting a prepared question does not intr
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">tile_counts</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">tile_counts</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
 <span class="go">0
 </span></code></pre></div></div>
 
@@ -1006,7 +1045,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Count the exercise queues and identify the queue of the question on screen.</p>
+<p>Count the exercise queues and identify the queue of the question
+on screen.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1026,7 +1066,8 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A missed card that comes due again is underlined as incorrect during its retry.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A missed card that comes due again is underlined as incorrect
+during its retry.
 </code></pre></div></div>
 
 <h3 id="calendarpracticetake">CalendarPractice.take</h3>
@@ -1040,7 +1081,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Take the first eligible card, recording a new introduction only when served.</p>
+<p>Take the first eligible card, recording a new introduction only
+when served.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1059,10 +1101,17 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">ChordQualities</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ChordQualities</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">practice</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="n">ChordQualities</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">practice</span><span class="p">.</span><span class="n">take</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ChordQualities</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">Question</span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -1080,7 +1129,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Draw an eligible card or return the time when a missed card can be reviewed.</p>
+<p>Draw an eligible card or return the time when a missed card can
+be reviewed.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1101,7 +1151,8 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A single missed card can wake the exercise when its learning step expires.
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A single missed card can wake the exercise when its learning
+step expires.
 </code></pre></div></div>
 
 <h3 id="calendarpracticeintroduce">CalendarPractice.introduce</h3>
@@ -1115,7 +1166,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Register a calendar introduction once, in the caller’s draw or answer transaction.</p>
+<p>Register a calendar introduction once, in the caller’s draw or
+answer transaction.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1163,7 +1215,15 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">()).</span><span class="n">correct_interval</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"abc"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"FSRS"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">).</span><span class="n">seconds</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Database</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">correct_interval</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="s">"abc"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"FSRS"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">seconds</span>
 <span class="go">600
 </span></code></pre></div></div>
 
@@ -1180,7 +1240,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Rating</span><span class="p">,</span> <span class="n">ReviewInterval</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Preview the three passing outcomes from one snapshot of this card.</p>
+<p>Preview the three passing outcomes from one snapshot of this
+card.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1202,7 +1263,13 @@ questions under its current settings. Counting a prepared question does not intr
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">passing_intervals</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"abc"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">Rating</span><span class="p">.</span><span class="n">Good</span><span class="p">].</span><span class="n">seconds</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">passing_intervals</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="s">"abc"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="n">Rating</span><span class="p">.</span><span class="n">Good</span><span class="p">].</span><span class="n">seconds</span>
 <span class="go">600
 </span></code></pre></div></div>
 
@@ -1221,7 +1288,8 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Reschedule a card from the first submission to this presentation.</p>
+<p>Reschedule a card from the first submission to this
+presentation.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1242,9 +1310,23 @@ questions under its current settings. Counting a prepared question does not intr
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">practice</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">question</span><span class="p">.</span><span class="n">item_key</span><span class="p">(),</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1002</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"SELECT due FROM review_schedules"</span><span class="p">).</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">practice</span><span class="p">.</span><span class="n">take</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NoteNames</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="n">question</span><span class="p">.</span><span class="n">item_key</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="mi">1002</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"SELECT due FROM review_schedules"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">87402.0
 </span></code></pre></div></div>
 
@@ -1419,8 +1501,8 @@ questions under its current settings. Counting a prepared question does not intr
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

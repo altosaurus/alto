@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,15 +678,22 @@
           
 <p>Small charts drawn with QPainter, in the application’s theme colors.</p>
 
-<p>Stacked bars, a line, horizontal bars and a calendar heatmap. Each has a title, draws a message when there is nothing to
+<p>Stacked bars, a line, horizontal bars and a calendar heatmap. Each has a
+title, draws a message when there is nothing to
 show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nice_ticks</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
 <span class="go">[0, 5, 10, 15]
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions answered"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Questions answered"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">wrong</span>
 <span class="go">([3, 1], [1, 0])
 </span></code></pre></div></div>
@@ -737,7 +744,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Chart</code></p>
 
-<p>Questions per period, the first-try right ones in green with the missed ones stacked above in red.</p>
+<p>Questions per period, the first-try right ones in green with the
+missed ones stacked above in red.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -748,8 +756,14 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions answered per day"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">,</span> <span class="s">"Wed"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Questions answered per day"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">,</span> <span class="s">"Wed"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">labels</span>
 <span class="go">['Mon', 'Tue', 'Wed']
 </span></code></pre></div></div>
@@ -795,7 +809,9 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">wrong</span>
 <span class="go">([2, 0], [0, 4])
 </span></code></pre></div></div>
@@ -805,7 +821,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the axes and a bar for each period, or a message when no questions were answered.</p>
+<p>Draw the axes and a bar for each period, or a message when no
+questions were answered.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -817,7 +834,9 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
@@ -841,10 +860,25 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QMouseEvent</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">_centers</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chart</span><span class="p">.</span><span class="n">_plot</span><span class="p">().</span><span class="n">center</span><span class="p">().</span><span class="n">y</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">_centers</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">_plot</span><span class="p">().</span><span class="n">center</span><span class="p">().</span><span class="n">y</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="linechart">LineChart</h2>
@@ -874,8 +908,15 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="s">"Right on the first try"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="si">}</span><span class="s">%"</span><span class="p">,</span> <span class="n">fixed_top</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">,</span> <span class="s">"Wed"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">40.0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">80.0</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Right on the first try"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="si">}</span><span class="s">%"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">fixed_top</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">,</span> <span class="s">"Wed"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">40.0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">80.0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">values</span>
 <span class="go">[40.0, None, 80.0]
 </span></code></pre></div></div>
@@ -895,7 +936,9 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">LineChart</span><span class="p">(</span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span><span class="p">).</span><span class="n">fixed_top</span> <span class="ow">is</span> <span class="bp">None</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">LineChart</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">fixed_top</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -919,8 +962,12 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="bp">None</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">labels</span>
 <span class="go">['a', 'b']
 </span></code></pre></div></div>
@@ -930,7 +977,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the axes, the line (one run at a time, so gaps show) and a dot for each value.</p>
+<p>Draw the axes, the line (one run at a time, so gaps show) and a
+dot for each value.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -940,9 +988,13 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
@@ -964,12 +1016,27 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QMouseEvent</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">_centers</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chart</span><span class="p">.</span><span class="n">_plot</span><span class="p">().</span><span class="n">center</span><span class="p">().</span><span class="n">y</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">_centers</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">_plot</span><span class="p">().</span><span class="n">center</span><span class="p">().</span><span class="n">y</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="hbarchart">HBarChart</h2>
@@ -983,7 +1050,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Chart</code></p>
 
-<p>One bar per name, on a fixed 0-100 scale, each with its value at the end.</p>
+<p>One bar per name, on a fixed 0-100 scale, each with its value at the
+end.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -994,8 +1062,15 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HBarChart</span><span class="p">(</span><span class="s">"Right on the first try, by exercise"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([(</span><span class="s">"Intervals"</span><span class="p">,</span> <span class="mf">77.0</span><span class="p">,</span> <span class="s">"77%  ·  52 q"</span><span class="p">),</span> <span class="p">(</span><span class="s">"Chords"</span><span class="p">,</span> <span class="mf">88.0</span><span class="p">,</span> <span class="s">"88%  ·  48 q"</span><span class="p">)])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HBarChart</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Right on the first try, by exercise"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="s">"Intervals"</span><span class="p">,</span> <span class="mf">77.0</span><span class="p">,</span> <span class="s">"77%  ·  52 q"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="s">"Chords"</span><span class="p">,</span> <span class="mf">88.0</span><span class="p">,</span> <span class="s">"88%  ·  48 q"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">rows</span><span class="p">)</span>
 <span class="go">2
 </span></code></pre></div></div>
@@ -1022,7 +1097,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="n">rows</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show a bar for each name, and make the chart tall enough for them.</p>
+<p>Show a bar for each name, and make the chart tall enough for
+them.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1033,7 +1109,12 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HBarChart</span><span class="p">(</span><span class="s">"By exercise"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([(</span><span class="sa">f</span><span class="s">"Exercise </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="s">"50%"</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">(</span><span class="sa">f</span><span class="s">"Exercise </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="s">"50%"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">minimumHeight</span><span class="p">()</span>
 <span class="go">306
 </span></code></pre></div></div>
@@ -1043,7 +1124,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw a bar with its name and value for each row, or a message when there are none.</p>
+<p>Draw a bar with its name and value for each row, or a message
+when there are none.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1078,9 +1160,19 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HBarChart</span><span class="p">(</span><span class="s">"By exercise"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([(</span><span class="s">"A"</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="s">"50%"</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">TOP</span> <span class="o">+</span> <span class="n">chart</span><span class="p">.</span><span class="n">ROW</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">10</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">TOP</span> <span class="o">+</span> <span class="n">chart</span><span class="p">.</span><span class="n">ROW</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">hovered</span>
 <span class="go">0
 </span></code></pre></div></div>
@@ -1096,7 +1188,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Chart</code></p>
 
-<p>A calendar of reviews: a column per week (Monday to Sunday), a square per day, darker the more questions.</p>
+<p>A calendar of reviews: a column per week (Monday to Sunday), a
+square per day, darker the more questions.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1110,7 +1203,10 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">12</span><span class="p">},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">12</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">counts</span>
 <span class="go">{datetime.date(2026, 11, 13): 12}
 </span></code></pre></div></div>
@@ -1155,7 +1251,9 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">weeks</span><span class="o">=</span><span class="mi">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">weeks</span><span class="o">=</span><span class="mi">26</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">weeks</span>
 <span class="go">26
 </span></code></pre></div></div>
@@ -1165,7 +1263,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">first_day</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">date</span>
 </code></pre></div></div>
 
-<p>Return the first day shown: the Monday that starts the first week.</p>
+<p>Return the first day shown: the Monday that starts the first
+week.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1177,7 +1276,10 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">first_day</span><span class="p">(),</span> <span class="n">chart</span><span class="p">.</span><span class="n">first_day</span><span class="p">().</span><span class="n">weekday</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">first_day</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">first_day</span><span class="p">().</span><span class="n">weekday</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(datetime.date(2025, 11, 10), 0)
 </span></code></pre></div></div>
 
@@ -1203,8 +1305,19 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">40</span><span class="p">,</span> <span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span> <span class="mi">20</span><span class="p">,</span> <span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span> <span class="mi">1</span><span class="p">},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">40</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span> <span class="mi">20</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0, 1, 4)
 </span></code></pre></div></div>
 
@@ -1232,10 +1345,23 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">760</span><span class="p">,</span> <span class="mi">190</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cell_</span><span class="p">,</span> <span class="p">(</span><span class="n">x0_</span><span class="p">,</span> <span class="n">y0_</span><span class="p">)</span> <span class="o">=</span> <span class="n">chart</span><span class="p">.</span><span class="n">_cell</span><span class="p">(),</span> <span class="n">chart</span><span class="p">.</span><span class="n">_origin</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">day_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">x0_</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">,</span> <span class="n">y0_</span> <span class="o">+</span> <span class="mf">4.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">))</span>  <span class="c1"># the last column, Friday
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cell_</span><span class="p">,</span> <span class="p">(</span><span class="n">x0_</span><span class="p">,</span> <span class="n">y0_</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">_cell</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">_origin</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">day_at</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">x0_</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">y0_</span> <span class="o">+</span> <span class="mf">4.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the last column, Friday
 </span><span class="go">datetime.date(2026, 11, 13)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">day_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">x0_</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">,</span> <span class="n">y0_</span> <span class="o">+</span> <span class="mf">6.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">))</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c1"># Sunday: not yet
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">day_at</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">x0_</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">y0_</span> <span class="o">+</span> <span class="mf">6.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c1"># Sunday: not yet
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -1244,7 +1370,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the month and weekday labels, a square for each day, and the Less-More legend.</p>
+<p>Draw the month and weekday labels, a square for each day, and
+the Less-More legend.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1256,7 +1383,10 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">760</span><span class="p">,</span> <span class="mi">190</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">5</span><span class="p">},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">5</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
@@ -1266,7 +1396,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Say how many questions were answered on the day under the pointer, in a tooltip.</p>
+<p>Say how many questions were answered on the day under the
+pointer, in a tooltip.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1280,11 +1411,27 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QMouseEvent</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">760</span><span class="p">,</span> <span class="mi">190</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">3</span><span class="p">},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cell</span><span class="p">,</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span> <span class="o">=</span> <span class="n">chart</span><span class="p">.</span><span class="n">_cell</span><span class="p">(),</span> <span class="n">chart</span><span class="p">.</span><span class="n">_origin</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="mf">4.5</span> <span class="o">*</span> <span class="n">cell</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">{</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">3</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cell</span><span class="p">,</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">_cell</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">chart</span><span class="p">.</span><span class="n">_origin</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">x0</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="mf">4.5</span> <span class="o">*</span> <span class="n">cell</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 </code></pre></div></div>
 
 
@@ -1506,8 +1653,8 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,19 +676,27 @@
         <article>
           <h1>alto.ui.notes</h1>
           
-<p>Engraved notes built from the Noto Music font’s glyphs, the way notation software draws them.</p>
+<p>Engraved notes built from the Noto Music font’s glyphs, the way notation
+software draws them.</p>
 
-<p>The font only has stem-up notes. A stem-down note is made from the same glyph turned half a turn (which puts the stem on
-the left of the head and keeps the head’s tilt), with the flags cut from the stem-up glyph and mirrored so they sweep up
+<p>The font only has stem-up notes. A stem-down note is made from the same
+glyph turned half a turn (which puts the stem on
+the left of the head and keeps the head’s tilt), with the flags cut from
+the stem-up glyph and mirrored so they sweep up
 from the stem’s end, as an engraver would write them.</p>
 
-<p>All numbers are in glyph units at a font size of 100, where one staff space is <code class="language-plaintext highlighter-rouge">STAFF_SPACE</code> units.</p>
+<p>All numbers are in glyph units at a font size of 100, where one staff
+space is <code class="language-plaintext highlighter-rouge">STAFF_SPACE</code> units.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_shape</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">).</span><span class="n">isEmpty</span><span class="p">()</span>
 <span class="go">False
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_shape</span><span class="p">(</span><span class="s">"whole"</span><span class="p">,</span> <span class="n">stem_down</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="ow">is</span> <span class="n">note_shape</span><span class="p">(</span><span class="s">"whole"</span><span class="p">)</span>  <span class="c1"># a whole note has no stem to turn
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_shape</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"whole"</span><span class="p">,</span> <span class="n">stem_down</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="n">note_shape</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"whole"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># a whole note has no stem to turn
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -703,7 +711,8 @@ from the stem’s end, as an engraver would write them.</p>
 
 <p>Return the outline of a note of a value, with the stem up or down.</p>
 
-<p>Half notes and shorter values have stems, so a double whole note or whole note looks the same either way.
+<p>Half notes and shorter values have stems, so a double whole note or
+whole note looks the same either way.
 Shapes are cached after their first use.</p>
 
 <p><strong>Parameters</strong></p>
@@ -721,7 +730,10 @@ Shapes are cached after their first use.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">up</span><span class="p">,</span> <span class="n">down</span> <span class="o">=</span> <span class="n">note_shape</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">),</span> <span class="n">note_shape</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">,</span> <span class="n">stem_down</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">up</span><span class="p">,</span> <span class="n">down</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">note_shape</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">note_shape</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">,</span> <span class="n">stem_down</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">up</span> <span class="o">==</span> <span class="n">down</span>
 <span class="go">False
 </span></code></pre></div></div>
@@ -742,8 +754,10 @@ Shapes are cached after their first use.</p>
 
 <p>Draw a note with its head centered on a point, in Noto Music.</p>
 
-<p>The note is drawn from the Noto Music font, so it is only drawn as it should be where that font is installed. The staff
-draws with Bravura, which comes with Alto, wherever Noto Music is missing.</p>
+<p>The note is drawn from the Noto Music font, so it is only drawn as
+it should be where that font is installed. The staff
+draws with Bravura, which comes with Alto, wherever Noto Music is
+missing.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -760,14 +774,27 @@ draws with Bravura, which comes with Alto, wherever Noto Music is missing.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_note</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"quarter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_note</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">value</span><span class="o">=</span><span class="s">"quarter"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">x</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QFontDatabase</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="ow">not</span> <span class="n">QFontDatabase</span><span class="p">.</span><span class="n">hasFamily</span><span class="p">(</span><span class="s">"Noto Music"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span>  <span class="c1"># the head is at the point
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="ow">not</span> <span class="n">QFontDatabase</span><span class="p">.</span><span class="n">hasFamily</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Noto Music"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">or</span> <span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span>  <span class="c1"># the head is at the point
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -1040,8 +1067,8 @@ draws with Bravura, which comes with Alto, wherever Noto Music is missing.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

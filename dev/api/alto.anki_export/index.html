@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.anki_export</h1>
           
-<p>Write portable Anki decks from Alto questions and optional calendar review dates.</p>
+<p>Write portable Anki decks from Alto questions and optional calendar
+review dates.</p>
 
 <h2 id="review">Review</h2>
 
@@ -691,7 +692,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>One practiced example and its calendar schedule in the exporting profile.</p>
+<p>One practiced example and its calendar schedule in the exporting
+profile.</p>
 
 <h2 id="profile_reviews">profile_reviews</h2>
 
@@ -715,7 +717,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Question</span><span class="p">,</span> <span class="n">Review</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Visit eligible scheduled examples before generating additional questions.</p>
+<p>Visit eligible scheduled examples before generating additional
+questions.</p>
 
 <p><strong>Yields</strong></p>
 
@@ -734,7 +737,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Write a deck and replace the destination only after the package is complete.</p>
+<p>Write a deck and replace the destination only after the package is
+complete.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -769,14 +773,16 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Distinct questions and their stable export identities for one exercise.</p>
+<p>Distinct questions and their stable export identities for one
+exercise.</p>
 
 <h2 id="plan_deck">plan_deck</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">plan_deck</span><span class="p">(</span><span class="n">selection</span><span class="p">:</span> <span class="n">DeckSelection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlannedDeck</span>
 </code></pre></div></div>
 
-<p>Select the exact cards to count in the summary and write to the package.</p>
+<p>Select the exact cards to count in the summary and write to the
+package.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -817,7 +823,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ExportControl</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>Coordinate a cancellation decision with the final replacement of the destination.</p>
+<p>Coordinate a cancellation decision with the final replacement of the
+destination.</p>
 
 <p><strong>Constructor</strong></p>
 
@@ -828,7 +835,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">confirm_cancel</span><span class="p">(</span><span class="n">confirm</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Reserve the destination until the user decides whether to cancel.</p>
+<p>Reserve the destination until the user decides whether to
+cancel.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -841,7 +849,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Stop work and unwind temporary files after confirmed cancellation.</p>
+<p>Stop work and unwind temporary files after confirmed
+cancellation.</p>
 
 <p><strong>Raises</strong></p>
 
@@ -1018,8 +1027,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

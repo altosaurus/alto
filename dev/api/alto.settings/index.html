@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,10 +676,13 @@
         <article>
           <h1>alto.settings</h1>
           
-<p>User settings. Pure Python (no Qt); persistence lives in ui/exercise_settings.py.</p>
+<p>User settings. Pure Python (no Qt); persistence lives in
+ui/exercise_settings.py.</p>
 
-<p>Each exercise with settings has a small dataclass here (<code class="language-plaintext highlighter-rouge">NoteNameSettings</code>, <code class="language-plaintext highlighter-rouge">KeyboardSettings</code> and so on) and one shared
-instance of it (<code class="language-plaintext highlighter-rouge">note_names</code>, <code class="language-plaintext highlighter-rouge">keyboard</code> …) that the exercise and its settings panel both read and write.</p>
+<p>Each exercise with settings has a small dataclass here
+(<code class="language-plaintext highlighter-rouge">NoteNameSettings</code>, <code class="language-plaintext highlighter-rouge">KeyboardSettings</code> and so on) and one shared
+instance of it (<code class="language-plaintext highlighter-rouge">note_names</code>, <code class="language-plaintext highlighter-rouge">keyboard</code> …) that the exercise and its
+settings panel both read and write.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -701,7 +704,8 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return a note name in the chosen naming system, optionally including its octave.</p>
+<p>Return a note name in the chosen naming system, optionally including
+its octave.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -725,17 +729,38 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 <span class="go">'F♯'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"solfege"</span><span class="p">)</span>
 <span class="go">'Fa♯'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'7̂'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'♭7̂'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"Eb4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">)</span>
 <span class="go">'♭3̂'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"functions"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">naming</span><span class="o">=</span><span class="s">"functions"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'Tonic'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"functions"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">naming</span><span class="o">=</span><span class="s">"functions"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'Lowered Leading tone'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">octave</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">octave</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'1̂ / 4'
 </span></code></pre></div></div>
 
@@ -769,7 +794,8 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefChoice</span>
 </code></pre></div></div>
 
-<p>Settings with a set of chosen clefs, which are always used in the same order.</p>
+<p>Settings with a set of chosen clefs, which are always used in the
+same order.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -780,7 +806,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"tenor"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"tenor"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_clefs</span><span class="p">()</span>
 <span class="go">['alto', 'tenor']
 </span></code></pre></div></div>
 
@@ -799,9 +827,13 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"grand"</span><span class="p">,</span> <span class="s">"tenor"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"grand"</span><span class="p">,</span> <span class="s">"tenor"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_clefs</span><span class="p">()</span>
 <span class="go">['tenor', 'grand']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"subbass"</span><span class="p">,</span> <span class="s">"treble"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"subbass"</span><span class="p">,</span> <span class="s">"treble"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_clefs</span><span class="p">()</span>
 <span class="go">['treble', 'subbass']
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_clefs</span><span class="p">()</span>
 <span class="go">['treble']
@@ -841,9 +873,13 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ConstructionSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">}).</span><span class="n">active_keys</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ConstructionSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_keys</span><span class="p">()</span>
 <span class="go">[-1, 2]
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignatureSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_keys</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignatureSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_keys</span><span class="p">()</span>
 <span class="go">[0]
 </span></code></pre></div></div>
 
@@ -882,7 +918,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">note_values</span><span class="o">=</span><span class="p">{</span><span class="s">"half"</span><span class="p">,</span> <span class="s">"whole"</span><span class="p">}).</span><span class="n">active_values</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">note_values</span><span class="o">=</span><span class="p">{</span><span class="s">"half"</span><span class="p">,</span> <span class="s">"whole"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_values</span><span class="p">()</span>
 <span class="go">['whole', 'half']
 </span></code></pre></div></div>
 
@@ -909,7 +947,11 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">().</span><span class="n">range_for</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
 <span class="go">(22, 52)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">ranges</span><span class="o">=</span><span class="p">{</span><span class="s">"treble"</span><span class="p">:</span> <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">30</span><span class="p">)}).</span><span class="n">range_for</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>  <span class="c1"># given in the wrong order
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ranges</span><span class="o">=</span><span class="p">{</span><span class="s">"treble"</span><span class="p">:</span> <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">30</span><span class="p">)}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">range_for</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># given in the wrong order
 </span><span class="go">(30, 40)
 </span></code></pre></div></div>
 
@@ -943,7 +985,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"bass"</span><span class="p">},</span> <span class="n">key_signatures</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">NoteNameSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"bass"</span><span class="p">},</span> <span class="n">key_signatures</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_clefs</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">()</span>
 <span class="go">(['bass'], [2])
 </span></code></pre></div></div>
@@ -955,8 +999,10 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p>Return the key signatures to draw from, lowest first.</p>
 
-<p>The field is named <code class="language-plaintext highlighter-rouge">key_signatures</code> rather than <code class="language-plaintext highlighter-rouge">keys</code>, as in <code class="language-plaintext highlighter-rouge">KeyChoice</code>, because the name is part of the practice
-signature that stored questions are matched by; renaming it would orphan every learner’s saved questions.</p>
+<p>The field is named <code class="language-plaintext highlighter-rouge">key_signatures</code> rather than <code class="language-plaintext highlighter-rouge">keys</code>, as in
+<code class="language-plaintext highlighter-rouge">KeyChoice</code>, because the name is part of the practice
+signature that stored questions are matched by; renaming it
+would orphan every learner’s saved questions.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -966,7 +1012,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">key_signatures</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">}).</span><span class="n">active_keys</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key_signatures</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_keys</span><span class="p">()</span>
 <span class="go">[-1, 2]
 </span></code></pre></div></div>
 
@@ -985,9 +1033,11 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">StaffRangeSettings</code></p>
 
-<p>The options a plugin’s exercise offers the learner, such as its range and whether to ask accidentals.</p>
+<p>The options a plugin’s exercise offers the learner, such as its
+range and whether to ask accidentals.</p>
 
-<p>Only the options the plugin declares for the exercise are shown and used; the rest keep their defaults.</p>
+<p>Only the options the plugin declares for the exercise are shown and
+used; the rest keep their defaults.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1004,9 +1054,13 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PackExerciseSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}).</span><span class="n">sound</span> <span class="ow">is</span> <span class="bp">None</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PackExerciseSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">sound</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PackExerciseSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}).</span><span class="n">keys</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PackExerciseSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">keys</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1029,7 +1083,8 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">StaffRangeSettings</code></p>
 
-<p>Staff signatures, presentations, answer format and spelled intervals for Interval Identification.</p>
+<p>Staff signatures, presentations, answer format and spelled intervals
+for Interval Identification.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1042,7 +1097,8 @@ signature that stored questions are matched by; renaming it would orphan every l
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">staff_span</span><span class="p">(</span><span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Count the written staff positions in a clef’s selected range, including both endpoints.</p>
+<p>Count the written staff positions in a clef’s selected range,
+including both endpoints.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1058,7 +1114,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalSettings</span><span class="p">(</span><span class="n">ranges</span><span class="o">=</span><span class="p">{</span><span class="s">"treble"</span><span class="p">:</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">30</span><span class="p">)}).</span><span class="n">staff_span</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ranges</span><span class="o">=</span><span class="p">{</span><span class="s">"treble"</span><span class="p">:</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">30</span><span class="p">)}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">staff_span</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
 <span class="go">3
 </span></code></pre></div></div>
 
@@ -1067,7 +1125,8 @@ signature that stored questions are matched by; renaming it would orphan every l
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_name</span><span class="p">(</span><span class="n">midi</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the name of a MIDI note with its octave, black keys as sharps.</p>
+<p>Return the name of a MIDI note with its octave, black keys as
+sharps.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1127,7 +1186,8 @@ signature that stored questions are matched by; renaming it would orphan every l
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyboard_interval_name</span><span class="p">(</span><span class="n">distance</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Name a keyboard interval by its distance, including compound intervals.</p>
+<p>Name a keyboard interval by its distance, including compound
+intervals.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1149,7 +1209,11 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">18</span><span class="p">),</span> <span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">18</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">24</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('m9', 'A11 / d12', 'P15')
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">87</span><span class="p">)</span>
 <span class="go">'m52'
@@ -1167,7 +1231,8 @@ signature that stored questions are matched by; renaming it would orphan every l
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>The keyboard range and interval distances used for keyboard interval identification.</p>
+<p>The keyboard range and interval distances used for keyboard interval
+identification.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1191,7 +1256,8 @@ signature that stored questions are matched by; renaming it would orphan every l
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">answer_button_limit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Return the requested count within the supported range of 1 to 87 buttons.</p>
+<p>Return the requested count within the supported range of 1 to 87
+buttons.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1203,7 +1269,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">().</span><span class="n">answer_button_limit</span><span class="p">()</span>
 <span class="go">6
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span><span class="n">button_count</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">answer_button_limit</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">button_count</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">answer_button_limit</span><span class="p">()</span>
 <span class="go">1
 </span></code></pre></div></div>
 
@@ -1222,7 +1290,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">60</span><span class="p">).</span><span class="n">bounds</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">low</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">60</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">bounds</span><span class="p">()</span>
 <span class="go">(60, 61)
 </span></code></pre></div></div>
 
@@ -1241,9 +1311,13 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">intervals</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">}).</span><span class="n">active_intervals</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">low</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">intervals</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_intervals</span><span class="p">()</span>
 <span class="go">[3, 4]
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span><span class="n">intervals</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_intervals</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">intervals</span><span class="o">=</span><span class="nb">set</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_intervals</span><span class="p">()</span>
 <span class="go">[]
 </span></code></pre></div></div>
 
@@ -1287,7 +1361,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ConstructionSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"grand"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ConstructionSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"grand"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_clefs</span><span class="p">()</span>
 <span class="go">['grand']
 </span></code></pre></div></div>
 
@@ -1328,7 +1404,8 @@ signature that stored questions are matched by; renaming it would orphan every l
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_types</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the chord types to ask, triads first and then seventh chords.</p>
+<p>Return the chord types to ask, triads first and then seventh
+chords.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1338,7 +1415,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">{</span><span class="s">"minor 7th"</span><span class="p">,</span> <span class="s">"major"</span><span class="p">}).</span><span class="n">active_types</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">types</span><span class="o">=</span><span class="p">{</span><span class="s">"minor 7th"</span><span class="p">,</span> <span class="s">"major"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_types</span><span class="p">()</span>
 <span class="go">['major', 'minor 7th']
 </span></code></pre></div></div>
 
@@ -1357,7 +1436,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span><span class="n">inversions</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}).</span><span class="n">active_inversions</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">inversions</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_inversions</span><span class="p">()</span>
 <span class="go">[0, 2]
 </span></code></pre></div></div>
 
@@ -1368,7 +1449,8 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p>Return the inversions that can be asked for a chord type.</p>
 
-<p>A triad has no third inversion. If none of the chosen inversions applies (only the third, for a triad), root position is
+<p>A triad has no third inversion. If none of the chosen inversions
+applies (only the third, for a triad), root position is
 used.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1386,9 +1468,14 @@ used.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ArpeggioSettings</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"major"</span><span class="p">),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"dominant 7th"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cfg</span><span class="p">.</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"major"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cfg</span><span class="p">.</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"dominant 7th"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">([0, 1, 2], [0, 1, 2, 3])
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span><span class="n">inversions</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">}).</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"major"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">inversions</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"major"</span><span class="p">)</span>
 <span class="go">[0]
 </span></code></pre></div></div>
 
@@ -1460,7 +1547,9 @@ used.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">OrderOfKeysSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">}).</span><span class="n">available_starts</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">OrderOfKeysSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">available_starts</span><span class="p">()</span>
 <span class="go">range(-2, 5)
 </span></code></pre></div></div>
 
@@ -1479,7 +1568,11 @@ used.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span><span class="n">OrderOfKeysSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">}).</span><span class="n">available_starts</span><span class="p">())</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">OrderOfKeysSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">available_starts</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">[-2, -1, 0]
 </span></code></pre></div></div>
 
@@ -1490,7 +1583,8 @@ used.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">KeySignatureSettings</code></p>
 
-<p>The settings of the key signature construction exercise: the same choices as key signature identification.</p>
+<p>The settings of the key signature construction exercise: the same
+choices as key signature identification.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1522,7 +1616,8 @@ used.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">KeySignatureSettings</code></p>
 
-<p>Choose the clefs, scale types and independent staff and scale key signatures for identification.</p>
+<p>Choose the clefs, scale types and independent staff and scale key
+signatures for identification.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1537,7 +1632,9 @@ used.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ScaleIdentificationSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span> <span class="n">staff_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ScaleIdentificationSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span> <span class="n">staff_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_staff_keys</span><span class="p">()</span>
 <span class="go">([2], [-3])
 </span></code></pre></div></div>
@@ -1547,7 +1644,8 @@ used.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_staff_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the selected staff signatures, falling back to no signature.</p>
+<p>Return the selected staff signatures, falling back to no
+signature.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1557,7 +1655,9 @@ used.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleIdentificationSettings</span><span class="p">(</span><span class="n">staff_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_staff_keys</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleIdentificationSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_staff_keys</span><span class="p">()</span>
 <span class="go">[0]
 </span></code></pre></div></div>
 
@@ -1575,11 +1675,15 @@ used.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">KeySignatureSettings</code></p>
 
-<p>The settings of the scale construction exercise: the same choices as key signature identification.</p>
+<p>The settings of the scale construction exercise: the same choices as
+key signature identification.</p>
 
-<p>Here “keys” chooses the scale by the signature it has: G major and E minor both have one sharp. <code class="language-plaintext highlighter-rouge">staff_keys</code> is a
-separate choice: the key signature drawn on the staff, which need not be the scale’s. On a staff with two flats a C
-major scale has to be placed with naturals where the staff would otherwise flatten the notes.</p>
+<p>Here “keys” chooses the scale by the signature it has: G major and E
+minor both have one sharp. <code class="language-plaintext highlighter-rouge">staff_keys</code> is a
+separate choice: the key signature drawn on the staff, which need
+not be the scale’s. On a staff with two flats a C
+major scale has to be placed with naturals where the staff would
+otherwise flatten the notes.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1597,7 +1701,13 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ScaleConstructionSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_clefs</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">steps</span><span class="p">,</span> <span class="n">cfg</span><span class="p">.</span><span class="n">octave</span><span class="p">,</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_staff_keys</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_clefs</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cfg</span><span class="p">.</span><span class="n">steps</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cfg</span><span class="p">.</span><span class="n">octave</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_staff_keys</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">([3], ['treble', 'bass'], False, False, [0])
 </span></code></pre></div></div>
 
@@ -1606,7 +1716,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_staff_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the key signatures that may be drawn on the staff, lowest first.</p>
+<p>Return the key signatures that may be drawn on the staff, lowest
+first.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1616,9 +1727,13 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleConstructionSettings</span><span class="p">(</span><span class="n">staff_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}).</span><span class="n">active_staff_keys</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleConstructionSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_staff_keys</span><span class="p">()</span>
 <span class="go">[-2, 3]
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleConstructionSettings</span><span class="p">(</span><span class="n">staff_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_staff_keys</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleConstructionSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">staff_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_staff_keys</span><span class="p">()</span>
 <span class="go">[0]
 </span></code></pre></div></div>
 
@@ -1633,9 +1748,11 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ClefChoice</code></p>
 
-<p>The settings of the clef basics exercise: what kind of question is asked, and which clefs.</p>
+<p>The settings of the clef basics exercise: what kind of question is
+asked, and which clefs.</p>
 
-<p>Every clef is one of three symbols, the G, C or F clef, put on a line of the staff: the mezzo-soprano clef is the C clef
+<p>Every clef is one of three symbols, the G, C or F clef, put on a
+line of the staff: the mezzo-soprano clef is the C clef
 on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1647,7 +1764,9 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"subbass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"subbass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_clefs</span><span class="p">()</span>
 <span class="go">['alto', 'subbass']
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">().</span><span class="n">question_type</span>
 <span class="go">'construction'
@@ -1668,9 +1787,13 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">question_type</span><span class="o">=</span><span class="s">"identification"</span><span class="p">).</span><span class="n">active_type</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">question_type</span><span class="o">=</span><span class="s">"identification"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_type</span><span class="p">()</span>
 <span class="go">'identification'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">question_type</span><span class="o">=</span><span class="s">"nonsense"</span><span class="p">).</span><span class="n">active_type</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">question_type</span><span class="o">=</span><span class="s">"nonsense"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_type</span><span class="p">()</span>
 <span class="go">'construction'
 </span></code></pre></div></div>
 
@@ -1679,7 +1802,8 @@ on the second line. The three symbols can always be chosen from.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">answer_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the clefs to offer as buttons when a clef is to be named: those asked for, and enough others to have a choice.</p>
+<p>Return the clefs to offer as buttons when a clef is to be named:
+those asked for, and enough others to have a choice.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1689,9 +1813,13 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">,</span> <span class="s">"tenor"</span><span class="p">}).</span><span class="n">answer_clefs</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">,</span> <span class="s">"tenor"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">answer_clefs</span><span class="p">()</span>
 <span class="go">['alto', 'tenor']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}).</span><span class="n">answer_clefs</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">answer_clefs</span><span class="p">()</span>
 <span class="go">['treble', 'alto']
 </span></code></pre></div></div>
 
@@ -1734,7 +1862,9 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">().</span><span class="n">active_questions</span><span class="p">()</span>
 <span class="go">['major', 'minor', 'numeral']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">questions</span><span class="o">=</span><span class="p">{</span><span class="s">"numeral"</span><span class="p">}).</span><span class="n">active_questions</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">questions</span><span class="o">=</span><span class="p">{</span><span class="s">"numeral"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_questions</span><span class="p">()</span>
 <span class="go">['numeral']
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">().</span><span class="n">active_scheme</span><span class="p">().</span><span class="n">name</span>
 <span class="go">'Cyan to indigo'
@@ -1745,7 +1875,8 @@ on the second line. The three symbols can always be chosen from.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_questions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the kinds of question to ask, in the order they are listed.</p>
+<p>Return the kinds of question to ask, in the order they are
+listed.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1755,9 +1886,13 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">questions</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_questions</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">questions</span><span class="o">=</span><span class="nb">set</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_questions</span><span class="p">()</span>
 <span class="go">['major', 'minor', 'numeral']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">questions</span><span class="o">=</span><span class="p">{</span><span class="s">"minor"</span><span class="p">,</span> <span class="s">"nonsense"</span><span class="p">}).</span><span class="n">active_questions</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">questions</span><span class="o">=</span><span class="p">{</span><span class="s">"minor"</span><span class="p">,</span> <span class="s">"nonsense"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_questions</span><span class="p">()</span>
 <span class="go">['minor']
 </span></code></pre></div></div>
 
@@ -1776,9 +1911,13 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s">"midnight"</span><span class="p">).</span><span class="n">active_scheme</span><span class="p">().</span><span class="n">name</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">scheme</span><span class="o">=</span><span class="s">"midnight"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_scheme</span><span class="p">().</span><span class="n">name</span>
 <span class="go">'Midnight'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s">"deleted"</span><span class="p">).</span><span class="n">active_scheme</span><span class="p">().</span><span class="n">key</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">scheme</span><span class="o">=</span><span class="s">"deleted"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">active_scheme</span><span class="p">().</span><span class="n">key</span>
 <span class="go">'cyan-indigo'
 </span></code></pre></div></div>
 
@@ -1939,8 +2078,8 @@ on the second line. The three symbols can always be chosen from.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

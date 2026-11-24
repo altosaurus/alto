@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,11 +676,14 @@
         <article>
           <h1>alto.instrument_info</h1>
           
-<p>What is known about each instrument’s recordings, for the summary shown in the instrument settings.</p>
+<p>What is known about each instrument’s recordings, for the summary shown
+in the instrument settings.</p>
 
-<p>The facts here come from the sources’ own pages (the University of Iowa Musical Instrument Samples, and the Salamander
+<p>The facts here come from the sources’ own pages (the University of Iowa
+Musical Instrument Samples, and the Salamander
 Grand Piano). What is on disk
-(how many notes, their range, their size) is worked out when the page is shown, not stored here. Pure Python, no Qt.</p>
+(how many notes, their range, their size) is worked out when the page is
+shown, not stored here. Pure Python, no Qt.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -720,7 +723,11 @@ Grand Piano). What is on disk
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">InstrumentInfo</span><span class="p">(</span><span class="s">"A flute."</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">IOWA</span><span class="p">,</span> <span class="n">source_url</span><span class="o">=</span><span class="s">"https://example.org/flute"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">InstrumentInfo</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"A flute."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">source</span><span class="o">=</span><span class="n">IOWA</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">source_url</span><span class="o">=</span><span class="s">"https://example.org/flute"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">terms</span> <span class="o">==</span> <span class="n">IOWA_TERMS</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -769,7 +776,10 @@ Grand Piano). What is on disk
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Coverage</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">installed</span><span class="p">,</span> <span class="n">coverage</span><span class="p">([</span><span class="mi">60</span><span class="p">]).</span><span class="n">installed</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Coverage</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">installed</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">coverage</span><span class="p">([</span><span class="mi">60</span><span class="p">]).</span><span class="n">installed</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(False, True)
 </span></code></pre></div></div>
 
@@ -791,11 +801,14 @@ Grand Piano). What is on disk
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">73</span><span class="p">)).</span><span class="n">describe</span><span class="p">()</span>
 <span class="go">'13 notes, C4 to C5, every semitone'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">([</span><span class="mi">60</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">65</span><span class="p">]).</span><span class="n">describe</span><span class="p">()</span>
-<span class="go">'4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbor.'
+<span class="go">'4 notes, C4 to F4, almost every semitone. The few missing notes
+are shifted from a neighbor.'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">2</span><span class="p">)).</span><span class="n">describe</span><span class="p">()</span>
-<span class="go">'13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbor.'
+<span class="go">'13 notes, C3 to C5, about every second semitone. The other
+notes are shifted from a neighbor.'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">3</span><span class="p">)).</span><span class="n">describe</span><span class="p">()</span>
-<span class="go">'30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor.'
+<span class="go">'30 notes, A0 to C8, about every third semitone. The other notes
+are shifted from a neighbor.'
 </span></code></pre></div></div>
 
 <h2 id="coverage-1">coverage</h2>
@@ -966,8 +979,8 @@ Grand Piano). What is on disk
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

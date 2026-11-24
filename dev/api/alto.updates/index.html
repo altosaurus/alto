@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,21 +676,31 @@
         <article>
           <h1>alto.updates</h1>
           
-<p>What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves.</p>
+<p>What kind of copy of Alto is running, how it can be updated, and the
+commands and answers that checking involves.</p>
 
-<p>A copy installed with <code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code> is a <code class="language-plaintext highlighter-rouge">uv tool</code> install from a git address. The installed package records that
-address and the commit it was built from, so it can follow the newest release (a tag) or the newest commit on the main branch.
-A packaged copy (a PyInstaller build) cannot replace itself, so it can only be told that a newer release exists. This module
-decides and describes; <code class="language-plaintext highlighter-rouge">alto.ui.update_flow</code> runs the commands and asks the questions.</p>
+<p>A copy installed with <code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code> is a <code class="language-plaintext highlighter-rouge">uv tool</code> install
+from a git address. The installed package records that
+address and the commit it was built from, so it can follow the newest
+release (a tag) or the newest commit on the main branch.
+A packaged copy (a PyInstaller build) cannot replace itself, so it can
+only be told that a newer release exists. This module
+decides and describes; <code class="language-plaintext highlighter-rouge">alto.ui.update_flow</code> runs the commands and asks
+the questions.</p>
 
-<p>A packaged copy replaces itself with a downloaded release. What makes that safe is here: a release carries <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> and a
-signature of it (<code class="language-plaintext highlighter-rouge">SHA256SUMS.sig</code>, Ed25519, made with a private key that only the release workflow has), and a copy of Alto
-trusts only the public keys in <code class="language-plaintext highlighter-rouge">UPDATE_PUBLIC_KEYS</code>. It installs a file only if the signature verifies, the signed list names the
+<p>A packaged copy replaces itself with a downloaded release. What makes
+that safe is here: a release carries <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> and a
+signature of it (<code class="language-plaintext highlighter-rouge">SHA256SUMS.sig</code>, Ed25519, made with a private key that
+only the release workflow has), and a copy of Alto
+trusts only the public keys in <code class="language-plaintext highlighter-rouge">UPDATE_PUBLIC_KEYS</code>. It installs a file
+only if the signature verifies, the signed list names the
 file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">short</span><span class="p">(</span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">short</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'b6e2091'
 </span></code></pre></div></div>
 
@@ -715,7 +725,10 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Source</span><span class="p">(</span><span class="s">"https://github.com/altosaurus/alto.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"b6e2091"</span><span class="p">).</span><span class="n">ref</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"https://github.com/altosaurus/alto.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">commit</span><span class="o">=</span><span class="s">"b6e2091"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">ref</span>
 <span class="go">'HEAD'
 </span></code></pre></div></div>
 
@@ -740,7 +753,9 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">short</span><span class="p">(</span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">short</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'b6e2091'
 </span></code></pre></div></div>
 
@@ -749,7 +764,8 @@ file, and the file’s hash is the one listed.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_direct_url</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Read where a package was installed from, out of the <code class="language-plaintext highlighter-rouge">direct_url.json</code> that the installer leaves with it.</p>
+<p>Read where a package was installed from, out of the
+<code class="language-plaintext highlighter-rouge">direct_url.json</code> that the installer leaves with it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -765,13 +781,24 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="s">'{"url": "https://example.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234"}}'</span><span class="p">)</span>
-<span class="go">Source(url='https://example.org/a.git', commit='abc1234', ref='HEAD')
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">named</span> <span class="o">=</span> <span class="s">'{"url": "https://x.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234", "requested_revision": "dev"}}'</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'{"url": "https://example.org/a.git", "vcs_info": {"vcs": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'"git", "commit_id": "abc1234"}}'</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">Source(url='https://example.org/a.git', commit='abc1234',
+ref='HEAD')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">named</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'{"url": "https://x.org/a.git", "vcs_info": {"vcs": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'"git", "commit_id": "abc1234", "requested_revision": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'"dev"}}'</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="n">named</span><span class="p">).</span><span class="n">ref</span>
 <span class="go">'dev'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="s">'{"url": "file:///home/me/alto", "dir_info": {"editable": true}}'</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'{"url": "file:///home/me/alto", "dir_info": {"editable": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'true}}'</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="s">"not json"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
@@ -793,7 +820,9 @@ file, and the file’s hash is the one listed.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="o">=</span> <span class="n">installed_source</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">commit</span><span class="p">)</span> <span class="o">==</span> <span class="n">COMMIT_LENGTH</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">source</span><span class="p">.</span><span class="n">commit</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">COMMIT_LENGTH</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -805,7 +834,8 @@ file, and the file’s hash is the one listed.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Say whether Alto is running from an environment that <code class="language-plaintext highlighter-rouge">uv tool</code> made, which is what the install script makes.</p>
+<p>Say whether Alto is running from an environment that <code class="language-plaintext highlighter-rouge">uv tool</code> made,
+which is what the install script makes.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -830,7 +860,8 @@ file, and the file’s hash is the one listed.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">InstallKind</span><span class="p">(</span><span class="n">Enum</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>How the running copy of Alto got where it is, which decides how it can be updated.</p>
+<p>How the running copy of Alto got where it is, which decides how it
+can be updated.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -852,7 +883,8 @@ file, and the file’s hash is the one listed.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_frozen</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Say whether Alto is running as a packaged build, made with PyInstaller, rather than from Python.</p>
+<p>Say whether Alto is running as a packaged build, made with
+PyInstaller, rather than from Python.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -894,12 +926,26 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span><span class="s">"https://example.org/a.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">name</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"https://example.org/a.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">here</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span>
 <span class="go">'SCRIPT'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">name</span><span class="p">,</span> <span class="n">install_kind</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">name</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">install_kind</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">here</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">install_kind</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="bp">None</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('OTHER', 'SOURCE')
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">name</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span>
 <span class="go">'PACKAGE'
 </span></code></pre></div></div>
 
@@ -924,9 +970,18 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SOURCE</span><span class="p">)</span> <span class="o">==</span> <span class="n">SOURCE_FOLDER</span><span class="p">,</span> <span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">OTHER</span><span class="p">)</span> <span class="o">==</span> <span class="n">NOT_BY_SCRIPT</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SOURCE</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">SOURCE_FOLDER</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">OTHER</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">NOT_BY_SCRIPT</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SCRIPT</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">PACKAGE</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cannot_update</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SCRIPT</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cannot_update</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">InstallKind</span><span class="p">.</span><span class="n">PACKAGE</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -939,7 +994,8 @@ file, and the file’s hash is the one listed.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Find a program to run, also in the places the installers put them, which a program started from the dock may not search.</p>
+<p>Find a program to run, also in the places the installers put them,
+which a program started from the dock may not search.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -956,7 +1012,9 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">find_program</span><span class="p">(</span><span class="s">"no-such-program-anywhere"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">find_program</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"no-such-program-anywhere"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -969,7 +1027,8 @@ file, and the file’s hash is the one listed.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Give the command that asks the address Alto came from for the commit at the end of a branch or tag.</p>
+<p>Give the command that asks the address Alto came from for the commit
+at the end of a branch or tag.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -986,7 +1045,13 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_command</span><span class="p">(</span><span class="n">Source</span><span class="p">(</span><span class="s">"https://example.org/a.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">),</span> <span class="n">git</span><span class="o">=</span><span class="s">"git"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_command</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"https://example.org/a.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">git</span><span class="o">=</span><span class="s">"git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('git', ['ls-remote', 'https://example.org/a.git', 'HEAD'])
 </span></code></pre></div></div>
 
@@ -1000,10 +1065,13 @@ file, and the file’s hash is the one listed.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>Give the command that installs Alto over the installed copy: a release, or the newest commit of the address.</p>
+<p>Give the command that installs Alto over the installed copy: a
+release, or the newest commit of the address.</p>
 
-<p><code class="language-plaintext highlighter-rouge">uv tool install --force</code> is used rather than <code class="language-plaintext highlighter-rouge">uv tool upgrade</code>, because an upgrade stays on the tag or branch the copy was
-installed from, and a copy that follows a release must be able to move to the main branch and back.</p>
+<p><code class="language-plaintext highlighter-rouge">uv tool install --force</code> is used rather than <code class="language-plaintext highlighter-rouge">uv tool upgrade</code>,
+because an upgrade stays on the tag or branch the copy was
+installed from, and a copy that follows a release must be able to
+move to the main branch and back.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1021,7 +1089,10 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span><span class="s">"https://example.org/alto.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"https://example.org/alto.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_command</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">uv</span><span class="o">=</span><span class="s">"uv"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v0.1.0"</span><span class="p">)</span>
 <span class="go">('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git@v0.1.0'])
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_command</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">uv</span><span class="o">=</span><span class="s">"uv"</span><span class="p">)</span>
@@ -1049,9 +1120,17 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_ls_remote</span><span class="p">(</span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe</span><span class="se">\t</span><span class="s">HEAD</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_ls_remote</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe</span><span class="se">\t</span><span class="s">HEAD</span><span class="se">\n</span><span class="s">"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_ls_remote</span><span class="p">(</span><span class="s">""</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">parse_ls_remote</span><span class="p">(</span><span class="s">"fatal: repository not found"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">parse_ls_remote</span><span class="p">(</span><span class="s">""</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">parse_ls_remote</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"fatal: repository not found"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True)
 </span></code></pre></div></div>
 
@@ -1064,7 +1143,8 @@ installed from, and a copy that follows a release must be able to move to the ma
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>A file of a release: the installer, the tarball, the checksums or their signature.</p>
+<p>A file of a release: the installer, the tarball, the checksums or
+their signature.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1076,7 +1156,11 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Asset</span><span class="p">(</span><span class="s">"SHA256SUMS"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/s"</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">300</span><span class="p">).</span><span class="n">size</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Asset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"SHA256SUMS"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/s"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">size</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">size</span>
 <span class="go">300
 </span></code></pre></div></div>
 
@@ -1103,7 +1187,11 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Release</span><span class="p">(</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v0.1.0"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/r"</span><span class="p">).</span><span class="n">version</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Release</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">tag</span><span class="o">=</span><span class="s">"v0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/r"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">version</span>
 <span class="go">'0.1.0'
 </span></code></pre></div></div>
 
@@ -1112,7 +1200,8 @@ installed from, and a copy that follows a release must be able to move to the ma
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">version_key</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="p">...]</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Turn a version, with or without the “v” of a tag, into numbers that can be compared.</p>
+<p>Turn a version, with or without the “v” of a tag, into numbers that
+can be compared.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1130,7 +1219,11 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">version_key</span><span class="p">(</span><span class="s">"v0.10.2"</span><span class="p">),</span> <span class="n">version_key</span><span class="p">(</span><span class="s">"1.0"</span><span class="p">)</span>
 <span class="go">((0, 10, 2), (1, 0))
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">version_key</span><span class="p">(</span><span class="s">"1.0.0rc1"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">version_key</span><span class="p">(</span><span class="s">""</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">version_key</span><span class="p">(</span><span class="s">"unknown"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">version_key</span><span class="p">(</span><span class="s">"1.0.0rc1"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">version_key</span><span class="p">(</span><span class="s">""</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">version_key</span><span class="p">(</span><span class="s">"unknown"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True, True)
 </span></code></pre></div></div>
 
@@ -1143,7 +1236,8 @@ installed from, and a copy that follows a release must be able to move to the ma
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Say whether one version is newer than another, comparing numbers and not text, so 0.10.0 is newer than 0.9.0.</p>
+<p>Say whether one version is newer than another, comparing numbers and
+not text, so 0.10.0 is newer than 0.9.0.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1160,9 +1254,15 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"0.10.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.9.0"</span><span class="p">),</span> <span class="n">is_newer</span><span class="p">(</span><span class="s">"v0.1.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.0.0"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"0.10.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.9.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"v0.1.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.0.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True)
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"1.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"1.0.0"</span><span class="p">),</span> <span class="n">is_newer</span><span class="p">(</span><span class="s">"0.0.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"1.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"1.0.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"0.0.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(False, False)
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"1.0.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"unknown"</span><span class="p">)</span>
 <span class="go">False
@@ -1208,10 +1308,20 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">answer</span> <span class="o">=</span> <span class="s">'{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">answer</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'{"tag_name": "v0.1.0", "html_url": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'"https://example.org/r", "draft": false, "prerelease": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'false}'</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-<span class="go">Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r', assets=())
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span><span class="n">answer</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'"prerelease": false'</span><span class="p">,</span> <span class="s">'"prerelease": true'</span><span class="p">))</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r',
+assets=())
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">'"prerelease": false'</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">'"prerelease": true'</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span><span class="s">"not json"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
@@ -1245,9 +1355,13 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">""</span><span class="p">)</span> <span class="o">==</span> <span class="n">NO_RELEASE</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"Name or service not known"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"Name or service not known"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'Alto could not reach GitHub: Name or service not known'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"rate limit exceeded"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">403</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"rate limit exceeded"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'GitHub answered with an error (403): rate limit exceeded'
 </span></code></pre></div></div>
 
@@ -1260,7 +1374,8 @@ installed from, and a copy that follows a release must be able to move to the ma
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Fetch a web address, waiting at most a number of seconds. It blocks, so the interface runs it on another thread.</p>
+<p>Fetch a web address, waiting at most a number of seconds. It blocks,
+so the interface runs it on another thread.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1277,7 +1392,9 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fetch_text</span><span class="p">(</span><span class="s">"http://127.0.0.1:9/"</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># nothing listens there
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fetch_text</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"http://127.0.0.1:9/"</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># nothing listens there
 </span><span class="go">0
 </span></code></pre></div></div>
 
@@ -1286,10 +1403,13 @@ installed from, and a copy that follows a release must be able to move to the ma
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ssl_context</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ssl</span><span class="p">.</span><span class="n">SSLContext</span>
 </code></pre></div></div>
 
-<p>Make the settings for a secure connection, trusting the certificate authorities that come with Alto.</p>
+<p>Make the settings for a secure connection, trusting the certificate
+authorities that come with Alto.</p>
 
-<p>A packaged copy cannot count on the system’s: the Python inside it may look for them where the computer it was built on keeps
-them, and a connection would then fail on a distribution that keeps them somewhere else.</p>
+<p>A packaged copy cannot count on the system’s: the Python inside it
+may look for them where the computer it was built on keeps
+them, and a connection would then fail on a distribution that keeps
+them somewhere else.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1299,7 +1419,11 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ssl_context</span><span class="p">().</span><span class="n">verify_mode</span> <span class="o">==</span> <span class="n">ssl</span><span class="p">.</span><span class="n">CERT_REQUIRED</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ssl_context</span><span class="p">().</span><span class="n">get_ca_certs</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">100</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ssl_context</span><span class="p">().</span><span class="n">verify_mode</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">ssl</span><span class="p">.</span><span class="n">CERT_REQUIRED</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">ssl_context</span><span class="p">().</span><span class="n">get_ca_certs</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True)
 </span></code></pre></div></div>
 
@@ -1313,7 +1437,8 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Give the name of the file that updates a packaged copy on this system, as the release workflow names it.</p>
+<p>Give the name of the file that updates a packaged copy on this
+system, as the release workflow names it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1331,11 +1456,23 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s">"Linux"</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="s">"x86_64"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"Linux"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">machine</span><span class="o">=</span><span class="s">"x86_64"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'alto-0.1.0-linux-x86_64.tar.gz'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s">"Windows"</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="s">"AMD64"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"Windows"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">machine</span><span class="o">=</span><span class="s">"AMD64"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'alto-0.1.0-windows-x64-setup.exe'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s">"Linux"</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="s">"aarch64"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"Linux"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">machine</span><span class="o">=</span><span class="s">"aarch64"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1349,7 +1486,8 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Asset</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Find a file of a release by its name, if it is at the address where a release keeps its files.</p>
+<p>Find a file of a release by its name, if it is at the address where
+a release keeps its files.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1367,11 +1505,24 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">files</span> <span class="o">=</span> <span class="p">(</span><span class="n">Asset</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">DOWNLOAD_BASE</span> <span class="o">+</span> <span class="s">"v1/a"</span><span class="p">),</span> <span class="n">Asset</span><span class="p">(</span><span class="s">"b"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/b"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">found</span> <span class="o">=</span> <span class="n">find_asset</span><span class="p">(</span><span class="n">Release</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v1"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">files</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">files</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Asset</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">DOWNLOAD_BASE</span> <span class="o">+</span> <span class="s">"v1/a"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Asset</span><span class="p">(</span><span class="s">"b"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/b"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">found</span> <span class="o">=</span> <span class="n">find_asset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Release</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"1"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v1"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">files</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">found</span><span class="p">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">found</span> <span class="k">else</span> <span class="bp">None</span>
 <span class="go">'a'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">find_asset</span><span class="p">(</span><span class="n">Release</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v1"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">files</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">"b"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">find_asset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Release</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"1"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v1"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">files</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"b"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1380,7 +1531,8 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_checksums</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Read a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> file: a line for each file, with its SHA-256 hash and its name.</p>
+<p>Read a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> file: a line for each file, with its SHA-256
+hash and its name.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1396,9 +1548,18 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">entry</span> <span class="o">=</span> <span class="s">"ab"</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">+</span> <span class="s">"  alto-0.1.0-linux-x86_64.tar.gz"</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_checksums</span><span class="p">(</span><span class="n">entry</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">not a line</span><span class="se">\n</span><span class="s">"</span> <span class="o">+</span> <span class="s">"cd"</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">+</span> <span class="s">"  ../evil"</span><span class="p">)</span>
-<span class="go">{'alto-0.1.0-linux-x86_64.tar.gz': 'abababababababababababababababababababababababababababababababab'}
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">entry</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"ab"</span> <span class="o">*</span> <span class="mi">32</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="s">"  alto-0.1.0-linux-x86_64.tar.gz"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_checksums</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">entry</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">not a line</span><span class="se">\n</span><span class="s">"</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="s">"cd"</span> <span class="o">*</span> <span class="mi">32</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="s">"  ../evil"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">{'alto-0.1.0-linux-x86_64.tar.gz':
+'abababababababababababababababababababababababababababababababab'}
 </span></code></pre></div></div>
 
 <h2 id="verify_signature">verify_signature</h2>
@@ -1411,7 +1572,8 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Say whether an Ed25519 signature of some data was made with one of the keys.</p>
+<p>Say whether an Ed25519 signature of some data was made with one of
+the keys.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1431,13 +1593,27 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">nacl.signing</span> <span class="kn">import</span> <span class="n">SigningKey</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pair</span> <span class="o">=</span> <span class="n">SigningKey</span><span class="p">.</span><span class="n">generate</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">public</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64encode</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">pair</span><span class="p">.</span><span class="n">verify_key</span><span class="p">)).</span><span class="n">decode</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signed</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">pair</span><span class="p">.</span><span class="n">sign</span><span class="p">(</span><span class="sa">b</span><span class="s">"the list"</span><span class="p">).</span><span class="n">signature</span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span><span class="sa">b</span><span class="s">"the list"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="n">public</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">public</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64encode</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">bytes</span><span class="p">(</span><span class="n">pair</span><span class="p">.</span><span class="n">verify_key</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signed</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64encode</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pair</span><span class="p">.</span><span class="n">sign</span><span class="p">(</span><span class="sa">b</span><span class="s">"the list"</span><span class="p">).</span><span class="n">signature</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="sa">b</span><span class="s">"the list"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="n">public</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span><span class="sa">b</span><span class="s">"another list"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="n">public</span><span class="p">,))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="sa">b</span><span class="s">"another list"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="n">public</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">False
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span><span class="sa">b</span><span class="s">"the list"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">())</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="sa">b</span><span class="s">"the list"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -1446,10 +1622,13 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">self_check</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Check, without any network, that what a copy needs to check an update is there and works.</p>
+<p>Check, without any network, that what a copy needs to check an
+update is there and works.</p>
 
-<p>It is what <code class="language-plaintext highlighter-rouge">alto --self-test</code> runs, so that the build can tell that a packaged copy carries the certificate list and the
-signature library (which PyInstaller must be told about), and that the keys in the code are keys.</p>
+<p>It is what <code class="language-plaintext highlighter-rouge">alto --self-test</code> runs, so that the build can tell that
+a packaged copy carries the certificate list and the
+signature library (which PyInstaller must be told about), and that
+the keys in the code are keys.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1624,8 +1803,8 @@ signature library (which PyInstaller must be told about), and that the keys in t
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

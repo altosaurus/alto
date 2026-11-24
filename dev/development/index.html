@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -874,8 +874,10 @@ pre-commit <span class="nb">install</span>
 files (the bundled recordings and fonts are exempt) and runs Ruff, applying its safe fixes. If a hook changes a file,
 the commit stops so you can review the change, then commit again.</p>
 
-<p>The test suite and Pyright run when you <strong>push</strong>, not on every commit, so commits stay quick. A failing test or a type
-error stops the push. Run the commit checks by hand with <code class="language-plaintext highlighter-rouge">pre-commit run --all-files</code>, the push checks with
+<p>On <strong>push</strong>, the hooks run the test suite, Pyright, and Pylint’s duplicate-code check (<code class="language-plaintext highlighter-rouge">R0801</code>). Pylint compares all
+modules in <code class="language-plaintext highlighter-rouge">alto/</code> so it can find matches in unchanged files. A failure in any of these checks stops the push.
+Run the duplicate check alone with <code class="language-plaintext highlighter-rouge">pre-commit run pylint-duplicates --hook-stage pre-push --all-files</code>,
+the commit checks with <code class="language-plaintext highlighter-rouge">pre-commit run --all-files</code>, the push checks with
 <code class="language-plaintext highlighter-rouge">pre-commit run --all-files --hook-stage pre-push</code>, and update the pinned hook versions with <code class="language-plaintext highlighter-rouge">pre-commit autoupdate</code>.</p>
 
 <h3 id="merged-local-branches">Merged local branches</h3>
@@ -899,8 +901,9 @@ references already in your clone and only deletes local branches.</p>
 <h2 id="linting">Linting</h2>
 
 <p>Alto uses <a href="https://docs.astral.sh/ruff/">Ruff</a> for linting and formatting. It is installed with the <code class="language-plaintext highlighter-rouge">dev</code> extra and
-configured in <code class="language-plaintext highlighter-rouge">pyproject.toml</code> (pycodestyle, pyflakes, import sorting, pyupgrade, bugbear and a few more rules, with a
-130-character line limit).</p>
+configured in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>. Ruff checks code at 79 characters and
+docstrings and standalone comments at 72 characters throughout the
+repository. Docstring summaries can wrap or start on their own line.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ruff format alto tests scripts        <span class="c"># format the code</span>
 ruff check <span class="nt">--fix</span> alto tests scripts   <span class="c"># report problems and apply the safe fixes</span>
@@ -1191,7 +1194,13 @@ the guided G major example, and three for the comparison and recap.</p>
 </span>
     <span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
         <span class="p">...</span>
-        <span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"What is this?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span> <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">note</span><span class="p">]],</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+            <span class="s">"What is this?"</span><span class="p">,</span>
+            <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">note</span><span class="p">]],</span>
+            <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span>
+        <span class="p">)</span>
 </code></pre></div></div>
 
 <ul>
@@ -1587,6 +1596,8 @@ Exclude the <a href="/alto/dev/developer-guide/ui-style-guide/">UI style guide</
 For screenshots using <code class="language-plaintext highlighter-rouge">component-shot.html</code>, check that the image dimensions match the captures and each clickable region covers its component.
 Run <code class="language-plaintext highlighter-rouge">sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py</code> and include the
 updated images and any caption or region corrections in the release PR.</li>
+  <li>Run the <strong>Release</strong> workflow manually on the versioned candidate. Complete the <a href="#license-compliance">license compliance check</a>
+on its Linux and Windows downloads and record the results in the release PR. Resolve any findings before tagging.</li>
   <li>Merge that as a pull request, then tag the merge commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
 the tag starts the <strong>Release</strong> workflow (see below), which publishes the downloads.</li>
 </ol>
@@ -1596,6 +1607,29 @@ pre-releases out, and compares version numbers (<code class="language-plaintext 
 
 <p><code class="language-plaintext highlighter-rouge">python scripts/changelog_section.py 0.1.0</code> prints the notes of one version, which is what a GitHub release shows. <code class="language-plaintext highlighter-rouge">alto --version</code>
 prints the version of the copy you run.</p>
+
+<h4 id="license-compliance">License compliance</h4>
+
+<ul>
+  <li><strong>Bundled software and assets.</strong> Unpack the Linux tarball and install the Windows candidate. On each platform, inventory
+the interpreter, frozen Python packages, embedded native code, Qt plugins and system libraries. Compare the contents with
+the exclusions in <code class="language-plaintext highlighter-rouge">packaging/alto.spec</code>. Check redistribution terms for each component and for the fonts, recordings,
+score excerpts, icons and vendored documentation assets. Confirm that Alto’s MIT license and the applicable third-party
+licenses and credits accompany the copies users receive, including the versioned documentation.</li>
+  <li><strong>Installed notices.</strong> Compare the inventory with <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code> and the installed <code class="language-plaintext highlighter-rouge">licenses/README.txt</code>.
+Check the notice texts against the exact upstream versions, including incorporated code such as CPython’s HACL*.
+Verify each SHA-256 in <code class="language-plaintext highlighter-rouge">licenses/notices.json</code> and resolve every license-file reference in <code class="language-plaintext highlighter-rouge">licenses/Qt/upstream-notices.zip</code>.</li>
+  <li><strong>Corresponding source.</strong> Match the Qt and Qt for Python source downloads to the versions and hashes in each installation.
+Verify that the Qt libraries and PySide6 and Shiboken bindings can be replaced and that Alto’s self-test still passes.
+Check the bundled Linux libraries against their package copyrights and verify the required Ubuntu source packages and file
+hashes in the companion archive. Verify the certifi source download and compare its CA bundle with the installed copy.</li>
+  <li><strong>Windows upgrade terms.</strong> Upgrade from the previous release with no recorded acceptance of the current Microsoft terms.
+Exercise both choices through Alto’s updater. Declining must preserve the old installation, and accepting must complete
+the upgrade and record acceptance.</li>
+  <li><strong>Release evidence.</strong> Record the workflow run, commit, artifact SHA-256s and results. The publishing tag triggers a fresh
+build. Verify that the signed <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> covers the exact desktop downloads and source companions, and repeat the
+applicable checks on any files whose hashes differ from the reviewed copies.</li>
+</ul>
 
 <h2 id="building-the-linux-download">Building the Linux download</h2>
 
@@ -1802,8 +1836,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

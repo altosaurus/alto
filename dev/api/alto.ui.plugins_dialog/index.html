@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,12 +676,15 @@
         <article>
           <h1>alto.ui.plugins_dialog</h1>
           
-<p>The Plugins dialog: the installed plugins on the left, and the buttons that add or remove one on the right.</p>
+<p>The Plugins dialog: the installed plugins on the left, and the buttons
+that add or remove one on the right.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginsDialog</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)).</span><span class="n">windowTitle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginsDialog</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">windowTitle</span><span class="p">()</span>
 <span class="go">'Plugins'
 </span></code></pre></div></div>
 
@@ -696,9 +699,11 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
-<p>List the installed plugins and offer to install one from a file or uninstall the selected one.</p>
+<p>List the installed plugins and offer to install one from a file or
+uninstall the selected one.</p>
 
-<p>Registered releases are downloaded in the background. The parent window handles local file installs, removal, and restarts.</p>
+<p>Registered releases are downloaded in the background. The parent
+window handles local file installs, removal, and restarts.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -716,8 +721,13 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">PluginsDialog</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="nb">list</span><span class="p">.</span><span class="n">count</span><span class="p">(),</span> <span class="n">dialog</span><span class="p">.</span><span class="n">uninstall_button</span><span class="p">.</span><span class="n">isEnabled</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">PluginsDialog</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">dialog</span><span class="p">.</span><span class="nb">list</span><span class="p">.</span><span class="n">count</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">dialog</span><span class="p">.</span><span class="n">uninstall_button</span><span class="p">.</span><span class="n">isEnabled</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(0, False)
 </span></code></pre></div></div>
 
@@ -735,7 +745,9 @@
 <p><strong>Constructor examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginsDialog</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)).</span><span class="n">minimumWidth</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginsDialog</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">minimumWidth</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -755,7 +767,9 @@
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginsDialog</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)).</span><span class="n">selected</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginsDialog</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">selected</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -764,12 +778,15 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Read the plugins folder again and keep the same plugin selected if it is still there.</p>
+<p>Read the plugins folder again and keep the same plugin selected
+if it is still there.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">PluginsDialog</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">PluginsDialog</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Path</span><span class="p">(</span><span class="s">"no-such-plugins-folder"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">refresh</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">empty</span><span class="p">.</span><span class="n">isHidden</span><span class="p">()</span>
 <span class="go">False
@@ -780,7 +797,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">done</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Keep the dialog available until a requested install or update finishes.</p>
+<p>Keep the dialog available until a requested install or update
+finishes.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1065,8 +1083,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

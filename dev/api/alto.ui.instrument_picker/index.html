@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.ui.instrument_picker</h1>
           
-<p>Choosing the instrument that plays notes, with a summary of what each one is made from.</p>
+<p>Choosing the instrument that plays notes, with a summary of what each
+one is made from.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -693,15 +694,20 @@
 
 <p>Apply the saved instrument.</p>
 
-<p>The piano is used if nothing is saved or the saved key is not an instrument.</p>
+<p>The piano is used if nothing is saved or the saved key is not an
+instrument.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">setValue</span><span class="p">(</span><span class="s">"audio/instrument"</span><span class="p">,</span> <span class="s">"flute"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">setValue</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"audio/instrument"</span><span class="p">,</span> <span class="s">"flute"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">load_instrument</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">instrument</span>
 <span class="go">'flute'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">setValue</span><span class="p">(</span><span class="s">"audio/instrument"</span><span class="p">,</span> <span class="s">"not an instrument"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">setValue</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"audio/instrument"</span><span class="p">,</span> <span class="s">"not an instrument"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">load_instrument</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">instrument</span>
 <span class="go">'piano'
@@ -731,7 +737,8 @@
 
 <p>Return the summary page’s colors.</p>
 
-<p>All are mixed from the system palette so they follow its light or dark theme.</p>
+<p>All are mixed from the system palette so they follow its light or
+dark theme.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -775,7 +782,11 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_size</span><span class="p">(</span><span class="mi">2_500_000</span><span class="p">),</span> <span class="n">format_size</span><span class="p">(</span><span class="mi">500_000</span><span class="p">),</span> <span class="n">format_size</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">format_size</span><span class="p">(</span><span class="mi">2_500_000</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">format_size</span><span class="p">(</span><span class="mi">500_000</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">format_size</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('2.5 MB', '500 KB', '1 KB')
 </span></code></pre></div></div>
 
@@ -786,10 +797,13 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The instruments in a box on the left; on the right, what the selected one is made from.</p>
+<p>The instruments in a box on the left; on the right, what the
+selected one is made from.</p>
 
-<p>An instrument that can be played in more than one way (the viola, arco or pizzicato) is one entry, and its page has a
-‘Use this instrument’ and a ‘Hear it’ for each way. ‘Hear it’ plays a short arpeggio even while sound is muted.</p>
+<p>An instrument that can be played in more than one way (the viola,
+arco or pizzicato) is one entry, and its page has a
+‘Use this instrument’ and a ‘Hear it’ for each way. ‘Hear it’ plays
+a short arpeggio even while sound is muted.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -851,7 +865,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_group</span><span class="p">(</span><span class="n">group</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Fill the summary page for an entry from what is known about it and what is on disk.</p>
+<p>Fill the summary page for an entry from what is known about it
+and what is on disk.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -872,7 +887,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">changeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Redraw the summary page when the palette changes, so its colors follow the theme.</p>
+<p>Redraw the summary page when the palette changes, so its colors
+follow the theme.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -884,7 +900,9 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">InstrumentPicker</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">show_group</span><span class="p">(</span><span class="s">"Flute"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">changeEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">PaletteChange</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">changeEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">PaletteChange</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">shown</span>
 <span class="go">'Flute'
 </span></code></pre></div></div>
@@ -894,7 +912,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Make an instrument the one for notes and the correct-answer chime.</p>
+<p>Make an instrument the one for notes and the correct-answer
+chime.</p>
 
 <p>Nothing happens if it has no recordings installed.</p>
 
@@ -930,7 +949,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">InstrumentPicker</span><span class="p">().</span><span class="n">preview</span><span class="p">(</span><span class="s">"flute"</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">InstrumentPicker</span><span class="p">().</span><span class="n">preview</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"flute"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># doctest: +SKIP
 </span></code></pre></div></div>
 
 
@@ -1180,8 +1201,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

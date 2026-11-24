@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,11 +676,15 @@
         <article>
           <h1>alto.ui.settings_menu</h1>
           
-<p>The building blocks of the settings panels that slide in beside an exercise.</p>
+<p>The building blocks of the settings panels that slide in beside an
+exercise.</p>
 
-<p>A panel is a menu of rows (Clefs, Range, Key signatures …) that each lead to a page, in a <code class="language-plaintext highlighter-rouge">SlideStack</code>. This module has the
-rows, switches, checklists and editors those pages are made of, and the panels’ shared base classes: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code>
-(navigation and saving), <code class="language-plaintext highlighter-rouge">ClefsPanel</code> (a Clefs page) and <code class="language-plaintext highlighter-rouge">StaffRangePanel</code> (a Range page per clef). The panels themselves are
+<p>A panel is a menu of rows (Clefs, Range, Key signatures …) that each
+lead to a page, in a <code class="language-plaintext highlighter-rouge">SlideStack</code>. This module has the
+rows, switches, checklists and editors those pages are made of, and the
+panels’ shared base classes: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code>
+(navigation and saving), <code class="language-plaintext highlighter-rouge">ClefsPanel</code> (a Clefs page) and
+<code class="language-plaintext highlighter-rouge">StaffRangePanel</code> (a Range page per clef). The panels themselves are
 in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</code> and <code class="language-plaintext highlighter-rouge">alto.ui.pack_settings_panel</code>.</p>
 
 <p><strong>Examples</strong></p>
@@ -701,7 +705,8 @@ in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</co
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Disable the only checked box, so that at least one choice always stays selected.</p>
+<p>Disable the only checked box, so that at least one choice always
+stays selected.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -749,7 +754,10 @@ in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</co
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">arrow_button</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">ArrowType</span><span class="p">.</span><span class="n">UpArrow</span><span class="p">,</span> <span class="n">tip</span><span class="o">=</span><span class="s">"Raise the lowest note"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">arrow_button</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">ArrowType</span><span class="p">.</span><span class="n">UpArrow</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">tip</span><span class="o">=</span><span class="s">"Raise the lowest note"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">toolTip</span><span class="p">(),</span> <span class="n">button</span><span class="p">.</span><span class="n">autoRepeat</span><span class="p">()</span>
 <span class="go">('Raise the lowest note', True)
 </span></code></pre></div></div>
@@ -770,7 +778,8 @@ in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</co
 
 <p>A staff showing the lowest and highest note asked for a clef.</p>
 
-<p>Arrows on the left move the lower bound, arrows on the right move the upper bound.</p>
+<p>Arrows on the left move the lower bound, arrows on the right move
+the upper bound.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -785,7 +794,9 @@ in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</co
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">RangeEditor</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">34</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">RangeEditor</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"treble"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">34</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">caption_text</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
 <span class="go">'&lt;b&gt;C4 – B4&lt;/b&gt;'
 </span></code></pre></div></div>
@@ -806,9 +817,13 @@ in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</co
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangeEditor</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">28</span><span class="p">).</span><span class="n">limits</span> <span class="o">==</span> <span class="n">settings</span><span class="p">.</span><span class="n">RANGE_LIMITS</span><span class="p">[</span><span class="s">"bass"</span><span class="p">]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangeEditor</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"bass"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">28</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">limits</span> <span class="o">==</span> <span class="n">settings</span><span class="p">.</span><span class="n">RANGE_LIMITS</span><span class="p">[</span><span class="s">"bass"</span><span class="p">]</span>
 <span class="go">True
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangeEditor</span><span class="p">(</span><span class="s">"alto"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">30</span><span class="p">)).</span><span class="n">limits</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangeEditor</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"alto"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">limits</span>
 <span class="go">(21, 30)
 </span></code></pre></div></div>
 
@@ -825,7 +840,8 @@ in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</co
 
 <p>A small fork showing which key signatures are selected.</p>
 
-<p>C major is on the left, then two rows of seven dots: 1 to 7 sharps on the top row and 1 to 7 flats on the bottom.
+<p>C major is on the left, then two rows of seven dots: 1 to 7 sharps
+on the top row and 1 to 7 flats on the bottom.
 Selected keys are filled, the rest are hollow.</p>
 
 <p><strong>Attributes</strong></p>
@@ -923,7 +939,11 @@ Selected keys are filled, the rest are hollow.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">box</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label_with_picture</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="n">picture</span><span class="o">=</span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s">"Treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label_with_picture</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">box</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">picture</span><span class="o">=</span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">]),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"Treble"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">box</span><span class="p">.</span><span class="n">toolTip</span><span class="p">(),</span> <span class="n">box</span><span class="p">.</span><span class="n">accessibleName</span><span class="p">()</span>
 <span class="go">('Treble', 'Treble')
 </span></code></pre></div></div>
@@ -941,7 +961,8 @@ Selected keys are filled, the rest are hollow.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCheckBox</span><span class="p">],</span> <span class="n">QWidget</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Build the “Clefs” page that every exercise with a choice of clefs shares.</p>
+<p>Build the “Clefs” page that every exercise with a choice of clefs
+shares.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -970,10 +991,19 @@ Selected keys are filled, the rest are hollow.</p>
 <span class="gp">...</span><span class="w">     </span><span class="n">edited</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">checked</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
 <span class="gp">...</span><span class="w">     </span><span class="n">back</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
 <span class="gp">...</span><span class="w"> </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">boxes_</span><span class="p">[</span><span class="s">"bass"</span><span class="p">].</span><span class="n">isEnabled</span><span class="p">()</span>  <span class="c1"># it is the only one checked, so it stays checked
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">boxes_</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"bass"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">isEnabled</span><span class="p">()</span>  <span class="c1"># it is the only one checked, so it stays checked
 </span><span class="go">False
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">boxes_</span><span class="p">[</span><span class="s">"treble"</span><span class="p">].</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">ticked_box</span> <span class="ow">in</span> <span class="n">boxes_</span><span class="p">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">ticked_box</span><span class="p">.</span><span class="n">isChecked</span><span class="p">()),</span> <span class="n">checked</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">sorted</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">c</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">ticked_box</span> <span class="ow">in</span> <span class="n">boxes_</span><span class="p">.</span><span class="n">items</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">         </span><span class="k">if</span> <span class="n">ticked_box</span><span class="p">.</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">checked</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(['bass', 'treble'], [1])
 </span></code></pre></div></div>
 
@@ -988,7 +1018,8 @@ Selected keys are filled, the rest are hollow.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the selected keys as a diagram in a menu row, or “Off” when key signatures are switched off.</p>
+<p>Show the selected keys as a diagram in a menu row, or “Off” when key
+signatures are switched off.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1001,8 +1032,16 @@ Selected keys are filled, the rest are hollow.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row_</span><span class="p">,</span> <span class="n">diagram_</span> <span class="o">=</span> <span class="n">MenuRow</span><span class="p">(</span><span class="s">"Key signatures"</span><span class="p">),</span> <span class="n">KeyDiagram</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">show_keys</span><span class="p">(</span><span class="n">row_</span><span class="p">,</span> <span class="n">diagram</span><span class="o">=</span><span class="n">diagram_</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row_</span><span class="p">,</span> <span class="n">diagram_</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">MenuRow</span><span class="p">(</span><span class="s">"Key signatures"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">KeyDiagram</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">show_keys</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">row_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">diagram</span><span class="o">=</span><span class="n">diagram_</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">enabled</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row_</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">diagram_</span><span class="p">.</span><span class="n">isHidden</span><span class="p">()</span>
 <span class="go">('Off', True)
 </span></code></pre></div></div>
@@ -1019,9 +1058,11 @@ Selected keys are filled, the rest are hollow.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
 
-<p>A menu row: title on the left, current value and a chevron on the right.</p>
+<p>A menu row: title on the left, current value and a chevron on the
+right.</p>
 
-<p>A <code class="language-plaintext highlighter-rouge">tall</code> row puts a picture on a second line of its own, using the full width, for summaries that need room to be
+<p>A <code class="language-plaintext highlighter-rouge">tall</code> row puts a picture on a second line of its own, using the
+full width, for summaries that need room to be
 readable.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1064,7 +1105,8 @@ readable.</p>
 
 <p>Put a widget in the row.</p>
 
-<p>Just after the value text, or (in a tall row) centered on its own line below.</p>
+<p>Just after the value text, or (in a tall row) centered on its
+own line below.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1143,7 +1185,8 @@ readable.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">setChecked</span><span class="p">(</span><span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Turn the switch on or off without animating, as when a setting is loaded.</p>
+<p>Turn the switch on or off without animating, as when a setting
+is loaded.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1204,7 +1247,8 @@ readable.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">MenuRow</code></p>
 
-<p>A menu row with a switch that changes a setting in place instead of opening a page.</p>
+<p>A menu row with a switch that changes a setting in place instead of
+opening a page.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1263,7 +1307,8 @@ readable.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">setOn</span><span class="p">(</span><span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set the switch without announcing it, as when a setting is loaded.</p>
+<p>Set the switch without announcing it, as when a setting is
+loaded.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1310,8 +1355,16 @@ readable.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page_</span> <span class="o">=</span> <span class="n">subpage</span><span class="p">(</span><span class="s">"Clefs"</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">back</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">calls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"back"</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">page_</span><span class="p">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QToolButton</span><span class="p">)</span> <span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s">"‹ Back"</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page_</span> <span class="o">=</span> <span class="n">subpage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Clefs"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">body</span><span class="o">=</span><span class="n">QWidget</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">back</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">calls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"back"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">next</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">b</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">page_</span><span class="p">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QToolButton</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s">"‹ Back"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span>
 <span class="go">['back']
 </span></code></pre></div></div>
@@ -1323,7 +1376,8 @@ readable.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QStackedWidget</code></p>
 
-<p>A stacked widget whose pages slide in from the right (going deeper) or the left (going back).</p>
+<p>A stacked widget whose pages slide in from the right (going deeper)
+or the left (going back).</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1377,7 +1431,8 @@ readable.</p>
 
 <p>Slide to another page.</p>
 
-<p>Going to a later page slides it in from the right and going back slides it in from the left. A request made during a
+<p>Going to a later page slides it in from the right and going back
+slides it in from the left. A request made during a
 slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1401,7 +1456,8 @@ slide, or for the page already showing, is ignored.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ExerciseSettingsPanel</span><span class="p">(</span><span class="n">QWidget</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>What every exercise’s settings pane has in common: it says when a setting has been edited.</p>
+<p>What every exercise’s settings pane has in common: it says when a
+setting has been edited.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1414,7 +1470,9 @@ slide, or for the page already showing, is ignored.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ExerciseSettingsPanel</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">panel</span><span class="p">.</span><span class="n">changed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">panel</span><span class="p">.</span><span class="n">changed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">changed</span><span class="p">.</span><span class="n">emit</span><span class="p">()</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span>
@@ -1444,12 +1502,26 @@ slide, or for the page already showing, is ignored.</p>
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Switching to ASRS hides the row and leaves its submenu.
 </code></pre></div></div>
 
+<h2 id="keyboardrangepanel">KeyboardRangePanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardRangePanel</span><span class="p">(</span><span class="n">ExerciseSettingsPanel</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Settings for selecting a practice range on a keyboard.</p>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Keyboard note identification allows the lowest and highest keys to
+coincide.
+</code></pre></div></div>
+
 <h2 id="clefspanel">ClefsPanel</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefsPanel</span><span class="p">(</span><span class="n">ExerciseSettingsPanel</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>A settings pane with a Clefs page, whose checkboxes choose the clefs that are asked about.</p>
+<p>A settings pane with a Clefs page, whose checkboxes choose the clefs
+that are asked about.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1461,8 +1533,15 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.ui.settings_panel</span> <span class="kn">import</span> <span class="n">ClefBasicsSettingsPanel</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">ClefBasicsSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">ClefBasicsSettings</span><span class="p">()),</span> <span class="n">ClefsPanel</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.ui.settings_panel</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ClefBasicsSettingsPanel</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ClefBasicsSettingsPanel</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">settings</span><span class="p">.</span><span class="n">ClefBasicsSettings</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ClefsPanel</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1476,6 +1555,19 @@ slide, or for the page already showing, is ignored.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Note and interval identification both open Range on page two.
+</code></pre></div></div>
+
+<h2 id="noteanswersettingspanel">NoteAnswerSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NoteAnswerSettingsPanel</span><span class="p">(</span><span class="n">StaffRangePanel</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Staff range settings for note names and optional octaves.</p>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A plugin and the built-in note identification exercise can both
+require the octave in an answer.
 </code></pre></div></div>
 
 <h2 id="keychecklist">KeyChecklist</h2>
@@ -1492,9 +1584,11 @@ slide, or for the page already showing, is ignored.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>Checkboxes for the 15 major keys, flats on the left and sharps on the right.</p>
+<p>Checkboxes for the 15 major keys, flats on the left and sharps on
+the right.</p>
 
-<p>At least one stays checked. Each is labeled with a picture of its signature.</p>
+<p>At least one stays checked. Each is labeled with a picture of its
+signature.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1562,7 +1656,8 @@ slide, or for the page already showing, is ignored.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The key signature sub-page: a switch for using key signatures at all, and the keys to draw from.</p>
+<p>The key signature sub-page: a switch for using key signatures at
+all, and the keys to draw from.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1574,7 +1669,9 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">KeySignaturePage</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">KeySignaturePage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">enabled</span><span class="p">(),</span> <span class="n">page</span><span class="p">.</span><span class="n">selected</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
 <span class="go">(True, True)
 </span></code></pre></div></div>
@@ -1615,7 +1712,9 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePage</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}).</span><span class="n">enabled</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">enabled</span><span class="p">()</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1634,7 +1733,9 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePage</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}).</span><span class="n">selected</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">selected</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1653,7 +1754,9 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleKeyPicker</span><span class="p">(</span><span class="n">major_keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">minor_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">}).</span><span class="n">count</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleKeyPicker</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">major_keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">minor_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">count</span><span class="p">()</span>
 <span class="go">2
 </span></code></pre></div></div>
 
@@ -1670,7 +1773,9 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleKeyPicker</span><span class="p">(</span><span class="n">major_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span> <span class="n">minor_keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}).</span><span class="n">currentIndex</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleKeyPicker</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">major_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span> <span class="n">minor_keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">currentIndex</span><span class="p">()</span>
 <span class="go">1
 </span></code></pre></div></div>
 
@@ -1688,7 +1793,8 @@ slide, or for the page already showing, is ignored.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>Checkboxes for a list of choices, optionally under headings and allowing an empty selection.</p>
+<p>Checkboxes for a list of choices, optionally under headings and
+allowing an empty selection.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1700,8 +1806,19 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">groups</span> <span class="o">=</span> <span class="p">[(</span><span class="s">"Triads"</span><span class="p">,</span> <span class="p">[(</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"Major"</span><span class="p">),</span> <span class="p">(</span><span class="s">"minor"</span><span class="p">,</span> <span class="s">"Minor"</span><span class="p">)]),</span> <span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="s">"x"</span><span class="p">,</span> <span class="s">"Other"</span><span class="p">)])]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checklist</span> <span class="o">=</span> <span class="n">ChoiceChecklist</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="s">"major"</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">groups</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"Triads"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">             </span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"Major"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">             </span><span class="p">(</span><span class="s">"minor"</span><span class="p">,</span> <span class="s">"Minor"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="s">"x"</span><span class="p">,</span> <span class="s">"Other"</span><span class="p">)]),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checklist</span> <span class="o">=</span> <span class="n">ChoiceChecklist</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">groups</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="s">"major"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checklist</span><span class="p">.</span><span class="n">selected</span><span class="p">()</span>
 <span class="go">{'major'}
 </span></code></pre></div></div>
@@ -1722,7 +1839,10 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checklist</span> <span class="o">=</span> <span class="n">ChoiceChecklist</span><span class="p">([(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Root"</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"1st"</span><span class="p">)])],</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">})</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checklist</span> <span class="o">=</span> <span class="n">ChoiceChecklist</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Root"</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"1st"</span><span class="p">)])],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">checklist</span><span class="p">.</span><span class="n">boxes</span><span class="p">)</span>
 <span class="go">[0, 1]
@@ -1743,7 +1863,10 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ChoiceChecklist</span><span class="p">([(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Root"</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"1st"</span><span class="p">)])],</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">}).</span><span class="n">selected</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ChoiceChecklist</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Root"</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"1st"</span><span class="p">)])],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">selected</span><span class="p">()</span>
 <span class="go">{0, 1}
 </span></code></pre></div></div>
 
@@ -1762,7 +1885,7 @@ slide, or for the page already showing, is ignored.</p>
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ButtonSettings or IntervalSettings or ScaleIdentificationSettings</em>): The exercise that owns the button mode and count.</li>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ButtonSettings or IntervalSettings</em>): The exercise that owns the button mode and count.</li>
   <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>callable</em>): Save and apply an edit.</li>
   <li><code class="language-plaintext highlighter-rouge">back</code> (<em>callable</em>): Return to the exercise settings menu.</li>
 </ul>
@@ -1805,8 +1928,16 @@ slide, or for the page already showing, is ignored.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">ScaleIdentificationSettings</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choices</span> <span class="o">=</span> <span class="n">direction_choices</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">edited</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QRadioButton</span><span class="p">)</span> <span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s">"Descending"</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choices</span> <span class="o">=</span> <span class="n">direction_choices</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cfg</span><span class="p">,</span> <span class="n">edited</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">None</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">next</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">b</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">.</span><span class="n">findChildren</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QRadioButton</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s">"Descending"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">motion</span>
 <span class="go">'descending'
 </span></code></pre></div></div>
@@ -1816,7 +1947,8 @@ slide, or for the page already showing, is ignored.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">scrolling</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QScrollArea</span>
 </code></pre></div></div>
 
-<p>Put a page’s body in a scroll area, so a long page scrolls inside the pane and never makes the window taller.</p>
+<p>Put a page’s body in a scroll area, so a long page scrolls inside
+the pane and never makes the window taller.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -2130,8 +2262,8 @@ slide, or for the page already showing, is ignored.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,9 +678,11 @@
           
 <p>The application-wide settings dialog.</p>
 
-<p>It holds the color theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.</p>
+<p>It holds the color theme, the notation font, the keyboard style, the
+transitions, the instrument and what updates follow.</p>
 
-<p>Changes apply as soon as they are made. Each style is a card that previews it.</p>
+<p>Changes apply as soon as they are made. Each style is a card that
+previews it.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -706,7 +708,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
 
-<p>A selectable tile that previews a style: a picture drawn in it, with its name and a few words about it underneath.</p>
+<p>A selectable tile that previews a style: a picture drawn in it, with
+its name and a few words about it underneath.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -716,8 +719,18 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">PreviewCard</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s">"♪"</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">blurb</span><span class="o">=</span><span class="s">"A short note."</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">style_key</span><span class="p">,</span> <span class="n">card</span><span class="p">.</span><span class="n">isCheckable</span><span class="p">(),</span> <span class="n">card</span><span class="p">.</span><span class="n">height</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">PreviewCard</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QLabel</span><span class="p">(</span><span class="s">"♪"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">blurb</span><span class="o">=</span><span class="s">"A short note."</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">height</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">card</span><span class="p">.</span><span class="n">style_key</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">card</span><span class="p">.</span><span class="n">isCheckable</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">card</span><span class="p">.</span><span class="n">height</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('demo', True, 120)
 </span></code></pre></div></div>
 
@@ -739,8 +752,16 @@
 <p><strong>Constructor examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s">"♪"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">PreviewCard</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">blurb</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">testAttribute</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">WidgetAttribute</span><span class="p">.</span><span class="n">WA_TransparentForMouseEvents</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">PreviewCard</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">label</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">blurb</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">height</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">testAttribute</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Qt</span><span class="p">.</span><span class="n">WidgetAttribute</span><span class="p">.</span><span class="n">WA_TransparentForMouseEvents</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -755,7 +776,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">PreviewCard</code></p>
 
-<p>A selectable tile that previews a notation style: a short phrase on a staff, drawn in that style.</p>
+<p>A selectable tile that previews a notation style: a short phrase on
+a staff, drawn in that style.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -784,7 +806,9 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StyleCard</span><span class="p">(</span><span class="n">notation</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"bravura"</span><span class="p">]).</span><span class="n">width</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StyleCard</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">notation</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"bravura"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">width</span><span class="p">()</span>
 <span class="go">232
 </span></code></pre></div></div>
 
@@ -799,7 +823,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">PreviewCard</code></p>
 
-<p>A selectable tile that previews a keyboard style: a short stretch of keys drawn in that style.</p>
+<p>A selectable tile that previews a keyboard style: a short stretch of
+keys drawn in that style.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -810,7 +835,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">KeyboardCard</span><span class="p">(</span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">KeyboardCard</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">style_key</span>
 <span class="go">'modern'
 </span></code></pre></div></div>
@@ -829,7 +856,9 @@
 <p><strong>Constructor examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardCard</span><span class="p">(</span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">]).</span><span class="n">keys</span><span class="p">.</span><span class="n">style_override</span><span class="p">.</span><span class="n">key</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardCard</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">keys</span><span class="p">.</span><span class="n">style_override</span><span class="p">.</span><span class="n">key</span>
 <span class="go">'classic'
 </span></code></pre></div></div>
 
@@ -850,8 +879,12 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">KeyboardCard</span><span class="p">(</span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">show_style</span><span class="p">(</span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">KeyboardCard</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">show_style</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">keys</span><span class="p">.</span><span class="n">style_override</span><span class="p">.</span><span class="n">key</span>
 <span class="go">'modern'
@@ -866,7 +899,8 @@
 
 <p>Rows for coloring each part of a keyboard.</p>
 
-<p>Each has a swatch that opens the color picker, and chips for colors named after materials. Changing anything selects
+<p>Each has a swatch that opens the color picker, and chips for colors
+named after materials. Changing anything selects
 the Custom style.</p>
 
 <p><strong>Attributes</strong></p>
@@ -895,7 +929,9 @@ the Custom style.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardBuilder</span><span class="p">().</span><span class="n">swatches</span><span class="p">[</span><span class="s">"naturals"</span><span class="p">].</span><span class="n">width</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardBuilder</span><span class="p">().</span><span class="n">swatches</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"naturals"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">width</span><span class="p">()</span>
 <span class="go">46
 </span></code></pre></div></div>
 
@@ -910,8 +946,11 @@ the Custom style.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">builder</span> <span class="o">=</span> <span class="n">KeyboardBuilder</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">refresh</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">swatches</span><span class="p">[</span><span class="s">"naturals"</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>  <span class="c1"># a color is set, so the swatch shows it, not "none"
-</span><span class="go">''
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">swatches</span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"naturals"</span>
+<span class="gp">...</span><span class="w"> </span><span class="c1"># a color is set, so the swatch shows it, not "none"
+</span><span class="gp">...</span><span class="w"> </span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
+<span class="go">''
 </span></code></pre></div></div>
 
 <h2 id="appsettingsdialog">AppSettingsDialog</h2>
@@ -925,9 +964,11 @@ the Custom style.</p>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
-<p>Application-wide settings. Changes apply immediately, and the main window can be used while the dialog is open.</p>
+<p>Application-wide settings. Changes apply immediately, and the main
+window can be used while the dialog is open.</p>
 
-<p>Pages are built when first selected, so hidden previews do not slow down opening Settings or changing themes.</p>
+<p>Pages are built when first selected, so hidden previews do not slow
+down opening Settings or changing themes.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -981,9 +1022,11 @@ the Custom style.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThemeCard</span>
 </code></pre></div></div>
 
-<p>Give the card of a theme, building it the first time it is asked for.</p>
+<p>Give the card of a theme, building it the first time it is asked
+for.</p>
 
-<p>Every card is a few dozen widgets, and Qt styles every widget again when the theme changes, so only the cards that have
+<p>Every card is a few dozen widgets, and Qt styles every widget
+again when the theme changes, so only the cards that have
 been looked at exist.</p>
 
 <p><strong>Parameters</strong></p>
@@ -1003,7 +1046,11 @@ been looked at exist.</p>
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"sage"</span> <span class="ow">in</span> <span class="n">dialog</span><span class="p">.</span><span class="n">theme_cards</span>
 <span class="go">False
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span> <span class="ow">is</span> <span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">),</span> <span class="s">"sage"</span> <span class="ow">in</span> <span class="n">dialog</span><span class="p">.</span><span class="n">theme_cards</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">is</span> <span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"sage"</span> <span class="ow">in</span> <span class="n">dialog</span><span class="p">.</span><span class="n">theme_cards</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(True, True)
 </span></code></pre></div></div>
 
@@ -1012,7 +1059,8 @@ been looked at exist.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_page</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QScrollArea</span>
 </code></pre></div></div>
 
-<p>Give the scroll area that holds a theme’s card, which is the page the stack shows for it.</p>
+<p>Give the scroll area that holds a theme’s card, which is the
+page the stack shows for it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1029,7 +1077,9 @@ been looked at exist.</p>
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">card_page</span><span class="p">(</span><span class="s">"sage"</span><span class="p">).</span><span class="n">widget</span><span class="p">()</span> <span class="ow">is</span> <span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">card_page</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"sage"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">widget</span><span class="p">()</span> <span class="ow">is</span> <span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1038,7 +1088,8 @@ been looked at exist.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">thumb</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThemeThumb</span>
 </code></pre></div></div>
 
-<p>Give the clickable picture that chooses a theme, with the card it is on built if it was not yet.</p>
+<p>Give the clickable picture that chooses a theme, with the card
+it is on built if it was not yet.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1064,7 +1115,8 @@ been looked at exist.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">choose_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Switch the color theme, remember it, and note that the window should be rebuilt in it.</p>
+<p>Switch the color theme, remember it, and note that the window
+should be rebuilt in it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1294,8 +1346,8 @@ been looked at exist.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

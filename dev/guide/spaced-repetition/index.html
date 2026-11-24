@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -786,7 +786,9 @@ between 0 and <code class="language-plaintext highlighter-rouge">STRAIN_MAX = 6<
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="ow">not</span> <span class="n">correct</span><span class="p">:</span>
     <span class="n">strain</span> <span class="o">+=</span> <span class="n">WRONG_PENALTY</span>  <span class="c1"># +1.5: every wrong attempt pushes it up
 </span><span class="k">elif</span> <span class="n">attempt_no</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="n">strain</span> <span class="o">+=</span> <span class="o">-</span><span class="n">CORRECT_REWARD</span> <span class="o">+</span> <span class="n">speed_term</span><span class="p">(</span><span class="n">seconds</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="n">par_seconds</span><span class="p">)</span>  <span class="c1"># -0.5, plus a speed adjustment
+    <span class="n">strain</span> <span class="o">+=</span> <span class="o">-</span><span class="n">CORRECT_REWARD</span> <span class="o">+</span> <span class="n">speed_term</span><span class="p">(</span>
+        <span class="n">seconds</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="n">par_seconds</span>
+    <span class="p">)</span>  <span class="c1"># -0.5, plus a speed adjustment
 </span><span class="k">else</span><span class="p">:</span>
     <span class="n">strain</span> <span class="o">-=</span> <span class="n">RETRY_REWARD</span>  <span class="c1"># -0.2: right, but only after misses
 </span><span class="n">strain</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">STRAIN_MAX</span><span class="p">)</span>
@@ -838,7 +840,9 @@ unremarkable in about three confident answers, and a question you keep missing c
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">weight</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">last_seen</span><span class="p">,</span> <span class="n">now</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">strain</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c1"># never seen: a fixed middling weight
 </span>        <span class="k">return</span> <span class="n">math</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">WEIGHT_SLOPE</span> <span class="o">*</span> <span class="n">NEW_STRAIN</span><span class="p">)</span>  <span class="c1"># exp(0.6 * 1.5) = 2.46
-</span>    <span class="n">cooldown</span> <span class="o">=</span> <span class="n">BASE_COOLDOWN</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">strain</span><span class="p">)</span>  <span class="c1"># seconds a question is "resting"
+</span>    <span class="n">cooldown</span> <span class="o">=</span> <span class="n">BASE_COOLDOWN</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span>
+        <span class="mf">3.0</span> <span class="o">-</span> <span class="n">strain</span>
+    <span class="p">)</span>  <span class="c1"># seconds a question is "resting"
 </span>    <span class="n">recency</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">math</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="nb">max</span><span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="p">(</span><span class="n">last_seen</span> <span class="ow">or</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">cooldown</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">math</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">WEIGHT_SLOPE</span> <span class="o">*</span> <span class="n">strain</span><span class="p">)</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">recency</span><span class="p">,</span> <span class="n">MIN_RECENCY</span><span class="p">)</span>
 </code></pre></div></div>
@@ -938,10 +942,14 @@ under a second.</p>
     <span class="n">par_seconds</span> <span class="o">=</span> <span class="mf">3.0</span>
 
     <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="sa">f</span><span class="s">"q</span><span class="si">{</span><span class="n">rng</span><span class="p">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"right"</span><span class="p">,</span> <span class="s">"wrong"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"right"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s">"q</span><span class="si">{</span><span class="n">rng</span><span class="p">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"right"</span><span class="p">,</span> <span class="s">"wrong"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"right"</span>
+        <span class="p">)</span>
 
 
-<span class="n">skill</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s">"q</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s">"</span><span class="p">:</span> <span class="mf">0.95</span> <span class="o">-</span> <span class="mf">0.04</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)}</span>  <span class="c1"># chance of a right answer: q0 is easy, q19 is hard
+<span class="n">skill</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sa">f</span><span class="s">"q</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s">"</span><span class="p">:</span> <span class="mf">0.95</span> <span class="o">-</span> <span class="mf">0.04</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="p">}</span>  <span class="c1"># chance of a right answer: q0 is easy, q19 is hard
 </span><span class="n">rng</span><span class="p">,</span> <span class="n">now</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mf">1_000_000.0</span>
 <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>  <span class="c1"># in memory: nothing is saved
 </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Sim"</span><span class="p">))</span>
@@ -951,7 +959,13 @@ under a second.</p>
     <span class="n">right</span> <span class="o">=</span> <span class="n">rng</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">skill</span><span class="p">[</span><span class="n">q</span><span class="p">.</span><span class="n">prompt</span><span class="p">]</span>
     <span class="n">seconds</span> <span class="o">=</span> <span class="n">rng</span><span class="p">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span> <span class="k">if</span> <span class="n">right</span> <span class="k">else</span> <span class="n">rng</span><span class="p">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">)</span>
     <span class="n">learner</span><span class="p">.</span><span class="n">record</span><span class="p">(</span>
-        <span class="n">exercise</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"right"</span> <span class="k">if</span> <span class="n">right</span> <span class="k">else</span> <span class="s">"wrong"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="n">right</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="n">now</span>
+        <span class="n">exercise</span><span class="p">,</span>
+        <span class="n">question</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s">"right"</span> <span class="k">if</span> <span class="n">right</span> <span class="k">else</span> <span class="s">"wrong"</span><span class="p">,</span>
+        <span class="n">correct</span><span class="o">=</span><span class="n">right</span><span class="p">,</span>
+        <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span>
+        <span class="n">now</span><span class="o">=</span><span class="n">now</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">asked</span><span class="p">[</span><span class="n">q</span><span class="p">.</span><span class="n">prompt</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">now</span> <span class="o">+=</span> <span class="n">seconds</span> <span class="o">+</span> <span class="mf">1.0</span>  <span class="c1"># the next question appears a second later
@@ -1152,8 +1166,8 @@ multi-armed bandits, including softmax action selection (free from the authors a
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

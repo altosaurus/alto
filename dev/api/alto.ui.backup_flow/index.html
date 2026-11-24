@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,15 +676,20 @@
         <article>
           <h1>alto.ui.backup_flow</h1>
           
-<p>Exporting a backup and importing one: the file dialogs, the questions asked, and the safety copy made before anything is replaced.</p>
+<p>Exporting a backup and importing one: the file dialogs, the questions
+asked, and the safety copy made before anything is replaced.</p>
 
-<p>Everything Alto keeps goes into a backup (the database and the saved preferences), and importing one replaces everything, so an
-import into a clean install leaves it as if nothing had changed. Before an import replaces what is there, a backup of that is
+<p>Everything Alto keeps goes into a backup (the database and the saved
+preferences), and importing one replaces everything, so an
+import into a clean install leaves it as if nothing had changed. Before
+an import replaces what is there, a backup of that is
 saved next to the database, so a wrong choice can be undone.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">default_name</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mf">0.0</span><span class="p">).</span><span class="n">endswith</span><span class="p">(</span><span class="s">".altobackup"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">default_name</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mf">0.0</span><span class="p">).</span><span class="n">endswith</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">".altobackup"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -712,7 +717,11 @@ saved next to the database, so a wrong choice can be undone.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">default_name</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">12</span><span class="p">).</span><span class="n">timestamp</span><span class="p">())</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">default_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">now</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">12</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">timestamp</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'alto-backup-2026-11-13.altobackup'
 </span></code></pre></div></div>
 
@@ -742,7 +751,10 @@ saved next to the database, so a wrong choice can be undone.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">counted</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noun</span><span class="o">=</span><span class="s">"profile"</span><span class="p">),</span> <span class="n">counted</span><span class="p">(</span><span class="mi">12345</span><span class="p">,</span> <span class="n">noun</span><span class="o">=</span><span class="s">"answer"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">counted</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noun</span><span class="o">=</span><span class="s">"profile"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">counted</span><span class="p">(</span><span class="mi">12345</span><span class="p">,</span> <span class="n">noun</span><span class="o">=</span><span class="s">"answer"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('1 profile', '12,345 answers')
 </span></code></pre></div></div>
 
@@ -751,7 +763,8 @@ saved next to the database, so a wrong choice can be undone.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="n">BackupInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Say what a backup holds and when it was made, for the question asked before importing it.</p>
+<p>Say what a backup holds and when it was made, for the question asked
+before importing it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -767,10 +780,20 @@ saved next to the database, so a wrong choice can be undone.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span> <span class="o">=</span> <span class="n">describe</span><span class="p">(</span><span class="n">BackupInfo</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">30</span><span class="p">).</span><span class="n">timestamp</span><span class="p">(),</span> <span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                            </span><span class="n">profiles</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">1500</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span> <span class="o">=</span> <span class="n">describe</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">BackupInfo</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">datetime</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">             </span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">30</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">).</span><span class="n">timestamp</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">profiles</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempts</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span>
-<span class="go">'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles and 1,500 answers.'
+<span class="go">'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles
+and 1,500 answers.'
 </span></code></pre></div></div>
 
 <h2 id="export_backup">export_backup</h2>
@@ -799,7 +822,9 @@ saved next to the database, so a wrong choice can be undone.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">export_backup</span><span class="p">(</span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">())</span>  <span class="c1"># doctest: +SKIP
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">export_backup</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># doctest: +SKIP
 </span><span class="go">PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
 </span></code></pre></div></div>
 
@@ -808,7 +833,8 @@ saved next to the database, so a wrong choice can be undone.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">safety_copy</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Save a backup of what the database holds now, beside it, before it is replaced.</p>
+<p>Save a backup of what the database holds now, beside it, before it
+is replaced.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -843,10 +869,13 @@ saved next to the database, so a wrong choice can be undone.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Ask for a backup file and, once the user has agreed, replace everything with what it holds.</p>
+<p>Ask for a backup file and, once the user has agreed, replace
+everything with what it holds.</p>
 
-<p>The file is read and checked completely first, so a damaged or foreign file changes nothing. After the user agrees, a
-backup of the current data is saved beside the database, then the database and the saved preferences are replaced. The
+<p>The file is read and checked completely first, so a damaged or
+foreign file changes nothing. After the user agrees, a
+backup of the current data is saved beside the database, then the
+database and the saved preferences are replaced. The
 caller has to reload what is on screen afterwards.</p>
 
 <p><strong>Parameters</strong></p>
@@ -864,7 +893,9 @@ caller has to reload what is on screen afterwards.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">import_backup</span><span class="p">(</span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">())</span>  <span class="c1"># doctest: +SKIP
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">import_backup</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># doctest: +SKIP
 </span><span class="go">True
 </span></code></pre></div></div>
 
@@ -1085,8 +1116,8 @@ caller has to reload what is on screen afterwards.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

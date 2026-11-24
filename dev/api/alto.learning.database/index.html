@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,14 +676,23 @@
         <article>
           <h1>alto.learning.database</h1>
           
-<p>The SQLite store: profiles, every answer given, and what is known about each question. Pure Python (no Qt).</p>
+<p>The SQLite store: profiles, every answer given, and what is known about
+each question. Pure Python (no Qt).</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answered_at</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">count_attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
 <span class="go">1
 </span></code></pre></div></div>
@@ -693,7 +702,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_snapshot</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Check that bytes are an intact Alto database that this version can read, and say what is in it.</p>
+<p>Check that bytes are an intact Alto database that this version can
+read, and say what is in it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -715,7 +725,11 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_snapshot</span><span class="p">(</span><span class="n">Database</span><span class="p">().</span><span class="n">snapshot</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span><span class="n">SCHEMA_VERSION</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_snapshot</span><span class="p">(</span><span class="n">Database</span><span class="p">().</span><span class="n">snapshot</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">SCHEMA_VERSION</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_snapshot</span><span class="p">(</span><span class="sa">b</span><span class="s">"not a database"</span><span class="p">)</span>
 <span class="go">Traceback (most recent call last):
@@ -732,7 +746,8 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>A person who practices: their answers are kept apart from everyone else’s.</p>
+<p>A person who practices: their answers are kept apart from everyone
+else’s.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -781,8 +796,16 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">first_try_right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">total_first_ms</span><span class="o">=</span><span class="mi">9000</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                     </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">2.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">seen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">first_try_right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">total_first_ms</span><span class="o">=</span><span class="mi">9000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">seen</span>
 <span class="go">3
 </span></code></pre></div></div>
@@ -792,7 +815,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Database</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">=</span> <span class="s">':memory:'</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>The SQLite database behind profiles, answers and per-question history.</p>
+<p>The SQLite database behind profiles, answers and per-question
+history.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -811,7 +835,8 @@
 
 <p><strong>Constructor</strong></p>
 
-<p>Open the database, creating it and its tables if they do not exist.</p>
+<p>Open the database, creating it and its tables if they do not
+exist.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -822,7 +847,9 @@
 <p><strong>Constructor examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"PRAGMA user_version"</span><span class="p">).</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">SCHEMA_VERSION</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"PRAGMA user_version"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">SCHEMA_VERSION</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -832,7 +859,8 @@
 <span class="k">def</span> <span class="nf">write_transaction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="bp">None</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Share the caller’s write transaction or begin one before reading the state to be updated.</p>
+<p>Share the caller’s write transaction or begin one before reading
+the state to be updated.</p>
 
 <p><strong>Yields</strong></p>
 
@@ -868,7 +896,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">snapshot</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bytes</span>
 </code></pre></div></div>
 
-<p>Return the whole database as bytes: every profile, answer and question record, exactly as they are now.</p>
+<p>Return the whole database as bytes: every profile, answer and
+question record, exactly as they are now.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -880,7 +909,11 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_snapshot</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">snapshot</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span><span class="n">SCHEMA_VERSION</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_snapshot</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">snapshot</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">SCHEMA_VERSION</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -889,10 +922,13 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">restore</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Replace everything in the database with a snapshot, so it is exactly as it was when the snapshot was taken.</p>
+<p>Replace everything in the database with a snapshot, so it is
+exactly as it was when the snapshot was taken.</p>
 
-<p>Profiles, answers and question records that are here now are gone afterwards, and the ones in the snapshot take their
-place with the same ids. A snapshot made by an older version of Alto is brought up to date.</p>
+<p>Profiles, answers and question records that are here now are
+gone afterwards, and the ones in the snapshot take their
+place with the same ids. A snapshot made by an older version of
+Alto is brought up to date.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1010,7 +1046,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">delete_profile</span><span class="p">(</span><span class="n">profile_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Delete a profile together with all of its answers and question history.</p>
+<p>Delete a profile together with all of its answers and question
+history.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1057,7 +1094,11 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">get_item</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1072,7 +1113,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Store what is known about a question, replacing any earlier record of it.</p>
+<p>Store what is known about a question, replacing any earlier
+record of it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1087,11 +1129,28 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">total_first_ms</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                     </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">record</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">2.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">total_first_ms</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item</span><span class="o">=</span><span class="n">record</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">).</span><span class="n">strain</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">get_item</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">strain</span>
 <span class="go">2.0
 </span></code></pre></div></div>
 
@@ -1131,9 +1190,20 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">50.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[(</span><span class="n">r</span><span class="p">[</span><span class="s">"answer"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"correct"</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answered_at</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s">"answer"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"correct"</span><span class="p">])</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">[('C', 0)]
 </span></code></pre></div></div>
 
@@ -1165,12 +1235,27 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"IntervalNames"</span><span class="p">]):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"IntervalNames"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answered_at</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"exercise"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)]</span>
 <span class="go">['NoteNames', 'IntervalNames']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"exercise"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"IntervalNames"</span><span class="p">)]</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">r</span><span class="p">[</span><span class="s">"exercise"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"IntervalNames"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">['IntervalNames']
 </span></code></pre></div></div>
 
@@ -1185,7 +1270,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">sqlite3</span><span class="p">.</span><span class="n">Row</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return answers given, oldest first, for some profiles, an exercise and a period.</p>
+<p>Return answers given, oldest first, for some profiles, an
+exercise and a period.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1207,9 +1293,22 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts_in</span><span class="p">([</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">since</span><span class="o">=</span><span class="mf">15.0</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts_in</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">since</span><span class="o">=</span><span class="mf">15.0</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">[20.0, 30.0]
 </span></code></pre></div></div>
 
@@ -1223,7 +1322,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Count the questions first answered on each day, in local time, counting the days in the database.</p>
+<p>Count the questions first answered on each day, in local time,
+counting the days in the database.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1244,9 +1344,21 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">attempt_no</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="n">attempt_no</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">86_400.0</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="mi">43_200</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">first_attempts_per_day</span><span class="p">([</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">]).</span><span class="n">values</span><span class="p">())</span>  <span class="c1"># the second try of a question is not counted
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempt_no</span><span class="o">=</span><span class="n">attempt_no</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answered_at</span><span class="o">=</span><span class="mf">86_400.0</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="mi">43_200</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">first_attempts_per_day</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">values</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the second try of a question is not counted
 </span><span class="go">[2]
 </span></code></pre></div></div>
 
@@ -1262,7 +1374,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">sqlite3</span><span class="p">.</span><span class="n">Row</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the questions that need most practice, the same question from different profiles counted together.</p>
+<p>Return the questions that need most practice, the same question
+from different profiles counted together.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1284,11 +1397,32 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">strain</span> <span class="ow">in</span> <span class="p">((</span><span class="s">"easy"</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="s">"hard"</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">item</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">total_first_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                       </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">)</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"item_key"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">strained_items</span><span class="p">([</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">min_strain</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">strain</span> <span class="ow">in</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="s">"easy"</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="s">"hard"</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">strain</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">total_first_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item_key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">r</span><span class="p">[</span><span class="s">"item_key"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">strained_items</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">min_strain</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">['hard']
 </span></code></pre></div></div>
 
@@ -1303,7 +1437,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Return how many answers a profile has given, optionally of one exercise and within a period.</p>
+<p>Return how many answers a profile has given, optionally of one
+exercise and within a period.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1327,10 +1462,21 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">count_attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
 <span class="go">0
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">count_attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">since</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="mf">9.0</span><span class="p">)</span>  <span class="c1"># from the start of the period up to, not including, its end
-</span><span class="go">1
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">count_attempts</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">since</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="mf">9.0</span>
+<span class="gp">...</span><span class="w"> </span><span class="c1"># from the start of the period up to, not including, its end
+</span><span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">1
 </span></code></pre></div></div>
 
 <h3 id="databaseattempt_rows">Database.attempt_rows</h3>
@@ -1345,7 +1491,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">sqlite3</span><span class="p">.</span><span class="n">Row</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the newest answers first, each with the stored question it was an answer to (if that is still known).</p>
+<p>Return the newest answers first, each with the stored question
+it was an answer to (if that is still known).</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1368,11 +1515,27 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">):</span>
-<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempt_rows</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempt_rows</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">[2.0, 1.0]
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempt_rows</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">since</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)]</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempt_rows</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">since</span><span class="o">=</span><span class="mf">1.5</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">[2.0]
 </span></code></pre></div></div>
 
@@ -1385,7 +1548,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">sqlite3</span><span class="p">.</span><span class="n">Row</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return what is known about each of a profile’s questions, the most strained first.</p>
+<p>Return what is known about each of a profile’s questions, the
+most strained first.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1425,7 +1589,14 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[(</span><span class="n">r</span><span class="p">[</span><span class="s">"name"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"attempts"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"questions"</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">profile_rows</span><span class="p">()]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">r</span><span class="p">[</span><span class="s">"name"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">r</span><span class="p">[</span><span class="s">"attempts"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">r</span><span class="p">[</span><span class="s">"questions"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">profile_rows</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">[('Ada', 0, 0)]
 </span></code></pre></div></div>
 
@@ -1441,7 +1612,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ItemRecord</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return questions asked before under these same settings: the ones that need most practice, plus a few at random.</p>
+<p>Return questions asked before under these same settings: the
+ones that need most practice, plus a few at random.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1463,12 +1635,36 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">item</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">total_first_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-<span class="gp">...</span><span class="w">                   </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s1"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">row_</span><span class="p">.</span><span class="n">item_key</span> <span class="k">for</span> <span class="n">row_</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">replay_candidates</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s1"</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">item</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">3.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">total_first_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signature</span><span class="o">=</span><span class="s">"s1"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">row_</span><span class="p">.</span><span class="n">item_key</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">row_</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">replay_candidates</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">signature</span><span class="o">=</span><span class="s">"s1"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">['k']
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">replay_candidates</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"other settings"</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">replay_candidates</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signature</span><span class="o">=</span><span class="s">"other settings"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">[]
 </span></code></pre></div></div>
 
@@ -1645,8 +1841,8 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

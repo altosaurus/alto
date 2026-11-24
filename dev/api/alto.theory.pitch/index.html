@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,9 +678,12 @@
           
 <p>Pitches and intervals, spelled correctly (C# is not Db).</p>
 
-<p>A <code class="language-plaintext highlighter-rouge">Note</code> is a pitch with its spelling (a letter, an accidental and an octave), so C♯4 and D♭4 are different notes even
-though they sound the same. An <code class="language-plaintext highlighter-rouge">Interval</code> is a distance between two spelled notes, such as a major third or a perfect
-fifth. Together they can transpose a note by an interval and work out the interval between two notes.</p>
+<p>A <code class="language-plaintext highlighter-rouge">Note</code> is a pitch with its spelling (a letter, an accidental and an
+octave), so C♯4 and D♭4 are different notes even
+though they sound the same. An <code class="language-plaintext highlighter-rouge">Interval</code> is a distance between two
+spelled notes, such as a major third or a perfect
+fifth. Together they can transpose a note by an interval and work out
+the interval between two notes.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -703,7 +706,8 @@ fifth. Together they can transpose a note by an interval and work out the interv
 
 <p>A spelled pitch: a letter name, an accidental and an octave.</p>
 
-<p>The spelling matters. C♯4 and D♭4 sound the same (they share a MIDI number) but are different notes, because they sit on
+<p>The spelling matters. C♯4 and D♭4 sound the same (they share a MIDI
+number) but are different notes, because they sit on
 different lines of the staff.</p>
 
 <p><strong>Attributes</strong></p>
@@ -743,7 +747,9 @@ different lines of the staff.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">midi</span>
 <span class="go">60
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">accidental</span><span class="o">=-</span><span class="mi">1</span><span class="p">).</span><span class="n">midi</span>  <span class="c1"># D♭4 sounds like C♯4
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">4</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">accidental</span><span class="o">=-</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">midi</span>  <span class="c1"># D♭4 sounds like C♯4
 </span><span class="go">61
 </span></code></pre></div></div>
 
@@ -753,9 +759,11 @@ different lines of the staff.</p>
 <span class="k">def</span> <span class="nf">diatonic</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div></div>
 
-<p>Return the absolute staff-step index of the note, ignoring its accidental.</p>
+<p>Return the absolute staff-step index of the note, ignoring its
+accidental.</p>
 
-<p>Counting from C0 as 0, D0 as 1 and so on, each line or space of the staff is one step. The distance between two notes in
+<p>Counting from C0 as 0, D0 as 1 and so on, each line or space of
+the staff is one step. The distance between two notes in
 staff steps is the difference of their indexes.</p>
 
 <p><strong>Returns</strong></p>
@@ -768,7 +776,9 @@ staff steps is the difference of their indexes.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">diatonic</span>  <span class="c1"># C4
 </span><span class="go">28
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">accidental</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">diatonic</span>  <span class="c1"># E♯4 is on the same step as E4
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">4</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">accidental</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">diatonic</span>  <span class="c1"># E♯4 is on the same step as E4
 </span><span class="go">30
 </span></code></pre></div></div>
 
@@ -788,9 +798,13 @@ staff steps is the difference of their indexes.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">accidental</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">pitch_class</span>  <span class="c1"># C♯4
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">4</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">accidental</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">pitch_class</span>  <span class="c1"># C♯4
 </span><span class="go">1
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">accidental</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">pitch_class</span>  <span class="c1"># B♯3 sounds like C
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Note</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">3</span><span class="p">,</span> <span class="n">letter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">accidental</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">pitch_class</span>  <span class="c1"># B♯3 sounds like C
 </span><span class="go">0
 </span></code></pre></div></div>
 
@@ -800,7 +814,8 @@ staff steps is the difference of their indexes.</p>
 <span class="k">def</span> <span class="nf">name</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the pitch-class name with Unicode accidentals, without the octave.</p>
+<p>Return the pitch-class name with Unicode accidentals, without
+the octave.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -855,7 +870,8 @@ staff steps is the difference of their indexes.</p>
 <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
 </code></pre></div></div>
 
-<p>Parse a note with ASCII or musical accidentals, such as ‘F#4’, ‘B♭3’ or ‘E𝄫2’.</p>
+<p>Parse a note with ASCII or musical accidentals, such as ‘F#4’,
+‘B♭3’ or ‘E𝄫2’.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -899,7 +915,8 @@ staff steps is the difference of their indexes.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
 </code></pre></div></div>
 
-<p>Move the note up or down by an interval, keeping the spelling correct.</p>
+<p>Move the note up or down by an interval, keeping the spelling
+correct.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -916,11 +933,24 @@ staff steps is the difference of their indexes.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">).</span><span class="n">transpose</span><span class="p">(</span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"M3"</span><span class="p">)))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">).</span><span class="n">transpose</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"M3"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'E4'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">).</span><span class="n">transpose</span><span class="p">(</span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"m3"</span><span class="p">)))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">).</span><span class="n">transpose</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"m3"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'E♭4'
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">).</span><span class="n">transpose</span><span class="p">(</span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"P5"</span><span class="p">),</span> <span class="n">descending</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">).</span><span class="n">transpose</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"P5"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">descending</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'F3'
 </span></code></pre></div></div>
 
@@ -966,9 +996,15 @@ staff steps is the difference of their indexes.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"M3"</span><span class="p">).</span><span class="n">inversion</span><span class="p">.</span><span class="n">short</span><span class="p">,</span> <span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"A4"</span><span class="p">).</span><span class="n">inversion</span><span class="p">.</span><span class="n">short</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"M3"</span><span class="p">).</span><span class="n">inversion</span><span class="p">.</span><span class="n">short</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"A4"</span><span class="p">).</span><span class="n">inversion</span><span class="p">.</span><span class="n">short</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('m6', 'd5')
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"m10"</span><span class="p">).</span><span class="n">inversion</span><span class="p">.</span><span class="n">short</span><span class="p">,</span> <span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"P15"</span><span class="p">).</span><span class="n">inversion</span><span class="p">.</span><span class="n">short</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"m10"</span><span class="p">).</span><span class="n">inversion</span><span class="p">.</span><span class="n">short</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"P15"</span><span class="p">).</span><span class="n">inversion</span><span class="p">.</span><span class="n">short</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('M6', 'P1')
 </span></code></pre></div></div>
 
@@ -978,7 +1014,8 @@ staff steps is the difference of their indexes.</p>
 <span class="k">def</span> <span class="nf">is_perfect_type</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Report whether this size of interval is “perfect type” (unison, fourth, fifth, octave) rather than major or minor type.</p>
+<p>Report whether this size of interval is “perfect type” (unison,
+fourth, fifth, octave) rather than major or minor type.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1014,8 +1051,11 @@ staff steps is the difference of their indexes.</p>
 <span class="go">4
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"d5"</span><span class="p">).</span><span class="n">semitones</span>
 <span class="go">6
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"m9"</span><span class="p">).</span><span class="n">semitones</span>  <span class="c1"># a minor ninth is an octave plus a minor second
-</span><span class="go">13
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"m9"</span>
+<span class="gp">...</span><span class="w"> </span><span class="c1"># a minor ninth is an octave plus a minor second
+</span><span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">semitones</span>
+<span class="go">13
 </span></code></pre></div></div>
 
 <h3 id="intervalshort">Interval.short</h3>
@@ -1024,7 +1064,8 @@ staff steps is the difference of their indexes.</p>
 <span class="k">def</span> <span class="nf">short</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the interval in short form: its quality followed by its number.</p>
+<p>Return the interval in short form: its quality followed by its
+number.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1065,9 +1106,13 @@ staff steps is the difference of their indexes.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">between</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">between</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">Interval(number=3, quality='M')
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">between</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">)).</span><span class="n">short</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Interval</span><span class="p">.</span><span class="n">between</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">short</span>
 <span class="go">'A4'
 </span></code></pre></div></div>
 
@@ -1077,7 +1122,8 @@ staff steps is the difference of their indexes.</p>
 <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Interval</span>
 </code></pre></div></div>
 
-<p>Parse an interval written in short form, such as ‘M3’, ‘P5’ or ‘d7’.</p>
+<p>Parse an interval written in short form, such as ‘M3’, ‘P5’ or
+‘d7’.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1338,8 +1384,8 @@ staff steps is the difference of their indexes.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

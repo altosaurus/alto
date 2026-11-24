@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,25 +676,44 @@
         <article>
           <h1>alto.learning.scheduler</h1>
           
-<p>How a question’s history turns into how soon it comes back. Pure Python, no database and no Qt.</p>
+<p>How a question’s history turns into how soon it comes back. Pure Python,
+no database and no Qt.</p>
 
-<p>Every question carries a <em>strain</em>: how much practice it needs. A new question starts at NEW_STRAIN. Each answer moves
-it, and the chance of being asked is exp(WEIGHT_SLOPE * strain), so strained questions come back sooner and more
+<p>Every question carries a <em>strain</em>: how much practice it needs. A new
+question starts at NEW_STRAIN. Each answer moves
+it, and the chance of being asked is exp(WEIGHT_SLOPE * strain), so
+strained questions come back sooner and more
 often while well-known ones fade into the background.</p>
 
 <ul>
-  <li>A wrong answer adds WRONG_PENALTY, so every extra attempt pushes the question further up.</li>
-  <li>A right answer on the first try takes CORRECT_REWARD off. A right answer after misses earns only RETRY_REWARD.</li>
-  <li>The first answer’s speed, against the exercise’s <code class="language-plaintext highlighter-rouge">par_seconds</code>, adds or removes strain on top: very quick
-answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
+  <li>A wrong answer adds WRONG_PENALTY, so every extra attempt pushes the
+question further up.</li>
+  <li>A right answer on the first try takes CORRECT_REWARD off. A right
+answer after misses earns only RETRY_REWARD.</li>
+  <li>The first answer’s speed, against the exercise’s <code class="language-plaintext highlighter-rouge">par_seconds</code>, adds
+or removes strain on top: very quick
+answers take off up to FAST_BONUS, and slow ones add up to
+SLOW_PENALTY.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">strain</span> <span class="o">=</span> <span class="n">update_strain</span><span class="p">(</span><span class="n">NEW_STRAIN</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">strain</span> <span class="o">=</span> <span class="n">update_strain</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">NEW_STRAIN</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">par_seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">strain</span>  <span class="c1"># a miss pushes the question up
 </span><span class="go">3.0
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>  <span class="c1"># a retry earns little
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">strain</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">seconds</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">par_seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># a retry earns little
 </span><span class="go">2.8
 </span></code></pre></div></div>
 
@@ -708,7 +727,8 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Score a previously answered item for Adaptive Response-Time-based Sequencing.</p>
+<p>Score a previously answered item for Adaptive Response-Time-based
+Sequencing.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -726,9 +746,13 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">arts_priority</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">arts_priority</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">1</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="mi">200</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">2.0
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">arts_priority</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">arts_priority</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="mi">3000</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">0.0
 </span></code></pre></div></div>
 
@@ -758,13 +782,17 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">speed_term</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>  <span class="c1"># at or under half of par: the full bonus
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">speed_term</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">1.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># at or under half of par: the full bonus
 </span><span class="go">-0.6
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">speed_term</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">-0.3
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">speed_term</span><span class="p">(</span><span class="mf">25.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">0.5
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">speed_term</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>  <span class="c1"># four times par or more: the full penalty
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">speed_term</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">100.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># four times par or more: the full penalty
 </span><span class="go">1.0
 </span></code></pre></div></div>
 
@@ -800,11 +828,32 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">1.5</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">3.0
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">update_strain</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># right, and quick
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">update_strain</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mf">1.5</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">seconds</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># right, and quick
 </span><span class="go">0.4
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span><span class="mf">5.9</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>  <span class="c1"># capped
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">5.9</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># capped
 </span><span class="go">6.0
 </span></code></pre></div></div>
 
@@ -818,10 +867,13 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div></div>
 
-<p>Return how likely a question is to be picked, relative to the others.</p>
+<p>Return how likely a question is to be picked, relative to the
+others.</p>
 
-<p>A question just seen is held back for a while, long for an easy one and short for a hard one, so what you have
-learned is not repeated right away but what you struggle with returns within the minute.</p>
+<p>A question just seen is held back for a while, long for an easy one
+and short for a hard one, so what you have
+learned is not repeated right away but what you struggle with
+returns within the minute.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -839,11 +891,18 @@ learned is not repeated right away but what you struggle with returns within the
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">weight</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># a new question
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">weight</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span> <span class="mi">2</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># a new question
 </span><span class="go">2.46
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">weight</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">1e9</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># a hard question, long unseen
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">weight</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">1e9</span><span class="p">),</span> <span class="mi">2</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># a hard question, long unseen
 </span><span class="go">6.05
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">weight</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">100.0</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># the same, just seen: held back
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">weight</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">100.0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the same, just seen: held back
 </span><span class="go">0.121
 </span></code></pre></div></div>
 
@@ -875,7 +934,11 @@ learned is not repeated right away but what you struggle with returns within the
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choose</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choose</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">'a'
 </span></code></pre></div></div>
 
@@ -1060,8 +1123,8 @@ learned is not repeated right away but what you struggle with returns within the
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

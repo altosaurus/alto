@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,14 +676,20 @@
         <article>
           <h1>alto.ui.pictures</h1>
           
-<p>Small pictures of musical things (clefs, note values, key signatures, note ranges …) for the settings panes.</p>
+<p>Small pictures of musical things (clefs, note values, key signatures,
+note ranges …) for the settings panes.</p>
 
-<p>Each picture is drawn in fixed units and then scaled, so the same picture serves as a summary in a menu row and, larger,
-as the label of a choice. Colors come from the palette, so they work in light and dark themes.</p>
+<p>Each picture is drawn in fixed units and then scaled, so the same
+picture serves as a summary in a menu row and, larger,
+as the label of a choice. Colors come from the palette, so they work in
+light and dark themes.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CLEF_NAMES</span><span class="p">[</span><span class="s">"treble"</span><span class="p">],</span> <span class="n">VALUE_NAMES</span><span class="p">[</span><span class="s">"sixteenth"</span><span class="p">]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">CLEF_NAMES</span><span class="p">[</span><span class="s">"treble"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">VALUE_NAMES</span><span class="p">[</span><span class="s">"sixteenth"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('Treble', '16th')
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">]).</span><span class="n">toolTip</span><span class="p">()</span>
 <span class="go">'Treble, Bass'
@@ -701,7 +707,8 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p>Draw a clef symbol on its own, without a staff, as an icon.</p>
 
-<p>The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centered.</p>
+<p>The G, C and F clefs are drawn the same size as they are on a staff,
+so the three look alike beside one another, and centered.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -719,7 +726,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">symbol_icon</span><span class="p">(</span><span class="s">"F"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">)).</span><span class="n">isNull</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">symbol_icon</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"F"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -735,9 +744,11 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
 
-<p>The selected clefs, each on its own five-line staff, and a two-stave picture with a brace for the grand staff.</p>
+<p>The selected clefs, each on its own five-line staff, and a two-stave
+picture with a brace for the grand staff.</p>
 
-<p>Showing each clef on its own staff lets alto and tenor, which share a symbol, look different.</p>
+<p>Showing each clef on its own staff lets alto and tenor, which share
+a symbol, look different.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -787,7 +798,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">ClefPictures</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">set_clefs</span><span class="p">([</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">set_clefs</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">width</span><span class="p">()</span>  <span class="c1"># three clefs and the space between them
 </span><span class="go">106
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
@@ -840,7 +853,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"grand"</span><span class="p">]).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefPictures</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"grand"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -857,7 +872,8 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
 
-<p>Note values as engraved symbols (no staff), each with its head on the same baseline so they line up.</p>
+<p>Note values as engraved symbols (no staff), each with its head on
+the same baseline so they line up.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -868,7 +884,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">ValuePictures</span><span class="p">([</span><span class="s">"whole"</span><span class="p">,</span> <span class="s">"quarter"</span><span class="p">,</span> <span class="s">"eighth"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">ValuePictures</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"whole"</span><span class="p">,</span> <span class="s">"quarter"</span><span class="p">,</span> <span class="s">"eighth"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">values</span>
 <span class="go">['whole', 'quarter', 'eighth']
 </span></code></pre></div></div>
@@ -888,7 +906,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ValuePictures</span><span class="p">([</span><span class="s">"half"</span><span class="p">],</span> <span class="n">center_stemless</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">center_stemless</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ValuePictures</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"half"</span><span class="p">],</span> <span class="n">center_stemless</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">center_stemless</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -959,7 +979,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ValuePictures</span><span class="p">([</span><span class="s">"whole"</span><span class="p">,</span> <span class="s">"half"</span><span class="p">,</span> <span class="s">"quarter"</span><span class="p">]).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ValuePictures</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"whole"</span><span class="p">,</span> <span class="s">"half"</span><span class="p">,</span> <span class="s">"quarter"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -968,7 +990,8 @@ as the label of a choice. Colors come from the palette, so they work in light an
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rhythm_picture</span><span class="p">(</span><span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValuePictures</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Render a single note, rest, tied pair, or beamed pair from an equation term.</p>
+<p>Render a single note, rest, tied pair, or beamed pair from an
+equation term.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1000,9 +1023,11 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
 
-<p>A key signature as a plain row of its sharps or flats, with no staff or clef.</p>
+<p>A key signature as a plain row of its sharps or flats, with no staff
+or clef.</p>
 
-<p>Each sign sits at the height it has after a treble clef, and C major, which has none, shows a natural sign.</p>
+<p>Each sign sits at the height it has after a treble clef, and C
+major, which has none, shows a natural sign.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1101,7 +1126,8 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
 
-<p>For each clef, a staff with its lowest and highest note, so the range can be read off at a glance.</p>
+<p>For each clef, a staff with its lowest and highest note, so the
+range can be read off at a glance.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1114,7 +1140,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">RangePictures</span><span class="p">([(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">)])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">RangePictures</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
 <span class="go">'Treble: D3 to F7'
 </span></code></pre></div></div>
@@ -1134,7 +1162,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangePictures</span><span class="p">([(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">)],</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">238</span><span class="p">).</span><span class="n">scale</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangePictures</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">)],</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">238</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">scale</span>
 <span class="go">1.9
 </span></code></pre></div></div>
 
@@ -1154,7 +1184,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">RangePictures</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">set_items</span><span class="p">([(</span><span class="s">"bass"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="p">(</span><span class="s">"alto"</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">35</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">set_items</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[(</span><span class="s">"bass"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="p">(</span><span class="s">"alto"</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">35</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">toolTip</span><span class="p">().</span><span class="n">splitlines</span><span class="p">()</span>
 <span class="go">['Bass: F1 to A5', 'Alto: C3 to C5']
 </span></code></pre></div></div>
@@ -1174,7 +1206,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangePictures</span><span class="p">([(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">),</span> <span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">)]).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangePictures</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">),</span> <span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">)]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -1190,7 +1224,8 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
 
-<p>How notes are named: C, D and E on a staff, labeled with letters, solfège syllables or scale degrees.</p>
+<p>How notes are named: C, D and E on a staff, labeled with letters,
+solfège syllables or scale degrees.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1570,8 +1605,8 @@ as the label of a choice. Colors come from the palette, so they work in light an
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

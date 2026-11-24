@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -678,8 +678,10 @@
           
 <p>The card of a theme in the settings.</p>
 
-<p>A card is one theme: its name, three pictures of the window one above another that can be clicked (light, dark, and System,
-which is cut through on a slant to show it is light or dark as the desktop is) and the squares of its colors.</p>
+<p>A card is one theme: its name, three pictures of the window one above
+another that can be clicked (light, dark, and System,
+which is cut through on a slant to show it is light or dark as the
+desktop is) and the squares of its colors.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -709,7 +711,10 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">colors_of</span><span class="p">(</span><span class="s">"dark"</span><span class="p">)[</span><span class="s">"window"</span><span class="p">],</span> <span class="n">colors_of</span><span class="p">(</span><span class="s">"studio"</span><span class="p">)[</span><span class="s">"window"</span><span class="p">]</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">colors_of</span><span class="p">(</span><span class="s">"dark"</span><span class="p">)[</span><span class="s">"window"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">colors_of</span><span class="p">(</span><span class="s">"studio"</span><span class="p">)[</span><span class="s">"window"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('#2b2b2b', '#eceef1')
 </span></code></pre></div></div>
 
@@ -727,7 +732,8 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
 
-<p>A small picture of the window in a theme, to click to choose the theme.</p>
+<p>A small picture of the window in a theme, to click to choose the
+theme.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -760,7 +766,14 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeThumb</span><span class="p">(</span><span class="s">"system"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">DARK</span><span class="p">).</span><span class="n">width</span><span class="p">(),</span> <span class="n">ThemeThumb</span><span class="p">(</span><span class="s">"light"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">2.0</span><span class="p">).</span><span class="n">width</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ThemeThumb</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"system"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">DARK</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">width</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ThemeThumb</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"light"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">2.0</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">width</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(116, 232)
 </span></code></pre></div></div>
 
@@ -769,7 +782,8 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the window, cut through on a slant if it has two halves, with an outline that is heavier when it is chosen.</p>
+<p>Draw the window, cut through on a slant if it has two halves,
+with an outline that is heavier when it is chosen.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -779,7 +793,9 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeThumb</span><span class="p">(</span><span class="s">"light"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeThumb</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"light"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -795,9 +811,11 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QFrame</code></p>
 
-<p>The card of one theme: its name, three clickable pictures one above another, and with each the squares of its colors.</p>
+<p>The card of one theme: its name, three clickable pictures one above
+another, and with each the squares of its colors.</p>
 
-<p>The pictures are Light, Dark and System. The System one is cut through on a slant, light on one side and dark on the other,
+<p>The pictures are Light, Dark and System. The System one is cut
+through on a slant, light on one side and dark on the other,
 because that version is light or dark as the desktop is.</p>
 
 <p><strong>Attributes</strong></p>
@@ -840,7 +858,8 @@ because that version is light or dark as the desktop is.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_current</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Mark the picture of the theme that is in use, and outline the card that has it.</p>
+<p>Mark the picture of the theme that is in use, and outline the
+card that has it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -852,7 +871,11 @@ because that version is light or dark as the desktop is.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">ThemeCard</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">show_current</span><span class="p">(</span><span class="s">"sage_dark"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">picture</span> <span class="ow">in</span> <span class="n">card</span><span class="p">.</span><span class="n">thumbs</span><span class="p">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">picture</span><span class="p">.</span><span class="n">isChecked</span><span class="p">()]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">k</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">picture</span> <span class="ow">in</span> <span class="n">card</span><span class="p">.</span><span class="n">thumbs</span><span class="p">.</span><span class="n">items</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">if</span> <span class="n">picture</span><span class="p">.</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
 <span class="go">['sage_dark']
 </span></code></pre></div></div>
 
@@ -1167,8 +1190,8 @@ because that version is light or dark as the desktop is.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

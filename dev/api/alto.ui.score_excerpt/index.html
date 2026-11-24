@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,14 +676,16 @@
         <article>
           <h1>alto.ui.score_excerpt</h1>
           
-<p>Paint the engraved score and locate symbols from a pixel map made from the same SVG.</p>
+<p>Paint the engraved score and locate symbols from a pixel map made from
+the same SVG.</p>
 
 <h2 id="scoreexcerpt">ScoreExcerpt</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScoreExcerpt</span><span class="p">(</span><span class="n">excerpt</span><span class="p">:</span> <span class="n">Excerpt</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>The score artwork and its per-pixel index into the excerpt’s target list.</p>
+<p>The score artwork and its per-pixel index into the excerpt’s target
+list.</p>
 
 <p><strong>Constructor</strong></p>
 
@@ -694,7 +696,8 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">music_rect</span><span class="p">(</span><span class="n">paper</span><span class="p">:</span> <span class="n">QRectF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QRectF</span>
 </code></pre></div></div>
 
-<p>Fit the music inside its paper, leaving one line for the source credit.</p>
+<p>Fit the music inside its paper, leaving one line for the source
+credit.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1037,8 +1040,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

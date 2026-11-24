@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795468709">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795539477">
   
 </head>
 <body>
@@ -676,7 +676,8 @@
         <article>
           <h1>alto.ui.widgets</h1>
           
-<p>Small widgets shared by several screens: the sidebar toggle, the help button and a segmented control.</p>
+<p>Small widgets shared by several screens: the sidebar toggle, the help
+button and a segmented control.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -684,17 +685,73 @@
 <span class="go">'Hide exercise list'
 </span></code></pre></div></div>
 
+<h2 id="vertical_scroll_area">vertical_scroll_area</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">vertical_scroll_area</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QScrollArea</span>
+</code></pre></div></div>
+
+<p>Put a resizable widget in a frameless vertical scroll area.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">body</code> (<em>QWidget</em>): Contents of the viewport.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QScrollArea</em>: The scroll area containing the body.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">body</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scroll</span> <span class="o">=</span> <span class="n">vertical_scroll_area</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scroll</span><span class="p">.</span><span class="n">widget</span><span class="p">()</span> <span class="ow">is</span> <span class="n">body</span>
+<span class="go">True
+</span></code></pre></div></div>
+
+<h2 id="busy_progress_bar">busy_progress_bar</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">busy_progress_bar</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QProgressBar</span>
+</code></pre></div></div>
+
+<p>Create the indeterminate progress indicator used during updates.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QProgressBar</em>: A progress bar with no percentage label.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bar</span> <span class="o">=</span> <span class="n">busy_progress_bar</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">bar</span><span class="p">.</span><span class="n">minimum</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">bar</span><span class="p">.</span><span class="n">maximum</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">bar</span><span class="p">.</span><span class="n">isTextVisible</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(0, 0, False)
+</span></code></pre></div></div>
+
 <h2 id="practicecounts">PracticeCounts</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PracticeCounts</span><span class="p">(</span><span class="n">QLabel</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Colored counts for calendar practice on tiles and in the exercise screen.</p>
+<p>Colored counts for calendar practice on tiles and in the exercise
+screen.</p>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span> <span class="o">=</span> <span class="n">PracticeCounts</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">set_counts</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">studying</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="s">"incorrect"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">set_counts</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">studying</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">current</span><span class="o">=</span><span class="s">"incorrect"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"1 incorrect card"</span> <span class="ow">in</span> <span class="n">label</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
 <span class="go">True
 </span></code></pre></div></div>
@@ -710,7 +767,8 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the counts in blue, red, green order and underline the active queue.</p>
+<p>Show the counts in blue, red, green order and underline the
+active queue.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -725,7 +783,9 @@
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span> <span class="o">=</span> <span class="n">PracticeCounts</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">set_counts</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">toolTip</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"Blue — 2 new cards available"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">toolTip</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"Blue — 2 new cards available"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -742,7 +802,8 @@
 
 <p>A button that shows or hides the exercise list.</p>
 
-<p>Connect to <code class="language-plaintext highlighter-rouge">clicked</code>; the main window decides what to show and calls <code class="language-plaintext highlighter-rouge">set_open</code> to match.</p>
+<p>Connect to <code class="language-plaintext highlighter-rouge">clicked</code>; the main window decides what to show and calls
+<code class="language-plaintext highlighter-rouge">set_open</code> to match.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -811,7 +872,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HelpButton</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s">"&lt;b&gt;Press the right note.&lt;/b&gt;"</span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HelpButton</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span><span class="p">:</span> <span class="s">"&lt;b&gt;Press the right note.&lt;/b&gt;"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
 <span class="go">'How this exercise works'
 </span></code></pre></div></div>
 
@@ -829,9 +892,12 @@
 <p><strong>Constructor examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">HelpButton</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">calls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="s">"help"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span>  <span class="c1"># the text is not asked for until the button is clicked
-</span><span class="go">[]
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">HelpButton</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span><span class="p">:</span> <span class="n">calls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="s">"help"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># the text is not asked for until the button is clicked
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span>
+<span class="go">[]
 </span></code></pre></div></div>
 
 <h3 id="helpbuttonshow_help">HelpButton.show_help</h3>
@@ -843,7 +909,9 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HelpButton</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s">"&lt;b&gt;Help&lt;/b&gt;"</span><span class="p">).</span><span class="n">show_help</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HelpButton</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span><span class="p">:</span> <span class="s">"&lt;b&gt;Help&lt;/b&gt;"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">show_help</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
 </span></code></pre></div></div>
 
 <h2 id="segmentedcontrol">SegmentedControl</h2>
@@ -858,7 +926,8 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QFrame</code></p>
 
-<p>A pill-shaped row of choices of which exactly one is chosen, like the switch between two views.</p>
+<p>A pill-shaped row of choices of which exactly one is chosen, like
+the switch between two views.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -869,11 +938,16 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span> <span class="o">=</span> <span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"Exercises"</span><span class="p">,</span> <span class="s">"Lessons"</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span> <span class="o">=</span> <span class="n">SegmentedControl</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Exercises"</span><span class="p">,</span> <span class="s">"Lessons"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">current</span><span class="p">()</span>
 <span class="go">0
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">set_current</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">current</span><span class="p">(),</span> <span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">control</span><span class="p">.</span><span class="n">current</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">(1, True)
 </span></code></pre></div></div>
 
@@ -891,9 +965,15 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">]).</span><span class="n">buttons</span><span class="p">)</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">SegmentedControl</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="p">[</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">buttons</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">3
-</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"A"</span><span class="p">],</span> <span class="n">icons</span><span class="o">=</span><span class="p">[</span><span class="n">HELP</span><span class="p">]).</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">icon</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SegmentedControl</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"A"</span><span class="p">],</span> <span class="n">icons</span><span class="o">=</span><span class="p">[</span><span class="n">HELP</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">icon</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
 <span class="go">False
 </span></code></pre></div></div>
 
@@ -914,9 +994,15 @@
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span> <span class="o">=</span> <span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"Exercises"</span><span class="p">,</span> <span class="s">"Lessons"</span><span class="p">],</span> <span class="n">icons</span><span class="o">=</span><span class="p">[</span><span class="n">HELP</span><span class="p">,</span> <span class="n">HELP</span><span class="p">])</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span> <span class="o">=</span> <span class="n">SegmentedControl</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"Exercises"</span><span class="p">,</span> <span class="s">"Lessons"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">icons</span><span class="o">=</span><span class="p">[</span><span class="n">HELP</span><span class="p">,</span> <span class="n">HELP</span><span class="p">],</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">set_compact</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">(),</span> <span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">toolTip</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
 <span class="go">('', 'Exercises')
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">set_compact</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
@@ -968,14 +1054,18 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">restyle</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Style the control from the palette now in use: a rounded track with the chosen choice raised and tinted.</p>
+<p>Style the control from the palette now in use: a rounded track
+with the chosen choice raised and tinted.</p>
 
-<p>A change of theme rebuilds the main window, so the control there is drawn afresh in the new colors. One that stays, as in
+<p>A change of theme rebuilds the main window, so the control there
+is drawn afresh in the new colors. One that stays, as in
 the settings, is restyled by calling this.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"segments"</span> <span class="ow">in</span> <span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">]).</span><span class="n">styleSheet</span><span class="p">()</span>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"segments"</span> <span class="ow">in</span> <span class="n">SegmentedControl</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">[</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">styleSheet</span><span class="p">()</span>
 <span class="go">True
 </span></code></pre></div></div>
 
@@ -1302,8 +1392,8 @@ the settings, is restyled by calling this.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795468709" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795468709" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795539477" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795539477" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
