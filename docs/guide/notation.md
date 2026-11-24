@@ -58,8 +58,12 @@ A clef fixes which index sits on the bottom line, `BOTTOM_LINE` in `alto/ui/staf
 Given the bottom line's `y` on screen, the height of any note is
 
 ```python
-steps = note.diatonic - BOTTOM_LINE[clef]  # 0 on the bottom line, 1 in the first space, 2 on the second line ...
-y = bottom - steps * gap / 2  # screen y grows downward, and each step is half a gap
+steps = (
+    note.diatonic - BOTTOM_LINE[clef]
+)  # 0 on the bottom line, 1 in the first space, 2 on the second line ...
+y = (
+    bottom - steps * gap / 2
+)  # screen y grows downward, and each step is half a gap
 ```
 
 and that is the heart of it. The reverse, from a click to a note, is `StaffInput.note_at(y)`: `round((bottom - y) / (gap / 2))`
@@ -117,13 +121,23 @@ A note is built from parts, the way an engraver would:
 
 ```python
 # alto/ui/engraving.py: draw_note, simplified
-left, _, right, _ = _ink(font, name="noteheadBlack")  # the head's ink box, in staff spaces
+left, _, right, _ = _ink(
+    font, name="noteheadBlack"
+)  # the head's ink box, in staff spaces
 ox = x - (left + right) / 2 * gap  # center the drawn head on x
-_fill(p, path=_place(_outline(font, name="noteheadBlack"), x=ox, y=y, gap=gap), color=color)
+_fill(
+    p,
+    path=_place(_outline(font, name="noteheadBlack"), x=ox, y=y, gap=gap),
+    color=color,
+)
 
-ax, ay = _anchor(font, name="noteheadBlack", anchor="stemUpSE")  # where an up-stem attaches
+ax, ay = _anchor(
+    font, name="noteheadBlack", anchor="stemUpSE"
+)  # where an up-stem attaches
 thick = _metrics(font)["stem"] * gap  # stem width from the font
-p.drawRect(QRectF(left_of_stem, stem_top, thick, stem_bottom - stem_top))  # the stem is just a rectangle
+p.drawRect(
+    QRectF(left_of_stem, stem_top, thick, stem_bottom - stem_top)
+)  # the stem is just a rectangle
 ```
 
 Notice that the **stem is a rectangle the code draws**, not a glyph. SMuFL leaves stems to the program, because their length
@@ -171,15 +185,32 @@ from alto.ui import engraving
 
 app = QApplication([])
 gap, bottom = 20, 150
-image = QImage(300, 200, QImage.Format.Format_ARGB32)  # kept in a variable: the painter paints on it
+image = QImage(
+    300, 200, QImage.Format.Format_ARGB32
+)  # kept in a variable: the painter paints on it
 image.fill(QColor("white"))
 p = QPainter(image)
 p.setRenderHint(QPainter.RenderHint.Antialiasing)
 for i in range(5):
     p.drawLine(20, bottom - i * gap, 280, bottom - i * gap)
-engraving.draw_clef(p, font="bravura", clef="treble", x=30, bottom=bottom, gap=gap, color=QColor("black"))
+engraving.draw_clef(
+    p,
+    font="bravura",
+    clef="treble",
+    x=30,
+    bottom=bottom,
+    gap=gap,
+    color=QColor("black"),
+)
 engraving.draw_note(
-    p, font="bravura", value="quarter", x=140, y=bottom - 6 * gap / 2, gap=gap, color=QColor("black"), stem_down=True
+    p,
+    font="bravura",
+    value="quarter",
+    x=140,
+    y=bottom - 6 * gap / 2,
+    gap=gap,
+    color=QColor("black"),
+    stem_down=True,
 )
 p.end()
 image.save("/tmp/notation-example.png")

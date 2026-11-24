@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.style/
 ---
 {% raw %}
-Application-wide stylesheet: rounded corners on buttons, panes, lists and scroll bars.
+Application-wide stylesheet: rounded corners on buttons, panes, lists
+and scroll bars.
 
 Colors come from the palette so it follows the system light/dark theme.
 
@@ -35,7 +36,9 @@ Style category headings in the navigation pane and tile filters.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> navigation_heading_style(QPalette())[0].bold()
+>>> navigation_heading_style(QPalette())[
+...     0
+... ].bold()
 True
 ```
 
@@ -51,7 +54,8 @@ def app_style(
 
 Build the stylesheet for a palette.
 
-Push buttons use rounded hairline borders. In dark mode, exercise tiles have near-black outlines and
+Push buttons use rounded hairline borders. In dark mode, exercise
+tiles have near-black outlines and
 other standard buttons have graphite-gray outlines.
 
 **Parameters**

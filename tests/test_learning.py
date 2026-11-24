@@ -1,4 +1,7 @@
-"""The learner: how answers are recorded, how strain builds up and how the next question is chosen."""
+"""
+The learner: how answers are recorded, how strain builds up and how the
+next question is chosen.
+"""
 
 from __future__ import annotations
 
@@ -25,7 +28,8 @@ from alto.ui.exercise_view import ExerciseView
 if TYPE_CHECKING:
     from pathlib import Path
 
-# -- the scheduler --------------------------------------------------------------------------------------------------
+# -- the scheduler
+# ----------------------------------------------------------------------
 
 
 def test_speed_term_runs_from_bonus_to_penalty() -> None:
@@ -33,10 +37,18 @@ def test_speed_term_runs_from_bonus_to_penalty() -> None:
     Check that speed term runs from bonus to penalty.
     """
     par = 4.0
-    assert scheduler.speed_term(0.5, par_seconds=par) == -scheduler.FAST_BONUS  # very quick
+    assert (
+        scheduler.speed_term(0.5, par_seconds=par) == -scheduler.FAST_BONUS
+    )  # very quick
     assert scheduler.speed_term(par, par_seconds=par) == 0.0  # right on par
-    assert scheduler.speed_term(par * 10, par_seconds=par) == scheduler.SLOW_PENALTY  # as slow as it counts
-    samples = [scheduler.speed_term(par * r / 10, par_seconds=par) for r in range(1, 60)]
+    assert (
+        scheduler.speed_term(par * 10, par_seconds=par)
+        == scheduler.SLOW_PENALTY
+    )  # as slow as it counts
+    samples = [
+        scheduler.speed_term(par * r / 10, par_seconds=par)
+        for r in range(1, 60)
+    ]
     assert samples == sorted(samples)  # never rewards slowness
 
 
@@ -65,7 +77,9 @@ def test_quick_correct_answer_ends_up_easier_than_slow_one() -> None:
         seconds=40.0,
         par_seconds=4.0,
     )
-    assert quick < steady < 2.0 < slow  # even a correct answer is held against you if it took too long
+    assert (
+        quick < steady < 2.0 < slow
+    )  # even a correct answer is held against you if it took too long
 
 
 def test_every_extra_attempt_adds_strain() -> None:
@@ -112,9 +126,12 @@ def test_strain_stays_in_bounds() -> None:
     )
 
 
-def test_weight_grows_with_strain_and_new_questions_beat_mastered_ones() -> None:
+def test_weight_grows_with_strain_and_new_questions_beat_mastered_ones() -> (
+    None
+):
     """
-    Check that weight grows with strain and new questions beat mastered ones.
+    Check that weight grows with strain and new questions beat mastered
+    ones.
     """
     later = 10_000.0
     weights = [
@@ -128,21 +145,42 @@ def test_weight_grows_with_strain_and_new_questions_beat_mastered_ones() -> None
         )
     ]
     assert weights == sorted(weights)
-    assert scheduler.weight(None, last_seen=None, now=later) > scheduler.weight(0.0, last_seen=0.0, now=later)
+    assert scheduler.weight(
+        None,
+        last_seen=None,
+        now=later,
+    ) > scheduler.weight(0.0, last_seen=0.0, now=later)
 
 
-def test_a_question_just_seen_is_held_back_and_hard_ones_return_sooner() -> None:
+def test_a_question_just_seen_is_held_back_and_hard_ones_return_sooner() -> (
+    None
+):
     """
-    Check that a question just seen is held back and hard ones return sooner.
+    Check that a question just seen is held back and hard ones return
+    sooner.
     """
-    assert scheduler.weight(1.0, last_seen=100.0, now=101.0) < scheduler.weight(1.0, last_seen=0.0, now=101.0)
-    # after the same short wait, the hard question has recovered more of its chance than the easy one
-    easy = scheduler.weight(0.5, last_seen=0.0, now=60.0) / scheduler.weight(0.5, last_seen=0.0, now=1e6)
-    hard = scheduler.weight(5.0, last_seen=0.0, now=60.0) / scheduler.weight(5.0, last_seen=0.0, now=1e6)
+    assert scheduler.weight(
+        1.0,
+        last_seen=100.0,
+        now=101.0,
+    ) < scheduler.weight(1.0, last_seen=0.0, now=101.0)
+    # after the same short wait, the hard question has recovered more of
+    # its chance than the easy one
+    easy = scheduler.weight(0.5, last_seen=0.0, now=60.0) / scheduler.weight(
+        0.5,
+        last_seen=0.0,
+        now=1e6,
+    )
+    hard = scheduler.weight(5.0, last_seen=0.0, now=60.0) / scheduler.weight(
+        5.0,
+        last_seen=0.0,
+        now=1e6,
+    )
     assert hard > easy
 
 
-# -- the database ---------------------------------------------------------------------------------------------------
+# -- the database
+# ----------------------------------------------------------------------
 
 
 def test_profiles_are_unique_ignoring_case_and_need_a_name() -> None:
@@ -173,11 +211,15 @@ def test_database_is_created_on_disk_and_reopened(tmp_path: Path) -> None:
     assert [p.name for p in Database(path).profiles()] == ["Ben"]
 
 
-# -- the learner ----------------------------------------------------------------------------------------------------
+# -- the learner
+# ----------------------------------------------------------------------
 
 
 class Stub(Exercise):
-    """A question per note A0..: one correct button, with a pool big enough that fresh ones rarely repeat."""
+    """
+    A question per note A0..: one correct button, with a pool big enough
+    that fresh ones rarely repeat.
+    """
 
     name, par_seconds = "Stub", 4.0
 
@@ -281,15 +323,26 @@ def test_every_answer_is_recorded_including_the_wrong_ones() -> None:
         now=104.0,
     )
     rows = learner.db.attempts(learner.profile.id)
-    assert [(r["attempt_no"], r["answer"], r["correct"]) for r in rows] == [(1, "B", 0), (2, "B", 0), (3, "A", 1)]
-    item = learner.db.get_item(learner.profile.id, exercise="Stub", item_key=q.item_key())
+    assert [(r["attempt_no"], r["answer"], r["correct"]) for r in rows] == [
+        (1, "B", 0),
+        (2, "B", 0),
+        (3, "A", 1),
+    ]
+    item = learner.db.get_item(
+        learner.profile.id,
+        exercise="Stub",
+        item_key=q.item_key(),
+    )
     assert item is not None
     assert (item.seen, item.first_try_right, item.wrong_attempts) == (1, 0, 2)
 
 
-def test_more_attempts_and_slower_answers_leave_a_question_more_strained() -> None:
+def test_more_attempts_and_slower_answers_leave_a_question_more_strained() -> (
+    None
+):
     """
-    Check that more attempts and slower answers leave a question more strained.
+    Check that more attempts and slower answers leave a question more
+    strained.
     """
     learner, ex = make_learner()
     rng = random.Random(2)
@@ -363,7 +416,11 @@ def test_more_attempts_and_slower_answers_leave_a_question_more_strained() -> No
         float
             Its strain.
         """
-        item = learner.db.get_item(learner.profile.id, exercise="Stub", item_key=q.item_key())
+        item = learner.db.get_item(
+            learner.profile.id,
+            exercise="Stub",
+            item_key=q.item_key(),
+        )
         assert item is not None
         return item.strain
 
@@ -376,12 +433,17 @@ def test_more_attempts_and_slower_answers_leave_a_question_more_strained() -> No
             ("quick", quick),
         )
     }
-    assert strain["fumbled"] > strain["slow"] > strain["clean"] > strain["quick"]
+    assert (
+        strain["fumbled"] > strain["slow"] > strain["clean"] > strain["quick"]
+    )
 
 
-def test_a_hard_question_comes_back_far_more_often_than_a_mastered_one() -> None:
+def test_a_hard_question_comes_back_far_more_often_than_a_mastered_one() -> (
+    None
+):
     """
-    Check that a hard question comes back far more often than a mastered one.
+    Check that a hard question comes back far more often than a mastered
+    one.
     """
     learner, ex = make_learner()
     rng = random.Random(3)
@@ -445,9 +507,12 @@ def test_pick_never_repeats_the_question_just_asked() -> None:
         )
 
 
-def test_stored_questions_are_only_asked_again_under_the_same_settings() -> None:
+def test_stored_questions_are_only_asked_again_under_the_same_settings() -> (
+    None
+):
     """
-    Check that stored questions are only asked again under the same settings.
+    Check that stored questions are only asked again under the same
+    settings.
     """
     learner, ex = make_learner()
     rng = random.Random(5)
@@ -463,9 +528,21 @@ def test_stored_questions_are_only_asked_again_under_the_same_settings() -> None
             now=0.0,
         )
     assert any(
-        i.item_key == q.item_key() for i in learner.db.replay_candidates(learner.profile.id, exercise="Stub", signature="")
+        i.item_key == q.item_key()
+        for i in learner.db.replay_candidates(
+            learner.profile.id,
+            exercise="Stub",
+            signature="",
+        )
     )
-    assert learner.db.replay_candidates(learner.profile.id, exercise="Stub", signature="other settings") == []
+    assert (
+        learner.db.replay_candidates(
+            learner.profile.id,
+            exercise="Stub",
+            signature="other settings",
+        )
+        == []
+    )
 
 
 def test_each_profile_has_its_own_history() -> None:
@@ -489,7 +566,8 @@ def test_each_profile_has_its_own_history() -> None:
     assert len(db.attempts(ben.id)) == 0 and len(db.attempts(ada.id)) == 1
 
 
-# -- the exercise screen --------------------------------------------------------------------------------------------
+# -- the exercise screen
+# ----------------------------------------------------------------------
 
 
 def test_exercise_view_records_each_answer_with_its_timing() -> None:
@@ -498,7 +576,9 @@ def test_exercise_view_records_each_answer_with_its_timing() -> None:
     """
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-    _app = QApplication.instance() or QApplication([])  # kept alive for the widgets below
+    _app = QApplication.instance() or QApplication(
+        [],
+    )  # kept alive for the widgets below
     learner, _ = make_learner()
     view = ExerciseView(KeySignatures(), rng=random.Random(7), learner=learner)
     q = view.question
@@ -510,8 +590,14 @@ def test_exercise_view_records_each_answer_with_its_timing() -> None:
     rows = learner.db.attempts(learner.profile.id, exercise="KeySignatures")
     assert [(r["attempt_no"], r["correct"]) for r in rows] == [(1, 0), (2, 1)]
     assert all(r["item_key"] == q.item_key() for r in rows)
-    item = learner.db.get_item(learner.profile.id, exercise="KeySignatures", item_key=q.item_key())
+    item = learner.db.get_item(
+        learner.profile.id,
+        exercise="KeySignatures",
+        item_key=q.item_key(),
+    )
     assert item is not None and item.wrong_attempts == 1
     view._advance.stop()
     view.next_question()
-    assert view.question is not None and view.question.item_key() != q.item_key()  # the next one is a different question
+    assert (
+        view.question is not None and view.question.item_key() != q.item_key()
+    )  # the next one is a different question

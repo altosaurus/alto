@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.instrument_picker/
 ---
 {% raw %}
-Choosing the instrument that plays notes, with a summary of what each one is made from.
+Choosing the instrument that plays notes, with a summary of what each
+one is made from.
 
 **Examples**
 
@@ -24,16 +25,21 @@ def load_instrument() -> None
 
 Apply the saved instrument.
 
-The piano is used if nothing is saved or the saved key is not an instrument.
+The piano is used if nothing is saved or the saved key is not an
+instrument.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> store().setValue("audio/instrument", "flute")
+>>> store().setValue(
+...     "audio/instrument", "flute"
+... )
 >>> load_instrument()
 >>> sounds.instrument
 'flute'
->>> store().setValue("audio/instrument", "not an instrument")
+>>> store().setValue(
+...     "audio/instrument", "not an instrument"
+... )
 >>> load_instrument()
 >>> sounds.instrument
 'piano'
@@ -66,7 +72,8 @@ def tokens(widget: QWidget) -> dict[str, str]
 
 Return the summary page's colors.
 
-All are mixed from the system palette so they follow its light or dark theme.
+All are mixed from the system palette so they follow its light or
+dark theme.
 
 **Parameters**
 
@@ -105,7 +112,11 @@ Write a file size the way the instrument page shows it.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> format_size(2_500_000), format_size(500_000), format_size(10)
+>>> (
+...     format_size(2_500_000),
+...     format_size(500_000),
+...     format_size(10),
+... )
 ('2.5 MB', '500 KB', '1 KB')
 ```
 
@@ -117,10 +128,13 @@ InstrumentPicker(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-The instruments in a box on the left; on the right, what the selected one is made from.
+The instruments in a box on the left; on the right, what the
+selected one is made from.
 
-An instrument that can be played in more than one way (the viola, arco or pizzicato) is one entry, and its page has a
-'Use this instrument' and a 'Hear it' for each way. 'Hear it' plays a short arpeggio even while sound is muted.
+An instrument that can be played in more than one way (the viola,
+arco or pizzicato) is one entry, and its page has a
+'Use this instrument' and a 'Hear it' for each way. 'Hear it' plays
+a short arpeggio even while sound is muted.
 
 **Attributes**
 
@@ -181,7 +195,8 @@ Show the page of the entry an instrument belongs to.
 def show_group(group: str) -> None
 ```
 
-Fill the summary page for an entry from what is known about it and what is on disk.
+Fill the summary page for an entry from what is known about it
+and what is on disk.
 
 **Parameters**
 
@@ -202,7 +217,8 @@ Fill the summary page for an entry from what is known about it and what is on di
 def changeEvent(event: QEvent) -> None
 ```
 
-Redraw the summary page when the palette changes, so its colors follow the theme.
+Redraw the summary page when the palette changes, so its colors
+follow the theme.
 
 **Parameters**
 
@@ -213,7 +229,9 @@ Redraw the summary page when the palette changes, so its colors follow the theme
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = InstrumentPicker()
 >>> picker.show_group("Flute")
->>> picker.changeEvent(QEvent(QEvent.Type.PaletteChange))
+>>> picker.changeEvent(
+...     QEvent(QEvent.Type.PaletteChange)
+... )
 >>> picker.shown
 'Flute'
 ```
@@ -224,7 +242,8 @@ Redraw the summary page when the palette changes, so its colors follow the theme
 def use(key: str) -> None
 ```
 
-Make an instrument the one for notes and the correct-answer chime.
+Make an instrument the one for notes and the correct-answer
+chime.
 
 Nothing happens if it has no recordings installed.
 
@@ -259,6 +278,8 @@ Play the DSCH motif in an instrument, even if sound is muted.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> InstrumentPicker().preview("flute")  # doctest: +SKIP
+>>> InstrumentPicker().preview(
+...     "flute"
+... )  # doctest: +SKIP
 ```
 {% endraw %}

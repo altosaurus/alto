@@ -1,9 +1,12 @@
 """
 Pitches and intervals, spelled correctly (C# is not Db).
 
-A `Note` is a pitch with its spelling (a letter, an accidental and an octave), so C♯4 and D♭4 are different notes even
-though they sound the same. An `Interval` is a distance between two spelled notes, such as a major third or a perfect
-fifth. Together they can transpose a note by an interval and work out the interval between two notes.
+A `Note` is a pitch with its spelling (a letter, an accidental and an
+octave), so C♯4 and D♭4 are different notes even
+though they sound the same. An `Interval` is a distance between two
+spelled notes, such as a major third or a perfect
+fifth. Together they can transpose a note by an interval and work out
+the interval between two notes.
 
 Examples
 --------
@@ -31,6 +34,9 @@ NATURAL_SEMITONES = (
     9,
     11,
 )
+NATURAL_LETTER_INDEX: dict[int, int] = {
+    semitone: letter for letter, semitone in enumerate(NATURAL_SEMITONES)
+}
 ACCIDENTAL_SYMBOLS = {
     -2: "𝄫",
     -1: "♭",
@@ -46,7 +52,13 @@ _ASCII = {
     2: "x",
 }
 
-_WRITTEN_ACCIDENTALS = str.maketrans({symbol: _ASCII[number] for number, symbol in ACCIDENTAL_SYMBOLS.items() if symbol})
+_WRITTEN_ACCIDENTALS = str.maketrans(
+    {
+        symbol: _ASCII[number]
+        for number, symbol in ACCIDENTAL_SYMBOLS.items()
+        if symbol
+    },
+)
 
 _MAJOR_BASE = (
     0,
@@ -65,7 +77,8 @@ class Note:
     """
     A spelled pitch: a letter name, an accidental and an octave.
 
-    The spelling matters. C♯4 and D♭4 sound the same (they share a MIDI number) but are different notes, because they sit on
+    The spelling matters. C♯4 and D♭4 sound the same (they share a MIDI
+    number) but are different notes, because they sit on
     different lines of the staff.
 
     Attributes
@@ -73,9 +86,11 @@ class Note:
     octave : int
         The octave in scientific pitch notation, where middle C is C4.
     letter : int
-        An index into `LETTERS`: 0 is C, 1 is D, 2 is E, 3 is F, 4 is G, 5 is A and 6 is B. Keyword-only.
+        An index into `LETTERS`: 0 is C, 1 is D, 2 is E, 3 is F, 4 is G,
+        5 is A and 6 is B. Keyword-only.
     accidental : int, default 0
-        -2 for a double flat, -1 for a flat, 0 for a natural, 1 for a sharp and 2 for a double sharp. Keyword-only.
+        -2 for a double flat, -1 for a flat, 0 for a natural, 1 for a
+        sharp and 2 for a double sharp. Keyword-only.
 
     Examples
     --------
@@ -107,17 +122,25 @@ class Note:
         --------
         >>> Note(4, letter=0).midi
         60
-        >>> Note(4, letter=1, accidental=-1).midi  # D♭4 sounds like C♯4
+        >>> Note(
+        ...     4, letter=1, accidental=-1
+        ... ).midi  # D♭4 sounds like C♯4
         61
         """
-        return 12 * (self.octave + 1) + NATURAL_SEMITONES[self.letter] + self.accidental
+        return (
+            12 * (self.octave + 1)
+            + NATURAL_SEMITONES[self.letter]
+            + self.accidental
+        )
 
     @property
     def diatonic(self) -> int:
         """
-        Return the absolute staff-step index of the note, ignoring its accidental.
+        Return the absolute staff-step index of the note, ignoring its
+        accidental.
 
-        Counting from C0 as 0, D0 as 1 and so on, each line or space of the staff is one step. The distance between two notes in
+        Counting from C0 as 0, D0 as 1 and so on, each line or space of
+        the staff is one step. The distance between two notes in
         staff steps is the difference of their indexes.
 
         Returns
@@ -129,7 +152,9 @@ class Note:
         --------
         >>> Note(4, letter=0).diatonic  # C4
         28
-        >>> Note(4, letter=2, accidental=1).diatonic  # E♯4 is on the same step as E4
+        >>> Note(
+        ...     4, letter=2, accidental=1
+        ... ).diatonic  # E♯4 is on the same step as E4
         30
         """
         return self.octave * 7 + self.letter
@@ -142,13 +167,18 @@ class Note:
         Returns
         -------
         int
-            A number from 0 (C) to 11 (B), the same for every octave and for enharmonic spellings.
+            A number from 0 (C) to 11 (B), the same for every octave and
+            for enharmonic spellings.
 
         Examples
         --------
-        >>> Note(4, letter=0, accidental=1).pitch_class  # C♯4
+        >>> Note(
+        ...     4, letter=0, accidental=1
+        ... ).pitch_class  # C♯4
         1
-        >>> Note(3, letter=6, accidental=1).pitch_class  # B♯3 sounds like C
+        >>> Note(
+        ...     3, letter=6, accidental=1
+        ... ).pitch_class  # B♯3 sounds like C
         0
         """
         return self.midi % 12
@@ -156,12 +186,14 @@ class Note:
     @property
     def name(self) -> str:
         """
-        Return the pitch-class name with Unicode accidentals, without the octave.
+        Return the pitch-class name with Unicode accidentals, without
+        the octave.
 
         Returns
         -------
         str
-            The letter followed by ♭, ♯, 𝄫 or 𝄪 where the note has an accidental.
+            The letter followed by ♭, ♯, 𝄫 or 𝄪 where the note has an
+            accidental.
 
         Examples
         --------
@@ -222,13 +254,16 @@ class Note:
     @classmethod
     def parse(cls, text: str) -> Note:
         """
-        Parse a note with ASCII or musical accidentals, such as 'F#4', 'B♭3' or 'E𝄫2'.
+        Parse a note with ASCII or musical accidentals, such as 'F#4',
+        'B♭3' or 'E𝄫2'.
 
         Parameters
         ----------
         text : str
-            A letter A-G (either case), then an accidental ('#' for a sharp, 'b' for a flat, 'bb' for a double flat, 'x' for a
-            double sharp, or nothing for a natural), then the octave number.
+            A letter A-G (either case), then an accidental ('#' for a
+            sharp, 'b' for a flat, 'bb' for a double flat, 'x' for a
+            double sharp, or nothing for a natural), then the octave
+            number.
 
         Returns
         -------
@@ -269,27 +304,43 @@ class Note:
         descending: bool = False,
     ) -> Note:
         """
-        Move the note up or down by an interval, keeping the spelling correct.
+        Move the note up or down by an interval, keeping the spelling
+        correct.
 
         Parameters
         ----------
         interval : Interval
-            How far to move. Its number decides the letter and its quality decides the accidental.
+            How far to move. Its number decides the letter and its
+            quality decides the accidental.
         descending : bool, default False
             Move down instead of up. Keyword-only.
 
         Returns
         -------
         Note
-            The new note. For example a major third above C is E, and a minor third above C is E♭, never D♯.
+            The new note. For example a major third above C is E, and a
+            minor third above C is E♭, never D♯.
 
         Examples
         --------
-        >>> str(Note.parse("C4").transpose(Interval.parse("M3")))
+        >>> str(
+        ...     Note.parse("C4").transpose(
+        ...         Interval.parse("M3")
+        ...     )
+        ... )
         'E4'
-        >>> str(Note.parse("C4").transpose(Interval.parse("m3")))
+        >>> str(
+        ...     Note.parse("C4").transpose(
+        ...         Interval.parse("m3")
+        ...     )
+        ... )
         'E♭4'
-        >>> str(Note.parse("C4").transpose(Interval.parse("P5"), descending=True))
+        >>> str(
+        ...     Note.parse("C4").transpose(
+        ...         Interval.parse("P5"),
+        ...         descending=True,
+        ...     )
+        ... )
         'F3'
         """
         steps = interval.number - 1
@@ -309,10 +360,13 @@ class Interval:
     Attributes
     ----------
     number : int
-        The size counting both end notes: 1 is a unison, 3 a third, 8 an octave, 9 a ninth and so on.
+        The size counting both end notes: 1 is a unison, 3 a third, 8 an
+        octave, 9 a ninth and so on.
     quality : str
-        One of 'dd' (doubly diminished), 'd' (diminished), 'm' (minor), 'M' (major), 'P' (perfect), 'A' (augmented) and
-        'AA' (doubly augmented). Keyword-only. Unisons, fourths, fifths and octaves are perfect, the others major or minor.
+        One of 'dd' (doubly diminished), 'd' (diminished), 'm' (minor),
+        'M' (major), 'P' (perfect), 'A' (augmented) and
+        'AA' (doubly augmented). Keyword-only. Unisons, fourths, fifths
+        and octaves are perfect, the others major or minor.
 
     Examples
     --------
@@ -329,12 +383,14 @@ class Interval:
     @property
     def _degree(self) -> int:
         """
-        Return the scale degree the interval spans within one octave, counting from 0.
+        Return the scale degree the interval spans within one octave,
+        counting from 0.
 
         Returns
         -------
         int
-            `(number - 1) % 7`: 0 for a unison or octave, 1 for a second or ninth, up to 6 for a seventh.
+            `(number - 1) % 7`: 0 for a unison or octave, 1 for a second
+            or ninth, up to 6 for a seventh.
 
         Examples
         --------
@@ -351,30 +407,47 @@ class Interval:
         Returns
         -------
         Interval
-            The complementary number and quality. Reduce compounds first, keeping octaves as octaves.
+            The complementary number and quality. Reduce compounds
+            first, keeping octaves as octaves.
 
         Examples
         --------
-        >>> Interval.parse("M3").inversion.short, Interval.parse("A4").inversion.short
+        >>> (
+        ...     Interval.parse("M3").inversion.short,
+        ...     Interval.parse("A4").inversion.short,
+        ... )
         ('m6', 'd5')
-        >>> Interval.parse("m10").inversion.short, Interval.parse("P15").inversion.short
+        >>> (
+        ...     Interval.parse("m10").inversion.short,
+        ...     Interval.parse("P15").inversion.short,
+        ... )
         ('M6', 'P1')
         """
         number = self.number
         if number > 8:
             number = 2 + (number - 2) % 7
-        quality = {"P": "P", "M": "m", "m": "M", "A": "d", "d": "A", "AA": "dd", "dd": "AA"}[self.quality]
+        quality = {
+            "P": "P",
+            "M": "m",
+            "m": "M",
+            "A": "d",
+            "d": "A",
+            "AA": "dd",
+            "dd": "AA",
+        }[self.quality]
         return Interval(9 - number, quality=quality)
 
     @property
     def is_perfect_type(self) -> bool:
         """
-        Report whether this size of interval is "perfect type" (unison, fourth, fifth, octave) rather than major or minor type.
+        Report whether this size of interval is "perfect type" (unison,
+        fourth, fifth, octave) rather than major or minor type.
 
         Returns
         -------
         bool
-            True for unisons, fourths, fifths and octaves (and their compounds), False for seconds, thirds, sixths and sevenths.
+            True for unisons, fourths, fifths and octaves (and their
+            compounds), False for seconds, thirds, sixths and sevenths.
 
         Examples
         --------
@@ -393,7 +466,8 @@ class Interval:
         Returns
         -------
         int
-            The distance in half steps, including whole octaves for compound intervals.
+            The distance in half steps, including whole octaves for
+            compound intervals.
 
         Examples
         --------
@@ -401,7 +475,10 @@ class Interval:
         4
         >>> Interval.parse("d5").semitones
         6
-        >>> Interval.parse("m9").semitones  # a minor ninth is an octave plus a minor second
+        >>> Interval.parse(
+        ...     "m9"
+        ... # a minor ninth is an octave plus a minor second
+        ... ).semitones
         13
         """
         base = _MAJOR_BASE[self._degree] + 12 * ((self.number - 1) // 7)
@@ -428,7 +505,8 @@ class Interval:
     @property
     def short(self) -> str:
         """
-        Return the interval in short form: its quality followed by its number.
+        Return the interval in short form: its quality followed by its
+        number.
 
         Returns
         -------
@@ -478,13 +556,18 @@ class Interval:
         Returns
         -------
         Interval
-            The spelled interval, such as a major third (C4 up to E4) or an augmented fourth (C4 up to F♯4).
+            The spelled interval, such as a major third (C4 up to E4) or
+            an augmented fourth (C4 up to F♯4).
 
         Examples
         --------
-        >>> Interval.between(Note.parse("C4"), high=Note.parse("E4"))
+        >>> Interval.between(
+        ...     Note.parse("C4"), high=Note.parse("E4")
+        ... )
         Interval(number=3, quality='M')
-        >>> Interval.between(Note.parse("C4"), high=Note.parse("F#4")).short
+        >>> Interval.between(
+        ...     Note.parse("C4"), high=Note.parse("F#4")
+        ... ).short
         'A4'
         """
         number = high.diatonic - low.diatonic + 1
@@ -513,12 +596,14 @@ class Interval:
     @classmethod
     def parse(cls, text: str) -> Interval:
         """
-        Parse an interval written in short form, such as 'M3', 'P5' or 'd7'.
+        Parse an interval written in short form, such as 'M3', 'P5' or
+        'd7'.
 
         Parameters
         ----------
         text : str
-            The quality (one of dd, d, m, M, P, A, AA) followed by the number.
+            The quality (one of dd, d, m, M, P, A, AA) followed by the
+            number.
 
         Returns
         -------
@@ -547,7 +632,8 @@ QUALITY_NAMES = {
 }
 
 
-# Key signatures: count > 0 is that many sharps, count < 0 that many flats.
+# Key signatures: count > 0 is that many sharps, count < 0 that many
+# flats.
 SHARP_ORDER = (
     3,
     0,
@@ -598,12 +684,14 @@ def key_accidental(
     letter : int
         An index into `LETTERS` (0 is C, 6 is B).
     count : int
-        The key signature: that many sharps if positive, that many flats if negative. Keyword-only.
+        The key signature: that many sharps if positive, that many flats
+        if negative. Keyword-only.
 
     Returns
     -------
     int
-        1 if the signature sharpens the letter, -1 if it flattens it, 0 if it leaves it natural.
+        1 if the signature sharpens the letter, -1 if it flattens it, 0
+        if it leaves it natural.
 
     Examples
     --------

@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.response_times/
 ---
 {% raw %}
-Profile speed-grading settings and the rolling distribution for each exercise.
+Profile speed-grading settings and the rolling distribution for each
+exercise.
 
 ## ResponseTimeDialog
 
@@ -20,9 +21,11 @@ ResponseTimeDialog(
 
 Bases: `QDialog`
 
-Inspect recent correct first answers and adjust the profile's automatic grading bands.
+Inspect recent correct first answers and adjust the profile's
+automatic grading bands.
 
 **Constructor**
 
-Open with the active profile’s saved settings and the selected exercise’s recent timings.
+Open with the active profile’s saved settings and the selected
+exercise’s recent timings.
 {% endraw %}

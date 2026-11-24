@@ -1,17 +1,30 @@
 """
-Numbers and series for the statistics screen, worked out from the answers in the database. Pure Python, no Qt.
+Numbers and series for the statistics screen, worked out from the
+answers in the database. Pure Python, no Qt.
 
-A "question" here is one showing of a question, scored by its first answer: it is right if that answer was right.
-Later attempts at the same showing show up as extra attempts per question, not as extra questions.
+A "question" here is one showing of a question, scored by its first
+answer: it is right if that answer was right.
+Later attempts at the same showing show up as extra attempts per
+question, not as extra questions.
 
 Examples
 --------
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for i, ok in enumerate((True, True, False)):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key=str(i), attempt_no=1, answer="C", correct=ok,
-...                    duration_ms=2000, answered_at=1000.0 + i)
->>> stats = collect(db, profile_ids=[ada.id], now=1010.0)
+...     db.add_attempt(
+...         ada.id,
+...         exercise="NoteNames",
+...         item_key=str(i),
+...         attempt_no=1,
+...         answer="C",
+...         correct=ok,
+...         duration_ms=2000,
+...         answered_at=1000.0 + i,
+...     )
+>>> stats = collect(
+...     db, profile_ids=[ada.id], now=1010.0
+... )
 >>> stats.questions, stats.first_right
 (3, 2)
 >>> # noinspection PyTypeChecker
@@ -42,13 +55,16 @@ from alto.notation_excerpts import excerpts
 from alto.theory.pitch import Note
 from alto.theory.scales import format_key_signature
 
-IDLE_CAP_S = 120.0  # one answer counts for at most this long toward practice time, so leaving the app open does not inflate it
+# one answer counts for at most this long toward practice time, so
+# leaving the app open does not inflate it
+IDLE_CAP_S = 120.0
 
 
 @dataclass
 class Bucket:
     """
-    The answers given in one period (an hour, day, week or month), for the charts.
+    The answers given in one period (an hour, day, week or month), for
+    the charts.
 
     Attributes
     ----------
@@ -65,7 +81,13 @@ class Bucket:
 
     Examples
     --------
-    >>> bucket = Bucket(datetime(2026, 1, 5), label="Jan 5", questions=2, first_right=1, times=[2.0, 4.0])
+    >>> bucket = Bucket(
+    ...     datetime(2026, 1, 5),
+    ...     label="Jan 5",
+    ...     questions=2,
+    ...     first_right=1,
+    ...     times=[2.0, 4.0],
+    ... )
     >>> bucket.accuracy, bucket.median_seconds
     (50.0, 3.0)
     """
@@ -75,12 +97,15 @@ class Bucket:
     label: str
     questions: int = 0
     first_right: int = 0
-    times: list[float] = field(default_factory=list)  # seconds to the first answer
+    times: list[float] = field(
+        default_factory=list,
+    )  # seconds to the first answer
 
     @property
     def accuracy(self) -> float | None:
         """
-        Return the percentage of questions in the period that were right on the first try.
+        Return the percentage of questions in the period that were right
+        on the first try.
 
         Returns
         -------
@@ -89,12 +114,23 @@ class Bucket:
 
         Examples
         --------
-        >>> Bucket(datetime(2026, 1, 5), label="Jan 5", questions=4, first_right=3).accuracy
+        >>> Bucket(
+        ...     datetime(2026, 1, 5),
+        ...     label="Jan 5",
+        ...     questions=4,
+        ...     first_right=3,
+        ... ).accuracy
         75.0
-        >>> Bucket(datetime(2026, 1, 5), label="Jan 5").accuracy is None
+        >>> Bucket(
+        ...     datetime(2026, 1, 5), label="Jan 5"
+        ... ).accuracy is None
         True
         """
-        return 100.0 * self.first_right / self.questions if self.questions else None
+        return (
+            100.0 * self.first_right / self.questions
+            if self.questions
+            else None
+        )
 
     @property
     def median_seconds(self) -> float | None:
@@ -104,11 +140,16 @@ class Bucket:
         Returns
         -------
         float or None
-            The median, in seconds, or None if no questions were answered.
+            The median, in seconds, or None if no questions were
+            answered.
 
         Examples
         --------
-        >>> Bucket(datetime(2026, 1, 5), label="Jan 5", times=[1.0, 2.0, 9.0]).median_seconds
+        >>> Bucket(
+        ...     datetime(2026, 1, 5),
+        ...     label="Jan 5",
+        ...     times=[1.0, 2.0, 9.0],
+        ... ).median_seconds
         2.0
         """
         return statistics.median(self.times) if self.times else None
@@ -132,7 +173,12 @@ class ExerciseStats:
 
     Examples
     --------
-    >>> ExerciseStats("NoteNames", questions=40, accuracy=87.5, median_seconds=3.2).accuracy
+    >>> ExerciseStats(
+    ...     "NoteNames",
+    ...     questions=40,
+    ...     accuracy=87.5,
+    ...     median_seconds=3.2,
+    ... ).accuracy
     87.5
     """
 
@@ -146,7 +192,8 @@ class ExerciseStats:
 @dataclass
 class HardQuestion:
     """
-    A question that needs practice, for the list on the statistics screen.
+    A question that needs practice, for the list on the statistics
+    screen.
 
     Attributes
     ----------
@@ -161,13 +208,20 @@ class HardQuestion:
     wrong : int
         How many wrong answers it has had. Keyword-only.
     item_key : str
-        The stored identity used to look up this question's practice history. Keyword-only.
+        The stored identity used to look up this question's practice
+        history. Keyword-only.
     payload : str or None
         The saved question as JSON for the preview. Keyword-only.
 
     Examples
     --------
-    >>> HardQuestion("NoteNames", text="Treble: G4", strain=4.5, seen=6, wrong=5).wrong
+    >>> HardQuestion(
+    ...     "NoteNames",
+    ...     text="Treble: G4",
+    ...     strain=4.5,
+    ...     seen=6,
+    ...     wrong=5,
+    ... ).wrong
     5
     """
 
@@ -193,19 +247,23 @@ class Stats:
     first_right : int, default 0
         How many were right on the first answer. Keyword-only.
     attempts : int, default 0
-        How many answers were given in all, including repeats. Keyword-only.
+        How many answers were given in all, including repeats.
+        Keyword-only.
     median_seconds : float or None
         The typical time to a first answer. Keyword-only.
     practice_seconds : float, default 0.0
-        Time spent practicing, with a cap on each answer so leaving the app open does not inflate it. Keyword-only.
+        Time spent practicing, with a cap on each answer so leaving the
+        app open does not inflate it. Keyword-only.
     days_practiced : int, default 0
         On how many different days there were answers. Keyword-only.
     granularity : str, default "day"
-        The size of the chart periods: "hour", "day", "week" or "month". Keyword-only.
+        The size of the chart periods: "hour", "day", "week" or "month".
+        Keyword-only.
     buckets : list of Bucket
         One per period, oldest first. Keyword-only.
     volume_buckets : list of Bucket
-        Period counts for the questions answered chart. These share the trend buckets when their periods match. Keyword-only.
+        Period counts for the questions answered chart. These share the
+        trend buckets when their periods match. Keyword-only.
     by_exercise : list of ExerciseStats
         One per exercise practiced, sorted by name. Keyword-only.
     hardest : list of HardQuestion
@@ -215,7 +273,9 @@ class Stats:
     --------
     >>> Stats().accuracy is None  # nothing answered yet
     True
-    >>> Stats(4, first_right=3, attempts=6).attempts_per_question
+    >>> Stats(
+    ...     4, first_right=3, attempts=6
+    ... ).attempts_per_question
     1.5
     """
 
@@ -235,7 +295,8 @@ class Stats:
     @property
     def accuracy(self) -> float | None:
         """
-        Return the percentage of questions that were right on the first try.
+        Return the percentage of questions that were right on the first
+        try.
 
         Returns
         -------
@@ -247,7 +308,11 @@ class Stats:
         >>> Stats(4, first_right=3).accuracy
         75.0
         """
-        return 100.0 * self.first_right / self.questions if self.questions else None
+        return (
+            100.0 * self.first_right / self.questions
+            if self.questions
+            else None
+        )
 
     @property
     def attempts_per_question(self) -> float | None:
@@ -257,7 +322,8 @@ class Stats:
         Returns
         -------
         float or None
-            1.0 if every question was answered right on the first try; None if no questions were answered.
+            1.0 if every question was answered right on the first try;
+            None if no questions were answered.
 
         Examples
         --------
@@ -279,7 +345,8 @@ def _granularity(span_days: float) -> str:
     Returns
     -------
     str
-        "hour" up to a day and a half, "day" up to 45 days, "week" up to 200 days, otherwise "month".
+        "hour" up to a day and a half, "day" up to 45 days, "week" up to
+        200 days, otherwise "month".
 
     Examples
     --------
@@ -308,7 +375,8 @@ def _floor(
     t : datetime
         The time.
     gran : str
-        "hour", "day", "week" (starting on Monday) or "month". Keyword-only.
+        "hour", "day", "week" (starting on Monday) or "month".
+        Keyword-only.
 
     Returns
     -------
@@ -317,11 +385,20 @@ def _floor(
 
     Examples
     --------
-    >>> _floor(datetime(2026, 11, 13, 15, 42), gran="day")
+    >>> _floor(
+    ...     datetime(2026, 11, 13, 15, 42),
+    ...     gran="day",
+    ... )
     datetime.datetime(2026, 11, 13, 0, 0)
-    >>> _floor(datetime(2026, 11, 13, 15, 42), gran="week")  # a Friday: back to Monday
+    >>> _floor(
+    ...     datetime(2026, 11, 13, 15, 42),
+    ...     gran="week",
+    ... )  # a Friday: back to Monday
     datetime.datetime(2026, 11, 9, 0, 0)
-    >>> _floor(datetime(2026, 11, 13, 15, 42), gran="month")
+    >>> _floor(
+    ...     datetime(2026, 11, 13, 15, 42),
+    ...     gran="month",
+    ... )
     datetime.datetime(2026, 11, 1, 0, 0)
     """
     if gran == "hour":
@@ -345,7 +422,8 @@ def _next(
     gran: str,
 ) -> datetime:
     """
-    Return the start of the period after the one starting at a given time.
+    Return the start of the period after the one starting at a given
+    time.
 
     Parameters
     ----------
@@ -393,11 +471,14 @@ def _label(
     Returns
     -------
     str
-        The time for an hour, the month and year for a month, otherwise the month and day.
+        The time for an hour, the month and year for a month, otherwise
+        the month and day.
 
     Examples
     --------
-    >>> _label(datetime(2026, 11, 13, 15), gran="hour")
+    >>> _label(
+    ...     datetime(2026, 11, 13, 15), gran="hour"
+    ... )
     '15:00'
     >>> _label(datetime(2026, 11, 13), gran="day")
     'Nov 13'
@@ -417,14 +498,16 @@ def period_end(
     granularity: str,
 ) -> datetime:
     """
-    Return the moment a chart period ends, which is when the next one begins.
+    Return the moment a chart period ends, which is when the next one
+    begins.
 
     Parameters
     ----------
     start : datetime
         The start of the period, as `Bucket.start` gives it.
     granularity : str
-        "hour", "day", "week" or "month", as `Stats.granularity` says. Keyword-only.
+        "hour", "day", "week" or "month", as `Stats.granularity` says.
+        Keyword-only.
 
     Returns
     -------
@@ -433,9 +516,14 @@ def period_end(
 
     Examples
     --------
-    >>> period_end(datetime(2026, 1, 5), granularity="week")
+    >>> period_end(
+    ...     datetime(2026, 1, 5), granularity="week"
+    ... )
     datetime.datetime(2026, 1, 12, 0, 0)
-    >>> period_end(datetime(2026, 12, 1), granularity="month")
+    >>> period_end(
+    ...     datetime(2026, 12, 1),
+    ...     granularity="month",
+    ... )
     datetime.datetime(2027, 1, 1, 0, 0)
     """
     return _next(start, gran=granularity)
@@ -443,7 +531,8 @@ def period_end(
 
 def describe(question: Question) -> str:
     """
-    Return a short line saying what a question was, for the list of questions that need practice.
+    Return a short line saying what a question was, for the list of
+    questions that need practice.
 
     Parameters
     ----------
@@ -453,12 +542,19 @@ def describe(question: Question) -> str:
     Returns
     -------
     str
-        What was shown (notes, a key signature or a keyboard key) and, where that does not already say it, the answer.
+        What was shown (notes, a key signature or a keyboard key) and,
+        where that does not already say it, the answer.
 
     Examples
     --------
     >>> from alto.exercises.base import Question
-    >>> describe(Question("What type of chord is this?", choices=["major", "minor"], answer="minor"))
+    >>> describe(
+    ...     Question(
+    ...         "What type of chord is this?",
+    ...         choices=["major", "minor"],
+    ...         answer="minor",
+    ...     )
+    ... )
     'What type of chord is this? → minor'
     """
 
@@ -480,7 +576,14 @@ def describe(question: Question) -> str:
         --------
         >>> from alto.exercises.base import Question
         >>> from alto.theory.pitch import Note
-        >>> describe(Question("", choices=["F♯", "G♭"], answer="F♯", keyboard=Note.parse("F#4")))  # names the key with `spelled`
+        >>> describe(
+        ...     Question(
+        ...         "",
+        ...         choices=["F♯", "G♭"],
+        ...         answer="F♯",
+        ...         keyboard=Note.parse("F#4"),
+        ...     )
+        ... )  # names the key with `spelled`
         'Key F♯4'
         """
         return f"{n.name}{n.octave}"
@@ -489,23 +592,44 @@ def describe(question: Question) -> str:
     if question.notation_excerpt:
         what = excerpts()[question.notation_excerpt].credit
     elif question.show_staff:
-        what = f"{clef}: {format_key_signature(question.key)}. {question.prompt}"
+        what = (
+            f"{clef}: {format_key_signature(question.key)}. {question.prompt}"
+        )
     elif question.prompt:
         what = question.prompt
     elif question.keyboard_notes:
-        what = "Keys " + " – ".join(spelled(note) for note in question.keyboard_notes)
+        what = "Keys " + " – ".join(
+            spelled(note) for note in question.keyboard_notes
+        )
     elif question.keyboard:
         what = f"Key {spelled(question.keyboard)}"
         if question.key:
-            what += f" in {abs(question.key)} {'sharps' if question.key > 0 else 'flats'}"
+            what += (
+                " in "
+                f"{abs(question.key)}"
+                " "
+                f"{('sharps' if question.key > 0 else 'flats')}"
+            )
     elif question.staff:
-        notes = " – ".join(" ".join(spelled(n) for n in col) for col in question.staff)
+        notes = " – ".join(
+            " ".join(spelled(n) for n in col) for col in question.staff
+        )
         what = f"{clef}: {notes}"
         if question.key:
-            what += f" ({abs(question.key)} {'sharps' if question.key > 0 else 'flats'})"
+            what += (
+                " ("
+                f"{abs(question.key)}"
+                " "
+                f"{('sharps' if question.key > 0 else 'flats')}"
+                ")"
+            )
     else:
         what = question.answer
-    return what if question.construct is not None or question.answer in what else f"{what} → {question.answer}"
+    return (
+        what
+        if question.construct is not None or question.answer in what
+        else f"{what} → {question.answer}"
+    )
 
 
 def daily_counts(
@@ -517,10 +641,13 @@ def daily_counts(
     now: float | None = None,
 ) -> dict[date, int]:
     """
-    Return how many questions were answered on each day, for the review heatmap.
+    Return how many questions were answered on each day, for the review
+    heatmap.
 
-    Looks back over the last `weeks` calendar weeks up to today, in local time. Days with no answers are left out. It
-    counts questions (first attempts), not attempts, like everything else here.
+    Looks back over the last `weeks` calendar weeks up to today, in
+    local time. Days with no answers are left out. It
+    counts questions (first attempts), not attempts, like everything
+    else here.
 
     Parameters
     ----------
@@ -529,11 +656,14 @@ def daily_counts(
     profile_ids : list of int or None
         The profiles to include; every profile if None. Keyword-only.
     exercise : str or None, default None
-        Only this exercise (its class name); every exercise if None. Keyword-only.
+        Only this exercise (its class name); every exercise if None.
+        Keyword-only.
     weeks : int, default 53
-        How many calendar weeks to look back, counting this one. Keyword-only.
+        How many calendar weeks to look back, counting this one.
+        Keyword-only.
     now : float or None, default None
-        The current time as a timestamp; the clock is used if None. Keyword-only.
+        The current time as a timestamp; the clock is used if None.
+        Keyword-only.
 
     Returns
     -------
@@ -544,24 +674,50 @@ def daily_counts(
     --------
     >>> database = Database()
     >>> ada = database.add_profile("Ada")
-    >>> noon = datetime(2026, 11, 13, 12).timestamp()
+    >>> noon = datetime(
+    ...     2026, 11, 13, 12
+    ... ).timestamp()
     >>> for i in range(3):
-    ...     database.add_attempt(ada.id, exercise="NoteNames", item_key=str(i), attempt_no=1, answer="C", correct=True,
-    ...                    duration_ms=1000, answered_at=noon + i)
-    >>> daily_counts(database, profile_ids=[ada.id], now=noon + 60)
+    ...     database.add_attempt(
+    ...         ada.id,
+    ...         exercise="NoteNames",
+    ...         item_key=str(i),
+    ...         attempt_no=1,
+    ...         answer="C",
+    ...         correct=True,
+    ...         duration_ms=1000,
+    ...         answered_at=noon + i,
+    ...     )
+    >>> daily_counts(
+    ...     database,
+    ...     profile_ids=[ada.id],
+    ...     now=noon + 60,
+    ... )
     {datetime.date(2026, 11, 13): 3}
     """
     now = time.time() if now is None else now
     today = datetime.fromtimestamp(now).date()
-    first = today - timedelta(days=today.weekday() + 7 * (weeks - 1))  # the Monday that starts the first week shown
+    first = today - timedelta(
+        days=today.weekday() + 7 * (weeks - 1),
+    )  # the Monday that starts the first week shown
     since = datetime.combine(first, datetime.min.time()).timestamp()
-    per_day = db.first_attempts_per_day(profile_ids, exercise=exercise, since=since)  # counted by the database
+    per_day = db.first_attempts_per_day(
+        profile_ids,
+        exercise=exercise,
+        since=since,
+    )  # counted by the database
     return {date.fromisoformat(day): count for day, count in per_day.items()}
 
 
-def _period_buckets(start: datetime, *, end: datetime, gran: str) -> dict[datetime, Bucket]:
+def _period_buckets(
+    start: datetime,
+    *,
+    end: datetime,
+    gran: str,
+) -> dict[datetime, Bucket]:
     """
-    Build consecutive chart periods, including periods without an answer.
+    Build consecutive chart periods, including periods without an
+    answer.
 
     Parameters
     ----------
@@ -579,7 +735,13 @@ def _period_buckets(start: datetime, *, end: datetime, gran: str) -> dict[dateti
 
     Examples
     --------
-    >>> len(_period_buckets(datetime(2026, 1, 1), end=datetime(2026, 1, 3), gran="day"))
+    >>> len(
+    ...     _period_buckets(
+    ...         datetime(2026, 1, 1),
+    ...         end=datetime(2026, 1, 3),
+    ...         gran="day",
+    ...     )
+    ... )
     3
     """
     cursor = _floor(start, gran=gran)
@@ -610,43 +772,74 @@ def collect(
     profile_ids : list of int or None
         The profiles to include; every profile if None. Keyword-only.
     exercise : str or None, default None
-        Only this exercise (its class name); every exercise if None. Keyword-only.
+        Only this exercise (its class name); every exercise if None.
+        Keyword-only.
     since : float or None, default None
-        Only answers from this timestamp on; the whole history if None. Keyword-only.
+        Only answers from this timestamp on; the whole history if None.
+        Keyword-only.
     now : float or None, default None
-        The current time as a timestamp; the clock is used if None. Keyword-only.
+        The current time as a timestamp; the clock is used if None.
+        Keyword-only.
     hardest : int, default 8
         How many questions to list as needing practice. Keyword-only.
     volume_granularity : str or None, default None
-        Group question counts by hour, day, week or month. None follows the timeframe. Keyword-only.
+        Group question counts by hour, day, week or month. None follows
+        the timeframe. Keyword-only.
 
     Returns
     -------
     Stats
-        The totals, the per-period buckets, the per-exercise figures and the hardest questions.
+        The totals, the per-period buckets, the per-exercise figures and
+        the hardest questions.
 
     Examples
     --------
     >>> database = Database()
     >>> ada = database.add_profile("Ada")
-    >>> database.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-    ...                duration_ms=4000, answered_at=1000.0)
-    >>> stats = collect(database, profile_ids=[ada.id], now=1060.0)
-    >>> stats.questions, stats.median_seconds, stats.practice_seconds
+    >>> database.add_attempt(
+    ...     ada.id,
+    ...     exercise="NoteNames",
+    ...     item_key="k",
+    ...     attempt_no=1,
+    ...     answer="C",
+    ...     correct=True,
+    ...     duration_ms=4000,
+    ...     answered_at=1000.0,
+    ... )
+    >>> stats = collect(
+    ...     database,
+    ...     profile_ids=[ada.id],
+    ...     now=1060.0,
+    ... )
+    >>> (
+    ...     stats.questions,
+    ...     stats.median_seconds,
+    ...     stats.practice_seconds,
+    ... )
     (1, 4.0, 4.0)
-    >>> collect(database, profile_ids=[999], now=1060.0).questions  # nobody has answered anything
+    >>> collect(
+    ...     database, profile_ids=[999], now=1060.0
+    ... ).questions  # nobody has answered anything
     0
     """
     now = time.time() if now is None else now
     rows = db.attempts_in(profile_ids, exercise=exercise, since=since)
     out = Stats(attempts=len(rows))
     if rows:
-        start = datetime.fromtimestamp(since if since is not None else rows[0]["answered_at"])
-        out.granularity = gran = _granularity((now - start.timestamp()) / 86400)
+        start = datetime.fromtimestamp(
+            since if since is not None else rows[0]["answered_at"],
+        )
+        out.granularity = gran = _granularity(
+            (now - start.timestamp()) / 86400,
+        )
         end = datetime.fromtimestamp(now)
         buckets = _period_buckets(start, end=end, gran=gran)
         volume_period = volume_granularity or gran
-        volume = _period_buckets(start, end=end, gran=volume_period) if volume_period != gran else {}
+        volume = (
+            _period_buckets(start, end=end, gran=volume_period)
+            if volume_period != gran
+            else {}
+        )
         per_exercise: dict[str, list[tuple[bool, float]]] = {}
         times: list[float] = []
         days = set()

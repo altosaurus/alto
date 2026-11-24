@@ -1,9 +1,14 @@
 """
-Mixing colors. The interface blends palette colors to get its soft tints and highlights.
+Mixing colors. The interface blends palette colors to get its soft tints
+and highlights.
 
 Examples
 --------
->>> blend_name(QColor("#000000"), b=QColor("#ffffff"), t=0.5)
+>>> blend_name(
+...     QColor("#000000"),
+...     b=QColor("#ffffff"),
+...     t=0.5,
+... )
 '#808080'
 """
 
@@ -21,7 +26,8 @@ def blend(
     t: float,
 ) -> QColor:
     """
-    Return the color a given fraction of the way from one color to another.
+    Return the color a given fraction of the way from one color to
+    another.
 
     Parameters
     ----------
@@ -30,7 +36,8 @@ def blend(
     b : QColor
         The color at 1. Keyword-only.
     t : float
-        How far from `a` to `b`: 0 is `a`, 1 is `b`, 0.5 is halfway. Keyword-only.
+        How far from `a` to `b`: 0 is `a`, 1 is `b`, 0.5 is halfway.
+        Keyword-only.
 
     Returns
     -------
@@ -39,9 +46,17 @@ def blend(
 
     Examples
     --------
-    >>> blend(QColor("#000000"), b=QColor("#ffffff"), t=0.0).name()
+    >>> blend(
+    ...     QColor("#000000"),
+    ...     b=QColor("#ffffff"),
+    ...     t=0.0,
+    ... ).name()
     '#000000'
-    >>> blend(QColor("#ff0000"), b=QColor("#0000ff"), t=1.0).name()
+    >>> blend(
+    ...     QColor("#ff0000"),
+    ...     b=QColor("#0000ff"),
+    ...     t=1.0,
+    ... ).name()
     '#0000ff'
     """
     return QColor.fromRgbF(
@@ -76,7 +91,11 @@ def blend_name(
 
     Examples
     --------
-    >>> blend_name(QColor("#000000"), b=QColor("#ffffff"), t=1.0)
+    >>> blend_name(
+    ...     QColor("#000000"),
+    ...     b=QColor("#ffffff"),
+    ...     t=1.0,
+    ... )
     '#ffffff'
     """
     return blend(a, b=b, t=t).name()

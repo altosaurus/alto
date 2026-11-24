@@ -1,9 +1,13 @@
 """
-Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others).
+Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma,
+MuseJazz and others).
 
-A SMuFL font has the parts of a note rather than whole notes: the head, the flag, and the clef and accidental glyphs,
-all measured in staff spaces (four to the em). The stem is a plain rectangle that the code draws, placed using the stem
-anchors the font publishes for each head. Heights are measured upward, so they are flipped on screen.
+A SMuFL font has the parts of a note rather than whole notes: the head,
+the flag, and the clef and accidental glyphs,
+all measured in staff spaces (four to the em). The stem is a plain
+rectangle that the code draws, placed using the stem
+anchors the font publishes for each head. Heights are measured upward,
+so they are flipped on screen.
 
 Examples
 --------
@@ -46,7 +50,9 @@ _FILES = {
     "finalemaestro": "FinaleMaestro.otf",
     "finalebroadway": "FinaleBroadway.otf",
 }
-_PX = 100.0  # glyph outlines are taken at 100 px to the em, so one staff space is 25 units
+# glyph outlines are taken at 100 px to the em, so one staff space is 25
+# units
+_PX = 100.0
 _SPACE = _PX / 4
 
 CODEPOINTS = {
@@ -70,7 +76,11 @@ CODEPOINTS = {
     "accidentalDoubleSharp": 0xE263,
     "accidentalDoubleFlat": 0xE264,
 }
-HEADS = {"breve": "noteheadDoubleWhole", "whole": "noteheadWhole", "half": "noteheadHalf"}
+HEADS = {
+    "breve": "noteheadDoubleWhole",
+    "whole": "noteheadWhole",
+    "half": "noteheadHalf",
+}
 FLAGS = {"eighth": "8th", "sixteenth": "16th", "thirty_second": "32nd"}
 ACCIDENTALS = {
     -2: "accidentalDoubleFlat",
@@ -93,12 +103,14 @@ _family: dict[str, str] = {}
 @cache
 def _all_metrics() -> dict:
     """
-    Return the measurements of every font, read once from engraving.json.
+    Return the measurements of every font, read once from
+    engraving.json.
 
     Returns
     -------
     dict
-        Font key to its measurements (stem and line thickness, glyph anchors, family name).
+        Font key to its measurements (stem and line thickness, glyph
+        anchors, family name).
 
     Examples
     --------
@@ -120,7 +132,8 @@ def _metrics(font: str) -> dict:
     Returns
     -------
     dict
-        The font's stem and line thickness, glyph anchors and family name.
+        The font's stem and line thickness, glyph anchors and family
+        name.
 
     Examples
     --------
@@ -132,7 +145,8 @@ def _metrics(font: str) -> dict:
 
 def _family_of(font: str) -> str:
     """
-    Return the font's family name, registering the file with Qt the first time.
+    Return the font's family name, registering the file with Qt the
+    first time.
 
     Parameters
     ----------
@@ -151,7 +165,9 @@ def _family_of(font: str) -> str:
     """
     if font not in _family:
         fid = QFontDatabase.addApplicationFont(str(_DIR / _FILES[font]))
-        families = QFontDatabase.applicationFontFamilies(fid) if fid >= 0 else []
+        families = (
+            QFontDatabase.applicationFontFamilies(fid) if fid >= 0 else []
+        )
         _family[font] = families[0] if families else _metrics(font)["family"]
     return _family[font]
 
@@ -163,14 +179,16 @@ def _outline(
     name: str,
 ) -> QPainterPath:
     """
-    Return a glyph as a path in font units (100 per em), with its origin at (0, 0) and y pointing down.
+    Return a glyph as a path in font units (100 per em), with its origin
+    at (0, 0) and y pointing down.
 
     Parameters
     ----------
     font : str
         A key of `_FILES`.
     name : str
-        A key of `CODEPOINTS`, such as "gClef" or "noteheadBlack". Keyword-only.
+        A key of `CODEPOINTS`, such as "gClef" or "noteheadBlack".
+        Keyword-only.
 
     Returns
     -------
@@ -212,16 +230,24 @@ def _ink(
     Returns
     -------
     tuple of (float, float, float, float)
-        Left, bottom, right and top, in staff spaces measured up from the glyph's origin.
+        Left, bottom, right and top, in staff spaces measured up from
+        the glyph's origin.
 
     Examples
     --------
-    >>> left, bottom, right, top = _ink("bravura", name="noteheadBlack")
+    >>> left, bottom, right, top = _ink(
+    ...     "bravura", name="noteheadBlack"
+    ... )
     >>> right > left and top > bottom
     True
     """
     r = _outline(font, name=name).boundingRect()
-    return r.left() / _SPACE, -r.bottom() / _SPACE, r.right() / _SPACE, -r.top() / _SPACE
+    return (
+        r.left() / _SPACE,
+        -r.bottom() / _SPACE,
+        r.right() / _SPACE,
+        -r.top() / _SPACE,
+    )
 
 
 def _anchor(
@@ -233,7 +259,8 @@ def _anchor(
     """
     Return a stem anchor from the font's metadata.
 
-    If the font does not give one, the place it would normally sit is used.
+    If the font does not give one, the place it would normally sit is
+    used.
 
     Parameters
     ----------
@@ -242,7 +269,8 @@ def _anchor(
     name : str
         The glyph, a key of `CODEPOINTS`. Keyword-only.
     anchor : str
-        The anchor's name, such as "stemUpSE" or "stemDownNW". Keyword-only.
+        The anchor's name, such as "stemUpSE" or "stemDownNW".
+        Keyword-only.
 
     Returns
     -------
@@ -251,14 +279,23 @@ def _anchor(
 
     Examples
     --------
-    >>> len(_anchor("bravura", name="noteheadBlack", anchor="stemUpSE"))
+    >>> len(
+    ...     _anchor(
+    ...         "bravura",
+    ...         name="noteheadBlack",
+    ...         anchor="stemUpSE",
+    ...     )
+    ... )
     2
     """
     given = _metrics(font)["anchors"].get(name, {}).get(anchor)
     if given:
         return given[0], given[1]
     left, _, right, _ = _ink(font, name=name)
-    return {"stemUpSE": (right, 0.17), "stemDownNW": (left, -0.17)}.get(anchor, (0.0, 0.0))
+    return {"stemUpSE": (right, 0.17), "stemDownNW": (left, -0.17)}.get(
+        anchor,
+        (0.0, 0.0),
+    )
 
 
 def _place(
@@ -281,7 +318,8 @@ def _place(
     y : float
         Where the glyph's origin goes, in pixels. Keyword-only.
     gap : float
-        The distance between staff lines in pixels, which sets the size. Keyword-only.
+        The distance between staff lines in pixels, which sets the size.
+        Keyword-only.
     scale : float, default 1.0
         A further scale factor. Keyword-only.
 
@@ -292,8 +330,14 @@ def _place(
 
     Examples
     --------
-    >>> head = _outline("bravura", name="noteheadBlack")
-    >>> round(_place(head, x=50, y=50, gap=10).boundingRect().height())  # a head is about one staff space tall
+    >>> head = _outline(
+    ...     "bravura", name="noteheadBlack"
+    ... )
+    >>> round(
+    ...     _place(head, x=50, y=50, gap=10)
+    ...     .boundingRect()
+    ...     .height()
+    ... )  # a head is about one staff space tall
     10
     """
     t = QTransform()
@@ -305,7 +349,8 @@ def _place(
 @cache
 def notation_glyph(font: str, *, codepoint: int) -> QPainterPath:
     """
-    Read a score marking from a bundled font at four staff spaces per em.
+    Read a score marking from a bundled font at four staff spaces per
+    em.
 
     Parameters
     ----------
@@ -317,11 +362,14 @@ def notation_glyph(font: str, *, codepoint: int) -> QPainterPath:
     Returns
     -------
     QPainterPath
-        Outline at 100 pixels per em. Bravura supplies markings missing in the selected font.
+        Outline at 100 pixels per em. Bravura supplies markings missing
+        in the selected font.
 
     Examples
     --------
-    >>> notation_glyph("bravura", codepoint=0xE260).isEmpty()
+    >>> notation_glyph(
+    ...     "bravura", codepoint=0xE260
+    ... ).isEmpty()
     False
     """
     raw = QRawFont(str(_DIR / _FILES[font]), _PX)
@@ -387,7 +435,7 @@ def ledger_width(
     return max(_metrics(font)["ledger"] * gap, 1.2)
 
 
-def _fill(
+def fill_path(
     p: QPainter,
     *,
     path: QPainterPath,
@@ -408,12 +456,18 @@ def _fill(
     Examples
     --------
     >>> from PySide6.QtGui import QImage
-    >>> image = QImage(20, 20, QImage.Format.Format_ARGB32)
+    >>> image = QImage(
+    ...     20, 20, QImage.Format.Format_ARGB32
+    ... )
     >>> image.fill(QColor("white"))
     >>> painter = QPainter(image)
     >>> square = QPainterPath()
     >>> square.addRect(QRectF(5, 5, 10, 10))
-    >>> _fill(painter, path=square, color=QColor("black"))
+    >>> fill_path(
+    ...     painter,
+    ...     path=square,
+    ...     color=QColor("black"),
+    ... )
     >>> painter.end()
     True
     >>> image.pixelColor(10, 10).lightness() < 128
@@ -441,7 +495,8 @@ def draw_note(
     """
     Draw a note with its head centered on a point.
 
-    The head, then a stem and (for the short values) a flag, placed on the font's anchors.
+    The head, then a stem and (for the short values) a flag, placed on
+    the font's anchors.
 
     Parameters
     ----------
@@ -450,7 +505,8 @@ def draw_note(
     font : str
         A key of `_FILES`. Keyword-only.
     value : str
-        "breve", "whole", "half", "quarter", "eighth", "sixteenth" or "thirty_second". Keyword-only.
+        "breve", "whole", "half", "quarter", "eighth", "sixteenth" or
+        "thirty_second". Keyword-only.
     x : float
         The head's center, in pixels. Keyword-only.
     y : float
@@ -467,10 +523,20 @@ def draw_note(
     Examples
     --------
     >>> from PySide6.QtGui import QImage
-    >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
+    >>> image = QImage(
+    ...     100, 100, QImage.Format.Format_ARGB32
+    ... )
     >>> image.fill(QColor("white"))
     >>> painter = QPainter(image)
-    >>> draw_note(painter, font="bravura", value="eighth", x=50, y=60, gap=16, color=QColor("black"))
+    >>> draw_note(
+    ...     painter,
+    ...     font="bravura",
+    ...     value="eighth",
+    ...     x=50,
+    ...     y=60,
+    ...     gap=16,
+    ...     color=QColor("black"),
+    ... )
     >>> painter.end()
     True
     >>> image.pixelColor(50, 60).lightness() < 128
@@ -478,8 +544,11 @@ def draw_note(
     """
     head_name = HEADS.get(value, "noteheadBlack")
     left, _, right, _ = _ink(font, name=head_name)
-    ox, oy = x - (left + right) / 2 * gap, y  # the head's origin, with the drawn head centered on the line or space
-    _fill(
+    ox, oy = (
+        x - (left + right) / 2 * gap,
+        y,
+    )  # the head's origin, with the drawn head centered on the line or space
+    fill_path(
         p,
         path=_place(
             _outline(font, name=head_name),
@@ -492,11 +561,17 @@ def draw_note(
     if value in ("breve", "whole"):
         return
     stem_down = bool(stem_down)
-    ax, ay = _anchor(font, name=head_name, anchor="stemDownNW" if stem_down else "stemUpSE")
+    ax, ay = _anchor(
+        font,
+        name=head_name,
+        anchor="stemDownNW" if stem_down else "stemUpSE",
+    )
     thick = _metrics(font)["stem"] * gap
     sx = ox + ax * gap  # the stem's edge that touches the head
     sy = oy - ay * gap
-    end = y + (1 if stem_down else -1) * STEM_LENGTH[value] * gap  # the far end of the stem, on screen
+    end = (
+        y + (1 if stem_down else -1) * STEM_LENGTH[value] * gap
+    )  # the far end of the stem, on screen
     left = sx if stem_down else sx - thick
     top, bottom = (sy, end) if stem_down else (end, sy)
     p.save()
@@ -513,9 +588,14 @@ def draw_note(
     p.restore()
     if value in FLAGS:
         name = f"flag{FLAGS[value]}{'Down' if stem_down else 'Up'}"
-        fx, fy = _anchor(font, name=name, anchor="stemDownSW" if stem_down else "stemUpNW")
-        # put the flag's anchor on the stem's far end, on the side the stem's outer edge is on
-        _fill(
+        fx, fy = _anchor(
+            font,
+            name=name,
+            anchor="stemDownSW" if stem_down else "stemUpNW",
+        )
+        # put the flag's anchor on the stem's far end, on the side the
+        # stem's outer edge is on
+        fill_path(
             p,
             path=_place(
                 _outline(font, name=name),
@@ -527,7 +607,8 @@ def draw_note(
         )
 
 
-# Each clef's SMuFL glyph and how many gaps above the bottom staff line its reference line (the G, F or middle C) is
+# Each clef's SMuFL glyph and how many gaps above the bottom staff line
+# its reference line (the G, F or middle C) is
 CLEF_SIGNS = {
     "treble": ("gClef", 1),
     "bass": ("fClef", 3),
@@ -537,7 +618,10 @@ CLEF_SIGNS = {
     "mezzo": ("cClef", 1),
     "baritone_c": ("cClef", 4),
     "baritone_f": ("fClef", 2),
-    "french": ("gClef", 0),  # the French violin clef: the G clef on the bottom line
+    "french": (
+        "gClef",
+        0,
+    ),  # the French violin clef: the G clef on the bottom line
     "subbass": ("fClef", 4),  # the subbass clef: the F clef on the top line
 }
 
@@ -562,11 +646,13 @@ def draw_clef(
     font : str
         A key of `_FILES`. Keyword-only.
     clef : str
-        "treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone_c" or "baritone_f". Keyword-only.
+        "treble", "bass", "alto", "tenor", "soprano", "mezzo",
+        "baritone_c" or "baritone_f". Keyword-only.
     x : float
         The clef's left edge, in pixels. Keyword-only.
     bottom : float
-        The y position of the staff's bottom line, in pixels. Keyword-only.
+        The y position of the staff's bottom line, in pixels.
+        Keyword-only.
     gap : float
         The distance between staff lines in pixels. Keyword-only.
     color : QColor
@@ -575,17 +661,32 @@ def draw_clef(
     Examples
     --------
     >>> from PySide6.QtGui import QImage
-    >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
+    >>> image = QImage(
+    ...     100, 100, QImage.Format.Format_ARGB32
+    ... )
     >>> image.fill(QColor("white"))
     >>> painter = QPainter(image)
-    >>> draw_clef(painter, font="bravura", clef="treble", x=10, bottom=70, gap=10, color=QColor("black"))
+    >>> draw_clef(
+    ...     painter,
+    ...     font="bravura",
+    ...     clef="treble",
+    ...     x=10,
+    ...     bottom=70,
+    ...     gap=10,
+    ...     color=QColor("black"),
+    ... )
     >>> painter.end()
     True
-    >>> any(image.pixelColor(x_, y).lightness() < 128 for x_ in range(10, 40) for y in range(20, 90))
+    >>> any(
+    ...     image.pixelColor(x_, y).lightness()
+    ...     < 128
+    ...     for x_ in range(10, 40)
+    ...     for y in range(20, 90)
+    ... )
     True
     """
     name, line = CLEF_SIGNS[clef]
-    _fill(
+    fill_path(
         p,
         path=_place(
             _outline(font, name=name),
@@ -604,16 +705,19 @@ def accidental_width(
     gap: float,
 ) -> float:
     """
-    Return how wide a sharp, flat or natural is drawn, so that it can be placed beside other things.
+    Return how wide a sharp, flat or natural is drawn, so that it can be
+    placed beside other things.
 
     Parameters
     ----------
     font : str
         A key of `_FILES`. Keyword-only.
     sign : int
-        -2 for a double flat, -1 flat, 0 natural, 1 sharp or 2 double sharp. Keyword-only.
+        -2 for a double flat, -1 flat, 0 natural, 1 sharp or 2 double
+        sharp. Keyword-only.
     gap : float
-        The distance between staff lines in pixels, which sets the size. Keyword-only.
+        The distance between staff lines in pixels, which sets the size.
+        Keyword-only.
 
     Returns
     -------
@@ -622,7 +726,11 @@ def accidental_width(
 
     Examples
     --------
-    >>> accidental_width(font="bravura", sign=1, gap=16) > accidental_width(font="bravura", sign=1, gap=8)
+    >>> accidental_width(
+    ...     font="bravura", sign=1, gap=16
+    ... ) > accidental_width(
+    ...     font="bravura", sign=1, gap=8
+    ... )
     True
     """
     left, _, right, _ = _ink(font, name=ACCIDENTALS[sign])
@@ -650,7 +758,8 @@ def draw_accidental(
     font : str
         A key of `_FILES`. Keyword-only.
     sign : int
-        -2 for a double flat, -1 flat, 0 natural, 1 sharp or 2 double sharp. Keyword-only.
+        -2 for a double flat, -1 flat, 0 natural, 1 sharp or 2 double
+        sharp. Keyword-only.
     x : float
         The glyph's left edge, in pixels. Keyword-only.
     y : float
@@ -660,7 +769,8 @@ def draw_accidental(
     color : QColor
         The color. Keyword-only.
     fit : float or None, default None
-        If given, shrink the glyph to be no wider than this many pixels. Keyword-only.
+        If given, shrink the glyph to be no wider than this many pixels.
+        Keyword-only.
 
     Returns
     -------
@@ -670,10 +780,29 @@ def draw_accidental(
     Examples
     --------
     >>> from PySide6.QtGui import QImage
-    >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
+    >>> image = QImage(
+    ...     100, 100, QImage.Format.Format_ARGB32
+    ... )
     >>> painter = QPainter(image)
-    >>> normal = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, color=QColor("black"))
-    >>> squeezed = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, color=QColor("black"), fit=5.0)
+    >>> normal = draw_accidental(
+    ...     painter,
+    ...     font="bravura",
+    ...     sign=1,
+    ...     x=10,
+    ...     y=50,
+    ...     gap=16,
+    ...     color=QColor("black"),
+    ... )
+    >>> squeezed = draw_accidental(
+    ...     painter,
+    ...     font="bravura",
+    ...     sign=1,
+    ...     x=10,
+    ...     y=50,
+    ...     gap=16,
+    ...     color=QColor("black"),
+    ...     fit=5.0,
+    ... )
     >>> painter.end()
     True
     >>> squeezed <= 5.0 < normal
@@ -683,7 +812,7 @@ def draw_accidental(
     left, _, right, _ = _ink(font, name=name)
     width = (right - left) * gap
     k = min(1.0, fit / width) if fit else 1.0
-    _fill(
+    fill_path(
         p,
         path=_place(
             _outline(font, name=name),
@@ -708,7 +837,8 @@ def draw_brace(
     width: float,
 ) -> bool:
     """
-    Draw the font's brace stretched between two heights, for a grand staff.
+    Draw the font's brace stretched between two heights, for a grand
+    staff.
 
     Parameters
     ----------
@@ -730,25 +860,38 @@ def draw_brace(
     Returns
     -------
     bool
-        True if it was drawn; False (and nothing is drawn) if the font has no usable brace.
+        True if it was drawn; False (and nothing is drawn) if the font
+        has no usable brace.
 
     Examples
     --------
     >>> from PySide6.QtGui import QImage
-    >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
+    >>> image = QImage(
+    ...     100, 100, QImage.Format.Format_ARGB32
+    ... )
     >>> painter = QPainter(image)
-    >>> draw_brace(painter, font="bravura", x=30, y0=10, y1=90, color=QColor("black"), width=12)
+    >>> draw_brace(
+    ...     painter,
+    ...     font="bravura",
+    ...     x=30,
+    ...     y0=10,
+    ...     y1=90,
+    ...     color=QColor("black"),
+    ...     width=12,
+    ... )
     True
     >>> painter.end()
     True
     """
     outline = _outline(font, name="brace")
     box = outline.boundingRect()
-    if outline.isEmpty() or box.width() <= 0 or box.height() < 4 * box.width():  # not a tall, narrow brace
+    if (
+        outline.isEmpty() or box.width() <= 0 or box.height() < 4 * box.width()
+    ):  # not a tall, narrow brace
         return False
     t = QTransform()
     t.translate(x - width, y0)
     t.scale(width / box.width(), (y1 - y0) / box.height())
     t.translate(-box.left(), -box.top())
-    _fill(p, path=t.map(outline), color=color)
+    fill_path(p, path=t.map(outline), color=color)
     return True

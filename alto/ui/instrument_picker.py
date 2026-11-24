@@ -1,5 +1,6 @@
 """
-Choosing the instrument that plays notes, with a summary of what each one is made from.
+Choosing the instrument that plays notes, with a summary of what each
+one is made from.
 
 Examples
 --------
@@ -68,15 +69,20 @@ def load_instrument() -> None:
     """
     Apply the saved instrument.
 
-    The piano is used if nothing is saved or the saved key is not an instrument.
+    The piano is used if nothing is saved or the saved key is not an
+    instrument.
 
     Examples
     --------
-    >>> store().setValue("audio/instrument", "flute")
+    >>> store().setValue(
+    ...     "audio/instrument", "flute"
+    ... )
     >>> load_instrument()
     >>> sounds.instrument
     'flute'
-    >>> store().setValue("audio/instrument", "not an instrument")
+    >>> store().setValue(
+    ...     "audio/instrument", "not an instrument"
+    ... )
     >>> load_instrument()
     >>> sounds.instrument
     'piano'
@@ -105,7 +111,8 @@ def tokens(widget: QWidget) -> dict[str, str]:
     """
     Return the summary page's colors.
 
-    All are mixed from the system palette so they follow its light or dark theme.
+    All are mixed from the system palette so they follow its light or
+    dark theme.
 
     Parameters
     ----------
@@ -115,7 +122,8 @@ def tokens(widget: QWidget) -> dict[str, str]:
     Returns
     -------
     dict of str to str
-        Color name to '#rrggbb': accent, accent_soft, muted, line, panel and well, and for each of good, warn and bad a
+        Color name to '#rrggbb': accent, accent_soft, muted, line, panel
+        and well, and for each of good, warn and bad a
         text color and a soft background (such as good and good_soft).
 
     Examples
@@ -127,19 +135,37 @@ def tokens(widget: QWidget) -> dict[str, str]:
     True
     """
     pal = widget.palette()
-    base, text = pal.color(QPalette.ColorRole.Base), pal.color(QPalette.ColorRole.Text)
+    base, text = (
+        pal.color(QPalette.ColorRole.Base),
+        pal.color(QPalette.ColorRole.Text),
+    )
     accent = pal.color(QPalette.ColorRole.Highlight)
     window = pal.color(QPalette.ColorRole.Window)
     out = dict(
-        accent=blend_name(accent, b=text, t=0.35),  # as text, a little toward the text color so it reads on either theme
+        accent=blend_name(
+            accent,
+            b=text,
+            t=0.35,
+            # as text, a little toward the text color so it reads on
+            # either
+            # theme
+        ),
         accent_soft=blend_name(base, b=accent, t=0.18),
         muted=blend_name(text, b=base, t=0.42),
         line=pal.color(QPalette.ColorRole.Mid).name(),
         panel=base.name(),
         well=blend_name(window, b=text, t=0.05),
     )
-    for kind, hue in (("good", QColor("#2e9e50")), ("warn", QColor("#d08a00")), ("bad", QColor("#d64a37"))):
-        out[kind] = blend_name(text, b=hue, t=0.65)  # the text color leaning toward the hue, so it stays readable
+    for kind, hue in (
+        ("good", QColor("#2e9e50")),
+        ("warn", QColor("#d08a00")),
+        ("bad", QColor("#d64a37")),
+    ):
+        out[kind] = blend_name(
+            text,
+            b=hue,
+            t=0.65,
+        )  # the text color leaning toward the hue, so it stays readable
         out[kind + "_soft"] = blend_name(base, b=hue, t=0.16)
     return out
 
@@ -156,29 +182,42 @@ def format_size(nbytes: int) -> str:
     Returns
     -------
     str
-        Megabytes with one decimal from a million bytes, otherwise whole kilobytes (at least 1).
+        Megabytes with one decimal from a million bytes, otherwise whole
+        kilobytes (at least 1).
 
     Examples
     --------
-    >>> format_size(2_500_000), format_size(500_000), format_size(10)
+    >>> (
+    ...     format_size(2_500_000),
+    ...     format_size(500_000),
+    ...     format_size(10),
+    ... )
     ('2.5 MB', '500 KB', '1 KB')
     """
-    return f"{nbytes / 1e6:.1f} MB" if nbytes >= 1e6 else f"{max(nbytes // 1000, 1)} KB"
+    return (
+        f"{nbytes / 1e6:.1f} MB"
+        if nbytes >= 1e6
+        else f"{max(nbytes // 1000, 1)} KB"
+    )
 
 
 class InstrumentPicker(QWidget):
     """
-    The instruments in a box on the left; on the right, what the selected one is made from.
+    The instruments in a box on the left; on the right, what the
+    selected one is made from.
 
-    An instrument that can be played in more than one way (the viola, arco or pizzicato) is one entry, and its page has a
-    'Use this instrument' and a 'Hear it' for each way. 'Hear it' plays a short arpeggio even while sound is muted.
+    An instrument that can be played in more than one way (the viola,
+    arco or pizzicato) is one entry, and its page has a
+    'Use this instrument' and a 'Hear it' for each way. 'Hear it' plays
+    a short arpeggio even while sound is muted.
 
     Attributes
     ----------
     chosen : Signal
         Emitted with the key of the instrument that is now in use.
     groups : dict of str to list of Instrument
-        The entries in the list, each with the instruments (ways of playing) it holds.
+        The entries in the list, each with the instruments (ways of
+        playing) it holds.
     list : QListWidget
         The box of entries.
     shown : str or None
@@ -211,19 +250,31 @@ class InstrumentPicker(QWidget):
         """
         super().__init__(parent)
         self.list = QListWidget()
-        self.list.setObjectName("categories")  # the rounded list used for the settings categories
+        self.list.setObjectName(
+            "categories",
+        )  # the rounded list used for the settings categories
         self.list.setFixedWidth(px(220))
         self.list.setStyleSheet("")  # set when shown, from the palette
-        self.groups = dict(instrument_groups())  # list entry -> the ways of playing it
+        self.groups = dict(
+            instrument_groups(),
+        )  # list entry -> the ways of playing it
         for name in self.groups:
             item = QListWidgetItem(name)
             item.setData(Qt.ItemDataRole.UserRole, name)
             item.setSizeHint(QSize(0, px(34)))
             self.list.addItem(item)
         # noinspection PyNoneFunctionAssignment
-        self.list.currentItemChanged.connect(lambda cur, _prev: cur and self.show_group(cur.data(Qt.ItemDataRole.UserRole)))
+        self.list.currentItemChanged.connect(
+            lambda cur, _prev: (
+                cur and self.show_group(cur.data(Qt.ItemDataRole.UserRole))
+            ),
+        )
         # noinspection PyShadowingNames
-        self.list.itemDoubleClicked.connect(lambda item: self.use(self._default_key(item.data(Qt.ItemDataRole.UserRole))))
+        self.list.itemDoubleClicked.connect(
+            lambda item: self.use(
+                self._default_key(item.data(Qt.ItemDataRole.UserRole)),
+            ),
+        )
 
         # The summary page.
         self.title = QLabel()
@@ -243,9 +294,14 @@ class InstrumentPicker(QWidget):
         self.facts.setHorizontalSpacing(16)
         self.facts.setVerticalSpacing(8)
         self.facts.setColumnStretch(1, 1)
-        self.action_rows = QVBoxLayout()  # one row of buttons for each way of playing the instrument
+        self.action_rows = (
+            QVBoxLayout()
+        )  # one row of buttons for each way of playing the instrument
         self.action_rows.setSpacing(8)
-        self.buttons: dict[str, tuple[QPushButton, QPushButton]] = {}  # instrument key -> (use, hear)
+        self.buttons: dict[
+            str,
+            tuple[QPushButton, QPushButton],
+        ] = {}  # instrument key -> (use, hear)
 
         page = QWidget()
         page.setObjectName("instrumentPage")
@@ -266,21 +322,25 @@ class InstrumentPicker(QWidget):
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scroll.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff,
+        )
         scroll.setWidget(page)
-        scroll.setStyleSheet("QScrollArea, QWidget#instrumentPage { background: transparent; }")
+        scroll.setStyleSheet(
+            "QScrollArea, QWidget#instrumentPage { background: transparent; }",
+        )
         self.divider = QFrame()
         self.divider.setFixedHeight(px(1))
 
-        self.card = card = QFrame()  # the summary sits in a card; the buttons stay in view below the scrolling details
+        self.card = card = (
+            QFrame()
+            # the summary sits in a card; the buttons stay in view below
+            # the
+            # scrolling details
+        )
         card.setObjectName("helpCard")
         right = QVBoxLayout(card)
-        right.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
+        right.setContentsMargins(0, 0, 0, 0)
         right.setSpacing(0)
         right.addWidget(scroll, 1)
         right.addWidget(self.divider)
@@ -294,12 +354,7 @@ class InstrumentPicker(QWidget):
         )
         right.addWidget(bar)
         outer = QHBoxLayout(self)
-        outer.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
+        outer.setContentsMargins(0, 0, 0, 0)
         outer.setSpacing(14)
         outer.addWidget(self.list)
         outer.addWidget(card, 1)
@@ -308,7 +363,8 @@ class InstrumentPicker(QWidget):
         self._mark_in_use()
         self.select(sounds.instrument)
 
-    # -- the list --------------------------------------------------------------------------------------------------
+    # -- the list
+    # ------------------------------------------------------------------
 
     @staticmethod
     def _group_of(key: str) -> str:
@@ -327,7 +383,12 @@ class InstrumentPicker(QWidget):
 
         Examples
         --------
-        >>> InstrumentPicker._group_of("viola_bowed"), InstrumentPicker._group_of("flute")
+        >>> (
+        ...     InstrumentPicker._group_of(
+        ...         "viola_bowed"
+        ...     ),
+        ...     InstrumentPicker._group_of("flute"),
+        ... )
         ('Viola', 'Flute')
         """
         return INSTRUMENT_BY_KEY[key].picker_group
@@ -344,7 +405,8 @@ class InstrumentPicker(QWidget):
         Returns
         -------
         str
-            The instrument in use if it is one of the entry's, otherwise the entry's first.
+            The instrument in use if it is one of the entry's, otherwise
+            the entry's first.
 
         Examples
         --------
@@ -354,7 +416,10 @@ class InstrumentPicker(QWidget):
         'viola_bowed'
         """
         members = self.groups[group]
-        return next((i.key for i in members if i.key == sounds.instrument), members[0].key)
+        return next(
+            (i.key for i in members if i.key == sounds.instrument),
+            members[0].key,
+        )
 
     def select(self, key: str) -> None:
         """
@@ -383,7 +448,8 @@ class InstrumentPicker(QWidget):
         """
         Mark the entry in use in the list.
 
-        It is shown bold and checked (saying which way of playing, if there are several), and the entries with no recordings
+        It is shown bold and checked (saying which way of playing, if
+        there are several), and the entries with no recordings
         installed are put in italics.
 
         Examples
@@ -391,7 +457,12 @@ class InstrumentPicker(QWidget):
         >>> picker = InstrumentPicker()
         >>> sounds.instrument = "piano"
         >>> picker._mark_in_use()
-        >>> picker.list.item(0).data(Qt.ItemDataRole.UserRole), picker.list.item(0).font().bold()
+        >>> (
+        ...     picker.list.item(0).data(
+        ...         Qt.ItemDataRole.UserRole
+        ...     ),
+        ...     picker.list.item(0).font().bold(),
+        ... )
         ('Piano', True)
         """
         for row in range(self.list.count()):
@@ -399,20 +470,38 @@ class InstrumentPicker(QWidget):
             group = item.data(Qt.ItemDataRole.UserRole)
             members = self.groups[group]
             label = members[0].label if members[0].pack_name else group
-            active = next((i for i in members if i.key == sounds.instrument), None)
+            active = next(
+                (i for i in members if i.key == sounds.instrument),
+                None,
+            )
             if active is None:
                 text = label
             else:
-                text = f"{label} ({active.variant})  ✓" if active.variant else f"{label}  ✓"
+                text = (
+                    f"{label} ({active.variant})  ✓"
+                    if active.variant
+                    else f"{label}  ✓"
+                )
             item.setText(text)
-            installed = any(coverage(sounds.recordings(i)).installed for i in members)
+            installed = any(
+                coverage(sounds.recordings(i)).installed for i in members
+            )
             font = item.font()
             font.setBold(active is not None)
-            font.setItalic(not installed)  # the list's stylesheet fixes the color, so italics mark what is missing
+            font.setItalic(
+                not installed,
+                # the list's stylesheet fixes the color, so italics mark
+                # what is missing
+            )
             item.setFont(font)
-            item.setToolTip("" if installed else "No recordings are installed for this instrument")
+            item.setToolTip(
+                ""
+                if installed
+                else "No recordings are installed for this instrument",
+            )
 
-    # -- the summary page ------------------------------------------------------------------------------------------
+    # -- the summary page
+    # ------------------------------------------------------------------
 
     @staticmethod
     def _clear(layout: QLayout) -> None:
@@ -460,7 +549,8 @@ class InstrumentPicker(QWidget):
         text : str
             What the tag says.
         kind : str, default ""
-            "accent", "good", "warn" or "bad" for a colored one, or empty for a plain outlined one. Keyword-only.
+            "accent", "good", "warn" or "bad" for a colored one, or
+            empty for a plain outlined one. Keyword-only.
 
         Returns
         -------
@@ -477,10 +567,24 @@ class InstrumentPicker(QWidget):
         t = tokens(self)
         chip = QLabel(text)
         if kind:
-            colors = f"color: {t[kind]}; background: {t[kind + '_soft']}; border: 1px solid transparent; font-weight: 600;"
+            colors = (
+                "color: "
+                f"{t[kind]}"
+                "; background: "
+                f"{t[kind + '_soft']}"
+                "; border: 1px solid transparent; font-weight: 600;"
+            )
         else:
-            colors = f"color: {t['muted']}; background: transparent; border: 1px solid {t['line']};"
-        chip.setStyleSheet(css(colors + " border-radius: 10px; padding: 2px 10px;"))
+            colors = (
+                "color: "
+                f"{t['muted']}"
+                "; background: transparent; border: 1px solid "
+                f"{t['line']}"
+                ";"
+            )
+        chip.setStyleSheet(
+            css(colors + " border-radius: 10px; padding: 2px 10px;"),
+        )
         return chip
 
     def _link(
@@ -507,10 +611,22 @@ class InstrumentPicker(QWidget):
         Examples
         --------
         >>> picker = InstrumentPicker()
-        >>> picker._link("https://example.org", text="Source").startswith('<a href="https://example.org">')
+        >>> picker._link(
+        ...     "https://example.org", text="Source"
+        ... ).startswith(
+        ...     '<a href="https://example.org">'
+        ... )
         True
         """
-        return f'<a href="{url}"><span style="color: {tokens(self)["accent"]};">{text}</span></a>'
+        return (
+            '<a href="'
+            f"{url}"
+            '"><span style="color: '
+            f"{tokens(self)['accent']}"
+            ';">'
+            f"{text}"
+            "</span></a>"
+        )
 
     def _fact(
         self,
@@ -532,24 +648,35 @@ class InstrumentPicker(QWidget):
         value : str
             Its value. Keyword-only.
         link : bool, default False
-            Treat the value as HTML, so links in it can be clicked. Keyword-only.
+            Treat the value as HTML, so links in it can be clicked.
+            Keyword-only.
 
         Examples
         --------
         >>> picker = InstrumentPicker()
         >>> before = picker.facts.count()
-        >>> picker._fact(99, label="Performer", value="Someone")
-        >>> picker.facts.count() - before  # a label and its value
+        >>> picker._fact(
+        ...     99, label="Performer", value="Someone"
+        ... )
+        >>> (
+        ...     picker.facts.count() - before
+        ... )  # a label and its value
         2
         """
         name = QLabel(label)
         name.setStyleSheet(f"color: {tokens(self)['muted']};")
         name.setFixedWidth(px(84))
-        name.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        name.setAlignment(
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
+        )
         text = QLabel(value)
         text.setWordWrap(True)
-        text.setTextFormat(Qt.TextFormat.RichText if link else Qt.TextFormat.PlainText)
-        text.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
+        text.setTextFormat(
+            Qt.TextFormat.RichText if link else Qt.TextFormat.PlainText,
+        )
+        text.setTextInteractionFlags(
+            Qt.TextInteractionFlag.TextBrowserInteraction,
+        )
         text.setOpenExternalLinks(True)
         self.facts.addWidget(
             name,
@@ -573,19 +700,25 @@ class InstrumentPicker(QWidget):
         members : list of Instrument
             The ways of playing an instrument.
         values : list of str
-            The fact for each, in the same order; an empty string for none. Keyword-only.
+            The fact for each, in the same order; an empty string for
+            none. Keyword-only.
 
         Returns
         -------
         str
-            One value if the ways agree, otherwise a line for each, led by its name.
+            One value if the ways agree, otherwise a line for each, led
+            by its name.
 
         Examples
         --------
         >>> viola = dict(instrument_groups())["Viola"]
-        >>> InstrumentPicker._per_way(viola, values=["Bowed", "Bowed"])
+        >>> InstrumentPicker._per_way(
+        ...     viola, values=["Bowed", "Bowed"]
+        ... )
         'Bowed'
-        >>> InstrumentPicker._per_way(viola, values=["Bowed", "Plucked"])
+        >>> InstrumentPicker._per_way(
+        ...     viola, values=["Bowed", "Plucked"]
+        ... )
         'Arco: Bowed\nPizzicato: Plucked'
         """
         shown = [(m, v) for m, v in zip(members, values) if v]
@@ -598,7 +731,8 @@ class InstrumentPicker(QWidget):
     # noinspection PyMethodMayBeStatic
     def _info(self, member: Instrument) -> InstrumentInfo:
         """
-        Find what is known about an instrument's recordings, from Alto's own list or from its plugin.
+        Find what is known about an instrument's recordings, from Alto's
+        own list or from its plugin.
 
         Parameters
         ----------
@@ -608,12 +742,15 @@ class InstrumentPicker(QWidget):
         Returns
         -------
         InstrumentInfo
-            The facts the plugin supplied, a plain statement when it supplied none, or Alto's own entry.
+            The facts the plugin supplied, a plain statement when it
+            supplied none, or Alto's own entry.
 
         Examples
         --------
         >>> picker = InstrumentPicker()
-        >>> picker._info(INSTRUMENT_BY_KEY["flute"]).source.startswith("University of Iowa")
+        >>> picker._info(
+        ...     INSTRUMENT_BY_KEY["flute"]
+        ... ).source.startswith("University of Iowa")
         True
         """
         if not member.pack_name:
@@ -630,7 +767,8 @@ class InstrumentPicker(QWidget):
 
     def show_group(self, group: str) -> None:
         """
-        Fill the summary page for an entry from what is known about it and what is on disk.
+        Fill the summary page for an entry from what is known about it
+        and what is on disk.
 
         Parameters
         ----------
@@ -652,37 +790,92 @@ class InstrumentPicker(QWidget):
         files = [sounds.recordings(m) for m in members]
         t = tokens(self)
         self.title.setText(members[0].label if members[0].pack_name else group)
-        self.card.setStyleSheet(css(f"QFrame#helpCard {{ background: {t['panel']}; border: 1px solid {t['line']}; }}"))
-        self.list.setStyleSheet(f"QListWidget#categories {{ background: {t['well']}; }}")  # a shade apart from the card
+        self.card.setStyleSheet(
+            css(
+                "QFrame#helpCard { background: "
+                f"{t['panel']}"
+                "; border: 1px solid "
+                f"{t['line']}"
+                "; }",
+            ),
+        )
+        self.list.setStyleSheet(
+            f"QListWidget#categories {{ background: {t['well']}; }}",
+        )  # a shade apart from the card
         self.divider.setStyleSheet(f"background: {t['line']};")
         self.summary.setStyleSheet(f"color: {t['muted']};")
-        self.banner.setStyleSheet(css(f"color: {t['bad']}; background: {t['bad_soft']}; border-radius: 8px; padding: 8px 12px;"))
-        self.summary.setText(FAMILY_SUMMARY.get(group, infos[0].summary) if many else infos[0].summary)
+        self.banner.setStyleSheet(
+            css(
+                "color: "
+                f"{t['bad']}"
+                "; background: "
+                f"{t['bad_soft']}"
+                "; border-radius: 8px; padding: 8px 12px;",
+            ),
+        )
+        self.summary.setText(
+            FAMILY_SUMMARY.get(group, infos[0].summary)
+            if many
+            else infos[0].summary,
+        )
 
-        # The chips: what is in use, what is installed, how notes behave.
+        # The chips: what is in use, what is installed, how notes
+        # behave.
         self._clear(self.chips)
         active = next((m for m in members if m.key == sounds.instrument), None)
         if active is not None:
-            self.chips.addWidget(self._chip(f"In use: {active.variant}" if many else "In use", kind="accent"))
+            self.chips.addWidget(
+                self._chip(
+                    f"In use: {active.variant}" if many else "In use",
+                    kind="accent",
+                ),
+            )
         installed = [h.installed for h in have]
-        state = "Installed" if all(installed) else "Not installed" if not any(installed) else "Partly installed"
+        state = (
+            "Installed"
+            if all(installed)
+            else "Not installed"
+            if not any(installed)
+            else "Partly installed"
+        )
         self.chips.addWidget(
-            self._chip(state, kind="good" if state == "Installed" else "bad" if state == "Not installed" else "warn"),
+            self._chip(
+                state,
+                kind="good"
+                if state == "Installed"
+                else "bad"
+                if state == "Not installed"
+                else "warn",
+            ),
         )
         if len({m.sustained for m in members}) == 1:
-            self.chips.addWidget(self._chip("Each note ends as the next begins" if members[0].sustained else "Notes ring on"))
+            self.chips.addWidget(
+                self._chip(
+                    "Each note ends as the next begins"
+                    if members[0].sustained
+                    else "Notes ring on",
+                ),
+            )
         self.chips.addStretch(1)
 
         missing = [m for m, h in zip(members, have) if not h.installed]
         if missing:
-            which = group if len(missing) == len(members) else " and ".join(m.variant for m in missing)
+            which = (
+                group
+                if len(missing) == len(members)
+                else " and ".join(m.variant for m in missing)
+            )
             self.banner.setText(
-                f"No recordings are installed for {which} in this copy of Alto, so it would play as the "
-                "synthesized piano. It is listed so you can see what it is made from.",
+                "No recordings are installed for "
+                f"{which}"
+                " in this copy of Alto, so it would play as the "
+                "synthesized piano. It is listed so you can see what it is "
+                "made from.",
             )
         self.banner.setVisible(bool(missing))
 
-        # The facts. What all the ways of playing share is shown once; what differs is shown for each.
+        # The facts. What all the ways of playing share is shown once;
+        # what differs is shown for each.
         self._clear(self.facts)
         source = infos[0].source
         if infos[0].source_url:
@@ -690,28 +883,62 @@ class InstrumentPicker(QWidget):
             source = (
                 self._link(infos[0].source_url, text=source)
                 if len(urls) == 1
-                else "<br>".join(f"{m.variant}: {self._link(i.source_url, text=i.source)}" for m, i in zip(members, infos))
+                else "<br>".join(
+                    f"{m.variant}: {self._link(i.source_url, text=i.source)}"
+                    for m, i in zip(members, infos)
+                )
             )
-        plugin = members[0].pack_name if all(m.pack_name == members[0].pack_name for m in members) else ""
+        plugin = (
+            members[0].pack_name
+            if all(m.pack_name == members[0].pack_name for m in members)
+            else ""
+        )
         rows = [
             ("Plugin", plugin, False),
             ("Source", source, bool(infos[0].source_url)),
-            ("Performer", self._per_way(members, values=[i.performer for i in infos]), False),
-            ("Recorded", self._per_way(members, values=[i.recorded for i in infos]), False),
-            ("Includes", self._per_way(members, values=[i.includes for i in infos]), False),
-            ("Notes", self._per_way(members, values=[h.describe() for h in have]), False),
+            (
+                "Performer",
+                self._per_way(members, values=[i.performer for i in infos]),
+                False,
+            ),
+            (
+                "Recorded",
+                self._per_way(members, values=[i.recorded for i in infos]),
+                False,
+            ),
+            (
+                "Includes",
+                self._per_way(members, values=[i.includes for i in infos]),
+                False,
+            ),
+            (
+                "Notes",
+                self._per_way(members, values=[h.describe() for h in have]),
+                False,
+            ),
             (
                 "Size",
                 self._per_way(
                     members,
                     values=[
-                        format_size(sum(p.stat().st_size for p in f.values())) if h.installed else "" for f, h in zip(files, have)
+                        format_size(sum(p.stat().st_size for p in f.values()))
+                        if h.installed
+                        else ""
+                        for f, h in zip(files, have)
                     ],
                 ),
                 False,
             ),
-            ("Terms", self._per_way(members, values=[i.terms for i in infos]), False),
-            ("About", self._per_way(members, values=[i.note for i in infos]), False),
+            (
+                "Terms",
+                self._per_way(members, values=[i.terms for i in infos]),
+                False,
+            ),
+            (
+                "About",
+                self._per_way(members, values=[i.note for i in infos]),
+                False,
+            ),
         ]
         for row, (label, value, link) in enumerate(r for r in rows if r[1]):
             self._fact(
@@ -728,12 +955,20 @@ class InstrumentPicker(QWidget):
             suffix = f" ({m.variant})" if many else ""
             in_use = m.key == sounds.instrument
             use = QPushButton(
-                f"In use{suffix}" if in_use else f"Use this instrument{suffix}" if h.installed else f"Not installed{suffix}",
+                f"In use{suffix}"
+                if in_use
+                else f"Use this instrument{suffix}"
+                if h.installed
+                else f"Not installed{suffix}",
             )
             use.setEnabled(h.installed and not in_use)
             if in_use:
                 use.setStyleSheet(
-                    f"QPushButton:disabled {{ background: {t['accent_soft']}; color: {t['accent']}; "
+                    "QPushButton:disabled { background: "
+                    f"{t['accent_soft']}"
+                    "; color: "
+                    f"{t['accent']}"
+                    "; "
                     f"border-color: {t['accent_soft']}; }}",
                 )
             use.clicked.connect(lambda _=False, k=m.key: self.use(k))
@@ -749,7 +984,8 @@ class InstrumentPicker(QWidget):
 
     def changeEvent(self, event: QEvent) -> None:
         """
-        Redraw the summary page when the palette changes, so its colors follow the theme.
+        Redraw the summary page when the palette changes, so its colors
+        follow the theme.
 
         Parameters
         ----------
@@ -760,7 +996,9 @@ class InstrumentPicker(QWidget):
         --------
         >>> picker = InstrumentPicker()
         >>> picker.show_group("Flute")
-        >>> picker.changeEvent(QEvent(QEvent.Type.PaletteChange))
+        >>> picker.changeEvent(
+        ...     QEvent(QEvent.Type.PaletteChange)
+        ... )
         >>> picker.shown
         'Flute'
         """
@@ -768,11 +1006,13 @@ class InstrumentPicker(QWidget):
             self.show_group(self.shown)
         super().changeEvent(event)
 
-    # -- actions ---------------------------------------------------------------------------------------------------
+    # -- actions
+    # ------------------------------------------------------------------
 
     def use(self, key: str) -> None:
         """
-        Make an instrument the one for notes and the correct-answer chime.
+        Make an instrument the one for notes and the correct-answer
+        chime.
 
         Nothing happens if it has no recordings installed.
 
@@ -811,6 +1051,8 @@ class InstrumentPicker(QWidget):
 
         Examples
         --------
-        >>> InstrumentPicker().preview("flute")  # doctest: +SKIP
+        >>> InstrumentPicker().preview(
+        ...     "flute"
+        ... )  # doctest: +SKIP
         """
         sounds.preview(key, midis=PREVIEW)

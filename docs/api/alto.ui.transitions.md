@@ -7,14 +7,19 @@ permalink: /api/alto.ui.transitions/
 {% raw %}
 The transitions between the exercises and the lessons on the home page.
 
-A transition moves between two sets of cards. Each card is photographed first, as a sprite, and a sprite can be faded, slid,
-scaled, blurred or cut away from one side. A transition is a function that sets how every sprite looks at each moment, so ten
+A transition moves between two sets of cards. Each card is photographed
+first, as a sprite, and a sprite can be faded, slid,
+scaled, blurred or cut away from one side. A transition is a function
+that sets how every sprite looks at each moment, so ten
 different ones share one player.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> [transition.key for transition in TRANSITIONS][:3]
+>>> [
+...     transition.key
+...     for transition in TRANSITIONS
+... ][:3]
 ['none', 'cascade', 'fade']
 >>> DEFAULT_TRANSITION
 'cascade'
@@ -57,7 +62,10 @@ A photograph of one card, and how it is drawn at this moment.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> sprite = Sprite(pixmap=QPixmap(), rect=QRectF(0, 0, 10, 10))
+>>> sprite = Sprite(
+...     pixmap=QPixmap(),
+...     rect=QRectF(0, 0, 10, 10),
+... )
 >>> sprite.opacity, sprite.reveal
 (1.0, 1.0)
 ```
@@ -73,7 +81,8 @@ Scene(
 )
 ```
 
-What a transition is given at each moment: the time, the two sets of sprites and the direction.
+What a transition is given at each moment: the time, the two sets of
+sprites and the direction.
 
 **Attributes**
 
@@ -85,7 +94,9 @@ What a transition is given at each moment: the time, the two sets of sprites and
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Scene(time=0.0, old=[], new=[], direction=1).direction
+>>> Scene(
+...     time=0.0, old=[], new=[], direction=1
+... ).direction
 1
 ```
 
@@ -95,7 +106,8 @@ What a transition is given at each moment: the time, the two sets of sprites and
 def ease_out(progress: float) -> float
 ```
 
-Ease a progress from 0 to 1 so that it starts fast and slows to a stop.
+Ease a progress from 0 to 1 so that it starts fast and slows to a
+stop.
 
 **Parameters**
 
@@ -123,7 +135,8 @@ def ramp(
 ) -> float
 ```
 
-Say how far along a part of a transition is, from 0 before it starts to 1 once it has finished.
+Say how far along a part of a transition is, from 0 before it starts
+to 1 once it has finished.
 
 **Parameters**
 
@@ -138,7 +151,11 @@ Say how far along a part of a transition is, from 0 before it starts to 1 once i
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ramp(50, start=100, length=200), ramp(200, start=100, length=200), ramp(900, start=100, length=200)
+>>> (
+...     ramp(50, start=100, length=200),
+...     ramp(200, start=100, length=200),
+...     ramp(900, start=100, length=200),
+... )
 (0.0, 0.5, 1.0)
 ```
 
@@ -157,7 +174,9 @@ Make sprites invisible.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> card = Sprite(pixmap=QPixmap(), rect=QRectF())
+>>> card = Sprite(
+...     pixmap=QPixmap(), rect=QRectF()
+... )
 >>> hide([card])
 >>> card.opacity
 0.0
@@ -169,7 +188,8 @@ Make sprites invisible.
 def fade_in(scene: Scene) -> None
 ```
 
-Set the sprites for a fade in: the new cards fade up from clear, and nothing of the old remains.
+Set the sprites for a fade in: the new cards fade up from clear, and
+nothing of the old remains.
 
 **Parameters**
 
@@ -178,8 +198,14 @@ Set the sprites for a fade in: the new cards fade up from clear, and nothing of 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> fade_in(Scene(time=0, old=[], new=new, direction=1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> fade_in(
+...     Scene(
+...         time=0, old=[], new=new, direction=1
+...     )
+... )
 >>> new[0].opacity
 0.0
 ```
@@ -190,7 +216,8 @@ Set the sprites for a fade in: the new cards fade up from clear, and nothing of 
 def crossfade(scene: Scene) -> None
 ```
 
-Set the sprites for a crossfade: the old cards fade out as the new ones fade in.
+Set the sprites for a crossfade: the old cards fade out as the new
+ones fade in.
 
 **Parameters**
 
@@ -199,8 +226,26 @@ Set the sprites for a crossfade: the old cards fade out as the new ones fade in.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> old, new = [Sprite(pixmap=QPixmap(), rect=QRectF())], [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> crossfade(Scene(time=300, old=old, new=new, direction=1))
+>>> old, new = (
+...     [
+...         Sprite(
+...             pixmap=QPixmap(), rect=QRectF()
+...         )
+...     ],
+...     [
+...         Sprite(
+...             pixmap=QPixmap(), rect=QRectF()
+...         )
+...     ],
+... )
+>>> crossfade(
+...     Scene(
+...         time=300,
+...         old=old,
+...         new=new,
+...         direction=1,
+...     )
+... )
 >>> old[0].opacity, new[0].opacity
 (0.0, 1.0)
 ```
@@ -211,7 +256,8 @@ Set the sprites for a crossfade: the old cards fade out as the new ones fade in.
 def slide(scene: Scene) -> None
 ```
 
-Set the sprites for a slide: both sets move sideways, toward the side of the switch that was pressed.
+Set the sprites for a slide: both sets move sideways, toward the
+side of the switch that was pressed.
 
 **Parameters**
 
@@ -220,8 +266,14 @@ Set the sprites for a slide: both sets move sideways, toward the side of the swi
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> slide(Scene(time=0, old=[], new=new, direction=1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> slide(
+...     Scene(
+...         time=0, old=[], new=new, direction=1
+...     )
+... )
 >>> new[0].dx
 60.0
 ```
@@ -232,7 +284,8 @@ Set the sprites for a slide: both sets move sideways, toward the side of the swi
 def rise(scene: Scene) -> None
 ```
 
-Set the sprites for a rise: the old cards sink and fade, and the new ones rise into place.
+Set the sprites for a rise: the old cards sink and fade, and the new
+ones rise into place.
 
 **Parameters**
 
@@ -241,8 +294,14 @@ Set the sprites for a rise: the old cards sink and fade, and the new ones rise i
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> rise(Scene(time=0, old=[], new=new, direction=1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> rise(
+...     Scene(
+...         time=0, old=[], new=new, direction=1
+...     )
+... )
 >>> new[0].dy, new[0].opacity
 (22.0, 0.0)
 ```
@@ -253,7 +312,8 @@ Set the sprites for a rise: the old cards sink and fade, and the new ones rise i
 def cascade(scene: Scene) -> None
 ```
 
-Set the sprites for a cascade: the new cards arrive one after another, each rising a little as it appears.
+Set the sprites for a cascade: the new cards arrive one after
+another, each rising a little as it appears.
 
 **Parameters**
 
@@ -262,8 +322,18 @@ Set the sprites for a cascade: the new cards arrive one after another, each risi
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF()) for _ in range(2)]
->>> cascade(Scene(time=100, old=[], new=new, direction=1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+...     for _ in range(2)
+... ]
+>>> cascade(
+...     Scene(
+...         time=100,
+...         old=[],
+...         new=new,
+...         direction=1,
+...     )
+... )
 >>> new[0].opacity > new[1].opacity > 0.0
 True
 ```
@@ -274,7 +344,8 @@ True
 def zoom(scene: Scene) -> None
 ```
 
-Set the sprites for a zoom: the old cards grow a little as they fade, and the new ones grow into place.
+Set the sprites for a zoom: the old cards grow a little as they
+fade, and the new ones grow into place.
 
 **Parameters**
 
@@ -283,8 +354,14 @@ Set the sprites for a zoom: the old cards grow a little as they fade, and the ne
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> zoom(Scene(time=0, old=[], new=new, direction=1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> zoom(
+...     Scene(
+...         time=0, old=[], new=new, direction=1
+...     )
+... )
 >>> new[0].sx
 0.92
 ```
@@ -295,7 +372,8 @@ Set the sprites for a zoom: the old cards grow a little as they fade, and the ne
 def flip(scene: Scene) -> None
 ```
 
-Set the sprites for a flip: each old card turns edge on and goes, then each new one turns face on.
+Set the sprites for a flip: each old card turns edge on and goes,
+then each new one turns face on.
 
 **Parameters**
 
@@ -304,8 +382,14 @@ Set the sprites for a flip: each old card turns edge on and goes, then each new 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> flip(Scene(time=0, old=[], new=new, direction=1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> flip(
+...     Scene(
+...         time=0, old=[], new=new, direction=1
+...     )
+... )
 >>> new[0].opacity
 0.0
 ```
@@ -316,7 +400,8 @@ Set the sprites for a flip: each old card turns edge on and goes, then each new 
 def blur(scene: Scene) -> None
 ```
 
-Set the sprites for a blur: the old cards dissolve into a blur and the new ones come into focus.
+Set the sprites for a blur: the old cards dissolve into a blur and
+the new ones come into focus.
 
 **Parameters**
 
@@ -325,8 +410,14 @@ Set the sprites for a blur: the old cards dissolve into a blur and the new ones 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> blur(Scene(time=0, old=[], new=new, direction=1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> blur(
+...     Scene(
+...         time=0, old=[], new=new, direction=1
+...     )
+... )
 >>> new[0].blur, new[0].opacity
 (1.0, 0.0)
 ```
@@ -337,7 +428,8 @@ Set the sprites for a blur: the old cards dissolve into a blur and the new ones 
 def wipe(scene: Scene) -> None
 ```
 
-Set the sprites for a wipe: the new cards are uncovered from one side while the old ones fade.
+Set the sprites for a wipe: the new cards are uncovered from one
+side while the old ones fade.
 
 **Parameters**
 
@@ -346,8 +438,17 @@ Set the sprites for a wipe: the new cards are uncovered from one side while the 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> wipe(Scene(time=0, old=[], new=new, direction=-1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> wipe(
+...     Scene(
+...         time=0,
+...         old=[],
+...         new=new,
+...         direction=-1,
+...     )
+... )
 >>> new[0].reveal, new[0].reveal_from
 (0.0, -1)
 ```
@@ -358,7 +459,8 @@ Set the sprites for a wipe: the new cards are uncovered from one side while the 
 def drop(scene: Scene) -> None
 ```
 
-Set the sprites for drop and pop: the old cards drop away one by one, then the new ones pop in with a small bounce.
+Set the sprites for drop and pop: the old cards drop away one by
+one, then the new ones pop in with a small bounce.
 
 **Parameters**
 
@@ -367,8 +469,14 @@ Set the sprites for drop and pop: the old cards drop away one by one, then the n
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> drop(Scene(time=0, old=[], new=new, direction=1))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> drop(
+...     Scene(
+...         time=0, old=[], new=new, direction=1
+...     )
+... )
 >>> new[0].opacity
 0.0
 ```
@@ -424,9 +532,11 @@ Motion(
 )
 ```
 
-How one set of cards moves in a transition built from parts: when each card starts, how long it takes, and what it does.
+How one set of cards moves in a transition built from parts: when
+each card starts, how long it takes, and what it does.
 
-Every card goes between its resting look and a look given here, so the same description serves for cards arriving (from that
+Every card goes between its resting look and a look given here, so
+the same description serves for cards arriving (from that
 look to rest) and leaving (from rest to that look).
 
 **Attributes**
@@ -464,7 +574,8 @@ def eased(
 ) -> float
 ```
 
-Time a progress from 0 to 1 in one of the ways a motion can be eased.
+Time a progress from 0 to 1 in one of the ways a motion can be
+eased.
 
 **Parameters**
 
@@ -478,7 +589,11 @@ Time a progress from 0 to 1 in one of the ways a motion can be eased.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> eased(0.5, how="linear"), eased(1.0, how="back"), eased(0.5, how="in")
+>>> (
+...     eased(0.5, how="linear"),
+...     eased(1.0, how="back"),
+...     eased(0.5, how="in"),
+... )
 (0.5, 1.0, 0.25)
 >>> eased(0.8, how="back") > 1.0
 True
@@ -508,8 +623,18 @@ Say where each sprite comes in an order: 0 for the first to start.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> row = [Sprite(pixmap=QPixmap(), rect=QRectF(x, 0, 10, 10)) for x in (0, 20, 40)]
->>> ranks(row, order="index"), ranks(row, order="reverse"), ranks(row, order="outward")
+>>> row = [
+...     Sprite(
+...         pixmap=QPixmap(),
+...         rect=QRectF(x, 0, 10, 10),
+...     )
+...     for x in (0, 20, 40)
+... ]
+>>> (
+...     ranks(row, order="index"),
+...     ranks(row, order="reverse"),
+...     ranks(row, order="outward"),
+... )
 ([0, 1, 2], [2, 1, 0], [1, 0, 2])
 ```
 
@@ -523,7 +648,8 @@ def span(
 ) -> float
 ```
 
-Say how long a motion takes for a number of cards, from when it starts to when the last card has finished.
+Say how long a motion takes for a number of cards, from when it
+starts to when the last card has finished.
 
 **Parameters**
 
@@ -537,7 +663,14 @@ Say how long a motion takes for a number of cards, from when it starts to when t
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> span(Motion(length=300.0, per_card=50.0, start=10.0), count=4)
+>>> span(
+...     Motion(
+...         length=300.0,
+...         per_card=50.0,
+...         start=10.0,
+...     ),
+...     count=4,
+... )
 460.0
 ```
 
@@ -552,7 +685,8 @@ def move(
 ) -> None
 ```
 
-Set the sprites for a transition built from a motion for the cards that leave and one for the cards that arrive.
+Set the sprites for a transition built from a motion for the cards
+that leave and one for the cards that arrive.
 
 **Parameters**
 
@@ -563,8 +697,16 @@ Set the sprites for a transition built from a motion for the cards that leave an
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
->>> move(Scene(time=0, old=[], new=new, direction=1), leaving=None, arriving=Motion(dy=20))
+>>> new = [
+...     Sprite(pixmap=QPixmap(), rect=QRectF())
+... ]
+>>> move(
+...     Scene(
+...         time=0, old=[], new=new, direction=1
+...     ),
+...     leaving=None,
+...     arriving=Motion(dy=20),
+... )
 >>> new[0].opacity, new[0].dy
 (0.0, 20.0)
 ```
@@ -579,7 +721,8 @@ def built(
 ) -> tuple[Callable[[Scene], None], Callable[[Scene], float]]
 ```
 
-Make the frame and length functions of a transition built from motions.
+Make the frame and length functions of a transition built from
+motions.
 
 **Parameters**
 
@@ -593,8 +736,26 @@ Make the frame and length functions of a transition built from motions.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> draw, lasts = built(leaving=None, arriving=Motion(length=300, per_card=50))
->>> lasts(Scene(time=0, old=[], new=[Sprite(pixmap=QPixmap(), rect=QRectF())] * 3, direction=1))
+>>> draw, lasts = built(
+...     leaving=None,
+...     arriving=Motion(
+...         length=300, per_card=50
+...     ),
+... )
+>>> lasts(
+...     Scene(
+...         time=0,
+...         old=[],
+...         new=[
+...             Sprite(
+...                 pixmap=QPixmap(),
+...                 rect=QRectF(),
+...             )
+...         ]
+...         * 3,
+...         direction=1,
+...     )
+... )
 400.0
 ```
 
@@ -628,7 +789,13 @@ Make a transition from motions.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> made("x", label="X", about="Does x.", leaving=None, arriving=Motion()).key
+>>> made(
+...     "x",
+...     label="X",
+...     about="Does x.",
+...     leaving=None,
+...     arriving=Motion(),
+... ).key
 'x'
 ```
 
@@ -651,7 +818,10 @@ Find a transition by its key.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> transition_named("flip").label, transition_named("nonsense").key
+>>> (
+...     transition_named("flip").label,
+...     transition_named("nonsense").key,
+... )
 ('Flip', 'cascade')
 ```
 
@@ -717,9 +887,19 @@ Draw sprites as they now look.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
->>> image = QImage(20, 20, QImage.Format.Format_ARGB32)
+>>> image = QImage(
+...     20, 20, QImage.Format.Format_ARGB32
+... )
 >>> brush = QPainter(image)
->>> paint_sprites(brush, sprites=[Sprite(pixmap=QPixmap(10, 10), rect=QRectF(0, 0, 10, 10))])
+>>> paint_sprites(
+...     brush,
+...     sprites=[
+...         Sprite(
+...             pixmap=QPixmap(10, 10),
+...             rect=QRectF(0, 0, 10, 10),
+...         )
+...     ],
+... )
 >>> brush.end()
 True
 ```
@@ -732,7 +912,8 @@ TransitionCanvas(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-A see-through sheet laid over the cards, on which a transition is drawn.
+A see-through sheet laid over the cards, on which a transition is
+drawn.
 
 **Attributes**
 
@@ -770,7 +951,8 @@ True
 def cover(old: list[Sprite]) -> None
 ```
 
-Show the old cards on the canvas as they are, so that they can be swapped for the new ones unseen.
+Show the old cards on the canvas as they are, so that they can
+be swapped for the new ones unseen.
 
 **Parameters**
 
@@ -796,7 +978,8 @@ def play(
 ) -> None
 ```
 
-Play a transition from the old cards that cover the canvas to the new ones.
+Play a transition from the old cards that cover the canvas to
+the new ones.
 
 **Parameters**
 
@@ -809,7 +992,9 @@ Play a transition from the old cards that cover the canvas to the new ones.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> canvas = TransitionCanvas()
 >>> canvas.cover([])
->>> canvas.play(TRANSITIONS[1], new=[], direction=1)
+>>> canvas.play(
+...     TRANSITIONS[1], new=[], direction=1
+... )
 >>> canvas.running
 True
 >>> canvas.stop()

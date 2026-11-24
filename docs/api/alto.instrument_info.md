@@ -5,11 +5,14 @@ package: alto
 permalink: /api/alto.instrument_info/
 ---
 {% raw %}
-What is known about each instrument's recordings, for the summary shown in the instrument settings.
+What is known about each instrument's recordings, for the summary shown
+in the instrument settings.
 
-The facts here come from the sources' own pages (the University of Iowa Musical Instrument Samples, and the Salamander
+The facts here come from the sources' own pages (the University of Iowa
+Musical Instrument Samples, and the Salamander
 Grand Piano). What is on disk
-(how many notes, their range, their size) is worked out when the page is shown, not stored here. Pure Python, no Qt.
+(how many notes, their range, their size) is worked out when the page is
+shown, not stored here. Pure Python, no Qt.
 
 **Examples**
 
@@ -50,7 +53,11 @@ The facts about where an instrument's recordings came from.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> info = InstrumentInfo("A flute.", source=IOWA, source_url="https://example.org/flute")
+>>> info = InstrumentInfo(
+...     "A flute.",
+...     source=IOWA,
+...     source_url="https://example.org/flute",
+... )
 >>> info.terms == IOWA_TERMS
 True
 ```
@@ -99,7 +106,10 @@ Report whether any recordings are on disk.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Coverage(0).installed, coverage([60]).installed
+>>> (
+...     Coverage(0).installed,
+...     coverage([60]).installed,
+... )
 (False, True)
 ```
 
@@ -121,11 +131,14 @@ Describe the coverage in a sentence for the instrument settings.
 >>> coverage(range(60, 73)).describe()
 '13 notes, C4 to C5, every semitone'
 >>> coverage([60, 62, 64, 65]).describe()
-'4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbor.'
+'4 notes, C4 to F4, almost every semitone. The few missing notes
+are shifted from a neighbor.'
 >>> coverage(range(48, 73, 2)).describe()
-'13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbor.'
+'13 notes, C3 to C5, about every second semitone. The other
+notes are shifted from a neighbor.'
 >>> coverage(range(21, 109, 3)).describe()
-'30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor.'
+'30 notes, A0 to C8, about every third semitone. The other notes
+are shifted from a neighbor.'
 ```
 
 ## coverage

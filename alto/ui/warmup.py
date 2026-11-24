@@ -1,30 +1,59 @@
 """
-Get ready, while Alto sits idle just after it opens, what a first visit to a page would otherwise pay for.
+Get ready, while Alto sits idle just after it opens, what a first visit
+to a page would otherwise pay for.
 
-The music font of the notation style is loaded by drawing a small staff out of sight. And most of what makes a page slow to open
-the first time is not the page. Labels such as "F♯" and "B♭" use signs that the interface font does not have, so Qt looks for a
-font that does, and it does so again for every size and weight of text, about 40 ms each time on Linux. Pages show such labels in
-several sizes, so a first visit could spend a tenth of a second looking for fonts. Laying out a line with those signs once in each
-size the interface uses, a little at a time while nothing else is happening, makes the first visit to a page about as quick as the
+The music font of the notation style is loaded by drawing a small staff
+out of sight. And most of what makes a page slow to open
+the first time is not the page. Labels such as "F♯" and "B♭" use signs
+that the interface font does not have, so Qt looks for a
+font that does, and it does so again for every size and weight of text,
+about 40 ms each time on Linux. Pages show such labels in
+several sizes, so a first visit could spend a tenth of a second looking
+for fonts. Laying out a line with those signs once in each
+size the interface uses, a little at a time while nothing else is
+happening, makes the first visit to a page about as quick as the
 second.
 
-Notes the current instrument has no recording of are made by shifting the nearest recording the first time they play, which
-takes a few tens of milliseconds each. They are made here too, one per step, so that even a first play is quick.
+Notes the current instrument has no recording of are made by shifting
+the nearest recording the first time they play, which
+takes a few tens of milliseconds each. They are made here too, one per
+step, so that even a first play is quick.
 
 Examples
 --------
 >>> warmed = []
 >>> owner = QObject()
->>> start(owner, steps=[lambda: warmed.append(1), lambda: warmed.append(2)], delay=0)
+>>> start(
+...     owner,
+...     steps=[
+...         lambda: warmed.append(1),
+...         lambda: warmed.append(2),
+...     ],
+...     delay=0,
+... )
 >>> import time
 >>> deadline = time.monotonic() + 2
->>> while len(warmed) < 2 and time.monotonic() < deadline:
+>>> while (
+...     len(warmed) < 2
+...     and time.monotonic() < deadline
+... ):
 ...     app.processEvents()
 >>> warmed
 [1, 2]
->>> while any(timer.isActive() for timer in owner.findChildren(QTimer)) and time.monotonic() < deadline:
+>>> while (
+...     any(
+...         timer.isActive()
+...         for timer in owner.findChildren(
+...             QTimer
+...         )
+...     )
+...     and time.monotonic() < deadline
+... ):
 ...     app.processEvents()
->>> any(timer.isActive() for timer in owner.findChildren(QTimer))  # it stops once every step has run
+>>> any(
+...     timer.isActive()
+...     for timer in owner.findChildren(QTimer)
+... )  # it stops once every step has run
 False
 """
 
@@ -47,14 +76,30 @@ from alto.theory.pitch import Note
 from alto.ui import zoom
 from alto.ui.staff import StaffWidget
 
-SIZES = (8, 9, 11, 12, 14, 15, 16, 18, 20, 22)  # the point sizes the interface's style sheets use, at 100%
-SIGNS = "C♯ D♭ E♮ Abc 0123"  # the signs labels use that the interface font may not have, with ordinary text
-START_DELAY_MS = 400  # after the window first appears, so its own first paint and the person's first click come first
+SIZES = (
+    8,
+    9,
+    11,
+    12,
+    14,
+    15,
+    16,
+    18,
+    20,
+    22,
+)  # the point sizes the interface's style sheets use, at 100%
+# the signs labels use that the interface font may not have, with
+# ordinary text
+SIGNS = "C♯ D♭ E♮ Abc 0123"
+# after the window first appears, so its own first paint and the
+# person's first click come first
+START_DELAY_MS = 400
 
 
 def _text_step(size: float, *, bold: bool) -> Callable[[], None]:
     """
-    Make the step that lays out the signs once in one size and weight, so Qt finds its fallback fonts for them now.
+    Make the step that lays out the signs once in one size and weight,
+    so Qt finds its fallback fonts for them now.
 
     Parameters
     ----------
@@ -82,7 +127,9 @@ def _text_step(size: float, *, bold: bool) -> Callable[[], None]:
         >>> step()  # doctest: +SKIP
         """
         app = QGuiApplication.instance()
-        font = QFont(app.font()) if isinstance(app, QGuiApplication) else QFont()
+        font = (
+            QFont(app.font()) if isinstance(app, QGuiApplication) else QFont()
+        )
         font.setPointSizeF(size)
         font.setBold(bold)
         QFontMetricsF(font).horizontalAdvance(SIGNS)
@@ -92,7 +139,8 @@ def _text_step(size: float, *, bold: bool) -> Callable[[], None]:
 
 def _staff_step() -> None:
     """
-    Draw a small staff with notes, a clef and a key signature out of sight, which loads the music font of the notation style.
+    Draw a small staff with notes, a clef and a key signature out of
+    sight, which loads the music font of the notation style.
 
     Examples
     --------
@@ -100,14 +148,19 @@ def _staff_step() -> None:
     """
     staff = StaffWidget()
     staff.resize(360, 160)
-    staff.show_notes([[Note(4, letter=0)], [Note(4, letter=3, accidental=1)]], clef="treble", key=2)
+    staff.show_notes(
+        [[Note(4, letter=0)], [Note(4, letter=3, accidental=1)]],
+        clef="treble",
+        key=2,
+    )
     staff.grab()
     staff.deleteLater()
 
 
 def _note_step(midi: int) -> Callable[[], None]:
     """
-    Make the step that makes one note the current instrument has no recording of.
+    Make the step that makes one note the current instrument has no
+    recording of.
 
     Parameters
     ----------
@@ -126,7 +179,8 @@ def _note_step(midi: int) -> Callable[[], None]:
 
     def step() -> None:
         """
-        Make the note's file, unless sound has been turned off since the warm-up began.
+        Make the note's file, unless sound has been turned off since the
+        warm-up began.
 
         Examples
         --------
@@ -142,8 +196,10 @@ def warmup_steps() -> list[Callable[[], None]]:
     """
     List the steps of the warm-up.
 
-    They draw a staff; lay out text in the application's own font size and each style sheet size, plain and bold, at the zoom;
-    and, while sound is on, make the notes the current instrument has no recording of.
+    They draw a staff; lay out text in the application's own font size
+    and each style sheet size, plain and bold, at the zoom;
+    and, while sound is on, make the notes the current instrument has no
+    recording of.
 
     Returns
     -------
@@ -152,8 +208,15 @@ def warmup_steps() -> list[Callable[[], None]]:
 
     Examples
     --------
-    >>> notes = len(sounds.unrecorded()) if sounds.enabled else 0
-    >>> len(warmup_steps()) == 1 + 22 + notes  # the staff, eleven sizes in two weights, and the notes
+    >>> notes = (
+    ...     len(sounds.unrecorded())
+    ...     if sounds.enabled
+    ...     else 0
+    ... )
+    >>> len(
+    ...     warmup_steps()
+    ... # the staff, eleven sizes in two weights, and the notes
+    ... ) == 1 + 22 + notes
     True
     """
     app = QGuiApplication.instance()
@@ -162,7 +225,11 @@ def warmup_steps() -> list[Callable[[], None]]:
     notes = sounds.unrecorded() if sounds.enabled else []
     return [
         _staff_step,
-        *(_text_step(size, bold=bold) for size in sizes for bold in (False, True)),
+        *(
+            _text_step(size, bold=bold)
+            for size in sizes
+            for bold in (False, True)
+        ),
         *(_note_step(midi) for midi in notes),
     ]
 
@@ -174,23 +241,29 @@ def start(
     delay: int = START_DELAY_MS,
 ) -> None:
     """
-    Run the warm-up's steps one at a time, each when the event loop has nothing else to do, beginning after a short delay.
+    Run the warm-up's steps one at a time, each when the event loop has
+    nothing else to do, beginning after a short delay.
 
-    Input and painting are handled between the steps, so the window stays as responsive as it is without the warm-up. If the
-    owner is deleted first (the window closed), the rest of the steps are dropped.
+    Input and painting are handled between the steps, so the window
+    stays as responsive as it is without the warm-up. If the
+    owner is deleted first (the window closed), the rest of the steps
+    are dropped.
 
     Parameters
     ----------
     owner : QObject
         What the warm-up belongs to, usually the main window.
     steps : list of callable or None, default None
-        The steps; None for the usual ones (`warmup_steps()`). Keyword-only.
+        The steps; None for the usual ones (`warmup_steps()`).
+        Keyword-only.
     delay : int, default START_DELAY_MS
         How long to wait first, in milliseconds. Keyword-only.
 
     Examples
     --------
-    >>> start(QObject(), steps=[], delay=0)  # nothing to do
+    >>> start(
+    ...     QObject(), steps=[], delay=0
+    ... )  # nothing to do
     """
     remaining = list(steps if steps is not None else warmup_steps())
     timer = QTimer(owner)

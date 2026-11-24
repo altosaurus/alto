@@ -5,10 +5,13 @@ package: alto
 permalink: /api/alto.settings/
 ---
 {% raw %}
-User settings. Pure Python (no Qt); persistence lives in ui/exercise_settings.py.
+User settings. Pure Python (no Qt); persistence lives in
+ui/exercise_settings.py.
 
-Each exercise with settings has a small dataclass here (`NoteNameSettings`, `KeyboardSettings` and so on) and one shared
-instance of it (`note_names`, `keyboard` ...) that the exercise and its settings panel both read and write.
+Each exercise with settings has a small dataclass here
+(`NoteNameSettings`, `KeyboardSettings` and so on) and one shared
+instance of it (`note_names`, `keyboard` ...) that the exercise and its
+settings panel both read and write.
 
 **Examples**
 
@@ -32,7 +35,8 @@ def spell(
 ) -> str
 ```
 
-Return a note name in the chosen naming system, optionally including its octave.
+Return a note name in the chosen naming system, optionally including
+its octave.
 
 **Parameters**
 
@@ -53,17 +57,38 @@ Return a note name in the chosen naming system, optionally including its octave.
 'F♯'
 >>> spell(Note.parse("F#4"), naming="solfege")
 'Fa♯'
->>> spell(Note.parse("F#4"), naming="degrees", key=1)
+>>> spell(
+...     Note.parse("F#4"),
+...     naming="degrees",
+...     key=1,
+... )
 '7̂'
->>> spell(Note.parse("F4"), naming="degrees", key=1)
+>>> spell(
+...     Note.parse("F4"),
+...     naming="degrees",
+...     key=1,
+... )
 '♭7̂'
 >>> spell(Note.parse("Eb4"), naming="degrees")
 '♭3̂'
->>> spell(Note.parse("G4"), naming="functions", key=1)
+>>> spell(
+...     Note.parse("G4"),
+...     naming="functions",
+...     key=1,
+... )
 'Tonic'
->>> spell(Note.parse("F4"), naming="functions", key=1)
+>>> spell(
+...     Note.parse("F4"),
+...     naming="functions",
+...     key=1,
+... )
 'Lowered Leading tone'
->>> spell(Note.parse("G4"), naming="degrees", key=1, octave=True)
+>>> spell(
+...     Note.parse("G4"),
+...     naming="degrees",
+...     key=1,
+...     octave=True,
+... )
 '1̂ / 4'
 ```
 
@@ -96,7 +121,8 @@ Return the name and octave of the natural note on a staff step.
 class ClefChoice
 ```
 
-Settings with a set of chosen clefs, which are always used in the same order.
+Settings with a set of chosen clefs, which are always used in the
+same order.
 
 **Attributes**
 
@@ -106,7 +132,9 @@ Settings with a set of chosen clefs, which are always used in the same order.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
+>>> ArpeggioSettings(
+...     clefs={"tenor", "alto"}
+... ).active_clefs()
 ['alto', 'tenor']
 ```
 
@@ -125,9 +153,13 @@ Return the clefs to use, in canonical order.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
+>>> NoteNameSettings(
+...     clefs={"grand", "tenor"}
+... ).active_clefs()
 ['tenor', 'grand']
->>> ClefBasicsSettings(clefs={"subbass", "treble"}).active_clefs()
+>>> ClefBasicsSettings(
+...     clefs={"subbass", "treble"}
+... ).active_clefs()
 ['treble', 'subbass']
 >>> NoteNameSettings(clefs=set()).active_clefs()
 ['treble']
@@ -167,9 +199,13 @@ Return the key signatures to draw from, lowest first.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ConstructionSettings(keys={2, -1}).active_keys()
+>>> ConstructionSettings(
+...     keys={2, -1}
+... ).active_keys()
 [-1, 2]
->>> KeySignatureSettings(keys=set()).active_keys()
+>>> KeySignatureSettings(
+...     keys=set()
+... ).active_keys()
 [0]
 ```
 
@@ -210,7 +246,9 @@ Return the note values to draw, from longest to shortest.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> NoteNameSettings(note_values={"half", "whole"}).active_values()
+>>> NoteNameSettings(
+...     note_values={"half", "whole"}
+... ).active_values()
 ['whole', 'half']
 ```
 
@@ -235,7 +273,11 @@ Return the range of notes that may be asked on a clef.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNameSettings().range_for("treble")
 (22, 52)
->>> NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
+>>> NoteNameSettings(
+...     ranges={"treble": (40, 30)}
+... ).range_for(
+...     "treble"
+... )  # given in the wrong order
 (30, 40)
 ```
 
@@ -269,7 +311,9 @@ The settings of the note identification exercise.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> cfg = NoteNameSettings(clefs={"bass"}, key_signatures={2})
+>>> cfg = NoteNameSettings(
+...     clefs={"bass"}, key_signatures={2}
+... )
 >>> cfg.active_clefs(), cfg.active_keys()
 (['bass'], [2])
 ```
@@ -282,8 +326,10 @@ def active_keys() -> list[int]
 
 Return the key signatures to draw from, lowest first.
 
-The field is named `key_signatures` rather than `keys`, as in `KeyChoice`, because the name is part of the practice
-signature that stored questions are matched by; renaming it would orphan every learner's saved questions.
+The field is named `key_signatures` rather than `keys`, as in
+`KeyChoice`, because the name is part of the practice
+signature that stored questions are matched by; renaming it
+would orphan every learner's saved questions.
 
 **Returns**
 
@@ -292,7 +338,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> NoteNameSettings(key_signatures={2, -1}).active_keys()
+>>> NoteNameSettings(
+...     key_signatures={2, -1}
+... ).active_keys()
 [-1, 2]
 ```
 
@@ -312,9 +360,11 @@ PackExerciseSettings(
 
 Bases: `StaffRangeSettings`
 
-The options a plugin's exercise offers the learner, such as its range and whether to ask accidentals.
+The options a plugin's exercise offers the learner, such as its
+range and whether to ask accidentals.
 
-Only the options the plugin declares for the exercise are shown and used; the rest keep their defaults.
+Only the options the plugin declares for the exercise are shown and
+used; the rest keep their defaults.
 
 **Attributes**
 
@@ -330,9 +380,13 @@ Only the options the plugin declares for the exercise are shown and used; the re
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> PackExerciseSettings(clefs={"alto"}).sound is None
+>>> PackExerciseSettings(
+...     clefs={"alto"}
+... ).sound is None
 True
->>> PackExerciseSettings(clefs={"alto"}).keys is None
+>>> PackExerciseSettings(
+...     clefs={"alto"}
+... ).keys is None
 True
 ```
 
@@ -356,7 +410,8 @@ IntervalSettings(
 
 Bases: `StaffRangeSettings`
 
-Staff signatures, presentations, answer format and spelled intervals for Interval Identification.
+Staff signatures, presentations, answer format and spelled intervals
+for Interval Identification.
 
 **Examples**
 
@@ -371,7 +426,8 @@ Staff signatures, presentations, answer format and spelled intervals for Interva
 def staff_span(clef: str) -> int
 ```
 
-Count the written staff positions in a clef's selected range, including both endpoints.
+Count the written staff positions in a clef's selected range,
+including both endpoints.
 
 **Parameters**
 
@@ -384,7 +440,9 @@ Count the written staff positions in a clef's selected range, including both end
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> IntervalSettings(ranges={"treble": (28, 30)}).staff_span("treble")
+>>> IntervalSettings(
+...     ranges={"treble": (28, 30)}
+... ).staff_span("treble")
 3
 ```
 
@@ -394,7 +452,8 @@ Count the written staff positions in a clef's selected range, including both end
 def key_name(midi: int) -> str
 ```
 
-Return the name of a MIDI note with its octave, black keys as sharps.
+Return the name of a MIDI note with its octave, black keys as
+sharps.
 
 **Parameters**
 
@@ -452,7 +511,8 @@ The settings of the keyboard identification exercise.
 def keyboard_interval_name(distance: int) -> str
 ```
 
-Name a keyboard interval by its distance, including compound intervals.
+Name a keyboard interval by its distance, including compound
+intervals.
 
 **Parameters**
 
@@ -469,7 +529,11 @@ Name a keyboard interval by its distance, including compound intervals.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> keyboard_interval_name(13), keyboard_interval_name(18), keyboard_interval_name(24)
+>>> (
+...     keyboard_interval_name(13),
+...     keyboard_interval_name(18),
+...     keyboard_interval_name(24),
+... )
 ('m9', 'A11 / d12', 'P15')
 >>> keyboard_interval_name(87)
 'm52'
@@ -488,7 +552,8 @@ KeyboardIntervalSettings(
 )
 ```
 
-The keyboard range and interval distances used for keyboard interval identification.
+The keyboard range and interval distances used for keyboard interval
+identification.
 
 **Attributes**
 
@@ -512,7 +577,8 @@ The keyboard range and interval distances used for keyboard interval identificat
 def answer_button_limit() -> int
 ```
 
-Return the requested count within the supported range of 1 to 87 buttons.
+Return the requested count within the supported range of 1 to 87
+buttons.
 
 **Returns**
 
@@ -523,7 +589,9 @@ Return the requested count within the supported range of 1 to 87 buttons.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardIntervalSettings().answer_button_limit()
 6
->>> KeyboardIntervalSettings(button_count=0).answer_button_limit()
+>>> KeyboardIntervalSettings(
+...     button_count=0
+... ).answer_button_limit()
 1
 ```
 
@@ -542,7 +610,9 @@ Return a piano range containing at least two distinct keys.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> KeyboardIntervalSettings(low=60, high=60).bounds()
+>>> KeyboardIntervalSettings(
+...     low=60, high=60
+... ).bounds()
 (60, 61)
 ```
 
@@ -561,9 +631,13 @@ Return selected interval distances that fit the keyboard range.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> KeyboardIntervalSettings(low=60, high=64, intervals={3, 4, 12}).active_intervals()
+>>> KeyboardIntervalSettings(
+...     low=60, high=64, intervals={3, 4, 12}
+... ).active_intervals()
 [3, 4]
->>> KeyboardIntervalSettings(intervals=set()).active_intervals()
+>>> KeyboardIntervalSettings(
+...     intervals=set()
+... ).active_intervals()
 []
 ```
 
@@ -607,7 +681,9 @@ The settings of the note construction exercise.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ConstructionSettings(clefs={"grand"}).active_clefs()
+>>> ConstructionSettings(
+...     clefs={"grand"}
+... ).active_clefs()
 ['grand']
 ```
 
@@ -649,7 +725,8 @@ The settings of the arpeggio identification exercise.
 def active_types() -> list[str]
 ```
 
-Return the chord types to ask, triads first and then seventh chords.
+Return the chord types to ask, triads first and then seventh
+chords.
 
 **Returns**
 
@@ -658,7 +735,9 @@ Return the chord types to ask, triads first and then seventh chords.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ArpeggioSettings(types={"minor 7th", "major"}).active_types()
+>>> ArpeggioSettings(
+...     types={"minor 7th", "major"}
+... ).active_types()
 ['major', 'minor 7th']
 ```
 
@@ -677,7 +756,9 @@ Return the inversions to ask, root position first.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ArpeggioSettings(inversions={2, 0}).active_inversions()
+>>> ArpeggioSettings(
+...     inversions={2, 0}
+... ).active_inversions()
 [0, 2]
 ```
 
@@ -689,7 +770,8 @@ def inversions_for(chord_type: str) -> list[int]
 
 Return the inversions that can be asked for a chord type.
 
-A triad has no third inversion. If none of the chosen inversions applies (only the third, for a triad), root position is
+A triad has no third inversion. If none of the chosen inversions
+applies (only the third, for a triad), root position is
 used.
 
 **Parameters**
@@ -704,9 +786,14 @@ used.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = ArpeggioSettings()
->>> cfg.inversions_for("major"), cfg.inversions_for("dominant 7th")
+>>> (
+...     cfg.inversions_for("major"),
+...     cfg.inversions_for("dominant 7th"),
+... )
 ([0, 1, 2], [0, 1, 2, 3])
->>> ArpeggioSettings(inversions={3}).inversions_for("major")
+>>> ArpeggioSettings(
+...     inversions={3}
+... ).inversions_for("major")
 [0]
 ```
 
@@ -778,7 +865,9 @@ Choose the starting signs for writing a key signature.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> OrderOfKeysSettings(keys={-2, 4}).available_starts()
+>>> OrderOfKeysSettings(
+...     keys={-2, 4}
+... ).available_starts()
 range(-2, 5)
 ```
 
@@ -797,7 +886,11 @@ Return starting counts that fit at least one selected signature.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> list(OrderOfKeysSettings(keys={-2}).available_starts())
+>>> list(
+...     OrderOfKeysSettings(
+...         keys={-2}
+...     ).available_starts()
+... )
 [-2, -1, 0]
 ```
 
@@ -809,7 +902,8 @@ KeyConstructionSettings()
 
 Bases: `KeySignatureSettings`
 
-The settings of the key signature construction exercise: the same choices as key signature identification.
+The settings of the key signature construction exercise: the same
+choices as key signature identification.
 
 **Attributes**
 
@@ -841,7 +935,8 @@ ScaleIdentificationSettings(
 
 Bases: `KeySignatureSettings`
 
-Choose the clefs, scale types and independent staff and scale key signatures for identification.
+Choose the clefs, scale types and independent staff and scale key
+signatures for identification.
 
 **Attributes**
 
@@ -855,7 +950,9 @@ Choose the clefs, scale types and independent staff and scale key signatures for
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> cfg = ScaleIdentificationSettings(keys={2}, staff_keys={-3})
+>>> cfg = ScaleIdentificationSettings(
+...     keys={2}, staff_keys={-3}
+... )
 >>> cfg.active_keys(), cfg.active_staff_keys()
 ([2], [-3])
 ```
@@ -866,7 +963,8 @@ Choose the clefs, scale types and independent staff and scale key signatures for
 def active_staff_keys() -> list[int]
 ```
 
-Return the selected staff signatures, falling back to no signature.
+Return the selected staff signatures, falling back to no
+signature.
 
 **Returns**
 
@@ -875,7 +973,9 @@ Return the selected staff signatures, falling back to no signature.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ScaleIdentificationSettings(staff_keys=set()).active_staff_keys()
+>>> ScaleIdentificationSettings(
+...     staff_keys=set()
+... ).active_staff_keys()
 [0]
 ```
 
@@ -894,11 +994,15 @@ ScaleConstructionSettings(
 
 Bases: `KeySignatureSettings`
 
-The settings of the scale construction exercise: the same choices as key signature identification.
+The settings of the scale construction exercise: the same choices as
+key signature identification.
 
-Here "keys" chooses the scale by the signature it has: G major and E minor both have one sharp. `staff_keys` is a
-separate choice: the key signature drawn on the staff, which need not be the scale's. On a staff with two flats a C
-major scale has to be placed with naturals where the staff would otherwise flatten the notes.
+Here "keys" chooses the scale by the signature it has: G major and E
+minor both have one sharp. `staff_keys` is a
+separate choice: the key signature drawn on the staff, which need
+not be the scale's. On a staff with two flats a C
+major scale has to be placed with naturals where the staff would
+otherwise flatten the notes.
 
 **Attributes**
 
@@ -915,7 +1019,13 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = ScaleConstructionSettings(keys={3})
->>> cfg.active_keys(), cfg.active_clefs(), cfg.steps, cfg.octave, cfg.active_staff_keys()
+>>> (
+...     cfg.active_keys(),
+...     cfg.active_clefs(),
+...     cfg.steps,
+...     cfg.octave,
+...     cfg.active_staff_keys(),
+... )
 ([3], ['treble', 'bass'], False, False, [0])
 ```
 
@@ -925,7 +1035,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 def active_staff_keys() -> list[int]
 ```
 
-Return the key signatures that may be drawn on the staff, lowest first.
+Return the key signatures that may be drawn on the staff, lowest
+first.
 
 **Returns**
 
@@ -934,9 +1045,13 @@ Return the key signatures that may be drawn on the staff, lowest first.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ScaleConstructionSettings(staff_keys={-2, 3}).active_staff_keys()
+>>> ScaleConstructionSettings(
+...     staff_keys={-2, 3}
+... ).active_staff_keys()
 [-2, 3]
->>> ScaleConstructionSettings(staff_keys=set()).active_staff_keys()
+>>> ScaleConstructionSettings(
+...     staff_keys=set()
+... ).active_staff_keys()
 [0]
 ```
 
@@ -952,9 +1067,11 @@ ClefBasicsSettings(
 
 Bases: `ClefChoice`
 
-The settings of the clef basics exercise: what kind of question is asked, and which clefs.
+The settings of the clef basics exercise: what kind of question is
+asked, and which clefs.
 
-Every clef is one of three symbols, the G, C or F clef, put on a line of the staff: the mezzo-soprano clef is the C clef
+Every clef is one of three symbols, the G, C or F clef, put on a
+line of the staff: the mezzo-soprano clef is the C clef
 on the second line. The three symbols can always be chosen from.
 
 **Attributes**
@@ -965,7 +1082,9 @@ on the second line. The three symbols can always be chosen from.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ClefBasicsSettings(clefs={"subbass", "alto"}).active_clefs()
+>>> ClefBasicsSettings(
+...     clefs={"subbass", "alto"}
+... ).active_clefs()
 ['alto', 'subbass']
 >>> ClefBasicsSettings().question_type
 'construction'
@@ -986,9 +1105,13 @@ Return the kind of question to ask.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ClefBasicsSettings(question_type="identification").active_type()
+>>> ClefBasicsSettings(
+...     question_type="identification"
+... ).active_type()
 'identification'
->>> ClefBasicsSettings(question_type="nonsense").active_type()
+>>> ClefBasicsSettings(
+...     question_type="nonsense"
+... ).active_type()
 'construction'
 ```
 
@@ -998,7 +1121,8 @@ Return the kind of question to ask.
 def answer_clefs() -> list[str]
 ```
 
-Return the clefs to offer as buttons when a clef is to be named: those asked for, and enough others to have a choice.
+Return the clefs to offer as buttons when a clef is to be named:
+those asked for, and enough others to have a choice.
 
 **Returns**
 
@@ -1007,9 +1131,13 @@ Return the clefs to offer as buttons when a clef is to be named: those asked for
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ClefBasicsSettings(clefs={"alto", "tenor"}).answer_clefs()
+>>> ClefBasicsSettings(
+...     clefs={"alto", "tenor"}
+... ).answer_clefs()
 ['alto', 'tenor']
->>> ClefBasicsSettings(clefs={"alto"}).answer_clefs()
+>>> ClefBasicsSettings(
+...     clefs={"alto"}
+... ).answer_clefs()
 ['treble', 'alto']
 ```
 
@@ -1054,7 +1182,9 @@ The settings of the circle of fifths exercise.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> CircleSettings().active_questions()
 ['major', 'minor', 'numeral']
->>> CircleSettings(questions={"numeral"}).active_questions()
+>>> CircleSettings(
+...     questions={"numeral"}
+... ).active_questions()
 ['numeral']
 >>> CircleSettings().active_scheme().name
 'Cyan to indigo'
@@ -1066,7 +1196,8 @@ The settings of the circle of fifths exercise.
 def active_questions() -> list[str]
 ```
 
-Return the kinds of question to ask, in the order they are listed.
+Return the kinds of question to ask, in the order they are
+listed.
 
 **Returns**
 
@@ -1075,9 +1206,13 @@ Return the kinds of question to ask, in the order they are listed.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> CircleSettings(questions=set()).active_questions()
+>>> CircleSettings(
+...     questions=set()
+... ).active_questions()
 ['major', 'minor', 'numeral']
->>> CircleSettings(questions={"minor", "nonsense"}).active_questions()
+>>> CircleSettings(
+...     questions={"minor", "nonsense"}
+... ).active_questions()
 ['minor']
 ```
 
@@ -1096,9 +1231,13 @@ Return the color scheme to draw the circle in.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> CircleSettings(scheme="midnight").active_scheme().name
+>>> CircleSettings(
+...     scheme="midnight"
+... ).active_scheme().name
 'Midnight'
->>> CircleSettings(scheme="deleted").active_scheme().key
+>>> CircleSettings(
+...     scheme="deleted"
+... ).active_scheme().key
 'cyan-indigo'
 ```
 {% endraw %}

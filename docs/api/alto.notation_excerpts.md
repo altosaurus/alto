@@ -17,7 +17,8 @@ Excerpt(
 )
 ```
 
-A versioned score and its visible notation components in SVG marker order.
+A versioned score and its visible notation components in SVG marker
+order.
 
 ## excerpts
 
@@ -39,7 +40,8 @@ Read the bundled excerpt manifests.
 def passages_by_term() -> dict[str, dict[str, list[int]]]
 ```
 
-Group score locations by term and passage so dense passages do not dominate the selection.
+Group score locations by term and passage so dense passages do not
+dominate the selection.
 
 **Returns**
 

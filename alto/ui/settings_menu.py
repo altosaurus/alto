@@ -1,9 +1,13 @@
 """
-The building blocks of the settings panels that slide in beside an exercise.
+The building blocks of the settings panels that slide in beside an
+exercise.
 
-A panel is a menu of rows (Clefs, Range, Key signatures ...) that each lead to a page, in a `SlideStack`. This module has the
-rows, switches, checklists and editors those pages are made of, and the panels' shared base classes: `ExerciseSettingsPanel`
-(navigation and saving), `ClefsPanel` (a Clefs page) and `StaffRangePanel` (a Range page per clef). The panels themselves are
+A panel is a menu of rows (Clefs, Range, Key signatures ...) that each
+lead to a page, in a `SlideStack`. This module has the
+rows, switches, checklists and editors those pages are made of, and the
+panels' shared base classes: `ExerciseSettingsPanel`
+(navigation and saving), `ClefsPanel` (a Clefs page) and
+`StaffRangePanel` (a Range page per clef). The panels themselves are
 in `alto.ui.settings_panel` and `alto.ui.pack_settings_panel`.
 
 Examples
@@ -17,6 +21,7 @@ Examples
 
 from __future__ import annotations
 
+from abc import abstractmethod
 from collections.abc import (
     Callable,
     Iterable,
@@ -83,6 +88,7 @@ from alto.ui import (
 from alto.ui.colors import blend
 from alto.ui.degree_text import DegreeCheckBox
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.keyboard import KeyboardSpan
 from alto.ui.pictures import (
     CLEF_NAMES,
     VALUE_NAMES,
@@ -94,6 +100,7 @@ from alto.ui.pictures import (
 )
 from alto.ui.practice_limits import DailyLimitsEditor
 from alto.ui.staff import StaffWidget
+from alto.ui.widgets import vertical_scroll_area
 from alto.ui.zoom import (
     css,
     px,
@@ -106,14 +113,16 @@ def guard_last(
     enabled: bool = True,
 ) -> None:
     """
-    Disable the only checked box, so that at least one choice always stays selected.
+    Disable the only checked box, so that at least one choice always
+    stays selected.
 
     Parameters
     ----------
     boxes : iterable of QAbstractButton
         The checkboxes of one choice.
     enabled : bool, default True
-        False disables them all (for when the whole choice is switched off). Keyword-only.
+        False disables them all (for when the whole choice is switched
+        off). Keyword-only.
 
     Examples
     --------
@@ -151,7 +160,9 @@ def _key_label(count: int) -> str:
     >>> _key_label(0), _key_label(2), _key_label(-3)
     ('C  ·  none', 'D  ·  2♯', 'E♭  ·  3♭')
     """
-    return f"{MAJOR_KEYS[count]}  ·  " + ("none" if count == 0 else f"{abs(count)}{'♯' if count > 0 else '♭'}")
+    return f"{MAJOR_KEYS[count]}  ·  " + (
+        "none" if count == 0 else f"{abs(count)}{'♯' if count > 0 else '♭'}"
+    )
 
 
 def arrow_button(
@@ -176,13 +187,19 @@ def arrow_button(
 
     Examples
     --------
-    >>> button = arrow_button(Qt.ArrowType.UpArrow, tip="Raise the lowest note")
+    >>> button = arrow_button(
+    ...     Qt.ArrowType.UpArrow,
+    ...     tip="Raise the lowest note",
+    ... )
     >>> button.toolTip(), button.autoRepeat()
     ('Raise the lowest note', True)
     """
     btn = QToolButton()
     btn.setArrowType(kind)
-    btn.setProperty("arrowButton", True)  # styled with a visible border (see style.py)
+    btn.setProperty(
+        "arrowButton",
+        True,
+    )  # styled with a visible border (see style.py)
     btn.setToolTip(tip)
     btn.setAccessibleName(tip)
     btn.setAutoRepeat(True)
@@ -195,12 +212,14 @@ class RangeEditor(QWidget):
     """
     A staff showing the lowest and highest note asked for a clef.
 
-    Arrows on the left move the lower bound, arrows on the right move the upper bound.
+    Arrows on the left move the lower bound, arrows on the right move
+    the upper bound.
 
     Attributes
     ----------
     edited : Signal
-        Emitted with the clef key, the lowest note and the highest note (as staff steps) after a change.
+        Emitted with the clef key, the lowest note and the highest note
+        (as staff steps) after a change.
     key : str
         The clef.
     low : int
@@ -214,7 +233,9 @@ class RangeEditor(QWidget):
 
     Examples
     --------
-    >>> editor = RangeEditor("treble", low=28, high=34)
+    >>> editor = RangeEditor(
+    ...     "treble", low=28, high=34
+    ... )
     >>> editor.caption_text.text()
     '<b>C4 – B4</b>'
     """
@@ -242,15 +263,20 @@ class RangeEditor(QWidget):
         high : int
             The highest note asked. Keyword-only.
         limits : tuple of (int, int) or None, default None
-            The furthest the bounds may go, as staff steps; None for the clef's usual limits. Keyword-only.
+            The furthest the bounds may go, as staff steps; None for the
+            clef's usual limits. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the editor. Keyword-only.
 
         Examples
         --------
-        >>> RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
+        >>> RangeEditor(
+        ...     "bass", low=14, high=28
+        ... ).limits == settings.RANGE_LIMITS["bass"]
         True
-        >>> RangeEditor("alto", low=21, high=30, limits=(21, 30)).limits
+        >>> RangeEditor(
+        ...     "alto", low=21, high=30, limits=(21, 30)
+        ... ).limits
         (21, 30)
         """
         super().__init__(parent)
@@ -258,14 +284,11 @@ class RangeEditor(QWidget):
         self.limits = limits or RANGE_LIMITS[key]
         self.caption_text = QLabel()
         self.caption_text.setStyleSheet(css("font-size: 12pt;"))
-        self.caption = QWidget()  # the clef as a picture, then the lowest and highest note
+        self.caption = (
+            QWidget()
+        )  # the clef as a picture, then the lowest and highest note
         caption_row = QHBoxLayout(self.caption)
-        caption_row.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
+        caption_row.setContentsMargins(0, 0, 0, 0)
         caption_row.addWidget(ClefPictures([key], scale=0.9))
         caption_row.addWidget(self.caption_text)
         caption_row.addStretch()
@@ -277,24 +300,35 @@ class RangeEditor(QWidget):
             compact=True,
         )
         self.staff.setFixedWidth(px(168))
-        self.low_up = arrow_button(Qt.ArrowType.UpArrow, tip="Raise the lowest note")
-        self.low_down = arrow_button(Qt.ArrowType.DownArrow, tip="Lower the lowest note")
-        self.high_up = arrow_button(Qt.ArrowType.UpArrow, tip="Raise the highest note")
-        self.high_down = arrow_button(Qt.ArrowType.DownArrow, tip="Lower the highest note")
+        self.low_up = arrow_button(
+            Qt.ArrowType.UpArrow,
+            tip="Raise the lowest note",
+        )
+        self.low_down = arrow_button(
+            Qt.ArrowType.DownArrow,
+            tip="Lower the lowest note",
+        )
+        self.high_up = arrow_button(
+            Qt.ArrowType.UpArrow,
+            tip="Raise the highest note",
+        )
+        self.high_down = arrow_button(
+            Qt.ArrowType.DownArrow,
+            tip="Lower the highest note",
+        )
         self.low_up.clicked.connect(lambda: self._move(low=1))
         self.low_down.clicked.connect(lambda: self._move(low=-1))
         self.high_up.clicked.connect(lambda: self._move(high=1))
         self.high_down.clicked.connect(lambda: self._move(high=-1))
 
         row = QHBoxLayout()
-        row.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-        row.addStretch()  # keep the staff and its arrows together, centered in the pane
-        for column, buttons in ((0, (self.low_up, self.low_down)), (2, (self.high_up, self.high_down))):
+        row.setContentsMargins(0, 0, 0, 0)
+        # keep the staff and its arrows together, centered in the pane
+        row.addStretch()
+        for column, buttons in (
+            (0, (self.low_up, self.low_down)),
+            (2, (self.high_up, self.high_down)),
+        ):
             col = QVBoxLayout()
             col.setSpacing(2)
             col.addStretch()  # center the pair on the staff's midline
@@ -326,45 +360,69 @@ class RangeEditor(QWidget):
         high: int = 0,
     ) -> None:
         """
-        Move the bounds by steps, keeping the lower below the upper and both within the limits.
+        Move the bounds by steps, keeping the lower below the upper and
+        both within the limits.
 
         Parameters
         ----------
         low : int, default 0
-            How many staff steps to move the lower bound; positive is higher.
+            How many staff steps to move the lower bound; positive is
+            higher.
         high : int, default 0
             How many steps to move the upper bound. Keyword-only.
 
         Examples
         --------
-        >>> editor = RangeEditor("treble", low=28, high=34)
+        >>> editor = RangeEditor(
+        ...     "treble", low=28, high=34
+        ... )
         >>> got = []
-        >>> _ = editor.edited.connect(lambda key, lo, hi: got.append((key, lo, hi)))
+        >>> _ = editor.edited.connect(
+        ...     lambda key, lo, hi: got.append(
+        ...         (key, lo, hi)
+        ...     )
+        ... )
         >>> editor._move(low=1)
         >>> got
         [('treble', 29, 34)]
-        >>> editor._move(low=100)  # the lower bound cannot pass the upper
+        >>> editor._move(
+        ...     low=100
+        ... )  # the lower bound cannot pass the upper
         >>> editor.low
         34
         """
-        self.low = min(max(self.low + low, self.limits[0]), self.high)  # the lower bound can't pass the upper
+        self.low = min(
+            max(self.low + low, self.limits[0]),
+            self.high,
+        )  # the lower bound can't pass the upper
         self.high = max(min(self.high + high, self.limits[1]), self.low)
         self._refresh()
         self.edited.emit(self.key, self.low, self.high)
 
     def _refresh(self) -> None:
         """
-        Show the bounds on the staff and in the caption, and enable only the arrows that can still move.
+        Show the bounds on the staff and in the caption, and enable only
+        the arrows that can still move.
 
         Examples
         --------
-        >>> editor = RangeEditor("treble", low=22, high=30)  # 22 is the lowest the treble range goes
+        >>> editor = RangeEditor(
+        ...     "treble", low=22, high=30
+        ... )  # 22 is the lowest the treble range goes
         >>> editor._refresh()
-        >>> editor.low_down.isEnabled(), editor.low_up.isEnabled()
+        >>> (
+        ...     editor.low_down.isEnabled(),
+        ...     editor.low_up.isEnabled(),
+        ... )
         (False, True)
         """
-        self.caption_text.setText(f"<b>{diatonic_name(self.low)} – {diatonic_name(self.high)}</b>")
-        self.staff.show_notes([[Note.from_diatonic(self.low)], [Note.from_diatonic(self.high)]], clef=self.key)
+        self.caption_text.setText(
+            f"<b>{diatonic_name(self.low)} – {diatonic_name(self.high)}</b>",
+        )
+        self.staff.show_notes(
+            [[Note.from_diatonic(self.low)], [Note.from_diatonic(self.high)]],
+            clef=self.key,
+        )
         self.low_up.setEnabled(self.low < self.high)
         self.low_down.setEnabled(self.low > self.limits[0])
         self.high_up.setEnabled(self.high < self.limits[1])
@@ -375,7 +433,8 @@ class KeyDiagram(QWidget):
     """
     A small fork showing which key signatures are selected.
 
-    C major is on the left, then two rows of seven dots: 1 to 7 sharps on the top row and 1 to 7 flats on the bottom.
+    C major is on the left, then two rows of seven dots: 1 to 7 sharps
+    on the top row and 1 to 7 flats on the bottom.
     Selected keys are filled, the rest are hollow.
 
     Attributes
@@ -383,7 +442,8 @@ class KeyDiagram(QWidget):
     DOT, PITCH, ROW_GAP, PAD : float
         The dot radius and the spacing, in pixels.
     keys : set of int
-        The selected key signatures: sharps if positive, flats if negative.
+        The selected key signatures: sharps if positive, flats if
+        negative.
 
     Examples
     --------
@@ -391,7 +451,12 @@ class KeyDiagram(QWidget):
     'C, D'
     """
 
-    DOT, PITCH, ROW_GAP, PAD = 4.4, 12.6, 13.0, 1.5  # dot radius and spacing, in pixels
+    DOT, PITCH, ROW_GAP, PAD = (
+        4.4,
+        12.6,
+        13.0,
+        1.5,
+    )  # dot radius and spacing, in pixels
 
     def __init__(
         self,
@@ -418,14 +483,25 @@ class KeyDiagram(QWidget):
         self.keys: set[int] = set(keys or ())
         zoomed = zoom.factor()  # the dots and their spacing follow the zoom
         self.DOT, self.PITCH, self.ROW_GAP, self.PAD = (
-            value * zoomed for value in (type(self).DOT, type(self).PITCH, type(self).ROW_GAP, type(self).PAD)
+            value * zoomed
+            for value in (
+                type(self).DOT,
+                type(self).PITCH,
+                type(self).ROW_GAP,
+                type(self).PAD,
+            )
         )
-        self.first_column = self.PAD + 2 * self.DOT + px(7) + self.DOT  # x of the 1-sharp / 1-flat dots
+        self.first_column = (
+            self.PAD + 2 * self.DOT + px(7) + self.DOT
+        )  # x of the 1-sharp / 1-flat dots
         self.setFixedSize(
-            int(self.first_column + 6 * self.PITCH + self.DOT + self.PAD) + px(1),
+            int(self.first_column + 6 * self.PITCH + self.DOT + self.PAD)
+            + px(1),
             int(self.ROW_GAP + 2 * self.DOT + 2 * self.PAD) + px(3),
         )
-        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # the row underneath is the click target
+        self.setAttribute(
+            Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+        )  # the row underneath is the click target
         self._update_tip()
 
     def set_keys(self, keys: set[int]) -> None:
@@ -450,7 +526,8 @@ class KeyDiagram(QWidget):
 
     def _update_tip(self) -> None:
         """
-        Set the tooltip to the names of the selected keys, sharp keys first.
+        Set the tooltip to the names of the selected keys, sharp keys
+        first.
 
         Examples
         --------
@@ -459,7 +536,10 @@ class KeyDiagram(QWidget):
         >>> diagram.toolTip()
         'G, A'
         """
-        names = [MAJOR_KEYS[k] for k in sorted(self.keys, key=lambda k: (k < 0, abs(k)))]
+        names = [
+            MAJOR_KEYS[k]
+            for k in sorted(self.keys, key=lambda k: (k < 0, abs(k)))
+        ]
         self.setToolTip(", ".join(names))
 
     def paintEvent(self, _: QPaintEvent) -> None:
@@ -480,11 +560,18 @@ class KeyDiagram(QWidget):
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         pal = self.palette()
         text = pal.color(QPalette.ColorRole.Text)
-        base = pal.color(QPalette.ColorRole.Base)  # the row is filled with the base color
+        base = pal.color(
+            QPalette.ColorRole.Base,
+        )  # the row is filled with the base color
 
-        def shade(t: float) -> QColor:  # t of the way from the row's background to the text color
+        def shade(
+            t: float,
+        ) -> (
+            QColor
+        ):  # t of the way from the row's background to the text color
             """
-            Return a color a fraction of the way from the row's background to the text color.
+            Return a color a fraction of the way from the row's
+            background to the text color.
 
             Parameters
             ----------
@@ -502,9 +589,14 @@ class KeyDiagram(QWidget):
             """
             return blend(base, b=text, t=t)
 
-        filled, outline = shade(0.85), shade(0.5)  # both stand out from the background, in a light or a dark theme
+        filled, outline = (
+            shade(0.85),
+            shade(0.5),
+        )  # both stand out from the background, in a light or a dark theme
         mid, top = self.height() / 2, self.height() / 2 - self.ROW_GAP / 2
-        spots = [(0, self.PAD + self.DOT, mid)]  # C major, between the two rows
+        spots = [
+            (0, self.PAD + self.DOT, mid),
+        ]  # C major, between the two rows
         for n in range(1, 8):
             x = self.first_column + (n - 1) * self.PITCH
             spots += [(n, x, top), (-n, x, top + self.ROW_GAP)]
@@ -515,7 +607,9 @@ class KeyDiagram(QWidget):
             p.drawEllipse(QPointF(x, y), self.DOT, self.DOT)
 
 
-ROW_PICTURE_WIDTH = 238  # room for a picture on its own line in a menu row (pane width less margins)
+# room for a picture on its own line in a menu row (pane width less
+# margins)
+ROW_PICTURE_WIDTH = 238
 
 
 def label_with_picture(
@@ -541,7 +635,11 @@ def label_with_picture(
     Examples
     --------
     >>> box = QCheckBox()
-    >>> label_with_picture(box, picture=ClefPictures(["treble"]), name="Treble")
+    >>> label_with_picture(
+    ...     box,
+    ...     picture=ClefPictures(["treble"]),
+    ...     name="Treble",
+    ... )
     >>> box.toolTip(), box.accessibleName()
     ('Treble', 'Treble')
     """
@@ -575,7 +673,11 @@ def _label_with_clef(
     >>> box.text()
     'Mezzo-soprano'
     """
-    label_with_picture(button, picture=ClefPictures([clef], scale=scale), name=CLEF_NAMES[clef])
+    label_with_picture(
+        button,
+        picture=ClefPictures([clef], scale=scale),
+        name=CLEF_NAMES[clef],
+    )
     button.setText(CLEF_NAMES[clef])
 
 
@@ -611,10 +713,13 @@ def _clef_box(
 
 def _clef_list(boxes: dict[str, QCheckBox]) -> QWidget:
     """
-    Lay the clef checkboxes out one under another, in three groups divided by a line.
+    Lay the clef checkboxes out one under another, in three groups
+    divided by a line.
 
-    The groups are the grand staff; the treble, bass, alto and tenor clefs; and the soprano, mezzo-soprano and baritone
-    clefs. A group none of the boxes belong to is left out. The list is indented under its heading.
+    The groups are the grand staff; the treble, bass, alto and tenor
+    clefs; and the soprano, mezzo-soprano and baritone
+    clefs. A group none of the boxes belong to is left out. The list is
+    indented under its heading.
 
     Parameters
     ----------
@@ -628,10 +733,18 @@ def _clef_list(boxes: dict[str, QCheckBox]) -> QWidget:
 
     Examples
     --------
-    >>> boxes_ = {clef: _clef_box(clef) for clef in ("treble", "bass", "soprano")}
+    >>> boxes_ = {
+    ...     clef: _clef_box(clef)
+    ...     for clef in (
+    ...         "treble",
+    ...         "bass",
+    ...         "soprano",
+    ...     )
+    ... }
     >>> widget_ = _clef_list(boxes_)
     >>> # noinspection PyUnresolvedReferences
-    >>> widget_.layout().count()  # two boxes_, a dividing line, and one box
+    >>> # two boxes_, a dividing line, and one box
+    >>> widget_.layout().count()
     4
     """
     widget = QWidget()
@@ -643,7 +756,10 @@ def _clef_list(boxes: dict[str, QCheckBox]) -> QWidget:
         0,
     )
     lay.setSpacing(8)
-    groups = [[boxes[c] for c in group if c in boxes] for group in settings.CLEF_GROUPS]
+    groups = [
+        [boxes[c] for c in group if c in boxes]
+        for group in settings.CLEF_GROUPS
+    ]
     for i, group in enumerate([g for g in groups if g]):
         if i:
             rule = QFrame()
@@ -666,12 +782,14 @@ def clef_choice_page(
     hint: str = "One of the checked clefs is picked at random.",
 ) -> tuple[dict[str, QCheckBox], QWidget]:
     """
-    Build the "Clefs" page that every exercise with a choice of clefs shares.
+    Build the "Clefs" page that every exercise with a choice of clefs
+    shares.
 
     Parameters
     ----------
     choices : iterable of str
-        The clefs to offer, from `settings.RANGE_KEYS`; "grand" is left out of exercises that cannot use the grand staff.
+        The clefs to offer, from `settings.RANGE_KEYS`; "grand" is left
+        out of exercises that cannot use the grand staff.
     selected : set of str
         The clefs that start checked. Keyword-only.
     edited : callable
@@ -688,7 +806,8 @@ def clef_choice_page(
     dict of str to QCheckBox
         The checkbox of each clef offered.
     QWidget
-        The page, with its title. The last checked clef cannot be unchecked.
+        The page, with its title. The last checked clef cannot be
+        unchecked.
 
     Examples
     --------
@@ -699,21 +818,25 @@ def clef_choice_page(
     ...     edited=lambda: checked.append(1),
     ...     back=lambda: None,
     ... )
-    >>> boxes_["bass"].isEnabled()  # it is the only one checked, so it stays checked
+    >>> boxes_[
+    ...     "bass"
+    ... ].isEnabled()  # it is the only one checked, so it stays checked
     False
     >>> boxes_["treble"].setChecked(True)
-    >>> sorted(c for c, ticked_box in boxes_.items() if ticked_box.isChecked()), checked
+    >>> (
+    ...     sorted(
+    ...         c
+    ...         for c, ticked_box in boxes_.items()
+    ...         if ticked_box.isChecked()
+    ...     ),
+    ...     checked,
+    ... )
     (['bass', 'treble'], [1])
     """
     boxes = {c: _clef_box(c) for c in choices}
     body = QWidget()
     lay = QVBoxLayout(body)
-    lay.setContentsMargins(
-        0,
-        0,
-        0,
-        0,
-    )
+    lay.setContentsMargins(0, 0, 0, 0)
     note = QLabel(hint)
     note.setWordWrap(True)
     note.setStyleSheet("color: gray;")
@@ -721,7 +844,9 @@ def clef_choice_page(
     for c, box in boxes.items():
         box.setChecked(c in selected)
     lay.addWidget(_clef_list(boxes))
-    guard_last(list(boxes.values()))  # the last checked clef can't be unchecked
+    guard_last(
+        list(boxes.values()),
+    )  # the last checked clef can't be unchecked
     for box in boxes.values():
         box.toggled.connect(edited)
     return boxes, subpage(title, body=body, back=back)
@@ -735,7 +860,8 @@ def show_keys(
     keys: set[int],
 ) -> None:
     """
-    Show the selected keys as a diagram in a menu row, or "Off" when key signatures are switched off.
+    Show the selected keys as a diagram in a menu row, or "Off" when key
+    signatures are switched off.
 
     Parameters
     ----------
@@ -750,8 +876,16 @@ def show_keys(
 
     Examples
     --------
-    >>> row_, diagram_ = MenuRow("Key signatures"), KeyDiagram()
-    >>> show_keys(row_, diagram=diagram_, enabled=False, keys={0})
+    >>> row_, diagram_ = (
+    ...     MenuRow("Key signatures"),
+    ...     KeyDiagram(),
+    ... )
+    >>> show_keys(
+    ...     row_,
+    ...     diagram=diagram_,
+    ...     enabled=False,
+    ...     keys={0},
+    ... )
     >>> row_.value.text(), diagram_.isHidden()
     ('Off', True)
     """
@@ -762,7 +896,8 @@ def show_keys(
 
 class _ValueLabel(QLabel):
     """
-    The value shown on the right of a menu row, which a screen reader is also given as the row's description.
+    The value shown on the right of a menu row, which a screen reader is
+    also given as the row's description.
 
     Examples
     --------
@@ -812,9 +947,11 @@ class _ValueLabel(QLabel):
 
 class MenuRow(QPushButton):
     """
-    A menu row: title on the left, current value and a chevron on the right.
+    A menu row: title on the left, current value and a chevron on the
+    right.
 
-    A `tall` row puts a picture on a second line of its own, using the full width, for summaries that need room to be
+    A `tall` row puts a picture on a second line of its own, using the
+    full width, for summaries that need room to be
     readable.
 
     Attributes
@@ -848,7 +985,8 @@ class MenuRow(QPushButton):
         title : str
             The row's title.
         chevron : bool, default True
-            Show a chevron on the right, to say it opens a page. Keyword-only.
+            Show a chevron on the right, to say it opens a page.
+            Keyword-only.
         tall : bool, default False
             Give the row a second line for a picture. Keyword-only.
 
@@ -861,10 +999,16 @@ class MenuRow(QPushButton):
         self.tall = tall
         self._contents: QBoxLayout  # the layout inside the row
         self.title = QLabel(f"<b>{title}</b>")
-        self.setAccessibleName(title)  # the text is in labels on the button, which a screen reader would not read as its name
+        self.setAccessibleName(
+            title,
+            # the text is in labels on the button, which a screen reader
+            # would not read as its name
+        )
         self.value = _ValueLabel(self)
         self.value.setStyleSheet("color: gray;")
-        self.value.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        self.value.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
+        )
         for label in (self.title, self.value):
             label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         arrow = QLabel("›")
@@ -906,7 +1050,8 @@ class MenuRow(QPushButton):
         """
         Put a widget in the row.
 
-        Just after the value text, or (in a tall row) centered on its own line below.
+        Just after the value text, or (in a tall row) centered on its
+        own line below.
 
         Parameters
         ----------
@@ -998,7 +1143,8 @@ class Switch(QAbstractButton):
         Parameters
         ----------
         value : float
-            0 for off up to 1 for on, with values between while it slides.
+            0 for off up to 1 for on, with values between while it
+            slides.
 
         Examples
         --------
@@ -1031,9 +1177,13 @@ class Switch(QAbstractButton):
         self._anim.setEndValue(1.0 if on else 0.0)
         self._anim.start()
 
-    def setChecked(self, on: bool) -> None:  # no animation when set programmatically
+    def setChecked(
+        self,
+        on: bool,
+    ) -> None:  # no animation when set programmatically
         """
-        Turn the switch on or off without animating, as when a setting is loaded.
+        Turn the switch on or off without animating, as when a setting
+        is loaded.
 
         Parameters
         ----------
@@ -1068,7 +1218,10 @@ class Switch(QAbstractButton):
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         pal = self.palette()
-        off, on = pal.color(QPalette.ColorRole.Mid), pal.color(QPalette.ColorRole.Highlight)
+        off, on = (
+            pal.color(QPalette.ColorRole.Mid),
+            pal.color(QPalette.ColorRole.Highlight),
+        )
         track = blend(off, b=on, t=self._pos)
         if not self.isEnabled():
             track.setAlpha(110)
@@ -1099,7 +1252,8 @@ class Switch(QAbstractButton):
 
 class ToggleRow(MenuRow):
     """
-    A menu row with a switch that changes a setting in place instead of opening a page.
+    A menu row with a switch that changes a setting in place instead of
+    opening a page.
 
     Attributes
     ----------
@@ -1137,8 +1291,12 @@ class ToggleRow(MenuRow):
         super().__init__(title, chevron=False)
         self.value.hide()
         self.switch = Switch()
-        self.switch.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # the whole row is the click target
-        self.switch.setFocusPolicy(Qt.FocusPolicy.NoFocus)  # the row is what the keyboard reaches, not its picture of a switch
+        self.switch.setAttribute(
+            Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+        )  # the whole row is the click target
+        self.switch.setFocusPolicy(
+            Qt.FocusPolicy.NoFocus,
+        )  # the row is what the keyboard reaches, not its picture of a switch
         self.switch.setAccessibleName(title)
         self._contents.addWidget(self.switch)
         self.clicked.connect(lambda: self._set(not self.switch.isChecked()))
@@ -1185,7 +1343,8 @@ class ToggleRow(MenuRow):
     # noinspection PyPep8Naming
     def setOn(self, on: bool) -> None:
         """
-        Set the switch without announcing it, as when a setting is loaded.
+        Set the switch without announcing it, as when a setting is
+        loaded.
 
         Parameters
         ----------
@@ -1221,7 +1380,8 @@ def subpage(
     back : callable
         Called when Back is clicked. Keyword-only.
     fill : bool, default False
-        Let the body take all the room (so a long page can scroll) instead of leaving space below it. Keyword-only.
+        Let the body take all the room (so a long page can scroll)
+        instead of leaving space below it. Keyword-only.
 
     Returns
     -------
@@ -1231,19 +1391,22 @@ def subpage(
     Examples
     --------
     >>> calls = []
-    >>> page_ = subpage("Clefs", body=QWidget(), back=lambda: calls.append("back"))
-    >>> next(b for b in page_.findChildren(QToolButton) if b.text() == "‹ Back").click()
+    >>> page_ = subpage(
+    ...     "Clefs",
+    ...     body=QWidget(),
+    ...     back=lambda: calls.append("back"),
+    ... )
+    >>> next(
+    ...     b
+    ...     for b in page_.findChildren(QToolButton)
+    ...     if b.text() == "‹ Back"
+    ... ).click()
     >>> calls
     ['back']
     """
     page = QWidget()
     lay = QVBoxLayout(page)
-    lay.setContentsMargins(
-        0,
-        0,
-        0,
-        0,
-    )
+    lay.setContentsMargins(0, 0, 0, 0)
     head = QHBoxLayout()
     btn = QToolButton()
     btn.setText("‹ Back")
@@ -1261,7 +1424,8 @@ def subpage(
 
 class SlideStack(QStackedWidget):
     """
-    A stacked widget whose pages slide in from the right (going deeper) or the left (going back).
+    A stacked widget whose pages slide in from the right (going deeper)
+    or the left (going back).
 
     Examples
     --------
@@ -1310,7 +1474,8 @@ class SlideStack(QStackedWidget):
         """
         Slide to another page.
 
-        Going to a later page slides it in from the right and going back slides it in from the left. A request made during a
+        Going to a later page slides it in from the right and going back
+        slides it in from the left. A request made during a
         slide, or for the page already showing, is ignored.
 
         Parameters
@@ -1353,7 +1518,8 @@ class SlideStack(QStackedWidget):
 
         def done() -> None:
             """
-            Finish the slide: show the new page and put both pages back in place.
+            Finish the slide: show the new page and put both pages back
+            in place.
 
             Examples
             --------
@@ -1373,21 +1539,26 @@ class SlideStack(QStackedWidget):
 
 class ExerciseSettingsPanel(QWidget):
     """
-    What every exercise's settings pane has in common: it says when a setting has been edited.
+    What every exercise's settings pane has in common: it says when a
+    setting has been edited.
 
     Attributes
     ----------
     changed : Signal
-        Emitted after any setting is edited that changes what is asked, so the exercise asks a new question.
+        Emitted after any setting is edited that changes what is asked,
+        so the exercise asks a new question.
     restyled : Signal
-        Emitted after a setting is edited that changes only how the exercise looks, so the question stays and the picture is
+        Emitted after a setting is edited that changes only how the
+        exercise looks, so the question stays and the picture is
         drawn again.
 
     Examples
     --------
     >>> panel = ExerciseSettingsPanel()
     >>> got = []
-    >>> _ = panel.changed.connect(lambda: got.append(1))
+    >>> _ = panel.changed.connect(
+    ...     lambda: got.append(1)
+    ... )
     >>> panel.changed.emit()
     True
     >>> got
@@ -1406,6 +1577,29 @@ class ExerciseSettingsPanel(QWidget):
     limits_editor: DailyLimitsEditor
     limits_page: int
 
+    def _build_menu(self) -> tuple[QWidget, QVBoxLayout]:
+        """
+        Set up the sliding stack and create its Settings menu.
+
+        Returns
+        -------
+        tuple of QWidget and QVBoxLayout
+            The menu and the layout for its rows.
+
+        Examples
+        --------
+        Each panel adds its own rows under the Settings heading.
+        """
+        self.stack = SlideStack()
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.addWidget(self.stack)
+        menu = QWidget()
+        layout = QVBoxLayout(menu)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(QLabel("<h3>Settings</h3>"))
+        return menu, layout
+
     def refresh_limits(self, mode: str, *, self_grading: bool = False) -> None:
         """
         Update scheduling controls for the active scheduler and profile.
@@ -1415,7 +1609,8 @@ class ExerciseSettingsPanel(QWidget):
         mode : str
             Selected question scheduler.
         self_grading : bool
-            Disable Next Question when a passing grade advances the exercise.
+            Disable Next Question when a passing grade advances the
+            exercise.
 
         Examples
         --------
@@ -1431,7 +1626,12 @@ class ExerciseSettingsPanel(QWidget):
             self.limits_editor.reload()
             editor = self.limits_editor
             new, reviews = (
-                "∞" if box.isChecked() else field.value() for box, field in zip(editor.unlimited, editor.fields, strict=True)
+                "∞" if box.isChecked() else field.value()
+                for box, field in zip(
+                    editor.unlimited,
+                    editor.fields,
+                    strict=True,
+                )
             )
             self.limits_row.value.setText(f"{new} new · {reviews} reviews")
         elif self.stack.currentIndex() == self.limits_page:
@@ -1441,17 +1641,23 @@ class ExerciseSettingsPanel(QWidget):
         """
         Slide to a page, getting it ready first.
 
-        A request made during a slide, or for the page already shown, is ignored.
+        A request made during a slide, or for the page already shown, is
+        ignored.
 
         Parameters
         ----------
         index : int
-            The page: 0 for the menu, the others in the order the pane added them.
+            The page: 0 for the menu, the others in the order the pane
+            added them.
 
         Examples
         --------
-        >>> from alto.ui.settings_panel import ClefBasicsSettingsPanel
-        >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
+        >>> from alto.ui.settings_panel import (
+        ...     ClefBasicsSettingsPanel,
+        ... )
+        >>> panel = ClefBasicsSettingsPanel(
+        ...     settings.ClefBasicsSettings()
+        ... )
         >>> panel._go(1)
         >>> panel.stack.sliding
         True
@@ -1463,7 +1669,8 @@ class ExerciseSettingsPanel(QWidget):
 
     def _prepare(self, index: int) -> None:
         """
-        Get a page ready to be shown: going back to the menu brings its summaries up to date.
+        Get a page ready to be shown: going back to the menu brings its
+        summaries up to date.
 
         Panes with pages that need building when they open add to this.
 
@@ -1474,8 +1681,12 @@ class ExerciseSettingsPanel(QWidget):
 
         Examples
         --------
-        >>> from alto.ui.settings_panel import ClefBasicsSettingsPanel
-        >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
+        >>> from alto.ui.settings_panel import (
+        ...     ClefBasicsSettingsPanel,
+        ... )
+        >>> panel = ClefBasicsSettingsPanel(
+        ...     settings.ClefBasicsSettings()
+        ... )
         >>> panel.cfg.clefs = {"alto"}
         >>> panel._prepare(0)
         >>> panel.clef_pictures.clefs
@@ -1486,7 +1697,8 @@ class ExerciseSettingsPanel(QWidget):
 
     def _refresh_summaries(self) -> None:
         """
-        Show the current settings in the menu's rows. Panes whose rows show nothing that can change leave this empty.
+        Show the current settings in the menu's rows. Panes whose rows
+        show nothing that can change leave this empty.
 
         Examples
         --------
@@ -1495,7 +1707,8 @@ class ExerciseSettingsPanel(QWidget):
 
     def _persist(self) -> None:
         """
-        Save the settings this pane edits. Panes that save each setting as it is edited leave this empty.
+        Save the settings this pane edits. Panes that save each setting
+        as it is edited leave this empty.
 
         Examples
         --------
@@ -1504,13 +1717,16 @@ class ExerciseSettingsPanel(QWidget):
 
     def _save_and_emit(self) -> None:
         """
-        Save the settings and say they changed, so the exercise asks a new question.
+        Save the settings and say they changed, so the exercise asks a
+        new question.
 
         Examples
         --------
         >>> panel = ExerciseSettingsPanel()
         >>> got = []
-        >>> _ = panel.changed.connect(lambda: got.append(1))
+        >>> _ = panel.changed.connect(
+        ...     lambda: got.append(1)
+        ... )
         >>> panel._save_and_emit()
         >>> got
         [1]
@@ -1519,9 +1735,123 @@ class ExerciseSettingsPanel(QWidget):
         self.changed.emit()
 
 
+class KeyboardRangePanel(ExerciseSettingsPanel):
+    """
+    Settings for selecting a practice range on a keyboard.
+
+    Examples
+    --------
+    Keyboard note identification allows the lowest and highest keys to
+    coincide.
+    """
+
+    @abstractmethod
+    def _step(self, which: str, *, delta: int) -> None:
+        """
+        Move an endpoint within the exercise's allowed range.
+
+        Parameters
+        ----------
+        which : str
+            Endpoint to move, low or high.
+        delta : int
+            Number of semitones to move.
+
+        Examples
+        --------
+        Pressing the upper endpoint's left arrow lowers the highest key
+        by a semitone.
+        """
+
+    def _range_body(
+        self,
+        span: KeyboardSpan,
+        *,
+        changed: Callable[[int, int], None],
+        full: tuple[int, int] = settings.KEYBOARD_FULL,
+        default: tuple[int, int] = settings.KEYBOARD_DEFAULT,
+        single_note: bool = False,
+    ) -> QWidget:
+        """
+        Build the range selector, endpoint arrows, and reset buttons.
+
+        Parameters
+        ----------
+        span : KeyboardSpan
+            Keyboard used for dragging and displaying the selected keys.
+        changed : callable
+            Receive the lowest and highest selected MIDI keys.
+        full : tuple of int
+            The instrument's full range.
+        default : tuple of int
+            The exercise's default range.
+        single_note : bool
+            Use the instructions and spacing for single-note
+            identification.
+
+        Returns
+        -------
+        QWidget
+            The body of the Range page.
+
+        Examples
+        --------
+        A plugin can display its instrument's own range while using the
+        same endpoint buttons as a piano.
+        """
+        body = QWidget()
+        layout = QVBoxLayout(body)
+        layout.setContentsMargins(0, 0, 0, 0)
+        if single_note:
+            layout.setSpacing(10)
+            hint = QLabel("Drag on the keyboard to choose the keys to ask.")
+        else:
+            hint = QLabel("Choose a range that fits both highlighted notes.")
+            hint.setWordWrap(True)
+        layout.addWidget(hint)
+        span.full = full
+        span.dragged.connect(changed)
+        layout.addWidget(span)
+        self.low_label, self.high_label = QLabel(), QLabel()
+        self.arrows: dict[str, tuple[QToolButton, QToolButton]] = {}
+        for title, label, which in (
+            ("Lowest key", self.low_label, "low"),
+            ("Highest key", self.high_label, "high"),
+        ):
+            row = QHBoxLayout()
+            row.addWidget(QLabel(f"<b>{title}</b>"), 1)
+            down = arrow_button(
+                Qt.ArrowType.LeftArrow,
+                tip=f"{title}: one key down",
+            )
+            up = arrow_button(
+                Qt.ArrowType.RightArrow,
+                tip=f"{title}: one key up",
+            )
+            down.clicked.connect(
+                lambda _=False, w=which: self._step(w, delta=-1),
+            )
+            up.clicked.connect(lambda _=False, w=which: self._step(w, delta=1))
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label.setMinimumWidth(px(48))
+            row.addWidget(down)
+            row.addWidget(label)
+            row.addWidget(up)
+            layout.addLayout(row)
+            self.arrows[which] = (down, up)
+        self.entire = QPushButton("Entire keyboard")
+        self.entire.clicked.connect(lambda: changed(*full))
+        self.default = QPushButton("Reset to default")
+        self.default.clicked.connect(lambda: changed(*default))
+        layout.addWidget(self.entire)
+        layout.addWidget(self.default)
+        return body
+
+
 class ClefsPanel(ExerciseSettingsPanel):
     """
-    A settings pane with a Clefs page, whose checkboxes choose the clefs that are asked about.
+    A settings pane with a Clefs page, whose checkboxes choose the clefs
+    that are asked about.
 
     Attributes
     ----------
@@ -1534,8 +1864,15 @@ class ClefsPanel(ExerciseSettingsPanel):
 
     Examples
     --------
-    >>> from alto.ui.settings_panel import ClefBasicsSettingsPanel
-    >>> isinstance(ClefBasicsSettingsPanel(settings.ClefBasicsSettings()), ClefsPanel)
+    >>> from alto.ui.settings_panel import (
+    ...     ClefBasicsSettingsPanel,
+    ... )
+    >>> isinstance(
+    ...     ClefBasicsSettingsPanel(
+    ...         settings.ClefBasicsSettings()
+    ...     ),
+    ...     ClefsPanel,
+    ... )
     True
     """
 
@@ -1545,20 +1882,29 @@ class ClefsPanel(ExerciseSettingsPanel):
 
     def _clefs_edited(self) -> None:
         """
-        Take the checked clefs into the settings, save them and say so. The last checked clef cannot be unchecked.
+        Take the checked clefs into the settings, save them and say so.
+        The last checked clef cannot be unchecked.
 
         Examples
         --------
-        >>> from alto.ui.settings_panel import ClefBasicsSettingsPanel
+        >>> from alto.ui.settings_panel import (
+        ...     ClefBasicsSettingsPanel,
+        ... )
         >>> from alto.ui.store import store
         >>> cfg = settings.ClefBasicsSettings()
         >>> panel = ClefBasicsSettingsPanel(cfg)
         >>> panel.boxes["french"].setChecked(True)
-        >>> "french" in cfg.clefs, str(store().value("clefBasics/clefs"))
+        >>> (
+        ...     "french" in cfg.clefs,
+        ...     str(store().value("clefBasics/clefs")),
+        ... )
         (True, 'treble,bass,french')
         >>> panel.boxes["treble"].setChecked(False)
         >>> panel.boxes["bass"].setChecked(False)
-        >>> panel.boxes["french"].isEnabled(), cfg.active_clefs()
+        >>> (
+        ...     panel.boxes["french"].isEnabled(),
+        ...     cfg.active_clefs(),
+        ... )
         (False, ['french'])
         >>> store().remove("clefBasics")
         """
@@ -1596,13 +1942,18 @@ class StaffRangePanel(ClefsPanel):
         Returns
         -------
         tuple of (int, int) or None
-            The lowest and highest staff step, or None for the clef's usual limits.
+            The lowest and highest staff step, or None for the clef's
+            usual limits.
 
         Examples
         --------
         >>> from alto.settings import NoteNameSettings
-        >>> from alto.ui.settings_panel import NoteNameSettingsPanel
-        >>> NoteNameSettingsPanel(NoteNameSettings())._limits("treble") is None
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> NoteNameSettingsPanel(
+        ...     NoteNameSettings()
+        ... )._limits("treble") is None
         True
         """
         del key
@@ -1618,13 +1969,16 @@ class StaffRangePanel(ClefsPanel):
         """
         clefs = self.cfg.active_clefs()
         self.clef_pictures.set_clefs(clefs)
-        self.range_pictures.set_items([(c, *self.cfg.range_for(c)) for c in clefs])
+        self.range_pictures.set_items(
+            [(c, *self.cfg.range_for(c)) for c in clefs],
+        )
         self.range_row.fit()
         self.value_pictures.set_values(self.cfg.active_values())
 
     def _values_page(self, title: str) -> QWidget:
         """
-        Build the shared note-value checklist with an engraved preview of each option.
+        Build the shared note-value checklist with an engraved preview
+        of each option.
 
         Parameters
         ----------
@@ -1639,19 +1993,18 @@ class StaffRangePanel(ClefsPanel):
         Examples
         --------
         >>> from alto.settings import NoteNameSettings
-        >>> from alto.ui.settings_panel import NoteNameSettingsPanel
-        >>> NoteNameSettingsPanel(NoteNameSettings()).value_boxes["whole"].isChecked()
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> NoteNameSettingsPanel(
+        ...     NoteNameSettings()
+        ... ).value_boxes["whole"].isChecked()
         True
         """
         self.value_boxes = {v: QCheckBox(VALUE_NAMES[v]) for v in NOTE_VALUES}
         values_body = QWidget()
         vlay = QVBoxLayout(values_body)
-        vlay.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
+        vlay.setContentsMargins(0, 0, 0, 0)
         vlay.setSpacing(2)
         values_hint = QLabel("One of the checked values is picked at random.")
         values_hint.setWordWrap(True)
@@ -1665,22 +2018,34 @@ class StaffRangePanel(ClefsPanel):
             vlay.addWidget(box)
         vlay.addStretch()
         guard_last(list(self.value_boxes.values()))
-        return subpage(title, body=scrolling(values_body), back=lambda: self._go(0), fill=True)
+        return subpage(
+            title,
+            body=scrolling(values_body),
+            back=lambda: self._go(0),
+            fill=True,
+        )
 
     def _values_edited(self) -> None:
         """
-        Take the checked note values into the settings, save them and say so.
+        Take the checked note values into the settings, save them and
+        say so.
 
         Examples
         --------
         >>> from alto.settings import NoteNameSettings
-        >>> from alto.ui.settings_panel import NoteNameSettingsPanel
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> panel = NoteNameSettingsPanel(
+        ...     NoteNameSettings()
+        ... )
         >>> panel.value_boxes["half"].setChecked(True)
         >>> "half" in panel.cfg.note_values
         True
         """
-        self.cfg.note_values = {v for v, b in self.value_boxes.items() if b.isChecked()}
+        self.cfg.note_values = {
+            v for v, b in self.value_boxes.items() if b.isChecked()
+        }
         guard_last(list(self.value_boxes.values()))
         self._save_and_emit()
 
@@ -1706,15 +2071,22 @@ class StaffRangePanel(ClefsPanel):
             8,
         )
         self.range_editors: dict[str, RangeEditor] = {}
-        # Restoring a pane after a theme change selects its page directly.
+        # Restoring a pane after a theme change selects its page
+        # directly.
         self.stack.currentChanged.connect(
-            lambda index: self._build_range_rows() if index == self.range_index and not self.range_editors else None,
+            lambda index: (
+                self._build_range_rows()
+                if index == self.range_index and not self.range_editors
+                else None
+            ),
         )
         scroll = QScrollArea()
         scroll.setWidget(self.range_body)
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scroll.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff,
+        )
         return subpage(
             "Range",
             body=scroll,
@@ -1724,7 +2096,8 @@ class StaffRangePanel(ClefsPanel):
 
     def _prepare(self, index: int) -> None:
         """
-        Get a page ready to be shown: the menu's summaries are brought up to date and the Range page's rows are built.
+        Get a page ready to be shown: the menu's summaries are brought
+        up to date and the Range page's rows are built.
 
         Parameters
         ----------
@@ -1734,10 +2107,17 @@ class StaffRangePanel(ClefsPanel):
         Examples
         --------
         >>> from alto.settings import NoteNameSettings
-        >>> from alto.ui.settings_panel import NoteNameSettingsPanel
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> panel = NoteNameSettingsPanel(
+        ...     NoteNameSettings()
+        ... )
         >>> panel._go(2)
-        >>> sorted(panel.range_editors), panel.stack.sliding
+        >>> (
+        ...     sorted(panel.range_editors),
+        ...     panel.stack.sliding,
+        ... )
         (['bass', 'treble'], True)
         """
         super()._prepare(index)
@@ -1751,13 +2131,18 @@ class StaffRangePanel(ClefsPanel):
         Returns
         -------
         list of str
-            The chosen clefs, which the range editors and summaries are for.
+            The chosen clefs, which the range editors and summaries are
+            for.
 
         Examples
         --------
         >>> from alto.settings import NoteNameSettings
-        >>> from alto.ui.settings_panel import NoteNameSettingsPanel
-        >>> NoteNameSettingsPanel(NoteNameSettings(clefs={"alto"}))._active_keys()
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> NoteNameSettingsPanel(
+        ...     NoteNameSettings(clefs={"alto"})
+        ... )._active_keys()
         ['alto']
         """
         return self.cfg.active_clefs()
@@ -1765,13 +2150,18 @@ class StaffRangePanel(ClefsPanel):
     # range page
     def _build_range_rows(self) -> None:
         """
-        Build a range editor for each clef in use, and a button to reset them to the defaults.
+        Build a range editor for each clef in use, and a button to reset
+        them to the defaults.
 
         Examples
         --------
         >>> from alto.settings import NoteNameSettings
-        >>> from alto.ui.settings_panel import NoteNameSettingsPanel
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings(clefs={"treble"}))
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> panel = NoteNameSettingsPanel(
+        ...     NoteNameSettings(clefs={"treble"})
+        ... )
         >>> panel._build_range_rows()
         >>> list(panel.range_editors)
         ['treble']
@@ -1784,7 +2174,12 @@ class StaffRangePanel(ClefsPanel):
         self.range_editors = {}
         for key in self._active_keys():
             low, high = self.cfg.range_for(key)
-            editor = RangeEditor(key, low=low, high=high, limits=self._limits(key))
+            editor = RangeEditor(
+                key,
+                low=low,
+                high=high,
+                limits=self._limits(key),
+            )
             editor.edited.connect(self._range_edited)
             self.range_editors[key] = editor
             self.range_lay.addWidget(editor)
@@ -1814,8 +2209,12 @@ class StaffRangePanel(ClefsPanel):
         Examples
         --------
         >>> from alto.settings import NoteNameSettings
-        >>> from alto.ui.settings_panel import NoteNameSettingsPanel
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> panel = NoteNameSettingsPanel(
+        ...     NoteNameSettings()
+        ... )
         >>> panel._range_edited("treble", 30, 40)
         >>> panel.cfg.ranges
         {'treble': (30, 40)}
@@ -1830,14 +2229,81 @@ class StaffRangePanel(ClefsPanel):
         Examples
         --------
         >>> from alto.settings import NoteNameSettings
-        >>> from alto.ui.settings_panel import NoteNameSettingsPanel
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings(ranges={"treble": (30, 40)}))
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> panel = NoteNameSettingsPanel(
+        ...     NoteNameSettings(
+        ...         ranges={"treble": (30, 40)}
+        ...     )
+        ... )
         >>> panel._reset_ranges()
         >>> panel.cfg.ranges
         {}
         """
         self.cfg.ranges.clear()
         self._build_range_rows()
+        self._save_and_emit()
+
+
+class NoteAnswerSettingsPanel(StaffRangePanel):
+    """
+    Staff range settings for note names and optional octaves.
+
+    Examples
+    --------
+    A plugin and the built-in note identification exercise can both
+    require the octave in an answer.
+    """
+
+    cfg: settings.NoteNameSettings | settings.PackExerciseSettings
+
+    def _accidentals_toggled(self, on: bool) -> None:
+        """
+        Save the Accidentals setting and emit the change.
+
+        Parameters
+        ----------
+        on : bool
+            Whether sharps, flats and naturals are asked.
+
+        Examples
+        --------
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> panel = NoteNameSettingsPanel(
+        ...     settings.NoteNameSettings()
+        ... )
+        >>> panel._accidentals_toggled(True)
+        >>> panel.cfg.accidentals
+        True
+        """
+        self.cfg.accidentals = on
+        self._save_and_emit()
+
+    def _octave_toggled(self, on: bool) -> None:
+        """
+        Take the Octave switch into the settings, save it and say so.
+
+        Parameters
+        ----------
+        on : bool
+            Whether the answer must include the note's octave.
+
+        Examples
+        --------
+        >>> from alto.ui.settings_panel import (
+        ...     NoteNameSettingsPanel,
+        ... )
+        >>> panel = NoteNameSettingsPanel(
+        ...     settings.NoteNameSettings()
+        ... )
+        >>> panel._octave_toggled(True)
+        >>> panel.cfg.require_octave
+        True
+        """
+        self.cfg.require_octave = on
         self._save_and_emit()
 
 
@@ -1867,7 +2333,9 @@ class _LabeledKeyCheckBox(QCheckBox):
 
         Examples
         --------
-        >>> _LabeledKeyCheckBox().hitButton(QPoint(-1, -1))
+        >>> _LabeledKeyCheckBox().hitButton(
+        ...     QPoint(-1, -1)
+        ... )
         False
         """
         return self.rect().contains(pos)
@@ -1875,16 +2343,19 @@ class _LabeledKeyCheckBox(QCheckBox):
 
 class KeyChecklist(QWidget):
     """
-    Checkboxes for the 15 major keys, flats on the left and sharps on the right.
+    Checkboxes for the 15 major keys, flats on the left and sharps on
+    the right.
 
-    At least one stays checked. Each is labeled with a picture of its signature.
+    At least one stays checked. Each is labeled with a picture of its
+    signature.
 
     Attributes
     ----------
     changed : Signal
         Emitted after a box is checked or unchecked.
     boxes : dict of int to QCheckBox
-        The checkbox of each key signature, from -7 (seven flats) to 7 (seven sharps).
+        The checkbox of each key signature, from -7 (seven flats) to 7
+        (seven sharps).
 
     Examples
     --------
@@ -1913,9 +2384,11 @@ class KeyChecklist(QWidget):
         allow_empty : bool, default False
             Allow every key to be unchecked. Keyword-only.
         counts_only : bool, default False
-            Label each box with its accidental count instead of drawing a signature. Keyword-only.
+            Label each box with its accidental count instead of drawing
+            a signature. Keyword-only.
         key_names : dict of int to str or None, default None
-            Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
+            Key names to display beside the signature diagrams. With
+            None, show only diagrams. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
@@ -1935,16 +2408,26 @@ class KeyChecklist(QWidget):
             for count, box in self.boxes.items():
                 name = key_names[count]
                 signature = _key_label(count).split("·")[1].strip()
-                description = f"{name}, {signature}" if count else f"{name}, no sharps or flats"
+                description = (
+                    f"{name}, {signature}"
+                    if count
+                    else f"{name}, no sharps or flats"
+                )
                 box.setText(name)
                 box.setToolTip(description)
                 box.setAccessibleName(description)
                 picture = KeySignaturePicture(count, scale=0.9)
-                picture.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+                picture.setAttribute(
+                    Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+                )
                 label_width = box.sizeHint().width()
                 contents = QHBoxLayout(box)
                 contents.setContentsMargins(label_width + 4, 0, 0, 0)
-                contents.addWidget(picture, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+                contents.addWidget(
+                    picture,
+                    alignment=Qt.AlignmentFlag.AlignLeft
+                    | Qt.AlignmentFlag.AlignVCenter,
+                )
                 box.setMinimumWidth(label_width + 4 + picture.width())
                 box.setMinimumHeight(picture.height())
                 if count:
@@ -1954,21 +2437,33 @@ class KeyChecklist(QWidget):
             for column in range(2):
                 grid.setColumnStretch(column, 1)
         else:
-            for k, box in self.boxes.items():  # each key is labeled with its signature, as written after a treble clef
+            for (
+                k,
+                box,
+                # each key is labeled with its signature, as written
+                # after a
+                # treble clef
+            ) in self.boxes.items():
                 if counts_only:
-                    box.setText(f"{abs(k)} {'♭' if k < 0 else '♯'}" if k else "0")
+                    box.setText(
+                        f"{abs(k)} {'♭' if k < 0 else '♯'}" if k else "0",
+                    )
                     box.setAccessibleName(format_key_signature(k))
                 else:
-                    description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
-                    label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
-            # Two framed groups: C major on its own, and the keys with sharps or flats (flats left, sharps right).
+                    description = (
+                        f"{MAJOR_KEYS[k]}"
+                        " major, "
+                        f"{_key_label(k).split('·')[1].strip()}"
+                    )
+                    label_with_picture(
+                        box,
+                        picture=KeySignaturePicture(k, scale=1.15),
+                        name=description,
+                    )
+            # Two framed groups: C major on its own, and the keys with
+            # sharps or flats (flats left, sharps right).
             outer = QVBoxLayout(self)
-            outer.setContentsMargins(
-                0,
-                0,
-                0,
-                0,
-            )
+            outer.setContentsMargins(0, 0, 0, 0)
             outer.setSpacing(10)
             natural = QFrame()
             natural.setObjectName("keyGroup")  # styled in style.py
@@ -2012,7 +2507,9 @@ class KeyChecklist(QWidget):
         --------
         >>> checklist = KeyChecklist({0})
         >>> got = []
-        >>> _ = checklist.changed.connect(lambda: got.append(1))
+        >>> _ = checklist.changed.connect(
+        ...     lambda: got.append(1)
+        ... )
         >>> checklist.boxes[3].setChecked(True)
         >>> got
         [1]
@@ -2024,7 +2521,8 @@ class KeyChecklist(QWidget):
 
 class KeySignaturePage(QWidget):
     """
-    The key signature sub-page: a switch for using key signatures at all, and the keys to draw from.
+    The key signature sub-page: a switch for using key signatures at
+    all, and the keys to draw from.
 
     Attributes
     ----------
@@ -2037,7 +2535,9 @@ class KeySignaturePage(QWidget):
 
     Examples
     --------
-    >>> page = KeySignaturePage(True, selected={0, 1})
+    >>> page = KeySignaturePage(
+    ...     True, selected={0, 1}
+    ... )
     >>> page.enabled(), page.selected() == {0, 1}
     (True, True)
     """
@@ -2065,7 +2565,8 @@ class KeySignaturePage(QWidget):
         allow_empty : bool, default False
             Allow every key to be unchecked. Keyword-only.
         key_names : dict of int to str or None, default None
-            Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
+            Key names to display beside the signature diagrams. With
+            None, show only diagrams. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
@@ -2077,19 +2578,20 @@ class KeySignaturePage(QWidget):
         """
         super().__init__(parent)
         lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(10)
         self.switch_row = ToggleRow("Use key signatures")
         self.switch_row.setOn(enabled)
         self.switch_row.switched.connect(self._switched)
-        self.checklist = KeyChecklist(selected, allow_empty=allow_empty, key_names=key_names)
+        self.checklist = KeyChecklist(
+            selected,
+            allow_empty=allow_empty,
+            key_names=key_names,
+        )
         self.checklist.changed.connect(self.changed)
-        self.checklist.setEnabled(enabled)  # the keys only matter while key signatures are on
+        self.checklist.setEnabled(
+            enabled,
+        )  # the keys only matter while key signatures are on
         lay.addWidget(self.switch_row)
         self.keys_label = QLabel("Draw from these keys:")
         lay.addWidget(self.keys_label)
@@ -2106,7 +2608,9 @@ class KeySignaturePage(QWidget):
 
         Examples
         --------
-        >>> KeySignaturePage(True, selected={0}).enabled()
+        >>> KeySignaturePage(
+        ...     True, selected={0}
+        ... ).enabled()
         True
         """
         return self.switch_row.isOn()
@@ -2122,14 +2626,17 @@ class KeySignaturePage(QWidget):
 
         Examples
         --------
-        >>> KeySignaturePage(True, selected={-2, 0}).selected() == {-2, 0}
+        >>> KeySignaturePage(
+        ...     True, selected={-2, 0}
+        ... ).selected() == {-2, 0}
         True
         """
         return self.checklist.selected()
 
     def _switched(self, on: bool) -> None:
         """
-        Enable the keys only while key signatures are on, and say that something changed.
+        Enable the keys only while key signatures are on, and say that
+        something changed.
 
         Parameters
         ----------
@@ -2140,7 +2647,9 @@ class KeySignaturePage(QWidget):
         --------
         >>> page = KeySignaturePage(True, selected={0})
         >>> got = []
-        >>> _ = page.changed.connect(lambda: got.append(1))
+        >>> _ = page.changed.connect(
+        ...     lambda: got.append(1)
+        ... )
         >>> page._switched(False)
         >>> page.checklist.isEnabled(), got
         (False, [1])
@@ -2155,7 +2664,9 @@ class ScaleKeyPicker(QTabWidget):
 
     Examples
     --------
-    >>> ScaleKeyPicker(major_keys={0}, minor_keys={-2}).count()
+    >>> ScaleKeyPicker(
+    ...     major_keys={0}, minor_keys={-2}
+    ... ).count()
     2
     """
 
@@ -2172,13 +2683,22 @@ class ScaleKeyPicker(QTabWidget):
 
         Examples
         --------
-        >>> ScaleKeyPicker(major_keys=set(), minor_keys={0}).currentIndex()
+        >>> ScaleKeyPicker(
+        ...     major_keys=set(), minor_keys={0}
+        ... ).currentIndex()
         1
         """
         super().__init__()
         major_names = {count: f"{name}M" for count, name in MAJOR_KEYS.items()}
-        self.major_keys = KeyChecklist(major_keys, allow_empty=True, key_names=major_names)
-        minor_names = {count: f"{mode_tonic(count, mode='Natural minor (Aeolian)').name}m" for count in range(-7, 8)}
+        self.major_keys = KeyChecklist(
+            major_keys,
+            allow_empty=True,
+            key_names=major_names,
+        )
+        minor_names = {
+            count: f"{mode_tonic(count, mode='Natural minor (Aeolian)').name}m"
+            for count in range(-7, 8)
+        }
         self.minor_keys = KeyChecklist(
             minor_keys,
             allow_empty=True,
@@ -2200,7 +2720,8 @@ class ScaleKeyPicker(QTabWidget):
 
 class ChoiceChecklist(QWidget):
     """
-    Checkboxes for a list of choices, optionally under headings and allowing an empty selection.
+    Checkboxes for a list of choices, optionally under headings and
+    allowing an empty selection.
 
     Attributes
     ----------
@@ -2213,8 +2734,19 @@ class ChoiceChecklist(QWidget):
 
     Examples
     --------
-    >>> groups = [("Triads", [("major", "Major"), ("minor", "Minor")]), ("", [("x", "Other")])]
-    >>> checklist = ChoiceChecklist(groups, selected={"major"})
+    >>> groups = [
+    ...     (
+    ...         "Triads",
+    ...         [
+    ...             ("major", "Major"),
+    ...             ("minor", "Minor"),
+    ...         ],
+    ...     ),
+    ...     ("", [("x", "Other")]),
+    ... ]
+    >>> checklist = ChoiceChecklist(
+    ...     groups, selected={"major"}
+    ... )
     >>> checklist.selected()
     {'major'}
     """
@@ -2236,19 +2768,24 @@ class ChoiceChecklist(QWidget):
         Parameters
         ----------
         groups : list of tuple of (str, list of tuple of (object, str))
-            The headings and, under each, the choices as (key, label); an empty heading shows none.
+            The headings and, under each, the choices as (key, label);
+            an empty heading shows none.
         selected : set
             The keys to check initially. Keyword-only.
         allow_empty : bool, default False
             Allow all choices to be unchecked. Keyword-only.
         positions : mapping or None, default None
-            Optional (row, column) for each key within its group. Keyword-only.
+            Optional (row, column) for each key within its group.
+            Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
         Examples
         --------
-        >>> checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
+        >>> checklist = ChoiceChecklist(
+        ...     [("", [(0, "Root"), (1, "1st")])],
+        ...     selected={0},
+        ... )
         >>> # noinspection PyTypeChecker
         >>> sorted(checklist.boxes)
         [0, 1]
@@ -2258,12 +2795,7 @@ class ChoiceChecklist(QWidget):
         self.boxes: dict[object, QCheckBox] = {}
         self.headings: dict[str, QLabel] = {}
         lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(6)
         for title, items in groups:
             if title:
@@ -2278,7 +2810,9 @@ class ChoiceChecklist(QWidget):
                 lay.addLayout(grid)
                 items = sorted(items, key=lambda item: positions[item[0]])
             for key, label in items:
-                box = DegreeCheckBox(label) if "̂" in label else QCheckBox(label)
+                box = (
+                    DegreeCheckBox(label) if "̂" in label else QCheckBox(label)
+                )
                 box.setChecked(key in selected)
                 box.toggled.connect(self._toggled)
                 self.boxes[key] = box
@@ -2302,7 +2836,10 @@ class ChoiceChecklist(QWidget):
 
         Examples
         --------
-        >>> ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
+        >>> ChoiceChecklist(
+        ...     [("", [(0, "Root"), (1, "1st")])],
+        ...     selected={0, 1},
+        ... ).selected()
         {0, 1}
         """
         return {k for k, box in self.boxes.items() if box.isChecked()}
@@ -2313,9 +2850,14 @@ class ChoiceChecklist(QWidget):
 
         Examples
         --------
-        >>> checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
+        >>> checklist = ChoiceChecklist(
+        ...     [("", [(0, "Root"), (1, "1st")])],
+        ...     selected={0},
+        ... )
         >>> got = []
-        >>> _ = checklist.changed.connect(lambda: got.append(1))
+        >>> _ = checklist.changed.connect(
+        ...     lambda: got.append(1)
+        ... )
         >>> checklist.boxes[1].setChecked(True)
         >>> got
         [1]
@@ -2326,7 +2868,9 @@ class ChoiceChecklist(QWidget):
 
 
 def buttons_page(
-    cfg: ButtonSettings | settings.IntervalSettings | settings.ScaleIdentificationSettings,
+    cfg: ButtonSettings
+    | settings.IntervalSettings
+    | settings.ScaleIdentificationSettings,
     *,
     changed: Callable[[], None],
     back: Callable[[], None],
@@ -2336,7 +2880,7 @@ def buttons_page(
 
     Parameters
     ----------
-    cfg : ButtonSettings or IntervalSettings or ScaleIdentificationSettings
+    cfg : ButtonSettings or IntervalSettings
         The exercise that owns the button mode and count.
     changed : callable
         Save and apply an edit.
@@ -2395,7 +2939,8 @@ def buttons_page(
 
 
 def direction_choices(
-    cfg: settings.ScaleIdentificationSettings | settings.ScaleConstructionSettings,
+    cfg: settings.ScaleIdentificationSettings
+    | settings.ScaleConstructionSettings,
     *,
     edited: Callable[[], None],
 ) -> QWidget:
@@ -2412,13 +2957,22 @@ def direction_choices(
     Returns
     -------
     QWidget
-        A pair of mutually exclusive Ascending and Descending radio buttons.
+        A pair of mutually exclusive Ascending and Descending radio
+        buttons.
 
     Examples
     --------
     >>> cfg = settings.ScaleIdentificationSettings()
-    >>> choices = direction_choices(cfg, edited=lambda: None)
-    >>> next(b for b in choices.findChildren(QRadioButton) if b.text() == "Descending").click()
+    >>> choices = direction_choices(
+    ...     cfg, edited=lambda: None
+    ... )
+    >>> next(
+    ...     b
+    ...     for b in choices.findChildren(
+    ...         QRadioButton
+    ...     )
+    ...     if b.text() == "Descending"
+    ... ).click()
     >>> cfg.motion
     'descending'
     """
@@ -2446,14 +3000,19 @@ def direction_choices(
         radio = QRadioButton(direction.title())
         layout.addWidget(radio)
         radio.setChecked(cfg.motion == direction)
-        radio.toggled.connect(lambda checked, value=direction: select(value) if checked else None)
+        radio.toggled.connect(
+            lambda checked, value=direction: (
+                select(value) if checked else None
+            ),
+        )
 
     return body
 
 
 def scrolling(body: QWidget) -> QScrollArea:
     """
-    Put a page's body in a scroll area, so a long page scrolls inside the pane and never makes the window taller.
+    Put a page's body in a scroll area, so a long page scrolls inside
+    the pane and never makes the window taller.
 
     Parameters
     ----------
@@ -2463,7 +3022,8 @@ def scrolling(body: QWidget) -> QScrollArea:
     Returns
     -------
     QScrollArea
-        The scroll area that holds it, with no frame and no sideways scrolling.
+        The scroll area that holds it, with no frame and no sideways
+        scrolling.
 
     Examples
     --------
@@ -2471,14 +3031,11 @@ def scrolling(body: QWidget) -> QScrollArea:
     >>> scrolling(page).widget() is page
     True
     """
-    # Short option lists keep their natural height as the viewport grows.
+    # Short option lists keep their natural height as the viewport
+    # grows.
     policy = body.sizePolicy()
     policy.setVerticalPolicy(QSizePolicy.Policy.Maximum)
     body.setSizePolicy(policy)
-    scroll = QScrollArea()
-    scroll.setWidget(body)
-    scroll.setWidgetResizable(True)
-    scroll.setFrameShape(QFrame.Shape.NoFrame)
-    scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+    scroll = vertical_scroll_area(body)
     scroll.setMinimumHeight(0)
     return scroll

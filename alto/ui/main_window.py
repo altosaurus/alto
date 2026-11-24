@@ -1,7 +1,9 @@
 """
-The main window: tile browsing or a workspace with an independently selected exercise or lesson list.
+The main window: tile browsing or a workspace with an independently
+selected exercise or lesson list.
 
-Navigation stays on the left of the top bar, with data tools on the right. Browsing tiles retains the active activity.
+Navigation stays on the left of the top bar, with data tools on the
+right. Browsing tiles retains the active activity.
 
 Examples
 --------
@@ -136,15 +138,24 @@ from alto.ui.transitions import SIDEBAR_SLIDE_MS, saved_transition
 from alto.ui.widgets import SidebarToggle
 from alto.ui.zoom import css, px
 
-DEFAULT_WIDTH, DEFAULT_HEIGHT = 1100, 820  # big enough for a lesson step with its circle, and an exercise with its pane
-SCREEN_FRACTION = 0.92  # the most of the screen the window opens to, so that it never starts bigger than the screen
+DEFAULT_WIDTH, DEFAULT_HEIGHT = (
+    1100,
+    820,
+    # big enough for a lesson step with its circle, and an exercise with
+    # its
+    # pane
+)
+# the most of the screen the window opens to, so that it never starts
+# bigger than the screen
+SCREEN_FRACTION = 0.92
 
 
 def default_size() -> tuple[int, int]:
     """
     Return the size a new window opens at.
 
-    It is big enough for a lesson step, with its circle, to show without scrolling, but never more than most of the screen.
+    It is big enough for a lesson step, with its circle, to show without
+    scrolling, but never more than most of the screen.
 
     Returns
     -------
@@ -167,20 +178,24 @@ def default_size() -> tuple[int, int]:
 @dataclass(kw_only=True)
 class _PageState:
     """
-    Remember the activity, browsing section and layout across a theme rebuild.
+    Remember the activity, browsing section and layout across a theme
+    rebuild.
 
     Attributes
     ----------
     exercise : type of Exercise or None
         The retained exercise's class.
     exercise_settings : tuple of (bool, int, int) or None
-        Whether exercise settings are open, the selected settings page, and its scroll position.
+        Whether exercise settings are open, the selected settings page,
+        and its scroll position.
     lesson : tuple of (str, int) or None
         The retained lesson's key and step.
     active : str
-        "exercise", "lesson" or "empty" for the workspace behind the tiles.
+        "exercise", "lesson" or "empty" for the workspace behind the
+        tiles.
     lesson_parent : str
-        "exercise", "empty" or "home", the page to return to when leaving a lesson.
+        "exercise", "empty" or "home", the page to return to when
+        leaving a lesson.
     overlay : str or None
         "stats" or "database" for a utility page on top.
     mode : str
@@ -234,7 +249,8 @@ class _AdjacentSubmenu(QMenu):
 
     def showEvent(self, event: QShowEvent) -> None:
         """
-        Align the popup after it opens and after deferred platform placement.
+        Align the popup after it opens and after deferred platform
+        placement.
 
         Parameters
         ----------
@@ -264,7 +280,9 @@ class _AdjacentSubmenu(QMenu):
         --------
         >>> from PySide6.QtCore import QPoint
         >>> submenu = _AdjacentSubmenu("Help")
-        >>> submenu.moveEvent(QMoveEvent(QPoint(1, 1), QPoint()))
+        >>> submenu.moveEvent(
+        ...     QMoveEvent(QPoint(1, 1), QPoint())
+        ... )
         """
         super().moveEvent(event)
         if self.isVisible():
@@ -272,7 +290,8 @@ class _AdjacentSubmenu(QMenu):
 
     def _align_edge(self) -> None:
         """
-        Place a visible submenu beside its parent within the screen bounds.
+        Place a visible submenu beside its parent within the screen
+        bounds.
 
         Examples
         --------
@@ -300,11 +319,14 @@ ZOOM_INDICATOR_MS = 1200
 
 class _ZoomPreview(QGraphicsEffect):
     """
-    Animate the workspace from a single frame captured by Qt during painting.
+    Animate the workspace from a single frame captured by Qt during
+    painting.
 
     Examples
     --------
-    >>> preview = _ZoomPreview(window.splitter)  # doctest: +SKIP
+    >>> preview = _ZoomPreview(
+    ...     window.splitter
+    ... )  # doctest: +SKIP
     >>> preview.move_to(1.25)  # doctest: +SKIP
     """
 
@@ -321,7 +343,9 @@ class _ZoomPreview(QGraphicsEffect):
 
         Examples
         --------
-        >>> preview = _ZoomPreview(window.splitter)  # doctest: +SKIP
+        >>> preview = _ZoomPreview(
+        ...     window.splitter
+        ... )  # doctest: +SKIP
         """
         super().__init__(workspace)
         self.frame = QPixmap()
@@ -341,7 +365,8 @@ class _ZoomPreview(QGraphicsEffect):
         Parameters
         ----------
         scale : float
-            Requested zoom divided by the zoom of the captured workspace.
+            Requested zoom divided by the zoom of the captured
+            workspace.
 
         Examples
         --------
@@ -371,13 +396,18 @@ class _ZoomPreview(QGraphicsEffect):
         >>> preview.update()  # doctest: +SKIP
         """
         if self.frame.isNull():
-            self.frame = self.sourcePixmap(mode=QGraphicsEffect.PixmapPadMode.NoPad)
+            self.frame = self.sourcePixmap(
+                mode=QGraphicsEffect.PixmapPadMode.NoPad,
+            )
             self.animation.start()
             self.frame_ready.emit()
         scale = self.animation.currentValue()
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
-        painter.translate(self.frame.deviceIndependentSize().width() * (1 - scale) / 2, 0)
+        painter.translate(
+            self.frame.deviceIndependentSize().width() * (1 - scale) / 2,
+            0,
+        )
         painter.scale(scale, scale)
         painter.drawPixmap(0, 0, self.frame)
         painter.restore()
@@ -390,21 +420,25 @@ class MainWindow(QMainWindow):
     Attributes
     ----------
     SIDEBAR_MIN : int
-        The narrowest the exercise list can be before it collapses, in pixels.
+        The narrowest the exercise list can be before it collapses, in
+        pixels.
     SIDEBAR_DEFAULT : int
         The list's width the first time.
     APP_TITLE : str
         The title shown on the start screen.
     learner : Learner or None
-        Who is practicing, and their history; None practices without recording.
+        Who is practicing, and their history; None practices without
+        recording.
     nav : QListWidget
         The exercise list.
     stack : QStackedWidget
-        The pages: the start screen, then exercises and the statistics or database while they are open.
+        The pages: the start screen, then exercises and the statistics
+        or database while they are open.
     home : HomePage
         The start screen.
     splitter : QSplitter
-        Holds the list and the pages, so the list can be dragged narrower or wider.
+        Holds the list and the pages, so the list can be dragged
+        narrower or wider.
     title_label : QLabel
         The title in the top bar.
     view_button : QToolButton
@@ -414,7 +448,8 @@ class MainWindow(QMainWindow):
     empty_page : QLabel
         The selected section's prompt before an activity starts.
     search_field : QLineEdit
-        Filters tiles and navigation lists without leaving the current activity.
+        Filters tiles and navigation lists without leaving the current
+        activity.
 
     Examples
     --------
@@ -429,41 +464,64 @@ class MainWindow(QMainWindow):
     SIDEBAR_MIN, SIDEBAR_DEFAULT = 170, 240
     APP_TITLE = "Alto - Music Theory"
 
-    def __init__(self, learner: Learner | None = None) -> None:
+    def __init__(
+        self,
+        learner: Learner | None = None,
+    ) -> None:
         """
         Build the window and load every saved setting.
 
         Parameters
         ----------
         learner : Learner or None, default None
-            Who is practicing. Without one, nothing is recorded and the statistics buttons are hidden.
+            Who is practicing. Without one, nothing is recorded and the
+            statistics buttons are hidden.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> window_ = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+        >>> window_ = MainWindow(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> window_.stats_button.isVisibleTo(window_)
         True
-        >>> MainWindow().stats_button.isVisibleTo(window_)  # no profile, no statistics
+        >>> MainWindow().stats_button.isVisibleTo(
+        ...     window_
+        ... )  # no profile, no statistics
         False
         """
         super().__init__()
-        self._overlay: StatsPage | DatabasePage | GlossaryPage | LessonsPage | None = (
-            None  # the statistics, database or lesson page, while one is showing
+        self._overlay: (
+            StatsPage | DatabasePage | GlossaryPage | LessonsPage | None
+            # the statistics, database or lesson page, while one is
+            # showing
+        ) = None
+        self._overlay_return: tuple[QWidget | None, str] | None = (
+            None  # the page and title to go back to
         )
-        self._overlay_return: tuple[QWidget | None, str] | None = None  # the page and title to go back to
         self._pane_view = False
         self._grid_return_available = False
         self._exercise_page: ExerciseView | None = None
         self._lesson_page: LessonsPage | None = None
         self._workspace_page: ExerciseView | LessonsPage | None = None
         self._lesson_return: tuple[QWidget | None, str] | None = None
-        self._settings: AppSettingsDialog | None = None  # the settings, while they are open
+        self._settings: AppSettingsDialog | None = (
+            None  # the settings, while they are open
+        )
         self._exporter = ExporterSession()
-        self.learner = learner  # who is practicing, and their history; None practices without recording
+        # who is practicing, and their history; None practices without
+        # recording
+        self.learner = learner
         zoom.load()
-        self._zoom_timer = QTimer(self)  # a turn of the wheel makes several steps; the window is made again once they stop
+        self._zoom_timer = QTimer(
+            self,
+            # a turn of the wheel makes several steps; the window is
+            # made
+            # again once they stop
+        )
         self._zoom_timer.setSingleShot(True)
         self._zoom_timer.setInterval(ZOOM_SETTLE_MS)
         self._zoom_timer.timeout.connect(self._apply_zoom)
@@ -475,7 +533,11 @@ class MainWindow(QMainWindow):
         self._wheel_zoom = zoom.WheelZoom(self)
         app = QApplication.instance()
         assert isinstance(app, QApplication)
-        self._wheel_zoom.follow(app)  # on each window in turn: a filter on the whole application slows every widget
+        self._wheel_zoom.follow(
+            app,
+            # on each window in turn: a filter on the whole application
+            # slows every widget
+        )
         self.setWindowTitle(self.APP_TITLE)
         self.resize(*default_size())
         saved_geometry = store().value("ui/windowGeometry", QByteArray())
@@ -503,7 +565,8 @@ class MainWindow(QMainWindow):
 
     def _build(self) -> None:
         """
-        Make the window's contents: the lists, the pages, the menu and the top bar, drawn in the current theme.
+        Make the window's contents: the lists, the pages, the menu and
+        the top bar, drawn in the current theme.
 
         Examples
         --------
@@ -517,12 +580,20 @@ class MainWindow(QMainWindow):
         self._lesson_page = None
         self._workspace_page = None
         self._lesson_return = None
-        self.nav = QListWidget()  # the exercise list: section labels and exercises, as a flat sidebar
+        self.nav = (
+            QListWidget()
+        )  # the exercise list: section labels and exercises, as a flat sidebar
         self.nav.setObjectName("nav")  # styled in style.py
-        self.nav.setIconSize(QSize(px(icons.ACTIVITY_ICON_SIZE), px(icons.ACTIVITY_ICON_SIZE)))
+        self.nav.setIconSize(
+            QSize(px(icons.ACTIVITY_ICON_SIZE), px(icons.ACTIVITY_ICON_SIZE)),
+        )
         self.nav.setVerticalScrollMode(QListWidget.ScrollMode.ScrollPerPixel)
-        self.lesson_nav = LessonNav()  # the lesson list, which takes the exercise list's place in lesson mode
-        self.nav_stack = QStackedWidget()  # holds the two lists; the page decides which shows
+        # the lesson list, which takes the exercise list's place in
+        # lesson mode
+        self.lesson_nav = LessonNav()
+        self.nav_stack = (
+            QStackedWidget()
+        )  # holds the two lists; the page decides which shows
         self.nav_stack.addWidget(self.nav)
         self.nav_stack.addWidget(self.lesson_nav)
         self.nav_stack.setMinimumWidth(px(self.SIDEBAR_MIN))
@@ -540,7 +611,11 @@ class MainWindow(QMainWindow):
         self.stack.setAutoFillBackground(False)
         activity_scroll.viewport().setAutoFillBackground(False)
         workspace_layout.addWidget(activity_scroll, 1)
-        self.home = HomePage(REGISTRY, learner=self.learner, filter_layout=workspace_layout)
+        self.home = HomePage(
+            REGISTRY,
+            learner=self.learner,
+            filter_layout=workspace_layout,
+        )
         self.home.exercise_chosen.connect(self.open_exercise)
         self.home.lesson_chosen.connect(self.open_lessons)
         self.home.resume_button.clicked.connect(self._back_from_topbar)
@@ -557,7 +632,9 @@ class MainWindow(QMainWindow):
         for cls in REGISTRY:
             if cls.category not in seen:
                 seen.add(cls.category)
-                self.nav.addItem(section_item(cls.category, palette=self.palette()))
+                self.nav.addItem(
+                    section_item(cls.category, palette=self.palette()),
+                )
             item = QListWidgetItem(cls.name)
             item.setData(Qt.ItemDataRole.UserRole, cls)
             item.setToolTip(cls.description)
@@ -566,27 +643,61 @@ class MainWindow(QMainWindow):
             self._items[cls] = item
         icons.set_item_icons(
             self.nav,
-            [(EXERCISE_ICONS.get(cls.__name__, icons.EXERCISE_NOTE_NAMES), item.setIcon) for cls, item in self._items.items()],
+            [
+                (
+                    EXERCISE_ICONS.get(
+                        cls.__name__,
+                        icons.EXERCISE_NOTE_NAMES,
+                    ),
+                    item.setIcon,
+                )
+                for cls, item in self._items.items()
+            ],
         )
-        widest_navigation = max(self.nav.sizeHintForColumn(0), self.lesson_nav.sizeHintForColumn(0))
-        self.SIDEBAR_DEFAULT = max(px(self.SIDEBAR_MIN), widest_navigation + 28)
+        widest_navigation = max(
+            self.nav.sizeHintForColumn(0),
+            self.lesson_nav.sizeHintForColumn(0),
+        )
+        self.SIDEBAR_DEFAULT = max(
+            px(self.SIDEBAR_MIN),
+            widest_navigation + 28,
+        )
         # noinspection PyShadowingNames
-        self.nav.itemClicked.connect(lambda item: self.open_exercise(item.data(Qt.ItemDataRole.UserRole)))
+        self.nav.itemClicked.connect(
+            lambda item: self.open_exercise(
+                item.data(Qt.ItemDataRole.UserRole),
+            ),
+        )
 
-        # Hamburger menu above the exercise list (replaces the menu bar).
+        # Hamburger menu above the exercise list (replaces the menu
+        # bar).
         self.menu_button = QToolButton()
         self.menu_button.setText("☰")
         self.menu_button.setToolTip("Menu")
         self.menu_button.setAccessibleName("Menu")
-        self.menu_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
-        self.menu_button.setStyleSheet(css("QToolButton { font-size: 16pt; } QToolButton::menu-indicator { image: none; }"))
+        self.menu_button.setPopupMode(
+            QToolButton.ToolButtonPopupMode.InstantPopup,
+        )
+        self.menu_button.setStyleSheet(
+            css(
+                (
+                    "QToolButton { font-size: 16pt; } "
+                    "QToolButton::menu-indicator { image: none; }"
+                ),
+            ),
+        )
         menu = QMenu(self.menu_button)
         tools_menu = _AdjacentSubmenu("Tools", menu)
         help_menu = _AdjacentSubmenu("Help", menu)
-        # Transparent, frameless popups let the stylesheet's rounded corners show.
+        # Transparent, frameless popups let the stylesheet's rounded
+        # corners show.
         for popup in (menu, tools_menu, help_menu):
             popup.setObjectName("appMenu")
-            popup.setWindowFlags(popup.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint)
+            popup.setWindowFlags(
+                popup.windowFlags()
+                | Qt.WindowType.FramelessWindowHint
+                | Qt.WindowType.NoDropShadowWindowHint,
+            )
             popup.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.profile_action = menu.addAction("")
         set_svg_icon(self.profile_action, icons.PROFILE, size=18)
@@ -600,15 +711,24 @@ class MainWindow(QMainWindow):
         menu.addMenu(tools_menu)
         self.import_action = tools_menu.addAction("Import backup…")
         set_svg_icon(self.import_action, icons.IMPORT, size=18)
-        self.import_action.setToolTip("Replace everything with a backup made earlier")
+        self.import_action.setToolTip(
+            "Replace everything with a backup made earlier",
+        )
         self.import_action.triggered.connect(self.import_backup)
         self.export_action = tools_menu.addAction("Export backup…")
         set_svg_icon(self.export_action, icons.EXPORT, size=18)
-        self.export_action.setToolTip("Save everything Alto keeps (profiles, history and settings) to one file")
+        self.export_action.setToolTip(
+            (
+                "Save everything Alto keeps (profiles, history and "
+                "settings) to one file"
+            ),
+        )
         self.export_action.triggered.connect(self.export_backup)
         plugins_action = tools_menu.addAction("Plugins…")
         set_svg_icon(plugins_action, icons.PLUGIN, size=18)
-        plugins_action.setToolTip("Install, update, or uninstall instrument plugins")
+        plugins_action.setToolTip(
+            "Install, update, or uninstall instrument plugins",
+        )
         plugins_action.triggered.connect(self.open_plugins)
         exporter_action = tools_menu.addAction("Anki Exporter")
 
@@ -616,29 +736,48 @@ class MainWindow(QMainWindow):
             exporter_action,
             lambda palette: svg_icon(
                 icons.FLASHCARDS,
-                color=QColor("white" if palette.window().color().lightness() < 128 else "black"),
+                color=QColor(
+                    "white"
+                    if palette.window().color().lightness() < 128
+                    else "black",
+                ),
                 size=18,
             ),
         )
         exporter_action.triggered.connect(self.open_anki_exporter)
-        self._show_profile()  # shows or hides the three actions that need a profile
+        # shows or hides the three actions that need a profile
+        self._show_profile()
         self.update_action = tools_menu.addAction("Check for updates…")
         set_svg_icon(self.update_action, icons.UPDATE, size=18)
-        self.update_action.setToolTip("See whether a newer Alto is available, and install it")
-        self.update_action.triggered.connect(self.check_for_updates)  # needs no profile, so it is always there
+        self.update_action.setToolTip(
+            "See whether a newer Alto is available, and install it",
+        )
+        self.update_action.triggered.connect(
+            self.check_for_updates,
+        )  # needs no profile, so it is always there
         set_svg_icon(help_menu, icons.HELP, size=18)
         menu.addMenu(help_menu)
         documentation = help_menu.addAction("Documentation")
         set_svg_icon(documentation, icons.BOOK, size=18)
         documentation.triggered.connect(
-            lambda: QDesktopServices.openUrl(QUrl("https://altosaurus.github.io/alto/getting-started/")),
+            lambda: QDesktopServices.openUrl(
+                QUrl("https://altosaurus.github.io/alto/getting-started/"),
+            ),
         )
         report_issue = help_menu.addAction("Report an issue")
         set_svg_icon(report_issue, icons.ISSUE, size=18)
-        report_issue.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://github.com/altosaurus/alto/issues")))
+        report_issue.triggered.connect(
+            lambda: QDesktopServices.openUrl(
+                QUrl("https://github.com/altosaurus/alto/issues"),
+            ),
+        )
         github = help_menu.addAction("GitHub")
         set_svg_icon(github, icons.GITHUB, size=18)
-        github.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://github.com/altosaurus/alto")))
+        github.triggered.connect(
+            lambda: QDesktopServices.openUrl(
+                QUrl("https://github.com/altosaurus/alto"),
+            ),
+        )
         about = help_menu.addAction("About")
         set_svg_icon(about, icons.INFO, size=18)
         about.triggered.connect(self.show_about)
@@ -653,7 +792,9 @@ class MainWindow(QMainWindow):
         quit_action.triggered.connect(QApplication.quit)
         self.menu_button.setMenu(menu)
         self.addAction(settings_action)
-        self.addAction(restart)  # keep the shortcuts working while the menu is closed
+        self.addAction(
+            restart,
+        )  # keep the shortcuts working while the menu is closed
         self.addAction(quit_action)
         self._add_zoom_actions()
 
@@ -662,7 +803,8 @@ class MainWindow(QMainWindow):
         load_notation_style()
         load_keyboard_style()
 
-        # The list and the exercise sit in a splitter: drag the handle to resize, or drag the list
+        # The list and the exercise sit in a splitter: drag the handle
+        # to resize, or drag the list
         # narrower than its minimum to collapse it.
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
         self._zoom_preview = _ZoomPreview(self.splitter)
@@ -674,17 +816,32 @@ class MainWindow(QMainWindow):
         self.splitter.setStretchFactor(1, 1)
         self.splitter.setCollapsible(0, True)
         self.splitter.setCollapsible(1, False)
-        self._sidebar_width = int_value(store(), key="ui/sidebarWidth", default=self.SIDEBAR_DEFAULT)
-        # Whether the user wants the list shown on exercise pages. The start screen never shows it.
-        self._sidebar_pref = text_value(store(), key="ui/sidebarCollapsed", default="false").lower() != "true"
+        self._sidebar_width = int_value(
+            store(),
+            key="ui/sidebarWidth",
+            default=self.SIDEBAR_DEFAULT,
+        )
+        # Whether the user wants the list shown on exercise pages. The
+        # start screen never shows it.
+        self._sidebar_pref = (
+            text_value(
+                store(),
+                key="ui/sidebarCollapsed",
+                default="false",
+            ).lower()
+            != "true"
+        )
         self._sidebar_anim: QVariantAnimation | None = None
         self.splitter.splitterMoved.connect(self._sidebar_dragged)
-        self.splitter.setSizes([0, 10_000])  # start on the home screen, with no list
+        self.splitter.setSizes(
+            [0, 10_000],
+        )  # start on the home screen, with no list
         self.splitter.handle(1).setEnabled(False)
 
         root = QWidget()
         lay = QVBoxLayout(root)
-        # Navigation on the left, data tools on the right, with the activity title centered.
+        # Navigation on the left, data tools on the right, with the
+        # activity title centered.
         self.title_label = QLabel(self.APP_TITLE)
         self.title_label.setObjectName("activityTitle")
         buttons = QHBoxLayout()
@@ -697,7 +854,9 @@ class MainWindow(QMainWindow):
         # noinspection DuplicatedCode
         buttons.addWidget(self.menu_button)
         self.view_button = QToolButton()
-        self.view_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+        self.view_button.setToolButtonStyle(
+            Qt.ToolButtonStyle.ToolButtonIconOnly,
+        )
         self.view_button.setIconSize(QSize(px(18), px(18)))
         self.view_button.setAutoRaise(True)
         self.view_button.clicked.connect(self._toggle_tiles_workspace)
@@ -718,15 +877,23 @@ class MainWindow(QMainWindow):
             QIcon(),
             QLineEdit.ActionPosition.LeadingPosition,
         )
-        set_svg_icon(self.search_action, icons.SEARCH, role=QPalette.ColorRole.Text)
+        set_svg_icon(
+            self.search_action,
+            icons.SEARCH,
+            role=QPalette.ColorRole.Text,
+        )
         self.search_action.setText("Search")
-        self.search_action.triggered.connect(lambda: self.search_field.setFocus())
+        self.search_action.triggered.connect(
+            lambda: self.search_field.setFocus(),
+        )
         self.view_button.setObjectName("navigationView")
         self.view_button.setMinimumHeight(px(32))
         self.search_row = QFrame()
         self.search_row.setObjectName("navigationSearchGroup")
         self.search_row.setProperty("focusWithin", False)
-        self.search_row.setFixedWidth(max(px(self.SIDEBAR_MIN), self._sidebar_width))
+        self.search_row.setFixedWidth(
+            max(px(self.SIDEBAR_MIN), self._sidebar_width),
+        )
         self.navigation_group = QFrame()
         self.navigation_group.setObjectName("navigationGroup")
         self.home.mode_control.setStyleSheet("""
@@ -740,7 +907,11 @@ class MainWindow(QMainWindow):
             }
             QFrame#segments QPushButton:checked { color: palette(highlight); }
         """)
-        for name, button in zip(("navigationExercises", "navigationLessons"), self.home.mode_control.buttons, strict=True):
+        for name, button in zip(
+            ("navigationExercises", "navigationLessons"),
+            self.home.mode_control.buttons,
+            strict=True,
+        ):
             button.setObjectName(name)
             button.setMinimumHeight(px(32))
         section_layout = self.home.mode_control.layout()
@@ -765,7 +936,10 @@ class MainWindow(QMainWindow):
         self.navigation_divider = QFrame()
         self.navigation_divider.setObjectName("navigationDivider")
         self.navigation_divider.setFixedSize(px(1), px(22))
-        navigation_row.addWidget(self.navigation_divider, alignment=Qt.AlignmentFlag.AlignVCenter)
+        navigation_row.addWidget(
+            self.navigation_divider,
+            alignment=Qt.AlignmentFlag.AlignVCenter,
+        )
         navigation_row.addWidget(self.view_button)
         buttons.addWidget(self.navigation_group)
         self.search_field.installEventFilter(self)
@@ -793,12 +967,16 @@ class MainWindow(QMainWindow):
         self.glossary_button.setIconSize(QSize(px(22), px(22)))
         self.glossary_button.setAutoRaise(True)
         self.glossary_button.setCheckable(True)
-        self.glossary_button.setStyleSheet("QToolButton:checked { background: transparent; }")
+        self.glossary_button.setStyleSheet(
+            "QToolButton:checked { background: transparent; }",
+        )
         self.glossary_button.setToolTip("Glossary")
         self.glossary_button.setAccessibleName("Glossary")
         self.glossary_button.clicked.connect(self.open_glossary)
         tools.addWidget(self.glossary_button)
-        self.stats_button = QToolButton()  # data tools stay separate from navigation
+        self.stats_button = (
+            QToolButton()
+        )  # data tools stay separate from navigation
         set_svg_icon(self.stats_button, icons.CHART)
         self.stats_button.setIconSize(QSize(px(22), px(22)))
         self.stats_button.setAutoRaise(True)
@@ -808,7 +986,11 @@ class MainWindow(QMainWindow):
         )
         self.stats_button.setToolTip("Statistics")
         self.stats_button.setAccessibleName("Statistics")
-        if self.learner is None:  # hidden, never shown here: a button with no parent that is shown opens as a window of its own
+        if (
+            self.learner is None
+            # hidden, never shown here: a button with no parent that is
+            # shown opens as a window of its own
+        ):
             self.stats_button.hide()
         self.stats_button.clicked.connect(self.open_stats)
         tools.addWidget(self.stats_button)
@@ -853,11 +1035,17 @@ class MainWindow(QMainWindow):
         self.shuffle_button.setAutoRaise(True)
         self.shuffle_button.setCheckable(True)
         self.shuffle_button.setIconSize(self.home.category_filter.iconSize())
-        self.shuffle_button.setMinimumSize(self.home.category_filter.minimumSize())
+        self.shuffle_button.setMinimumSize(
+            self.home.category_filter.minimumSize(),
+        )
         self.shuffle_button.setAccessibleName("Shuffle exercises")
         self.shuffle_button.toggled.connect(self._update_shuffle_button)
         self.shuffle_button.clicked.connect(
-            lambda checked: self._shuffle_exercise() if checked and self.stack.currentWidget() is self.home else None,
+            lambda checked: (
+                self._shuffle_exercise()
+                if checked and self.stack.currentWidget() is self.home
+                else None
+            ),
         )
         self.home.filters_changed.connect(self._filter_navigation)
         self.home.filters_changed.connect(self._update_shuffle_button)
@@ -891,7 +1079,8 @@ class MainWindow(QMainWindow):
         event: QEvent,
     ) -> bool:
         """
-        Highlight the search field's outline while it has keyboard focus.
+        Highlight the search field's outline while it has keyboard
+        focus.
 
         Parameters
         ----------
@@ -903,18 +1092,28 @@ class MainWindow(QMainWindow):
         Returns
         -------
         bool
-            Whether the base window consumes the event; focus changes are allowed through.
+            Whether the base window consumes the event; focus changes
+            are allowed through.
 
         Examples
         --------
         >>> window = MainWindow()
-        >>> window.eventFilter(window.search_field, QEvent(QEvent.Type.FocusIn))
+        >>> window.eventFilter(
+        ...     window.search_field,
+        ...     QEvent(QEvent.Type.FocusIn),
+        ... )
         False
         >>> window.search_row.property("focusWithin")
         True
         """
-        if watched is self.search_field and event.type() in (QEvent.Type.FocusIn, QEvent.Type.FocusOut):
-            self.search_row.setProperty("focusWithin", event.type() == QEvent.Type.FocusIn)
+        if watched is self.search_field and event.type() in (
+            QEvent.Type.FocusIn,
+            QEvent.Type.FocusOut,
+        ):
+            self.search_row.setProperty(
+                "focusWithin",
+                event.type() == QEvent.Type.FocusIn,
+            )
             self.search_row.style().unpolish(self.search_row)
             self.search_row.style().polish(self.search_row)
             self.search_row.update()
@@ -928,7 +1127,8 @@ class MainWindow(QMainWindow):
         Returns
         -------
         int
-            The width in pixels; 0 when the list is collapsed, as it always is on the start screen.
+            The width in pixels; 0 when the list is collapsed, as it
+            always is on the start screen.
 
         Examples
         --------
@@ -939,17 +1139,21 @@ class MainWindow(QMainWindow):
 
     def _sidebar_dragged(self, *_: object) -> None:
         """
-        Remember the list's new width after the splitter handle is dragged.
+        Remember the list's new width after the splitter handle is
+        dragged.
 
         Parameters
         ----------
         *_ : object
-            What the splitter's signal passes (the handle's position and index); not used.
+            What the splitter's signal passes (the handle's position and
+            index); not used.
 
         Examples
         --------
         >>> window = MainWindow()
-        >>> window._sidebar_dragged(0, 1)  # the list is collapsed, so it is remembered as hidden
+        >>> window._sidebar_dragged(
+        ...     0, 1
+        ... )  # the list is collapsed, so it is remembered as hidden
         >>> window._sidebar_pref
         False
         """
@@ -972,14 +1176,28 @@ class MainWindow(QMainWindow):
         if hasattr(self, "pane_button"):
             self.pane_button.setChecked(is_open)
             self.pane_button.set_open(is_open)
-            icon_color = QPalette.ColorRole.Highlight if is_open else QPalette.ColorRole.WindowText
-            set_svg_icon(self.pane_button, icons.NAVIGATION_CLOSE if is_open else icons.NAVIGATION_OPEN, role=icon_color)
+            icon_color = (
+                QPalette.ColorRole.Highlight
+                if is_open
+                else QPalette.ColorRole.WindowText
+            )
+            set_svg_icon(
+                self.pane_button,
+                icons.NAVIGATION_CLOSE if is_open else icons.NAVIGATION_OPEN,
+                role=icon_color,
+            )
         if hasattr(self, "search_row"):
-            self.search_row.setFixedWidth(max(px(self.SIDEBAR_MIN), self._sidebar_width))
+            self.search_row.setFixedWidth(
+                max(px(self.SIDEBAR_MIN), self._sidebar_width),
+            )
         for i in range(self.stack.count()):
             button = getattr(self.stack.widget(i), "sidebar_button", None)
             if isinstance(button, SidebarToggle):
-                button.noun = "lesson list" if self.home.mode == "lessons" else "exercise list"
+                button.noun = (
+                    "lesson list"
+                    if self.home.mode == "lessons"
+                    else "exercise list"
+                )
                 button.set_open(is_open)
 
     def _save_sidebar(self) -> None:
@@ -996,11 +1214,15 @@ class MainWindow(QMainWindow):
         """
         s = store()
         s.setValue("ui/sidebarWidth", self._sidebar_width)
-        s.setValue("ui/sidebarCollapsed", "false" if self._sidebar_pref else "true")
+        s.setValue(
+            "ui/sidebarCollapsed",
+            "false" if self._sidebar_pref else "true",
+        )
 
     def toggle_sidebar(self) -> None:
         """
-        Slide the list closed, or back open, for the user's button. The choice is remembered for next time.
+        Slide the list closed, or back open, for the user's button. The
+        choice is remembered for next time.
 
         Examples
         --------
@@ -1028,9 +1250,11 @@ class MainWindow(QMainWindow):
         show : bool
             True to open the list, False to close it.
         user : bool, default False
-            True if the user asked for this (with the button), so it is remembered. Keyword-only.
+            True if the user asked for this (with the button), so it is
+            remembered. Keyword-only.
         animate : bool, default True
-            Slide to the new width. Disable this to lay out the tile grid at its final width immediately.
+            Slide to the new width. Disable this to lay out the tile
+            grid at its final width immediately.
 
         Examples
         --------
@@ -1038,7 +1262,10 @@ class MainWindow(QMainWindow):
         >>> window._set_sidebar(True, user=True)
         >>> window._sidebar_pref
         True
-        >>> window._set_sidebar(False)  # the start screen hides it without changing the preference
+        >>> window._set_sidebar(
+        ...     False
+        ... # the start screen hides it without changing the preference
+        ... )
         >>> window._sidebar_pref
         True
         """
@@ -1053,16 +1280,23 @@ class MainWindow(QMainWindow):
         if start == end:
             return
         total = sum(self.splitter.sizes())
-        self.nav_stack.setMinimumWidth(0)  # let the width pass through values below the minimum while animating
+        self.nav_stack.setMinimumWidth(
+            0,
+            # let the width pass through values below the minimum while
+            # animating
+        )
         anim = self._sidebar_anim = QVariantAnimation(self)
         anim.setDuration(SIDEBAR_SLIDE_MS if animate else 0)
         anim.setStartValue(start)
         anim.setEndValue(end)
-        anim.valueChanged.connect(lambda w: self.splitter.setSizes([int(w), total - int(w)]))
+        anim.valueChanged.connect(
+            lambda w: self.splitter.setSizes([int(w), total - int(w)]),
+        )
 
         def done() -> None:
             """
-            Finish the slide: restore the list's minimum width, set its final size and save it.
+            Finish the slide: restore the list's minimum width, set its
+            final size and save it.
 
             Examples
             --------
@@ -1090,11 +1324,14 @@ class MainWindow(QMainWindow):
         >>> bool(MainWindow()._shuffle_choices())
         True
         """
-        return [cls for cls, item in self._items.items() if not item.isHidden()]
+        return [
+            cls for cls, item in self._items.items() if not item.isHidden()
+        ]
 
     def _update_shuffle_button(self) -> None:
         """
-        Show shuffle during exercise practice and explain when the filters leave no choices.
+        Show shuffle during exercise practice and explain when the
+        filters leave no choices.
 
         Examples
         --------
@@ -1102,15 +1339,23 @@ class MainWindow(QMainWindow):
         >>> window._update_shuffle_button()
         """
         current = self.stack.currentWidget()
-        on_exercise_grid = current is self.home and self.home.mode == "exercises"
-        self.shuffle_button.setVisible(on_exercise_grid or isinstance(current, ExerciseView))
+        on_exercise_grid = (
+            current is self.home and self.home.mode == "exercises"
+        )
+        self.shuffle_button.setVisible(
+            on_exercise_grid or isinstance(current, ExerciseView),
+        )
         active = self.shuffle_button.isChecked()
         if active:
             icons.set_palette_icon(
                 self.shuffle_button,
                 lambda palette: svg_icon(
                     icons.SHUFFLE,
-                    color=QColor(STUDIO[1].accent if palette.button().color().lightness() < 128 else STUDIO[0].accent),
+                    color=QColor(
+                        STUDIO[1].accent
+                        if palette.button().color().lightness() < 128
+                        else STUDIO[0].accent,
+                    ),
                 ),
             )
         else:
@@ -1118,7 +1363,9 @@ class MainWindow(QMainWindow):
         choices = self._shuffle_choices()
         self.shuffle_button.setEnabled(active or bool(choices))
         if self._exercise_page is not None:
-            self._exercise_page.shuffle_answers = active and choices != [type(self._exercise_page.exercise)]
+            self._exercise_page.shuffle_answers = active and choices != [
+                type(self._exercise_page.exercise),
+            ]
         if active:
             tip = "Turn off exercise shuffle"
         elif choices:
@@ -1129,13 +1376,17 @@ class MainWindow(QMainWindow):
 
     def _shuffle_exercise(self) -> None:
         """
-        Open a random eligible exercise through the same navigation as its tile.
+        Open a random eligible exercise through the same navigation as
+        its tile.
 
         Examples
         --------
         >>> window = MainWindow()
         >>> window._shuffle_exercise()
-        >>> isinstance(window.stack.currentWidget(), ExerciseView)
+        >>> isinstance(
+        ...     window.stack.currentWidget(),
+        ...     ExerciseView,
+        ... )
         True
         """
         choices = self._shuffle_choices()
@@ -1161,7 +1412,12 @@ class MainWindow(QMainWindow):
                     learner
                     and mode in CALENDAR_SCHEDULERS
                     and not any(
-                        learner.calendar.counts(exercise(), profile=learner.profile.id, mode=mode, now=now),
+                        learner.calendar.counts(
+                            exercise(),
+                            profile=learner.profile.id,
+                            mode=mode,
+                            now=now,
+                        ),
                     )
                 ):
                     continue
@@ -1173,7 +1429,9 @@ class MainWindow(QMainWindow):
             else:
                 self.open_exercise(current)
         elif categories:
-            self.open_exercise(groups[categories[0]][0])  # Show the scheduler's caught-up message.
+            self.open_exercise(
+                groups[categories[0]][0],
+            )  # Show the scheduler's caught-up message.
         else:
             self.show_home()
 
@@ -1184,11 +1442,14 @@ class MainWindow(QMainWindow):
         Parameters
         ----------
         cls : type of Exercise or None
-            The exercise class; None (a category heading in the list, which has no class) does nothing.
+            The exercise class; None (a category heading in the list,
+            which has no class) does nothing.
 
         Examples
         --------
-        >>> from alto.exercises.library import KeySignatures
+        >>> from alto.exercises.library import (
+        ...     KeySignatures,
+        ... )
         >>> window = MainWindow()
         >>> window.open_exercise(KeySignatures)
         >>> window.title_label.text()
@@ -1198,11 +1459,17 @@ class MainWindow(QMainWindow):
             return
         self.close_overlay()
         old = self._exercise_page
-        view = old if old is not None and type(old.exercise) is cls else ExerciseView(cls(), learner=self.learner)
+        view = (
+            old
+            if old is not None and type(old.exercise) is cls
+            else ExerciseView(cls(), learner=self.learner)
+        )
         if view is not old:
             view.shuffle_requested.connect(self._shuffle_exercise)
             view.lesson_requested.connect(lambda key: self.open_lessons(key))
-            view.lesson_back_button.clicked.connect(self._back_to_practice_lesson)
+            view.lesson_back_button.clicked.connect(
+                self._back_to_practice_lesson,
+            )
             self.stack.addWidget(view)
         if self._lesson_return is not None and self._lesson_return[0] is old:
             self._lesson_return = (view, cls.name)
@@ -1217,7 +1484,8 @@ class MainWindow(QMainWindow):
 
     def show_about(self) -> None:
         """
-        Show the installed version, development status, and purpose of Alto.
+        Show the installed version, development status, and purpose of
+        Alto.
 
         Examples
         --------
@@ -1227,41 +1495,64 @@ class MainWindow(QMainWindow):
             classifiers = metadata.metadata("alto").get_all("Classifier") or []
         except metadata.PackageNotFoundError:
             classifiers = []
-        status = next((item.rsplit(" - ", 1)[-1] for item in classifiers if item.startswith("Development Status :: ")), "Unknown")
+        status = next(
+            (
+                item.rsplit(" - ", 1)[-1]
+                for item in classifiers
+                if item.startswith("Development Status :: ")
+            ),
+            "Unknown",
+        )
         QMessageBox.about(
             self,
             "About Alto",
             f"<h3>Alto {updates.installed_version()}</h3>"
             f"<p>Development status: {status}</p>"
-            "<p>Learn and practice music theory with interactive exercises and lessons.</p>",
+            "<p>Learn and practice music theory with interactive exercises "
+            "and lessons.</p>",
         )
 
     def open_anki_exporter(self) -> None:
         """
-        Open the modeless exporter with a private copy of the current exercise settings.
+        Open the modeless exporter with a private copy of the current
+        exercise settings.
 
         Examples
         --------
-        Choose Anki Exporter from Tools to prepare a deck while keeping the exercise open.
+        Choose Anki Exporter from Tools to prepare a deck while keeping
+        the exercise open.
         """
-        selected = type(self._exercise_page.exercise).__name__ if self._exercise_page is not None else ""
+        selected = (
+            type(self._exercise_page.exercise).__name__
+            if self._exercise_page is not None
+            else ""
+        )
         try:
             self._exporter.open(self.learner, selected=selected)
         except OSError as error:
-            QMessageBox.warning(self, "Anki Exporter", f"Could not open the exporter. {error}")
+            QMessageBox.warning(
+                self,
+                "Anki Exporter",
+                f"Could not open the exporter. {error}",
+            )
 
     def open_settings(self) -> None:
         """
-        Open the application settings without blocking the window, or bring them forward if they are already open.
+        Open the application settings without blocking the window, or
+        bring them forward if they are already open.
 
-        If the theme was changed, the window is rebuilt in it once the settings are closed.
+        If the theme was changed, the window is rebuilt in it once the
+        settings are closed.
 
         Examples
         --------
         >>> window = MainWindow()
         >>> window.open_settings()
         >>> # noinspection PyUnresolvedReferences
-        >>> window._settings is not None and not window._settings.isModal()
+        >>> (
+        ...     window._settings is not None
+        ...     and not window._settings.isModal()
+        ... )
         True
         >>> # noinspection PyUnresolvedReferences
         >>> window._settings.close()
@@ -1283,7 +1574,8 @@ class MainWindow(QMainWindow):
 
     def _scheduler_changed(self) -> None:
         """
-        Apply the scheduler to an open exercise and refresh due dates in the database browser.
+        Apply the scheduler to an open exercise and refresh due dates in
+        the database browser.
 
         Examples
         --------
@@ -1299,7 +1591,8 @@ class MainWindow(QMainWindow):
 
     def _restore_defaults(self) -> None:
         """
-        Restore all preferences while retaining profiles and recorded practice.
+        Restore all preferences while retaining profiles and recorded
+        practice.
 
         Examples
         --------
@@ -1311,7 +1604,11 @@ class MainWindow(QMainWindow):
             self.learner.set_speed_thresholds(easy=15, hard=15)
             self.learner.calendar.reset_limits(self.learner.profile.id)
         saved = store()
-        retained = {key: saved.value(key) for key in saved.allKeys() if key.startswith(("profile/", "lessons/"))}
+        retained = {
+            key: saved.value(key)
+            for key in saved.allKeys()
+            if key.startswith(("profile/", "lessons/"))
+        }
         import_settings(retained)
         for name in (
             "note_names",
@@ -1351,23 +1648,43 @@ class MainWindow(QMainWindow):
 
     def _add_zoom_actions(self) -> None:
         """
-        Add the keyboard shortcuts that zoom in and out and go back to 100%, which work in every window of the app.
+        Add the keyboard shortcuts that zoom in and out and go back to
+        100%, which work in every window of the app.
 
         Examples
         --------
         >>> window = MainWindow()
-        >>> sorted(action.text() for action in window.actions() if action.objectName().startswith("zoom"))
+        >>> sorted(
+        ...     action.text()
+        ...     for action in window.actions()
+        ...     if action.objectName().startswith(
+        ...         "zoom"
+        ...     )
+        ... )
         ['Actual Size', 'Zoom In', 'Zoom Out']
         """
         for name, text, shortcuts, change in (
             (
                 "zoomIn",
                 "Zoom In",
-                [*QKeySequence.keyBindings(QKeySequence.StandardKey.ZoomIn), QKeySequence("Ctrl+=")],
+                [
+                    *QKeySequence.keyBindings(QKeySequence.StandardKey.ZoomIn),
+                    QKeySequence("Ctrl+="),
+                ],
                 lambda: zoom.step(1),
             ),
-            ("zoomOut", "Zoom Out", QKeySequence.keyBindings(QKeySequence.StandardKey.ZoomOut), lambda: zoom.step(-1)),
-            ("zoomReset", "Actual Size", [QKeySequence("Ctrl+0")], self._reset_zoom),
+            (
+                "zoomOut",
+                "Zoom Out",
+                QKeySequence.keyBindings(QKeySequence.StandardKey.ZoomOut),
+                lambda: zoom.step(-1),
+            ),
+            (
+                "zoomReset",
+                "Actual Size",
+                [QKeySequence("Ctrl+0")],
+                self._reset_zoom,
+            ),
         ):
             action = QAction(text, self.menu_button)
             action.setObjectName(name)
@@ -1378,7 +1695,8 @@ class MainWindow(QMainWindow):
 
     def _reset_zoom(self) -> None:
         """
-        Reset the workspace and confirm actual size even when it is already at 100%.
+        Reset the workspace and confirm actual size even when it is
+        already at 100%.
 
         Examples
         --------
@@ -1390,7 +1708,8 @@ class MainWindow(QMainWindow):
 
     def _zoom_changed(self, percent: int) -> None:
         """
-        Show the requested percentage and animate the workspace until input settles.
+        Show the requested percentage and animate the workspace until
+        input settles.
 
         Parameters
         ----------
@@ -1410,7 +1729,8 @@ class MainWindow(QMainWindow):
 
     def _apply_zoom(self) -> None:
         """
-        Draw everything again at the new zoom: the stylesheet, and the window with the sizes it fixes in pixels.
+        Draw everything again at the new zoom: the stylesheet, and the
+        window with the sizes it fixes in pixels.
 
         Examples
         --------
@@ -1428,7 +1748,8 @@ class MainWindow(QMainWindow):
 
     def _settings_closed(self) -> None:
         """
-        Pick up what the settings changed once they are closed: a new theme needs the window to be rebuilt.
+        Pick up what the settings changed once they are closed: a new
+        theme needs the window to be rebuilt.
 
         Examples
         --------
@@ -1441,9 +1762,11 @@ class MainWindow(QMainWindow):
 
     def rebuild(self) -> None:
         """
-        Make the window's contents again in the same window, so every icon and color is drawn in the new theme.
+        Make the window's contents again in the same window, so every
+        icon and color is drawn in the new theme.
 
-        The window itself stays, so it does not vanish and reappear. The page that was open is shown again, with the list
+        The window itself stays, so it does not vanish and reappear. The
+        page that was open is shown again, with the list
         already open or closed as it was, not sliding.
 
         Examples
@@ -1473,19 +1796,26 @@ class MainWindow(QMainWindow):
         self._build()
         self._restore_page(state)
         animation = self._sidebar_anim
-        if animation is not None and animation.state() != QAbstractAnimation.State.Stopped:
-            animation.setCurrentTime(animation.duration())  # the list is already open, not sliding open again
+        if (
+            animation is not None
+            and animation.state() != QAbstractAnimation.State.Stopped
+        ):
+            animation.setCurrentTime(
+                animation.duration(),
+            )  # the list is already open, not sliding open again
         if old is not None:
             old.deleteLater()
 
     def _page_state(self) -> _PageState:
         """
-        Remember retained activities and the independently selected navigation section.
+        Remember retained activities and the independently selected
+        navigation section.
 
         Returns
         -------
         _PageState
-            Activities, selected section, tile or pane view, and any utility page.
+            Activities, selected section, tile or pane view, and any
+            utility page.
 
         Examples
         --------
@@ -1495,11 +1825,28 @@ class MainWindow(QMainWindow):
         """
         parent = self._lesson_return[0] if self._lesson_return else self.home
         return _PageState(
-            exercise=type(self._exercise_page.exercise) if self._exercise_page is not None else None,
-            exercise_settings=self._exercise_page.settings_state() if self._exercise_page is not None else None,
-            lesson=(self._lesson_page.view.lesson.key, self._lesson_page.view.current) if self._lesson_page is not None else None,
-            active="lesson" if isinstance(self._workspace_page, LessonsPage) else "exercise" if self._workspace_page else "empty",
-            lesson_parent="exercise" if isinstance(parent, ExerciseView) else "empty" if parent is self.empty_page else "home",
+            exercise=type(self._exercise_page.exercise)
+            if self._exercise_page is not None
+            else None,
+            exercise_settings=self._exercise_page.settings_state()
+            if self._exercise_page is not None
+            else None,
+            lesson=(
+                self._lesson_page.view.lesson.key,
+                self._lesson_page.view.current,
+            )
+            if self._lesson_page is not None
+            else None,
+            active="lesson"
+            if isinstance(self._workspace_page, LessonsPage)
+            else "exercise"
+            if self._workspace_page
+            else "empty",
+            lesson_parent="exercise"
+            if isinstance(parent, ExerciseView)
+            else "empty"
+            if parent is self.empty_page
+            else "home",
             overlay="stats"
             if isinstance(self._overlay, StatsPage)
             else "database"
@@ -1509,7 +1856,9 @@ class MainWindow(QMainWindow):
             else None,
             glossary=(
                 self._overlay.search.text(),
-                self._overlay.terms.currentItem().text() if self._overlay.terms.currentItem() else "",
+                self._overlay.terms.currentItem().text()
+                if self._overlay.terms.currentItem()
+                else "",
                 self._overlay.activity_switch.current(),
                 getattr(self._overlay, "_example_index", 0),
                 self._overlay.definition.verticalScrollBar().value(),
@@ -1527,7 +1876,8 @@ class MainWindow(QMainWindow):
 
     def _restore_page(self, state: _PageState) -> None:
         """
-        Restore retained activity types and the navigation layout after rebuilding.
+        Restore retained activity types and the navigation layout after
+        rebuilding.
 
         Parameters
         ----------
@@ -1538,28 +1888,50 @@ class MainWindow(QMainWindow):
         --------
         >>> from alto.exercises.library import NoteNames
         >>> window = MainWindow()
-        >>> window._restore_page(_PageState(exercise=NoteNames, active="exercise", pane=True))
+        >>> window._restore_page(
+        ...     _PageState(
+        ...         exercise=NoteNames,
+        ...         active="exercise",
+        ...         pane=True,
+        ...     )
+        ... )
         >>> window.title_label.text()
         'Note Identification'
         """
         if state.exercise is not None:
             self.open_exercise(state.exercise)
-            if self._exercise_page is not None and state.exercise_settings is not None:
-                self._exercise_page.restore_settings_state(state.exercise_settings)
+            if (
+                self._exercise_page is not None
+                and state.exercise_settings is not None
+            ):
+                self._exercise_page.restore_settings_state(
+                    state.exercise_settings,
+                )
         if state.lesson is not None:
             self.open_lessons(state.lesson[0])
             if self._lesson_page is not None:
                 self._lesson_page.view.go(to=state.lesson[1])
             if state.lesson_parent != "exercise":
-                parent = self.empty_page if state.lesson_parent == "empty" else self.home
+                parent = (
+                    self.empty_page
+                    if state.lesson_parent == "empty"
+                    else self.home
+                )
                 self._lesson_return = (parent, self.APP_TITLE)
         self._workspace_page = (
-            self._lesson_page if state.active == "lesson" else self._exercise_page if state.active == "exercise" else None
+            self._lesson_page
+            if state.active == "lesson"
+            else self._exercise_page
+            if state.active == "exercise"
+            else None
         )
         if self.home.mode != state.mode:
             self.home.set_mode(state.mode, animate=False)
         self.search_field.setText(state.search)
-        self.home.restore_tile_filters(state.tile_filters, expanded=state.filters_open)
+        self.home.restore_tile_filters(
+            state.tile_filters,
+            expanded=state.filters_open,
+        )
         self.shuffle_button.setChecked(state.shuffle)
         self._sidebar_pref = state.sidebar
         if state.pane:
@@ -1572,7 +1944,10 @@ class MainWindow(QMainWindow):
             self.open_database()
         elif state.overlay == "glossary":
             self.open_glossary()
-            if isinstance(self._overlay, GlossaryPage) and state.glossary is not None:
+            if (
+                isinstance(self._overlay, GlossaryPage)
+                and state.glossary is not None
+            ):
                 page = self._overlay
                 search, term, mode, example, scroll = state.glossary
                 page.search.setText(search)
@@ -1585,24 +1960,46 @@ class MainWindow(QMainWindow):
                 page._example_index = example
                 if term:
                     page._update_example()
-                QTimer.singleShot(0, page, lambda: page.definition.verticalScrollBar().setValue(scroll))
+                QTimer.singleShot(
+                    0,
+                    page,
+                    lambda: page.definition.verticalScrollBar().setValue(
+                        scroll,
+                    ),
+                )
 
     def _show_profile(self) -> None:
         """
-        Show the profile's name in the menu, or hide that entry when there is no profile.
+        Show the profile's name in the menu, or hide that entry when
+        there is no profile.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+        >>> window = MainWindow(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> window.profile_action.text()
         'Profile: Ada…'
         """
-        for action in (self.profile_action, self.export_action, self.import_action):
-            action.setVisible(self.learner is not None)  # there is nothing to back up or to restore into without a profile
+        for action in (
+            self.profile_action,
+            self.export_action,
+            self.import_action,
+        ):
+            action.setVisible(
+                self.learner is not None,
+                # there is nothing to back up or to restore into without
+                # a
+                # profile
+            )
         if self.learner:
-            self.profile_action.setText(f"Profile: {self.learner.profile.name}…")
+            self.profile_action.setText(
+                f"Profile: {self.learner.profile.name}…",
+            )
 
     def open_glossary(self) -> None:
         """
@@ -1622,13 +2019,18 @@ class MainWindow(QMainWindow):
 
     def open_stats(self) -> None:
         """
-        Show the statistics in place of the current page. Nothing happens without a profile.
+        Show the statistics in place of the current page. Nothing
+        happens without a profile.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+        >>> window = MainWindow(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> window.open_stats()
         >>> window.title_label.text()
         'Statistics'
@@ -1642,12 +2044,15 @@ class MainWindow(QMainWindow):
 
     def _update_empty_page(self) -> None:
         """
-        Match the empty workspace prompt to the selected exercise or lesson list.
+        Match the empty workspace prompt to the selected exercise or
+        lesson list.
 
         Examples
         --------
         >>> window = MainWindow()
-        >>> window.home.set_mode("exercises", animate=False)
+        >>> window.home.set_mode(
+        ...     "exercises", animate=False
+        ... )
         >>> window._update_empty_page()
         >>> window.empty_page.text()
         'Select an exercise to begin.'
@@ -1657,7 +2062,8 @@ class MainWindow(QMainWindow):
 
     def _show_mode_control(self) -> None:
         """
-        Keep navigation icon-only in both views and name the view button for its destination.
+        Keep navigation icon-only in both views and name the view button
+        for its destination.
 
         Examples
         --------
@@ -1666,7 +2072,9 @@ class MainWindow(QMainWindow):
         'Tiles'
         """
         self.home.mode_control.set_compact(True)
-        self.home.mode_control.set_current(1 if self.home.mode == "lessons" else 0)
+        self.home.mode_control.set_current(
+            1 if self.home.mode == "lessons" else 0,
+        )
         for index, (button, icon) in enumerate(
             zip(
                 self.home.mode_control.buttons,
@@ -1674,7 +2082,11 @@ class MainWindow(QMainWindow):
                 strict=True,
             ),
         ):
-            color = QPalette.ColorRole.Highlight if index == self.home.mode_control.current() else QPalette.ColorRole.WindowText
+            color = (
+                QPalette.ColorRole.Highlight
+                if index == self.home.mode_control.current()
+                else QPalette.ColorRole.WindowText
+            )
             set_svg_icon(button, icon, role=color, size=18)
         section = "lessons" if self.home.mode == "lessons" else "exercises"
         self.search_field.setPlaceholderText(f"Search {section}…")
@@ -1685,7 +2097,9 @@ class MainWindow(QMainWindow):
         set_svg_icon(
             self.view_button,
             icons.TILES,
-            role=QPalette.ColorRole.Highlight if not self._pane_view else QPalette.ColorRole.WindowText,
+            role=QPalette.ColorRole.Highlight
+            if not self._pane_view
+            else QPalette.ColorRole.WindowText,
         )
         stats_active = isinstance(self._overlay, StatsPage)
         glossary_active = isinstance(self._overlay, GlossaryPage)
@@ -1693,7 +2107,9 @@ class MainWindow(QMainWindow):
         set_svg_icon(
             self.glossary_button,
             icons.GLOSSARY,
-            role=QPalette.ColorRole.Highlight if glossary_active else QPalette.ColorRole.WindowText,
+            role=QPalette.ColorRole.Highlight
+            if glossary_active
+            else QPalette.ColorRole.WindowText,
         )
         database_active = isinstance(self._overlay, DatabasePage)
         self.stats_button.setChecked(stats_active)
@@ -1701,19 +2117,34 @@ class MainWindow(QMainWindow):
         set_svg_icon(
             self.stats_button,
             icons.CHART,
-            role=QPalette.ColorRole.Highlight if stats_active else QPalette.ColorRole.WindowText,
+            role=QPalette.ColorRole.Highlight
+            if stats_active
+            else QPalette.ColorRole.WindowText,
         )
         set_svg_icon(
             self.database_button,
             icons.DATABASE,
-            role=QPalette.ColorRole.Highlight if database_active else QPalette.ColorRole.WindowText,
+            role=QPalette.ColorRole.Highlight
+            if database_active
+            else QPalette.ColorRole.WindowText,
         )
         activity = self._workspace_page
-        activity_section = "exercises" if isinstance(activity, ExerciseView) else "lessons" if activity else None
+        activity_section = (
+            "exercises"
+            if isinstance(activity, ExerciseView)
+            else "lessons"
+            if activity
+            else None
+        )
         current = self.stack.currentWidget()
-        self.home.set_filter_available(current in (self.home, self.empty_page) or isinstance(current, ExerciseView))
+        self.home.set_filter_available(
+            current in (self.home, self.empty_page)
+            or isinstance(current, ExerciseView),
+        )
         self._update_shuffle_button()
-        show_back = (current is self.home and activity_section is not None) or isinstance(
+        show_back = (
+            current is self.home and activity_section is not None
+        ) or isinstance(
             self._overlay,
             (StatsPage, DatabasePage, GlossaryPage),
         )
@@ -1725,7 +2156,8 @@ class MainWindow(QMainWindow):
 
     def _back_from_topbar(self) -> None:
         """
-        Return from a data page or resume the current activity from the tiles.
+        Return from a data page or resume the current activity from the
+        tiles.
 
         Examples
         --------
@@ -1738,7 +2170,8 @@ class MainWindow(QMainWindow):
 
     def _mode_chosen(self) -> None:
         """
-        Switch the browser's section without replacing the current activity.
+        Switch the browser's section without replacing the current
+        activity.
 
         Examples
         --------
@@ -1747,7 +2180,9 @@ class MainWindow(QMainWindow):
         >>> window.open_exercise(NoteNames)
         >>> view = window.stack.currentWidget()
         >>> window.home.mode_control.buttons[1].click()
-        >>> window.stack.currentWidget() is view and window.nav_stack.currentWidget() is window.lesson_nav
+        >>> window.stack.currentWidget() is view
+        True
+        >>> window.nav_stack.currentWidget() is window.lesson_nav
         True
         """
         self._show_nav()
@@ -1759,13 +2194,18 @@ class MainWindow(QMainWindow):
 
     def toggle_navigation(self) -> None:
         """
-        Open the workspace from tiles, or toggle its navigation pane without leaving the activity.
+        Open the workspace from tiles, or toggle its navigation pane
+        without leaving the activity.
 
         Examples
         --------
         >>> window = MainWindow()
         >>> window.toggle_navigation()
-        >>> window.stack.currentWidget() is window.empty_page, window.view_button.accessibleName()
+        >>> (
+        ...     window.stack.currentWidget()
+        ...     is window.empty_page,
+        ...     window.view_button.accessibleName(),
+        ... )
         (True, 'Tiles')
         """
         if self._pane_view:
@@ -1776,7 +2216,8 @@ class MainWindow(QMainWindow):
 
     def _show_workspace(self) -> None:
         """
-        Show the retained activity, or the empty prompt before an activity begins.
+        Show the retained activity, or the empty prompt before an
+        activity begins.
 
         Examples
         --------
@@ -1790,7 +2231,9 @@ class MainWindow(QMainWindow):
         self._pane_view = True
         page = self._workspace_page
         self._overlay = page if isinstance(page, LessonsPage) else None
-        self._overlay_return = self._lesson_return if self._overlay is not None else None
+        self._overlay_return = (
+            self._lesson_return if self._overlay is not None else None
+        )
         self._update_empty_page()
         self.title_label.setText(
             page.exercise.name
@@ -1799,7 +2242,9 @@ class MainWindow(QMainWindow):
             if isinstance(page, LessonsPage)
             else self.APP_TITLE,
         )
-        self.stack.setCurrentWidget(page if page is not None else self.empty_page)
+        self.stack.setCurrentWidget(
+            page if page is not None else self.empty_page,
+        )
         self.splitter.handle(1).setEnabled(True)
         self._set_sidebar(self._sidebar_pref)
         self._show_nav()
@@ -1808,7 +2253,8 @@ class MainWindow(QMainWindow):
 
     def _toggle_tiles_workspace(self) -> None:
         """
-        Switch between the tile catalog and the workspace while keeping the activity in place.
+        Switch between the tile catalog and the workspace while keeping
+        the activity in place.
 
         Examples
         --------
@@ -1823,7 +2269,9 @@ class MainWindow(QMainWindow):
         if self.stack.currentWidget() is not self.home:
             if self._pane_view:
                 self._grid_return_available = True
-                self._grid_return_sidebar = self.sidebar_width() > 0 or self._sidebar_pref
+                self._grid_return_sidebar = (
+                    self.sidebar_width() > 0 or self._sidebar_pref
+                )
             self.show_home()
         elif self._grid_return_available:
             self._grid_return_available = False
@@ -1849,7 +2297,8 @@ class MainWindow(QMainWindow):
 
     def open_lessons(self, lesson: str) -> None:
         """
-        Open a lesson in place of the current page, at the step it was left at, with the lesson list on the left.
+        Open a lesson in place of the current page, at the step it was
+        left at, with the lesson list on the left.
 
         Parameters
         ----------
@@ -1860,7 +2309,11 @@ class MainWindow(QMainWindow):
         --------
         >>> window = MainWindow()
         >>> window.open_lessons("circle-of-fifths")
-        >>> window.title_label.text(), window.nav_stack.currentWidget() is window.lesson_nav
+        >>> (
+        ...     window.title_label.text(),
+        ...     window.nav_stack.currentWidget()
+        ...     is window.lesson_nav,
+        ... )
         ('The Circle of Fifths', True)
         >>> window.close_overlay()
         """
@@ -1868,13 +2321,20 @@ class MainWindow(QMainWindow):
         if isinstance(self._overlay, LessonsPage):
             self.close_overlay()
         old = self._lesson_page
-        page = old if old is not None and old.view.lesson.key == lesson else LessonsPage(lesson)
+        page = (
+            old
+            if old is not None and old.view.lesson.key == lesson
+            else LessonsPage(lesson)
+        )
         if page is not old:
             page.practice_requested.connect(self._practice)
             page.back.connect(self._leave_lesson)
             page.view.stepped.connect(self.lesson_nav.select_step)
             self.stack.addWidget(page)
-        self._lesson_return = (self.stack.currentWidget(), self.title_label.text())
+        self._lesson_return = (
+            self.stack.currentWidget(),
+            self.title_label.text(),
+        )
         if self._exercise_page is not None:
             self._exercise_page.lesson_back_button.hide()
         self._lesson_page = page
@@ -1887,7 +2347,8 @@ class MainWindow(QMainWindow):
 
     def _leave_lesson(self) -> None:
         """
-        Close the open lesson and show what was open before it, with the exercise list or without the list, as that page has.
+        Close the open lesson and show what was open before it, with the
+        exercise list or without the list, as that page has.
 
         Examples
         --------
@@ -1910,7 +2371,8 @@ class MainWindow(QMainWindow):
 
     def _lesson_picked(self, key: str) -> None:
         """
-        Open the lesson whose row was clicked in the list, unless it is the one that is open.
+        Open the lesson whose row was clicked in the list, unless it is
+        the one that is open.
 
         Parameters
         ----------
@@ -1921,7 +2383,9 @@ class MainWindow(QMainWindow):
         --------
         >>> window = MainWindow()
         >>> window.open_lessons("circle-of-fifths")
-        >>> window._lesson_picked("circle-of-fifths")  # already open: nothing changes
+        >>> window._lesson_picked(
+        ...     "circle-of-fifths"
+        ... )  # already open: nothing changes
         >>> window.close_overlay()
         """
         page = self._overlay
@@ -1943,7 +2407,8 @@ class MainWindow(QMainWindow):
         >>> window = MainWindow()
         >>> window.open_lessons("circle-of-fifths")
         >>> window._step_picked(2)
-        >>> window.lesson_nav.currentItem() is window.lesson_nav.step_items[2]
+        >>> selected = window.lesson_nav.currentItem()
+        >>> selected is window.lesson_nav.step_items[2]
         True
         >>> window.close_overlay()
         """
@@ -1955,7 +2420,8 @@ class MainWindow(QMainWindow):
 
     def _show_nav(self) -> None:
         """
-        Show the selected browser section independently of the active activity.
+        Show the selected browser section independently of the active
+        activity.
 
         Examples
         --------
@@ -1971,20 +2437,30 @@ class MainWindow(QMainWindow):
 
     def _filter_navigation(self) -> None:
         """
-        Hide unmatched rows and empty category headings, retaining matching lessons' steps.
+        Hide unmatched rows and empty category headings, retaining
+        matching lessons' steps.
 
         Examples
         --------
         >>> window = MainWindow()
-        >>> window.search_field.setText("nothing matches this")
-        >>> all(window.nav.item(i).isHidden() for i in range(window.nav.count()))
+        >>> window.search_field.setText(
+        ...     "nothing matches this"
+        ... )
+        >>> all(
+        ...     window.nav.item(i).isHidden()
+        ...     for i in range(window.nav.count())
+        ... )
         True
         """
         for nav, cards, section in (
             (self.nav, self.home.cards, "exercises"),
             (self.lesson_nav, self.home.lesson_cards, "lessons"),
         ):
-            matching = [card for card in cards if self.home.matches_filter(card, section=section)]
+            matching = [
+                card
+                for card in cards
+                if self.home.matches_filter(card, section=section)
+            ]
             titles = {card.title for card in matching}
             headings = {card.category.upper() for card in matching}
             visible = False
@@ -2013,7 +2489,14 @@ class MainWindow(QMainWindow):
         'Circle of Fifths'
         """
         from_lesson = isinstance(self.stack.currentWidget(), LessonsPage)
-        cls = next((candidate for candidate in REGISTRY if candidate.__name__ == name), None)
+        cls = next(
+            (
+                candidate
+                for candidate in REGISTRY
+                if candidate.__name__ == name
+            ),
+            None,
+        )
         if cls is not None:
             self.open_exercise(cls)
             if self._exercise_page is not None:
@@ -2021,7 +2504,8 @@ class MainWindow(QMainWindow):
 
     def _back_to_practice_lesson(self) -> None:
         """
-        Return from practice to the retained lesson and its current step.
+        Return from practice to the retained lesson and its current
+        step.
 
         Examples
         --------
@@ -2044,13 +2528,18 @@ class MainWindow(QMainWindow):
 
     def open_database(self) -> None:
         """
-        Show the database browser in place of the current page. Nothing happens without a profile.
+        Show the database browser in place of the current page. Nothing
+        happens without a profile.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+        >>> window = MainWindow(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> window.open_database()
         >>> window.title_label.text()
         'Database'
@@ -2069,27 +2558,38 @@ class MainWindow(QMainWindow):
         title: str,
     ) -> None:
         """
-        Slide a utility page in from the right and remember the page to return to.
+        Slide a utility page in from the right and remember the page to
+        return to.
 
         Parameters
         ----------
         page : StatsPage or DatabasePage or GlossaryPage
-            The page to show; its Back button returns to the page it replaced.
+            The page to show; its Back button returns to the page it
+            replaced.
         title : str
-            The title to show in the top bar while it is open. Keyword-only.
+            The title to show in the top bar while it is open.
+            Keyword-only.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> learner = Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... )
         >>> window = MainWindow(learner)
-        >>> window._open_overlay(StatsPage(learner), title="Statistics")
+        >>> window._open_overlay(
+        ...     StatsPage(learner), title="Statistics"
+        ... )
         >>> window.stack.currentWidget() is window._overlay
         True
         >>> window.close_overlay()
         """
-        backdrop = self.stack.grab() if self.stack.isVisible() and saved_transition() != "none" else None
+        backdrop = (
+            self.stack.grab()
+            if self.stack.isVisible() and saved_transition() != "none"
+            else None
+        )
         previous = self._overlay
         if previous is None or isinstance(previous, LessonsPage):
             current = self.stack.currentWidget()
@@ -2106,7 +2606,8 @@ class MainWindow(QMainWindow):
 
     def _slide_overlay(self, backdrop: QPixmap) -> None:
         """
-        Reveal the incoming page over a still image of the page the user was viewing.
+        Reveal the incoming page over a still image of the page the user
+        was viewing.
 
         Parameters
         ----------
@@ -2118,13 +2619,18 @@ class MainWindow(QMainWindow):
         >>> window = MainWindow()
         >>> window.show()
         >>> window.open_glossary()
-        >>> isinstance(window.stack.currentWidget(), GlossaryPage)
+        >>> isinstance(
+        ...     window.stack.currentWidget(),
+        ...     GlossaryPage,
+        ... )
         True
         """
         incoming = self.stack.grab()
         background = QLabel(self.stack)
         background.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
-        background.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        background.setAlignment(
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
+        )
         background.setPixmap(backdrop)
         background.setGeometry(self.stack.contentsRect())
         foreground = QLabel(background)
@@ -2145,13 +2651,18 @@ class MainWindow(QMainWindow):
 
     def close_overlay(self) -> None:
         """
-        Leave the statistics or database page and show the page that was open before it.
+        Leave the statistics or database page and show the page that was
+        open before it.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+        >>> window = MainWindow(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> window.open_stats()
         >>> window.close_overlay()
         >>> window.title_label.text()
@@ -2174,16 +2685,22 @@ class MainWindow(QMainWindow):
         """
         Choose or add a profile.
 
-        Their history and questions are kept apart; the next question comes from theirs.
+        Their history and questions are kept apart; the next question
+        comes from theirs.
 
         Examples
         --------
         >>> window = MainWindow()
-        >>> window.switch_profile()  # without a profile there is nothing to switch
+        >>> # without a profile there is nothing to switch
+        >>> window.switch_profile()
         """
         if not self.learner:
             return
-        dialog = ProfileDialog(self.learner.db, current=self.learner.profile, parent=self)
+        dialog = ProfileDialog(
+            self.learner.db,
+            current=self.learner.profile,
+            parent=self,
+        )
         accepted = dialog.exec() == QDialog.DialogCode.Accepted
         chosen = dialog.chosen
         if accepted and chosen is not None and chosen != self.learner.profile:
@@ -2197,7 +2714,9 @@ class MainWindow(QMainWindow):
             self._show_profile()
             self.show_home()
             exercise, lesson = self._exercise_page, self._lesson_page
-            self._workspace_page = self._exercise_page = self._lesson_page = None
+            self._workspace_page = self._exercise_page = self._lesson_page = (
+                None
+            )
             self._lesson_return = None
             self._drop(exercise)
             self._drop(lesson)
@@ -2205,18 +2724,21 @@ class MainWindow(QMainWindow):
 
     def export_backup(self) -> None:
         """
-        Save a backup of everything: ask where, then write profiles, history and settings to one file.
+        Save a backup of everything: ask where, then write profiles,
+        history and settings to one file.
 
         Examples
         --------
-        >>> MainWindow().export_backup()  # does nothing without a profile
+        >>> # does nothing without a profile
+        >>> MainWindow().export_backup()
         """
         if self.learner:
             backup_flow.export_backup(self, db=self.learner.db)
 
     def check_for_updates(self) -> None:
         """
-        Ask whether a newer Alto is available; if so and the person agrees, install it and restart.
+        Ask whether a newer Alto is available; if so and the person
+        agrees, install it and restart.
 
         Examples
         --------
@@ -2226,18 +2748,24 @@ class MainWindow(QMainWindow):
 
     def import_backup(self) -> None:
         """
-        Replace everything with a backup: ask for the file, check it, ask again, and reload the whole window from it.
+        Replace everything with a backup: ask for the file, check it,
+        ask again, and reload the whole window from it.
 
         Examples
         --------
-        >>> MainWindow().import_backup()  # does nothing without a profile
+        >>> # does nothing without a profile
+        >>> MainWindow().import_backup()
         """
-        if self.learner and backup_flow.import_backup(self, db=self.learner.db):
+        if self.learner and backup_flow.import_backup(
+            self,
+            db=self.learner.db,
+        ):
             self._restored()
 
     def _restored(self) -> None:
         """
-        Pick up an imported backup: the profile that was in use, the theme and every setting, then open a fresh window.
+        Pick up an imported backup: the profile that was in use, the
+        theme and every setting, then open a fresh window.
 
         Examples
         --------
@@ -2248,13 +2776,19 @@ class MainWindow(QMainWindow):
         self._exporter.close()
         db = self.learner.db
         profiles = db.profiles()
-        self.learner.set_profile(db.profile(int_value(store(), key="profile/last", default=-1)) or profiles[0])
+        self.learner.set_profile(
+            db.profile(int_value(store(), key="profile/last", default=-1))
+            or profiles[0],
+        )
         apply_theme(saved_theme())
-        self.rebuild()  # a new window loads every setting, and draws every icon and color in the theme again
+        # a new window loads every setting, and draws every icon and
+        # color in the theme again
+        self.rebuild()
 
     def show_home(self) -> None:
         """
-        Go back to the start screen, closing the statistics or database and hiding the exercise list.
+        Go back to the start screen, closing the statistics or database
+        and hiding the exercise list.
 
         Examples
         --------
@@ -2282,7 +2816,8 @@ class MainWindow(QMainWindow):
 
     def _drop(self, old: QWidget | None) -> None:
         """
-        Remove an unused page, keeping the tiles, empty workspace and retained activities.
+        Remove an unused page, keeping the tiles, empty workspace and
+        retained activities.
 
         Parameters
         ----------
@@ -2293,13 +2828,21 @@ class MainWindow(QMainWindow):
         --------
         >>> window = MainWindow()
         >>> window._drop(None)
-        >>> window._drop(window.home)  # the start screen is kept
+        >>> window._drop(
+        ...     window.home
+        ... )  # the start screen is kept
         >>> window.stack.indexOf(window.home)
         0
         """
         if old is None:
             return
-        if old in (self.home, self.empty_page, self._exercise_page, self._lesson_page, self.stack.currentWidget()):
+        if old in (
+            self.home,
+            self.empty_page,
+            self._exercise_page,
+            self._lesson_page,
+            self.stack.currentWidget(),
+        ):
             return
         # noinspection PyTypeChecker
         self.stack.removeWidget(old)
@@ -2308,7 +2851,8 @@ class MainWindow(QMainWindow):
 
     def open_plugins(self) -> None:
         """
-        Manage installed plugins, install by code or ZIP, and update from registered releases.
+        Manage installed plugins, install by code or ZIP, and update
+        from registered releases.
 
         Examples
         --------
@@ -2316,8 +2860,12 @@ class MainWindow(QMainWindow):
         """
         dialog = PluginsDialog(database_path().parent / "plugins", parent=self)
         dialog.restart_requested.connect(self.restart_app)
-        dialog.install_requested.connect(lambda: self.install_plugin(parent=dialog))
-        dialog.uninstall_requested.connect(lambda plugin: self.uninstall_plugin(plugin, parent=dialog))
+        dialog.install_requested.connect(
+            lambda: self.install_plugin(parent=dialog),
+        )
+        dialog.uninstall_requested.connect(
+            lambda plugin: self.uninstall_plugin(plugin, parent=dialog),
+        )
         dialog.finished.connect(dialog.deleteLater)
         dialog.exec()
 
@@ -2328,65 +2876,105 @@ class MainWindow(QMainWindow):
         Parameters
         ----------
         parent : QWidget or None, default None
-            The window that owns the file chooser and messages. Defaults to this window. Keyword-only.
+            The window that owns the file chooser and messages. Defaults
+            to this window. Keyword-only.
 
         Examples
         --------
-        Press Install plugin from file in the Plugins dialog and open viola.zip.
+        Press Install plugin from file in the Plugins dialog and open
+        viola.zip.
         """
         parent = parent or self
         title = "Install plugin from file"
         name, _ = QFileDialog.getOpenFileName(
             parent,
             title,
-            QStandardPaths.writableLocation(QStandardPaths.StandardLocation.DownloadLocation),
+            QStandardPaths.writableLocation(
+                QStandardPaths.StandardLocation.DownloadLocation,
+            ),
             "Alto instrument packs (*.zip *.ZIP)",
         )
         if not name:
             return
         source = Path(name)
         try:
-            pack_name = install_pack(source, folder=database_path().parent / "plugins")
+            pack_name = install_pack(
+                source,
+                folder=database_path().parent / "plugins",
+            )
         except (ValueError, OSError) as error:
             QMessageBox.warning(parent, title, str(error))
             return
-        message = f"<p>Installed {escape(pack_name)}. Restart Alto now to use its exercises?</p>"
-        if QMessageBox.question(parent, "Plugin installed", message) == QMessageBox.StandardButton.Yes:
+        message = (
+            "<p>Installed "
+            f"{escape(pack_name)}"
+            ". Restart Alto now to use its exercises?</p>"
+        )
+        if (
+            QMessageBox.question(parent, "Plugin installed", message)
+            == QMessageBox.StandardButton.Yes
+        ):
             self.restart_app()
 
-    def uninstall_plugin(self, plugin: InstalledPlugin, *, parent: QWidget | None = None) -> None:
+    def uninstall_plugin(
+        self,
+        plugin: InstalledPlugin,
+        *,
+        parent: QWidget | None = None,
+    ) -> None:
         """
-        Move a plugin to the system trash after confirming, then restart Alto.
+        Move a plugin to the system trash after confirming, then restart
+        Alto.
 
         Parameters
         ----------
         plugin : InstalledPlugin
             The plugin selected in the Plugins dialog.
         parent : QWidget or None, default None
-            The window that owns the confirmation and messages. Defaults to this window. Keyword-only.
+            The window that owns the confirmation and messages. Defaults
+            to this window. Keyword-only.
 
         Examples
         --------
-        Select Viola Instrument Pack in the Plugins dialog and press Uninstall plugin.
+        Select Viola Instrument Pack in the Plugins dialog and press
+        Uninstall plugin.
         """
         parent = parent or self
         title = "Uninstall plugin"
         message = (
-            f"<p>Move <b>{escape(plugin.title)}</b> ({escape(plugin.path.name)}) to the system trash?</p>"
-            "<p>Selecting a folder moves all its contents. Alto will restart. Your practice history is kept.</p>"
+            "<p>Move <b>"
+            f"{escape(plugin.title)}"
+            "</b> ("
+            f"{escape(plugin.path.name)}"
+            ") to the system trash?</p>"
+            "<p>Selecting a folder moves all its contents. Alto will "
+            "restart. Your practice history is kept.</p>"
         )
-        if QMessageBox.question(parent, title, message) != QMessageBox.StandardButton.Yes:
+        if (
+            QMessageBox.question(parent, title, message)
+            != QMessageBox.StandardButton.Yes
+        ):
             return
         lock = QLockFile(str(plugin.path.parent / ".install.lock"))
         if not lock.tryLock(0):
-            QMessageBox.warning(parent, title, "Another plugin change is in progress. Try again.")
+            QMessageBox.warning(
+                parent,
+                title,
+                "Another plugin change is in progress. Try again.",
+            )
             return
         try:
-            if not plugin.manifest.is_file() or not samestat(plugin.snapshot, plugin.path.lstat()):
+            if not plugin.manifest.is_file() or not samestat(
+                plugin.snapshot,
+                plugin.path.lstat(),
+            ):
                 QMessageBox.warning(
                     parent,
                     title,
-                    "The installation changed. The list has been refreshed; choose the plugin again.",
+                    (
+                        "The installation changed. The list has been "
+                        "refreshed; choose the plugin again."
+                    ),
                 )
                 return
             pack = QFile(str(plugin.path))
@@ -2394,7 +2982,10 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(
                     parent,
                     title,
-                    f"Could not move {plugin.path.name} to the system trash.\n\n{pack.errorString()}",
+                    "Could not move "
+                    f"{plugin.path.name}"
+                    " to the system trash.\n\n"
+                    f"{pack.errorString()}",
                 )
                 return
         except OSError as error:
@@ -2411,16 +3002,23 @@ class MainWindow(QMainWindow):
         Parameters
         ----------
         quit_on_failure : bool
-            Close after a failed relaunch if an uninstalled pack's assets are already gone.
+            Close after a failed relaunch if an uninstalled pack's
+            assets are already gone.
 
         Examples
         --------
         >>> MainWindow().restart_app()  # doctest: +SKIP
         """
-        arguments = [] if updates.is_frozen() else ["-m", "alto"]  # a packaged build is Alto itself, not Python
+        arguments = (
+            [] if updates.is_frozen() else ["-m", "alto"]
+        )  # a packaged build is Alto itself, not Python
         started, _ = QProcess.startDetached(sys.executable, arguments)
         if not started:
-            message = "Open Alto again to finish uninstalling the plugin." if quit_on_failure else "Please restart Alto manually."
+            message = (
+                "Open Alto again to finish uninstalling the plugin."
+                if quit_on_failure
+                else "Please restart Alto manually."
+            )
             QMessageBox.warning(self, "Could not restart Alto", message)
         if started or quit_on_failure:
             QApplication.quit()

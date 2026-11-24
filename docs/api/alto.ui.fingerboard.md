@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.fingerboard/
 ---
 {% raw %}
-Render a pack's instrument portrait using its calibrated string endpoints.
+Render a pack's instrument portrait using its calibrated string
+endpoints.
 
 ## ruler_reach
 
@@ -13,7 +14,8 @@ Render a pack's instrument portrait using its calibrated string endpoints.
 def ruler_reach(model: PackInstrument) -> int
 ```
 
-Find how many half steps the ruler covers: an octave, or further if the pack names a position beyond it.
+Find how many half steps the ruler covers: an octave, or further if
+the pack names a position beyond it.
 
 **Parameters**
 
@@ -27,10 +29,25 @@ Find how many half steps the ruler covers: an octave, or further if the pack nam
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
->>> bare = PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None)
+>>> bare = PackInstrument(
+...     "pack.x.y",
+...     Path("a.png"),
+...     (10, 10),
+...     (),
+...     None,
+... )
 >>> ruler_reach(bare)
 12
->>> ruler_reach(PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None, positions=((14, "9th"),)))
+>>> ruler_reach(
+...     PackInstrument(
+...         "pack.x.y",
+...         Path("a.png"),
+...         (10, 10),
+...         (),
+...         None,
+...         positions=((14, "9th"),),
+...     )
+... )
 14
 ```
 
@@ -44,7 +61,8 @@ def ruler_base(
 ) -> tuple[QPointF, QPointF, float]
 ```
 
-Locate where a ruler tick for one half step starts, beside the fingerboard rather than on it.
+Locate where a ruler tick for one half step starts, beside the
+fingerboard rather than on it.
 
 **Parameters**
 
@@ -60,9 +78,20 @@ Locate where a ruler tick for one half step starts, beside the fingerboard rathe
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> from alto.instrument_packs import PackString
->>> strings = (PackString("C3", (0, 10), (100, 10)), PackString("G3", (0, 0), (100, 0)))
->>> viola = PackInstrument("pack.x.y", Path("a.png"), (100, 10), strings, None)
->>> start, away, apart = ruler_base(viola, step=0)
+>>> strings = (
+...     PackString("C3", (0, 10), (100, 10)),
+...     PackString("G3", (0, 0), (100, 0)),
+... )
+>>> viola = PackInstrument(
+...     "pack.x.y",
+...     Path("a.png"),
+...     (100, 10),
+...     strings,
+...     None,
+... )
+>>> start, away, apart = ruler_base(
+...     viola, step=0
+... )
 >>> (start.x(), start.y(), away.y(), apart)
 (0.0, -18.0, -1.0, 10.0)
 ```
@@ -77,9 +106,11 @@ def neck_view(
 ) -> QRectF
 ```
 
-Choose the part of the picture a note question needs: the nut, the neck with its ruler, and the bridge.
+Choose the part of the picture a note question needs: the nut, the
+neck with its ruler, and the bridge.
 
-The scroll, the pegs and everything past the bridge are left out, since the question never refers to them.
+The scroll, the pegs and everything past the bridge are left out,
+since the question never refers to them.
 
 **Parameters**
 
@@ -95,10 +126,24 @@ The scroll, the pegs and everything past the bridge are left out, since the ques
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> from alto.instrument_packs import PackString
->>> strings = (PackString("C3", (100, 60), (900, 60)), PackString("G3", (100, 40), (900, 40)))
->>> board = PackInstrument("pack.x.y", Path("a.png"), (1000, 100), strings, None)
+>>> strings = (
+...     PackString("C3", (100, 60), (900, 60)),
+...     PackString("G3", (100, 40), (900, 40)),
+... )
+>>> board = PackInstrument(
+...     "pack.x.y",
+...     Path("a.png"),
+...     (1000, 100),
+...     strings,
+...     None,
+... )
 >>> view = neck_view(board, gap=20.0)
->>> view.left() < 100 and view.right() > 900 and view.top() < 40 and view.bottom() > 60
+>>> (
+...     view.left() < 100
+...     and view.right() > 900
+...     and view.top() < 40
+...     and view.bottom() > 60
+... )
 True
 ```
 
@@ -108,7 +153,8 @@ True
 def manual_style(model: PackInstrument) -> tuple[KeyboardStyle | None, float]
 ```
 
-Build the look of an instrument's drawn keyboards from its plugin's ``keyboard_style``.
+Build the look of an instrument's drawn keyboards from its plugin's
+``keyboard_style``.
 
 **Parameters**
 
@@ -122,13 +168,33 @@ Build the look of an instrument's drawn keyboards from its plugin's ``keyboard_s
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
->>> bare = PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None)
+>>> bare = PackInstrument(
+...     "pack.x.y",
+...     Path("a.png"),
+...     (10, 10),
+...     (),
+...     None,
+... )
 >>> manual_style(bare)
 (None, 4.5)
->>> from alto.instrument_packs import PackKeyboardStyle
->>> look = PackKeyboardStyle((("cap", "#eee3c8"),), (("length", 5.0),))
->>> styled = PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None, keyboard_style=look)
->>> look_style, look_length = manual_style(styled)
+>>> from alto.instrument_packs import (
+...     PackKeyboardStyle,
+... )
+>>> look = PackKeyboardStyle(
+...     (("cap", "#eee3c8"),),
+...     (("length", 5.0),),
+... )
+>>> styled = PackInstrument(
+...     "pack.x.y",
+...     Path("a.png"),
+...     (10, 10),
+...     (),
+...     None,
+...     keyboard_style=look,
+... )
+>>> look_style, look_length = manual_style(
+...     styled
+... )
 >>> # noinspection PyUnresolvedReferences
 >>> look_style.cap, look_length
 ('#eee3c8', 5.0)
@@ -142,7 +208,8 @@ FingerboardWidget()
 
 Bases: `QWidget`
 
-Draw the instrument and keep the teaching overlays on the same scale.
+Draw the instrument and keep the teaching overlays on the same
+scale.
 
 **Constructor**
 
@@ -166,7 +233,8 @@ Reserve space for the whole instrument.
 def show_position(position: FingerboardPosition | PicturePosition | None) -> None
 ```
 
-Resolve the saved pack identity and clear the previous playback highlight.
+Resolve the saved pack identity and clear the previous playback
+highlight.
 
 ### FingerboardWidget.resizeEvent
 
@@ -186,7 +254,8 @@ Fit the drawn keyboards to the new height.
 def set_pickable(pickable: bool) -> None
 ```
 
-Let a click on the picture be an answer, and say so with the pointer.
+Let a click on the picture be an answer, and say so with the
+pointer.
 
 **Parameters**
 
@@ -207,7 +276,8 @@ True
 def show_target(point: tuple[float, float] | None) -> None
 ```
 
-Mark the right place on a picture that has no marker, or clear the mark.
+Mark the right place on a picture that has no marker, or clear
+the mark.
 
 **Parameters**
 
@@ -227,7 +297,8 @@ Mark the right place on a picture that has no marker, or clear the mark.
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-Turn a click into a point on the picture when the picture is being used for an answer.
+Turn a click into a point on the picture when the picture is
+being used for an answer.
 
 **Parameters**
 
@@ -247,7 +318,8 @@ Mark the pitch during answer playback.
 def feedback_gap_ms() -> int
 ```
 
-Use the sounding note's full length for an animated single-note question.
+Use the sounding note's full length for an animated single-note
+question.
 
 **Returns**
 
@@ -259,7 +331,8 @@ Use the sounding note's full length for an animated single-note question.
 def animate_silent_answer(duration_ms: int) -> None
 ```
 
-Show an image-anchored overlay during the usual silent picture feedback interval.
+Show an image-anchored overlay during the usual silent picture
+feedback interval.
 
 ### FingerboardWidget.hideEvent
 
@@ -275,5 +348,6 @@ End any silent or sounding overlay when leaving the diagram.
 def paintEvent(event: QPaintEvent) -> None
 ```
 
-Draw the whole picture for a marked location, or only the neck and ruler for a note on a string.
+Draw the whole picture for a marked location, or only the neck
+and ruler for a note on a string.
 {% endraw %}

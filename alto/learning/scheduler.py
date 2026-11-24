@@ -1,21 +1,40 @@
 """
-How a question's history turns into how soon it comes back. Pure Python, no database and no Qt.
+How a question's history turns into how soon it comes back. Pure Python,
+no database and no Qt.
 
-Every question carries a *strain*: how much practice it needs. A new question starts at NEW_STRAIN. Each answer moves
-it, and the chance of being asked is exp(WEIGHT_SLOPE * strain), so strained questions come back sooner and more
+Every question carries a *strain*: how much practice it needs. A new
+question starts at NEW_STRAIN. Each answer moves
+it, and the chance of being asked is exp(WEIGHT_SLOPE * strain), so
+strained questions come back sooner and more
 often while well-known ones fade into the background.
 
-* A wrong answer adds WRONG_PENALTY, so every extra attempt pushes the question further up.
-* A right answer on the first try takes CORRECT_REWARD off. A right answer after misses earns only RETRY_REWARD.
-* The first answer's speed, against the exercise's `par_seconds`, adds or removes strain on top: very quick
-  answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.
+* A wrong answer adds WRONG_PENALTY, so every extra attempt pushes the
+question further up.
+* A right answer on the first try takes CORRECT_REWARD off. A right
+answer after misses earns only RETRY_REWARD.
+* The first answer's speed, against the exercise's `par_seconds`, adds
+or removes strain on top: very quick
+  answers take off up to FAST_BONUS, and slow ones add up to
+  SLOW_PENALTY.
 
 Examples
 --------
->>> strain = update_strain(NEW_STRAIN, correct=False, attempt_no=1, seconds=4.0, par_seconds=4.0)
+>>> strain = update_strain(
+...     NEW_STRAIN,
+...     correct=False,
+...     attempt_no=1,
+...     seconds=4.0,
+...     par_seconds=4.0,
+... )
 >>> strain  # a miss pushes the question up
 3.0
->>> update_strain(strain, correct=True, attempt_no=2, seconds=2.0, par_seconds=4.0)  # a retry earns little
+>>> update_strain(
+...     strain,
+...     correct=True,
+...     attempt_no=2,
+...     seconds=2.0,
+...     par_seconds=4.0,
+... )  # a retry earns little
 2.8
 """
 
@@ -36,20 +55,29 @@ SLOW_PENALTY = 1.0
 VERY_FAST = 0.5  # at or below this fraction of par counts as very quick
 VERY_SLOW = 4.0  # at or above this many times par counts as as slow as it gets
 WEIGHT_SLOPE = 0.6
-BASE_COOLDOWN = 120.0  # seconds a question of strain 3 stays out of the running before it can recur freely
+# seconds a question of strain 3 stays out of the running before it can
+# recur freely
+BASE_COOLDOWN = 120.0
 MIN_RECENCY = 0.02
 
 T = TypeVar("T")
 
 
-def arts_priority(intervening: int, *, correct: bool, duration_ms: int) -> float:
+def arts_priority(
+    intervening: int,
+    *,
+    correct: bool,
+    duration_ms: int,
+) -> float:
     """
-    Score a previously answered item for Adaptive Response-Time-based Sequencing.
+    Score a previously answered item for Adaptive Response-Time-based
+    Sequencing.
 
     Parameters
     ----------
     intervening : int
-        Other first submissions since the last first submission to this item.
+        Other first submissions since the last first submission to this
+        item.
     correct : bool
         Whether the last first submission was correct.
     duration_ms : int
@@ -62,13 +90,19 @@ def arts_priority(intervening: int, *, correct: bool, duration_ms: int) -> float
 
     Examples
     --------
-    >>> arts_priority(1, correct=False, duration_ms=200)
+    >>> arts_priority(
+    ...     1, correct=False, duration_ms=200
+    ... )
     2.0
-    >>> arts_priority(0, correct=True, duration_ms=3000)
+    >>> arts_priority(
+    ...     0, correct=True, duration_ms=3000
+    ... )
     0.0
     """
-    # Equation 1 in Mettler, Massey & Kellman (2016), with a 100 ms reference for music drills.
-    # With a one-trial delay, N - D is exactly the number of intervening first submissions.
+    # Equation 1 in Mettler, Massey & Kellman (2016), with a 100 ms
+    # reference for music drills.
+    # With a one-trial delay, N - D is exactly the number of intervening
+    # first submissions.
     increment = 1.1 * math.log(max(duration_ms, 101) / 100) if correct else 20
     return 0.1 * intervening * increment
 
@@ -86,23 +120,29 @@ def speed_term(
     seconds : float
         How long the first answer took.
     par_seconds : float
-        How long a good first answer takes for this exercise. Keyword-only.
+        How long a good first answer takes for this exercise.
+        Keyword-only.
 
     Returns
     -------
     float
-        Negative when the answer was quick (down to `-FAST_BONUS`), zero at par, and positive when it was slow (up to
+        Negative when the answer was quick (down to `-FAST_BONUS`), zero
+        at par, and positive when it was slow (up to
         `SLOW_PENALTY`).
 
     Examples
     --------
-    >>> speed_term(1.0, par_seconds=10.0)  # at or under half of par: the full bonus
+    >>> speed_term(
+    ...     1.0, par_seconds=10.0
+    ... )  # at or under half of par: the full bonus
     -0.6
     >>> round(speed_term(7.5, par_seconds=10.0), 2)
     -0.3
     >>> round(speed_term(25.0, par_seconds=10.0), 2)
     0.5
-    >>> speed_term(100.0, par_seconds=10.0)  # four times par or more: the full penalty
+    >>> speed_term(
+    ...     100.0, par_seconds=10.0
+    ... )  # four times par or more: the full penalty
     1.0
     """
     ratio = seconds / par_seconds
@@ -131,11 +171,14 @@ def update_strain(
     correct : bool
         Whether the answer was right. Keyword-only.
     attempt_no : int
-        1 for the first answer to this showing of the question, 2 for the second and so on. Keyword-only.
+        1 for the first answer to this showing of the question, 2 for
+        the second and so on. Keyword-only.
     seconds : float
-        How long the answer took. Only the first attempt's speed matters. Keyword-only.
+        How long the answer took. Only the first attempt's speed
+        matters. Keyword-only.
     par_seconds : float
-        How long a good first answer takes for this exercise. Keyword-only.
+        How long a good first answer takes for this exercise.
+        Keyword-only.
 
     Returns
     -------
@@ -144,17 +187,41 @@ def update_strain(
 
     Examples
     --------
-    >>> update_strain(1.5, correct=False, attempt_no=1, seconds=5.0, par_seconds=5.0)
+    >>> update_strain(
+    ...     1.5,
+    ...     correct=False,
+    ...     attempt_no=1,
+    ...     seconds=5.0,
+    ...     par_seconds=5.0,
+    ... )
     3.0
-    >>> round(update_strain(1.5, correct=True, attempt_no=1, seconds=1.0, par_seconds=5.0), 2)  # right, and quick
+    >>> round(
+    ...     update_strain(
+    ...         1.5,
+    ...         correct=True,
+    ...         attempt_no=1,
+    ...         seconds=1.0,
+    ...         par_seconds=5.0,
+    ...     ),
+    ...     2,
+    ... )  # right, and quick
     0.4
-    >>> update_strain(5.9, correct=False, attempt_no=1, seconds=5.0, par_seconds=5.0)  # capped
+    >>> update_strain(
+    ...     5.9,
+    ...     correct=False,
+    ...     attempt_no=1,
+    ...     seconds=5.0,
+    ...     par_seconds=5.0,
+    ... )  # capped
     6.0
     """
     if not correct:
         strain += WRONG_PENALTY
     elif attempt_no == 1:
-        strain += -CORRECT_REWARD + speed_term(seconds, par_seconds=par_seconds)
+        strain += -CORRECT_REWARD + speed_term(
+            seconds,
+            par_seconds=par_seconds,
+        )
     else:
         strain -= RETRY_REWARD
     return min(max(strain, 0.0), STRAIN_MAX)
@@ -167,32 +234,44 @@ def weight(
     now: float,
 ) -> float:
     """
-    Return how likely a question is to be picked, relative to the others.
+    Return how likely a question is to be picked, relative to the
+    others.
 
-    A question just seen is held back for a while, long for an easy one and short for a hard one, so what you have
-    learned is not repeated right away but what you struggle with returns within the minute.
+    A question just seen is held back for a while, long for an easy one
+    and short for a hard one, so what you have
+    learned is not repeated right away but what you struggle with
+    returns within the minute.
 
     Parameters
     ----------
     strain : float or None
         The question's strain, or None for one never answered.
     last_seen : float or None
-        When it was last answered (a timestamp), or None if never. Keyword-only.
+        When it was last answered (a timestamp), or None if never.
+        Keyword-only.
     now : float
         The current time (a timestamp). Keyword-only.
 
     Returns
     -------
     float
-        A positive number; a larger one means the question is more likely to come up.
+        A positive number; a larger one means the question is more
+        likely to come up.
 
     Examples
     --------
-    >>> round(weight(None, last_seen=None, now=0.0), 2)  # a new question
+    >>> round(
+    ...     weight(None, last_seen=None, now=0.0), 2
+    ... )  # a new question
     2.46
-    >>> round(weight(3.0, last_seen=0.0, now=1e9), 2)  # a hard question, long unseen
+    >>> round(
+    ...     weight(3.0, last_seen=0.0, now=1e9), 2
+    ... )  # a hard question, long unseen
     6.05
-    >>> round(weight(3.0, last_seen=100.0, now=100.0), 3)  # the same, just seen: held back
+    >>> round(
+    ...     weight(3.0, last_seen=100.0, now=100.0),
+    ...     3,
+    ... )  # the same, just seen: held back
     0.121
     """
     if strain is None:
@@ -216,7 +295,8 @@ def choose(
     options : sequence of T
         The things to choose from.
     weights : sequence of float
-        One weight per option; a larger weight makes it more likely. Keyword-only.
+        One weight per option; a larger weight makes it more likely.
+        Keyword-only.
     rng : random.Random
         The random number generator to draw with. Keyword-only.
 
@@ -227,7 +307,11 @@ def choose(
 
     Examples
     --------
-    >>> choose(["a", "b"], weights=[1.0, 0.0], rng=random.Random(0))
+    >>> choose(
+    ...     ["a", "b"],
+    ...     weights=[1.0, 0.0],
+    ...     rng=random.Random(0),
+    ... )
     'a'
     """
     return rng.choices(options, weights=weights, k=1)[0]

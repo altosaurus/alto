@@ -5,15 +5,21 @@ package: alto.ui
 permalink: /api/alto.ui.pictures/
 ---
 {% raw %}
-Small pictures of musical things (clefs, note values, key signatures, note ranges ...) for the settings panes.
+Small pictures of musical things (clefs, note values, key signatures,
+note ranges ...) for the settings panes.
 
-Each picture is drawn in fixed units and then scaled, so the same picture serves as a summary in a menu row and, larger,
-as the label of a choice. Colors come from the palette, so they work in light and dark themes.
+Each picture is drawn in fixed units and then scaled, so the same
+picture serves as a summary in a menu row and, larger,
+as the label of a choice. Colors come from the palette, so they work in
+light and dark themes.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> CLEF_NAMES["treble"], VALUE_NAMES["sixteenth"]
+>>> (
+...     CLEF_NAMES["treble"],
+...     VALUE_NAMES["sixteenth"],
+... )
 ('Treble', '16th')
 >>> ClefPictures(["treble", "bass"]).toolTip()
 'Treble, Bass'
@@ -32,7 +38,8 @@ def symbol_icon(
 
 Draw a clef symbol on its own, without a staff, as an icon.
 
-The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centered.
+The G, C and F clefs are drawn the same size as they are on a staff,
+so the three look alike beside one another, and centered.
 
 **Parameters**
 
@@ -47,7 +54,9 @@ The G, C and F clefs are drawn the same size as they are on a staff, so the thre
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> symbol_icon("F", color=QColor("black")).isNull()
+>>> symbol_icon(
+...     "F", color=QColor("black")
+... ).isNull()
 False
 ```
 
@@ -64,9 +73,11 @@ ClefPictures(
 
 Bases: `_Picture`
 
-The selected clefs, each on its own five-line staff, and a two-stave picture with a brace for the grand staff.
+The selected clefs, each on its own five-line staff, and a two-stave
+picture with a brace for the grand staff.
 
-Showing each clef on its own staff lets alto and tenor, which share a symbol, look different.
+Showing each clef on its own staff lets alto and tenor, which share
+a symbol, look different.
 
 **Attributes**
 
@@ -114,7 +125,9 @@ Show different clefs and size the picture for them.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> pictures = ClefPictures()
->>> pictures.set_clefs(["treble", "bass", "alto"])
+>>> pictures.set_clefs(
+...     ["treble", "bass", "alto"]
+... )
 >>> pictures.width()  # three clefs and the space between them
 106
 >>> pictures.toolTip()
@@ -165,7 +178,9 @@ Draw each clef on its staff, or the grand staff with its brace.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ClefPictures(["treble", "grand"]).grab().isNull()
+>>> ClefPictures(
+...     ["treble", "grand"]
+... ).grab().isNull()
 False
 ```
 
@@ -183,7 +198,8 @@ ValuePictures(
 
 Bases: `_Picture`
 
-Note values as engraved symbols (no staff), each with its head on the same baseline so they line up.
+Note values as engraved symbols (no staff), each with its head on
+the same baseline so they line up.
 
 **Attributes**
 
@@ -193,7 +209,9 @@ Note values as engraved symbols (no staff), each with its head on the same basel
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> pictures = ValuePictures(["whole", "quarter", "eighth"])
+>>> pictures = ValuePictures(
+...     ["whole", "quarter", "eighth"]
+... )
 >>> pictures.values
 ['whole', 'quarter', 'eighth']
 ```
@@ -212,7 +230,9 @@ Create the picture.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ValuePictures(["half"], center_stemless=True).center_stemless
+>>> ValuePictures(
+...     ["half"], center_stemless=True
+... ).center_stemless
 True
 ```
 
@@ -281,7 +301,9 @@ Draw each note value.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ValuePictures(["whole", "half", "quarter"]).grab().isNull()
+>>> ValuePictures(
+...     ["whole", "half", "quarter"]
+... ).grab().isNull()
 False
 ```
 
@@ -291,7 +313,8 @@ False
 def rhythm_picture(term: str) -> ValuePictures | None
 ```
 
-Render a single note, rest, tied pair, or beamed pair from an equation term.
+Render a single note, rest, tied pair, or beamed pair from an
+equation term.
 
 **Parameters**
 
@@ -321,9 +344,11 @@ KeySignaturePicture(
 
 Bases: `_Picture`
 
-A key signature as a plain row of its sharps or flats, with no staff or clef.
+A key signature as a plain row of its sharps or flats, with no staff
+or clef.
 
-Each sign sits at the height it has after a treble clef, and C major, which has none, shows a natural sign.
+Each sign sits at the height it has after a treble clef, and C
+major, which has none, shows a natural sign.
 
 **Attributes**
 
@@ -419,7 +444,8 @@ RangePictures(
 
 Bases: `_Picture`
 
-For each clef, a staff with its lowest and highest note, so the range can be read off at a glance.
+For each clef, a staff with its lowest and highest note, so the
+range can be read off at a glance.
 
 **Attributes**
 
@@ -431,7 +457,9 @@ For each clef, a staff with its lowest and highest note, so the range can be rea
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> pictures = RangePictures([("treble", 22, 52)])
+>>> pictures = RangePictures(
+...     [("treble", 22, 52)]
+... )
 >>> pictures.toolTip()
 'Treble: D3 to F7'
 ```
@@ -450,7 +478,9 @@ Create the picture.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> RangePictures([("treble", 22, 52)], max_width=238).scale
+>>> RangePictures(
+...     [("treble", 22, 52)], max_width=238
+... ).scale
 1.9
 ```
 
@@ -470,7 +500,9 @@ Show the ranges of some clefs and size the picture for them.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> pictures = RangePictures()
->>> pictures.set_items([("bass", 10, 40), ("alto", 21, 35)])
+>>> pictures.set_items(
+...     [("bass", 10, 40), ("alto", 21, 35)]
+... )
 >>> pictures.toolTip().splitlines()
 ['Bass: F1 to A5', 'Alto: C3 to C5']
 ```
@@ -490,7 +522,9 @@ Draw a staff for each clef with its lowest and highest note.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> RangePictures([("treble", 22, 52), ("bass", 10, 40)]).grab().isNull()
+>>> RangePictures(
+...     [("treble", 22, 52), ("bass", 10, 40)]
+... ).grab().isNull()
 False
 ```
 
@@ -507,7 +541,8 @@ NamePicture(
 
 Bases: `_Picture`
 
-How notes are named: C, D and E on a staff, labeled with letters, solfège syllables or scale degrees.
+How notes are named: C, D and E on a staff, labeled with letters,
+solfège syllables or scale degrees.
 
 **Attributes**
 

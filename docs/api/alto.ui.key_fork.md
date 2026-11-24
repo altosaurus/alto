@@ -5,11 +5,15 @@ package: alto.ui
 permalink: /api/alto.ui.key_fork/
 ---
 {% raw %}
-The fork: a picker for a key signature, shaped like a tuning fork lying on its side.
+The fork: a picker for a key signature, shaped like a tuning fork lying
+on its side.
 
-The stem on the left ends in a natural sign (no sharps or flats, C major). At the right the stem opens into two tines:
-the top one has the sharps, 1 to 7, and the bottom one the flats, 1 to 7. A circle marks the chosen signature. Click a
-number to choose it, drag the circle along the fork, or turn the mouse wheel to move it.
+The stem on the left ends in a natural sign (no sharps or flats, C
+major). At the right the stem opens into two tines:
+the top one has the sharps, 1 to 7, and the bottom one the flats, 1 to
+7. A circle marks the chosen signature. Click a
+number to choose it, drag the circle along the fork, or turn the mouse
+wheel to move it.
 
 **Examples**
 
@@ -39,9 +43,13 @@ Return where a signature sits on the fork.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> node_position(0).x() < node_position(1).x() < node_position(2).x()
+>>> node_position(0).x() < node_position(
+...     1
+... ).x() < node_position(2).x()
 True
->>> node_position(3).y() < node_position(0).y() < node_position(-3).y()
+>>> node_position(3).y() < node_position(
+...     0
+... ).y() < node_position(-3).y()
 True
 ```
 
@@ -51,7 +59,8 @@ True
 def route(value: int) -> list[QPointF]
 ```
 
-Return the way along the fork from the end of the stem to a signature.
+Return the way along the fork from the end of the stem to a
+signature.
 
 **Parameters**
 
@@ -64,11 +73,18 @@ Return the way along the fork from the end of the stem to a signature.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> len(route(0)), len(route(2)) > len(route(1)) > len(route(0))
+>>> (
+...     len(route(0)),
+...     len(route(2))
+...     > len(route(1))
+...     > len(route(0)),
+... )
 (1, True)
 >>> route(-1)[-1] == node_position(-1)
 True
->>> round(route(3)[1].x()) == round(APEX_X)  # it leaves the stem at the apex of the U
+>>> round(route(3)[1].x()) == round(
+...     APEX_X
+... )  # it leaves the stem at the apex of the U
 True
 ```
 
@@ -84,7 +100,8 @@ def path_between(
 
 Return the way along the fork from one signature to another.
 
-The circle goes back along the tine it is on, around the U and out along the other, never across the gap between the tines.
+The circle goes back along the tine it is on, around the U and out
+along the other, never across the gap between the tines.
 
 **Parameters**
 
@@ -100,9 +117,16 @@ The circle goes back along the tine it is on, around the U and out along the oth
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> path_between(2, b=2) == [node_position(2)]
 True
->>> path_between(1, b=-1)[0] == node_position(1) and path_between(1, b=-1)[-1] == node_position(-1)
+>>> path_between(1, b=-1)[0] == node_position(
+...     1
+... ) and path_between(1, b=-1)[
+...     -1
+... ] == node_position(-1)
 True
->>> any(abs(p.x() - APEX_X) < 1e-9 for p in path_between(1, b=-1))  # it goes around the U, through its apex
+>>> any(
+...     abs(p.x() - APEX_X) < 1e-9
+...     for p in path_between(1, b=-1)
+... )  # it goes around the U, through its apex
 True
 ```
 
@@ -116,7 +140,8 @@ def point_along(
 ) -> QPointF
 ```
 
-Return the point a fraction of the way along a path made of short straight pieces.
+Return the point a fraction of the way along a path made of short
+straight pieces.
 
 **Parameters**
 
@@ -130,9 +155,18 @@ Return the point a fraction of the way along a path made of short straight piece
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> point_along([QPointF(0, 0), QPointF(10, 0), QPointF(10, 10)], t=0.75).toTuple()
+>>> point_along(
+...     [
+...         QPointF(0, 0),
+...         QPointF(10, 0),
+...         QPointF(10, 10),
+...     ],
+...     t=0.75,
+... ).toTuple()
 (10.0, 5.0)
->>> point_along([QPointF(0, 0), QPointF(3, 4)], t=0.5).toTuple()  # slanting pieces are measured along their length
+>>> point_along(
+...     [QPointF(0, 0), QPointF(3, 4)], t=0.5
+... ).toTuple()  # slanting pieces are measured along their length
 (1.5, 2.0)
 ```
 
@@ -155,9 +189,17 @@ Return the point on the fork's line that is closest to a point.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> nearest_on_fork(QPointF(node_position(2).x(), 0)) == node_position(2)  # straight above the number
+>>> nearest_on_fork(
+...     QPointF(node_position(2).x(), 0)
+... ) == node_position(
+...     2
+... )  # straight above the number
 True
->>> nearest_on_fork(QPointF(-50, node_position(0).y())) == node_position(0)  # past the end of the stem
+>>> nearest_on_fork(
+...     QPointF(-50, node_position(0).y())
+... ) == node_position(
+...     0
+... )  # past the end of the stem
 True
 ```
 
@@ -167,7 +209,8 @@ True
 def fork_path() -> QPainterPath
 ```
 
-Return the outline of the fork: the stem, a half circle for the U, and the two tines.
+Return the outline of the fork: the stem, a half circle for the U,
+and the two tines.
 
 **Returns**
 
@@ -177,7 +220,10 @@ Return the outline of the fork: the stem, a half circle for the U, and the two t
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> outline = fork_path()
->>> outline.boundingRect().left() == STEM_X and outline.boundingRect().top() == TOP_Y
+>>> (
+...     outline.boundingRect().left() == STEM_X
+...     and outline.boundingRect().top() == TOP_Y
+... )
 True
 ```
 
@@ -208,7 +254,12 @@ Draw a natural sign: two upright lines joined by two slanting bars.
 >>> from PySide6.QtGui import QPixmap
 >>> canvas = QPixmap(20, 20)
 >>> painter = QPainter(canvas)
->>> draw_natural(painter, center=QPointF(10, 10), height=14, color=QColor("black"))
+>>> draw_natural(
+...     painter,
+...     center=QPointF(10, 10),
+...     height=14,
+...     color=QColor("black"),
+... )
 >>> _ = painter.end()
 ```
 
@@ -223,7 +274,8 @@ KeyFork(
 
 Bases: `QWidget`
 
-A tuning fork on its side, for choosing how many sharps or flats a key signature has.
+A tuning fork on its side, for choosing how many sharps or flats a
+key signature has.
 
 **Attributes**
 
@@ -329,7 +381,11 @@ Return the signature whose number is under a point.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> fork = KeyFork()
->>> fork.value_at(node_position(3)), fork.value_at(node_position(-4)), fork.value_at(node_position(0))
+>>> (
+...     fork.value_at(node_position(3)),
+...     fork.value_at(node_position(-4)),
+...     fork.value_at(node_position(0)),
+... )
 (3, -4, 0)
 >>> fork.value_at(QPointF(5, 130)) is None
 True
@@ -341,7 +397,8 @@ True
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-Pick up the circle if it was pressed, or choose the number that was clicked.
+Pick up the circle if it was pressed, or choose the number that
+was clicked.
 
 **Parameters**
 
@@ -353,8 +410,16 @@ Pick up the circle if it was pressed, or choose the number that was clicked.
 >>> from PySide6.QtCore import QEvent
 >>> fork = KeyFork()
 >>> point = node_position(-2)
->>> fork.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                                  Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+>>> fork.mousePressEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseButtonPress,
+...         point,
+...         point,
+...         Qt.MouseButton.LeftButton,
+...         Qt.MouseButton.LeftButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> fork.value
 -2
 ```
@@ -365,9 +430,11 @@ Pick up the circle if it was pressed, or choose the number that was clicked.
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-Carry the circle along the fork while it is held, and light the number under the mouse otherwise.
+Carry the circle along the fork while it is held, and light the
+number under the mouse otherwise.
 
-The signature changes to the nearest number as the circle passes it.
+The signature changes to the nearest number as the circle passes
+it.
 
 **Parameters**
 
@@ -380,10 +447,26 @@ The signature changes to the nearest number as the circle passes it.
 >>> fork = KeyFork()
 >>> here = node_position(0)
 >>> there = node_position(3)
->>> fork.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, here, here, Qt.MouseButton.LeftButton,
-...                                  Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
->>> fork.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, there, there, Qt.MouseButton.NoButton,
-...                                 Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+>>> fork.mousePressEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseButtonPress,
+...         here,
+...         here,
+...         Qt.MouseButton.LeftButton,
+...         Qt.MouseButton.LeftButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
+>>> fork.mouseMoveEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseMove,
+...         there,
+...         there,
+...         Qt.MouseButton.NoButton,
+...         Qt.MouseButton.LeftButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> fork.value
 3
 ```
@@ -406,10 +489,19 @@ Let go of the circle, which slides to the number it is nearest.
 >>> from PySide6.QtCore import QEvent
 >>> fork = KeyFork()
 >>> fork._dragging = True
->>> fork._marker = node_position(0) + QPointF(9, 0)
->>> fork.mouseReleaseEvent(QMouseEvent(QEvent.Type.MouseButtonRelease, fork._marker, fork._marker,
-...                                    Qt.MouseButton.LeftButton, Qt.MouseButton.NoButton,
-...                                    Qt.KeyboardModifier.NoModifier))
+>>> fork._marker = node_position(0) + QPointF(
+...     9, 0
+... )
+>>> fork.mouseReleaseEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseButtonRelease,
+...         fork._marker,
+...         fork._marker,
+...         Qt.MouseButton.LeftButton,
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> fork._dragging
 False
 ```
@@ -442,9 +534,11 @@ True
 def wheelEvent(event: QWheelEvent) -> None
 ```
 
-Move the circle one number along the fork for each notch of the wheel.
+Move the circle one number along the fork for each notch of the
+wheel.
 
-Rolling up goes toward more sharps and down toward more flats, passing through the natural sign.
+Rolling up goes toward more sharps and down toward more flats,
+passing through the natural sign.
 
 **Parameters**
 
@@ -456,8 +550,18 @@ Rolling up goes toward more sharps and down toward more flats, passing through t
 >>> from PySide6.QtCore import QPoint
 >>> fork = KeyFork()
 >>> point = QPointF(100, 50)
->>> fork.wheelEvent(QWheelEvent(point, point, QPoint(0, 0), QPoint(0, -120), Qt.MouseButton.NoButton,
-...                             Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False))
+>>> fork.wheelEvent(
+...     QWheelEvent(
+...         point,
+...         point,
+...         QPoint(0, 0),
+...         QPoint(0, -120),
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...         Qt.ScrollPhase.NoScrollPhase,
+...         False,
+...     )
+... )
 >>> fork.value
 -1
 ```
@@ -468,7 +572,8 @@ Rolling up goes toward more sharps and down toward more flats, passing through t
 def keyPressEvent(event: QKeyEvent) -> None
 ```
 
-Move the circle with the arrow keys: up or right for a sharp, down or left for a flat.
+Move the circle with the arrow keys: up or right for a sharp,
+down or left for a flat.
 
 **Parameters**
 
@@ -479,7 +584,13 @@ Move the circle with the arrow keys: up or right for a sharp, down or left for a
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> fork = KeyFork()
->>> fork.keyPressEvent(QKeyEvent(QEvent.Type.KeyPress, Qt.Key.Key_Up, Qt.KeyboardModifier.NoModifier))
+>>> fork.keyPressEvent(
+...     QKeyEvent(
+...         QEvent.Type.KeyPress,
+...         Qt.Key.Key_Up,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> fork.value
 1
 ```

@@ -1,4 +1,7 @@
-"""The database: profiles, the stored questions and answers, and the read-only views the browser uses."""
+"""
+The database: profiles, the stored questions and answers, and the
+read-only views the browser uses.
+"""
 
 import json
 import random
@@ -42,7 +45,8 @@ def question(letter: int = 0) -> Question:
 
 def test_a_profile_can_be_found_by_id_and_removed_with_its_history() -> None:
     """
-    Check that a profile can be found by id and removed with its history.
+    Check that a profile can be found by id and removed with its
+    history.
     """
     db = Database()
     ada, ben = db.add_profile("Ada"), db.add_profile("Ben")
@@ -83,13 +87,18 @@ def test_a_profile_can_be_found_by_id_and_removed_with_its_history() -> None:
     )
     assert db.count_attempts(ada.id) == 1
     db.delete_profile(ada.id)
-    assert db.profile(ada.id) is None and db.count_attempts(ada.id) == 0  # the answers go with the profile
-    assert [p.name for p in db.profiles()] == ["Ben"] and db.profile(ben.id) == ben
+    assert (
+        db.profile(ada.id) is None and db.count_attempts(ada.id) == 0
+    )  # the answers go with the profile
+    assert [p.name for p in db.profiles()] == ["Ben"] and db.profile(
+        ben.id,
+    ) == ben
 
 
 def test_the_browser_rows_come_newest_first_with_the_stored_question() -> None:
     """
-    Check that the browser rows come newest first with the stored question.
+    Check that the browser rows come newest first with the stored
+    question.
     """
     db = Database()
     ada = db.add_profile("Ada")
@@ -135,7 +144,9 @@ def test_the_browser_rows_come_newest_first_with_the_stored_question() -> None:
     assert rows[0]["payload"] == payload and rows[0]["answer"] == "A"
     assert [r["item_key"] for r in db.item_rows(ada.id)] == [q.item_key()]
     profiles = db.profile_rows()
-    assert [(r["name"], r["attempts"], r["questions"]) for r in profiles] == [("Ada", 2, 1)]
+    assert [(r["name"], r["attempts"], r["questions"]) for r in profiles] == [
+        ("Ada", 2, 1),
+    ]
 
 
 def test_the_item_rows_list_the_hardest_questions_first() -> None:
@@ -175,9 +186,12 @@ def test_a_closed_database_refuses_further_work() -> None:
         db.profiles()
 
 
-def test_answers_can_be_listed_and_counted_for_one_exercise_and_period() -> None:
+def test_answers_can_be_listed_and_counted_for_one_exercise_and_period() -> (
+    None
+):
     """
-    Check that the answers of a profile can be narrowed to an exercise and to a period that includes its start and not its end.
+    Check that the answers of a profile can be narrowed to an exercise
+    and to a period that includes its start and not its end.
     """
     db = Database()
     ada, ben = db.add_profile("Ada"), db.add_profile("Ben")
@@ -199,7 +213,14 @@ def test_answers_can_be_listed_and_counted_for_one_exercise_and_period() -> None
         )
     assert db.count_attempts(ada.id) == 3
     assert db.count_attempts(ada.id, exercise="NoteNames") == 2
-    assert db.count_attempts(ada.id, since=10.0, until=20.0) == 1  # the start is included and the end is not
-    assert [r["exercise"] for r in db.attempt_rows(ada.id, exercise="KeyboardNotes")] == ["KeyboardNotes"]
+    assert (
+        db.count_attempts(ada.id, since=10.0, until=20.0) == 1
+    )  # the start is included and the end is not
+    assert [
+        r["exercise"]
+        for r in db.attempt_rows(ada.id, exercise="KeyboardNotes")
+    ] == ["KeyboardNotes"]
     assert db.attempt_rows(ada.id, until=10.0) == []
-    assert len(db.attempt_rows(ada.id, limit=2)) == 2  # another profile's answers are never counted
+    assert (
+        len(db.attempt_rows(ada.id, limit=2)) == 2
+    )  # another profile's answers are never counted

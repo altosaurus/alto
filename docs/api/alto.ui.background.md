@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.background/
 ---
 {% raw %}
-Run slow work, such as a download, on another thread, and hear how it went on the window's thread.
+Run slow work, such as a download, on another thread, and hear how it
+went on the window's thread.
 
 **Examples**
 
@@ -13,9 +14,17 @@ Run slow work, such as a download, on another thread, and hear how it went on th
 >>> import time
 >>> heard = []
 >>> owner = QObject()
->>> _ = run_in_background(lambda: 6 * 7, owner=owner, done=heard.append, failed=heard.append)
+>>> _ = run_in_background(
+...     lambda: 6 * 7,
+...     owner=owner,
+...     done=heard.append,
+...     failed=heard.append,
+... )
 >>> deadline = time.monotonic() + 5
->>> while not heard and time.monotonic() < deadline:
+>>> while (
+...     not heard
+...     and time.monotonic() < deadline
+... ):
 ...     app.processEvents()
 >>> heard
 [42]
@@ -33,9 +42,11 @@ def run_in_background(
 ) -> threading.Thread
 ```
 
-Run work on another thread, then call `done` with its result, or `failed` with its exception, on the owner's thread.
+Run work on another thread, then call `done` with its result, or
+`failed` with its exception, on the owner's thread.
 
-The window stays responsive while the work runs. If the owner is deleted before the work ends, neither is called. The thread
+The window stays responsive while the work runs. If the owner is
+deleted before the work ends, neither is called. The thread
 does not keep Alto from quitting.
 
 **Parameters**
@@ -57,9 +68,19 @@ does not keep Alto from quitting.
 >>> owner = QObject()
 >>> def broken():
 ...     raise OSError("offline")
->>> _ = run_in_background(broken, owner=owner, done=heard.append, failed=lambda error: heard.append(str(error)))
+>>> _ = run_in_background(
+...     broken,
+...     owner=owner,
+...     done=heard.append,
+...     failed=lambda error: heard.append(
+...         str(error)
+...     ),
+... )
 >>> deadline = time.monotonic() + 5
->>> while not heard and time.monotonic() < deadline:
+>>> while (
+...     not heard
+...     and time.monotonic() < deadline
+... ):
 ...     app.processEvents()
 >>> heard
 ['offline']

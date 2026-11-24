@@ -7,9 +7,12 @@ permalink: /api/alto.ui.exercise_settings/
 {% raw %}
 Load and save each exercise's settings.
 
-The settings themselves are plain dataclasses in `alto.settings`, one shared object per exercise. The functions here read them
-from the saved preferences when Alto starts (`load_exercise_settings`) and write them back when a settings panel changes them.
-Values saved by older versions are converted, and anything saved that is not valid any more is ignored.
+The settings themselves are plain dataclasses in `alto.settings`, one
+shared object per exercise. The functions here read them
+from the saved preferences when Alto starts (`load_exercise_settings`)
+and write them back when a settings panel changes them.
+Values saved by older versions are converted, and anything saved that is
+not valid any more is ignored.
 
 **Examples**
 
@@ -25,9 +28,11 @@ True
 def load_note_names() -> None
 ```
 
-Load the saved note identification settings into the shared settings object.
+Load the saved note identification settings into the shared settings
+object.
 
-Settings saved by an older version, which had a switch between the grand staff and single clefs, are converted. Anything
+Settings saved by an older version, which had a switch between the
+grand staff and single clefs, are converted. Anything
 in the saved data that is not valid is ignored.
 
 **Examples**
@@ -70,9 +75,11 @@ Save the note identification settings.
 def load_keyboard() -> None
 ```
 
-Load the saved keyboard exercise settings into the shared settings object.
+Load the saved keyboard exercise settings into the shared settings
+object.
 
-A saved range that is not a valid span of keys, or a key list with nothing usable in it, is ignored.
+A saved range that is not a valid span of keys, or a key list with
+nothing usable in it, is ignored.
 
 **Examples**
 
@@ -101,7 +108,9 @@ Save the keyboard exercise settings.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg_ = settings.keyboard
 >>> save_keyboard()
->>> int(store().value("keyboard/low")) == cfg_.low
+>>> int(
+...     store().value("keyboard/low")
+... ) == cfg_.low
 True
 ```
 
@@ -111,13 +120,16 @@ True
 def load_keyboard_intervals() -> None
 ```
 
-Load keyboard interval settings, ignoring invalid values and intervals that cannot fit.
+Load keyboard interval settings, ignoring invalid values and
+intervals that cannot fit.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_keyboard_intervals()
->>> settings.keyboard_intervals.bounds()[0] < settings.keyboard_intervals.bounds()[1]
+>>> settings.keyboard_intervals.bounds()[
+...     0
+... ] < settings.keyboard_intervals.bounds()[1]
 True
 ```
 
@@ -136,7 +148,9 @@ Save the keyboard interval range and selected distances.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> save_keyboard_intervals(settings.KeyboardIntervalSettings())
+>>> save_keyboard_intervals(
+...     settings.KeyboardIntervalSettings()
+... )
 >>> int(store().value("keyboardIntervals/low"))
 48
 ```
@@ -147,12 +161,15 @@ Save the keyboard interval range and selected distances.
 def load_construction() -> None
 ```
 
-Load the saved note construction settings into the shared settings object.
+Load the saved note construction settings into the shared settings
+object.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> store().setValue("construction/accidentals", "true")
+>>> store().setValue(
+...     "construction/accidentals", "true"
+... )
 >>> load_construction()
 >>> settings.construction.accidentals
 False
@@ -177,7 +194,9 @@ Save the note construction settings.
 >>> save_construction(settings.construction)
 >>> str(store().value("construction/degrees"))
 '1,3'
->>> settings.construction.degrees = set(range(1, 8))
+>>> settings.construction.degrees = set(
+...     range(1, 8)
+... )
 >>> save_construction(settings.construction)
 ```
 
@@ -189,7 +208,8 @@ def load_arpeggio() -> None
 
 Load the saved arpeggio settings into the shared settings object.
 
-Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+Anything in the saved data that is not valid is ignored, and a list
+with nothing valid in it leaves the setting as it was.
 
 **Examples**
 
@@ -198,8 +218,18 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 >>> load_arpeggio()
 >>> settings.arpeggio.types
 {'major'}
->>> settings.arpeggio.types = {"major", "minor", "dominant 7th", "diminished 7th"}
->>> store().setValue("arpeggio/types", ",".join(settings.arpeggio.active_types()))
+>>> settings.arpeggio.types = {
+...     "major",
+...     "minor",
+...     "dominant 7th",
+...     "diminished 7th",
+... }
+>>> store().setValue(
+...     "arpeggio/types",
+...     ",".join(
+...         settings.arpeggio.active_types()
+...     ),
+... )
 ```
 
 ## save_arpeggio
@@ -218,7 +248,11 @@ Save the arpeggio settings.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_arpeggio(settings.arpeggio)
->>> str(store().value("arpeggio/clefs")) == ",".join(settings.arpeggio.active_clefs())
+>>> str(
+...     store().value("arpeggio/clefs")
+... ) == ",".join(
+...     settings.arpeggio.active_clefs()
+... )
 True
 ```
 
@@ -232,7 +266,8 @@ def load_intervals(
 ) -> None
 ```
 
-Restore the saved staff interval options, keeping valid choices and per-clef ranges.
+Restore the saved staff interval options, keeping valid choices and
+per-clef ranges.
 
 **Parameters**
 
@@ -257,7 +292,8 @@ def save_key_settings(
 ) -> None
 ```
 
-Save the settings of a key exercise: its clefs, scales and key signatures, and the options of the kind of exercise it is.
+Save the settings of a key exercise: its clefs, scales and key
+signatures, and the options of the kind of exercise it is.
 
 **Parameters**
 
@@ -267,10 +303,19 @@ Save the settings of a key exercise: its clefs, scales and key signatures, and t
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> saved_ = settings.ScaleConstructionSettings(modes={"Major (Ionian)", "Dorian"}, steps=True)
->>> save_key_settings(saved_, prefix="doctestScales")
->>> loaded_ = settings.ScaleConstructionSettings()
->>> _load_key_settings(loaded_, prefix="doctestScales")
+>>> saved_ = settings.ScaleConstructionSettings(
+...     modes={"Major (Ionian)", "Dorian"},
+...     steps=True,
+... )
+>>> save_key_settings(
+...     saved_, prefix="doctestScales"
+... )
+>>> loaded_ = (
+...     settings.ScaleConstructionSettings()
+... )
+>>> _load_key_settings(
+...     loaded_, prefix="doctestScales"
+... )
 >>> sorted(loaded_.modes), loaded_.steps
 (['Dorian', 'Major (Ionian)'], True)
 >>> store().remove("doctestScales")
@@ -282,19 +327,28 @@ Save the settings of a key exercise: its clefs, scales and key signatures, and t
 def load_key_signatures() -> None
 ```
 
-Load the saved key signature identification settings into the shared settings object.
+Load the saved key signature identification settings into the shared
+settings object.
 
-Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+Anything in the saved data that is not valid is ignored, and a list
+with nothing valid in it leaves the setting as it was.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> store().setValue("keySignatures/clefs", "alto")
+>>> store().setValue(
+...     "keySignatures/clefs", "alto"
+... )
 >>> load_key_signatures()
 >>> settings.key_signatures.clefs
 {'alto'}
->>> settings.key_signatures.clefs = {"treble", "bass"}
->>> store().setValue("keySignatures/clefs", "treble,bass")
+>>> settings.key_signatures.clefs = {
+...     "treble",
+...     "bass",
+... }
+>>> store().setValue(
+...     "keySignatures/clefs", "treble,bass"
+... )
 ```
 
 ## load_key_construction
@@ -303,18 +357,24 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 def load_key_construction() -> None
 ```
 
-Load the saved key signature construction settings into the shared settings object.
+Load the saved key signature construction settings into the shared
+settings object.
 
-Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+Anything in the saved data that is not valid is ignored, and a list
+with nothing valid in it leaves the setting as it was.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> store().setValue("keyConstruction/keys", "-3,4")
+>>> store().setValue(
+...     "keyConstruction/keys", "-3,4"
+... )
 >>> load_key_construction()
 >>> settings.key_construction.active_keys()
 [-3, 4]
->>> settings.key_construction.keys = set(range(-7, 8))
+>>> settings.key_construction.keys = set(
+...     range(-7, 8)
+... )
 >>> store().remove("keyConstruction")
 ```
 
@@ -324,7 +384,8 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 def load_order_of_keys() -> None
 ```
 
-Restore the clefs, scales, and key signatures selected for Order of Keys.
+Restore the clefs, scales, and key signatures selected for Order of
+Keys.
 
 **Examples**
 
@@ -338,7 +399,8 @@ Restore the clefs, scales, and key signatures selected for Order of Keys.
 def load_scale_identification() -> None
 ```
 
-Load the saved scale identification options independently of scale construction.
+Load the saved scale identification options independently of scale
+construction.
 
 **Examples**
 
@@ -354,20 +416,35 @@ Load the saved scale identification options independently of scale construction.
 def load_scale_construction() -> None
 ```
 
-Load the saved scale construction settings into the shared settings object.
+Load the saved scale construction settings into the shared settings
+object.
 
-Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+Anything in the saved data that is not valid is ignored, and a list
+with nothing valid in it leaves the setting as it was.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> store().setValue("scaleConstruction/keys", "1,-1")
->>> store().setValue("scaleConstruction/steps", "true")
->>> store().setValue("scaleConstruction/octave", "true")
+>>> store().setValue(
+...     "scaleConstruction/keys", "1,-1"
+... )
+>>> store().setValue(
+...     "scaleConstruction/steps", "true"
+... )
+>>> store().setValue(
+...     "scaleConstruction/octave", "true"
+... )
 >>> load_scale_construction()
->>> settings.scale_construction.active_keys(), settings.scale_construction.steps, settings.scale_construction.octave
+>>> (
+...     settings.scale_construction.active_keys(),
+...     settings.scale_construction.steps,
+...     settings.scale_construction.octave,
+... )
 ([-1, 1], True, True)
->>> settings.scale_construction.keys, settings.scale_construction.steps = set(range(-7, 8)), False
+>>> (
+...     settings.scale_construction.keys,
+...     settings.scale_construction.steps,
+... ) = set(range(-7, 8)), False
 >>> settings.scale_construction.octave = False
 >>> store().remove("scaleConstruction")
 ```
@@ -396,7 +473,8 @@ Switching Select none off restores these checkboxes.
 def load_notation_terms() -> None
 ```
 
-Restore the question type and term selection, defaulting to Answer Button and all terms.
+Restore the question type and term selection, defaulting to Answer
+Button and all terms.
 
 **Examples**
 
@@ -414,18 +492,32 @@ def load_clef_basics() -> None
 
 Load the saved clef basics settings into the shared settings object.
 
-Anything in the saved data that is not a clef or a kind of question is ignored, and a list with no clef in it leaves the
+Anything in the saved data that is not a clef or a kind of question
+is ignored, and a list with no clef in it leaves the
 setting as it was.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> store().setValue("clefBasics/clefs", "alto,subbass,flute")
->>> store().setValue("clefBasics/type", "identification")
+>>> store().setValue(
+...     "clefBasics/clefs", "alto,subbass,flute"
+... )
+>>> store().setValue(
+...     "clefBasics/type", "identification"
+... )
 >>> load_clef_basics()
->>> settings.clef_basics.active_clefs(), settings.clef_basics.question_type
+>>> (
+...     settings.clef_basics.active_clefs(),
+...     settings.clef_basics.question_type,
+... )
 (['alto', 'subbass'], 'identification')
->>> settings.clef_basics.clefs, settings.clef_basics.question_type = {"treble", "bass"}, "construction"
+>>> (
+...     settings.clef_basics.clefs,
+...     settings.clef_basics.question_type,
+... ) = (
+...     {"treble", "bass"},
+...     "construction",
+... )
 >>> store().remove("clefBasics")
 ```
 
@@ -444,8 +536,16 @@ Save clef basics settings, the form `load_clef_basics` reads.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> save_clef_basics(settings.ClefBasicsSettings(clefs={"french", "treble"}, question_type="identification"))
->>> str(store().value("clefBasics/clefs")), str(store().value("clefBasics/type"))
+>>> save_clef_basics(
+...     settings.ClefBasicsSettings(
+...         clefs={"french", "treble"},
+...         question_type="identification",
+...     )
+... )
+>>> (
+...     str(store().value("clefBasics/clefs")),
+...     str(store().value("clefBasics/type")),
+... )
 ('treble,french', 'identification')
 >>> store().remove("clefBasics")
 ```
@@ -456,20 +556,32 @@ Save clef basics settings, the form `load_clef_basics` reads.
 def load_circle() -> None
 ```
 
-Load the saved circle of fifths settings into the shared settings object.
+Load the saved circle of fifths settings into the shared settings
+object.
 
-Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
-saved color scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.
+Anything in the saved data that is not valid is ignored, and a list
+with nothing valid in it leaves the setting as it was. A
+saved color scheme that no longer exists (it was deleted, or comes
+from a newer Alto) leaves the default.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> store().setValue("circle/questions", "numeral,nonsense")
->>> store().setValue("circle/scheme", "midnight")
+>>> store().setValue(
+...     "circle/questions", "numeral,nonsense"
+... )
+>>> store().setValue(
+...     "circle/scheme", "midnight"
+... )
 >>> load_circle()
->>> settings.circle.questions, settings.circle.scheme
+>>> (
+...     settings.circle.questions,
+...     settings.circle.scheme,
+... )
 ({'numeral'}, 'midnight')
->>> settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+>>> settings.circle.questions = set(
+...     settings.CIRCLE_QUESTIONS
+... )
 >>> settings.circle.scheme = DEFAULT_SCHEME
 >>> store().remove("circle")
 ```
@@ -489,7 +601,9 @@ Save the circle of fifths settings.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> save_circle(settings.CircleSettings(scheme="ink"))
+>>> save_circle(
+...     settings.CircleSettings(scheme="ink")
+... )
 >>> store().value("circle/scheme")
 'ink'
 >>> store().remove("circle")
@@ -501,7 +615,8 @@ Save the circle of fifths settings.
 def load_pack_options() -> None
 ```
 
-Restore the options learners chose for each plugin exercise that offers settings.
+Restore the options learners chose for each plugin exercise that
+offers settings.
 
 Anything in the saved data that is not valid is ignored.
 
@@ -535,14 +650,18 @@ Save the options chosen for one plugin exercise.
 def load_choice_buttons() -> None
 ```
 
-Restore the independent button preferences for each multiple-choice exercise.
+Restore the independent button preferences for each multiple-choice
+exercise.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_choice_buttons()
 >>> from alto.exercises.library import NoteNames
->>> NoteNames.button_settings().button_mode in {"all", "limited"}
+>>> NoteNames.button_settings().button_mode in {
+...     "all",
+...     "limited",
+... }
 True
 ```
 
@@ -552,7 +671,8 @@ True
 def load_exercise_settings() -> None
 ```
 
-Load the saved exercise options before creating a practice or export settings panel.
+Load the saved exercise options before creating a practice or export
+settings panel.
 
 **Examples**
 

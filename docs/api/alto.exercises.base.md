@@ -5,16 +5,23 @@ package: alto.exercises
 permalink: /api/alto.exercises.base/
 ---
 {% raw %}
-Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks.
+Exercise framework. Register a ChoiceExercise for button answers or an
+Exercise for construction tasks.
 
-An `Exercise` makes `Question` objects. The `Question` says what to show (a staff, a keyboard or only text), which
-buttons to offer and which answer is right. The exercise screen and the scheduler work with those two classes only, so
+An `Exercise` makes `Question` objects. The `Question` says what to show
+(a staff, a keyboard or only text), which
+buttons to offer and which answer is right. The exercise screen and the
+scheduler work with those two classes only, so
 a new exercise needs no new interface code.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> question = Question("Name this note.", choices=["C", "D", "E"], answer="D")
+>>> question = Question(
+...     "Name this note.",
+...     choices=["C", "D", "E"],
+...     answer="D",
+... )
 >>> question.check("D"), question.check("E")
 (True, False)
 ```
@@ -35,7 +42,9 @@ A written pitch on one string, with the tuning needed to redraw it.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> FingerboardPosition(("C3", "G3", "D4", "A4"), 2, "E4").string
+>>> FingerboardPosition(
+...     ("C3", "G3", "D4", "A4"), 2, "E4"
+... ).string
 2
 ```
 
@@ -74,9 +83,15 @@ A pack-owned image and a marked location in its original pixels.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> PicturePosition("pack.studio.drum", (80, 50)).point
+>>> PicturePosition(
+...     "pack.studio.drum", (80, 50)
+... ).point
 (80, 50)
->>> PicturePosition("pack.studio.organ", (0, 0), keys=(("Great", "C4"), ("Swell", "E4"))).keys[1]
+>>> PicturePosition(
+...     "pack.studio.organ",
+...     (0, 0),
+...     keys=(("Great", "C4"), ("Swell", "E4")),
+... ).keys[1]
 ('Swell', 'E4')
 ```
 
@@ -178,10 +193,17 @@ One question, with what to show for it and which answer is right.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> q = Question("Which note is this?", choices=["C", "D", "E"], answer="D", staff=[[Note.parse("D4")]])
+>>> q = Question(
+...     "Which note is this?",
+...     choices=["C", "D", "E"],
+...     answer="D",
+...     staff=[[Note.parse("D4")]],
+... )
 >>> q.check("D")
 True
->>> Question.from_dict(q.to_dict()) == q  # a question can be stored and asked again
+>>> Question.from_dict(
+...     q.to_dict()
+... ) == q  # a question can be stored and asked again
 True
 ```
 
@@ -193,7 +215,8 @@ def check_placed(note: Note) -> bool
 
 Report whether a note placed on the staff is the one asked for.
 
-The spelling must match exactly. The octave must also match unless `any_octave` is set.
+The spelling must match exactly. The octave must also match
+unless `any_octave` is set.
 
 **Parameters**
 
@@ -206,11 +229,36 @@ The spelling must match exactly. The octave must also match unless `any_octave` 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> q = Question("Place C4", choices=[], answer="C4", construct=Note.parse("C4"))
+>>> q = Question(
+...     "Place C4",
+...     choices=[],
+...     answer="C4",
+...     construct=Note.parse("C4"),
+... )
 >>> q.check_placed(Note.parse("C4"))
 True
->>> q.check_placed(Note.parse("B#3"))  # sounds the same, but is spelled differently
+>>> q.check_placed(
+...     Note.parse("B#3")
+... )  # sounds the same, but is spelled differently
 False
+```
+
+### Question.sounding_columns
+
+```python
+def sounding_columns() -> list[list[Note]]
+```
+
+Return pitches from the staff or keyboard in playback order.
+
+**Returns**
+
+- *list of list of Note*: Each column contains the pitches sounding together.
+
+**Examples**
+
+```text
+A keyboard interval plays both of its highlighted pitches.
 ```
 
 ### Question.placement_columns
@@ -219,7 +267,8 @@ False
 def placement_columns(note: Note | None) -> list[list[Note]]
 ```
 
-Return the given and placed notes grouped by onset, omitting the answer until it is placed.
+Return the given and placed notes grouped by onset, omitting the
+answer until it is placed.
 
 **Parameters**
 
@@ -232,8 +281,17 @@ Return the given and placed notes grouped by onset, omitting the answer until it
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> q = Question("Place a major third.", choices=[], answer="E4", staff=[[Note.parse("C4"), Note.parse("E4")]])
->>> q.placement_columns(None) == [[Note.parse("C4")]]
+>>> q = Question(
+...     "Place a major third.",
+...     choices=[],
+...     answer="E4",
+...     staff=[
+...         [Note.parse("C4"), Note.parse("E4")]
+...     ],
+... )
+>>> q.placement_columns(None) == [
+...     [Note.parse("C4")]
+... ]
 True
 ```
 
@@ -243,11 +301,15 @@ True
 def check_scale(notes: list[Note]) -> bool
 ```
 
-Report whether the notes placed on the staff are the scale asked for.
+Report whether the notes placed on the staff are the scale asked
+for.
 
-The spelling and the order of the notes must match, so a G♯ is not an A♭. Unless `exact_octave` is set the octave
-does not matter, as long as the whole scale is in the same one: the same scale an octave higher or lower is right,
-but a scale with one note in the wrong octave is not. With `exact_octave` the scale has to be in the octave asked.
+The spelling and the order of the notes must match, so a G♯ is
+not an A♭. Unless `exact_octave` is set the octave
+does not matter, as long as the whole scale is in the same one:
+the same scale an octave higher or lower is right,
+but a scale with one note in the wrong octave is not. With
+`exact_octave` the scale has to be in the octave asked.
 
 **Parameters**
 
@@ -261,17 +323,47 @@ but a scale with one note in the wrong octave is not. With `exact_octave` the sc
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> asked = [Note.parse("C4"), Note.parse("D4")]
->>> q = Question("Place C D.", choices=[], answer="C4 D4", construct_scale=asked)
->>> q.check_scale([Note.parse("C4"), Note.parse("D4")])
+>>> q = Question(
+...     "Place C D.",
+...     choices=[],
+...     answer="C4 D4",
+...     construct_scale=asked,
+... )
+>>> q.check_scale(
+...     [Note.parse("C4"), Note.parse("D4")]
+... )
 True
->>> q.check_scale([Note.parse("C5"), Note.parse("D5")])  # the same scale, an octave higher
+>>> q.check_scale(
+...     [Note.parse("C5"), Note.parse("D5")]
+... )  # the same scale, an octave higher
 True
->>> q.check_scale([Note.parse("C4"), Note.parse("D5")])  # one note in another octave
+>>> q.check_scale(
+...     [Note.parse("C4"), Note.parse("D5")]
+... )  # one note in another octave
 False
->>> q.check_scale([Note.parse("C4"), Note.parse("D4"), Note.parse("E4")])
+>>> q.check_scale(
+...     [
+...         Note.parse("C4"),
+...         Note.parse("D4"),
+...         Note.parse("E4"),
+...     ]
+... )
 False
->>> exact = Question("Place C D.", choices=[], answer="C4 D4", construct_scale=asked, exact_octave=True)
->>> exact.check_scale([Note.parse("C4"), Note.parse("D4")]), exact.check_scale([Note.parse("C5"), Note.parse("D5")])
+>>> exact = Question(
+...     "Place C D.",
+...     choices=[],
+...     answer="C4 D4",
+...     construct_scale=asked,
+...     exact_octave=True,
+... )
+>>> (
+...     exact.check_scale(
+...         [Note.parse("C4"), Note.parse("D4")]
+...     ),
+...     exact.check_scale(
+...         [Note.parse("C5"), Note.parse("D5")]
+...     ),
+... )
 (True, False)
 ```
 
@@ -281,7 +373,8 @@ False
 def check_steps(steps: list[str]) -> bool
 ```
 
-Report whether the steps marked between the notes of a scale are the right ones.
+Report whether the steps marked between the notes of a scale are
+the right ones.
 
 **Parameters**
 
@@ -294,10 +387,21 @@ Report whether the steps marked between the notes of a scale are the right ones.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> q = Question("Mark the steps.", choices=[], answer="W H", construct_steps=["W", "H"])
->>> q.check_steps(["W", "H"]), q.check_steps(["H", "W"]), q.check_steps(["W"])
+>>> q = Question(
+...     "Mark the steps.",
+...     choices=[],
+...     answer="W H",
+...     construct_steps=["W", "H"],
+... )
+>>> (
+...     q.check_steps(["W", "H"]),
+...     q.check_steps(["H", "W"]),
+...     q.check_steps(["W"]),
+... )
 (True, False, False)
->>> Question("No steps.", choices=[], answer="").check_steps([])
+>>> Question(
+...     "No steps.", choices=[], answer=""
+... ).check_steps([])
 True
 ```
 
@@ -307,7 +411,8 @@ True
 def check_built(count: int) -> bool
 ```
 
-Report whether a key signature built with the fork is the one asked for.
+Report whether a key signature built with the fork is the one
+asked for.
 
 **Parameters**
 
@@ -320,7 +425,14 @@ Report whether a key signature built with the fork is the one asked for.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> q = Question("Build D major.", choices=[], answer="2 sharps", key=2, show_staff=True, build_key=True)
+>>> q = Question(
+...     "Build D major.",
+...     choices=[],
+...     answer="2 sharps",
+...     key=2,
+...     show_staff=True,
+...     build_key=True,
+... )
 >>> q.check_built(2), q.check_built(-2)
 (True, False)
 ```
@@ -332,7 +444,8 @@ Report whether a key signature built with the fork is the one asked for.
 def places_sequence() -> bool
 ```
 
-Report whether the learner enters successive positions on the staff.
+Report whether the learner enters successive positions on the
+staff.
 
 **Returns**
 
@@ -341,7 +454,12 @@ Report whether the learner enters successive positions on the staff.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Question("D major", choices=[], answer="F♯5 C♯5", place_signature=True).places_sequence
+>>> Question(
+...     "D major",
+...     choices=[],
+...     answer="F♯5 C♯5",
+...     place_signature=True,
+... ).places_sequence
 True
 ```
 
@@ -364,11 +482,25 @@ Report whether a chosen answer is right.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> q = Question("", choices=["F♯", "G♭"], answer="F♯", accept=("G♭",))
+>>> q = Question(
+...     "",
+...     choices=["F♯", "G♭"],
+...     answer="F♯",
+...     accept=("G♭",),
+... )
 >>> q.check("F♯"), q.check("G♭"), q.check("A")
 (True, True, False)
->>> both = Question("", choices=["B", "C♭", "D"], answer="B", required=("B", "C♭"))
->>> both.check("B"), both.check("C♭"), both.check("D")  # each is right, but both are needed: see `complete`
+>>> both = Question(
+...     "",
+...     choices=["B", "C♭", "D"],
+...     answer="B",
+...     required=("B", "C♭"),
+... )
+>>> (
+...     both.check("B"),
+...     both.check("C♭"),
+...     both.check("D"),
+... )  # each is right, but both are needed: see `complete`
 (True, True, False)
 ```
 
@@ -391,10 +523,20 @@ Report whether the answers given so far are all of those needed.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> both = Question("", choices=["B", "C♭"], answer="B", required=("B", "C♭"))
->>> both.complete({"B"}), both.complete({"C♭", "B"})
+>>> both = Question(
+...     "",
+...     choices=["B", "C♭"],
+...     answer="B",
+...     required=("B", "C♭"),
+... )
+>>> (
+...     both.complete({"B"}),
+...     both.complete({"C♭", "B"}),
+... )
 (False, True)
->>> Question("", choices=["C"], answer="C").complete({"C"})
+>>> Question(
+...     "", choices=["C"], answer="C"
+... ).complete({"C"})
 True
 ```
 
@@ -404,9 +546,11 @@ True
 def item_key() -> str
 ```
 
-Return a stable identity for the question, so the same one can be recognized when it comes around again.
+Return a stable identity for the question, so the same one can
+be recognized when it comes around again.
 
-It covers what is asked and where it is drawn, but not the note value or the order of the buttons.
+It covers what is asked and where it is drawn, but not the note
+value or the order of the buttons.
 
 **Returns**
 
@@ -415,8 +559,16 @@ It covers what is asked and where it is drawn, but not the note value or the ord
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> a = Question("Name it.", choices=["C", "D"], answer="C")
->>> b = Question("Name it.", choices=["D", "C"], answer="C")  # the same question, buttons in another order
+>>> a = Question(
+...     "Name it.",
+...     choices=["C", "D"],
+...     answer="C",
+... )
+>>> b = Question(
+...     "Name it.",
+...     choices=["D", "C"],
+...     answer="C",
+... )  # the same question, buttons in another order
 >>> a.item_key() == b.item_key()
 True
 >>> len(a.item_key())
@@ -429,7 +581,8 @@ True
 def to_dict() -> dict
 ```
 
-Return the question as plain data, so it can be stored and asked again.
+Return the question as plain data, so it can be stored and asked
+again.
 
 **Returns**
 
@@ -438,7 +591,12 @@ Return the question as plain data, so it can be stored and asked again.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> data = Question("Name it.", choices=["C"], answer="C", staff=[[Note.parse("C4")]]).to_dict()
+>>> data = Question(
+...     "Name it.",
+...     choices=["C"],
+...     answer="C",
+...     staff=[[Note.parse("C4")]],
+... ).to_dict()
 >>> data["answer"], data["staff"]
 ('C', [[{'octave': 4, 'letter': 0, 'accidental': 0}]])
 ```
@@ -463,7 +621,13 @@ Rebuild a question from the data that `to_dict` made.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> q = Question("Name it.", choices=["C", "D"], answer="C", key=2, accept=("D",))
+>>> q = Question(
+...     "Name it.",
+...     choices=["C", "D"],
+...     answer="C",
+...     key=2,
+...     accept=("D",),
+... )
 >>> Question.from_dict(q.to_dict()) == q
 True
 ```
@@ -487,7 +651,13 @@ Rebuild a note from stored data.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> note_from({"octave": 4, "letter": 0, "accidental": 0})
+>>> note_from(
+...     {
+...         "octave": 4,
+...         "letter": 0,
+...         "accidental": 0,
+...     }
+... )
 Note(octave=4, letter=0, accidental=0)
 >>> note_from(None) is None
 True
@@ -499,7 +669,8 @@ True
 def signature(*parts: object) -> str
 ```
 
-Describe the exercise settings in force, so a stored question is only asked again under the settings it was made for.
+Describe the exercise settings in force, so a stored question is
+only asked again under the settings it was made for.
 
 **Parameters**
 
@@ -514,7 +685,11 @@ Describe the exercise settings in force, so a stored question is only asked agai
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> signature({"clefs": {"bass", "treble"}}, 3)
 '[{"clefs": ["bass", "treble"]}, 3]'
->>> signature({"clefs": {"treble", "bass"}}, 3) == signature({"clefs": {"bass", "treble"}}, 3)
+>>> signature(
+...     {"clefs": {"treble", "bass"}}, 3
+... ) == signature(
+...     {"clefs": {"bass", "treble"}}, 3
+... )
 True
 ```
 
@@ -524,7 +699,8 @@ True
 class Exercise(ABC)
 ```
 
-What every exercise provides: its name, how it makes questions and how long a good answer takes.
+What every exercise provides: its name, how it makes questions and
+how long a good answer takes.
 
 **Attributes**
 
@@ -541,8 +717,13 @@ What every exercise provides: its name, how it makes questions and how long a go
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     name = "Demo"
+...
 ...     def generate(self, rng):
-...         return Question("Pick A.", choices=["A", "B"], answer="A")
+...         return Question(
+...             "Pick A.",
+...             choices=["A", "B"],
+...             answer="A",
+...         )
 >>> Demo().generate(random.Random(0)).answer
 'A'
 ```
@@ -567,7 +748,9 @@ Choose the instrument that plays this exercise's notes.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
->>> NoteNames().sound_instrument("pack.viola.bowed-viola")
+>>> NoteNames().sound_instrument(
+...     "pack.viola.bowed-viola"
+... )
 'pack.viola.bowed-viola'
 ```
 
@@ -579,7 +762,8 @@ def settings_signature() -> str
 
 Return what identifies the settings that shape the questions.
 
-A stored question is only asked again while this is unchanged. Exercises with settings override it.
+A stored question is only asked again while this is unchanged.
+Exercises with settings override it.
 
 **Returns**
 
@@ -590,7 +774,9 @@ A stored question is only asked again while this is unchanged. Exercises with se
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     def generate(self, rng):
-...         return Question("?", choices=["A"], answer="A")
+...         return Question(
+...             "?", choices=["A"], answer="A"
+...         )
 >>> Demo().settings_signature()
 ''
 ```
@@ -601,9 +787,11 @@ A stored question is only asked again while this is unchanged. Exercises with se
 def card_prompt(question: Question) -> str
 ```
 
-Say what to do on a flashcard made from a question, where nothing on screen explains the task.
+Say what to do on a flashcard made from a question, where
+nothing on screen explains the task.
 
-Exercises whose on-screen prompt depends on the screen (buttons to press, a staff to click) override this.
+Exercises whose on-screen prompt depends on the screen (buttons
+to press, a staff to click) override this.
 
 **Parameters**
 
@@ -618,11 +806,25 @@ Exercises whose on-screen prompt depends on the screen (buttons to press, a staf
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     name = "Demo"
+...
 ...     def generate(self, rng):
-...         return Question("Pick A.", choices=["A"], answer="A")
->>> Demo().card_prompt(Question("", choices=["A"], answer="A"))
+...         return Question(
+...             "Pick A.",
+...             choices=["A"],
+...             answer="A",
+...         )
+>>> Demo().card_prompt(
+...     Question("", choices=["A"], answer="A")
+... )
 'Demo'
->>> Demo().card_prompt(Question("Click the fermata.", choices=[], answer="fermata", notation_target=("fermata", 0)))
+>>> Demo().card_prompt(
+...     Question(
+...         "Click the fermata.",
+...         choices=[],
+...         answer="fermata",
+...         notation_target=("fermata", 0),
+...     )
+... )
 'Locate the fermata.'
 ```
 
@@ -632,7 +834,8 @@ Exercises whose on-screen prompt depends on the screen (buttons to press, a staf
 def card_groups() -> dict[str, str] | None
 ```
 
-Map playable examples to the skills that share a calendar review date.
+Map playable examples to the skills that share a calendar review
+date.
 
 **Returns**
 
@@ -641,7 +844,9 @@ Map playable examples to the skills that share a calendar review date.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import KeyboardNotes
+>>> from alto.exercises.library import (
+...     KeyboardNotes,
+... )
 >>> KeyboardNotes().card_groups() is None
 True
 ```
@@ -652,7 +857,8 @@ True
 def card_count() -> int | None
 ```
 
-Count distinct cards possible with the current settings when the exercise has an exact catalog.
+Count distinct cards possible with the current settings when the
+exercise has an exact catalog.
 
 **Returns**
 
@@ -661,7 +867,9 @@ Count distinct cards possible with the current settings when the exercise has an
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import KeyboardNotes
+>>> from alto.exercises.library import (
+...     KeyboardNotes,
+... )
 >>> KeyboardNotes().card_count() is None
 True
 ```
@@ -672,7 +880,8 @@ True
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
 
-Yield distinct questions until 100 consecutive draws find no new playable item.
+Yield distinct questions until 100 consecutive draws find no new
+playable item.
 
 **Parameters**
 
@@ -685,8 +894,17 @@ Yield distinct questions until 100 consecutive draws find no new playable item.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import KeyboardNotes
->>> isinstance(next(KeyboardNotes().daily_candidates(random.Random(1))), Question)
+>>> from alto.exercises.library import (
+...     KeyboardNotes,
+... )
+>>> isinstance(
+...     next(
+...         KeyboardNotes().daily_candidates(
+...             random.Random(1)
+...         )
+...     ),
+...     Question,
+... )
 True
 ```
 
@@ -714,10 +932,14 @@ Adapt a stored question for review under the active settings.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import KeyboardNotes
+>>> from alto.exercises.library import (
+...     KeyboardNotes,
+... )
 >>> ex = KeyboardNotes()
 >>> q = ex.generate(random.Random(1))
->>> ex.review_question(q, same_settings=True) == q
+>>> ex.review_question(
+...     q, same_settings=True
+... ) == q
 True
 ```
 
@@ -727,9 +949,11 @@ True
 def refresh(question: Question) -> Question
 ```
 
-Bring a stored question up to date with how the exercise draws its questions now.
+Bring a stored question up to date with how the exercise draws
+its questions now.
 
-A question that is asked again comes from the copy stored when it was first asked, which an older version may
+A question that is asked again comes from the copy stored when
+it was first asked, which an older version may
 have drawn differently. The default leaves it as it is.
 
 **Parameters**
@@ -745,7 +969,9 @@ have drawn differently. The default leaves it as it is.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     def generate(self, rng):
-...         return Question("?", choices=["A"], answer="A")
+...         return Question(
+...             "?", choices=["A"], answer="A"
+...         )
 >>> q = Question("?", choices=["A"], answer="A")
 >>> Demo().refresh(q) is q
 True
@@ -770,8 +996,11 @@ Exercises override it to describe themselves.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     description = "Spot the note."
+...
 ...     def generate(self, rng):
-...         return Question("?", choices=["A"], answer="A")
+...         return Question(
+...             "?", choices=["A"], answer="A"
+...         )
 >>> Demo().instructions()
 'Spot the note.'
 ```
@@ -811,7 +1040,8 @@ ButtonSettings(
 )
 ```
 
-An exercise’s choice of answer layout and maximum number of buttons per group.
+An exercise’s choice of answer layout and maximum number of buttons
+per group.
 
 **Examples**
 
@@ -828,12 +1058,15 @@ class ChoiceExercise(Exercise)
 
 A button-answer exercise with its own standard Buttons submenu.
 
-Supply the eligible choices in `make_question`. Set `default_limit` to start in Limited mode.
+Supply the eligible choices in `make_question`. Set `default_limit`
+to start in Limited mode.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import ChordQualities
+>>> from alto.exercises.library import (
+...     ChordQualities,
+... )
 >>> ChordQualities.button_settings().button_mode
 'limited'
 ```
@@ -846,7 +1079,8 @@ Supply the eligible choices in `make_question`. Set `default_limit` to start in 
 def button_settings() -> ButtonSettings
 ```
 
-Return the preferences shared by instances of this particular exercise.
+Return the preferences shared by instances of this particular
+exercise.
 
 **Returns**
 
@@ -866,7 +1100,8 @@ Return the preferences shared by instances of this particular exercise.
 def settings_signature() -> str
 ```
 
-Include custom answer layouts when deciding which questions can be replayed.
+Include custom answer layouts when deciding which questions can
+be replayed.
 
 **Returns**
 
@@ -875,7 +1110,9 @@ Include custom answer layouts when deciding which questions can be replayed.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import ChordQualities
+>>> from alto.exercises.library import (
+...     ChordQualities,
+... )
 >>> ChordQualities().settings_signature()
 ''
 ```
@@ -895,7 +1132,9 @@ Identify the exercise settings other than the answer layout.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import ChordQualities
+>>> from alto.exercises.library import (
+...     ChordQualities,
+... )
 >>> ChordQualities().practice_signature()
 ''
 ```
@@ -919,8 +1158,14 @@ Generate the musical task and apply the selected button count.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import ChordQualities
->>> len(ChordQualities().generate(random.Random(0)).choices)
+>>> from alto.exercises.library import (
+...     ChordQualities,
+... )
+>>> len(
+...     ChordQualities()
+...     .generate(random.Random(0))
+...     .choices
+... )
 5
 ```
 
@@ -934,7 +1179,8 @@ def limit_buttons(
 ) -> Question
 ```
 
-Limit each answer group while keeping all the buttons needed to complete the question.
+Limit each answer group while keeping all the buttons needed to
+complete the question.
 
 **Parameters**
 
@@ -948,7 +1194,8 @@ Limit each answer group while keeping all the buttons needed to complete the que
 **Examples**
 
 ```text
-A note and octave question keeps the correct name and octave in their respective groups.
+A note and octave question keeps the correct name and octave in
+their respective groups.
 ```
 
 ### ChoiceExercise.make_question
@@ -958,7 +1205,8 @@ A note and octave question keeps the correct name and octave in their respective
 def make_question(rng: random.Random) -> Question
 ```
 
-Generate the task and eligible answer choices before the button limit is applied.
+Generate the task and eligible answer choices before the button
+limit is applied.
 
 **Parameters**
 
@@ -971,7 +1219,8 @@ Generate the task and eligible answer choices before the button limit is applied
 **Examples**
 
 ```text
-Note Identification supplies the note names appropriate to the active clef and key settings.
+Note Identification supplies the note names appropriate to the
+active clef and key settings.
 ```
 
 ## register
@@ -982,7 +1231,8 @@ def register() -> type[Exercise]
 
 Add an exercise to `REGISTRY`, next to the others of its category.
 
-The categories come in the order they first appear, so the home screen and the exercise list can show each category
+The categories come in the order they first appear, so the home
+screen and the exercise list can show each category
 once, with all its exercises under it. Used as a class decorator.
 
 **Parameters**
@@ -999,9 +1249,14 @@ once, with all its exercises under it. Used as a class decorator.
 >>> @register
 ... class Demo(Exercise):
 ...     name = "Demo"
-...     category = "A category no other exercise has"
+...     category = (
+...         "A category no other exercise has"
+...     )
+...
 ...     def generate(self, rng):
-...         return Question("?", choices=["A"], answer="A")
+...         return Question(
+...             "?", choices=["A"], answer="A"
+...         )
 >>> REGISTRY[-1] is Demo
 True
 >>> REGISTRY.remove(Demo)
@@ -1019,7 +1274,8 @@ def pick_distractors(
 ) -> list[str]
 ```
 
-Choose wrong answers to offer alongside the right one, and shuffle them all.
+Choose wrong answers to offer alongside the right one, and shuffle
+them all.
 
 **Parameters**
 
@@ -1035,7 +1291,12 @@ Choose wrong answers to offer alongside the right one, and shuffle them all.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> choices_ = pick_distractors("C", pool=["C", "D", "E", "F"], n=2, rng=random.Random(0))
+>>> choices_ = pick_distractors(
+...     "C",
+...     pool=["C", "D", "E", "F"],
+...     n=2,
+...     rng=random.Random(0),
+... )
 >>> len(choices_), "C" in choices_
 (3, True)
 ```

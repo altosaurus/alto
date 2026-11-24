@@ -5,18 +5,27 @@ package: alto
 permalink: /api/alto.selfupdate/
 ---
 {% raw %}
-Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over.
+Replacing a packaged copy of Alto with a newer release: whether it can,
+getting the update, checking it, and handing over.
 
-A packaged copy is Alto frozen with PyInstaller, in a folder the user owns: `~/.local/opt/alto` on Linux, made by `install.sh`,
-and a folder under `%LOCALAPPDATA%\Programs` on Windows, made by the installer. Neither needs administrator rights, so Alto can
-fetch the new package, check it, and start the program that installs it. Nothing is installed unless the signature on the list of
-checksums verifies against a key that came with Alto, the list names the file, and the file's hash is the one listed (see
-`alto.updates`). This module has no Qt, so the interface runs it on a worker thread and shows its progress.
+A packaged copy is Alto frozen with PyInstaller, in a folder the user
+owns: `~/.local/opt/alto` on Linux, made by `install.sh`,
+and a folder under `%LOCALAPPDATA%\Programs` on Windows, made by the
+installer. Neither needs administrator rights, so Alto can
+fetch the new package, check it, and start the program that installs it.
+Nothing is installed unless the signature on the list of
+checksums verifies against a key that came with Alto, the list names the
+file, and the file's hash is the one listed (see
+`alto.updates`). This module has no Qt, so the interface runs it on a
+worker thread and shows its progress.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> self_update_target(executable=Path("/nowhere/alto"), system="linux") is None
+>>> self_update_target(
+...     executable=Path("/nowhere/alto"),
+...     system="linux",
+... ) is None
 True
 ```
 
@@ -26,7 +35,8 @@ True
 class UpdateError(Exception)
 ```
 
-Something went wrong in getting or checking an update. The message says what, in words for the person.
+Something went wrong in getting or checking an update. The message
+says what, in words for the person.
 
 ## UpdateCanceled
 
@@ -57,7 +67,11 @@ A packaged copy that can replace itself, and where it is.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Target("windows", folder=Path("C:/Alto"), prefix=None).system
+>>> Target(
+...     "windows",
+...     folder=Path("C:/Alto"),
+...     prefix=None,
+... ).system
 'windows'
 ```
 
@@ -71,7 +85,8 @@ Prepared(
 )
 ```
 
-An update that has been downloaded and checked, and is ready to be handed over.
+An update that has been downloaded and checked, and is ready to be
+handed over.
 
 **Attributes**
 
@@ -82,7 +97,11 @@ An update that has been downloaded and checked, and is ready to be handed over.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Prepared(Path("/tmp/x"), installer=None, root=Path("/tmp/x/unpacked/alto-0.1.0")).installer is None
+>>> Prepared(
+...     Path("/tmp/x"),
+...     installer=None,
+...     root=Path("/tmp/x/unpacked/alto-0.1.0"),
+... ).installer is None
 True
 ```
 
@@ -96,10 +115,13 @@ def self_update_target(
 ) -> Target | None
 ```
 
-Say whether the running copy can replace itself, and if so where it is.
+Say whether the running copy can replace itself, and if so where it
+is.
 
-On Linux a copy can if it was put in `<prefix>/opt/alto` by `install.sh`, which links `<prefix>/bin/alto` to it; a folder that
-someone unpacked and ran from cannot. On Windows a copy can if the installer made it, which leaves `unins000.exe` beside it.
+On Linux a copy can if it was put in `<prefix>/opt/alto` by
+`install.sh`, which links `<prefix>/bin/alto` to it; a folder that
+someone unpacked and ran from cannot. On Windows a copy can if the
+installer made it, which leaves `unins000.exe` beside it.
 
 **Parameters**
 
@@ -113,9 +135,15 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> self_update_target(executable=Path("/usr/bin/python3"), system="linux") is None
+>>> self_update_target(
+...     executable=Path("/usr/bin/python3"),
+...     system="linux",
+... ) is None
 True
->>> self_update_target(executable=Path("/nowhere/alto.exe"), system="windows") is None
+>>> self_update_target(
+...     executable=Path("/nowhere/alto.exe"),
+...     system="windows",
+... ) is None
 True
 ```
 
@@ -134,7 +162,8 @@ def download(
 ) -> str
 ```
 
-Fetch a file, checking the address, the size and the connection, and give its SHA-256 hash.
+Fetch a file, checking the address, the size and the connection, and
+give its SHA-256 hash.
 
 **Parameters**
 
@@ -165,7 +194,8 @@ def extract_tarball(
 ) -> Path
 ```
 
-Unpack the Linux download, refusing anything that would land outside the folder.
+Unpack the Linux download, refusing anything that would land outside
+the folder.
 
 **Parameters**
 
@@ -189,7 +219,8 @@ def ignore_progress(
 ) -> None
 ```
 
-Take a note of progress and do nothing with it, for a download whose progress nobody watches.
+Take a note of progress and do nothing with it, for a download whose
+progress nobody watches.
 
 **Parameters**
 
@@ -219,7 +250,8 @@ def prepare_update(
 ) -> Prepared
 ```
 
-Download a release for this copy and check it: its signed list of checksums, then the file against its listed hash.
+Download a release for this copy and check it: its signed list of
+checksums, then the file against its listed hash.
 
 **Parameters**
 
@@ -248,11 +280,16 @@ Download a release for this copy and check it: its signed list of checksums, the
 def clean_environment(env: Mapping[str, str]) -> dict[str, str]
 ```
 
-Undo what PyInstaller did to the environment, for a program that this one starts.
+Undo what PyInstaller did to the environment, for a program that
+this one starts.
 
-A packaged program puts its own libraries first on the library path, which would make the system's `sh`, `tar` and the next
-Alto load them. PyInstaller keeps the original in `LD_LIBRARY_PATH_ORIG`, and asks a program that restarts itself to reset
-what it passed on. The desktop's start-up token is for this launch only, so it is dropped too.
+A packaged program puts its own libraries first on the library path,
+which would make the system's `sh`, `tar` and the next
+Alto load them. PyInstaller keeps the original in
+`LD_LIBRARY_PATH_ORIG`, and asks a program that restarts itself to
+reset
+what it passed on. The desktop's start-up token is for this launch
+only, so it is dropped too.
 
 **Parameters**
 
@@ -265,9 +302,21 @@ what it passed on. The desktop's start-up token is for this launch only, so it i
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> clean_environment({"LD_LIBRARY_PATH": "/app/lib", "LD_LIBRARY_PATH_ORIG": "/usr/lib", "_PYI_ARCHIVE_FILE": "x"})
-{'LD_LIBRARY_PATH': '/usr/lib', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
->>> clean_environment({"LD_LIBRARY_PATH": "/app/lib", "LD_LIBRARY_PATH_ORIG": ""})
+>>> clean_environment(
+...     {
+...         "LD_LIBRARY_PATH": "/app/lib",
+...         "LD_LIBRARY_PATH_ORIG": "/usr/lib",
+...         "_PYI_ARCHIVE_FILE": "x",
+...     }
+... )
+{'LD_LIBRARY_PATH': '/usr/lib', 'PYINSTALLER_RESET_ENVIRONMENT':
+'1'}
+>>> clean_environment(
+...     {
+...         "LD_LIBRARY_PATH": "/app/lib",
+...         "LD_LIBRARY_PATH_ORIG": "",
+...     }
+... )
 {'PYINSTALLER_RESET_ENVIRONMENT': '1'}
 >>> clean_environment({"HOME": "/home/me"})
 {'HOME': '/home/me', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
@@ -279,7 +328,8 @@ what it passed on. The desktop's start-up token is for this launch only, so it i
 def log_path() -> Path
 ```
 
-Give the file the Linux helper writes to, so that a failed update can be looked into.
+Give the file the Linux helper writes to, so that a failed update
+can be looked into.
 
 **Returns**
 
@@ -303,10 +353,13 @@ def windows_handoff_command(
 ) -> list[str]
 ```
 
-Give the command that waits for Alto to end, runs the installer, and starts the old Alto again if the installer fails.
+Give the command that waits for Alto to end, runs the installer, and
+starts the old Alto again if the installer fails.
 
-The installer must not start while Alto is still closing: it would find Alto's files in use and, with no one to answer, give
-up. So Alto starts this command and quits, and the command waits for Alto's process to be gone before it begins.
+The installer must not start while Alto is still closing: it would
+find Alto's files in use and, with no one to answer, give
+up. So Alto starts this command and quits, and the command waits for
+Alto's process to be gone before it begins.
 
 **Parameters**
 
@@ -321,10 +374,20 @@ up. So Alto starts this command and quits, and the command waits for Alto's proc
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> command = windows_handoff_command(Path("C:/Temp/setup.exe"), pid=42, alto=Path("C:/Alto/alto.exe"))
->>> command[0], command[1:-1] == list(POWERSHELL_ARGUMENTS)
+>>> command = windows_handoff_command(
+...     Path("C:/Temp/setup.exe"),
+...     pid=42,
+...     alto=Path("C:/Alto/alto.exe"),
+... )
+>>> (
+...     command[0],
+...     command[1:-1]
+...     == list(POWERSHELL_ARGUMENTS),
+... )
 ('powershell.exe', True)
->>> text = base64.b64decode(command[-1]).decode("utf-16-le")
+>>> text = base64.b64decode(command[-1]).decode(
+...     "utf-16-le"
+... )
 >>> "Wait-Process -Id 42" in text and "/RELAUNCH=1" in text
 True
 ```
@@ -342,7 +405,8 @@ def start_handoff(
 ) -> None
 ```
 
-Start the program that installs the update, and return at once so that Alto can quit.
+Start the program that installs the update, and return at once so
+that Alto can quit.
 
 **Parameters**
 
@@ -362,7 +426,8 @@ Start the program that installs the update, and return at once so that Alto can 
 def new_work_folder() -> Path
 ```
 
-Make a new temporary folder for an update, whose name says what it is for.
+Make a new temporary folder for an update, whose name says what it
+is for.
 
 **Returns**
 
@@ -372,7 +437,9 @@ Make a new temporary folder for an update, whose name says what it is for.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> folder = new_work_folder()
->>> folder.is_dir() and folder.name.startswith(LEFTOVER_PREFIX)
+>>> folder.is_dir() and folder.name.startswith(
+...     LEFTOVER_PREFIX
+... )
 True
 >>> folder.rmdir()
 ```
@@ -388,7 +455,8 @@ def remove_leftovers(
 ) -> int
 ```
 
-Remove the temporary folders of earlier updates that were never cleaned up, such as a Windows installer that was run and left.
+Remove the temporary folders of earlier updates that were never
+cleaned up, such as a Windows installer that was run and left.
 
 **Parameters**
 
@@ -403,7 +471,9 @@ Remove the temporary folders of earlier updates that were never cleaned up, such
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> remove_leftovers(root=Path("/no/such/folder"))
+>>> remove_leftovers(
+...     root=Path("/no/such/folder")
+... )
 0
 ```
 {% endraw %}

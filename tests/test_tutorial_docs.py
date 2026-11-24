@@ -1,8 +1,10 @@
 """
 Tests for bringing the plugin tutorials into the docs.
 
-The tutorial pages live in repositories of their own. The docs workflows copy in the page and only the files it refers to, so
-these tests check that the script copies exactly that, that it refuses a tutorial with a file missing, and that Alto keeps no
+The tutorial pages live in repositories of their own. The docs workflows
+copy in the page and only the files it refers to, so
+these tests check that the script copies exactly that, that it refuses a
+tutorial with a file missing, and that Alto keeps no
 copy of what it brings in.
 """
 
@@ -39,7 +41,10 @@ def load() -> ModuleType:
     ModuleType
         The loaded module.
     """
-    spec = importlib.util.spec_from_file_location("tutorial_docs", ROOT / "scripts" / "tutorial_docs.py")
+    spec = importlib.util.spec_from_file_location(
+        "tutorial_docs",
+        ROOT / "scripts" / "tutorial_docs.py",
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -51,7 +56,8 @@ tutorial_docs = load()
 
 def make_tutorial(base: Path, *, leave_out: str = "") -> Path:
     """
-    Make a tutorial repository with a page, the files the page refers to, and some files it does not.
+    Make a tutorial repository with a page, the files the page refers
+    to, and some files it does not.
 
     Parameters
     ----------
@@ -72,7 +78,7 @@ def make_tutorial(base: Path, *, leave_out: str = "") -> Path:
         "assets/plugins/demo-wide.png": "wide",
         "assets/img/demo-screen.png": "light",
         "assets/img/demo-screen-dark.png": "dark",
-        "assets/plugins/demo/sounds/C4.wav": "a loose sound the page never shows",
+        "assets/plugins/demo/sounds/C4.wav": "unused audio",
         "assets/plugins/demo-answer.gif": "a picture for the README only",
         "assets/img/other.png": "a screenshot nothing shows",
     }
@@ -86,12 +92,18 @@ def make_tutorial(base: Path, *, leave_out: str = "") -> Path:
 
 def test_the_doctests_of_the_script_pass() -> None:
     """Run the examples in the script's docstrings."""
-    result = doctest.testmod(tutorial_docs, optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS)
+    result = doctest.testmod(
+        tutorial_docs,
+        optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS,
+    )
     assert result.attempted and not result.failed
 
 
 def test_a_page_lists_each_file_it_refers_to_once() -> None:
-    """Find the downloads, the pictures and both themes of each screenshot, without repeats."""
+    """
+    Find the downloads, the pictures and both themes of each screenshot,
+    without repeats.
+    """
     assert tutorial_docs.references(PAGE) == [
         "assets/plugins/demo.zip",
         "assets/img/demo-screen.png",
@@ -100,9 +112,12 @@ def test_a_page_lists_each_file_it_refers_to_once() -> None:
     ]
 
 
-def test_only_the_page_and_the_files_it_refers_to_are_copied(tmp_path: Path) -> None:
+def test_only_the_page_and_the_files_it_refers_to_are_copied(
+    tmp_path: Path,
+) -> None:
     """
-    Copy the page and what it shows, and nothing else from the tutorial repository.
+    Copy the page and what it shows, and nothing else from the tutorial
+    repository.
 
     Parameters
     ----------
@@ -113,7 +128,11 @@ def test_only_the_page_and_the_files_it_refers_to_are_copied(tmp_path: Path) -> 
     docs = tmp_path / "docs"
     copied = tutorial_docs.bring_in("viola", source=repo, docs=docs)
     assert copied[0] == "plugins/viola.md"
-    on_disk = sorted(path.relative_to(docs).as_posix() for path in docs.rglob("*") if path.is_file())
+    on_disk = sorted(
+        path.relative_to(docs).as_posix()
+        for path in docs.rglob("*")
+        if path.is_file()
+    )
     assert on_disk == sorted(copied)
     assert "assets/plugins/demo/sounds/C4.wav" not in on_disk
     assert "assets/plugins/demo-answer.gif" not in on_disk
@@ -121,10 +140,21 @@ def test_only_the_page_and_the_files_it_refers_to_are_copied(tmp_path: Path) -> 
     assert (docs / "assets/img/demo-screen-dark.png").read_text() == "dark"
 
 
-@pytest.mark.parametrize("missing", ["assets/plugins/demo.zip", "assets/img/demo-screen-dark.png", "plugins/viola.md"])
-def test_a_tutorial_with_a_file_missing_is_refused_before_anything_is_copied(tmp_path: Path, missing: str) -> None:
+@pytest.mark.parametrize(
+    "missing",
+    [
+        "assets/plugins/demo.zip",
+        "assets/img/demo-screen-dark.png",
+        "plugins/viola.md",
+    ],
+)
+def test_a_tutorial_with_a_file_missing_is_refused_before_anything_is_copied(
+    tmp_path: Path,
+    missing: str,
+) -> None:
     """
-    Refuse a tutorial whose page refers to a file the repository does not have, and leave the docs as they were.
+    Refuse a tutorial whose page refers to a file the repository does
+    not have, and leave the docs as they were.
 
     Parameters
     ----------
@@ -140,9 +170,13 @@ def test_a_tutorial_with_a_file_missing_is_refused_before_anything_is_copied(tmp
     assert not docs.exists()
 
 
-def test_the_command_reports_a_missing_tutorial(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_command_reports_a_missing_tutorial(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     """
-    Fail with a message when the tutorial is not where it was said to be.
+    Fail with a message when the tutorial is not where it was said to
+    be.
 
     Parameters
     ----------
@@ -151,11 +185,25 @@ def test_the_command_reports_a_missing_tutorial(tmp_path: Path, capsys: pytest.C
     capsys : pytest.CaptureFixture
         The command's output.
     """
-    assert tutorial_docs.main(["viola", "--from", str(tmp_path), "--docs", str(tmp_path / "docs")]) == 1
+    assert (
+        tutorial_docs.main(
+            [
+                "viola",
+                "--from",
+                str(tmp_path),
+                "--docs",
+                str(tmp_path / "docs"),
+            ],
+        )
+        == 1
+    )
     assert "not at" in capsys.readouterr().out
 
 
-def test_the_command_copies_from_a_checkout(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_command_copies_from_a_checkout(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     """
     Bring a tutorial in from a checkout and say how many files came.
 
@@ -167,12 +215,20 @@ def test_the_command_copies_from_a_checkout(tmp_path: Path, capsys: pytest.Captu
         The command's output.
     """
     repo = make_tutorial(tmp_path)
-    assert tutorial_docs.main(["viola", "--from", str(repo), "--docs", str(tmp_path / "docs")]) == 0
+    assert (
+        tutorial_docs.main(
+            ["viola", "--from", str(repo), "--docs", str(tmp_path / "docs")],
+        )
+        == 0
+    )
     assert "5 files" in capsys.readouterr().out
 
 
 def test_alto_keeps_no_copy_of_a_tutorial_it_brings_in() -> None:
-    """Ignore every path the script writes, so that none of it is committed, and keep none of it in the repository."""
+    """
+    Ignore every path the script writes, so that none of it is
+    committed, and keep none of it in the repository.
+    """
     ignored = (ROOT / ".gitignore").read_text()
     for path in (
         "docs/plugins/viola.md",
@@ -182,12 +238,25 @@ def test_alto_keeps_no_copy_of_a_tutorial_it_brings_in() -> None:
         "docs/assets/img/plugin-harpsichord-*.png",
     ):
         assert path in ignored
-    tracked = subprocess.run(["git", "ls-files", "docs"], cwd=ROOT, capture_output=True, text=True, check=False).stdout
-    assert not re.search(r"viola|harpsichord", tracked), "the plugin tutorials are brought in, not stored here"
+    tracked = subprocess.run(
+        ["git", "ls-files", "docs"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    ).stdout
+    assert not re.search(r"viola|harpsichord", tracked), (
+        "the plugin tutorials are brought in, not stored here"
+    )
 
 
 def test_the_workflows_bring_the_tutorials_in_before_they_build() -> None:
-    """Check that the docs build and the pull request check both run the script before Jekyll."""
+    """
+    Check that the docs build and the pull request check both run the
+    script before Jekyll.
+    """
     for name in ("docs.yml", "docs-check.yml"):
         workflow = (ROOT / ".github/workflows" / name).read_text()
-        assert workflow.index("tutorial_docs.py all") < workflow.index("jekyll build"), name
+        assert workflow.index("tutorial_docs.py all") < workflow.index(
+            "jekyll build",
+        ), name

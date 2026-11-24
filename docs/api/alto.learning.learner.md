@@ -5,15 +5,20 @@ package: alto.learning
 permalink: /api/alto.learning.learner/
 ---
 {% raw %}
-Ties the profile, the database and the scheduler together for the exercise screen.
+Ties the profile, the database and the scheduler together for the
+exercise screen.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
->>> learner = Learner(db, profile=db.add_profile("Ada"))
->>> question = learner.pick(NoteNames(), rng=random.Random(1))
+>>> learner = Learner(
+...     db, profile=db.add_profile("Ada")
+... )
+>>> question = learner.pick(
+...     NoteNames(), rng=random.Random(1)
+... )
 >>> question.answer in question.choices
 True
 ```
@@ -60,7 +65,8 @@ Learner(
 )
 ```
 
-Chooses what a profile is asked next and records how it was answered.
+Chooses what a profile is asked next and records how it was
+answered.
 
 **Attributes**
 
@@ -73,10 +79,21 @@ Chooses what a profile is asked next and records how it was answered.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
->>> learner = Learner(db, profile=db.add_profile("Ada"))
+>>> learner = Learner(
+...     db, profile=db.add_profile("Ada")
+... )
 >>> rng = random.Random(2)
->>> question = learner.pick(NoteNames(), rng=rng)
->>> learner.record(NoteNames(), question=question, answer=question.answer, correct=True, attempt_no=1, seconds=2.5)
+>>> question = learner.pick(
+...     NoteNames(), rng=rng
+... )
+>>> learner.record(
+...     NoteNames(),
+...     question=question,
+...     answer=question.answer,
+...     correct=True,
+...     attempt_no=1,
+...     seconds=2.5,
+... )
 >>> db.count_attempts(learner.profile.id)
 1
 ```
@@ -94,7 +111,10 @@ Create a learner for one profile.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> database = Database()
->>> learner = Learner(database, profile=database.add_profile("Ada"))
+>>> learner = Learner(
+...     database,
+...     profile=database.add_profile("Ada"),
+... )
 >>> learner.profile.name
 'Ada'
 ```
@@ -105,7 +125,8 @@ Create a learner for one profile.
 def set_profile(profile: Profile) -> None
 ```
 
-Open a profile's practice queues and resume its selected scheduler.
+Open a profile's practice queues and resume its selected
+scheduler.
 
 **Parameters**
 
@@ -115,7 +136,9 @@ Open a profile's practice queues and resume its selected scheduler.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
->>> learner = Learner(db, profile=db.add_profile("Ada"))
+>>> learner = Learner(
+...     db, profile=db.add_profile("Ada")
+... )
 >>> learner.set_profile(db.add_profile("Ben"))
 >>> learner.profile.name
 'Ben'
@@ -138,7 +161,9 @@ Return this profile's question scheduler.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
->>> Learner(db, profile=db.add_profile("Ada")).mode
+>>> Learner(
+...     db, profile=db.add_profile("Ada")
+... ).mode
 'ASRS'
 ```
 
@@ -159,7 +184,9 @@ Read the profile's SM-2 and FSRS grading preference.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
->>> Learner(db, profile=db.add_profile("Ada")).self_grading
+>>> Learner(
+...     db, profile=db.add_profile("Ada")
+... ).self_grading
 False
 ```
 
@@ -169,7 +196,8 @@ False
 def response_times(exercise: str) -> ResponseTimes
 ```
 
-Read the rolling sample for one exercise and the current profile's thresholds.
+Read the rolling sample for one exercise and the current
+profile's thresholds.
 
 **Parameters**
 
@@ -183,7 +211,9 @@ Read the rolling sample for one exercise and the current profile's thresholds.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
->>> Learner(db, profile=db.add_profile("Ada")).response_times("KeyboardNotes").times
+>>> Learner(
+...     db, profile=db.add_profile("Ada")
+... ).response_times("KeyboardNotes").times
 ()
 ```
 
@@ -211,7 +241,8 @@ Save the two tail percentages for this profile.
 **Examples**
 
 ```text
-Setting both tails to zero assigns Good to every correct first answer.
+Setting both tails to zero assigns Good to every correct first
+answer.
 ```
 
 ### Learner.set_self_grading
@@ -230,7 +261,9 @@ Choose how this profile grades correct calendar reviews.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
->>> learner = Learner(db, profile=db.add_profile("Ada"))
+>>> learner = Learner(
+...     db, profile=db.add_profile("Ada")
+... )
 >>> learner.set_self_grading(True)
 >>> learner.self_grading
 True
@@ -256,7 +289,9 @@ Select the question scheduler for this profile.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
->>> learner = Learner(db, profile=db.add_profile("Ada"))
+>>> learner = Learner(
+...     db, profile=db.add_profile("Ada")
+... )
 >>> learner.set_mode("FSRS")
 >>> learner.mode
 'FSRS'
@@ -274,7 +309,8 @@ def pick(
 ) -> Question
 ```
 
-Return the next eligible question using the profile's selected scheduler.
+Return the next eligible question using the profile's selected
+scheduler.
 
 **Parameters**
 
@@ -296,9 +332,17 @@ Return the next eligible question using the profile's selected scheduler.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
->>> learner = Learner(db, profile=db.add_profile("Ada"))
->>> first = learner.pick(NoteNames(), rng=random.Random(3))
->>> second = learner.pick(NoteNames(), rng=random.Random(3), avoid=first.item_key())
+>>> learner = Learner(
+...     db, profile=db.add_profile("Ada")
+... )
+>>> first = learner.pick(
+...     NoteNames(), rng=random.Random(3)
+... )
+>>> second = learner.pick(
+...     NoteNames(),
+...     rng=random.Random(3),
+...     avoid=first.item_key(),
+... )
 >>> second.item_key() != first.item_key()
 True
 ```
@@ -347,14 +391,41 @@ Log one answer and update what is known about the question.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
->>> learner = Learner(db, profile=db.add_profile("Ada"))
->>> q = learner.pick(NoteNames(), rng=random.Random(4))
->>> learner.record(NoteNames(), question=q, answer="?", correct=False, attempt_no=1, seconds=3.0)
->>> learner.record(NoteNames(), question=q, answer=q.answer, correct=True, attempt_no=2, seconds=1.0)
->>> [row["correct"] for row in db.attempts(learner.profile.id)]
+>>> learner = Learner(
+...     db, profile=db.add_profile("Ada")
+... )
+>>> q = learner.pick(
+...     NoteNames(), rng=random.Random(4)
+... )
+>>> learner.record(
+...     NoteNames(),
+...     question=q,
+...     answer="?",
+...     correct=False,
+...     attempt_no=1,
+...     seconds=3.0,
+... )
+>>> learner.record(
+...     NoteNames(),
+...     question=q,
+...     answer=q.answer,
+...     correct=True,
+...     attempt_no=2,
+...     seconds=1.0,
+... )
+>>> [
+...     row["correct"]
+...     for row in db.attempts(
+...         learner.profile.id
+...     )
+... ]
 [0, 1]
 >>> # noinspection PyUnresolvedReferences
->>> db.get_item(learner.profile.id, exercise="NoteNames", item_key=q.item_key()).wrong_attempts
+>>> db.get_item(
+...     learner.profile.id,
+...     exercise="NoteNames",
+...     item_key=q.item_key(),
+... ).wrong_attempts
 1
 ```
 {% endraw %}

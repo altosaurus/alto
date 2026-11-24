@@ -7,7 +7,8 @@ permalink: /api/alto.ui.charts/
 {% raw %}
 Small charts drawn with QPainter, in the application's theme colors.
 
-Stacked bars, a line, horizontal bars and a calendar heatmap. Each has a title, draws a message when there is nothing to
+Stacked bars, a line, horizontal bars and a calendar heatmap. Each has a
+title, draws a message when there is nothing to
 show, and explains the bar or square under the pointer in a tooltip.
 
 **Examples**
@@ -15,8 +16,14 @@ show, and explains the bar or square under the pointer in a tooltip.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> nice_ticks(13)
 [0, 5, 10, 15]
->>> chart = StackedBarChart("Questions answered")
->>> chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
+>>> chart = StackedBarChart(
+...     "Questions answered"
+... )
+>>> chart.set_data(
+...     ["Mon", "Tue"],
+...     right=[3, 1],
+...     wrong=[1, 0],
+... )
 >>> chart.right, chart.wrong
 ([3, 1], [1, 0])
 ```
@@ -66,7 +73,8 @@ StackedBarChart(
 
 Bases: `_Chart`
 
-Questions per period, the first-try right ones in green with the missed ones stacked above in red.
+Questions per period, the first-try right ones in green with the
+missed ones stacked above in red.
 
 **Attributes**
 
@@ -76,8 +84,14 @@ Questions per period, the first-try right ones in green with the missed ones sta
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> chart = StackedBarChart("Questions answered per day")
->>> chart.set_data(["Mon", "Tue", "Wed"], right=[3, 0, 5], wrong=[1, 2, 0])
+>>> chart = StackedBarChart(
+...     "Questions answered per day"
+... )
+>>> chart.set_data(
+...     ["Mon", "Tue", "Wed"],
+...     right=[3, 0, 5],
+...     wrong=[1, 2, 0],
+... )
 >>> chart.labels
 ['Mon', 'Tue', 'Wed']
 ```
@@ -122,7 +136,9 @@ Show a count of right and missed questions for each period.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = StackedBarChart("Questions")
->>> chart.set_data(["a", "b"], right=[2, 0], wrong=[0, 4])
+>>> chart.set_data(
+...     ["a", "b"], right=[2, 0], wrong=[0, 4]
+... )
 >>> chart.right, chart.wrong
 ([2, 0], [0, 4])
 ```
@@ -133,7 +149,8 @@ Show a count of right and missed questions for each period.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the axes and a bar for each period, or a message when no questions were answered.
+Draw the axes and a bar for each period, or a message when no
+questions were answered.
 
 **Parameters**
 
@@ -144,7 +161,9 @@ Draw the axes and a bar for each period, or a message when no questions were ans
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = StackedBarChart("Questions")
 >>> chart.resize(400, 300)
->>> chart.set_data(["a", "b"], right=[3, 1], wrong=[1, 0])
+>>> chart.set_data(
+...     ["a", "b"], right=[3, 1], wrong=[1, 0]
+... )
 >>> chart.grab().isNull()
 False
 ```
@@ -168,10 +187,25 @@ Explain the bar under the pointer in a tooltip.
 >>> from PySide6.QtGui import QMouseEvent
 >>> chart = StackedBarChart("Questions")
 >>> chart.resize(400, 300)
->>> chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
->>> point = QPointF(chart._centers()[0], chart._plot().center().y())
->>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+>>> chart.set_data(
+...     ["Mon", "Tue"],
+...     right=[3, 1],
+...     wrong=[1, 0],
+... )
+>>> point = QPointF(
+...     chart._centers()[0],
+...     chart._plot().center().y(),
+... )
+>>> chart.mouseMoveEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseMove,
+...         point,
+...         point,
+...         Qt.MouseButton.NoButton,
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 ```
 
 ## LineChart
@@ -201,8 +235,15 @@ Periods with no answers leave a gap rather than a zero.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> chart = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
->>> chart.set_data(["Mon", "Tue", "Wed"], values=[40.0, None, 80.0])
+>>> chart = LineChart(
+...     "Right on the first try",
+...     fmt=lambda v: f"{v:.0f}%",
+...     fixed_top=100,
+... )
+>>> chart.set_data(
+...     ["Mon", "Tue", "Wed"],
+...     values=[40.0, None, 80.0],
+... )
 >>> chart.values
 [40.0, None, 80.0]
 ```
@@ -221,7 +262,9 @@ Create an empty chart.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> LineChart("Speed", fmt=lambda v: f"{v:.1f} s").fixed_top is None
+>>> LineChart(
+...     "Speed", fmt=lambda v: f"{v:.1f} s"
+... ).fixed_top is None
 True
 ```
 
@@ -245,8 +288,12 @@ Show a value for each period.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
->>> chart.set_data(["a", "b"], values=[2.5, None])
+>>> chart = LineChart(
+...     "Speed", fmt=lambda v: f"{v:.1f} s"
+... )
+>>> chart.set_data(
+...     ["a", "b"], values=[2.5, None]
+... )
 >>> chart.labels
 ['a', 'b']
 ```
@@ -257,7 +304,8 @@ Show a value for each period.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the axes, the line (one run at a time, so gaps show) and a dot for each value.
+Draw the axes, the line (one run at a time, so gaps show) and a
+dot for each value.
 
 **Parameters**
 
@@ -266,9 +314,13 @@ Draw the axes, the line (one run at a time, so gaps show) and a dot for each val
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
+>>> chart = LineChart(
+...     "Speed", fmt=lambda v: f"{v:.1f} s"
+... )
 >>> chart.resize(400, 300)
->>> chart.set_data(["a", "b", "c"], values=[2.0, None, 3.0])
+>>> chart.set_data(
+...     ["a", "b", "c"], values=[2.0, None, 3.0]
+... )
 >>> chart.grab().isNull()
 False
 ```
@@ -290,12 +342,27 @@ Say what the value under the pointer is in a tooltip.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> from PySide6.QtGui import QMouseEvent
->>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
+>>> chart = LineChart(
+...     "Speed", fmt=lambda v: f"{v:.1f} s"
+... )
 >>> chart.resize(400, 300)
->>> chart.set_data(["a", "b"], values=[2.0, 3.0])
->>> point = QPointF(chart._centers()[0], chart._plot().center().y())
->>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+>>> chart.set_data(
+...     ["a", "b"], values=[2.0, 3.0]
+... )
+>>> point = QPointF(
+...     chart._centers()[0],
+...     chart._plot().center().y(),
+... )
+>>> chart.mouseMoveEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseMove,
+...         point,
+...         point,
+...         Qt.MouseButton.NoButton,
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 ```
 
 ## HBarChart
@@ -310,7 +377,8 @@ HBarChart(
 
 Bases: `_Chart`
 
-One bar per name, on a fixed 0-100 scale, each with its value at the end.
+One bar per name, on a fixed 0-100 scale, each with its value at the
+end.
 
 **Attributes**
 
@@ -320,8 +388,15 @@ One bar per name, on a fixed 0-100 scale, each with its value at the end.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> chart = HBarChart("Right on the first try, by exercise")
->>> chart.set_data([("Intervals", 77.0, "77%  ·  52 q"), ("Chords", 88.0, "88%  ·  48 q")])
+>>> chart = HBarChart(
+...     "Right on the first try, by exercise"
+... )
+>>> chart.set_data(
+...     [
+...         ("Intervals", 77.0, "77%  ·  52 q"),
+...         ("Chords", 88.0, "88%  ·  48 q"),
+...     ]
+... )
 >>> len(chart.rows)
 2
 ```
@@ -348,7 +423,8 @@ Create an empty chart.
 def set_data(rows: Sequence[tuple[str, float, str]]) -> None
 ```
 
-Show a bar for each name, and make the chart tall enough for them.
+Show a bar for each name, and make the chart tall enough for
+them.
 
 **Parameters**
 
@@ -358,7 +434,12 @@ Show a bar for each name, and make the chart tall enough for them.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HBarChart("By exercise")
->>> chart.set_data([(f"Exercise {i}", 50.0, "50%") for i in range(10)])
+>>> chart.set_data(
+...     [
+...         (f"Exercise {i}", 50.0, "50%")
+...         for i in range(10)
+...     ]
+... )
 >>> chart.minimumHeight()
 306
 ```
@@ -369,7 +450,8 @@ Show a bar for each name, and make the chart tall enough for them.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw a bar with its name and value for each row, or a message when there are none.
+Draw a bar with its name and value for each row, or a message
+when there are none.
 
 **Parameters**
 
@@ -403,9 +485,19 @@ Highlight the row under the pointer.
 >>> from PySide6.QtCore import QEvent
 >>> chart = HBarChart("By exercise")
 >>> chart.set_data([("A", 50.0, "50%")])
->>> point = QPointF(10, chart.TOP + chart.ROW / 2)
->>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+>>> point = QPointF(
+...     10, chart.TOP + chart.ROW / 2
+... )
+>>> chart.mouseMoveEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseMove,
+...         point,
+...         point,
+...         Qt.MouseButton.NoButton,
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> chart.hovered
 0
 ```
@@ -422,7 +514,8 @@ HeatmapChart(
 
 Bases: `_Chart`
 
-A calendar of reviews: a column per week (Monday to Sunday), a square per day, darker the more questions.
+A calendar of reviews: a column per week (Monday to Sunday), a
+square per day, darker the more questions.
 
 **Attributes**
 
@@ -435,7 +528,10 @@ A calendar of reviews: a column per week (Monday to Sunday), a square per day, d
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
->>> chart.set_data({date(2026, 11, 13): 12}, today=date(2026, 11, 13))
+>>> chart.set_data(
+...     {date(2026, 11, 13): 12},
+...     today=date(2026, 11, 13),
+... )
 >>> chart.counts
 {datetime.date(2026, 11, 13): 12}
 ```
@@ -479,7 +575,9 @@ Show how many questions were answered on each day.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
->>> chart.set_data({}, today=date(2026, 11, 13), weeks=26)
+>>> chart.set_data(
+...     {}, today=date(2026, 11, 13), weeks=26
+... )
 >>> chart.weeks
 26
 ```
@@ -490,7 +588,8 @@ Show how many questions were answered on each day.
 def first_day() -> date
 ```
 
-Return the first day shown: the Monday that starts the first week.
+Return the first day shown: the Monday that starts the first
+week.
 
 **Returns**
 
@@ -501,7 +600,10 @@ Return the first day shown: the Monday that starts the first week.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
 >>> chart.set_data({}, today=date(2026, 11, 13))
->>> chart.first_day(), chart.first_day().weekday()
+>>> (
+...     chart.first_day(),
+...     chart.first_day().weekday(),
+... )
 (datetime.date(2025, 11, 10), 0)
 ```
 
@@ -525,8 +627,19 @@ Return how dark a day's square is.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
->>> chart.set_data({date(2026, 11, 13): 40, date(2026, 11, 12): 20, date(2026, 11, 11): 1}, today=date(2026, 11, 13))
->>> chart.level(0), chart.level(1), chart.level(40)
+>>> chart.set_data(
+...     {
+...         date(2026, 11, 13): 40,
+...         date(2026, 11, 12): 20,
+...         date(2026, 11, 11): 1,
+...     },
+...     today=date(2026, 11, 13),
+... )
+>>> (
+...     chart.level(0),
+...     chart.level(1),
+...     chart.level(40),
+... )
 (0, 1, 4)
 ```
 
@@ -552,10 +665,23 @@ Return the day whose square is under a point.
 >>> chart = HeatmapChart("Reviews")
 >>> chart.resize(760, 190)
 >>> chart.set_data({}, today=date(2026, 11, 13))
->>> cell_, (x0_, y0_) = chart._cell(), chart._origin()
->>> chart.day_at(QPointF(x0_ + 52.5 * cell_, y0_ + 4.5 * cell_))  # the last column, Friday
+>>> cell_, (x0_, y0_) = (
+...     chart._cell(),
+...     chart._origin(),
+... )
+>>> chart.day_at(
+...     QPointF(
+...         x0_ + 52.5 * cell_,
+...         y0_ + 4.5 * cell_,
+...     )
+... )  # the last column, Friday
 datetime.date(2026, 11, 13)
->>> chart.day_at(QPointF(x0_ + 52.5 * cell_, y0_ + 6.5 * cell_)) is None  # Sunday: not yet
+>>> chart.day_at(
+...     QPointF(
+...         x0_ + 52.5 * cell_,
+...         y0_ + 6.5 * cell_,
+...     )
+... ) is None  # Sunday: not yet
 True
 ```
 
@@ -565,7 +691,8 @@ True
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the month and weekday labels, a square for each day, and the Less-More legend.
+Draw the month and weekday labels, a square for each day, and
+the Less-More legend.
 
 **Parameters**
 
@@ -576,7 +703,10 @@ Draw the month and weekday labels, a square for each day, and the Less-More lege
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
 >>> chart.resize(760, 190)
->>> chart.set_data({date(2026, 11, 13): 5}, today=date(2026, 11, 13))
+>>> chart.set_data(
+...     {date(2026, 11, 13): 5},
+...     today=date(2026, 11, 13),
+... )
 >>> chart.grab().isNull()
 False
 ```
@@ -587,7 +717,8 @@ False
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-Say how many questions were answered on the day under the pointer, in a tooltip.
+Say how many questions were answered on the day under the
+pointer, in a tooltip.
 
 **Parameters**
 
@@ -600,10 +731,26 @@ Say how many questions were answered on the day under the pointer, in a tooltip.
 >>> from PySide6.QtGui import QMouseEvent
 >>> chart = HeatmapChart("Reviews")
 >>> chart.resize(760, 190)
->>> chart.set_data({date(2026, 11, 13): 3}, today=date(2026, 11, 13))
->>> cell, (x0, y0) = chart._cell(), chart._origin()
->>> point = QPointF(x0 + 52.5 * cell, y0 + 4.5 * cell)
->>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+>>> chart.set_data(
+...     {date(2026, 11, 13): 3},
+...     today=date(2026, 11, 13),
+... )
+>>> cell, (x0, y0) = (
+...     chart._cell(),
+...     chart._origin(),
+... )
+>>> point = QPointF(
+...     x0 + 52.5 * cell, y0 + 4.5 * cell
+... )
+>>> chart.mouseMoveEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseMove,
+...         point,
+...         point,
+...         Qt.MouseButton.NoButton,
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 ```
 {% endraw %}

@@ -5,18 +5,26 @@ package: alto.ui
 permalink: /api/alto.ui.update_flow/
 ---
 {% raw %}
-Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards.
+Checking for a newer Alto and installing it: the questions asked, the
+progress shown, and the restart afterwards.
 
-The menu's "Check for updates…" follows one of two channels, chosen in Settings: the newest release (the default), or the
-newest commit on the main branch. A copy installed with `scripts/alto-install.sh` can replace itself, from either, with
-`uv tool install`, showing its output, and restarts when OK is pressed. A packaged copy cannot replace itself, so it is told
-that a newer release exists and offered the page where it can be downloaded; it always follows releases. A copy run from a
+The menu's "Check for updates…" follows one of two channels, chosen in
+Settings: the newest release (the default), or the
+newest commit on the main branch. A copy installed with
+`scripts/alto-install.sh` can replace itself, from either, with
+`uv tool install`, showing its output, and restarts when OK is pressed.
+A packaged copy cannot replace itself, so it is told
+that a newer release exists and offered the page where it can be
+downloaded; it always follows releases. A copy run from a
 source folder is told to update with git.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> brief("fatal: unable to access 'https://example.org/': Could not resolve host\n")
+>>> brief(
+...     "fatal: unable to access 'https://example.org/': Could not "
+...     "resolve host\n"
+... )
 "fatal: unable to access 'https://example.org/': Could not resolve host"
 ```
 
@@ -30,7 +38,8 @@ def brief(
 ) -> str
 ```
 
-Cut what a program printed down to what is worth showing in a message: the end of it, without the blank space around it.
+Cut what a program printed down to what is worth showing in a
+message: the end of it, without the blank space around it.
 
 **Parameters**
 
@@ -58,7 +67,8 @@ CommandRunner(parent: QObject | None = None)
 
 Bases: `QObject`
 
-Run one program without freezing the window, handing on what it prints as it prints it, and how it ended.
+Run one program without freezing the window, handing on what it
+prints as it prints it, and how it ended.
 
 **Attributes**
 
@@ -118,7 +128,13 @@ Start a program.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> import sys
 >>> runner = CommandRunner()
->>> runner.start(sys.executable, arguments=["-c", "import time; time.sleep(30)"])
+>>> runner.start(
+...     sys.executable,
+...     arguments=[
+...         "-c",
+...         "import time; time.sleep(30)",
+...     ],
+... )
 >>> runner.stop()
 >>> runner.running
 False
@@ -130,7 +146,8 @@ False
 def stop() -> None
 ```
 
-Stop the program, if it is running, without announcing that it has ended.
+Stop the program, if it is running, without announcing that it
+has ended.
 
 **Examples**
 
@@ -193,7 +210,8 @@ WaitDialog(
 
 Bases: `QDialog`
 
-A small window with a bar that keeps moving and a Cancel button, shown while something is asked for.
+A small window with a bar that keeps moving and a Cancel button,
+shown while something is asked for.
 
 **Attributes**
 
@@ -230,7 +248,8 @@ CheckDialog(
 
 Bases: `WaitDialog`
 
-A waiting window while the address Alto came from is asked for the newest commit of its main branch.
+A waiting window while the address Alto came from is asked for the
+newest commit of its main branch.
 
 **Attributes**
 
@@ -260,7 +279,14 @@ Ask, showing the window until there is an answer.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyTypeChecker
->>> CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").canceled
+>>> CheckDialog(
+...     None,
+...     source=Source(
+...         "https://example.org/a.git",
+...         commit="abc1234",
+...     ),
+...     git="git",
+... ).canceled
 False
 ```
 
@@ -272,7 +298,8 @@ ReleaseFetcher(parent: QObject | None = None)
 
 Bases: `QObject`
 
-Ask GitHub for the latest release on another thread, so that the window never freezes while it waits.
+Ask GitHub for the latest release on another thread, so that the
+window never freezes while it waits.
 
 **Attributes**
 
@@ -313,7 +340,8 @@ Start asking.
 def cancel() -> None
 ```
 
-Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up.
+Stop caring about the answer; the thread ends by itself when
+GitHub answers or the time is up.
 
 ## DailyReleaseCheck
 
@@ -323,7 +351,8 @@ DailyReleaseCheck(window: MainWindow)
 
 Bases: `QTimer`
 
-Check for published releases in the background and honor the learner’s reminder choice at the exercise grid.
+Check for published releases in the background and honor the
+learner’s reminder choice at the exercise grid.
 
 **Examples**
 
@@ -397,10 +426,13 @@ UpdateDialog(
 
 Bases: `QDialog`
 
-The window that shows an update being installed: a bar that keeps moving, what `uv` prints, and then what comes next.
+The window that shows an update being installed: a bar that keeps
+moving, what `uv` prints, and then what comes next.
 
-It cannot be closed while the update runs, because stopping it half way could leave the installed copy broken. When it has
-finished it says so, and its one button closes it. After a successful update the caller restarts Alto.
+It cannot be closed while the update runs, because stopping it half
+way could leave the installed copy broken. When it has
+finished it says so, and its one button closes it. After a
+successful update the caller restarts Alto.
 
 **Attributes**
 
@@ -414,7 +446,8 @@ finished it says so, and its one button closes it. After a successful update the
 
 **Constructor**
 
-Build the window; the update does not start until `run` is called.
+Build the window; the update does not start until `run` is
+called.
 
 **Parameters**
 
@@ -427,7 +460,8 @@ Build the window; the update does not start until `run` is called.
 def run() -> bool
 ```
 
-Install the update, showing the window until the person has read how it went.
+Install the update, showing the window until the person has read
+how it went.
 
 **Returns**
 
@@ -437,7 +471,13 @@ Install the update, showing the window until the person has read how it went.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyTypeChecker
->>> UpdateDialog(None, command=("uv", ["tool", "install", "alto"])).succeeded
+>>> UpdateDialog(
+...     None,
+...     command=(
+...         "uv",
+...         ["tool", "install", "alto"],
+...     ),
+... ).succeeded
 False
 ```
 
@@ -472,10 +512,13 @@ def check_for_updates(
 ) -> None
 ```
 
-Ask whether a newer Alto is available and, if the person agrees, install it and restart.
+Ask whether a newer Alto is available and, if the person agrees,
+install it and restart.
 
-What is asked depends on the copy: one run from a source folder is told how it is updated; a packaged copy asks for the
-latest release and is offered its download page; one installed with the script follows what Settings says, the latest release
+What is asked depends on the copy: one run from a source folder is
+told how it is updated; a packaged copy asks for the
+latest release and is offered its download page; one installed with
+the script follows what Settings says, the latest release
 or the main branch, and can install it.
 
 **Parameters**
@@ -503,7 +546,8 @@ def check_release(
 ) -> None
 ```
 
-Ask GitHub for the latest release and compare it with the version that is running.
+Ask GitHub for the latest release and compare it with the version
+that is running.
 
 **Parameters**
 
@@ -534,7 +578,8 @@ def offer_release(
 ) -> None
 ```
 
-Ask whether to upgrade using the installation's supported update path.
+Ask whether to upgrade using the installation's supported update
+path.
 
 **Parameters**
 
@@ -563,7 +608,8 @@ def check_main(
 ) -> None
 ```
 
-Ask the address Alto came from for the newest commit on its main branch and compare it with the one that is running.
+Ask the address Alto came from for the newest commit on its main
+branch and compare it with the one that is running.
 
 **Parameters**
 
@@ -589,7 +635,8 @@ def install(
 ) -> None
 ```
 
-Install a release, or the newest commit of the main branch, showing the progress, and restart if it worked.
+Install a release, or the newest commit of the main branch, showing
+the progress, and restart if it worked.
 
 **Parameters**
 
@@ -616,7 +663,8 @@ def update_package(
 ) -> None
 ```
 
-Replace a packaged copy after the user agrees: download and check it, say that Alto will restart, and hand over.
+Replace a packaged copy after the user agrees: download and check
+it, say that Alto will restart, and hand over.
 
 **Parameters**
 

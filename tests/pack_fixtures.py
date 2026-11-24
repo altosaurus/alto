@@ -1,11 +1,17 @@
 """
-Make the recordings, pictures and icons of the example plugins that the plugin tests install, read and edit.
+Make the recordings, pictures and icons of the example plugins that the
+plugin tests install, read and edit.
 
-The packs' manifests are kept in `tests/packs/`, but their recordings, photographs and icons are not: the real ones are in the
-tutorial repositories, and the plugin's author provides them. The tests only need sound files of the right names, lengths and
-pitches, pictures of the right size, and icons that Alto accepts. This module writes a plucked sine tone for each pitch a
-manifest names, a plain picture for each photograph and a plain icon for each tile icon, the first time it is asked, and
-`.gitignore` keeps the files out of the repository. A pack's `image-sizes.json` gives the pixel size of each picture, because the
+The packs' manifests are kept in `tests/packs/`, but their recordings,
+photographs and icons are not: the real ones are in the
+tutorial repositories, and the plugin's author provides them. The tests
+only need sound files of the right names, lengths and
+pitches, pictures of the right size, and icons that Alto accepts. This
+module writes a plucked sine tone for each pitch a
+manifest names, a plain picture for each photograph and a plain icon for
+each tile icon, the first time it is asked, and
+`.gitignore` keeps the files out of the repository. A pack's
+`image-sizes.json` gives the pixel size of each picture, because the
 manifest's points and regions are checked against it.
 """
 
@@ -23,10 +29,12 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QColor, QImage, QPainter, QPen, QPolygonF
 
 RATE = 32_000  # the rate of the recordings the packs ship
-# A plain tile icon: a ring, with the even-odd fill rule that the icon reader keeps.
+# A plain tile icon: a ring, with the even-odd fill rule that the icon
+# reader keeps.
 ICON = (
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
-    '<path fill-rule="evenodd" d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>\n'
+    '<path fill-rule="evenodd" d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 '
+    '0-16zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>\n'
 )
 
 
@@ -52,7 +60,9 @@ def midi(name: str) -> int:
     match = re.fullmatch(r"([A-G])([#b]?)(-?\d+)", name)
     assert match is not None, name
     letter, accidental, octave = match.groups()
-    semitone = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}[letter] + {"#": 1, "b": -1, "": 0}[accidental]
+    semitone = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}[
+        letter
+    ] + {"#": 1, "b": -1, "": 0}[accidental]
     return 12 * (int(octave) + 1) + semitone
 
 
@@ -85,17 +95,27 @@ def tone(pitch: str, *, seconds: float) -> bytes:
         attack = min(1.0, time / 0.004)
         fade = min(1.0, (seconds - time) / 0.05)
         samples.append(
-            round(0.5 * 32767 * attack * fade * math.exp(-3 * time / seconds) * math.sin(2 * math.pi * frequency * time)),
+            round(
+                0.5
+                * 32767
+                * attack
+                * fade
+                * math.exp(-3 * time / seconds)
+                * math.sin(2 * math.pi * frequency * time),
+            ),
         )
     return struct.pack(f"<{count}h", *samples)
 
 
 def staging(folder: Path) -> Path:
     """
-    Give this process a folder beside a pack's to write a file in before moving it into the pack.
+    Give this process a folder beside a pack's to write a file in before
+    moving it into the pack.
 
-    Another test process may be zipping or copying the pack at the same moment. A file is moved into the pack only once it is
-    written, in one step, so nothing ever finds one half written there. The folder is beside the pack, on the same disk, so the
+    Another test process may be zipping or copying the pack at the same
+    moment. A file is moved into the pack only once it is
+    written, in one step, so nothing ever finds one half written there.
+    The folder is beside the pack, on the same disk, so the
     move is a rename.
 
     Parameters
@@ -113,7 +133,9 @@ def staging(folder: Path) -> Path:
     >>> import tempfile
     >>> with tempfile.TemporaryDirectory() as tmp:
     ...     place = staging(Path(tmp) / "viola")
-    ...     place.parent == Path(tmp) and place.is_dir()
+    ...     place.parent == Path(
+    ...         tmp
+    ...     ) and place.is_dir()
     True
     """
     place = folder.parent / f".{folder.name}.{os.getpid()}.part"
@@ -123,7 +145,8 @@ def staging(folder: Path) -> Path:
 
 def ensure_sounds(folder: Path, *, seconds: float) -> None:
     """
-    Write the recording of every pitch the folder's manifest names, unless it is there already.
+    Write the recording of every pitch the folder's manifest names,
+    unless it is there already.
 
     Parameters
     ----------
@@ -136,7 +159,12 @@ def ensure_sounds(folder: Path, *, seconds: float) -> None:
     --------
     >>> import tempfile
     >>> with tempfile.TemporaryDirectory() as tmp:
-    ...     _ = (Path(tmp) / "pack.json").write_text('{"instruments": [{"samples": {"A4": "sounds/A4.wav"}}]}')
+    ...     _ = (
+    ...         Path(tmp) / "pack.json"
+    ...     ).write_text(
+    ...         '{"instruments": [{"samples": {"A4": '
+    ...         '"sounds/A4.wav"}}]}'
+    ...     )
     ...     ensure_sounds(Path(tmp), seconds=0.1)
     ...     (Path(tmp) / "sounds/A4.wav").is_file()
     True
@@ -154,47 +182,86 @@ def ensure_sounds(folder: Path, *, seconds: float) -> None:
                 sound.setsampwidth(2)
                 sound.setframerate(RATE)
                 sound.writeframes(tone(pitch, seconds=seconds))
-            partial.replace(target)  # when tests run in several processes, one of them wins and the rest find the finished file
+            partial.replace(
+                target,
+                # when tests run in several processes, one of them wins
+                # and
+                # the rest find the finished file
+            )
 
 
 def ensure_pictures(folder: Path) -> None:
     """
-    Write a plain picture of the right size for every photograph the folder's `image-sizes.json` lists, unless it is there.
+    Write a plain picture of the right size for every photograph the
+    folder's `image-sizes.json` lists, unless it is there.
 
-    A photograph that an instrument's strings are calibrated on gets a dark band under them, where the neck would be, because
-    some tests look at what is drawn over the neck. Another photograph is a different shade, so that views differ.
+    A photograph that an instrument's strings are calibrated on gets a
+    dark band under them, where the neck would be, because
+    some tests look at what is drawn over the neck. Another photograph
+    is a different shade, so that views differ.
 
     Parameters
     ----------
     folder : Path
-        An example pack's folder, holding `pack.json` and `image-sizes.json`.
+        An example pack's folder, holding `pack.json` and
+        `image-sizes.json`.
 
     Examples
     --------
     >>> import tempfile
     >>> with tempfile.TemporaryDirectory() as tmp:
-    ...     _ = (Path(tmp) / "pack.json").write_text('{"instruments": []}')
-    ...     _ = (Path(tmp) / "image-sizes.json").write_text('{"images/a.png": [40, 30]}')
+    ...     _ = (
+    ...         Path(tmp) / "pack.json"
+    ...     ).write_text('{"instruments": []}')
+    ...     _ = (
+    ...         Path(tmp) / "image-sizes.json"
+    ...     ).write_text(
+    ...         '{"images/a.png": [40, 30]}'
+    ...     )
     ...     ensure_pictures(Path(tmp))
-    ...     QImage(str(Path(tmp) / "images/a.png")).size().width()
+    ...     QImage(
+    ...         str(Path(tmp) / "images/a.png")
+    ...     ).size().width()
     40
     """
-    sizes = json.loads((folder / "image-sizes.json").read_text(encoding="utf-8"))
+    sizes = json.loads(
+        (folder / "image-sizes.json").read_text(encoding="utf-8"),
+    )
     manifest = json.loads((folder / "pack.json").read_text(encoding="utf-8"))
-    necks = {instrument["image"]: instrument["strings"] for instrument in manifest["instruments"] if instrument.get("strings")}
+    necks = {
+        instrument["image"]: instrument["strings"]
+        for instrument in manifest["instruments"]
+        if instrument.get("strings")
+    }
     for number, (relative, (width, height)) in enumerate(sizes.items()):
         target = folder / relative
         if target.is_file():
             continue
         target.parent.mkdir(parents=True, exist_ok=True)
         picture = QImage(width, height, QImage.Format.Format_RGB32)
-        picture.fill(QColor("#c8c8c8" if relative in necks else f"#{0xA0 + 16 * number:02x}a0a0"))
+        picture.fill(
+            QColor(
+                "#c8c8c8"
+                if relative in necks
+                else f"#{0xA0 + 16 * number:02x}a0a0",
+            ),
+        )
         if relative in necks:
             first, last = necks[relative][0], necks[relative][-1]
-            band = QPolygonF([QPointF(*first["nut"]), QPointF(*first["bridge"]), QPointF(*last["bridge"]), QPointF(*last["nut"])])
+            band = QPolygonF(
+                [
+                    QPointF(*first["nut"]),
+                    QPointF(*first["bridge"]),
+                    QPointF(*last["bridge"]),
+                    QPointF(*last["nut"]),
+                ],
+            )
             painter = QPainter(picture)
             painter.setBrush(QColor("#101010"))
-            pen = QPen(QColor("#101010"), 28)  # a few pixels of margin around the strings
+            pen = QPen(
+                QColor("#101010"),
+                28,
+            )  # a few pixels of margin around the strings
             pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
             painter.setPen(pen)
             painter.drawPolygon(band)
@@ -206,9 +273,11 @@ def ensure_pictures(folder: Path) -> None:
 
 def ensure_icons(folder: Path) -> None:
     """
-    Write a plain icon for every tile icon the folder's manifest names, unless it is there already.
+    Write a plain icon for every tile icon the folder's manifest names,
+    unless it is there already.
 
-    The real icons belong to the plugin and its author. The tests only need files that Alto accepts as icons.
+    The real icons belong to the plugin and its author. The tests only
+    need files that Alto accepts as icons.
 
     Parameters
     ----------
@@ -219,14 +288,29 @@ def ensure_icons(folder: Path) -> None:
     --------
     >>> import tempfile
     >>> with tempfile.TemporaryDirectory() as tmp:
-    ...     text = '{"exercises": [{"icon": "icons/a.svg"}], "lessons": [{"icon": "icons/b.svg"}]}'
-    ...     _ = (Path(tmp) / "pack.json").write_text(text)
+    ...     text = (
+    ...         '{"exercises": [{"icon": "icons/a.svg"}], "lessons": '
+    ...         '[{"icon": "icons/b.svg"}]}'
+    ...     )
+    ...     _ = (
+    ...         Path(tmp) / "pack.json"
+    ...     ).write_text(text)
     ...     ensure_icons(Path(tmp))
-    ...     sorted(path.name for path in (Path(tmp) / "icons").iterdir())
+    ...     sorted(
+    ...         path.name
+    ...         for path in (
+    ...             Path(tmp) / "icons"
+    ...         ).iterdir()
+    ...     )
     ['a.svg', 'b.svg']
     """
     manifest = json.loads((folder / "pack.json").read_text(encoding="utf-8"))
-    wanted = {item["icon"] for key in ("exercises", "lessons") for item in manifest.get(key, []) if "icon" in item}
+    wanted = {
+        item["icon"]
+        for key in ("exercises", "lessons")
+        for item in manifest.get(key, [])
+        if "icon" in item
+    }
     for relative in wanted:
         target = folder / relative
         if target.is_file():

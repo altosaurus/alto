@@ -21,9 +21,13 @@ from alto.ui.style import app_style
 
 
 @pytest.mark.parametrize("dark", [False, True])
-def test_popup_corners_are_clipped_after_opening_resizing_and_scrolling(app: QApplication, dark: bool) -> None:
+def test_popup_corners_are_clipped_after_opening_resizing_and_scrolling(
+    app: QApplication,
+    dark: bool,
+) -> None:
     """
-    Round the outer popup window in light and dark palettes while preserving scrolling and the field value.
+    Round the outer popup window in light and dark palettes while
+    preserving scrolling and the field value.
 
     Parameters
     ----------
@@ -34,8 +38,14 @@ def test_popup_corners_are_clipped_after_opening_resizing_and_scrolling(app: QAp
     """
     host = QWidget()
     palette = host.palette()
-    palette.setColor(QPalette.ColorRole.Base, QColor("#202124" if dark else "#ffffff"))
-    palette.setColor(QPalette.ColorRole.Text, QColor("#f5f5f5" if dark else "#202124"))
+    palette.setColor(
+        QPalette.ColorRole.Base,
+        QColor("#202124" if dark else "#ffffff"),
+    )
+    palette.setColor(
+        QPalette.ColorRole.Text,
+        QColor("#f5f5f5" if dark else "#202124"),
+    )
     host.setPalette(palette)
     host.setStyleSheet(app_style(palette))
     picker = FieldComboBox()
@@ -54,12 +64,16 @@ def test_popup_corners_are_clipped_after_opening_resizing_and_scrolling(app: QAp
     assert picker.property("field")
     assert not popup.mask().isEmpty()
     assert not popup.mask().contains(QPoint(0, 0))
-    assert not popup.mask().contains(QPoint(popup.width() - 1, popup.height() - 1))
+    assert not popup.mask().contains(
+        QPoint(popup.width() - 1, popup.height() - 1),
+    )
     assert popup.mask().contains(popup.rect().center())
     popup.resize(popup.width() + 10, popup.height() + 10)
     app.processEvents()
     assert popup.mask().boundingRect() == popup.rect()
-    assert not popup.mask().contains(QPoint(popup.width() - 1, popup.height() - 1))
+    assert not popup.mask().contains(
+        QPoint(popup.width() - 1, popup.height() - 1),
+    )
     picker.view().scrollToBottom()
     assert picker.view().verticalScrollBar().value() > 0
     assert picker.currentText() == "0"

@@ -13,12 +13,19 @@ MINIMUM = 40
 @dataclass(frozen=True)
 class ResponseTimes:
     """
-    Sorted millisecond timings and the profile's fastest and slowest tail percentages.
+    Sorted millisecond timings and the profile's fastest and slowest
+    tail percentages.
 
     Examples
     --------
-    >>> sample = ResponseTimes(tuple(range(1, 101)), 15, 15)
-    >>> sample.grade(1).name, sample.grade(50).name, sample.grade(100).name
+    >>> sample = ResponseTimes(
+    ...     tuple(range(1, 101)), 15, 15
+    ... )
+    >>> (
+    ...     sample.grade(1).name,
+    ...     sample.grade(50).name,
+    ...     sample.grade(100).name,
+    ... )
     ('Easy', 'Good', 'Hard')
     """
 
@@ -45,7 +52,8 @@ class ResponseTimes:
 
     def percentile(self, percent: int) -> float:
         """
-        Interpolate a percentile between adjacent observations in a nonempty sample.
+        Interpolate a percentile between adjacent observations in a
+        nonempty sample.
 
         Parameters
         ----------
@@ -59,16 +67,24 @@ class ResponseTimes:
 
         Examples
         --------
-        >>> ResponseTimes((1000, 2000), 15, 15).percentile(25)
+        >>> ResponseTimes(
+        ...     (1000, 2000), 15, 15
+        ... ).percentile(25)
         1250.0
         """
         index, remainder = divmod((len(self.times) - 1) * percent, 100)
         lower = self.times[index]
-        return lower + (self.times[min(index + 1, len(self.times) - 1)] - lower) * remainder / 100
+        return (
+            lower
+            + (self.times[min(index + 1, len(self.times) - 1)] - lower)
+            * remainder
+            / 100
+        )
 
     def grade(self, milliseconds: int) -> Rating:
         """
-        Grade a correct first answer against earlier answers to this exercise.
+        Grade a correct first answer against earlier answers to this
+        exercise.
 
         Parameters
         ----------
@@ -78,16 +94,23 @@ class ResponseTimes:
         Returns
         -------
         Rating
-            Hard for slow answers, Easy for fast answers, and Good for ties or missing timings.
+            Hard for slow answers, Easy for fast answers, and Good for
+            ties or missing timings.
 
         Examples
         --------
-        >>> ResponseTimes((1000,) * 40, 15, 15).grade(1000).name
+        >>> ResponseTimes((1000,) * 40, 15, 15).grade(
+        ...     1000
+        ... ).name
         'Good'
         """
         if self.ready and milliseconds > 0:
-            if self.easy_percent and milliseconds < self.percentile(self.easy_percent):
+            if self.easy_percent and milliseconds < self.percentile(
+                self.easy_percent,
+            ):
                 return Rating.Easy
-            if self.hard_percent and milliseconds > self.percentile(100 - self.hard_percent):
+            if self.hard_percent and milliseconds > self.percentile(
+                100 - self.hard_percent,
+            ):
                 return Rating.Hard
         return Rating.Good

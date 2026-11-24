@@ -17,7 +17,8 @@ PackString(
 )
 ```
 
-One open pitch with its nut and bridge locations in the original image pixels.
+One open pitch with its nut and bridge locations in the original
+image pixels.
 
 ### PackString.point
 
@@ -40,7 +41,8 @@ AnswerAnimation(
 )
 ```
 
-An author-supplied animated overlay and its alignment on the instrument.
+An author-supplied animated overlay and its alignment on the
+instrument.
 
 ## PackView
 
@@ -52,7 +54,8 @@ PackView(
 )
 ```
 
-Another picture of an instrument, such as its back, with its own pixel size.
+Another picture of an instrument, such as its back, with its own
+pixel size.
 
 ## PackKeyboard
 
@@ -64,7 +67,8 @@ PackKeyboard(
 )
 ```
 
-One keyboard of an instrument, drawn by Alto from the range of keys the plugin gives it.
+One keyboard of an instrument, drawn by Alto from the range of keys
+the plugin gives it.
 
 **Attributes**
 
@@ -122,7 +126,12 @@ Report whether a pitch is a key on this keyboard.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> board = PackKeyboard("M", "C4", "E4")
->>> board.has("C#4"), board.has("E#4"), board.has("F4"), board.has("Db4")
+>>> (
+...     board.has("C#4"),
+...     board.has("E#4"),
+...     board.has("F4"),
+...     board.has("Db4"),
+... )
 (True, False, False, False)
 ```
 
@@ -135,7 +144,8 @@ PackKeyboardStyle(
 )
 ```
 
-How a plugin's keyboards look: the colors of the keys and case, and the proportions of the keys.
+How a plugin's keyboards look: the colors of the keys and case, and
+the proportions of the keys.
 
 **Attributes**
 
@@ -145,7 +155,10 @@ How a plugin's keyboards look: the colors of the keys and case, and the proporti
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> style = PackKeyboardStyle((("cap", "#eee3c8"),), (("length", 4.5),))
+>>> style = PackKeyboardStyle(
+...     (("cap", "#eee3c8"),),
+...     (("length", 4.5),),
+... )
 >>> dict(style.colors), dict(style.numbers)
 ({'cap': '#eee3c8'}, {'length': 4.5})
 ```
@@ -178,10 +191,18 @@ Validate the optional look of an instrument's keyboards.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> read_keyboard_style(None, where="pack.v.va") is None
+>>> read_keyboard_style(
+...     None, where="pack.v.va"
+... ) is None
 True
 >>> # noinspection PyUnresolvedReferences
->>> read_keyboard_style({"cap": "#eee3c8", "white": ["#2a211c", "#120d0a"]}, where="pack.v.va").colors[1]
+>>> read_keyboard_style(
+...     {
+...         "cap": "#eee3c8",
+...         "white": ["#2a211c", "#120d0a"],
+...     },
+...     where="pack.v.va",
+... ).colors[1]
 ('white', ('#2a211c', '#120d0a'))
 ```
 
@@ -225,8 +246,18 @@ Find one of the instrument's keyboards by name.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> keys = PackKeyboard("Manual", "C4", "E4")
->>> board = PackInstrument("pack.x.y", Path("a.png"), (10, 20), (), None, keyboards=(keys,))
->>> board.keyboard("Manual") is keys, board.keyboard("Pedals")
+>>> board = PackInstrument(
+...     "pack.x.y",
+...     Path("a.png"),
+...     (10, 20),
+...     (),
+...     None,
+...     keyboards=(keys,),
+... )
+>>> (
+...     board.keyboard("Manual") is keys,
+...     board.keyboard("Pedals"),
+... )
 (True, None)
 ```
 
@@ -236,7 +267,8 @@ Find one of the instrument's keyboards by name.
 def picture(view: str = '') -> tuple[Path, tuple[int, int]] | None
 ```
 
-Find the picture for a view: the instrument's main picture for an empty name, otherwise the named extra picture.
+Find the picture for a view: the instrument's main picture for
+an empty name, otherwise the named extra picture.
 
 **Parameters**
 
@@ -249,10 +281,24 @@ Find the picture for a view: the instrument's main picture for an empty name, ot
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> back = PackView("back", Path("back.png"), (30, 40))
->>> board = PackInstrument("pack.x.y", Path("front.png"), (10, 20), (), None, views=(back,))
->>> board.picture(), board.picture("back"), board.picture("side")
-((PosixPath('front.png'), (10, 20)), (PosixPath('back.png'), (30, 40)), None)
+>>> back = PackView(
+...     "back", Path("back.png"), (30, 40)
+... )
+>>> board = PackInstrument(
+...     "pack.x.y",
+...     Path("front.png"),
+...     (10, 20),
+...     (),
+...     None,
+...     views=(back,),
+... )
+>>> (
+...     board.picture(),
+...     board.picture("back"),
+...     board.picture("side"),
+... )
+((PosixPath('front.png'), (10, 20)), (PosixPath('back.png'),
+(30, 40)), None)
 ```
 
 ## identifier
@@ -297,11 +343,13 @@ PackFiles(
 )
 ```
 
-Resolve only manifest-declared assets, from a folder or the root of a ZIP.
+Resolve only manifest-declared assets, from a folder or the root of
+a ZIP.
 
 **Constructor**
 
-Keep folder assets in place and give ZIP assets private, generated filenames.
+Keep folder assets in place and give ZIP assets private,
+generated filenames.
 
 **Raises**
 
@@ -375,7 +423,8 @@ def read_sound_info(
 ) -> InstrumentInfo | None
 ```
 
-Validate the optional facts a pack gives about where its recordings came from.
+Validate the optional facts a pack gives about where its recordings
+came from.
 
 **Parameters**
 
@@ -394,10 +443,18 @@ Validate the optional facts a pack gives about where its recordings came from.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> info = read_sound_info({"summary": "A viola."}, where="pack.v.va", pack_name="Viola")
+>>> info = read_sound_info(
+...     {"summary": "A viola."},
+...     where="pack.v.va",
+...     pack_name="Viola",
+... )
 >>> info.source if info else None
 'Viola'
->>> read_sound_info(None, where="pack.v.va", pack_name="Viola") is None
+>>> read_sound_info(
+...     None,
+...     where="pack.v.va",
+...     pack_name="Viola",
+... ) is None
 True
 ```
 
@@ -411,7 +468,8 @@ def plain_text(
 ) -> bool
 ```
 
-Check that a manifest entry is nonblank plain text of a reasonable length.
+Check that a manifest entry is nonblank plain text of a reasonable
+length.
 
 **Parameters**
 
@@ -425,7 +483,11 @@ Check that a manifest entry is nonblank plain text of a reasonable length.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> plain_text("Name the note.", limit=40), plain_text("<b>Name</b>", limit=40), plain_text(None, limit=40)
+>>> (
+...     plain_text("Name the note.", limit=40),
+...     plain_text("<b>Name</b>", limit=40),
+...     plain_text(None, limit=40),
+... )
 (True, False, False)
 ```
 
@@ -461,7 +523,12 @@ Check one piece of plain text and return it trimmed.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> read_text("  Hello ", limit=10, what="title", where="lesson demo")
+>>> read_text(
+...     "  Hello ",
+...     limit=10,
+...     what="title",
+...     where="lesson demo",
+... )
 'Hello'
 ```
 
@@ -495,7 +562,9 @@ Validate a picture question's region to show.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> read_focus([0, 10, 200, 100], width=400, height=300)
+>>> read_focus(
+...     [0, 10, 200, 100], width=400, height=300
+... )
 (0.0, 10.0, 200.0, 100.0)
 ```
 
@@ -536,7 +605,8 @@ def read_icon(
 ) -> str
 ```
 
-Read a plugin's tile icon: a plain SVG of simple shapes, redrawn in the theme's ink.
+Read a plugin's tile icon: a plain SVG of simple shapes, redrawn in
+the theme's ink.
 
 **Parameters**
 
@@ -554,7 +624,8 @@ Read a plugin's tile icon: a plain SVG of simple shapes, redrawn in the theme's 
 **Examples**
 
 ```text
-The viola's icon is its own silhouette traced from the museum photograph.
+The viola's icon is its own silhouette traced from the museum
+photograph.
 ```
 
 ## read_picture_file
@@ -593,7 +664,8 @@ def read_views(
 ) -> tuple[PackView, ...]
 ```
 
-Validate the optional extra pictures of an instrument, such as a view of its back.
+Validate the optional extra pictures of an instrument, such as a
+view of its back.
 
 **Parameters**
 
@@ -613,7 +685,9 @@ Validate the optional extra pictures of an instrument, such as a view of its bac
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyTypeChecker
->>> read_views(None, files=None, where="pack.v.va")
+>>> read_views(
+...     None, files=None, where="pack.v.va"
+... )
 ()
 ```
 
@@ -627,7 +701,8 @@ def read_keyboards(
 ) -> tuple[PackKeyboard, ...]
 ```
 
-Validate the optional keyboards of an instrument, which Alto draws from their ranges.
+Validate the optional keyboards of an instrument, which Alto draws
+from their ranges.
 
 **Parameters**
 
@@ -647,7 +722,16 @@ Validate the optional keyboards of an instrument, which Alto draws from their ra
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_keyboards(None, where="pack.v.va")
 ()
->>> read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], where="pack.v.va")[0].naturals
+>>> read_keyboards(
+...     [
+...         {
+...             "name": "Manual",
+...             "lowest": "C4",
+...             "highest": "E4",
+...         }
+...     ],
+...     where="pack.v.va",
+... )[0].naturals
 3
 ```
 
@@ -661,7 +745,8 @@ def read_positions(
 ) -> tuple[tuple[int, str], ...]
 ```
 
-Validate the optional named positions along a string, which label the ruler beside the fingerboard.
+Validate the optional named positions along a string, which label
+the ruler beside the fingerboard.
 
 **Parameters**
 
@@ -679,7 +764,13 @@ Validate the optional named positions along a string, which label the ruler besi
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], where="pack.v.va")
+>>> read_positions(
+...     [
+...         {"name": "1st", "half_steps": 2},
+...         {"name": "2nd", "half_steps": 3},
+...     ],
+...     where="pack.v.va",
+... )
 ((2, '1st'), (3, '2nd'))
 >>> read_positions(None, where="pack.v.va")
 ()
@@ -697,7 +788,8 @@ def read_instrument(
 ) -> PackInstrument
 ```
 
-Validate one declared instrument against its own artwork and recordings.
+Validate one declared instrument against its own artwork and
+recordings.
 
 **Returns**
 

@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-"""Build hits.png for a curated score. Run with the project Python and the versioned excerpt directory as an argument."""
+"""
+Build hits.png for a curated score. Run with the project Python and the
+versioned excerpt directory as an argument.
+"""
 
 from __future__ import annotations
 
@@ -16,10 +19,13 @@ from PySide6.QtWidgets import QApplication
 
 def build_hit_map(folder: Path) -> QImage:
     """
-    Rasterize marker ownership from the same artwork used by the exercise.
+    Rasterize marker ownership from the same artwork used by the
+    exercise.
 
-    Each pass measures three components in the red, green, and blue channels. Black ink from surrounding music
-    still occludes the measured shapes. At crossings a foreground symbol takes precedence over a staff or ledger line.
+    Each pass measures three components in the red, green, and blue
+    channels. Black ink from surrounding music
+    still occludes the measured shapes. At crossings a foreground symbol
+    takes precedence over a staff or ledger line.
 
     Parameters
     ----------
@@ -29,7 +35,8 @@ def build_hit_map(folder: Path) -> QImage:
     Returns
     -------
     QImage
-        Sixteen-bit grayscale image. Zero denotes background and one is the first marker.
+        Sixteen-bit grayscale image. Zero denotes background and one is
+        the first marker.
 
     Raises
     ------
@@ -38,9 +45,12 @@ def build_hit_map(folder: Path) -> QImage:
 
     Examples
     --------
-    Run with QT_QPA_PLATFORM=offscreen when regenerating the maps on a headless system.
+    Run with QT_QPA_PLATFORM=offscreen when regenerating the maps on a
+    headless system.
     """
-    terms = json.loads((folder / "excerpt.json").read_text(encoding="utf-8"))["targets"]
+    terms = json.loads((folder / "excerpt.json").read_text(encoding="utf-8"))[
+        "targets"
+    ]
     svg = (folder / "score.svg").read_bytes()
     bounds = QSvgRenderer(QByteArray(svg)).viewBoxF()
     width = 1500
@@ -51,15 +61,30 @@ def build_hit_map(folder: Path) -> QImage:
     for first in range(0, len(terms), 3):
         data = svg
         batch = terms[first : first + 3]
-        for index, color in enumerate(("red", "lime", "blue")[: len(batch)], first):
+        for index, color in enumerate(
+            ("red", "lime", "blue")[: len(batch)],
+            first,
+        ):
             marker = f'id="mark-{index}"'.encode()
             if data.count(marker) != 1:
-                raise ValueError(f"Expected one SVG element named mark-{index} in {folder}")
-            data = data.replace(marker, marker + f' fill="{color}" color="{color}"'.encode())
+                raise ValueError(
+                    f"Expected one SVG element named mark-{index} in {folder}",
+                )
+            data = data.replace(
+                marker,
+                marker + f' fill="{color}" color="{color}"'.encode(),
+            )
         image.fill(QColor("black"))
         with QPainter(image) as painter:
-            QSvgRenderer(QByteArray(data)).render(painter, QRectF(image.rect()))
-        pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(height, width, 4)
+            QSvgRenderer(QByteArray(data)).render(
+                painter,
+                QRectF(image.rect()),
+            )
+        pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(
+            height,
+            width,
+            4,
+        )
         for channel, term in enumerate(batch):
             coverage = pixels[:, :, channel]
             if term in {"Staff line", "Ledger line"}:
@@ -69,7 +94,13 @@ def build_hit_map(folder: Path) -> QImage:
             strongest[visible] = coverage[visible]
     if set(np.unique(ids)) != set(range(len(terms) + 1)):
         raise ValueError(f"Every marker in {folder} needs visible ink")
-    return QImage(ids.data, width, height, ids.strides[0], QImage.Format.Format_Grayscale16).copy()
+    return QImage(
+        ids.data,
+        width,
+        height,
+        ids.strides[0],
+        QImage.Format.Format_Grayscale16,
+    ).copy()
 
 
 if __name__ == "__main__":

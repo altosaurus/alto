@@ -1,10 +1,13 @@
 """
-The Plugins dialog: the installed plugins on the left, and the buttons that add or remove one on the right.
+The Plugins dialog: the installed plugins on the left, and the buttons
+that add or remove one on the right.
 
 Examples
 --------
 >>> from pathlib import Path
->>> PluginsDialog(Path("no-such-plugins-folder")).windowTitle()
+>>> PluginsDialog(
+...     Path("no-such-plugins-folder")
+... ).windowTitle()
 'Plugins'
 """
 
@@ -45,9 +48,11 @@ ROW_HEIGHT = 32  # pixels: one line of text with the list style's padding
 
 class PluginsDialog(QDialog):
     """
-    List the installed plugins and offer to install one from a file or uninstall the selected one.
+    List the installed plugins and offer to install one from a file or
+    uninstall the selected one.
 
-    Registered releases are downloaded in the background. The parent window handles local file installs, removal, and restarts.
+    Registered releases are downloaded in the background. The parent
+    window handles local file installs, removal, and restarts.
 
     Attributes
     ----------
@@ -58,7 +63,8 @@ class PluginsDialog(QDialog):
     install_button : QPushButton
         Asks for a plugin to install from a ZIP file.
     uninstall_button : QPushButton
-        Asks to remove the selected plugin. Disabled while nothing is selected.
+        Asks to remove the selected plugin. Disabled while nothing is
+        selected.
     empty : QLabel
         The message shown inside the list while no plugin is installed.
     problems : QLabel
@@ -66,13 +72,19 @@ class PluginsDialog(QDialog):
     install_requested : Signal
         Emitted when Install is pressed.
     uninstall_requested : Signal
-        Emitted with the selected InstalledPlugin when Uninstall is pressed.
+        Emitted with the selected InstalledPlugin when Uninstall is
+        pressed.
 
     Examples
     --------
     >>> from pathlib import Path
-    >>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
-    >>> dialog.list.count(), dialog.uninstall_button.isEnabled()
+    >>> dialog = PluginsDialog(
+    ...     Path("no-such-plugins-folder")
+    ... )
+    >>> (
+    ...     dialog.list.count(),
+    ...     dialog.uninstall_button.isEnabled(),
+    ... )
     (0, False)
     """
 
@@ -94,7 +106,9 @@ class PluginsDialog(QDialog):
         Examples
         --------
         >>> from pathlib import Path
-        >>> PluginsDialog(Path("no-such-plugins-folder")).minimumWidth() > 0
+        >>> PluginsDialog(
+        ...     Path("no-such-plugins-folder")
+        ... ).minimumWidth() > 0
         True
         """
         super().__init__(parent)
@@ -114,14 +128,17 @@ class PluginsDialog(QDialog):
         heading = QLabel("<b>Installed plugins</b>")
         left.addWidget(heading)
         self.list = QListWidget()
-        self.list.setObjectName("categories")  # the rounded list style used in the settings dialog
+        self.list.setObjectName(
+            "categories",
+        )  # the rounded list style used in the settings dialog
         self.list.setAccessibleName("Installed plugins")
         self.list.setSpacing(2)
         self.list.currentItemChanged.connect(lambda *_: self._update_buttons())
         self.empty = QLabel("No plugins are installed.", self.list)
         self.empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.empty.setStyleSheet("color: gray; background: transparent;")
-        # The message sits inside the list's frame, so the box looks the same with or without plugins.
+        # The message sits inside the list's frame, so the box looks the
+        # same with or without plugins.
         frame = QVBoxLayout(self.list)
         frame.addWidget(self.empty)
         left.addWidget(self.list, 1)
@@ -133,7 +150,9 @@ class PluginsDialog(QDialog):
 
         right = QVBoxLayout()
         right.setSpacing(8)
-        right.addSpacing(heading.sizeHint().height() + 6)  # level the first button with the top of the list
+        right.addSpacing(
+            heading.sizeHint().height() + 6,
+        )  # level the first button with the top of the list
         self.code_button = QPushButton("Install plugin by code…")
         self.code_button.clicked.connect(self._ask_code)
         right.addWidget(self.code_button)
@@ -146,7 +165,9 @@ class PluginsDialog(QDialog):
         self.update_button.clicked.connect(self._update_selected)
         right.addWidget(self.update_button)
         self.uninstall_button = QPushButton("Uninstall plugin")
-        self.uninstall_button.setToolTip("Move the selected plugin to the system trash")
+        self.uninstall_button.setToolTip(
+            "Move the selected plugin to the system trash",
+        )
         self.uninstall_button.setAccessibleName("Uninstall plugin")
         self.uninstall_button.clicked.connect(self._uninstall)
         right.addWidget(self.uninstall_button)
@@ -160,7 +181,9 @@ class PluginsDialog(QDialog):
         layout.addWidget(self.status)
         self.status.hide()
         buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
-        self.close_button = buttons.button(QDialogButtonBox.StandardButton.Close)
+        self.close_button = buttons.button(
+            QDialogButtonBox.StandardButton.Close,
+        )
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
         self.refresh()
@@ -177,7 +200,9 @@ class PluginsDialog(QDialog):
         Examples
         --------
         >>> from pathlib import Path
-        >>> PluginsDialog(Path("no-such-plugins-folder")).selected() is None
+        >>> PluginsDialog(
+        ...     Path("no-such-plugins-folder")
+        ... ).selected() is None
         True
         """
         item = self.list.currentItem()
@@ -185,12 +210,15 @@ class PluginsDialog(QDialog):
 
     def refresh(self) -> None:
         """
-        Read the plugins folder again and keep the same plugin selected if it is still there.
+        Read the plugins folder again and keep the same plugin selected
+        if it is still there.
 
         Examples
         --------
         >>> from pathlib import Path
-        >>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
+        >>> dialog = PluginsDialog(
+        ...     Path("no-such-plugins-folder")
+        ... )
         >>> dialog.refresh()
         >>> dialog.empty.isHidden()
         False
@@ -202,7 +230,9 @@ class PluginsDialog(QDialog):
             item = QListWidgetItem(plugin.title)
             item.setData(Qt.ItemDataRole.UserRole, plugin)
             item.setToolTip(str(plugin.path))
-            item.setSizeHint(QSize(0, px(ROW_HEIGHT)))  # room for the name, the same for every row
+            item.setSizeHint(
+                QSize(0, px(ROW_HEIGHT)),
+            )  # room for the name, the same for every row
             self.list.addItem(item)
             if keep is not None and plugin.path == keep.path:
                 self.list.setCurrentItem(item)
@@ -220,7 +250,9 @@ class PluginsDialog(QDialog):
         Examples
         --------
         >>> from pathlib import Path
-        >>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
+        >>> dialog = PluginsDialog(
+        ...     Path("no-such-plugins-folder")
+        ... )
         >>> dialog._update_buttons()
         >>> dialog.uninstall_button.isEnabled()
         False
@@ -230,13 +262,19 @@ class PluginsDialog(QDialog):
         self.install_button.setEnabled(not self._busy)
         self.close_button.setEnabled(not self._busy)
         self.update_button.setEnabled(
-            not self._busy and selected is not None and selected.path == selected.manifest and not selected.path.is_symlink(),
+            not self._busy
+            and selected is not None
+            and selected.path == selected.manifest
+            and not selected.path.is_symlink(),
         )
-        self.uninstall_button.setEnabled(not self._busy and selected is not None)
+        self.uninstall_button.setEnabled(
+            not self._busy and selected is not None,
+        )
 
     def done(self, result: int) -> None:
         """
-        Keep the dialog available until a requested install or update finishes.
+        Keep the dialog available until a requested install or update
+        finishes.
 
         Parameters
         ----------
@@ -247,33 +285,59 @@ class PluginsDialog(QDialog):
             super().done(result)
 
     def _ask_code(self) -> None:
-        """Start an installation when the user submits a registration code."""
-        code, accepted = QInputDialog.getText(self, "Install plugin by code", "Registration code")
+        """
+        Start an installation when the user submits a registration code.
+        """
+        code, accepted = QInputDialog.getText(
+            self,
+            "Install plugin by code",
+            "Registration code",
+        )
         if accepted and code.strip():
             self._start_release(code, selected=None)
 
     def _update_selected(self) -> None:
-        """Check the current ZIP against the latest release in its registered repository."""
+        """
+        Check the current ZIP against the latest release in its
+        registered repository.
+        """
         selected = self.selected()
         if selected is not None:
             self._start_release("", selected=selected)
 
-    def _start_release(self, code: str, *, selected: InstalledPlugin | None) -> None:
-        """Resolve and install the release on a worker while the dialog remains responsive."""
+    def _start_release(
+        self,
+        code: str,
+        *,
+        selected: InstalledPlugin | None,
+    ) -> None:
+        """
+        Resolve and install the release on a worker while the dialog
+        remains responsive.
+        """
         self._busy = True
         self._update_buttons()
-        self.status.setText("Checking the plugin registry and downloading the latest release…")
+        self.status.setText(
+            "Checking the plugin registry and downloading the latest release…",
+        )
         self.status.show()
 
         run_in_background(
-            lambda: install_registered(code, folder=self.folder, selected=selected),
+            lambda: install_registered(
+                code,
+                folder=self.folder,
+                selected=selected,
+            ),
             owner=self,
             done=lambda result: self._finish_release(result, ""),
             failed=lambda error: self._finish_release(None, str(error)),
         )
 
     def _finish_release(self, result: str | None, error: str) -> None:  # noqa: PLR0917 (Qt signal arguments)
-        """Show the result, refresh the installed list, and offer a restart after a change."""
+        """
+        Show the result, refresh the installed list, and offer a restart
+        after a change.
+        """
         self._busy = False
         self.refresh()
         if error:
@@ -281,19 +345,28 @@ class PluginsDialog(QDialog):
         elif result is None:
             self.status.setText("This plugin is already up to date.")
         else:
-            self.status.setText(f"Installed {result}. Restart Alto to use this release.")
-            answer = QMessageBox.question(self, "Plugin installed", f"<p>Installed {escape(result)}. Restart Alto now?</p>")
+            self.status.setText(
+                f"Installed {result}. Restart Alto to use this release.",
+            )
+            answer = QMessageBox.question(
+                self,
+                "Plugin installed",
+                f"<p>Installed {escape(result)}. Restart Alto now?</p>",
+            )
             if answer == QMessageBox.StandardButton.Yes:
                 self.restart_requested.emit()
 
     def _install(self) -> None:
         """
-        Ask for a plugin to be installed, then show the folder as it is afterwards.
+        Ask for a plugin to be installed, then show the folder as it is
+        afterwards.
 
         Examples
         --------
         >>> from pathlib import Path
-        >>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
+        >>> dialog = PluginsDialog(
+        ...     Path("no-such-plugins-folder")
+        ... )
         >>> dialog._install()
         >>> dialog.list.count()
         0
@@ -303,13 +376,17 @@ class PluginsDialog(QDialog):
 
     def _uninstall(self) -> None:
         """
-        Ask for the selected plugin to be uninstalled, then show the folder as it is afterwards.
+        Ask for the selected plugin to be uninstalled, then show the
+        folder as it is afterwards.
 
         Examples
         --------
         >>> from pathlib import Path
-        >>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
-        >>> dialog._uninstall()  # nothing selected, so nothing is requested
+        >>> dialog = PluginsDialog(
+        ...     Path("no-such-plugins-folder")
+        ... )
+        >>> # nothing selected, so nothing is requested
+        >>> dialog._uninstall()
         """
         plugin = self.selected()
         if plugin is not None:

@@ -1,13 +1,18 @@
 """
-Exporting a backup and importing one: the file dialogs, the questions asked, and the safety copy made before anything is replaced.
+Exporting a backup and importing one: the file dialogs, the questions
+asked, and the safety copy made before anything is replaced.
 
-Everything Alto keeps goes into a backup (the database and the saved preferences), and importing one replaces everything, so an
-import into a clean install leaves it as if nothing had changed. Before an import replaces what is there, a backup of that is
+Everything Alto keeps goes into a backup (the database and the saved
+preferences), and importing one replaces everything, so an
+import into a clean install leaves it as if nothing had changed. Before
+an import replaces what is there, a backup of that is
 saved next to the database, so a wrong choice can be undone.
 
 Examples
 --------
->>> default_name(now=0.0).endswith(".altobackup")
+>>> default_name(now=0.0).endswith(
+...     ".altobackup"
+... )
 True
 """
 
@@ -48,7 +53,8 @@ def default_name(*, now: float | None = None) -> str:
     Parameters
     ----------
     now : float or None, default None
-        The time as a timestamp; the clock is used if None. Keyword-only.
+        The time as a timestamp; the clock is used if None.
+        Keyword-only.
 
     Returns
     -------
@@ -57,7 +63,11 @@ def default_name(*, now: float | None = None) -> str:
 
     Examples
     --------
-    >>> default_name(now=datetime(2026, 11, 13, 12).timestamp())
+    >>> default_name(
+    ...     now=datetime(
+    ...         2026, 11, 13, 12
+    ...     ).timestamp()
+    ... )
     'alto-backup-2026-11-13.altobackup'
     """
     when = datetime.fromtimestamp(time.time() if now is None else now)
@@ -86,7 +96,10 @@ def counted(
 
     Examples
     --------
-    >>> counted(1, noun="profile"), counted(12345, noun="answer")
+    >>> (
+    ...     counted(1, noun="profile"),
+    ...     counted(12345, noun="answer"),
+    ... )
     ('1 profile', '12,345 answers')
     """
     return f"{number:,} {noun}" + ("" if number == 1 else "s")
@@ -94,7 +107,8 @@ def counted(
 
 def describe(info: BackupInfo) -> str:
     """
-    Say what a backup holds and when it was made, for the question asked before importing it.
+    Say what a backup holds and when it was made, for the question asked
+    before importing it.
 
     Parameters
     ----------
@@ -108,15 +122,29 @@ def describe(info: BackupInfo) -> str:
 
     Examples
     --------
-    >>> text = describe(BackupInfo(datetime(2026, 11, 13, 9, 30).timestamp(), app_version="0.1.0", schema_version=1,
-    ...                            profiles=2, attempts=1500))
+    >>> text = describe(
+    ...     BackupInfo(
+    ...         datetime(
+    ...             2026, 11, 13, 9, 30
+    ...         ).timestamp(),
+    ...         app_version="0.1.0",
+    ...         schema_version=1,
+    ...         profiles=2,
+    ...         attempts=1500,
+    ...     )
+    ... )
     >>> text
-    'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles and 1,500 answers.'
+    'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles
+    and 1,500 answers.'
     """
     when = datetime.fromtimestamp(info.created)
     return (
         f"Made on {when.day} {when:%B %Y, %H:%M} by Alto {info.app_version}. "
-        f"It holds {counted(info.profiles, noun='profile')} and {counted(info.attempts, noun='answer')}."
+        "It holds "
+        f"{counted(info.profiles, noun='profile')}"
+        " and "
+        f"{counted(info.attempts, noun='answer')}"
+        "."
     )
 
 
@@ -138,11 +166,14 @@ def export_backup(
     Returns
     -------
     Path or None
-        The file that was written, or None if the user canceled or the backup could not be written (which is explained).
+        The file that was written, or None if the user canceled or the
+        backup could not be written (which is explained).
 
     Examples
     --------
-    >>> export_backup(QWidget(), db=Database())  # doctest: +SKIP
+    >>> export_backup(
+    ...     QWidget(), db=Database()
+    ... )  # doctest: +SKIP
     PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
     """
     name, _ = QFileDialog.getSaveFileName(
@@ -164,7 +195,11 @@ def export_backup(
     QMessageBox.information(
         parent,
         EXPORT_TITLE,
-        f"Saved {counted(info.profiles, noun='profile')} and {counted(info.attempts, noun='answer')}, "
+        "Saved "
+        f"{counted(info.profiles, noun='profile')}"
+        " and "
+        f"{counted(info.attempts, noun='answer')}"
+        ", "
         f"with your settings, to:\n{path}",
     )
     return path
@@ -172,7 +207,8 @@ def export_backup(
 
 def safety_copy(db: Database) -> Path | None:
     """
-    Save a backup of what the database holds now, beside it, before it is replaced.
+    Save a backup of what the database holds now, beside it, before it
+    is replaced.
 
     Parameters
     ----------
@@ -182,7 +218,8 @@ def safety_copy(db: Database) -> Path | None:
     Returns
     -------
     Path or None
-        The file written, or None for a throwaway in-memory database, which has no folder to keep a copy in.
+        The file written, or None for a throwaway in-memory database,
+        which has no folder to keep a copy in.
 
     Raises
     ------
@@ -208,10 +245,13 @@ def import_backup(
     db: Database,
 ) -> bool:
     """
-    Ask for a backup file and, once the user has agreed, replace everything with what it holds.
+    Ask for a backup file and, once the user has agreed, replace
+    everything with what it holds.
 
-    The file is read and checked completely first, so a damaged or foreign file changes nothing. After the user agrees, a
-    backup of the current data is saved beside the database, then the database and the saved preferences are replaced. The
+    The file is read and checked completely first, so a damaged or
+    foreign file changes nothing. After the user agrees, a
+    backup of the current data is saved beside the database, then the
+    database and the saved preferences are replaced. The
     caller has to reload what is on screen afterwards.
 
     Parameters
@@ -224,11 +264,14 @@ def import_backup(
     Returns
     -------
     bool
-        True if the backup was applied; False if the user canceled or the file was refused (which is explained).
+        True if the backup was applied; False if the user canceled or
+        the file was refused (which is explained).
 
     Examples
     --------
-    >>> import_backup(QWidget(), db=Database())  # doctest: +SKIP
+    >>> import_backup(
+    ...     QWidget(), db=Database()
+    ... )  # doctest: +SKIP
     True
     """
     name, _ = QFileDialog.getOpenFileName(
@@ -245,14 +288,28 @@ def import_backup(
         QMessageBox.warning(parent, IMPORT_TITLE, str(error))
         return False
     if backup.info.profiles == 0:
-        QMessageBox.warning(parent, IMPORT_TITLE, "This backup has no profiles in it, so there is nothing to restore.")
+        QMessageBox.warning(
+            parent,
+            IMPORT_TITLE,
+            (
+                "This backup has no profiles in it, so there is nothing to"
+                " restore."
+            ),
+        )
         return False
-    kept = "A copy of what is there now is saved first, so this can be undone." if db.path != ":memory:" else ""
+    kept = (
+        "A copy of what is there now is saved first, so this can be undone."
+        if db.path != ":memory:"
+        else ""
+    )
     agreed = QMessageBox.question(
         parent,
         IMPORT_TITLE,
-        f"Replace everything in Alto with this backup?\n\n{describe(backup.info)}\n\n"
-        f"Your current profiles, history and settings will be replaced. {kept}",
+        "Replace everything in Alto with this backup?\n\n"
+        f"{describe(backup.info)}"
+        "\n\n"
+        "Your current profiles, history and settings will be replaced. "
+        f"{kept}",
         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         QMessageBox.StandardButton.No,
     )
@@ -262,12 +319,17 @@ def import_backup(
         saved = safety_copy(db)
         restore_database(db, backup=backup)
     except BackupError as error:
-        QMessageBox.warning(parent, IMPORT_TITLE, f"{error}\n\nNothing was changed.")
+        QMessageBox.warning(
+            parent,
+            IMPORT_TITLE,
+            f"{error}\n\nNothing was changed.",
+        )
         return False
     import_settings(backup.settings)
     QMessageBox.information(
         parent,
         IMPORT_TITLE,
-        "The backup has been imported." + (f"\n\nWhat was here before is kept in:\n{saved}" if saved else ""),
+        "The backup has been imported."
+        + (f"\n\nWhat was here before is kept in:\n{saved}" if saved else ""),
     )
     return True

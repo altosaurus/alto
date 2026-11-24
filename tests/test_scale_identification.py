@@ -1,5 +1,6 @@
 """
-Scale identification draws complete scales and keeps staff and scale signatures independent.
+Scale identification draws complete scales and keeps staff and scale
+signatures independent.
 """
 
 from __future__ import annotations
@@ -40,17 +41,25 @@ if TYPE_CHECKING:
 
 def test_every_clef_mode_and_scale_key_produces_the_written_scale() -> None:
     """
-    Check exact note spelling, ascending octaves, distinct choices and serialization across every selectable scale.
+    Check exact note spelling, ascending octaves, distinct choices and
+    serialization across every selectable scale.
     """
     cfg = settings.scale_identification
     rng = random.Random(31)
     for clef in settings.CLEFS:
         for mode in settings.KEY_MODES:
             for key in range(-7, 8):
-                cfg.clefs, cfg.modes, cfg.keys, cfg.staff_keys = {clef}, {mode}, {key}, {-key}
+                cfg.clefs, cfg.modes, cfg.keys, cfg.staff_keys = (
+                    {clef},
+                    {mode},
+                    {key},
+                    {-key},
+                )
                 q = ScaleIdentification().generate(rng)
                 notes = [chord[0] for chord in q.staff]
-                assert len(notes) == 8 and all(len(chord) == 1 for chord in q.staff)
+                assert len(notes) == 8 and all(
+                    len(chord) == 1 for chord in q.staff
+                )
                 assert q.clef == clef and q.key == -key
                 assert notes[0].name == mode_tonic(key, mode=mode).name
                 assert notes[:-1] == build(notes[0], intervals=SCALES[mode])
@@ -58,16 +67,27 @@ def test_every_clef_mode_and_scale_key_produces_the_written_scale() -> None:
                 assert notes[-1].midi - notes[0].midi == 12
                 assert notes[-1].accidental == notes[0].accidental
                 assert q.answer.startswith(notes[0].name + " ")
-                kind = "Major" if mode == "Major (Ionian)" else "minor" if mode == "Natural minor (Aeolian)" else mode
+                kind = (
+                    "Major"
+                    if mode == "Major (Ionian)"
+                    else "minor"
+                    if mode == "Natural minor (Aeolian)"
+                    else mode
+                )
                 assert all(choice.endswith(" " + kind) for choice in q.choices)
-                assert len(q.choices) == len(set(q.choices)) == 6 and q.check(q.answer)
+                assert len(q.choices) == len(set(q.choices)) == 6 and q.check(
+                    q.answer,
+                )
                 assert not q.caption and q.answer not in q.prompt
                 assert Question.from_dict(q.to_dict()) == q
 
 
-def test_settings_are_saved_loaded_and_isolated_from_construction(app: QApplication) -> None:
+def test_settings_are_saved_loaded_and_isolated_from_construction(
+    app: QApplication,
+) -> None:
     """
-    Edit the requested options and ensure only identification settings and its scheduler signature change.
+    Edit the requested options and ensure only identification settings
+    and its scheduler signature change.
 
     Parameters
     ----------
@@ -79,12 +99,19 @@ def test_settings_are_saved_loaded_and_isolated_from_construction(app: QApplicat
     panel = settings_panel_for(exercise)
     assert isinstance(panel, KeySignatureSettingsPanel)
     assert panel.cfg is settings.scale_identification
-    assert panel.staff_keys_row is not None and panel.staff_key_list is not None
+    assert (
+        panel.staff_keys_row is not None and panel.staff_key_list is not None
+    )
     assert panel.octave_row is None and panel.steps_row is None
-    motion = {button.text(): button for button in panel.findChildren(QRadioButton)}
+    motion = {
+        button.text(): button for button in panel.findChildren(QRadioButton)
+    }
     assert motion["Ascending"].isChecked()
     motion["Descending"].click()
-    assert motion["Descending"].isChecked() and not motion["Ascending"].isChecked()
+    assert (
+        motion["Descending"].isChecked()
+        and not motion["Ascending"].isChecked()
+    )
     panel.boxes["alto"].setChecked(True)
     panel.staff_key_list.boxes[-2].setChecked(True)
     panel.key_list.boxes[5].setChecked(False)
@@ -93,18 +120,30 @@ def test_settings_are_saved_loaded_and_isolated_from_construction(app: QApplicat
     settings.scale_identification.keys = set(range(-7, 8))
     settings.scale_identification.motion = "ascending"
     load_scale_identification()
-    assert settings.scale_identification.motion == "descending" and settings.scale_construction.motion == "ascending"
+    assert (
+        settings.scale_identification.motion == "descending"
+        and settings.scale_construction.motion == "ascending"
+    )
     assert settings.scale_identification.staff_keys == {0, -2}
-    assert "alto" in settings.scale_identification.clefs and 5 not in settings.scale_identification.keys
-    assert settings.scale_construction.staff_keys == {0} and 5 in settings.scale_construction.keys
+    assert (
+        "alto" in settings.scale_identification.clefs
+        and 5 not in settings.scale_identification.keys
+    )
+    assert (
+        settings.scale_construction.staff_keys == {0}
+        and 5 in settings.scale_construction.keys
+    )
     window = MainWindow()
     assert settings.scale_identification.staff_keys == {0, -2}
     window.close()
 
 
-def test_replacement_keeps_the_icon_and_shows_an_answerable_staff(app: QApplication) -> None:
+def test_replacement_keeps_the_icon_and_shows_an_answerable_staff(
+    app: QApplication,
+) -> None:
     """
-    Keep the existing scale icon and render an identification question with the normal answer controls.
+    Keep the existing scale icon and render an identification question
+    with the normal answer controls.
 
     Parameters
     ----------
@@ -121,7 +160,9 @@ def test_replacement_keeps_the_icon_and_shows_an_answerable_staff(app: QApplicat
     assert view.answered
 
 
-def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(app: QApplication) -> None:
+def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(
+    app: QApplication,
+) -> None:
     """
     Switch answer modes through Settings and submit a two-part answer.
 
@@ -137,7 +178,11 @@ def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(app: QAp
     assert count is not None
     count.setCurrentIndex(count.findData(4))
     assert len(exercise.generate(random.Random(3)).choices) == 4
-    all_buttons = next(button for button in panel.findChildren(QRadioButton) if button.text() == "All")
+    all_buttons = next(
+        button
+        for button in panel.findChildren(QRadioButton)
+        if button.text() == "All"
+    )
     all_buttons.click()
     load_scale_identification()
     assert settings.scale_identification.button_mode == "all"
@@ -145,7 +190,10 @@ def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(app: QAp
 
     view = ExerciseView(exercise, rng=random.Random(3))
     assert view.question is not None
-    assert len(view.question.choices) == 21 and len(view.question.octaves or []) == 7
+    assert (
+        len(view.question.choices) == 21
+        and len(view.question.octaves or []) == 7
+    )
     tonic, mode = view.question.answer.split(" ", 1)
     buttons = {button.text(): button for button in view.buttons}
     buttons[mode].click()
@@ -155,10 +203,18 @@ def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(app: QAp
     view.close()
 
 
-@pytest.mark.parametrize(("label", "answer"), [("Mode", "Major"), ("Key", "C")])
-def test_question_type_asks_for_one_part(app: QApplication, label: str, answer: str) -> None:
+@pytest.mark.parametrize(
+    ("label", "answer"),
+    [("Mode", "Major"), ("Key", "C")],
+)
+def test_question_type_asks_for_one_part(
+    app: QApplication,
+    label: str,
+    answer: str,
+) -> None:
     """
-    Save a question type and check that it accepts the requested part alone.
+    Save a question type and check that it accepts the requested part
+    alone.
 
     Parameters
     ----------
@@ -172,7 +228,11 @@ def test_question_type_asks_for_one_part(app: QApplication, label: str, answer: 
     exercise = ScaleIdentification()
     panel = settings_panel_for(exercise)
     assert isinstance(panel, KeySignatureSettingsPanel)
-    boxes = {box.text(): box for box in panel.findChildren(QCheckBox) if box.text() in {"Key", "Mode"}}
+    boxes = {
+        box.text(): box
+        for box in panel.findChildren(QCheckBox)
+        if box.text() in {"Key", "Mode"}
+    }
     assert all(box.isChecked() for box in boxes.values())
     boxes["Key" if label == "Mode" else "Mode"].click()
     assert boxes[label].isChecked() and not boxes[label].isEnabled()
@@ -188,7 +248,8 @@ def test_question_type_asks_for_one_part(app: QApplication, label: str, answer: 
 
 def test_empty_selections_have_usable_defaults() -> None:
     """
-    Generate a valid major scale in treble clef without a signature when nothing is selected.
+    Generate a valid major scale in treble clef without a signature when
+    nothing is selected.
     """
     cfg = settings.scale_identification
     cfg.clefs, cfg.modes, cfg.keys, cfg.staff_keys = set(), set(), set(), set()
@@ -199,13 +260,17 @@ def test_empty_selections_have_usable_defaults() -> None:
 
 def test_answer_buttons_use_only_selected_scale_types() -> None:
     """
-    Keep all answer choices within the selected scale types across repeated questions.
+    Keep all answer choices within the selected scale types across
+    repeated questions.
     """
     settings.scale_identification.modes = {"Dorian", "Mixolydian"}
     rng = random.Random(5)
     for _ in range(50):
         q = ScaleIdentification().generate(rng)
-        assert all(choice.split(" ", 1)[1] in {"Dorian", "Mixolydian"} for choice in q.choices)
+        assert all(
+            choice.split(" ", 1)[1] in {"Dorian", "Mixolydian"}
+            for choice in q.choices
+        )
         assert q.answer in q.choices
 
 
@@ -214,7 +279,8 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Highlight only the sounding note and keep the question until the audio completion callback.
+    Highlight only the sounding note and keep the question until the
+    audio completion callback.
 
     Parameters
     ----------
@@ -276,9 +342,15 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
         assert view.staff.note_color is None and not view._advance.isActive()
         assert view.question is question
     callbacks[0](None)
-    assert view._advance.isActive() and not view.staff.column_colors and view.staff.note_color is None
+    assert (
+        view._advance.isActive()
+        and not view.staff.column_colors
+        and view.staff.note_color is None
+    )
     view.hide()
-    callbacks[0](None)  # a completion delivered while away must leave advancement paused
+    callbacks[0](
+        None,
+    )  # a completion delivered while away must leave advancement paused
     assert not view._advance.isActive()
     view.show()
     assert view._advance.isActive()
@@ -288,7 +360,10 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
 
 
 def test_descending_scale_from_saved_minor_only_keys() -> None:
-    """Restore a minor-only selection and read the same scale in reverse when motion changes."""
+    """
+    Restore a minor-only selection and read the same scale in reverse
+    when motion changes.
+    """
     saved = store()
     saved.setValue("scaleIdentification/keys", "")
     saved.setValue("scaleIdentification/minorKeys", "-2")

@@ -7,9 +7,11 @@ permalink: /api/alto.ui.app_settings/
 {% raw %}
 The application-wide settings dialog.
 
-It holds the color theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.
+It holds the color theme, the notation font, the keyboard style, the
+transitions, the instrument and what updates follow.
 
-Changes apply as soon as they are made. Each style is a card that previews it.
+Changes apply as soon as they are made. Each style is a card that
+previews it.
 
 **Examples**
 
@@ -37,7 +39,8 @@ PreviewCard(
 
 Bases: `QPushButton`
 
-A selectable tile that previews a style: a picture drawn in it, with its name and a few words about it underneath.
+A selectable tile that previews a style: a picture drawn in it, with
+its name and a few words about it underneath.
 
 **Attributes**
 
@@ -46,8 +49,18 @@ A selectable tile that previews a style: a picture drawn in it, with its name an
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> card = PreviewCard(QLabel("♪"), key="demo", title="Demo", blurb="A short note.", height=120)
->>> card.style_key, card.isCheckable(), card.height()
+>>> card = PreviewCard(
+...     QLabel("♪"),
+...     key="demo",
+...     title="Demo",
+...     blurb="A short note.",
+...     height=120,
+... )
+>>> (
+...     card.style_key,
+...     card.isCheckable(),
+...     card.height(),
+... )
 ('demo', True, 120)
 ```
 
@@ -68,8 +81,16 @@ Build the card around its preview.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> label = QLabel("♪")
->>> card = PreviewCard(label, key="demo", title="Demo", blurb="", height=120)
->>> label.testAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+>>> card = PreviewCard(
+...     label,
+...     key="demo",
+...     title="Demo",
+...     blurb="",
+...     height=120,
+... )
+>>> label.testAttribute(
+...     Qt.WidgetAttribute.WA_TransparentForMouseEvents
+... )
 True
 ```
 
@@ -85,7 +106,8 @@ StyleCard(
 
 Bases: `PreviewCard`
 
-A selectable tile that previews a notation style: a short phrase on a staff, drawn in that style.
+A selectable tile that previews a notation style: a short phrase on
+a staff, drawn in that style.
 
 **Attributes**
 
@@ -112,7 +134,9 @@ Build the card for a notation style.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> StyleCard(notation.BY_KEY["bravura"]).width()
+>>> StyleCard(
+...     notation.BY_KEY["bravura"]
+... ).width()
 232
 ```
 
@@ -128,7 +152,8 @@ KeyboardCard(
 
 Bases: `PreviewCard`
 
-A selectable tile that previews a keyboard style: a short stretch of keys drawn in that style.
+A selectable tile that previews a keyboard style: a short stretch of
+keys drawn in that style.
 
 **Attributes**
 
@@ -138,7 +163,9 @@ A selectable tile that previews a keyboard style: a short stretch of keys drawn 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> card = KeyboardCard(keyboard_styles.BY_KEY["modern"])
+>>> card = KeyboardCard(
+...     keyboard_styles.BY_KEY["modern"]
+... )
 >>> card.style_key
 'modern'
 ```
@@ -156,7 +183,9 @@ Build the card for a keyboard style.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyUnresolvedReferences
->>> KeyboardCard(keyboard_styles.BY_KEY["classic"]).keys.style_override.key
+>>> KeyboardCard(
+...     keyboard_styles.BY_KEY["classic"]
+... ).keys.style_override.key
 'classic'
 ```
 
@@ -177,8 +206,12 @@ The custom card follows the colors being edited.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> card = KeyboardCard(keyboard_styles.BY_KEY["classic"])
->>> card.show_style(keyboard_styles.BY_KEY["modern"])
+>>> card = KeyboardCard(
+...     keyboard_styles.BY_KEY["classic"]
+... )
+>>> card.show_style(
+...     keyboard_styles.BY_KEY["modern"]
+... )
 >>> # noinspection PyUnresolvedReferences
 >>> card.keys.style_override.key
 'modern'
@@ -194,7 +227,8 @@ Bases: `QFrame`
 
 Rows for coloring each part of a keyboard.
 
-Each has a swatch that opens the color picker, and chips for colors named after materials. Changing anything selects
+Each has a swatch that opens the color picker, and chips for colors
+named after materials. Changing anything selects
 the Custom style.
 
 **Attributes**
@@ -221,7 +255,9 @@ Build the rows and show each part's current color.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> KeyboardBuilder().swatches["naturals"].width()
+>>> KeyboardBuilder().swatches[
+...     "naturals"
+... ].width()
 46
 ```
 
@@ -238,7 +274,10 @@ Show each part's current color on its swatch.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> builder = KeyboardBuilder()
 >>> builder.refresh()
->>> builder.swatches["naturals"].text()  # a color is set, so the swatch shows it, not "none"
+>>> builder.swatches[
+...     "naturals"
+... # a color is set, so the swatch shows it, not "none"
+... ].text()
 ''
 ```
 
@@ -254,9 +293,11 @@ AppSettingsDialog(
 
 Bases: `QDialog`
 
-Application-wide settings. Changes apply immediately, and the main window can be used while the dialog is open.
+Application-wide settings. Changes apply immediately, and the main
+window can be used while the dialog is open.
 
-Pages are built when first selected, so hidden previews do not slow down opening Settings or changing themes.
+Pages are built when first selected, so hidden previews do not slow
+down opening Settings or changing themes.
 
 **Attributes**
 
@@ -309,9 +350,11 @@ Build the dialog with the Appearance page showing.
 def card(family: str) -> ThemeCard
 ```
 
-Give the card of a theme, building it the first time it is asked for.
+Give the card of a theme, building it the first time it is asked
+for.
 
-Every card is a few dozen widgets, and Qt styles every widget again when the theme changes, so only the cards that have
+Every card is a few dozen widgets, and Qt styles every widget
+again when the theme changes, so only the cards that have
 been looked at exist.
 
 **Parameters**
@@ -328,7 +371,11 @@ been looked at exist.
 >>> dialog = AppSettingsDialog()
 >>> "sage" in dialog.theme_cards
 False
->>> dialog.card("sage") is dialog.card("sage"), "sage" in dialog.theme_cards
+>>> (
+...     dialog.card("sage")
+...     is dialog.card("sage"),
+...     "sage" in dialog.theme_cards,
+... )
 (True, True)
 ```
 
@@ -338,7 +385,8 @@ False
 def card_page(family: str) -> QScrollArea
 ```
 
-Give the scroll area that holds a theme's card, which is the page the stack shows for it.
+Give the scroll area that holds a theme's card, which is the
+page the stack shows for it.
 
 **Parameters**
 
@@ -352,7 +400,9 @@ Give the scroll area that holds a theme's card, which is the page the stack show
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> dialog = AppSettingsDialog()
->>> dialog.card_page("sage").widget() is dialog.card("sage")
+>>> dialog.card_page(
+...     "sage"
+... ).widget() is dialog.card("sage")
 True
 ```
 
@@ -362,7 +412,8 @@ True
 def thumb(key: str) -> ThemeThumb
 ```
 
-Give the clickable picture that chooses a theme, with the card it is on built if it was not yet.
+Give the clickable picture that chooses a theme, with the card
+it is on built if it was not yet.
 
 **Parameters**
 
@@ -386,7 +437,8 @@ False
 def choose_theme(key: str) -> None
 ```
 
-Switch the color theme, remember it, and note that the window should be rebuilt in it.
+Switch the color theme, remember it, and note that the window
+should be rebuilt in it.
 
 **Parameters**
 

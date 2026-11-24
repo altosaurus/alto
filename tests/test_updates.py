@@ -1,5 +1,6 @@
 """
-Tests for what decides whether an installed Alto can update itself, and for the commands that check and update.
+Tests for what decides whether an installed Alto can update itself, and
+for the commands that check and update.
 """
 
 from __future__ import annotations
@@ -60,19 +61,40 @@ from alto.updates import (
 
 COMMIT = "b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"
 URL = "https://github.com/altosaurus/alto.git"
-GIT_INSTALL = json.dumps({"url": URL, "vcs_info": {"vcs": "git", "commit_id": COMMIT}})
+GIT_INSTALL = json.dumps(
+    {"url": URL, "vcs_info": {"vcs": "git", "commit_id": COMMIT}},
+)
 
 
 def test_a_commit_is_shortened_to_seven_characters() -> None:
-    """Check that a full commit id is cut to the seven characters people use."""
+    """
+    Check that a full commit id is cut to the seven characters people
+    use.
+    """
     assert short(COMMIT) == "b6e2091"
     assert short("abc") == "abc"
 
 
 def test_a_git_install_records_its_address_commit_and_ref() -> None:
-    """Check that the file the installer leaves is read, with the default branch unless the install named one."""
-    assert parse_direct_url(GIT_INSTALL) == Source(URL, commit=COMMIT, ref="HEAD")
-    named = json.dumps({"url": URL, "vcs_info": {"vcs": "git", "commit_id": COMMIT, "requested_revision": "dev"}})
+    """
+    Check that the file the installer leaves is read, with the default
+    branch unless the install named one.
+    """
+    assert parse_direct_url(GIT_INSTALL) == Source(
+        URL,
+        commit=COMMIT,
+        ref="HEAD",
+    )
+    named = json.dumps(
+        {
+            "url": URL,
+            "vcs_info": {
+                "vcs": "git",
+                "commit_id": COMMIT,
+                "requested_revision": "dev",
+            },
+        },
+    )
     found = parse_direct_url(named)
     assert found is not None and found.ref == "dev"
 
@@ -80,8 +102,12 @@ def test_a_git_install_records_its_address_commit_and_ref() -> None:
 @pytest.mark.parametrize(
     "text",
     [
-        json.dumps({"url": "file:///home/me/alto", "dir_info": {"editable": True}}),
-        json.dumps({"url": URL, "vcs_info": {"vcs": "hg", "commit_id": COMMIT}}),
+        json.dumps(
+            {"url": "file:///home/me/alto", "dir_info": {"editable": True}},
+        ),
+        json.dumps(
+            {"url": URL, "vcs_info": {"vcs": "hg", "commit_id": COMMIT}},
+        ),
         json.dumps({"url": URL, "vcs_info": {"vcs": "git"}}),
         json.dumps({"vcs_info": {"vcs": "git", "commit_id": COMMIT}}),
         "[]",
@@ -93,7 +119,8 @@ def test_a_git_install_records_its_address_commit_and_ref() -> None:
 )
 def test_anything_that_is_not_a_git_install_has_no_source(text: str) -> None:
     """
-    Check that a source folder, another kind of repository and unreadable files are all read as having no git source.
+    Check that a source folder, another kind of repository and
+    unreadable files are all read as having no git source.
 
     Parameters
     ----------
@@ -104,7 +131,10 @@ def test_anything_that_is_not_a_git_install_has_no_source(text: str) -> None:
 
 
 class FakeDistribution:
-    """Stands in for the installed package's record, holding one `direct_url.json` or none."""
+    """
+    Stands in for the installed package's record, holding one
+    `direct_url.json` or none.
+    """
 
     def __init__(self, text: str | None) -> None:
         """
@@ -113,7 +143,8 @@ class FakeDistribution:
         Parameters
         ----------
         text : str or None
-            The contents of the file, or None if the package has no such file.
+            The contents of the file, or None if the package has no such
+            file.
         """
         self.text = text
 
@@ -134,24 +165,38 @@ class FakeDistribution:
         return self.text if filename == "direct_url.json" else None
 
 
-def test_the_installed_package_is_asked_where_it_came_from(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_installed_package_is_asked_where_it_came_from(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that the running copy's source comes from its package record, and that a missing record means no source.
+    Check that the running copy's source comes from its package record,
+    and that a missing record means no source.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
         Replaces the package lookup.
     """
-    monkeypatch.setattr(updates.metadata, "distribution", lambda _name: FakeDistribution(GIT_INSTALL))
+    monkeypatch.setattr(
+        updates.metadata,
+        "distribution",
+        lambda _name: FakeDistribution(GIT_INSTALL),
+    )
     assert installed_source() == Source(URL, commit=COMMIT)
-    monkeypatch.setattr(updates.metadata, "distribution", lambda _name: FakeDistribution(None))
+    monkeypatch.setattr(
+        updates.metadata,
+        "distribution",
+        lambda _name: FakeDistribution(None),
+    )
     assert installed_source() is None
 
 
-def test_a_copy_installed_by_uv_has_its_receipt_in_its_environment(tmp_path: Path) -> None:
+def test_a_copy_installed_by_uv_has_its_receipt_in_its_environment(
+    tmp_path: Path,
+) -> None:
     """
-    Check that an environment made by `uv tool` is told apart by the receipt it keeps.
+    Check that an environment made by `uv tool` is told apart by the
+    receipt it keeps.
 
     Parameters
     ----------
@@ -163,27 +208,43 @@ def test_a_copy_installed_by_uv_has_its_receipt_in_its_environment(tmp_path: Pat
     assert is_tool_install(prefix=tmp_path)
 
 
-def test_the_kind_of_copy_comes_from_where_it_was_installed_from_and_how() -> None:
-    """Check that a packaged build, a script install, another git install and a source folder are told apart."""
+def test_the_kind_of_copy_comes_from_where_it_was_installed_from_and_how() -> (
+    None
+):
+    """
+    Check that a packaged build, a script install, another git install
+    and a source folder are told apart.
+    """
     here = Source(URL, commit=COMMIT)
     assert install_kind(here, tool=True, frozen=False) is InstallKind.SCRIPT
     assert install_kind(here, tool=False, frozen=False) is InstallKind.OTHER
     assert install_kind(None, tool=False, frozen=False) is InstallKind.SOURCE
     assert install_kind(None, tool=True, frozen=False) is InstallKind.SOURCE
-    assert install_kind(here, tool=True, frozen=True) is InstallKind.PACKAGE  # a packaged build is one whatever it records
+    assert (
+        install_kind(here, tool=True, frozen=True) is InstallKind.PACKAGE
+    )  # a packaged build is one whatever it records
     assert install_kind(None, tool=False, frozen=True) is InstallKind.PACKAGE
 
 
-def test_a_source_folder_and_another_kind_of_install_are_told_why_they_cannot_update() -> None:
-    """Check that only the kinds of copy that can be told about updates have no reason given."""
+def test_source_folder_and_another_kind_of_install_told_why_they() -> None:
+    """
+    Check that only the kinds of copy that can be told about updates
+    have no reason given.
+    """
     assert cannot_update(InstallKind.SOURCE) == SOURCE_FOLDER
     assert cannot_update(InstallKind.OTHER) == NOT_BY_SCRIPT
-    assert cannot_update(InstallKind.SCRIPT) is None and cannot_update(InstallKind.PACKAGE) is None
+    assert (
+        cannot_update(InstallKind.SCRIPT) is None
+        and cannot_update(InstallKind.PACKAGE) is None
+    )
 
 
-def test_a_packaged_build_is_the_one_that_python_marks_as_frozen(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_packaged_build_is_the_one_that_python_marks_as_frozen(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that `is_frozen` follows the flag that PyInstaller sets on `sys`.
+    Check that `is_frozen` follows the flag that PyInstaller sets on
+    `sys`.
 
     Parameters
     ----------
@@ -198,14 +259,19 @@ def test_a_packaged_build_is_the_one_that_python_marks_as_frozen(monkeypatch: py
     assert is_frozen()
 
 
-def test_a_program_is_found_on_the_path_or_where_the_installers_put_it(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_program_is_found_on_the_path_or_where_the_installers_put_it(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that `find_program` uses the search path first and then the folders that the installers use.
+    Check that `find_program` uses the search path first and then the
+    folders that the installers use.
 
     Parameters
     ----------
     tmp_path : Path
-        A new folder, used as the home folder and as a folder on the path.
+        A new folder, used as the home folder and as a folder on the
+        path.
     monkeypatch : pytest.MonkeyPatch
         Sets the search path for the length of the test.
     """
@@ -214,7 +280,9 @@ def test_a_program_is_found_on_the_path_or_where_the_installers_put_it(tmp_path:
     local = tmp_path / ".local" / "bin"
     local.mkdir(parents=True)
     (local / "uv").write_text("#!/bin/sh\n")
-    assert find_program("uv", home=tmp_path) is None  # present but not something that can be run
+    assert (
+        find_program("uv", home=tmp_path) is None
+    )  # present but not something that can be run
     os.chmod(local / "uv", 0o755)
     assert find_program("uv", home=tmp_path) == str(local / "uv")
     on_path = tmp_path / "bin"
@@ -225,15 +293,24 @@ def test_a_program_is_found_on_the_path_or_where_the_installers_put_it(tmp_path:
     assert find_program("git", home=tmp_path) == str(on_path / "git")
 
 
-def test_the_check_asks_the_installs_own_address_and_the_install_command_names_a_release_or_the_default_branch() -> None:
-    """Check that the check uses the address and ref, and that installing names a tag, or none for the default branch."""
+def test_check_asks_installs_own_address_and_install_command() -> None:
+    """
+    Check that the check uses the address and ref, and that installing
+    names a tag, or none for the default branch.
+    """
     source = Source(URL, commit=COMMIT, ref="dev")
-    assert check_command(source, git="/usr/bin/git") == ("/usr/bin/git", ["ls-remote", URL, "dev"])
+    assert check_command(source, git="/usr/bin/git") == (
+        "/usr/bin/git",
+        ["ls-remote", URL, "dev"],
+    )
     assert install_command(source, uv="/usr/bin/uv", tag="v0.1.0") == (
         "/usr/bin/uv",
         ["tool", "install", "--force", f"git+{URL}@v0.1.0"],
     )
-    assert install_command(source, uv="/usr/bin/uv") == ("/usr/bin/uv", ["tool", "install", "--force", f"git+{URL}"])
+    assert install_command(source, uv="/usr/bin/uv") == (
+        "/usr/bin/uv",
+        ["tool", "install", "--force", f"git+{URL}"],
+    )
 
 
 @pytest.mark.parametrize(
@@ -248,9 +325,13 @@ def test_the_check_asks_the_installs_own_address_and_the_install_command_names_a
         (f"{'G' * 40}\tHEAD\n", None),
     ],
 )
-def test_the_commit_is_read_from_what_ls_remote_prints(text: str, expected: str | None) -> None:
+def test_the_commit_is_read_from_what_ls_remote_prints(
+    text: str,
+    expected: str | None,
+) -> None:
     """
-    Check that the first line's commit id is read, and that an error or an empty answer gives none.
+    Check that the first line's commit id is read, and that an error or
+    an empty answer gives none.
 
     Parameters
     ----------
@@ -276,9 +357,13 @@ def test_the_commit_is_read_from_what_ls_remote_prints(text: str, expected: str 
         ("v", None),
     ],
 )
-def test_a_version_becomes_numbers_only_if_it_is_plain(text: str, expected: tuple[int, ...] | None) -> None:
+def test_a_version_becomes_numbers_only_if_it_is_plain(
+    text: str,
+    expected: tuple[int, ...] | None,
+) -> None:
     """
-    Check that a version, with or without a tag's "v", is read as numbers, and that anything else is not.
+    Check that a version, with or without a tag's "v", is read as
+    numbers, and that anything else is not.
 
     Parameters
     ----------
@@ -291,15 +376,28 @@ def test_a_version_becomes_numbers_only_if_it_is_plain(text: str, expected: tupl
 
 
 def test_versions_are_compared_as_numbers_and_not_as_text() -> None:
-    """Check that 0.10.0 is newer than 0.9.0, that trailing zeros do not matter, and that unreadable versions are never newer."""
-    assert is_newer("0.10.0", installed="0.9.0") and is_newer("v0.1.0", installed="0.0.0") and is_newer("1", installed="0.9.9")
+    """
+    Check that 0.10.0 is newer than 0.9.0, that trailing zeros do not
+    matter, and that unreadable versions are never newer.
+    """
+    assert (
+        is_newer("0.10.0", installed="0.9.0")
+        and is_newer("v0.1.0", installed="0.0.0")
+        and is_newer("1", installed="0.9.9")
+    )
     assert (
         not is_newer("0.0.0", installed="0.0.0")
         and not is_newer("1.0", installed="1.0.0")
         and not is_newer("1.0.0", installed="1.0")
     )
-    assert not is_newer("0.9.0", installed="0.10.0") and not is_newer("0.0.0", installed="0.1.0")
-    assert not is_newer("1.0.0", installed="unknown") and not is_newer("1.0.0rc1", installed="0.0.0")
+    assert not is_newer("0.9.0", installed="0.10.0") and not is_newer(
+        "0.0.0",
+        installed="0.1.0",
+    )
+    assert not is_newer("1.0.0", installed="unknown") and not is_newer(
+        "1.0.0rc1",
+        installed="0.0.0",
+    )
 
 
 RELEASE_URL = "https://github.com/altosaurus/alto/releases/tag/v0.1.0"
@@ -312,9 +410,18 @@ RELEASE = {
 
 
 def test_the_latest_release_is_read_from_githubs_answer() -> None:
-    """Check that the tag becomes a version, with its page, and that a missing page falls back to the list of releases."""
-    assert parse_latest_release(json.dumps(RELEASE)) == Release("0.1.0", tag="v0.1.0", url=RELEASE_URL)
-    without_page = {key: value for key, value in RELEASE.items() if key != "html_url"}
+    """
+    Check that the tag becomes a version, with its page, and that a
+    missing page falls back to the list of releases.
+    """
+    assert parse_latest_release(json.dumps(RELEASE)) == Release(
+        "0.1.0",
+        tag="v0.1.0",
+        url=RELEASE_URL,
+    )
+    without_page = {
+        key: value for key, value in RELEASE.items() if key != "html_url"
+    }
     found = parse_latest_release(json.dumps(without_page))
     assert found is not None and found.url == RELEASES_PAGE
 
@@ -335,7 +442,8 @@ def test_the_latest_release_is_read_from_githubs_answer() -> None:
 )
 def test_an_answer_that_is_not_a_plain_release_is_not_one(text: str) -> None:
     """
-    Check that drafts, pre-releases, odd tags and answers that are not releases at all give no release.
+    Check that drafts, pre-releases, odd tags and answers that are not
+    releases at all give no release.
 
     Parameters
     ----------
@@ -345,24 +453,55 @@ def test_an_answer_that_is_not_a_plain_release_is_not_one(text: str) -> None:
     assert parse_latest_release(text) is None
 
 
-def test_each_kind_of_answer_gives_a_release_or_a_sentence_that_says_why_not() -> None:
-    """Check the release or the reason for success, no release yet, an error, no answer, and an answer that makes no sense."""
-    assert release_answer(200, text=json.dumps(RELEASE)) == Release("0.1.0", tag="v0.1.0", url=RELEASE_URL)
+def test_each_kind_of_answer_gives_release_or_sentence_says_why() -> None:
+    """
+    Check the release or the reason for success, no release yet, an
+    error, no answer, and an answer that makes no sense.
+    """
+    assert release_answer(200, text=json.dumps(RELEASE)) == Release(
+        "0.1.0",
+        tag="v0.1.0",
+        url=RELEASE_URL,
+    )
     assert release_answer(404, text="Not Found") == NO_RELEASE
-    assert release_answer(403, text="rate limit exceeded") == "GitHub answered with an error (403): rate limit exceeded"
-    assert release_answer(500, text="") == "GitHub answered with an error (500): no details"
-    assert release_answer(0, text="Name or service not known") == "Alto could not reach GitHub: Name or service not known"
-    assert release_answer(0, text="") == "Alto could not reach GitHub: no answer"
+    assert (
+        release_answer(403, text="rate limit exceeded")
+        == "GitHub answered with an error (403): rate limit exceeded"
+    )
+    assert (
+        release_answer(500, text="")
+        == "GitHub answered with an error (500): no details"
+    )
+    assert (
+        release_answer(0, text="Name or service not known")
+        == "Alto could not reach GitHub: Name or service not known"
+    )
+    assert (
+        release_answer(0, text="") == "Alto could not reach GitHub: no answer"
+    )
     assert "not understood" in str(release_answer(200, text="<html>"))
 
 
 class Handler(BaseHTTPRequestHandler):
-    """Answers a request for `/ok` with a release, and anything else with a 404."""
+    """
+    Answers a request for `/ok` with a release, and anything else with a
+    404.
+    """
 
     def do_GET(self) -> None:  # noqa: N802
         """Answer one request, noting who asked and how."""
-        seen.append((self.path, self.headers.get("User-Agent", ""), self.headers.get("Accept", "")))
-        body = json.dumps(RELEASE).encode() if self.path == "/ok" else b'{"message": "Not Found"}'
+        seen.append(
+            (
+                self.path,
+                self.headers.get("User-Agent", ""),
+                self.headers.get("Accept", ""),
+            ),
+        )
+        body = (
+            json.dumps(RELEASE).encode()
+            if self.path == "/ok"
+            else b'{"message": "Not Found"}'
+        )
         self.send_response(200 if self.path == "/ok" else 404)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
@@ -385,8 +524,11 @@ class Handler(BaseHTTPRequestHandler):
 seen: list[tuple[str, str, str]] = []
 
 
-def test_fetching_reads_the_status_and_body_and_says_only_what_the_request_is_for() -> None:
-    """Check `fetch_text` against a real server: a 200, a 404, and headers that say only what the request is for."""
+def test_fetching_reads_status_and_body_and_says_only_what() -> None:
+    """
+    Check `fetch_text` against a real server: a 200, a 404, and headers
+    that say only what the request is for.
+    """
     seen.clear()
     # noinspection PyTypeChecker
     server = HTTPServer(("127.0.0.1", 0), Handler)
@@ -401,13 +543,21 @@ def test_fetching_reads_the_status_and_body_and_says_only_what_the_request_is_fo
     finally:
         server.shutdown()
         server.server_close()
-    assert [agent for _, agent, _ in seen] == [updates.USER_AGENT, updates.USER_AGENT]
-    assert all(accept == "application/vnd.github+json" for _, _, accept in seen)
+    assert [agent for _, agent, _ in seen] == [
+        updates.USER_AGENT,
+        updates.USER_AGENT,
+    ]
+    assert all(
+        accept == "application/vnd.github+json" for _, _, accept in seen
+    )
     assert updates.USER_AGENT == "alto-update-check"
 
 
 def test_fetching_reports_no_answer_as_status_zero_with_the_reason() -> None:
-    """Check that a refused connection and a server that never answers both give 0 and a reason."""
+    """
+    Check that a refused connection and a server that never answers both
+    give 0 and a reason.
+    """
     free = socket.socket()
     free.bind(("127.0.0.1", 0))
     port = free.getsockname()[1]
@@ -416,24 +566,40 @@ def test_fetching_reports_no_answer_as_status_zero_with_the_reason() -> None:
     assert status == 0 and reason
     silent = socket.socket()
     silent.bind(("127.0.0.1", 0))
-    silent.listen(1)  # connections are accepted by the system, and then nobody answers
+    silent.listen(
+        1,
+    )  # connections are accepted by the system, and then nobody answers
     try:
-        status, reason = fetch_text(f"http://127.0.0.1:{silent.getsockname()[1]}/", seconds=1)
+        status, reason = fetch_text(
+            f"http://127.0.0.1:{silent.getsockname()[1]}/",
+            seconds=1,
+        )
     finally:
         silent.close()
     assert status == 0 and "timed out" in reason
 
 
-# -- what a packaged copy needs to update itself --------------------------------------------------------------------
+# -- what a packaged copy needs to update itself
+# --------------------------------------------------------------------
 
 
-def test_the_files_of_a_release_are_read_from_githubs_answer_and_odd_ones_are_skipped() -> None:
-    """Check that each file's name, address and size are kept, and that entries that are not files are ignored."""
+def test_files_of_release_read_from_githubs_answer_and_odd_ones() -> None:
+    """
+    Check that each file's name, address and size are kept, and that
+    entries that are not files are ignored.
+    """
     answer = {
         **RELEASE,
         "assets": [
-            {"name": "alto-0.1.0-linux-x86_64.tar.gz", "browser_download_url": DOWNLOAD_BASE + "v0.1.0/a", "size": 123},
-            {"name": "SHA256SUMS", "browser_download_url": DOWNLOAD_BASE + "v0.1.0/SHA256SUMS"},
+            {
+                "name": "alto-0.1.0-linux-x86_64.tar.gz",
+                "browser_download_url": DOWNLOAD_BASE + "v0.1.0/a",
+                "size": 123,
+            },
+            {
+                "name": "SHA256SUMS",
+                "browser_download_url": DOWNLOAD_BASE + "v0.1.0/SHA256SUMS",
+            },
             {"name": "no address"},
             {"browser_download_url": "no name"},
             "not a dict",
@@ -443,10 +609,16 @@ def test_the_files_of_a_release_are_read_from_githubs_answer_and_odd_ones_are_sk
     release = parse_latest_release(json.dumps(answer))
     assert release is not None
     assert release.assets == (
-        Asset("alto-0.1.0-linux-x86_64.tar.gz", url=DOWNLOAD_BASE + "v0.1.0/a", size=123),
+        Asset(
+            "alto-0.1.0-linux-x86_64.tar.gz",
+            url=DOWNLOAD_BASE + "v0.1.0/a",
+            size=123,
+        ),
         Asset("SHA256SUMS", url=DOWNLOAD_BASE + "v0.1.0/SHA256SUMS", size=0),
     )
-    assert parse_latest_release(json.dumps({**RELEASE, "assets": "oops"})) == Release("0.1.0", tag="v0.1.0", url=RELEASE_URL)
+    assert parse_latest_release(
+        json.dumps({**RELEASE, "assets": "oops"}),
+    ) == Release("0.1.0", tag="v0.1.0", url=RELEASE_URL)
 
 
 @pytest.mark.parametrize(
@@ -467,7 +639,8 @@ def test_the_download_for_a_system_is_named_as_the_release_workflow_names_it(
     expected: str | None,
 ) -> None:
     """
-    Check the file name for each system and processor, and that unsupported ones have none.
+    Check the file name for each system and processor, and that
+    unsupported ones have none.
 
     Parameters
     ----------
@@ -478,11 +651,17 @@ def test_the_download_for_a_system_is_named_as_the_release_workflow_names_it(
     expected : str or None
         The name the release workflow gives that package.
     """
-    assert platform_asset_name("1.2.3", system=system, machine=machine) == expected
+    assert (
+        platform_asset_name("1.2.3", system=system, machine=machine)
+        == expected
+    )
 
 
-def test_a_file_of_a_release_is_found_only_at_the_address_where_releases_keep_their_files() -> None:
-    """Check that a file by the right name at some other address is not found."""
+def test_file_of_release_found_only_at_address_where_releases() -> None:
+    """
+    Check that a file by the right name at some other address is not
+    found.
+    """
     release = Release(
         "0.1.0",
         tag="v0.1.0",
@@ -493,13 +672,25 @@ def test_a_file_of_a_release_is_found_only_at_the_address_where_releases_keep_th
             Asset("c", url=DOWNLOAD_BASE + "x/c"),
         ),
     )
-    assert find_asset(release, name="a") == release.assets[0] and find_asset(release, name="c") == release.assets[2]
-    assert find_asset(release, name="b") is None and find_asset(release, name="missing") is None
-    assert find_asset(release, name="b", base="https://evil.example/") == release.assets[1]
+    assert (
+        find_asset(release, name="a") == release.assets[0]
+        and find_asset(release, name="c") == release.assets[2]
+    )
+    assert (
+        find_asset(release, name="b") is None
+        and find_asset(release, name="missing") is None
+    )
+    assert (
+        find_asset(release, name="b", base="https://evil.example/")
+        == release.assets[1]
+    )
 
 
-def test_a_list_of_checksums_is_read_line_by_line_and_only_plain_file_names_are_kept() -> None:
-    """Check the hash and name of each good line, in lower case, with binary-mode marks, and that anything else is ignored."""
+def test_list_of_checksums_read_line_by_line_and_only_plain_file() -> None:
+    """
+    Check the hash and name of each good line, in lower case, with
+    binary-mode marks, and that anything else is ignored.
+    """
     good = "AB" * 32
     text = "\n".join(
         [
@@ -514,7 +705,10 @@ def test_a_list_of_checksums_is_read_line_by_line_and_only_plain_file_names_are_
             f"{'34' * 32}   three-spaces",
         ],
     )
-    assert parse_checksums(text) == {"alto-1.tar.gz": good.lower(), "alto-2.exe": "cd" * 32}
+    assert parse_checksums(text) == {
+        "alto-1.tar.gz": good.lower(),
+        "alto-2.exe": "cd" * 32,
+    }
     assert parse_checksums("") == {}
 
 
@@ -533,35 +727,76 @@ def signed(data: bytes) -> tuple[str, str]:
         The public key and the signature, base64.
     """
     key = SigningKey.generate()
-    return base64.b64encode(bytes(key.verify_key)).decode(), base64.b64encode(key.sign(data).signature).decode()
+    return base64.b64encode(bytes(key.verify_key)).decode(), base64.b64encode(
+        key.sign(data).signature,
+    ).decode()
 
 
-def test_a_signature_verifies_only_for_the_exact_data_and_a_trusted_key() -> None:
-    """Check the good case and each way it can go wrong: other data, another key, no keys, and either one malformed."""
+def test_a_signature_verifies_only_for_the_exact_data_and_a_trusted_key() -> (
+    None
+):
+    """
+    Check the good case and each way it can go wrong: other data,
+    another key, no keys, and either one malformed.
+    """
     public, signature = signed(b"the list")
     other_public, _ = signed(b"another")
     assert verify_signature(b"the list", signature=signature, keys=(public,))
-    assert verify_signature(b"the list", signature=signature, keys=(other_public, public))  # any trusted key will do
-    assert not verify_signature(b"the list ", signature=signature, keys=(public,))
-    assert not verify_signature(b"the list", signature=signature, keys=(other_public,))
+    assert verify_signature(
+        b"the list",
+        signature=signature,
+        keys=(other_public, public),
+    )  # any trusted key will do
+    assert not verify_signature(
+        b"the list ",
+        signature=signature,
+        keys=(public,),
+    )
+    assert not verify_signature(
+        b"the list",
+        signature=signature,
+        keys=(other_public,),
+    )
     assert not verify_signature(b"the list", signature=signature, keys=())
-    assert not verify_signature(b"the list", signature=signature, keys=("not base64!", "AAAA", ""))
-    assert not verify_signature(b"the list", signature=signature[:-4], keys=(public,))
-    assert not verify_signature(b"the list", signature="not base64!", keys=(public,))
+    assert not verify_signature(
+        b"the list",
+        signature=signature,
+        keys=("not base64!", "AAAA", ""),
+    )
+    assert not verify_signature(
+        b"the list",
+        signature=signature[:-4],
+        keys=(public,),
+    )
+    assert not verify_signature(
+        b"the list",
+        signature="not base64!",
+        keys=(public,),
+    )
     assert not verify_signature(b"the list", signature="", keys=(public,))
-    assert not verify_signature(b"the list", signature=base64.b64encode(b"x" * 64).decode(), keys=(public,))
+    assert not verify_signature(
+        b"the list",
+        signature=base64.b64encode(b"x" * 64).decode(),
+        keys=(public,),
+    )
 
 
-def test_a_secure_connection_trusts_the_certificate_authorities_that_come_with_alto() -> None:
-    """Check that the settings for a connection verify the server and carry certifi's list, not the system's."""
+def test_secure_connection_trusts_certificate_authorities_come() -> None:
+    """
+    Check that the settings for a connection verify the server and carry
+    certifi's list, not the system's.
+    """
     context = ssl_context()
     assert context.verify_mode == ssl.CERT_REQUIRED and context.check_hostname
     assert len(context.get_ca_certs()) > 100
 
 
-def test_the_release_check_uses_that_secure_connection(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_release_check_uses_that_secure_connection(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that `fetch_text` hands the secure settings to the connection it opens.
+    Check that `fetch_text` hands the secure settings to the connection
+    it opens.
 
     Parameters
     ----------
@@ -590,14 +825,23 @@ def test_the_release_check_uses_that_secure_connection(monkeypatch: pytest.Monke
         raise OSError("no connection in a test")
 
     monkeypatch.setattr(urllib.request, "urlopen", open_it)
-    assert fetch_text("https://api.github.com/x", seconds=1) == (0, "no connection in a test")
+    assert fetch_text("https://api.github.com/x", seconds=1) == (
+        0,
+        "no connection in a test",
+    )
     context = contexts[0]
-    assert isinstance(context, ssl.SSLContext) and context.verify_mode == ssl.CERT_REQUIRED
+    assert (
+        isinstance(context, ssl.SSLContext)
+        and context.verify_mode == ssl.CERT_REQUIRED
+    )
 
 
-def test_the_built_in_self_check_passes_and_notices_a_key_that_is_not_a_key(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_built_in_self_check_passes_and_notices_a_key_that_is_not_a_key(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check what `alto --self-test` runs: it finds nothing wrong, and says so when a key in the code is not a key.
+    Check what `alto --self-test` runs: it finds nothing wrong, and says
+    so when a key in the code is not a key.
 
     Parameters
     ----------
@@ -605,16 +849,40 @@ def test_the_built_in_self_check_passes_and_notices_a_key_that_is_not_a_key(monk
         Replaces the keys in the code.
     """
     assert self_check() == []
+    with monkeypatch.context() as changed:
+        changed.setattr(
+            updates,
+            "ssl_context",
+            lambda: ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT),
+        )
+        assert self_check() == [
+            (
+                "The list of certificate authorities did not load, so a "
+                "secure connection could not be made."
+            ),
+        ]
     public, _ = signed(b"x")
     monkeypatch.setattr(updates, "UPDATE_PUBLIC_KEYS", (public,))
     assert self_check() == []
     monkeypatch.setattr(updates, "UPDATE_PUBLIC_KEYS", (public, "not a key"))
-    assert self_check() == ["A public key in the code is not a valid Ed25519 key."]
-    monkeypatch.setattr(updates, "UPDATE_PUBLIC_KEYS", (base64.b64encode(b"short").decode(),))
+    assert self_check() == [
+        "A public key in the code is not a valid Ed25519 key.",
+    ]
+    monkeypatch.setattr(
+        updates,
+        "UPDATE_PUBLIC_KEYS",
+        (base64.b64encode(b"short").decode(),),
+    )
     assert len(self_check()) == 1
 
 
-def test_the_two_names_the_workflow_uploads_for_the_signature_are_the_ones_alto_looks_for() -> None:
-    """Check the file names, which the release workflow, the signing script and the updater must agree on."""
+def test_two_names_workflow_uploads_for_signature_ones_alto() -> None:
+    """
+    Check the file names, which the release workflow, the signing script
+    and the updater must agree on.
+    """
     assert (CHECKSUMS_NAME, SIGNATURE_NAME) == ("SHA256SUMS", "SHA256SUMS.sig")
-    assert DOWNLOAD_BASE == "https://github.com/altosaurus/alto/releases/download/"
+    assert (
+        DOWNLOAD_BASE
+        == "https://github.com/altosaurus/alto/releases/download/"
+    )

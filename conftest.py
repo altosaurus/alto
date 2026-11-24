@@ -1,4 +1,7 @@
-"""Setup for the doctests in alto/: a Qt application for examples that make widgets, and settings kept away from the real ones."""
+"""
+Setup for the doctests in alto/: a Qt application for examples that make
+widgets, and settings kept away from the real ones.
+"""
 
 import atexit
 import gc
@@ -6,7 +9,8 @@ import os
 import shutil
 import tempfile
 
-# Examples that save a setting must not touch the real ones, even if only `pytest alto` runs and tests/conftest.py is not loaded.
+# Examples that save a setting must not touch the real ones, even if
+# only `pytest alto` runs and tests/conftest.py is not loaded.
 _HOME = tempfile.mkdtemp(prefix="alto-doctests-")
 os.environ["XDG_CONFIG_HOME"] = f"{_HOME}/config"
 os.environ["XDG_DATA_HOME"] = f"{_HOME}/data"
@@ -36,18 +40,22 @@ def _qt_application_for_doctests(
     request : pytest.FixtureRequest
         The running test, used to tell doctests from ordinary tests.
     doctest_namespace : dict
-        The names every doctest can use without importing them. Keyword-only.
+        The names every doctest can use without importing them.
+        Keyword-only.
 
     Yields
     ------
     None
-        Control, while the doctest runs. Afterwards every window it left open is closed, so they do not pile up: Qt restyles
-        every live widget when a theme is applied, and a thousand examples' worth made the theme examples take minutes.
+        Control, while the doctest runs. Afterwards every window it left
+        open is closed, so they do not pile up: Qt restyles
+        every live widget when a theme is applied, and a thousand
+        examples' worth made the theme examples take minutes.
 
     Examples
     --------
     >>> from PySide6.QtWidgets import QApplication
-    >>> QApplication.instance() is not None  # the application `app` that every doctest can use
+    >>> # the application `app` that every doctest can use
+    >>> QApplication.instance() is not None
     True
     """
     if type(request.node).__name__ != "DoctestItem":
@@ -65,7 +73,10 @@ def _qt_application_for_doctests(
 
 
 def _delete_every_widget() -> None:
-    """Close and delete every top-level widget, then let Qt carry out the deletions."""
+    """
+    Close and delete every top-level widget, then let Qt carry out the
+    deletions.
+    """
     if QApplication.instance() is None:
         return
     for widget in QApplication.topLevelWidgets():
@@ -76,9 +87,11 @@ def _delete_every_widget() -> None:
 
 def pytest_sessionfinish() -> None:
     """
-    Delete every widget the run left behind, while Python and Qt are both still running.
+    Delete every widget the run left behind, while Python and Qt are
+    both still running.
 
-    Examples make widgets they never close. Left to the interpreter's exit, PySide destroys them in an order that aborts the
+    Examples make widgets they never close. Left to the interpreter's
+    exit, PySide destroys them in an order that aborts the
     process after every test has passed, which fails the pre-push hook.
 
     Examples

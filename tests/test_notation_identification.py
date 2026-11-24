@@ -1,4 +1,7 @@
-"""Rendering and replay of questions about individual parts of written music."""
+"""
+Rendering and replay of questions about individual parts of written
+music.
+"""
 
 from __future__ import annotations
 
@@ -35,9 +38,13 @@ if TYPE_CHECKING:
     from PySide6.QtWidgets import QApplication
 
 
-def test_notation_highlights_in_saved_questions(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_notation_highlights_in_saved_questions(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check the highlight geometry in each notation font, including both stem directions.
+    Check the highlight geometry in each notation font, including both
+    stem directions.
 
     Parameters
     ----------
@@ -63,11 +70,22 @@ def test_notation_highlights_in_saved_questions(app: QApplication, monkeypatch: 
         assert saved == question and saved.check(part)
         preview = QuestionPreview(exercise.name, question=saved)
         staff = preview.findChild(StaffWidget)
-        assert staff is not None and staff.notation_target == question.notation_target
+        assert (
+            staff is not None
+            and staff.notation_target == question.notation_target
+        )
         for style in STYLES:
             staff.notation_style = style
-            image = staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-            pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(image.height(), image.width(), 4)
+            image = (
+                staff.grab()
+                .toImage()
+                .convertToFormat(QImage.Format.Format_RGBA8888)
+            )
+            pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(
+                image.height(),
+                image.width(),
+                4,
+            )
             ys, xs = np.where((pixels[:, :, 2] > 100) & (pixels[:, :, 0] < 90))
             assert xs.size, (style.key, part)
             width, height = np.ptp(xs) + 1, np.ptp(ys) + 1
@@ -76,15 +94,25 @@ def test_notation_highlights_in_saved_questions(app: QApplication, monkeypatch: 
             elif part == "Stem":
                 assert height > 2 * staff.GAP and width < staff.GAP
             elif part == "Notehead":
-                assert staff.GAP / 2 < height < 1.5 * staff.GAP and staff.GAP < width < 2 * staff.GAP
+                assert (
+                    staff.GAP / 2 < height < 1.5 * staff.GAP
+                    and staff.GAP < width < 2 * staff.GAP
+                )
             else:
                 assert height > 4 * staff.GAP and max(xs) < image.width() / 2
 
 
-@pytest.mark.parametrize("term", ["Notehead", "Stem", "Staff line", "Quarter rest", "Sharp", "Tie", "Turn"])
-def test_notation_question_in_the_exercise(app: QApplication, term: str) -> None:
+@pytest.mark.parametrize(
+    "term",
+    ["Notehead", "Stem", "Staff line", "Quarter rest", "Sharp", "Tie", "Turn"],
+)
+def test_notation_question_in_the_exercise(
+    app: QApplication,
+    term: str,
+) -> None:
     """
-    Verify that a correct answer turns the original blue marking green in the same place.
+    Verify that a correct answer turns the original blue marking green
+    in the same place.
 
     Parameters
     ----------
@@ -96,16 +124,35 @@ def test_notation_question_in_the_exercise(app: QApplication, term: str) -> None
     settings.notation.terms = {term}
     view = ExerciseView(NotationIdentification(), rng=random.Random(7))
     question = view.question
-    assert question is not None and view.staff.notation_target == question.notation_target
-    before = view.staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
+    assert (
+        question is not None
+        and view.staff.notation_target == question.notation_target
+    )
+    before = (
+        view.staff.grab()
+        .toImage()
+        .convertToFormat(QImage.Format.Format_RGBA8888)
+    )
     view.buttons[question.choices.index(term)].click()
     assert view.answered and view.correct == 1
     view._advance.stop()
     animation = view._anims[-1]
     animation.setCurrentTime(animation.duration())
-    after = view.staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-    original = np.frombuffer(before.constBits(), dtype=np.uint8).reshape(-1, 4).astype(int)
-    feedback = np.frombuffer(after.constBits(), dtype=np.uint8).reshape(-1, 4).astype(int)
+    after = (
+        view.staff.grab()
+        .toImage()
+        .convertToFormat(QImage.Format.Format_RGBA8888)
+    )
+    original = (
+        np.frombuffer(before.constBits(), dtype=np.uint8)
+        .reshape(-1, 4)
+        .astype(int)
+    )
+    feedback = (
+        np.frombuffer(after.constBits(), dtype=np.uint8)
+        .reshape(-1, 4)
+        .astype(int)
+    )
     blue = original[:, 2] - original[:, 0]
     green = feedback[:, 1] - feedback[:, 0]
     # Account for different ink intensities in antialiased edge pixels.
@@ -113,9 +160,12 @@ def test_notation_question_in_the_exercise(app: QApplication, term: str) -> None
     assert (green[blue > 25] > 4).all() and (blue[green > 12] > 8).all()
 
 
-def test_selecting_notation_terms_filters_questions_and_restores_the_selection(app: QApplication) -> None:
+def test_selecting_notation_terms_filters_questions_and_restores_the_selection(
+    app: QApplication,
+) -> None:
     """
-    Change terms through the exercise gear and verify the next question, replay signature, and saved state.
+    Change terms through the exercise gear and verify the next question,
+    replay signature, and saved state.
 
     Parameters
     ----------
@@ -129,20 +179,38 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(a
     view.gear.click()
     panel = view.settings_panel
     assert isinstance(panel, NotationSettingsPanel) and panel.isVisible()
-    assert panel.type_row.value.text() == "Answer Button" and panel.terms_row.value.text() == "All"
-    assert not panel.group_picker.isVisible() and not panel.types["button"].isVisible()
+    assert (
+        panel.type_row.value.text() == "Answer Button"
+        and panel.terms_row.value.text() == "All"
+    )
+    assert (
+        not panel.group_picker.isVisible()
+        and not panel.types["button"].isVisible()
+    )
     page_changed = QSignalSpy(panel.stack.currentChanged)
     question = view.question
     panel.type_row.click()
     motion.settle()
-    assert page_changed.count() and panel.types["staff"].isVisible() and view.question is question
+    assert (
+        page_changed.count()
+        and panel.types["staff"].isVisible()
+        and view.question is question
+    )
     panel.types["staff"].click()
     assert panel.type_row.value.text() == "Click on Staff"
     panel.types["button"].click()
     question = view.question
-    next(b for b in panel.findChildren(QToolButton) if b.isVisible() and b.text() == "‹ Back").click()
+    next(
+        b
+        for b in panel.findChildren(QToolButton)
+        if b.isVisible() and b.text() == "‹ Back"
+    ).click()
     motion.settle()
-    assert page_changed.count() and panel.type_row.isVisible() and view.question is question
+    assert (
+        page_changed.count()
+        and panel.type_row.isVisible()
+        and view.question is question
+    )
     panel.terms_row.click()
     motion.settle()
     assert page_changed.count() and panel.group_picker.isVisible()
@@ -152,7 +220,9 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(a
         panel.terms.boxes[term].click()
     pair_signature = exercise.settings_signature()
     rng = random.Random(9)
-    assert pair_signature and {exercise.generate(rng).answer for _ in range(50)} == {"Notehead", "Clef"}
+    assert pair_signature and {
+        exercise.generate(rng).answer for _ in range(50)
+    } == {"Notehead", "Clef"}
     panel.terms.boxes["Clef"].click()
     assert panel.terms_row.value.text() == "1 selected"
     assert view.question is not None and view.question.answer == "Notehead"
@@ -164,15 +234,27 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(a
     assert NotationSettingsPanel().terms.selected() == {"Notehead"}
     panel.group_picker.textActivated.emit("All terms")
     assert exercise.settings_signature() == ""
-    next(b for b in panel.findChildren(QToolButton) if b.isVisible() and b.text() == "‹ Back").click()
+    next(
+        b
+        for b in panel.findChildren(QToolButton)
+        if b.isVisible() and b.text() == "‹ Back"
+    ).click()
     motion.settle()
-    assert page_changed.count() and panel.terms_row.isVisible() and panel.terms_row.value.text() == "All"
+    assert (
+        page_changed.count()
+        and panel.terms_row.isVisible()
+        and panel.terms_row.value.text() == "All"
+    )
 
 
 @pytest.mark.parametrize("mode", ["button", "staff"])
-def test_select_none_clears_and_restores_notation_terms(app: QApplication, mode: str) -> None:
+def test_select_none_clears_and_restores_notation_terms(
+    app: QApplication,
+    mode: str,
+) -> None:
     """
-    Clear a custom selection, reopen it, and resume through the switch, a checkbox, or a group.
+    Clear a custom selection, reopen it, and resume through the switch,
+    a checkbox, or a group.
 
     Parameters
     ----------
@@ -190,15 +272,30 @@ def test_select_none_clears_and_restores_notation_terms(app: QApplication, mode:
     changes = QSignalSpy(panel.changed)
     panel.select_none.click()
     assert changes.count() == 1 and panel.select_none.isOn()
-    assert not panel.terms.selected() and panel.terms_row.value.text() == "None"
-    assert view.question and not view.question.answer and "Select a notation term" in view.prompt.text()
-    assert view.staff.isHidden() and not view.buttons and not view._advance.isActive() and view.total == 0
+    assert (
+        not panel.terms.selected() and panel.terms_row.value.text() == "None"
+    )
+    assert (
+        view.question
+        and not view.question.answer
+        and "Select a notation term" in view.prompt.text()
+    )
+    assert (
+        view.staff.isHidden()
+        and not view.buttons
+        and not view._advance.isActive()
+        and view.total == 0
+    )
 
     settings.notation.terms = set(settings.NOTATION_TERMS)
     load_notation_terms()
     reopened = ExerciseView(NotationIdentification(), rng=random.Random(12))
     panel = reopened.settings_panel
-    assert isinstance(panel, NotationSettingsPanel) and panel.select_none.isOn() and not panel.terms.selected()
+    assert (
+        isinstance(panel, NotationSettingsPanel)
+        and panel.select_none.isOn()
+        and not panel.terms.selected()
+    )
     panel.types["staff" if mode == "button" else "button"].click()
     panel.select_none.click()
     assert panel.terms.selected() == original and not panel.select_none.isOn()
@@ -206,24 +303,35 @@ def test_select_none_clears_and_restores_notation_terms(app: QApplication, mode:
 
     panel.select_none.click()
     panel.terms.boxes["Tie"].click()
-    assert not panel.select_none.isOn() and reopened.question and reopened.question.answer == "Tie"
+    assert (
+        not panel.select_none.isOn()
+        and reopened.question
+        and reopened.question.answer == "Tie"
+    )
     panel.terms.boxes["Tie"].click()
     assert panel.select_none.isOn() and not settings.notation.terms
     panel.group_picker.textActivated.emit("Ornaments")
-    assert not panel.select_none.isOn() and settings.notation.terms == set(CATALOG["Ornaments"])
+    assert not panel.select_none.isOn() and settings.notation.terms == set(
+        CATALOG["Ornaments"],
+    )
 
 
 @pytest.mark.slow  # every term in every notation font: 1,600 pictures
-def test_each_notation_term_draws_a_highlight(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_each_notation_term_draws_a_highlight(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Select every term individually and verify its saved question paints visible colored ink.
+    Select every term individually and verify its saved question paints
+    visible colored ink.
 
     Parameters
     ----------
     app : QApplication
         The shared Qt application.
     monkeypatch : pytest.MonkeyPatch
-        Exercise the generated notation renderer in every available font.
+        Exercise the generated notation renderer in every available
+        font.
     """
     monkeypatch.setattr("alto.exercises.library.passages_by_term", dict)
     exercise = NotationIdentification()
@@ -235,7 +343,9 @@ def test_each_notation_term_draws_a_highlight(app: QApplication, monkeypatch: py
         question = exercise.generate(rng)
         assert question.check(term) and question.choices == [term]
         if isinstance(glyph, int):
-            assert not notation_glyph("bravura", codepoint=glyph).isEmpty(), term
+            assert not notation_glyph("bravura", codepoint=glyph).isEmpty(), (
+                term
+            )
         saved = Question.from_dict(json.loads(json.dumps(question.to_dict())))
         staff.show_notes(
             saved.staff,
@@ -247,17 +357,36 @@ def test_each_notation_term_draws_a_highlight(app: QApplication, monkeypatch: py
         )
         for style in STYLES:
             staff.notation_style = style
-            image = staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-            pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(image.height(), image.width(), 4)
+            image = (
+                staff.grab()
+                .toImage()
+                .convertToFormat(QImage.Format.Format_RGBA8888)
+            )
+            pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(
+                image.height(),
+                image.width(),
+                4,
+            )
             ys, xs = np.where((pixels[:, :, 2] > 100) & (pixels[:, :, 0] < 90))
-            assert xs.size and min(xs) > 0 and max(xs) < image.width() - 1, (term, style.key)
-            assert min(ys) > 0 and max(ys) < image.height() - 1, (term, style.key)
+            assert xs.size and min(xs) > 0 and max(xs) < image.width() - 1, (
+                term,
+                style.key,
+            )
+            assert min(ys) > 0 and max(ys) < image.height() - 1, (
+                term,
+                style.key,
+            )
             index = xs.size // 2
-            assert staff.hits_notation(QPoint(int(xs[index]), int(ys[index]))), (term, style.key)
+            assert staff.hits_notation(
+                QPoint(int(xs[index]), int(ys[index])),
+            ), (term, style.key)
 
 
 def test_notation_choices_favor_lookalikes_within_the_category() -> None:
-    """Keep choices in the target category and usually offer all four turn variants together."""
+    """
+    Keep choices in the target category and usually offer all four turn
+    variants together.
+    """
     rng = random.Random(31)
     exercise = NotationIdentification()
     for family in SIMILAR_MARKS:
@@ -267,31 +396,54 @@ def test_notation_choices_favor_lookalikes_within_the_category() -> None:
         for _ in range(20):
             question = exercise.generate(rng)
             assert (
-                question.answer in question.choices and len(set(question.choices)) == 4 and set(question.choices) <= group.keys()
+                question.answer in question.choices
+                and len(set(question.choices)) == 4
+                and set(question.choices) <= group.keys()
             )
     settings.notation.terms = set(CATALOG["Ornaments"])
     variants = {"Turn", "Inverted turn", "Slashed turn", "Vertical turn"}
-    turns = [q for _ in range(5000) if (q := exercise.generate(rng)).answer == "Turn"][:500]
+    turns = [
+        q
+        for _ in range(5000)
+        if (q := exercise.generate(rng)).answer == "Turn"
+    ][:500]
     matched = sum(set(q.choices) == variants for q in turns)
     assert 350 < matched < 475
 
 
-def test_notation_choices_follow_mixed_selections_on_generation_and_replay() -> None:
-    """Offer only the three checked terms even when the old question contained other distractors."""
+def test_notation_choices_follow_mixed_selections_on_generation() -> None:
+    """
+    Offer only the three checked terms even when the old question
+    contained other distractors.
+    """
     exercise = NotationIdentification()
     rng = random.Random(42)
     original = exercise.generate(rng)
-    selected = {original.answer, *[term for term in ("Stem", "Sharp", "Fermata") if term != original.answer][:2]}
+    selected = {
+        original.answer,
+        *[
+            term
+            for term in ("Stem", "Sharp", "Fermata")
+            if term != original.answer
+        ][:2],
+    }
     settings.notation.terms = selected
     for question in (exercise.generate(rng), exercise.refresh(original)):
-        assert set(question.choices) == selected and set(question.grid or {}) == selected
+        assert (
+            set(question.choices) == selected
+            and set(question.grid or {}) == selected
+        )
     assert exercise.refresh(original).item_key() == original.item_key()
 
 
-@pytest.mark.parametrize("term", ["Staff line", "Stem", "Notehead", "Quarter note", "Segno"])
+@pytest.mark.parametrize(
+    "term",
+    ["Staff line", "Stem", "Notehead", "Quarter note", "Segno"],
+)
 def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     """
-    Switch question types and answer by clicking an unmarked score at its displayed size.
+    Switch question types and answer by clicking an unmarked score at
+    its displayed size.
 
     Parameters
     ----------
@@ -314,7 +466,12 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     assert not view.buttons and view.choice_area.isHidden()
     assert exercise.settings_signature() != button_signature
     assert "click" in exercise.instructions()
-    assert exercise.refresh(Question.from_dict(json.loads(json.dumps(q.to_dict())))) == q
+    assert (
+        exercise.refresh(
+            Question.from_dict(json.loads(json.dumps(q.to_dict()))),
+        )
+        == q
+    )
     settings.notation.question_type = "button"
     load_notation_terms()
     assert NotationSettingsPanel().types["staff"].isChecked()
@@ -323,34 +480,64 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     view.show()
     app.processEvents()
     staff = view.staff
-    before = staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-    pixels = np.frombuffer(before.constBits(), dtype=np.uint8).reshape(-1, 4).astype(int)
+    before = (
+        staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
+    )
+    pixels = (
+        np.frombuffer(before.constBits(), dtype=np.uint8)
+        .reshape(-1, 4)
+        .astype(int)
+    )
     assert not np.any(pixels[:, 2] - pixels[:, 0] > 100)
     preview = StaffWidget()
-    preview.show_notes(q.staff, value=q.value, notation_target=q.notation_target, notation_excerpt=q.notation_excerpt)
+    preview.show_notes(
+        q.staff,
+        value=q.value,
+        notation_target=q.notation_target,
+        notation_excerpt=q.notation_excerpt,
+    )
     preview.resize(staff.size())
-    image = preview.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-    marked = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(image.height(), image.width(), 4).astype(int)
+    image = (
+        preview.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
+    )
+    marked = (
+        np.frombuffer(image.constBits(), dtype=np.uint8)
+        .reshape(image.height(), image.width(), 4)
+        .astype(int)
+    )
     ys, xs = np.where(marked[:, :, 2] - marked[:, :, 0] > 100)
     mid = len(xs) // 2
     target = QPoint(int(xs[mid]), int(ys[mid]))
 
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=QPoint(12, 12))
-    assert view.missed and not view.answered and "Try again" in view.prompt.text()
+    assert (
+        view.missed and not view.answered and "Try again" in view.prompt.text()
+    )
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=target)
-    assert view.answered and view._advance.isActive() and view.total == 1 and view.correct == 0
+    assert (
+        view.answered
+        and view._advance.isActive()
+        and view.total == 1
+        and view.correct == 0
+    )
     view.next_question()
     panel.types["button"].click()
-    assert exercise.settings_signature() == button_signature and len(view.buttons) == 1
+    assert (
+        exercise.settings_signature() == button_signature
+        and len(view.buttons) == 1
+    )
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=target)
     assert not view.answered
     view.buttons[0].click()
     assert view.answered and view.correct == 1
 
 
-def test_hover_previews_the_component_that_a_staff_click_would_select(app: QApplication) -> None:
+def test_hover_previews_the_component_that_a_staff_click_would_select(
+    app: QApplication,
+) -> None:
     """
-    Move between a notehead, a marking, and empty paper before answering the question.
+    Move between a notehead, a marking, and empty paper before answering
+    the question.
 
     Parameters
     ----------
@@ -382,8 +569,16 @@ def test_hover_previews_the_component_that_a_staff_click_would_select(app: QAppl
         ndarray
             Mask of highlighted pixels.
         """
-        image = widget.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-        pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(image.height(), image.width(), 4).astype(int)
+        image = (
+            widget.grab()
+            .toImage()
+            .convertToFormat(QImage.Format.Format_RGBA8888)
+        )
+        pixels = (
+            np.frombuffer(image.constBits(), dtype=np.uint8)
+            .reshape(image.height(), image.width(), 4)
+            .astype(int)
+        )
         return pixels[:, :, 2] - pixels[:, :, 0] > 100
 
     for target in (("Notehead", 0), q.notation_target):
@@ -392,7 +587,12 @@ def test_hover_previews_the_component_that_a_staff_click_would_select(app: QAppl
             app.processEvents()
             assert staff.size() != preview.size()
         preview.resize(staff.size())
-        preview.show_notes(q.staff, clef=q.clef, value=q.value, notation_target=target)
+        preview.show_notes(
+            q.staff,
+            clef=q.clef,
+            value=q.value,
+            notation_target=target,
+        )
         expected = blue_ink(preview)
         ys, xs = np.where(expected)
         point = QPoint(int(xs[len(xs) // 2]), int(ys[len(ys) // 2]))
@@ -421,9 +621,13 @@ def test_hover_previews_the_component_that_a_staff_click_would_select(app: QAppl
     assert original.any() and np.array_equal(blue_ink(staff), original)
 
 
-def test_notation_uses_bundled_glyphs_without_system_music_font(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_notation_uses_bundled_glyphs_without_system_music_font(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Match the Bravura component outlines when the system cannot supply Noto Music.
+    Match the Bravura component outlines when the system cannot supply
+    Noto Music.
 
     Parameters
     ----------
@@ -440,19 +644,32 @@ def test_notation_uses_bundled_glyphs_without_system_music_font(app: QApplicatio
     for term in ("Notehead", "Stem", "Clef"):
         settings.notation.terms = {term}
         question = exercise.generate(random.Random(7))
-        staff.show_notes(question.staff, value=question.value, notation_target=question.notation_target)
+        staff.show_notes(
+            question.staff,
+            value=question.value,
+            notation_target=question.notation_target,
+        )
         masks = []
         for style in ("bravura", "noto"):
             staff.notation_style = BY_KEY[style]
-            image = staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-            pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(-1, 4).astype(int)
+            image = (
+                staff.grab()
+                .toImage()
+                .convertToFormat(QImage.Format.Format_RGBA8888)
+            )
+            pixels = (
+                np.frombuffer(image.constBits(), dtype=np.uint8)
+                .reshape(-1, 4)
+                .astype(int)
+            )
             masks.append(pixels[:, 2] - pixels[:, 0] > 100)
         assert masks[0].any() and np.array_equal(*masks), term
 
 
 def test_repertoire_assets_match_their_manifests(app: QApplication) -> None:
     """
-    Check every bundled marker, its hit map, source credit, and retained MusicXML.
+    Check every bundled marker, its hit map, source credit, and retained
+    MusicXML.
 
     Parameters
     ----------
@@ -460,24 +677,37 @@ def test_repertoire_assets_match_their_manifests(app: QApplication) -> None:
         The application used to load Qt images.
     """
     for excerpt in excerpts().values():
-        metadata = json.loads((excerpt.folder / "excerpt.json").read_text(encoding="utf-8"))
-        assert "CC0" in metadata["rights"] and metadata["source"].endswith(".mxl")
+        metadata = json.loads(
+            (excerpt.folder / "excerpt.json").read_text(encoding="utf-8"),
+        )
+        assert "CC0" in metadata["rights"] and metadata["source"].endswith(
+            ".mxl",
+        )
         music = ET.parse(excerpt.folder / "score.musicxml")
         assert music.findtext("identification/rights") == "OpenScore (CC0)"
-        assert [int(m.attrib["number"]) for m in music.findall("part/measure")] == list(
+        assert [
+            int(m.attrib["number"]) for m in music.findall("part/measure")
+        ] == list(
             range(metadata["measures"][0], metadata["measures"][1] + 1),
         )
         score = ET.parse(excerpt.folder / "score.svg")
-        markers = [int(e.attrib["id"][5:]) for e in score.iter() if e.get("id", "").startswith("mark-")]
+        markers = [
+            int(e.attrib["id"][5:])
+            for e in score.iter()
+            if e.get("id", "").startswith("mark-")
+        ]
         assert sorted(markers) == list(range(len(excerpt.targets)))
         assert set(excerpt.targets) <= MARKS.keys()
         artwork = score_artwork(excerpt)
-        assert set(np.unique(artwork.hits)) == set(range(len(excerpt.targets) + 1))
+        assert set(np.unique(artwork.hits)) == set(
+            range(len(excerpt.targets) + 1),
+        )
 
 
 def test_repertoire_replay_and_generated_fallback(app: QApplication) -> None:
     """
-    Reopen an excerpt in the answer card and keep a selected term outside the collection playable.
+    Reopen an excerpt in the answer card and keep a selected term
+    outside the collection playable.
 
     Parameters
     ----------
@@ -490,16 +720,34 @@ def test_repertoire_replay_and_generated_fallback(app: QApplication) -> None:
     questions = [exercise.generate(rng) for _ in range(32)]
     assert {q.answer for q in questions} == settings.notation.terms
     assert all(set(q.choices) == settings.notation.terms for q in questions)
-    assert all(q.staff and not q.notation_excerpt for q in questions if q.answer == "Koron")
+    assert all(
+        q.staff and not q.notation_excerpt
+        for q in questions
+        if q.answer == "Koron"
+    )
     question = next(q for q in questions if q.notation_excerpt)
     saved = Question.from_dict(json.loads(json.dumps(question.to_dict())))
     assert saved == question and saved.item_key() == question.item_key()
-    assert saved.notation_excerpt and describe(saved) == f"{excerpts()[saved.notation_excerpt].credit} → {saved.answer}"
-    assert replace(saved, notation_excerpt="different-version").item_key() != saved.item_key()
+    assert (
+        saved.notation_excerpt
+        and describe(saved)
+        == f"{excerpts()[saved.notation_excerpt].credit} → {saved.answer}"
+    )
+    assert (
+        replace(saved, notation_excerpt="different-version").item_key()
+        != saved.item_key()
+    )
     preview = QuestionPreview(exercise.name, question=saved)
     staff = preview.findChild(StaffWidget)
-    assert staff is not None and staff.excerpt is not None and saved.notation_excerpt
-    assert staff.excerpt.excerpt == excerpts()[saved.notation_excerpt] and staff.notation_target == saved.notation_target
+    assert (
+        staff is not None
+        and staff.excerpt is not None
+        and saved.notation_excerpt
+    )
+    assert (
+        staff.excerpt.excerpt == excerpts()[saved.notation_excerpt]
+        and staff.notation_target == saved.notation_target
+    )
     legacy = next(q for q in questions if q.staff)
     payload = legacy.to_dict()
     del payload["notation_excerpt"]
@@ -508,7 +756,8 @@ def test_repertoire_replay_and_generated_fallback(app: QApplication) -> None:
 
 def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
     """
-    Hover and click the second accent, then keep its feedback on that exact symbol after moving the mouse.
+    Hover and click the second accent, then keep its feedback on that
+    exact symbol after moving the mouse.
 
     Parameters
     ----------
@@ -519,11 +768,18 @@ def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
     settings.notation.question_type = "staff"
     view = ExerciseView(NotationIdentification(), rng=random.Random(11))
     question = view.question
-    assert question and question.notation_target and question.notation_excerpt and not question.choices
+    assert (
+        question
+        and question.notation_target
+        and question.notation_excerpt
+        and not question.choices
+    )
     staff = view.staff
     assert staff.excerpt
     target = next(
-        i for i, term in enumerate(staff.excerpt.excerpt.targets) if term == "Accent" and i != question.notation_target[1]
+        i
+        for i, term in enumerate(staff.excerpt.excerpt.targets)
+        if term == "Accent" and i != question.notation_target[1]
     )
     view.show()
     point = QPoint()
@@ -534,8 +790,14 @@ def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
         hit_map = np.asarray(staff.excerpt.hits)
         ys, xs = np.where(hit_map == target + 1)
         point = QPoint(
-            round(rect.left() + xs[len(xs) // 2] * rect.width() / hit_map.shape[1]),
-            round(rect.top() + ys[len(xs) // 2] * rect.height() / hit_map.shape[0]),
+            round(
+                rect.left()
+                + xs[len(xs) // 2] * rect.width() / hit_map.shape[1],
+            ),
+            round(
+                rect.top()
+                + ys[len(xs) // 2] * rect.height() / hit_map.shape[0],
+            ),
         )
         QTest.mouseMove(staff, point)
         assert staff._notation_at(point) == ("Accent", target)
@@ -550,10 +812,20 @@ def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
     assert staff.grab().toImage() == after
 
 
-@pytest.mark.parametrize(("term", "prompt"), [("Sharp", "Click a sharp beside a note."), ("Barline", "Click a single barline.")])
-def test_excerpt_prompt_distinguishes_related_ink(term: str, prompt: str) -> None:
+@pytest.mark.parametrize(
+    ("term", "prompt"),
+    [
+        ("Sharp", "Click a sharp beside a note."),
+        ("Barline", "Click a single barline."),
+    ],
+)
+def test_excerpt_prompt_distinguishes_related_ink(
+    term: str,
+    prompt: str,
+) -> None:
     """
-    Distinguish note accidentals from the key signature and single from final barlines.
+    Distinguish note accidentals from the key signature and single from
+    final barlines.
 
     Parameters
     ----------

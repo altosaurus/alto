@@ -7,8 +7,10 @@ permalink: /api/alto.learning.calendar/
 {% raw %}
 Daily exercise queues for SM-2 and FSRS.
 
-The scheduler controls when an introduced card is due. Each exercise supplies new
-questions under its current settings. Counting a prepared question does not introduce it.
+The scheduler controls when an introduced card is due. Each exercise
+supplies new
+questions under its current settings. Counting a prepared question does
+not introduce it.
 
 ## ReviewInterval
 
@@ -28,7 +30,11 @@ A preview of one rating for a card in its current scheduling state.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ReviewInterval(600, (1, "NoteNames", "abc", "FSRS"), None).seconds
+>>> ReviewInterval(
+...     600,
+...     (1, "NoteNames", "abc", "FSRS"),
+...     None,
+... ).seconds
 600
 ```
 
@@ -39,7 +45,8 @@ A preview of one rating for a card in its current scheduling state.
 def duration() -> str
 ```
 
-Format a review interval for display above a grade button or beside the music.
+Format a review interval for display above a grade button or
+beside the music.
 
 **Returns**
 
@@ -48,7 +55,11 @@ Format a review interval for display above a grade button or beside the music.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ReviewInterval(330, (1, "NoteNames", "abc", "FSRS"), None).duration
+>>> ReviewInterval(
+...     330,
+...     (1, "NoteNames", "abc", "FSRS"),
+...     None,
+... ).duration
 '5 min 30 s'
 ```
 
@@ -58,7 +69,8 @@ Format a review interval for display above a grade button or beside the music.
 CalendarPractice(db: Database)
 ```
 
-Prepare daily exercise queues and store each scheduler's review dates.
+Prepare daily exercise queues and store each scheduler's review
+dates.
 
 **Examples**
 
@@ -93,7 +105,8 @@ def inherit_schedules(
 ) -> None
 ```
 
-Initialize missing schedules for this profile from the other calendar scheduler.
+Initialize missing schedules for this profile from the other
+calendar scheduler.
 
 **Parameters**
 
@@ -103,7 +116,8 @@ Initialize missing schedules for this profile from the other calendar scheduler.
 **Examples**
 
 ```text
-Switching to FSRS carries over an SM-2 due date without consuming a review.
+Switching to FSRS carries over an SM-2 due date without
+consuming a review.
 ```
 
 ### CalendarPractice.limits
@@ -158,7 +172,9 @@ Read the two explicitly saved limits for an exercise.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> CalendarPractice(Database()).overrides(1, exercise="NoteNames")
+>>> CalendarPractice(Database()).overrides(
+...     1, exercise="NoteNames"
+... )
 (None, None)
 ```
 
@@ -189,8 +205,12 @@ Save the profile defaults or an exercise's individual overrides.
 >>> db = Database()
 >>> practice = CalendarPractice(db)
 >>> profile = db.add_profile("Ada").id
->>> practice.set_limits(profile, new_cards=5, reviews=30)
->>> practice.limits(profile, exercise="NoteNames")
+>>> practice.set_limits(
+...     profile, new_cards=5, reviews=30
+... )
+>>> practice.limits(
+...     profile, exercise="NoteNames"
+... )
 (5, 30)
 ```
 
@@ -209,7 +229,8 @@ Restore the profile defaults and remove its exercise overrides.
 **Examples**
 
 ```text
-Restoring defaults keeps the day's introductions and completed reviews.
+Restoring defaults keeps the day's introductions and completed
+reviews.
 ```
 
 ### CalendarPractice.queue
@@ -224,7 +245,8 @@ def queue(
 ) -> tuple[list[Question], list[Question]]
 ```
 
-Find due reviews and prepare the remaining new cards for this local day.
+Find due reviews and prepare the remaining new cards for this
+local day.
 
 **Parameters**
 
@@ -243,7 +265,12 @@ Find due reviews and prepare the remaining new cards for this local day.
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> due, new = CalendarPractice(db).queue(NoteNames(), profile=ada.id, mode="FSRS", now=1000)
+>>> due, new = CalendarPractice(db).queue(
+...     NoteNames(),
+...     profile=ada.id,
+...     mode="FSRS",
+...     now=1000,
+... )
 >>> not due and len(new) == DAILY_NEW
 True
 ```
@@ -260,7 +287,8 @@ def counts(
 ) -> tuple[int, int]
 ```
 
-Count due reviews and unseen cards available with the selected settings.
+Count due reviews and unseen cards available with the selected
+settings.
 
 **Parameters**
 
@@ -278,7 +306,12 @@ Count due reviews and unseen cards available with the selected settings.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
->>> CalendarPractice(db).counts(NoteNames(), profile=db.add_profile("Ada").id, mode="SM-2", now=100)[1] > 0
+>>> CalendarPractice(db).counts(
+...     NoteNames(),
+...     profile=db.add_profile("Ada").id,
+...     mode="SM-2",
+...     now=100,
+... )[1] > 0
 True
 ```
 
@@ -294,7 +327,8 @@ def tile_counts(
 ) -> tuple[int, int, int]
 ```
 
-Count available reviews, new cards, and missed cards awaiting a correct review.
+Count available reviews, new cards, and missed cards awaiting a
+correct review.
 
 **Parameters**
 
@@ -312,7 +346,12 @@ Count available reviews, new cards, and missed cards awaiting a correct review.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
->>> CalendarPractice(db).tile_counts(NoteNames(), profile=db.add_profile("Ada").id, mode="SM-2", now=100)[2]
+>>> CalendarPractice(db).tile_counts(
+...     NoteNames(),
+...     profile=db.add_profile("Ada").id,
+...     mode="SM-2",
+...     now=100,
+... )[2]
 0
 ```
 
@@ -329,7 +368,8 @@ def study_counts(
 ) -> tuple[tuple[int, int, int], str | None]
 ```
 
-Count the exercise queues and identify the queue of the question on screen.
+Count the exercise queues and identify the queue of the question
+on screen.
 
 **Parameters**
 
@@ -346,7 +386,8 @@ Count the exercise queues and identify the queue of the question on screen.
 **Examples**
 
 ```text
-A missed card that comes due again is underlined as incorrect during its retry.
+A missed card that comes due again is underlined as incorrect
+during its retry.
 ```
 
 ### CalendarPractice.take
@@ -361,7 +402,8 @@ def take(
 ) -> Question | None
 ```
 
-Take the first eligible card, recording a new introduction only when served.
+Take the first eligible card, recording a new introduction only
+when served.
 
 **Parameters**
 
@@ -377,10 +419,17 @@ Take the first eligible card, recording a new introduction only when served.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import ChordQualities
+>>> from alto.exercises.library import (
+...     ChordQualities,
+... )
 >>> db = Database()
 >>> practice = CalendarPractice(db)
->>> question = practice.take(ChordQualities(), profile=db.add_profile("Ada").id, mode="SM-2", now=1000)
+>>> question = practice.take(
+...     ChordQualities(),
+...     profile=db.add_profile("Ada").id,
+...     mode="SM-2",
+...     now=1000,
+... )
 >>> isinstance(question, Question)
 True
 ```
@@ -399,7 +448,8 @@ def take_or_wait(
 ) -> tuple[Question | None, float | None]
 ```
 
-Draw an eligible card or return the time when a missed card can be reviewed.
+Draw an eligible card or return the time when a missed card can
+be reviewed.
 
 **Parameters**
 
@@ -417,7 +467,8 @@ Draw an eligible card or return the time when a missed card can be reviewed.
 **Examples**
 
 ```text
-A single missed card can wake the exercise when its learning step expires.
+A single missed card can wake the exercise when its learning
+step expires.
 ```
 
 ### CalendarPractice.introduce
@@ -432,7 +483,8 @@ def introduce(
 ) -> None
 ```
 
-Register a calendar introduction once, in the caller's draw or answer transaction.
+Register a calendar introduction once, in the caller's draw or
+answer transaction.
 
 **Parameters**
 
@@ -477,7 +529,15 @@ Preview the next correct answer without grading the card.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> CalendarPractice(Database()).correct_interval("NoteNames", profile=1, key="abc", mode="FSRS", now=1000).seconds
+>>> CalendarPractice(
+...     Database()
+... ).correct_interval(
+...     "NoteNames",
+...     profile=1,
+...     key="abc",
+...     mode="FSRS",
+...     now=1000,
+... ).seconds
 600
 ```
 
@@ -495,7 +555,8 @@ def passing_intervals(
 ) -> dict[Rating, ReviewInterval]
 ```
 
-Preview the three passing outcomes from one snapshot of this card.
+Preview the three passing outcomes from one snapshot of this
+card.
 
 **Parameters**
 
@@ -514,7 +575,13 @@ Preview the three passing outcomes from one snapshot of this card.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> practice = CalendarPractice(Database())
->>> practice.passing_intervals("NoteNames", profile=1, key="abc", mode="SM-2", now=0)[Rating.Good].seconds
+>>> practice.passing_intervals(
+...     "NoteNames",
+...     profile=1,
+...     key="abc",
+...     mode="SM-2",
+...     now=0,
+... )[Rating.Good].seconds
 600
 ```
 
@@ -534,7 +601,8 @@ def grade(
 ) -> None
 ```
 
-Reschedule a card from the first submission to this presentation.
+Reschedule a card from the first submission to this
+presentation.
 
 **Parameters**
 
@@ -554,9 +622,23 @@ Reschedule a card from the first submission to this presentation.
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> practice = CalendarPractice(db)
->>> question = practice.take(NoteNames(), profile=ada.id, mode="SM-2", now=1000)
->>> practice.grade("NoteNames", profile=ada.id, key=question.item_key(), mode="SM-2", correct=True, now=1002)
->>> db.conn.execute("SELECT due FROM review_schedules").fetchone()[0]
+>>> question = practice.take(
+...     NoteNames(),
+...     profile=ada.id,
+...     mode="SM-2",
+...     now=1000,
+... )
+>>> practice.grade(
+...     "NoteNames",
+...     profile=ada.id,
+...     key=question.item_key(),
+...     mode="SM-2",
+...     correct=True,
+...     now=1002,
+... )
+>>> db.conn.execute(
+...     "SELECT due FROM review_schedules"
+... ).fetchone()[0]
 87402.0
 ```
 {% endraw %}

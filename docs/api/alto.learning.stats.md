@@ -5,10 +5,13 @@ package: alto.learning
 permalink: /api/alto.learning.stats/
 ---
 {% raw %}
-Numbers and series for the statistics screen, worked out from the answers in the database. Pure Python, no Qt.
+Numbers and series for the statistics screen, worked out from the
+answers in the database. Pure Python, no Qt.
 
-A "question" here is one showing of a question, scored by its first answer: it is right if that answer was right.
-Later attempts at the same showing show up as extra attempts per question, not as extra questions.
+A "question" here is one showing of a question, scored by its first
+answer: it is right if that answer was right.
+Later attempts at the same showing show up as extra attempts per
+question, not as extra questions.
 
 **Examples**
 
@@ -16,9 +19,19 @@ Later attempts at the same showing show up as extra attempts per question, not a
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for i, ok in enumerate((True, True, False)):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key=str(i), attempt_no=1, answer="C", correct=ok,
-...                    duration_ms=2000, answered_at=1000.0 + i)
->>> stats = collect(db, profile_ids=[ada.id], now=1010.0)
+...     db.add_attempt(
+...         ada.id,
+...         exercise="NoteNames",
+...         item_key=str(i),
+...         attempt_no=1,
+...         answer="C",
+...         correct=ok,
+...         duration_ms=2000,
+...         answered_at=1000.0 + i,
+...     )
+>>> stats = collect(
+...     db, profile_ids=[ada.id], now=1010.0
+... )
 >>> stats.questions, stats.first_right
 (3, 2)
 >>> # noinspection PyTypeChecker
@@ -39,7 +52,8 @@ Bucket(
 )
 ```
 
-The answers given in one period (an hour, day, week or month), for the charts.
+The answers given in one period (an hour, day, week or month), for
+the charts.
 
 **Attributes**
 
@@ -52,7 +66,13 @@ The answers given in one period (an hour, day, week or month), for the charts.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> bucket = Bucket(datetime(2026, 1, 5), label="Jan 5", questions=2, first_right=1, times=[2.0, 4.0])
+>>> bucket = Bucket(
+...     datetime(2026, 1, 5),
+...     label="Jan 5",
+...     questions=2,
+...     first_right=1,
+...     times=[2.0, 4.0],
+... )
 >>> bucket.accuracy, bucket.median_seconds
 (50.0, 3.0)
 ```
@@ -64,7 +84,8 @@ The answers given in one period (an hour, day, week or month), for the charts.
 def accuracy() -> float | None
 ```
 
-Return the percentage of questions in the period that were right on the first try.
+Return the percentage of questions in the period that were right
+on the first try.
 
 **Returns**
 
@@ -73,9 +94,16 @@ Return the percentage of questions in the period that were right on the first tr
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Bucket(datetime(2026, 1, 5), label="Jan 5", questions=4, first_right=3).accuracy
+>>> Bucket(
+...     datetime(2026, 1, 5),
+...     label="Jan 5",
+...     questions=4,
+...     first_right=3,
+... ).accuracy
 75.0
->>> Bucket(datetime(2026, 1, 5), label="Jan 5").accuracy is None
+>>> Bucket(
+...     datetime(2026, 1, 5), label="Jan 5"
+... ).accuracy is None
 True
 ```
 
@@ -95,7 +123,11 @@ Return the typical time to a first answer in the period.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Bucket(datetime(2026, 1, 5), label="Jan 5", times=[1.0, 2.0, 9.0]).median_seconds
+>>> Bucket(
+...     datetime(2026, 1, 5),
+...     label="Jan 5",
+...     times=[1.0, 2.0, 9.0],
+... ).median_seconds
 2.0
 ```
 
@@ -123,7 +155,12 @@ How practice is going on one exercise.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ExerciseStats("NoteNames", questions=40, accuracy=87.5, median_seconds=3.2).accuracy
+>>> ExerciseStats(
+...     "NoteNames",
+...     questions=40,
+...     accuracy=87.5,
+...     median_seconds=3.2,
+... ).accuracy
 87.5
 ```
 
@@ -142,7 +179,8 @@ HardQuestion(
 )
 ```
 
-A question that needs practice, for the list on the statistics screen.
+A question that needs practice, for the list on the statistics
+screen.
 
 **Attributes**
 
@@ -157,7 +195,13 @@ A question that needs practice, for the list on the statistics screen.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> HardQuestion("NoteNames", text="Treble: G4", strain=4.5, seen=6, wrong=5).wrong
+>>> HardQuestion(
+...     "NoteNames",
+...     text="Treble: G4",
+...     strain=4.5,
+...     seen=6,
+...     wrong=5,
+... ).wrong
 5
 ```
 
@@ -201,7 +245,9 @@ Everything the statistics screen shows.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> Stats().accuracy is None  # nothing answered yet
 True
->>> Stats(4, first_right=3, attempts=6).attempts_per_question
+>>> Stats(
+...     4, first_right=3, attempts=6
+... ).attempts_per_question
 1.5
 ```
 
@@ -212,7 +258,8 @@ True
 def accuracy() -> float | None
 ```
 
-Return the percentage of questions that were right on the first try.
+Return the percentage of questions that were right on the first
+try.
 
 **Returns**
 
@@ -255,7 +302,8 @@ def period_end(
 ) -> datetime
 ```
 
-Return the moment a chart period ends, which is when the next one begins.
+Return the moment a chart period ends, which is when the next one
+begins.
 
 **Parameters**
 
@@ -269,9 +317,14 @@ Return the moment a chart period ends, which is when the next one begins.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> period_end(datetime(2026, 1, 5), granularity="week")
+>>> period_end(
+...     datetime(2026, 1, 5), granularity="week"
+... )
 datetime.datetime(2026, 1, 12, 0, 0)
->>> period_end(datetime(2026, 12, 1), granularity="month")
+>>> period_end(
+...     datetime(2026, 12, 1),
+...     granularity="month",
+... )
 datetime.datetime(2027, 1, 1, 0, 0)
 ```
 
@@ -281,7 +334,8 @@ datetime.datetime(2027, 1, 1, 0, 0)
 def describe(question: Question) -> str
 ```
 
-Return a short line saying what a question was, for the list of questions that need practice.
+Return a short line saying what a question was, for the list of
+questions that need practice.
 
 **Parameters**
 
@@ -295,7 +349,13 @@ Return a short line saying what a question was, for the list of questions that n
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.base import Question
->>> describe(Question("What type of chord is this?", choices=["major", "minor"], answer="minor"))
+>>> describe(
+...     Question(
+...         "What type of chord is this?",
+...         choices=["major", "minor"],
+...         answer="minor",
+...     )
+... )
 'What type of chord is this? → minor'
 ```
 
@@ -312,10 +372,13 @@ def daily_counts(
 ) -> dict[date, int]
 ```
 
-Return how many questions were answered on each day, for the review heatmap.
+Return how many questions were answered on each day, for the review
+heatmap.
 
-Looks back over the last `weeks` calendar weeks up to today, in local time. Days with no answers are left out. It
-counts questions (first attempts), not attempts, like everything else here.
+Looks back over the last `weeks` calendar weeks up to today, in
+local time. Days with no answers are left out. It
+counts questions (first attempts), not attempts, like everything
+else here.
 
 **Parameters**
 
@@ -334,11 +397,25 @@ counts questions (first attempts), not attempts, like everything else here.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> database = Database()
 >>> ada = database.add_profile("Ada")
->>> noon = datetime(2026, 11, 13, 12).timestamp()
+>>> noon = datetime(
+...     2026, 11, 13, 12
+... ).timestamp()
 >>> for i in range(3):
-...     database.add_attempt(ada.id, exercise="NoteNames", item_key=str(i), attempt_no=1, answer="C", correct=True,
-...                    duration_ms=1000, answered_at=noon + i)
->>> daily_counts(database, profile_ids=[ada.id], now=noon + 60)
+...     database.add_attempt(
+...         ada.id,
+...         exercise="NoteNames",
+...         item_key=str(i),
+...         attempt_no=1,
+...         answer="C",
+...         correct=True,
+...         duration_ms=1000,
+...         answered_at=noon + i,
+...     )
+>>> daily_counts(
+...     database,
+...     profile_ids=[ada.id],
+...     now=noon + 60,
+... )
 {datetime.date(2026, 11, 13): 3}
 ```
 
@@ -378,12 +455,30 @@ Work out everything the statistics screen shows.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> database = Database()
 >>> ada = database.add_profile("Ada")
->>> database.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                duration_ms=4000, answered_at=1000.0)
->>> stats = collect(database, profile_ids=[ada.id], now=1060.0)
->>> stats.questions, stats.median_seconds, stats.practice_seconds
+>>> database.add_attempt(
+...     ada.id,
+...     exercise="NoteNames",
+...     item_key="k",
+...     attempt_no=1,
+...     answer="C",
+...     correct=True,
+...     duration_ms=4000,
+...     answered_at=1000.0,
+... )
+>>> stats = collect(
+...     database,
+...     profile_ids=[ada.id],
+...     now=1060.0,
+... )
+>>> (
+...     stats.questions,
+...     stats.median_seconds,
+...     stats.practice_seconds,
+... )
 (1, 4.0, 4.0)
->>> collect(database, profile_ids=[999], now=1060.0).questions  # nobody has answered anything
+>>> collect(
+...     database, profile_ids=[999], now=1060.0
+... ).questions  # nobody has answered anything
 0
 ```
 {% endraw %}

@@ -1,4 +1,7 @@
-"""The statistics: counts, times and accuracy over days, exercises and profiles."""
+"""
+The statistics: counts, times and accuracy over days, exercises and
+profiles.
+"""
 
 from __future__ import annotations
 
@@ -85,7 +88,8 @@ def fill() -> tuple[Database, Profile, Profile]:
     a, b = A(), B()
     qa, qb = a.generate(rng), b.generate(rng)
     la, lb = Learner(db, profile=ada), Learner(db, profile=ben)
-    # Ada, two days ago: A right on the first try (2 s), A wrong then right (4 s then 3 s)
+    # Ada, two days ago: A right on the first try (2 s), A wrong then
+    # right (4 s then 3 s)
     la.record(
         a,
         question=qa,
@@ -196,7 +200,11 @@ def test_buckets_run_without_gaps_from_first_answer_to_now() -> None:
     )
     assert s.granularity == "day" and len(s.buckets) == 8
     assert sum(b.questions for b in s.buckets) == s.questions
-    assert [b.questions for b in s.buckets][-3:] == [2, 0, 1]  # two days ago, yesterday (empty), today
+    assert [b.questions for b in s.buckets][-3:] == [
+        2,
+        0,
+        1,
+    ]  # two days ago, yesterday (empty), today
 
 
 def test_long_spans_use_coarser_buckets() -> None:
@@ -204,7 +212,9 @@ def test_long_spans_use_coarser_buckets() -> None:
     Check that long spans use coarser buckets.
     """
     db, ada, _ = fill()
-    assert stats.collect(db, profile_ids=None, now=NOW).granularity == "day"  # 20 days
+    assert (
+        stats.collect(db, profile_ids=None, now=NOW).granularity == "day"
+    )  # 20 days
     assert (
         stats.collect(
             db,
@@ -250,14 +260,20 @@ def test_nothing_recorded_gives_empty_stats() -> None:
     Check that nothing recorded gives empty stats.
     """
     s = stats.collect(Database(), profile_ids=None, now=NOW)
-    assert s.questions == 0 and s.accuracy is None and s.buckets == [] and s.hardest == []
+    assert (
+        s.questions == 0
+        and s.accuracy is None
+        and s.buckets == []
+        and s.hardest == []
+    )
 
 
-def test_daily_counts_count_first_answers_per_local_day_and_follow_the_exercise(
+def test_daily_counts_count_first_answers_per_local_day_and(
     practiced_learner: Callable[..., Learner],
 ) -> None:
     """
-    Check that daily counts count first answers per local day and follow the exercise.
+    Check that daily counts count first answers per local day and follow
+    the exercise.
 
     Parameters
     ----------
@@ -266,7 +282,11 @@ def test_daily_counts_count_first_answers_per_local_day_and_follow_the_exercise(
     """
     learner = practiced_learner()
     now = time.time()
-    everything = stats.daily_counts(learner.db, profile_ids=[learner.profile.id], now=now)
+    everything = stats.daily_counts(
+        learner.db,
+        profile_ids=[learner.profile.id],
+        now=now,
+    )
     assert everything and datetime.fromtimestamp(now).date() >= max(everything)
     total = sum(everything.values())
     assert (

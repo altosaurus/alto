@@ -1,11 +1,16 @@
 """
-How long each operation may take before a test fails: about four to five times what it took when the budgets were set.
+How long each operation may take before a test fails: about four to five
+times what it took when the budgets were set.
 
-The margin is wide on purpose. A shared build machine can be twice as slow as this one from one run to the next, and a test that
-fails for no reason soon gets ignored. A margin this size still catches the kind of mistake that makes something ten times slower,
-such as measuring a glyph the font does not have, for every name in the circle of fifths, at every size.
+The margin is wide on purpose. A shared build machine can be twice as
+slow as this one from one run to the next, and a test that
+fails for no reason soon gets ignored. A margin this size still catches
+the kind of mistake that makes something ten times slower,
+such as measuring a glyph the font does not have, for every name in the
+circle of fifths, at every size.
 
-Slower trends than that are for the ASV history to show. When an operation is made faster or slower on purpose, change its budget
+Slower trends than that are for the ASV history to show. When an
+operation is made faster or slower on purpose, change its budget
 here in the same commit.
 
 Examples
@@ -20,7 +25,8 @@ from __future__ import annotations
 
 MILLISECOND = 0.001
 
-# The longest an operation may take, in milliseconds, by its name; a name ending in ":" stands for every name that starts with it.
+# The longest an operation may take, in milliseconds, by its name; a
+# name ending in ":" stands for every name that starts with it.
 WARM_MS = {
     "page:statistics": 200,
     "page:settings": 400,
@@ -40,7 +46,8 @@ WARM_MS = {
     "learner:": 20,
 }
 
-# The first use in a new process, which also builds the fonts and layouts that are cached afterwards, and varies more.
+# The first use in a new process, which also builds the fonts and
+# layouts that are cached afterwards, and varies more.
 COLD_MS = {
     "startup": 1000,
     "resize:": 150,
@@ -54,7 +61,8 @@ def _lookup(
     name: str,
 ) -> int:
     """
-    Find the budget for a name: the exact name first, then the longest prefix that is listed.
+    Find the budget for a name: the exact name first, then the longest
+    prefix that is listed.
 
     Parameters
     ----------
@@ -75,7 +83,10 @@ def _lookup(
 
     Examples
     --------
-    >>> _lookup(WARM_MS, name="page:home"), _lookup(WARM_MS, name="page:NoteNames")
+    >>> (
+    ...     _lookup(WARM_MS, name="page:home"),
+    ...     _lookup(WARM_MS, name="page:NoteNames"),
+    ... )
     (50, 150)
     >>> _lookup(WARM_MS, name="unknown")
     Traceback (most recent call last):
@@ -83,7 +94,11 @@ def _lookup(
     """
     if name in table:
         return table[name]
-    prefixes = [prefix for prefix in table if name.startswith(prefix) and prefix.endswith(":")]
+    prefixes = [
+        prefix
+        for prefix in table
+        if name.startswith(prefix) and prefix.endswith(":")
+    ]
     if not prefixes:
         raise KeyError(f"no budget for {name}")
     return table[max(prefixes, key=len)]

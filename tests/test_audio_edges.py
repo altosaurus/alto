@@ -1,4 +1,7 @@
-"""The audio engine's less common paths: far notes, fades, errors and a sequence that is replaced while it waits."""
+"""
+The audio engine's less common paths: far notes, fades, errors and a
+sequence that is replaced while it waits.
+"""
 
 from __future__ import annotations
 
@@ -48,7 +51,12 @@ class Effect:
         loading : bool
             Whether it is still loading.
         """
-        self.playing, self.loading, self.volume_set, self.stopped = playing, loading, [], 0
+        self.playing, self.loading, self.volume_set, self.stopped = (
+            playing,
+            loading,
+            [],
+            0,
+        )
 
     # noinspection PyPep8Naming
     def isPlaying(self) -> bool:
@@ -108,10 +116,16 @@ class Effect:
         QSoundEffect.Status
             Loading while the loading flag is set, otherwise Ready.
         """
-        return QSoundEffect.Status.Loading if self.loading else QSoundEffect.Status.Ready
+        return (
+            QSoundEffect.Status.Loading
+            if self.loading
+            else QSoundEffect.Status.Ready
+        )
 
 
-def test_a_piano_note_far_outside_the_recordings_is_synthesized(tmp_path: Path) -> None:
+def test_a_piano_note_far_outside_the_recordings_is_synthesized(
+    tmp_path: Path,
+) -> None:
     """
     Check that a piano note far outside the recordings is synthesized.
 
@@ -123,13 +137,18 @@ def test_a_piano_note_far_outside_the_recordings_is_synthesized(tmp_path: Path) 
     s = Sounds()
     s._dir = tmp_path
     piano = INSTRUMENT_BY_KEY["piano"]
-    path = s._note_file(piano, midi=max(s.recordings(piano)) + 6)  # well above the highest recording
+    path = s._note_file(
+        piano,
+        midi=max(s.recordings(piano)) + 6,
+    )  # well above the highest recording
     assert path.exists()
     with wave.open(str(path)) as w:
         assert w.getnchannels() == 1 and w.getnframes() > 1000
 
 
-def test_another_instrument_shifts_the_nearest_recording(tmp_path: Path) -> None:
+def test_another_instrument_shifts_the_nearest_recording(
+    tmp_path: Path,
+) -> None:
     """
     Check that another instrument shifts the nearest recording.
 
@@ -141,11 +160,16 @@ def test_another_instrument_shifts_the_nearest_recording(tmp_path: Path) -> None
     s = Sounds()
     s._dir = tmp_path
     inst = INSTRUMENT_BY_KEY["viola_plucked"]
-    missing = next(m for m in range(48, 90) if m not in s.recordings(inst))  # a note between the recorded ones
+    missing = next(
+        m for m in range(48, 90) if m not in s.recordings(inst)
+    )  # a note between the recorded ones
     assert s._note_file(inst, midi=missing).exists()
 
 
-def test_a_released_note_fades_out_and_stops(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_released_note_fades_out_and_stops(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that a released note fades out and stops.
 
@@ -160,8 +184,18 @@ def test_a_released_note_fades_out_and_stops(app: QApplication, monkeypatch: pyt
     fx = QObject()
     fx.setProperty("volume", 1.0)
     stopped = []
-    monkeypatch.setattr(fx, "volume", lambda: fx.property("volume"), raising=False)
-    monkeypatch.setattr(fx, "stop", lambda: stopped.append(True), raising=False)
+    monkeypatch.setattr(
+        fx,
+        "volume",
+        lambda: fx.property("volume"),
+        raising=False,
+    )
+    monkeypatch.setattr(
+        fx,
+        "stop",
+        lambda: stopped.append(True),
+        raising=False,
+    )
     s._release(fx)  # type: ignore[arg-type]
     assert id(fx) in s._fades
     QTest.qWait(s.FADE_MS + 150)
@@ -220,7 +254,9 @@ def test_stop_all_silences_what_is_playing_and_cancels_fades() -> None:
     s._sounding = [loud]
     s.stop_all()
     assert canceled == [1, 1] and s._fades == {} and s._sounding == []
-    assert loud.stopped == 1 and loud.volume_set == [0.0] and quiet.stopped == 0
+    assert (
+        loud.stopped == 1 and loud.volume_set == [0.0] and quiet.stopped == 0
+    )
 
 
 def test_a_failure_in_the_sound_system_is_reported_not_raised(
@@ -233,7 +269,8 @@ def test_a_failure_in_the_sound_system_is_reported_not_raised(
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     capsys : pytest.CaptureFixture[str]
         Captures what the test prints.
     """
@@ -258,18 +295,29 @@ def test_a_failure_in_the_sound_system_is_reported_not_raised(
         midi : int
             The note.
         """
-        del inst, midi  # accepted to match what it stands in for, but not needed
+        del (
+            inst,
+            midi,
+        )  # accepted to match what it stands in for, but not needed
         raise RuntimeError("no sound card")
 
     monkeypatch.setattr(s, "_effect", broken)
-    monkeypatch.setattr(s, "_preview_file", lambda *_args, **_kwargs: broken("piano", midi=60))
+    monkeypatch.setattr(
+        s,
+        "_preview_file",
+        lambda *_args, **_kwargs: broken("piano", midi=60),
+    )
     s.play_midi(60)
     s.play_notes([[Note(4, letter=0)]])
     s.preview("piano", midis=(60,))
-    assert capsys.readouterr().out.count("audio unavailable: no sound card") == 3
+    assert (
+        capsys.readouterr().out.count("audio unavailable: no sound card") == 3
+    )
 
 
-def test_an_unknown_instrument_is_reported_not_raised(capsys: pytest.CaptureFixture[str]) -> None:
+def test_an_unknown_instrument_is_reported_not_raised(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     """
     Check that an unknown instrument is reported not raised.
 
@@ -287,21 +335,33 @@ def test_a_sequence_waiting_for_its_notes_to_load_gives_way_to_a_newer_one(
     app: QApplication,
 ) -> None:
     """
-    Check that a sequence waiting for its notes to load gives way to a newer one.
+    Check that a sequence waiting for its notes to load gives way to a
+    newer one.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     app : QApplication
         The shared Qt application.
     """
     s = Sounds()
     slow, ready = Effect(loading=True), Effect()
     played = []
-    monkeypatch.setattr(s, "play_midi", lambda midi, *a, **k: played.append(midi))
-    monkeypatch.setattr(s, "_effect", lambda inst, midi: slow if midi == 60 else ready)
-    s.play_notes([[Note(4, letter=0)]])  # waits, because note 60 is still loading
+    monkeypatch.setattr(
+        s,
+        "play_midi",
+        lambda midi, *a, **k: played.append(midi),
+    )
+    monkeypatch.setattr(
+        s,
+        "_effect",
+        lambda inst, midi: slow if midi == 60 else ready,
+    )
+    s.play_notes(
+        [[Note(4, letter=0)]],
+    )  # waits, because note 60 is still loading
     s.play_notes([[Note(4, letter=1)]])  # replaces it
     QTest.qWait(150)
     assert played == [62]  # the first one gave up without playing
@@ -313,9 +373,11 @@ def test_samples_are_stored_little_endian_whatever_the_computer(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that WAV files stay little-endian, as the format requires, and read back right, also on a big-endian computer.
+    Check that WAV files stay little-endian, as the format requires, and
+    read back right, also on a big-endian computer.
 
-    Python's `wave` module swaps the bytes itself on a big-endian computer, so Alto must not swap them again.
+    Python's `wave` module swaps the bytes itself on a big-endian
+    computer, so Alto must not swap them again.
 
     Parameters
     ----------
@@ -326,15 +388,22 @@ def test_samples_are_stored_little_endian_whatever_the_computer(
     """
     path = tmp_path / "note.wav"
     path.write_bytes(to_wav_bytes([0.5, -0.25]))
-    assert path.read_bytes()[44:] == bytes([0xFF, 0x3F, 0x01, 0xE0])  # 16383 and -8191, least significant byte first
+    assert path.read_bytes()[44:] == bytes(
+        [0xFF, 0x3F, 0x01, 0xE0],
+    )  # 16383 and -8191, least significant byte first
     assert [round(value, 3) for value in read_wav(path)[0]] == [0.5, -0.25]
     monkeypatch.setattr(sys, "byteorder", "big")
-    assert to_wav_bytes([0.5, -0.25])[44:] == bytes([0x3F, 0xFF, 0xE0, 0x01])  # what this little-endian computer's memory holds
+    assert to_wav_bytes([0.5, -0.25])[44:] == bytes(
+        [0x3F, 0xFF, 0xE0, 0x01],
+    )  # what this little-endian computer's memory holds
 
 
-def test_an_instrument_without_recordings_has_no_notes_to_make(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_an_instrument_without_recordings_has_no_notes_to_make(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that an instrument with no recordings lists nothing for the warm-up to make.
+    Check that an instrument with no recordings lists nothing for the
+    warm-up to make.
 
     Parameters
     ----------
@@ -346,9 +415,13 @@ def test_an_instrument_without_recordings_has_no_notes_to_make(monkeypatch: pyte
     assert player.unrecorded("piano") == []
 
 
-def test_loud_notes_that_overlap_in_a_preview_are_clipped(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_loud_notes_that_overlap_in_a_preview_are_clipped(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that a preview whose notes add up beyond full scale where they overlap is clipped rather than wrapped around.
+    Check that a preview whose notes add up beyond full scale where they
+    overlap is clipped rather than wrapped around.
 
     Parameters
     ----------
@@ -362,6 +435,17 @@ def test_loud_notes_that_overlap_in_a_preview_are_clipped(tmp_path: Path, monkey
     player = Sounds()
     player._dir = tmp_path / "cache"
     monkeypatch.setattr(player, "_note_file", lambda _inst, *, midi: loud)
-    samples, _rate = read_wav(player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=(60, 62), step_ms=300))
-    assert max(samples) == 32767 / 32768  # where the first note fades out under the second, 0.9 + 0.9 is held at full scale
+    samples, _rate = read_wav(
+        player._preview_file(
+            INSTRUMENT_BY_KEY["flute"],
+            midis=(60, 62),
+            step_ms=300,
+        ),
+    )
+    assert (
+        max(samples) == 32767 / 32768
+        # where the first note fades out under the second, 0.9 + 0.9 is
+        # held
+        # at full scale
+    )
     assert min(samples) >= 0

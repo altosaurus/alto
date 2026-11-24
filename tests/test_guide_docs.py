@@ -1,4 +1,7 @@
-"""The Resources section in docs/guide lists every chapter, has working links, and renders with Jekyll."""
+"""
+The Resources section in docs/guide lists every chapter, has working
+links, and renders with Jekyll.
+"""
 
 from __future__ import annotations
 
@@ -15,7 +18,8 @@ LINK = re.compile(r"\{\{\s*'([^']+)'\s*\|\s*relative_url\s*}}")
 
 def front_matter(page: Path) -> dict[str, str]:
     """
-    Read the top-level single-line fields used to check a docs page's links and order.
+    Read the top-level single-line fields used to check a docs page's
+    links and order.
 
     Parameters
     ----------
@@ -25,7 +29,8 @@ def front_matter(page: Path) -> dict[str, str]:
     Returns
     -------
     dict of str to str
-        The page's top-level scalar fields. Nested collections, such as homepage topics, are skipped.
+        The page's top-level scalar fields. Nested collections, such as
+        homepage topics, are skipped.
     """
     head = page.read_text(encoding="utf-8").split("---\n", 2)[1]
     return dict(re.findall(r"^([\w-]+): (.+)$", head, re.MULTILINE))
@@ -38,9 +43,14 @@ def permalinks() -> set[str]:
     Returns
     -------
     set of str
-        The permalinks of the pages in `docs/` and `docs/guide/` and `docs/api/`, such as `/guide/qt/`.
+        The permalinks of the pages in `docs/` and `docs/guide/` and
+        `docs/api/`, such as `/guide/qt/`.
     """
-    pages = [*DOCS.glob("*.md"), *GUIDE.glob("*.md"), *(DOCS / "api").glob("*.md")]
+    pages = [
+        *DOCS.glob("*.md"),
+        *GUIDE.glob("*.md"),
+        *(DOCS / "api").glob("*.md"),
+    ]
     return {front_matter(p)["permalink"] for p in pages}
 
 
@@ -53,26 +63,44 @@ def chapters() -> list[Path]:
     list of Path
         The chapter files, in the order the guide gives them.
     """
-    return sorted((p for p in GUIDE.glob("*.md") if p.name != "index.md"), key=lambda p: int(front_matter(p)["order"]))
+    return sorted(
+        (p for p in GUIDE.glob("*.md") if p.name != "index.md"),
+        key=lambda p: int(front_matter(p)["order"]),
+    )
 
 
 def test_every_chapter_is_listed_on_the_index_and_numbered_once() -> None:
     """
-    Check that every chapter has a distinct order number and is linked from the guide's index.
+    Check that every chapter has a distinct order number and is linked
+    from the guide's index.
     """
     index = (GUIDE / "index.md").read_text(encoding="utf-8")
     orders = [int(front_matter(p)["order"]) for p in chapters()]
-    assert orders == sorted(set(orders)), "chapter order numbers must be distinct"
+    assert orders == sorted(set(orders)), (
+        "chapter order numbers must be distinct"
+    )
     for chapter in chapters():
         meta = front_matter(chapter)
-        assert meta["parent"] == "guide" and meta["permalink"] == f"/guide/{chapter.stem}/", chapter.name
-        assert f"'{meta['permalink']}'" in index, f"{chapter.name} is not linked from the index"
+        assert (
+            meta["parent"] == "guide"
+            and meta["permalink"] == f"/guide/{chapter.stem}/"
+        ), chapter.name
+        assert f"'{meta['permalink']}'" in index, (
+            f"{chapter.name} is not linked from the index"
+        )
 
 
-@pytest.mark.parametrize("page", [GUIDE / "index.md", *chapters()], ids=lambda p: p.name)
-def test_every_link_in_a_guide_page_goes_to_a_page_that_exists(page: Path) -> None:
+@pytest.mark.parametrize(
+    "page",
+    [GUIDE / "index.md", *chapters()],
+    ids=lambda p: p.name,
+)
+def test_every_link_in_a_guide_page_goes_to_a_page_that_exists(
+    page: Path,
+) -> None:
     """
-    Check that every site link in a guide page points at the permalink of a real page.
+    Check that every site link in a guide page points at the permalink
+    of a real page.
 
     Parameters
     ----------
@@ -81,13 +109,22 @@ def test_every_link_in_a_guide_page_goes_to_a_page_that_exists(page: Path) -> No
     """
     known = permalinks()
     for target in LINK.findall(page.read_text(encoding="utf-8")):
-        assert target in known, f"{page.name} links to {target}, which is no page"
+        assert target in known, (
+            f"{page.name} links to {target}, which is no page"
+        )
 
 
-@pytest.mark.parametrize("page", [GUIDE / "index.md", *chapters()], ids=lambda p: p.name)
-def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(page: Path) -> None:
+@pytest.mark.parametrize(
+    "page",
+    [GUIDE / "index.md", *chapters()],
+    ids=lambda p: p.name,
+)
+def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(
+    page: Path,
+) -> None:
     """
-    Allow relative links and screenshot includes in the guide, and flag other Liquid delimiters.
+    Allow relative links and screenshot includes in the guide, and flag
+    other Liquid delimiters.
 
     Parameters
     ----------
@@ -96,17 +133,23 @@ def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(page: Path) ->
     """
     text = LINK.sub("", page.read_text(encoding="utf-8"))
     text = re.sub(
-        r'^{% include shot\.html src="[\w-]+\.png" alt="[^"{}\n]+"(?: caption="[^"{}\n]+")? %}$',
+        (
+            '^{% include shot\\.html src="[\\w-]+\\.png" alt="[^"{}\\n]+"(?: '
+            'caption="[^"{}\\n]+")? %}$'
+        ),
         "",
         text,
         flags=re.MULTILINE,
     )
-    assert "{{" not in text and "{%" not in text, f"{page.name} has braces that Jekyll would read as template code"
+    assert "{{" not in text and "{%" not in text, (
+        f"{page.name} has braces that Jekyll would read as template code"
+    )
 
 
 def test_the_guide_has_a_glossary_and_reading_list() -> None:
     """
-    Check that the last chapter has the glossary and the reading list the other chapters point to.
+    Check that the last chapter has the glossary and the reading list
+    the other chapters point to.
     """
     text = (GUIDE / "reading.md").read_text(encoding="utf-8")
     assert "## Glossary" in text and "## Reading list" in text

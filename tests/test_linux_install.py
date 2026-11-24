@@ -1,8 +1,10 @@
 """
 Tests for the install script of the Linux download.
 
-The script installs for one user, updates in place, removes cleanly, keeps or deletes the user's data as asked, and never
-touches a copy of Alto that was installed another way. It runs for real, in a scratch home, against a stand-in for the unpacked
+The script installs for one user, updates in place, removes cleanly,
+keeps or deletes the user's data as asked, and never
+touches a copy of Alto that was installed another way. It runs for real,
+in a scratch home, against a stand-in for the unpacked
 download.
 """
 
@@ -27,7 +29,8 @@ class Site(NamedTuple):
     Attributes
     ----------
     download : Path
-        The folder the download was unpacked to, holding `install.sh`, the program and the icons.
+        The folder the download was unpacked to, holding `install.sh`,
+        the program and the icons.
     prefix : Path
         Where the script is told to install (`ALTO_PREFIX`).
     data : Path
@@ -90,7 +93,10 @@ class Site(NamedTuple):
         list of Path
             The 256 and 512 pixel icons.
         """
-        return [self.data / "icons" / "hicolor" / size / "apps" / "alto.png" for size in ("256x256", "512x512")]
+        return [
+            self.data / "icons" / "hicolor" / size / "apps" / "alto.png"
+            for size in ("256x256", "512x512")
+        ]
 
 
 def run(
@@ -124,7 +130,8 @@ def run(
 @pytest.fixture
 def site(tmp_path: Path) -> Site:
     """
-    Make a scratch home and an unpacked download whose program just says its version.
+    Make a scratch home and an unpacked download whose program just says
+    its version.
 
     Parameters
     ----------
@@ -142,7 +149,9 @@ def site(tmp_path: Path) -> Site:
     program.write_text('#!/bin/sh\necho "Alto 9.9.9"\n')
     program.chmod(0o755)
     (program.parent / "_internal").mkdir()
-    (program.parent / "_internal" / "library.so").write_text("a file the program needs")
+    (program.parent / "_internal" / "library.so").write_text(
+        "a file the program needs",
+    )
     (download / "icons").mkdir()
     for name in ("icon-256.png", "icon.png"):
         shutil.copy(ROOT / "alto" / "assets" / name, download / "icons" / name)
@@ -174,16 +183,22 @@ def keep_some_data(site: Site) -> tuple[Path, Path]:
     tuple of Path and Path
         The database file and the settings file.
     """
-    database, settings = site.data / "Alto" / "alto.db", site.config / "alto" / "alto.conf"
+    database, settings = (
+        site.data / "Alto" / "alto.db",
+        site.config / "alto" / "alto.conf",
+    )
     for path in (database, settings):
         path.parent.mkdir(parents=True)
         path.write_text("precious")
     return database, settings
 
 
-def test_installing_copies_the_program_links_it_and_adds_the_menu_entry_and_icons(site: Site) -> None:
+def test_installing_copies_program_links_and_adds_menu_entry_and(
+    site: Site,
+) -> None:
     """
-    Check that install puts the program, the command, the menu entry and the icons where they belong, with no root.
+    Check that install puts the program, the command, the menu entry and
+    the icons where they belong, with no root.
 
     Parameters
     ----------
@@ -193,18 +208,34 @@ def test_installing_copies_the_program_links_it_and_adds_the_menu_entry_and_icon
     done = run(site, "install")
     assert done.returncode == 0, done.stderr
     assert "Installed Alto 9.9.9" in done.stdout
-    assert (site.opt / "alto").is_file() and os.access(site.opt / "alto", os.X_OK)
-    assert (site.opt / "_internal" / "library.so").read_text() == "a file the program needs"
+    assert (site.opt / "alto").is_file() and os.access(
+        site.opt / "alto",
+        os.X_OK,
+    )
+    assert (
+        site.opt / "_internal" / "library.so"
+    ).read_text() == "a file the program needs"
     assert site.link.is_symlink() and site.link.readlink() == site.opt / "alto"
     lines = site.entry.read_text().splitlines()
-    assert 'Exec="' + str(site.opt / "alto") + '"' in lines and "Icon=alto" in lines and "Name=Alto" in lines
-    assert not any(line.startswith(("StartupNotify", "StartupWMClass")) for line in lines)
-    assert all(icon.is_file() and icon.stat().st_size > 0 for icon in site.icons)
+    assert (
+        'Exec="' + str(site.opt / "alto") + '"' in lines
+        and "Icon=alto" in lines
+        and "Name=Alto" in lines
+    )
+    assert not any(
+        line.startswith(("StartupNotify", "StartupWMClass")) for line in lines
+    )
+    assert all(
+        icon.is_file() and icon.stat().st_size > 0 for icon in site.icons
+    )
 
 
-def test_installing_again_replaces_the_old_files_and_keeps_the_data(site: Site) -> None:
+def test_installing_again_replaces_the_old_files_and_keeps_the_data(
+    site: Site,
+) -> None:
     """
-    Check that installing a newer download replaces the program, leaves nothing of the old one, and keeps the data.
+    Check that installing a newer download replaces the program, leaves
+    nothing of the old one, and keeps the data.
 
     Parameters
     ----------
@@ -216,13 +247,19 @@ def test_installing_again_replaces_the_old_files_and_keeps_the_data(site: Site) 
     database, settings = keep_some_data(site)
     again = run(site, "install")
     assert again.returncode == 0, again.stderr
-    assert not (site.opt / "left-over-from-the-old-version").exists() and (site.opt / "alto").is_file()
+    assert (
+        not (site.opt / "left-over-from-the-old-version").exists()
+        and (site.opt / "alto").is_file()
+    )
     assert database.read_text() == settings.read_text() == "precious"
 
 
-def test_uninstalling_removes_what_was_installed_and_keeps_the_data(site: Site) -> None:
+def test_uninstalling_removes_what_was_installed_and_keeps_the_data(
+    site: Site,
+) -> None:
     """
-    Check that uninstall removes the program, the command, the menu entry and the icons, and says the data was kept.
+    Check that uninstall removes the program, the command, the menu
+    entry and the icons, and says the data was kept.
 
     Parameters
     ----------
@@ -233,15 +270,23 @@ def test_uninstalling_removes_what_was_installed_and_keeps_the_data(site: Site) 
     database, settings = keep_some_data(site)
     done = run(site, "uninstall")
     assert done.returncode == 0, done.stderr
-    assert not site.opt.exists() and not site.link.exists() and not site.link.is_symlink() and not site.entry.exists()
+    assert (
+        not site.opt.exists()
+        and not site.link.exists()
+        and not site.link.is_symlink()
+        and not site.entry.exists()
+    )
     assert not any(icon.exists() for icon in site.icons)
     assert database.read_text() == settings.read_text() == "precious"
     assert "were kept" in done.stdout and "--purge" in done.stdout
 
 
-def test_uninstalling_with_purge_also_deletes_the_history_and_the_settings(site: Site) -> None:
+def test_uninstalling_with_purge_also_deletes_the_history_and_the_settings(
+    site: Site,
+) -> None:
     """
-    Check that `uninstall --purge` removes the practice history and the settings as well, and says what it deleted.
+    Check that `uninstall --purge` removes the practice history and the
+    settings as well, and says what it deleted.
 
     Parameters
     ----------
@@ -254,12 +299,18 @@ def test_uninstalling_with_purge_also_deletes_the_history_and_the_settings(site:
     assert done.returncode == 0, done.stderr
     assert not site.opt.exists() and not site.entry.exists()
     assert not database.parent.exists() and not settings.parent.exists()
-    assert str(database.parent) in done.stdout and str(settings.parent) in done.stdout
+    assert (
+        str(database.parent) in done.stdout
+        and str(settings.parent) in done.stdout
+    )
 
 
-def test_uninstalling_when_nothing_is_installed_says_so_and_can_still_purge(site: Site) -> None:
+def test_uninstalling_when_nothing_is_installed_says_so_and_can_still_purge(
+    site: Site,
+) -> None:
     """
-    Check that uninstalling with nothing installed succeeds and says so, and that purge still deletes the data.
+    Check that uninstalling with nothing installed succeeds and says so,
+    and that purge still deletes the data.
 
     Parameters
     ----------
@@ -274,7 +325,8 @@ def test_uninstalling_when_nothing_is_installed_says_so_and_can_still_purge(site
 
 class Foreign(NamedTuple):
     """
-    What a copy of Alto installed another way (with alto-install.sh) leaves behind, which has the same names.
+    What a copy of Alto installed another way (with alto-install.sh)
+    leaves behind, which has the same names.
 
     Attributes
     ----------
@@ -287,7 +339,8 @@ class Foreign(NamedTuple):
 
 def install_another_way(site: Site) -> Foreign:
     """
-    Leave what alto-install.sh would: a command that is a link to a program elsewhere, a menu entry for it, and an icon.
+    Leave what alto-install.sh would: a command that is a link to a
+    program elsewhere, a menu entry for it, and an icon.
 
     Parameters
     ----------
@@ -312,9 +365,12 @@ def install_another_way(site: Site) -> Foreign:
     return Foreign(program)
 
 
-def test_installing_refuses_to_overwrite_a_copy_installed_another_way(site: Site) -> None:
+def test_installing_refuses_to_overwrite_a_copy_installed_another_way(
+    site: Site,
+) -> None:
     """
-    Check that install stops, changes nothing, and says how to remove the other copy, if the command already exists.
+    Check that install stops, changes nothing, and says how to remove
+    the other copy, if the command already exists.
 
     Parameters
     ----------
@@ -325,14 +381,20 @@ def test_installing_refuses_to_overwrite_a_copy_installed_another_way(site: Site
     before = site.entry.read_text()
     done = run(site, "install")
     assert done.returncode == 1 and "alto-install.sh uninstall" in done.stderr
-    assert site.link.readlink() == other.program and site.entry.read_text() == before
+    assert (
+        site.link.readlink() == other.program
+        and site.entry.read_text() == before
+    )
     assert not site.opt.exists()
     assert all(icon.read_text() == "their icon" for icon in site.icons)
 
 
-def test_uninstalling_leaves_a_copy_installed_another_way_alone(site: Site) -> None:
+def test_uninstalling_leaves_a_copy_installed_another_way_alone(
+    site: Site,
+) -> None:
     """
-    Check that uninstall does not remove a command, menu entry or icons that are not this download's, even by the same name.
+    Check that uninstall does not remove a command, menu entry or icons
+    that are not this download's, even by the same name.
 
     Parameters
     ----------
@@ -343,13 +405,19 @@ def test_uninstalling_leaves_a_copy_installed_another_way_alone(site: Site) -> N
     before = site.entry.read_text()
     done = run(site, "uninstall")
     assert done.returncode == 0 and "is not installed" in done.stdout
-    assert site.link.readlink() == other.program and site.entry.read_text() == before
+    assert (
+        site.link.readlink() == other.program
+        and site.entry.read_text() == before
+    )
     assert all(icon.read_text() == "their icon" for icon in site.icons)
 
 
-def test_a_link_that_was_removed_by_hand_still_lets_uninstall_clean_up(site: Site) -> None:
+def test_a_link_that_was_removed_by_hand_still_lets_uninstall_clean_up(
+    site: Site,
+) -> None:
     """
-    Check that uninstall still removes the program folder, the menu entry and the icons if the command link is already gone.
+    Check that uninstall still removes the program folder, the menu
+    entry and the icons if the command link is already gone.
 
     Parameters
     ----------
@@ -359,12 +427,19 @@ def test_a_link_that_was_removed_by_hand_still_lets_uninstall_clean_up(site: Sit
     run(site, "install")
     site.link.unlink()
     assert run(site, "uninstall").returncode == 0
-    assert not site.opt.exists() and not site.entry.exists() and not any(icon.exists() for icon in site.icons)
+    assert (
+        not site.opt.exists()
+        and not site.entry.exists()
+        and not any(icon.exists() for icon in site.icons)
+    )
 
 
-def test_running_it_from_a_folder_with_no_program_fails_with_a_message(site: Site) -> None:
+def test_running_it_from_a_folder_with_no_program_fails_with_a_message(
+    site: Site,
+) -> None:
     """
-    Check that install says what is wrong, and changes nothing, if the folder does not hold the program.
+    Check that install says what is wrong, and changes nothing, if the
+    folder does not hold the program.
 
     Parameters
     ----------
@@ -377,9 +452,12 @@ def test_running_it_from_a_folder_with_no_program_fails_with_a_message(site: Sit
     assert not site.opt.exists() and not site.link.exists()
 
 
-def test_with_no_argument_the_script_prints_how_to_use_it_and_changes_nothing(site: Site) -> None:
+def test_with_no_argument_the_script_prints_how_to_use_it_and_changes_nothing(
+    site: Site,
+) -> None:
     """
-    Check that running it with no arguments explains the commands and exits with 2.
+    Check that running it with no arguments explains the commands and
+    exits with 2.
 
     Parameters
     ----------
@@ -387,20 +465,35 @@ def test_with_no_argument_the_script_prints_how_to_use_it_and_changes_nothing(si
         The scratch home and the download.
     """
     done = run(site)
-    assert done.returncode == 2 and "install.sh install" in done.stdout and "uninstall --purge" in done.stdout
+    assert (
+        done.returncode == 2
+        and "install.sh install" in done.stdout
+        and "uninstall --purge" in done.stdout
+    )
     assert not site.opt.exists() and not site.entry.exists()
 
 
 def test_the_download_scripts_are_valid_shell() -> None:
-    """Check that the install script and the build script at least parse, so a typo is caught before a release."""
+    """
+    Check that the install script and the build script at least parse,
+    so a typo is caught before a release.
+    """
     for script in (SCRIPT, ROOT / "scripts" / "build-linux.sh"):
-        done = subprocess.run(["sh", "-n", str(script)], capture_output=True, text=True, check=False)
+        done = subprocess.run(
+            ["sh", "-n", str(script)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
         assert done.returncode == 0, done.stderr
 
 
-def test_a_failed_copy_leaves_the_installed_copy_exactly_as_it_was(site: Site) -> None:
+def test_a_failed_copy_leaves_the_installed_copy_exactly_as_it_was(
+    site: Site,
+) -> None:
     """
-    Check that when the new files cannot be copied, install stops, says nothing was changed, and keeps the old copy.
+    Check that when the new files cannot be copied, install stops, says
+    nothing was changed, and keeps the old copy.
 
     Parameters
     ----------
@@ -417,14 +510,22 @@ def test_a_failed_copy_leaves_the_installed_copy_exactly_as_it_was(site: Site) -
     finally:
         unreadable.chmod(0o644)
     assert done.returncode == 1 and "nothing was changed" in done.stderr
-    assert (site.opt / "marker").read_text() == "the old copy" and (site.opt / "alto").is_file()
+    assert (site.opt / "marker").read_text() == "the old copy" and (
+        site.opt / "alto"
+    ).is_file()
     assert site.link.is_symlink() and site.link.readlink() == site.opt / "alto"
-    assert not (site.opt.parent / "alto.new").exists() and not (site.opt.parent / "alto.old").exists()
+    assert (
+        not (site.opt.parent / "alto.new").exists()
+        and not (site.opt.parent / "alto.old").exists()
+    )
 
 
-def test_a_successful_update_leaves_no_copy_of_the_old_files_beside_the_new(site: Site) -> None:
+def test_a_successful_update_leaves_no_copy_of_the_old_files_beside_the_new(
+    site: Site,
+) -> None:
     """
-    Check that after installing over an old copy only the new one remains, with nothing set aside.
+    Check that after installing over an old copy only the new one
+    remains, with nothing set aside.
 
     Parameters
     ----------

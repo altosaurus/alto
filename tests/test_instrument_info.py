@@ -1,4 +1,7 @@
-"""The facts shown about each instrument: who recorded it, how many notes and the range."""
+"""
+The facts shown about each instrument: who recorded it, how many notes
+and the range.
+"""
 
 from alto.audio import INSTRUMENTS
 from alto.instrument_info import (
@@ -64,15 +67,21 @@ def test_a_single_missing_note_is_almost_every_semitone() -> None:
     """
     c = coverage([m for m in range(48, 94) if m != 51])
     assert c.gaps == 1
-    assert "almost every semitone" in c.describe() and "C3 to A6" in c.describe()
+    assert (
+        "almost every semitone" in c.describe() and "C3 to A6" in c.describe()
+    )
 
 
-def test_a_set_recorded_in_minor_thirds_is_described_as_every_third_semitone() -> None:
+def test_set_recorded_in_minor_thirds_described_as_every_third() -> None:
     """
-    Check that a set recorded in minor thirds is described as every third semitone.
+    Check that a set recorded in minor thirds is described as every
+    third semitone.
     """
     c = coverage(range(21, 109, 3))
-    assert c.describe() == "30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor."
+    assert c.describe() == (
+        "30 notes, A0 to C8, about every third semitone. The other "
+        "notes are shifted from a neighbor."
+    )
 
 
 def test_every_second_semitone_is_described_as_such() -> None:

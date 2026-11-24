@@ -7,7 +7,8 @@ permalink: /api/alto.ui.staff_input/
 {% raw %}
 The staffs you click to place notes or a clef.
 
-One note for the note construction exercise, a row of them for scale construction, and a clef for the clef exercise.
+One note for the note construction exercise, a row of them for scale
+construction, and a clef for the clef exercise.
 
 **Examples**
 
@@ -25,10 +26,13 @@ StaffInput(parent: QWidget | None = None)
 
 Bases: `StaffWidget`
 
-A single staff you click to place a note, or place a note on with the keyboard.
+A single staff you click to place a note, or place a note on with
+the keyboard.
 
-The note snaps to the nearest line or space and follows the pointer until you click. Without the mouse, a caret marks
-the note that would be placed: `move_cursor` and `jump_to_letter` move it, and `place_caret` places it.
+The note snaps to the nearest line or space and follows the pointer
+until you click. Without the mouse, a caret marks
+the note that would be placed: `move_cursor` and `jump_to_letter`
+move it, and `place_caret` places it.
 
 **Attributes**
 
@@ -45,7 +49,11 @@ the note that would be placed: `move_cursor` and `jump_to_letter` move it, and `
 >>> staff = StaffInput()
 >>> staff.reset("treble", key=0)
 >>> staff.resize(400, 300)
->>> str(staff.note_at(staff.staff_bottoms()["treble"]))  # the bottom line of the treble staff
+>>> str(
+...     staff.note_at(
+...         staff.staff_bottoms()["treble"]
+...     )
+... )  # the bottom line of the treble staff
 'E4'
 ```
 
@@ -91,7 +99,11 @@ Clear the staff for a new question, drawing a key signature.
 >>> staff = StaffInput()
 >>> staff.accidental, staff.locked = 1, True
 >>> staff.reset("bass", key=-2)
->>> staff.accidental is None, staff.locked, staff.key
+>>> (
+...     staff.accidental is None,
+...     staff.locked,
+...     staff.key,
+... )
 (True, False, -2)
 ```
 
@@ -101,9 +113,11 @@ Clear the staff for a new question, drawing a key signature.
 def note_at(y: float) -> Note
 ```
 
-Return the note on the line or space nearest to a height on the staff.
+Return the note on the line or space nearest to a height on the
+staff.
 
-The note is kept within five ledger lines of the staff. On a grand staff, a click in the upper half is on the treble
+The note is kept within five ledger lines of the staff. On a
+grand staff, a click in the upper half is on the treble
 staff and the lower half on the bass staff.
 
 **Parameters**
@@ -118,12 +132,20 @@ staff and the lower half on the bass staff.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
->>> staff.reset("treble", key=1)  # G major: F is sharp
+>>> staff.reset(
+...     "treble", key=1
+... )  # G major: F is sharp
 >>> staff.resize(400, 300)
 >>> bottom = staff.staff_bottoms()["treble"]
->>> str(staff.note_at(bottom - 3 * staff.GAP / 2))  # three steps above E4
+>>> str(
+...     staff.note_at(
+...         bottom - 3 * staff.GAP / 2
+...     )
+... )  # three steps above E4
 'A4'
->>> str(staff.note_at(bottom - staff.GAP / 2))  # one step above E4: F, sharp in this key
+>>> str(
+...     staff.note_at(bottom - staff.GAP / 2)
+... )  # one step above E4: F, sharp in this key
 'F♯4'
 ```
 
@@ -133,9 +155,11 @@ staff and the lower half on the bass staff.
 def note_for(diatonic: int) -> Note
 ```
 
-Return the note on a staff step, with the chosen sign or the one the key signature gives it.
+Return the note on a staff step, with the chosen sign or the one
+the key signature gives it.
 
-The step is kept within five ledger lines of the staff, as clicking is.
+The step is kept within five ledger lines of the staff, as
+clicking is.
 
 **Parameters**
 
@@ -149,11 +173,21 @@ The step is kept within five ledger lines of the staff, as clicking is.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
->>> staff.reset("treble", key=1)  # G major: F is sharp
->>> str(staff.note_for(Note.parse("F4").diatonic))
+>>> staff.reset(
+...     "treble", key=1
+... )  # G major: F is sharp
+>>> str(
+...     staff.note_for(
+...         Note.parse("F4").diatonic
+...     )
+... )
 'F♯4'
 >>> staff.accidental = 0
->>> str(staff.note_for(Note.parse("F4").diatonic))
+>>> str(
+...     staff.note_for(
+...         Note.parse("F4").diatonic
+...     )
+... )
 'F4'
 ```
 
@@ -163,7 +197,8 @@ The step is kept within five ledger lines of the staff, as clicking is.
 def caret_start() -> int
 ```
 
-Return the staff step the caret starts from, when the keyboard first moves it.
+Return the staff step the caret starts from, when the keyboard
+first moves it.
 
 **Returns**
 
@@ -211,9 +246,11 @@ True
 def move_cursor(steps: int) -> None
 ```
 
-Move the caret up (positive) or down (negative) by staff steps, and show the note there.
+Move the caret up (positive) or down (negative) by staff steps,
+and show the note there.
 
-The first move starts from `caret_start`. The caret stays within the furthest ledger lines.
+The first move starts from `caret_start`. The caret stays within
+the furthest ledger lines.
 
 **Parameters**
 
@@ -230,7 +267,9 @@ The first move starts from `caret_start`. The caret stays within the furthest le
 >>> staff.move_cursor(-7)
 >>> str(staff.caret_note())
 'C4'
->>> staff.move_cursor(-500)  # no further than the ledger lines go
+>>> staff.move_cursor(
+...     -500
+... )  # no further than the ledger lines go
 >>> staff.caret == RANGE_LIMITS["treble"][0]
 True
 ```
@@ -241,7 +280,8 @@ True
 def jump_to_letter(letter: int) -> None
 ```
 
-Move the caret to the nearest note with a letter name, above or below where it is.
+Move the caret to the nearest note with a letter name, above or
+below where it is.
 
 **Parameters**
 
@@ -254,10 +294,14 @@ Move the caret to the nearest note with a letter name, above or below where it i
 >>> staff.reset("treble")
 >>> staff.move_cursor(0)  # B4, the middle line
 >>> staff.jump_to_letter(0)
->>> str(staff.caret_note())  # the nearest C is the one just above
+>>> str(
+...     staff.caret_note()
+... )  # the nearest C is the one just above
 'C5'
 >>> staff.jump_to_letter(4)
->>> str(staff.caret_note())  # and the nearest G is the one just below
+>>> str(
+...     staff.caret_note()
+... )  # and the nearest G is the one just below
 'G4'
 ```
 
@@ -276,7 +320,8 @@ Place the note at the caret, as a click would.
 >>> staff.reset("treble")
 >>> placed = []
 >>> _ = staff.placed.connect(placed.append)
->>> staff.place_caret()  # the first press places the note at the start
+>>> # the first press places the note at the start
+>>> staff.place_caret()
 >>> [str(n) for n in placed]
 ['B4']
 ```
@@ -316,16 +361,20 @@ Draw a single note on the staff, or clear it.
 def refresh_preview() -> None
 ```
 
-Redraw the note that would be placed, for example after the accidental changes.
+Redraw the note that would be placed, for example after the
+accidental changes.
 
-It is the pointer's note while the pointer is over the staff, and otherwise the note at the caret, once the keyboard
+It is the pointer's note while the pointer is over the staff,
+and otherwise the note at the caret, once the keyboard
 has put the caret somewhere.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
->>> staff.refresh_preview()  # the pointer is not over the staff, and there is no caret: nothing to redraw
+>>> # the pointer is not over the staff, and there is no caret:
+>>> # nothing to redraw
+>>> staff.refresh_preview()
 >>> staff.columns
 []
 >>> staff.reset("treble")
@@ -353,9 +402,19 @@ Show the note under the pointer, in a lighter color.
 >>> staff.reset("treble")
 >>> staff.resize(400, 300)
 >>> from PySide6.QtCore import QPointF
->>> point = QPointF(50, staff.staff_bottoms()["treble"])
->>> staff.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+>>> point = QPointF(
+...     50, staff.staff_bottoms()["treble"]
+... )
+>>> staff.mouseMoveEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseMove,
+...         point,
+...         point,
+...         Qt.MouseButton.NoButton,
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> str(staff.columns[0][0])
 'E4'
 ```
@@ -366,7 +425,8 @@ Show the note under the pointer, in a lighter color.
 def leaveEvent(event: QEvent) -> None
 ```
 
-Remove the pointer's note when the pointer leaves the staff, showing the note at the caret instead if there is one.
+Remove the pointer's note when the pointer leaves the staff,
+showing the note at the caret instead if there is one.
 
 **Parameters**
 
@@ -388,7 +448,8 @@ Remove the pointer's note when the pointer leaves the staff, showing the note at
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-Place the note on a left click, or step through the accidentals on a right click.
+Place the note on a left click, or step through the accidentals
+on a right click.
 
 **Parameters**
 
@@ -403,9 +464,19 @@ Place the note on a left click, or step through the accidentals on a right click
 >>> placed = []
 >>> _ = staff.placed.connect(placed.append)
 >>> from PySide6.QtCore import QPointF
->>> point = QPointF(50, staff.staff_bottoms()["treble"])
->>> staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                                   Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+>>> point = QPointF(
+...     50, staff.staff_bottoms()["treble"]
+... )
+>>> staff.mousePressEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseButtonPress,
+...         point,
+...         point,
+...         Qt.MouseButton.LeftButton,
+...         Qt.MouseButton.LeftButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> [str(n) for n in placed]
 ['E4']
 ```
@@ -418,14 +489,20 @@ ScaleInput(parent: QWidget | None = None)
 
 Bases: `StaffInput`
 
-A staff you click to place the notes of a scale one after another, left to right, and then, if asked, its steps.
+A staff you click to place the notes of a scale one after another,
+left to right, and then, if asked, its steps.
 
-The next note follows the pointer, snapped to a line or space, in the place it will take. Each click puts it there and
-moves on to the next place. The places are all drawn from the start, so the notes do not move as more are placed.
+The next note follows the pointer, snapped to a line or space, in
+the place it will take. Each click puts it there and
+moves on to the next place. The places are all drawn from the start,
+so the notes do not move as more are placed.
 
-When steps are asked for, once all the notes are placed two lines rise from each pair of neighboring notes to a point
-above them (a wedge). The step to be marked next is shown there, in the preview color, as "W" (whole) or "H" (half).
-The mouse wheel or a right click changes it, and a left click marks it and moves on to the next pair.
+When steps are asked for, once all the notes are placed two lines
+rise from each pair of neighboring notes to a point
+above them (a wedge). The step to be marked next is shown there, in
+the preview color, as "W" (whole) or "H" (half).
+The mouse wheel or a right click changes it, and a left click marks
+it and moves on to the next pair.
 
 **Attributes**
 
@@ -445,10 +522,23 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=8)
 >>> staff.resize(600, 300)
->>> point = QPointF(50, staff.staff_bottoms()["treble"])
->>> staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                                   Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
->>> [str(n) for n in staff.notes], len(staff.columns)
+>>> point = QPointF(
+...     50, staff.staff_bottoms()["treble"]
+... )
+>>> staff.mousePressEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseButtonPress,
+...         point,
+...         point,
+...         Qt.MouseButton.LeftButton,
+...         Qt.MouseButton.LeftButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
+>>> (
+...     [str(n) for n in staff.notes],
+...     len(staff.columns),
+... )
 (['E4'], 8)
 ```
 
@@ -480,7 +570,8 @@ def reset_scale(
 ) -> None
 ```
 
-Clear the staff for a new scale: a staff with room for its notes, and the key signature it is to have.
+Clear the staff for a new scale: a staff with room for its
+notes, and the key signature it is to have.
 
 **Parameters**
 
@@ -494,9 +585,19 @@ Clear the staff for a new scale: a staff with room for its notes, and the key si
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
->>> staff.notes, staff.slots = [Note.parse("C4")], 3
->>> staff.reset_scale("bass", slots=8, caption="D Major")
->>> staff.notes, staff.slots, staff.caption, staff.key
+>>> staff.notes, staff.slots = (
+...     [Note.parse("C4")],
+...     3,
+... )
+>>> staff.reset_scale(
+...     "bass", slots=8, caption="D Major"
+... )
+>>> (
+...     staff.notes,
+...     staff.slots,
+...     staff.caption,
+...     staff.key,
+... )
 ([], 8, 'D Major', 0)
 >>> staff.reset_scale("bass", slots=8, key=-2)
 >>> staff.key
@@ -535,7 +636,8 @@ True
 def placing_steps() -> bool
 ```
 
-Report whether it is the turn of the steps: they are asked for, every note is placed and some step is still to mark.
+Report whether it is the turn of the steps: they are asked for,
+every note is placed and some step is still to mark.
 
 **Returns**
 
@@ -545,8 +647,12 @@ Report whether it is the turn of the steps: they are asked for, every note is pl
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
->>> staff.reset_scale("treble", slots=2, with_steps=True)
->>> staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
+>>> staff.reset_scale(
+...     "treble", slots=2, with_steps=True
+... )
+>>> staff.notes.extend(
+...     [Note.parse("C4"), Note.parse("D4")]
+... )
 >>> staff.placing_steps
 True
 >>> staff.steps.append("W")
@@ -561,7 +667,8 @@ False
 def done() -> bool
 ```
 
-Report whether everything asked for is placed: every note and, if they are asked for, every step.
+Report whether everything asked for is placed: every note and,
+if they are asked for, every step.
 
 **Returns**
 
@@ -571,8 +678,12 @@ Report whether everything asked for is placed: every note and, if they are asked
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
->>> staff.reset_scale("treble", slots=2, with_steps=True)
->>> staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
+>>> staff.reset_scale(
+...     "treble", slots=2, with_steps=True
+... )
+>>> staff.notes.extend(
+...     [Note.parse("C4"), Note.parse("D4")]
+... )
 >>> staff.done
 False
 >>> staff.steps.append("W")
@@ -623,9 +734,13 @@ Choose the step that the next click marks.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
->>> staff.reset_scale("treble", slots=3, with_steps=True)
+>>> staff.reset_scale(
+...     "treble", slots=3, with_steps=True
+... )
 >>> chosen = []
->>> _ = staff.step_selected.connect(chosen.append)
+>>> _ = staff.step_selected.connect(
+...     chosen.append
+... )
 >>> staff.set_pending_step("H")
 >>> staff.pending_step, chosen
 ('H', ['H'])
@@ -637,13 +752,16 @@ Choose the step that the next click marks.
 def toggle_step() -> None
 ```
 
-Switch the step that the next click marks between whole and half.
+Switch the step that the next click marks between whole and
+half.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
->>> staff.reset_scale("treble", slots=3, with_steps=True)
+>>> staff.reset_scale(
+...     "treble", slots=3, with_steps=True
+... )
 >>> staff.toggle_step()
 >>> staff.pending_step
 'H'
@@ -658,7 +776,8 @@ Switch the step that the next click marks between whole and half.
 def undo() -> None
 ```
 
-Take back the last thing placed: the last step if there is one, otherwise the last note.
+Take back the last thing placed: the last step if there is one,
+otherwise the last note.
 
 **Examples**
 
@@ -677,10 +796,13 @@ Take back the last thing placed: the last step if there is one, otherwise the la
 def wheelEvent(event: QWheelEvent) -> None
 ```
 
-Use the mouse wheel for what comes next: the sign of the note to place, or the step to mark.
+Use the mouse wheel for what comes next: the sign of the note to
+place, or the step to mark.
 
-While notes are placed each notch asks the owner to move on to the next sign (up) or back to the one before (down).
-While steps are marked each notch switches between whole and half. Once everything is placed it does nothing.
+While notes are placed each notch asks the owner to move on to
+the next sign (up) or back to the one before (down).
+While steps are marked each notch switches between whole and
+half. Once everything is placed it does nothing.
 
 **Parameters**
 
@@ -691,16 +813,30 @@ While steps are marked each notch switches between whole and half. Once everythi
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPoint, QPointF
 >>> staff = ScaleInput()
->>> staff.reset_scale("treble", slots=2, with_steps=True)
+>>> staff.reset_scale(
+...     "treble", slots=2, with_steps=True
+... )
 >>> signs = []
->>> _ = staff.accidental_stepped.connect(signs.append)
+>>> _ = staff.accidental_stepped.connect(
+...     signs.append
+... )
 >>> here = QPointF(50, 50)
->>> turn = QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
-...                    Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
+>>> turn = QWheelEvent(
+...     here,
+...     here,
+...     QPoint(0, 0),
+...     QPoint(0, 120),
+...     Qt.MouseButton.NoButton,
+...     Qt.KeyboardModifier.NoModifier,
+...     Qt.ScrollPhase.NoScrollPhase,
+...     False,
+... )
 >>> staff.wheelEvent(turn)
 >>> signs, staff.pending_step
 ([1], 'W')
->>> staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
+>>> staff.notes.extend(
+...     [Note.parse("C4"), Note.parse("D4")]
+... )
 >>> staff.wheelEvent(turn)
 >>> signs, staff.pending_step
 ([1], 'H')
@@ -712,7 +848,8 @@ While steps are marked each notch switches between whole and half. Once everythi
 def caret_start() -> int
 ```
 
-Return the staff step the caret starts from: that of the last note placed, or the middle line.
+Return the staff step the caret starts from: that of the last
+note placed, or the middle line.
 
 **Returns**
 
@@ -723,10 +860,14 @@ Return the staff step the caret starts from: that of the last note placed, or th
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=8)
->>> str(Note.from_diatonic(staff.caret_start()))  # the middle line
+>>> str(
+...     Note.from_diatonic(staff.caret_start())
+... )  # the middle line
 'B4'
 >>> staff.notes.append(Note.parse("D4"))
->>> str(Note.from_diatonic(staff.caret_start()))  # the note before
+>>> str(
+...     Note.from_diatonic(staff.caret_start())
+... )  # the note before
 'D4'
 ```
 
@@ -736,7 +877,8 @@ Return the staff step the caret starts from: that of the last note placed, or th
 def place_next(note: Note | None = None) -> None
 ```
 
-Place the next note, or mark the next step once the notes are placed.
+Place the next note, or mark the next step once the notes are
+placed.
 
 **Parameters**
 
@@ -746,10 +888,13 @@ Place the next note, or mark the next step once the notes are placed.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
->>> staff.reset_scale("treble", slots=2, with_steps=True)
+>>> staff.reset_scale(
+...     "treble", slots=2, with_steps=True
+... )
 >>> staff.place_next(Note.parse("C4"))
 >>> staff.place_next(Note.parse("D4"))
->>> staff.place_next()  # the notes are placed: this marks the first step
+>>> # the notes are placed: this marks the first step
+>>> staff.place_next()
 >>> [str(n) for n in staff.notes], staff.steps
 (['C4', 'D4'], ['W'])
 ```
@@ -760,7 +905,8 @@ Place the next note, or mark the next step once the notes are placed.
 def place_caret() -> None
 ```
 
-Place the next note at the caret, or mark the next step, as a click would.
+Place the next note at the caret, or mark the next step, as a
+click would.
 
 **Examples**
 
@@ -779,7 +925,8 @@ Place the next note at the caret, or mark the next step, as a click would.
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-Place the next note or mark the next step on a left click; change the sign or the step on a right click.
+Place the next note or mark the next step on a left click;
+change the sign or the step on a right click.
 
 **Parameters**
 
@@ -792,11 +939,21 @@ Place the next note or mark the next step on a left click; change the sign or th
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=1)
 >>> staff.resize(600, 300)
->>> point = QPointF(50, staff.staff_bottoms()["treble"])
->>> press = QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                     Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier)
+>>> point = QPointF(
+...     50, staff.staff_bottoms()["treble"]
+... )
+>>> press = QMouseEvent(
+...     QEvent.Type.MouseButtonPress,
+...     point,
+...     point,
+...     Qt.MouseButton.LeftButton,
+...     Qt.MouseButton.LeftButton,
+...     Qt.KeyboardModifier.NoModifier,
+... )
 >>> staff.mousePressEvent(press)
->>> staff.mousePressEvent(press)  # every place is taken
+>>> staff.mousePressEvent(
+...     press
+... )  # every place is taken
 >>> [str(n) for n in staff.notes]
 ['E4']
 ```
@@ -807,13 +964,16 @@ Place the next note or mark the next step on a left click; change the sign or th
 class SignatureInput(ScaleInput)
 ```
 
-Place accidentals in consecutive key-signature slots immediately after the clef.
+Place accidentals in consecutive key-signature slots immediately
+after the clef.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = SignatureInput()
->>> staff.reset_scale("treble", slots=7, caption="D major")
+>>> staff.reset_scale(
+...     "treble", slots=7, caption="D major"
+... )
 >>> staff.place_next(Note.parse("F#5"))
 >>> staff.notes, staff.columns
 ([Note(octave=5, letter=3, accidental=1)], [])
@@ -831,7 +991,8 @@ def reset_signature(
 ) -> None
 ```
 
-Set the fixed signs for this question and clear the learner’s entries.
+Set the fixed signs for this question and clear the learner’s
+entries.
 
 **Parameters**
 
@@ -844,7 +1005,12 @@ Set the fixed signs for this question and clear the learner’s entries.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = SignatureInput()
->>> staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
+>>> staff.reset_signature(
+...     "treble",
+...     key=2,
+...     caption="D major",
+...     starting_slots=[1],
+... )
 >>> len(staff.template), staff.template[1]
 (7, Note(octave=5, letter=0, accidental=1))
 ```
@@ -855,7 +1021,8 @@ Set the fixed signs for this question and clear the learner’s entries.
 def entered_signature() -> list[Note | None]
 ```
 
-Combine the fixed signs and the learner's entries in staff order.
+Combine the fixed signs and the learner's entries in staff
+order.
 
 **Returns**
 
@@ -865,9 +1032,18 @@ Combine the fixed signs and the learner's entries in staff order.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = SignatureInput()
->>> staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
+>>> staff.reset_signature(
+...     "treble",
+...     key=2,
+...     caption="D major",
+...     starting_slots=[1],
+... )
 >>> staff.place_next(Note.parse("F#5"))
->>> [str(n) for n in staff.entered_signature() if n is not None]
+>>> [
+...     str(n)
+...     for n in staff.entered_signature()
+...     if n is not None
+... ]
 ['F♯5', 'C♯5']
 ```
 
@@ -877,7 +1053,8 @@ Combine the fixed signs and the learner's entries in staff order.
 def paintEvent(event: QPaintEvent) -> None
 ```
 
-Draw the blank staff and caption, then the placed signs and the next sign under the pointer.
+Draw the blank staff and caption, then the placed signs and the
+next sign under the pointer.
 
 **Parameters**
 
@@ -901,10 +1078,13 @@ ClefInput(parent: QWidget | None = None)
 
 Bases: `StaffWidget`
 
-A blank staff on which you put a clef symbol: choose the G, C or F clef, then click where it goes.
+A blank staff on which you put a clef symbol: choose the G, C or F
+clef, then click where it goes.
 
-The symbol can go on any line or space of the staff and on the three ledger lines and spaces above and below it, and
-follows the pointer from place to place, in a lighter color, until you click. Without the mouse, `move_caret` moves it,
+The symbol can go on any line or space of the staff and on the three
+ledger lines and spaces above and below it, and
+follows the pointer from place to place, in a lighter color, until
+you click. Without the mouse, `move_caret` moves it,
 `step_symbol` switches the symbol and `place_caret` places it.
 
 **Attributes**
@@ -952,7 +1132,8 @@ def reset(
 ) -> None
 ```
 
-Clear the staff for a new question and offer some symbols to choose from.
+Clear the staff for a new question and offer some symbols to
+choose from.
 
 **Parameters**
 
@@ -963,8 +1144,15 @@ Clear the staff for a new question and offer some symbols to choose from.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
->>> staff.reset(["C", "F"], caption="Place the alto clef.")
->>> staff.selected, staff.placed_symbol, staff.caption
+>>> staff.reset(
+...     ["C", "F"],
+...     caption="Place the alto clef.",
+... )
+>>> (
+...     staff.selected,
+...     staff.placed_symbol,
+...     staff.caption,
+... )
 ('C', None, 'Place the alto clef.')
 ```
 
@@ -996,7 +1184,8 @@ Choose a symbol.
 def step_symbol(direction: int) -> None
 ```
 
-Choose the next symbol of the options, or the one before, going around.
+Choose the next symbol of the options, or the one before, going
+around.
 
 **Parameters**
 
@@ -1035,7 +1224,12 @@ Return the line or space nearest to a height in the widget.
 >>> staff.reset(["G"])
 >>> staff.resize(400, 300)
 >>> floor = staff.staff_bottoms()["treble"]
->>> staff.step_at(floor), staff.step_at(floor - 1.4 * staff.GAP), staff.step_at(0), staff.step_at(10_000)
+>>> (
+...     staff.step_at(floor),
+...     staff.step_at(floor - 1.4 * staff.GAP),
+...     staff.step_at(0),
+...     staff.step_at(10_000),
+... )
 (0, 3, 14, -6)
 ```
 
@@ -1082,7 +1276,11 @@ Put the chosen symbol in a place, drawn solid, and say so.
 >>> staff = ClefInput()
 >>> staff.reset(["F"])
 >>> got = []
->>> _ = staff.placed.connect(lambda symbol, where: got.append((symbol, where)))
+>>> _ = staff.placed.connect(
+...     lambda symbol, where: got.append(
+...         (symbol, where)
+...     )
+... )
 >>> staff.place(6)
 >>> got, staff.placed_symbol, staff.placed_step
 ([('F', 6)], 'F', 6)
@@ -1094,7 +1292,8 @@ Put the chosen symbol in a place, drawn solid, and say so.
 def place_caret() -> None
 ```
 
-Place the symbol where the keyboard put it, or on the middle line if it has not moved.
+Place the symbol where the keyboard put it, or on the middle
+line if it has not moved.
 
 **Examples**
 
@@ -1131,7 +1330,8 @@ True
 def set_clef_color(color: QColor | None) -> None
 ```
 
-Draw the placed symbol in a color, for feedback, or back in black.
+Draw the placed symbol in a color, for feedback, or back in
+black.
 
 **Parameters**
 
@@ -1152,7 +1352,8 @@ True
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-Show the symbol in the place under the pointer, in a lighter color.
+Show the symbol in the place under the pointer, in a lighter
+color.
 
 **Parameters**
 
@@ -1165,9 +1366,21 @@ Show the symbol in the place under the pointer, in a lighter color.
 >>> staff.reset(["G"])
 >>> staff.resize(400, 300)
 >>> from PySide6.QtCore import QPointF
->>> point = QPointF(50, staff.staff_bottoms()["treble"] - 2 * staff.GAP)
->>> staff.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+>>> point = QPointF(
+...     50,
+...     staff.staff_bottoms()["treble"]
+...     - 2 * staff.GAP,
+... )
+>>> staff.mouseMoveEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseMove,
+...         point,
+...         point,
+...         Qt.MouseButton.NoButton,
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> staff._hover
 4
 ```
@@ -1200,7 +1413,8 @@ True
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-Place the symbol on a left click, or choose the next symbol on a right click.
+Place the symbol on a left click, or choose the next symbol on a
+right click.
 
 **Parameters**
 
@@ -1213,9 +1427,19 @@ Place the symbol on a left click, or choose the next symbol on a right click.
 >>> staff.reset(["G", "F"])
 >>> staff.resize(400, 300)
 >>> from PySide6.QtCore import QPointF
->>> point = QPointF(50, staff.staff_bottoms()["treble"])
->>> staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.RightButton,
-...                                   Qt.MouseButton.RightButton, Qt.KeyboardModifier.NoModifier))
+>>> point = QPointF(
+...     50, staff.staff_bottoms()["treble"]
+... )
+>>> staff.mousePressEvent(
+...     QMouseEvent(
+...         QEvent.Type.MouseButtonPress,
+...         point,
+...         point,
+...         Qt.MouseButton.RightButton,
+...         Qt.MouseButton.RightButton,
+...         Qt.KeyboardModifier.NoModifier,
+...     )
+... )
 >>> staff.selected
 'F'
 ```
@@ -1226,7 +1450,8 @@ Place the symbol on a left click, or choose the next symbol on a right click.
 def wheelEvent(event: QWheelEvent) -> None
 ```
 
-Choose the next symbol for each notch of the wheel turned up, and the one before for each turned down.
+Choose the next symbol for each notch of the wheel turned up,
+and the one before for each turned down.
 
 **Parameters**
 
@@ -1239,8 +1464,18 @@ Choose the next symbol for each notch of the wheel turned up, and the one before
 >>> staff = ClefInput()
 >>> staff.reset(["G", "F"])
 >>> here = QPointF(50, 50)
->>> staff.wheelEvent(QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
-...                              Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False))
+>>> staff.wheelEvent(
+...     QWheelEvent(
+...         here,
+...         here,
+...         QPoint(0, 0),
+...         QPoint(0, 120),
+...         Qt.MouseButton.NoButton,
+...         Qt.KeyboardModifier.NoModifier,
+...         Qt.ScrollPhase.NoScrollPhase,
+...         False,
+...     )
+... )
 >>> staff.selected
 'F'
 ```
@@ -1251,9 +1486,11 @@ Choose the next symbol for each notch of the wheel turned up, and the one before
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the staff, then the symbol that was placed or, until one is, the one that would be placed.
+Draw the staff, then the symbol that was placed or, until one
+is, the one that would be placed.
 
-A symbol on a ledger line has the ledger lines it needs drawn behind it.
+A symbol on a ledger line has the ledger lines it needs drawn
+behind it.
 
 **Parameters**
 

@@ -1,4 +1,7 @@
-"""Answer-button intervals for Anki's default SM-2 and FSRS-6 deck settings."""
+"""
+Answer-button intervals for Anki's default SM-2 and FSRS-6 deck
+settings.
+"""
 
 from __future__ import annotations
 
@@ -43,7 +46,12 @@ def _fuzz(days: float, *, minimum: int, factor: float) -> int:
     days = max(minimum, min(MAX_DAYS, days))
     spread = 0.0
     if days >= 2.5:
-        spread = 1 + 0.15 * (min(days, 7) - 2.5) + 0.1 * max(0, min(days, 20) - 7) + 0.05 * max(0, days - 20)
+        spread = (
+            1
+            + 0.15 * (min(days, 7) - 2.5)
+            + 0.1 * max(0, min(days, 20) - 7)
+            + 0.05 * max(0, days - 20)
+        )
     low = max(minimum, math.floor(days - spread + 0.5))
     high = min(MAX_DAYS, math.floor(days + spread + 0.5))
     return low + int(factor * (high - low + 1))
@@ -52,7 +60,8 @@ def _fuzz(days: float, *, minimum: int, factor: float) -> int:
 @dataclass(frozen=True)
 class Sm2State:
     """
-    SM-2 learning step, review history, and actual delay for the current presentation.
+    SM-2 learning step, review history, and actual delay for the current
+    presentation.
 
     Examples
     --------
@@ -93,12 +102,26 @@ class Sm2State:
         if isinstance(stored, dict):
             return cls(**stored)
         repetitions, interval, ease = stored
-        return cls(repetitions, interval, ease, "review" if interval else "learning", delay=interval * DAY or 60)
+        return cls(
+            repetitions,
+            interval,
+            ease,
+            "review" if interval else "learning",
+            delay=interval * DAY or 60,
+        )
 
 
-def inherited_state(key: str, *, source: str, state: str, due: float, rating: Rating) -> str:
+def inherited_state(
+    key: str,
+    *,
+    source: str,
+    state: str,
+    due: float,
+    rating: Rating,
+) -> str:
     """
-    Translate one saved calendar schedule into the other scheduler's initial state.
+    Translate one saved calendar schedule into the other scheduler's
+    initial state.
 
     Parameters
     ----------
@@ -120,24 +143,39 @@ def inherited_state(key: str, *, source: str, state: str, due: float, rating: Ra
 
     Examples
     --------
-    >>> result = inherited_state("abc", source="SM-2", state="[8, 180, 2.5]", due=200 * DAY, rating=Rating.Good)
+    >>> result = inherited_state(
+    ...     "abc",
+    ...     source="SM-2",
+    ...     state="[8, 180, 2.5]",
+    ...     due=200 * DAY,
+    ...     rating=Rating.Good,
+    ... )
     >>> Card.from_json(result).stability
     180.0
     """
     deadline = datetime.fromtimestamp(due, UTC)
     if source == "FSRS":
         card = Card.from_json(state)
-        assert card.last_review is not None  # Only graded cards have saved schedules.
+        assert (
+            card.last_review is not None
+        )  # Only graded cards have saved schedules.
         delay = round((deadline - card.last_review).total_seconds())
         days = max(1, round(delay / DAY)) if card.state == State.Review else 0
-        sm2 = Sm2State(repetitions=min(days, 2), interval=days, phase=card.state.name.lower(), step=card.step or 0, delay=delay)
+        sm2 = Sm2State(
+            repetitions=min(days, 2),
+            interval=days,
+            phase=card.state.name.lower(),
+            step=card.step or 0,
+            delay=delay,
+        )
         return json.dumps(asdict(sm2))
 
     sm2 = Sm2State.read(state)
     reviewed = deadline - timedelta(seconds=sm2.delay)
     card = Card(card_id=int(key[:15], 16), due=reviewed)
     if sm2.phase == "review":
-        # FSRS-6's SM-2 conversion at 90% historical retention: stability equals the full interval.
+        # FSRS-6's SM-2 conversion at 90% historical retention:
+        # stability equals the full interval.
         stability = float(sm2.interval)
         w = _FSRS.parameters
         growth = math.exp(w[8]) * stability ** -w[9] * math.expm1(0.1 * w[10])
@@ -147,15 +185,24 @@ def inherited_state(key: str, *, source: str, state: str, due: float, rating: Ra
         card.last_review = reviewed
     else:
         card, _ = _FSRS.review_card(card, rating, review_datetime=reviewed)
-        card.state = State.Relearning if sm2.phase == "relearning" else State.Learning
+        card.state = (
+            State.Relearning if sm2.phase == "relearning" else State.Learning
+        )
         card.step = sm2.step
     card.due = deadline
     return card.to_json()
 
 
-def _sm2_options(previous: str | None, *, due: float, now: float, factor: float) -> dict[Rating, tuple[int, str]]:
+def _sm2_options(
+    previous: str | None,
+    *,
+    due: float,
+    now: float,
+    factor: float,
+) -> dict[Rating, tuple[int, str]]:
     """
-    Calculate the four default SM-2 learning, relearning, or review outcomes.
+    Calculate the four default SM-2 learning, relearning, or review
+    outcomes.
 
     Parameters
     ----------
@@ -175,7 +222,9 @@ def _sm2_options(previous: str | None, *, due: float, now: float, factor: float)
 
     Examples
     --------
-    >>> _sm2_options(None, due=0, now=0, factor=0.5)[Rating.Good][0]
+    >>> _sm2_options(
+    ...     None, due=0, now=0, factor=0.5
+    ... )[Rating.Good][0]
     600
     """
     card = Sm2State.read(previous)
@@ -184,32 +233,112 @@ def _sm2_options(previous: str | None, *, due: float, now: float, factor: float)
     if learning or relearning:
         hard = 900 if relearning else 600 if card.step else 330
         again = replace(card, step=0, delay=600 if relearning else 60)
-        graduate = replace(card, phase="review", repetitions=max(1, card.repetitions), step=0)
+        graduate = replace(
+            card,
+            phase="review",
+            repetitions=max(1, card.repetitions),
+            step=0,
+        )
         if learning and card.step == 0:
             good = replace(card, step=1, delay=600)
         else:
             good = replace(graduate, interval=1, delay=DAY)
         easy_days = 2 if relearning else _fuzz(4, minimum=1, factor=factor)
-        states = (again, replace(card, delay=hard), good, replace(graduate, interval=easy_days, delay=easy_days * DAY))
+        states = (
+            again,
+            replace(card, delay=hard),
+            good,
+            replace(graduate, interval=easy_days, delay=easy_days * DAY),
+        )
     else:
         days = card.interval
-        late = max(0, (datetime.fromtimestamp(now).date() - datetime.fromtimestamp(due).date()).days)
+        late = max(
+            0,
+            (
+                datetime.fromtimestamp(now).date()
+                - datetime.fromtimestamp(due).date()
+            ).days,
+        )
         hard = _fuzz(1.2 * days, minimum=days + 1, factor=factor)
-        good = _fuzz((days + late / 2) * card.ease, minimum=hard + 1, factor=factor)
-        easy = _fuzz((days + late) * card.ease * 1.3, minimum=good + 1, factor=factor)
+        good = _fuzz(
+            (days + late / 2) * card.ease,
+            minimum=hard + 1,
+            factor=factor,
+        )
+        easy = _fuzz(
+            (days + late) * card.ease * 1.3,
+            minimum=good + 1,
+            factor=factor,
+        )
         next_review = replace(card, repetitions=card.repetitions + 1)
         states = (
-            Sm2State(ease=max(1.3, card.ease - 0.2), phase="relearning", delay=600),
-            replace(next_review, interval=hard, ease=max(1.3, card.ease - 0.15), delay=hard * DAY),
+            Sm2State(
+                ease=max(1.3, card.ease - 0.2),
+                phase="relearning",
+                delay=600,
+            ),
+            replace(
+                next_review,
+                interval=hard,
+                ease=max(1.3, card.ease - 0.15),
+                delay=hard * DAY,
+            ),
             replace(next_review, interval=good, delay=good * DAY),
-            replace(next_review, interval=easy, ease=card.ease + 0.15, delay=easy * DAY),
+            replace(
+                next_review,
+                interval=easy,
+                ease=card.ease + 0.15,
+                delay=easy * DAY,
+            ),
         )
-    return {grade: (state.delay, json.dumps(asdict(state))) for grade, state in zip(Rating, states, strict=True)}
+    return {
+        grade: (state.delay, json.dumps(asdict(state)))
+        for grade, state in zip(Rating, states, strict=True)
+    }
 
 
-def _fsrs_options(key: str, *, previous: str | None, now: float, factor: float) -> dict[Rating, tuple[int, str]]:
+def read_fsrs_card(
+    key: str,
+    *,
+    previous: str | None,
+    due: datetime,
+) -> Card:
     """
-    Apply Anki's learning steps and ordered review bounds to FSRS-6 memory updates.
+    Restore a saved FSRS card or start one for the question.
+
+    Parameters
+    ----------
+    key : str
+        The question's stable card key.
+    previous : str or None
+        The saved JSON, if the question has been reviewed.
+    due : datetime
+        Initial due time for a new card.
+
+    Returns
+    -------
+    Card
+        The restored or newly scheduled card.
+
+    Examples
+    --------
+    A new card is due at the time of its first review.
+    """
+    if previous:
+        return Card.from_json(previous)
+    return Card(card_id=int(key[:15], 16), due=due)
+
+
+def _fsrs_options(
+    key: str,
+    *,
+    previous: str | None,
+    now: float,
+    factor: float,
+) -> dict[Rating, tuple[int, str]]:
+    """
+    Apply Anki's learning steps and ordered review bounds to FSRS-6
+    memory updates.
 
     Parameters
     ----------
@@ -229,28 +358,37 @@ def _fsrs_options(key: str, *, previous: str | None, now: float, factor: float) 
 
     Examples
     --------
-    >>> _fsrs_options("abc", previous=None, now=0, factor=0.5)[Rating.Hard][0]
+    >>> _fsrs_options(
+    ...     "abc", previous=None, now=0, factor=0.5
+    ... )[Rating.Hard][0]
     330
     """
     when = datetime.fromtimestamp(now, UTC)
-    card = Card.from_json(previous) if previous else Card(card_id=int(key[:15], 16), due=when)
+    card = read_fsrs_card(key, previous=previous, due=when)
     prior_days = 0
     if card.last_review is not None:
         prior_days = round((card.due - card.last_review).total_seconds() / DAY)
-        elapsed = (datetime.fromtimestamp(now).date() - card.last_review.astimezone().date()).days
+        elapsed = (
+            datetime.fromtimestamp(now).date()
+            - card.last_review.astimezone().date()
+        ).days
         card.last_review = when - timedelta(days=max(0, elapsed))
     options = {}
     minimum = 1
     for grade in Rating:
         updated, _ = _FSRS.review_card(card, grade, review_datetime=when)
         assert updated.stability is not None
-        # At the default 90% retention, FSRS stability is the unrounded interval in days.
+        # At the default 90% retention, FSRS stability is the unrounded
+        # interval in days.
         base = updated.stability
         if updated.state == State.Review:
             if card.state == State.Review:
                 if math.floor(base + 0.5) > prior_days:
                     minimum = max(minimum, prior_days + 1)
-                elif _fuzz(base, minimum=1, factor=math.nextafter(1.0, 0.0)) >= prior_days:
+                elif (
+                    _fuzz(base, minimum=1, factor=math.nextafter(1.0, 0.0))
+                    >= prior_days
+                ):
                     minimum = max(minimum, prior_days)
             else:
                 base = math.floor(base + 0.5)
@@ -258,15 +396,27 @@ def _fsrs_options(key: str, *, previous: str | None, now: float, factor: float) 
             updated.due = when + timedelta(days=days)
             minimum = days + 1
         if card.state != State.Review and grade == Rating.Good:
-            # Easy graduates even when Good would still be a learning step.
+            # Easy graduates even when Good would still be a learning
+            # step.
             minimum = _fuzz(updated.stability, minimum=1, factor=factor) + 1
-        options[grade] = (round((updated.due - when).total_seconds()), updated.to_json())
+        options[grade] = (
+            round((updated.due - when).total_seconds()),
+            updated.to_json(),
+        )
     return options
 
 
-def review_options(key: str, *, mode: str, previous: str | None, due: float, now: float) -> dict[Rating, tuple[int, str]]:
+def review_options(
+    key: str,
+    *,
+    mode: str,
+    previous: str | None,
+    due: float,
+    now: float,
+) -> dict[Rating, tuple[int, str]]:
     """
-    Calculate a consistent set of answer-button intervals from one scheduling state.
+    Calculate a consistent set of answer-button intervals from one
+    scheduling state.
 
     Parameters
     ----------
@@ -288,7 +438,13 @@ def review_options(key: str, *, mode: str, previous: str | None, due: float, now
 
     Examples
     --------
-    >>> review_options("abc", mode="SM-2", previous=None, due=0, now=0)[Rating.Again][0]
+    >>> review_options(
+    ...     "abc",
+    ...     mode="SM-2",
+    ...     previous=None,
+    ...     due=0,
+    ...     now=0,
+    ... )[Rating.Again][0]
     60
     """
     factor = random.Random(f"{key}:{mode}:{previous}").random()

@@ -1,8 +1,11 @@
 """
-Helpers for tests of the updater: a local web server that plays GitHub, and a signed fake release for it to serve.
+Helpers for tests of the updater: a local web server that plays GitHub,
+and a signed fake release for it to serve.
 
-Nothing here goes online. The server is on 127.0.0.1, the keys are made for the test, and the packages are small files built on
-the spot, so the real download, signature and checksum code runs against them.
+Nothing here goes online. The server is on 127.0.0.1, the keys are made
+for the test, and the packages are small files built on
+the spot, so the real download, signature and checksum code runs against
+them.
 """
 
 from __future__ import annotations
@@ -37,7 +40,8 @@ class Keys:
     Attributes
     ----------
     private : str
-        The private key, base64, as `scripts/make_signing_key.py` prints it.
+        The private key, base64, as `scripts/make_signing_key.py` prints
+        it.
     public : str
         The public key, base64, as `UPDATE_PUBLIC_KEYS` holds it.
     """
@@ -68,12 +72,14 @@ class Keys:
 
 class Server:
     """
-    A web server on this computer that serves files from a dictionary, for the length of a `with` block.
+    A web server on this computer that serves files from a dictionary,
+    for the length of a `with` block.
 
     Attributes
     ----------
     files : dict of str to bytes
-        What is served, by path (such as "/releases/download/v9.9.9/SHA256SUMS").
+        What is served, by path (such as
+        "/releases/download/v9.9.9/SHA256SUMS").
     redirects : dict of str to str
         Paths that answer with a redirect to another address.
     requests : list of str
@@ -86,6 +92,7 @@ class Server:
         """Start listening, on a port the system chooses."""
         self.files: dict[str, bytes] = {}
         self.redirects: dict[str, str] = {}
+        self.omit_length: set[str] = set()
         self.requests: list[str] = []
         outer = self
 
@@ -108,7 +115,8 @@ class Server:
                     self.end_headers()
                     return
                 self.send_response(200)
-                self.send_header("Content-Length", str(len(body)))
+                if self.path not in outer.omit_length:
+                    self.send_header("Content-Length", str(len(body)))
                 self.end_headers()
                 self.wfile.write(body)
 
@@ -128,7 +136,10 @@ class Server:
         # noinspection PyTypeChecker
         self._server = HTTPServer(("127.0.0.1", 0), Handler)
         self.port = self._server.server_port
-        self._thread = threading.Thread(target=self._server.serve_forever, daemon=True)
+        self._thread = threading.Thread(
+            target=self._server.serve_forever,
+            daemon=True,
+        )
 
     def __enter__(self) -> Server:
         """
@@ -166,7 +177,8 @@ class Server:
     @property
     def base(self) -> str:
         """
-        Give the address the release's files are under, ending in a slash.
+        Give the address the release's files are under, ending in a
+        slash.
 
         Returns
         -------
@@ -183,7 +195,8 @@ def linux_package(
     program: bytes = b'#!/bin/sh\necho "Alto 9.9.9"\n',
 ) -> bytes:
     """
-    Build a small Linux download: a folder with the real `install.sh`, a stand-in program, and the icons.
+    Build a small Linux download: a folder with the real `install.sh`, a
+    stand-in program, and the icons.
 
     Parameters
     ----------
@@ -203,17 +216,25 @@ def linux_package(
     buffer = io.BytesIO()
     with tarfile.open(fileobj=buffer, mode="w:gz") as tar:
         files = {
-            f"{top}/install.sh": (ROOT / "packaging" / "linux" / "install.sh").read_bytes()
+            f"{top}/install.sh": (
+                ROOT / "packaging" / "linux" / "install.sh"
+            ).read_bytes()
             if install_script is None
             else install_script,
             f"{top}/alto/alto": program,
-            f"{top}/icons/icon-256.png": (ROOT / "alto" / "assets" / "icon-256.png").read_bytes(),
-            f"{top}/icons/icon.png": (ROOT / "alto" / "assets" / "icon.png").read_bytes(),
+            f"{top}/icons/icon-256.png": (
+                ROOT / "alto" / "assets" / "icon-256.png"
+            ).read_bytes(),
+            f"{top}/icons/icon.png": (
+                ROOT / "alto" / "assets" / "icon.png"
+            ).read_bytes(),
         }
         for name, data in files.items():
             info = tarfile.TarInfo(name)
             info.size = len(data)
-            info.mode = 0o755 if name.endswith(("alto/alto", "install.sh")) else 0o644
+            info.mode = (
+                0o755 if name.endswith(("alto/alto", "install.sh")) else 0o644
+            )
             tar.addfile(info, io.BytesIO(data))
     return buffer.getvalue()
 
@@ -230,14 +251,16 @@ def publish(
     leave_out: tuple[str, ...] = (),
 ) -> updates.Release:
     """
-    Put a release on the server: the package, the list of checksums, and the signature of the list.
+    Put a release on the server: the package, the list of checksums, and
+    the signature of the list.
 
     Parameters
     ----------
     server : Server
         Where to put it.
     keys : Keys
-        The keys the release is signed with, unless `sign_with` says another. Keyword-only.
+        The keys the release is signed with, unless `sign_with` says
+        another. Keyword-only.
     package : bytes
         The package. Keyword-only.
     name : str
@@ -245,9 +268,11 @@ def publish(
     version : str, default VERSION
         The release's version. Keyword-only.
     sign_with : Keys or None, default None
-        Sign with these instead, to make a signature that does not verify. Keyword-only.
+        Sign with these instead, to make a signature that does not
+        verify. Keyword-only.
     sums_for : bytes or None, default None
-        Write the hash of these bytes in the list instead of the package's, to make a list that does not match. Keyword-only.
+        Write the hash of these bytes in the list instead of the
+        package's, to make a list that does not match. Keyword-only.
     leave_out : tuple of str
         Names of files not to put on the release. Keyword-only.
 
@@ -257,13 +282,29 @@ def publish(
         The release, with the addresses of its files on the server.
     """
     tag = f"v{version}"
-    listing = f"{hashlib.sha256(package if sums_for is None else sums_for).hexdigest()}  {name}\n".encode()
+    digest = hashlib.sha256(package if sums_for is None else sums_for)
+    listing = (f"{digest.hexdigest()}  {name}\n").encode()
     signature = (sign_with or keys).sign(listing).encode()
-    contents = {name: package, updates.CHECKSUMS_NAME: listing, updates.SIGNATURE_NAME: signature}
+    contents = {
+        name: package,
+        updates.CHECKSUMS_NAME: listing,
+        updates.SIGNATURE_NAME: signature,
+    }
     assets = []
     for file, data in contents.items():
         if file in leave_out:
             continue
         server.files[f"/releases/download/{tag}/{file}"] = data
-        assets.append(updates.Asset(file, url=f"{server.base}{tag}/{file}", size=len(data)))
-    return updates.Release(version, tag=tag, url="https://example.org/release", assets=tuple(assets))
+        assets.append(
+            updates.Asset(
+                file,
+                url=f"{server.base}{tag}/{file}",
+                size=len(data),
+            ),
+        )
+    return updates.Release(
+        version,
+        tag=tag,
+        url="https://example.org/release",
+        assets=tuple(assets),
+    )

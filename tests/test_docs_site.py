@@ -1,8 +1,11 @@
 """
-Tests for the versioned docs: the script that puts the site together, and the files that make the dropdown and the search rules.
+Tests for the versioned docs: the script that puts the site together,
+and the files that make the dropdown and the search rules.
 
-The Jekyll builds and the push to `gh-pages` happen on GitHub, so these tests cover what can be checked without them: the logic
-of which release is the latest and what is written around the versions, and that the layout, the workflow and the shared files
+The Jekyll builds and the push to `gh-pages` happen on GitHub, so these
+tests cover what can be checked without them: the logic
+of which release is the latest and what is written around the versions,
+and that the layout, the workflow and the shared files
 say what the design needs.
 """
 
@@ -38,7 +41,10 @@ def load() -> ModuleType:
     ModuleType
         The loaded module.
     """
-    spec = importlib.util.spec_from_file_location("docs_site", ROOT / "scripts" / "docs_site.py")
+    spec = importlib.util.spec_from_file_location(
+        "docs_site",
+        ROOT / "scripts" / "docs_site.py",
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -54,7 +60,8 @@ def make_site(
     folders: tuple[str, ...],
 ) -> tuple[Path, Path]:
     """
-    Make a site with some version folders, and a folder of shared files to go with it.
+    Make a site with some version folders, and a folder of shared files
+    to go with it.
 
     Parameters
     ----------
@@ -72,7 +79,10 @@ def make_site(
     for name in folders:
         (site / name).mkdir(parents=True)
     shared.mkdir(parents=True)
-    (shared / "robots.txt").write_text("Sitemap: @SITE@/sitemap.xml\nPath: @SITE_PATH@\n", encoding="utf-8")
+    (shared / "robots.txt").write_text(
+        "Sitemap: @SITE@/sitemap.xml\nPath: @SITE_PATH@\n",
+        encoding="utf-8",
+    )
     return site, shared
 
 
@@ -80,14 +90,23 @@ def make_site(
     ("tags", "newest"),
     [
         (["v0.0.0"], "v0.0.0"),
-        (["v0.9.0", "v0.10.0", "v0.2.0"], "v0.10.0"),  # numbers, not text: 10 is more than 9
-        (["v1.0.0", "v1.0.0-rc1", "v1.1.0-beta1"], "v1.0.0"),  # a pre-release is never the latest
+        (
+            ["v0.9.0", "v0.10.0", "v0.2.0"],
+            "v0.10.0",
+        ),  # numbers, not text: 10 is more than 9
+        (
+            ["v1.0.0", "v1.0.0-rc1", "v1.1.0-beta1"],
+            "v1.0.0",
+        ),  # a pre-release is never the latest
         (["v1.0.0-rc1"], None),
         (["main", "dev", "latest", "v1"], None),
         ([], None),
     ],
 )
-def test_the_latest_release_is_the_highest_version_that_is_not_a_pre_release(tags: list[str], newest: str | None) -> None:
+def test_the_latest_release_is_the_highest_version_that_is_not_a_pre_release(
+    tags: list[str],
+    newest: str | None,
+) -> None:
     """
     Check which tag counts as the latest release.
 
@@ -101,13 +120,24 @@ def test_the_latest_release_is_the_highest_version_that_is_not_a_pre_release(tag
     assert docs_site.latest_release(tags) == newest
 
 
-def test_versions_are_listed_newest_first_with_a_pre_release_before_its_release() -> None:
-    """Check the order of the dropdown: the newest release first, and a release candidate under the release it leads to."""
+def test_versions_listed_newest_first_with_pre_release_before() -> None:
+    """
+    Check the order of the dropdown: the newest release first, and a
+    release candidate under the release it leads to.
+    """
     tags = ["v0.0.0", "v1.0.0-rc2", "v1.0.0", "v0.1.0", "v1.0.0-rc10", "notes"]
-    assert docs_site.sort_versions(tags) == ["v1.0.0", "v1.0.0-rc2", "v1.0.0-rc10", "v0.1.0", "v0.0.0"]
+    assert docs_site.sort_versions(tags) == [
+        "v1.0.0",
+        "v1.0.0-rc2",
+        "v1.0.0-rc10",
+        "v0.1.0",
+        "v0.0.0",
+    ]
 
 
-def test_finishing_a_site_lists_dev_and_the_releases_and_names_the_latest(tmp_path: Path) -> None:
+def test_finishing_a_site_lists_dev_and_the_releases_and_names_the_latest(
+    tmp_path: Path,
+) -> None:
     """
     Check `versions.json`, which the dropdown in every page reads.
 
@@ -116,17 +146,28 @@ def test_finishing_a_site_lists_dev_and_the_releases_and_names_the_latest(tmp_pa
     tmp_path : Path
         A new folder.
     """
-    site, shared = make_site(tmp_path, folders=("dev", "latest", "v0.0.0", "v0.1.0"))
+    site, shared = make_site(
+        tmp_path,
+        folders=("dev", "latest", "v0.0.0", "v0.1.0"),
+    )
     (site / "dev" / "commit.txt").write_text("abc1234\n", encoding="utf-8")
     docs_site.finish(site, root_files=shared, site_url=SITE_URL)
-    assert json.loads((site / "versions.json").read_text(encoding="utf-8")) == {
+    assert json.loads(
+        (site / "versions.json").read_text(encoding="utf-8"),
+    ) == {
         "latest": "v0.1.0",
         "dev_commit": "abc1234",
-        "versions": ["dev", "v0.1.0", "v0.0.0"],  # "latest" is an alias, not a version of its own
+        "versions": [
+            "dev",
+            "v0.1.0",
+            "v0.0.0",
+        ],  # "latest" is an alias, not a version of its own
     }
 
 
-def test_the_home_page_goes_to_latest_and_to_dev_until_there_is_a_release(tmp_path: Path) -> None:
+def test_the_home_page_goes_to_latest_and_to_dev_until_there_is_a_release(
+    tmp_path: Path,
+) -> None:
     """
     Check where the root of the site sends a visitor in each state.
 
@@ -135,7 +176,10 @@ def test_the_home_page_goes_to_latest_and_to_dev_until_there_is_a_release(tmp_pa
     tmp_path : Path
         A new folder.
     """
-    site, shared = make_site(tmp_path / "with-release", folders=("dev", "latest", "v0.0.0"))
+    site, shared = make_site(
+        tmp_path / "with-release",
+        folders=("dev", "latest", "v0.0.0"),
+    )
     docs_site.finish(site, root_files=shared, site_url=SITE_URL)
     page = (site / "index.html").read_text(encoding="utf-8")
     assert 'url=latest/"' in page and f'href="{SITE_URL}/latest/"' in page
@@ -151,9 +195,12 @@ def test_the_home_page_goes_to_latest_and_to_dev_until_there_is_a_release(tmp_pa
     assert not (site / "index.html").exists()  # nothing to send anyone to
 
 
-def test_the_sitemap_of_the_site_is_the_one_of_latest_and_goes_when_there_is_no_latest(tmp_path: Path) -> None:
+def test_sitemap_of_site_one_of_latest_and_goes_when_there_no(
+    tmp_path: Path,
+) -> None:
     """
-    Check that only the latest release's pages are offered to search engines.
+    Check that only the latest release's pages are offered to search
+    engines.
 
     Parameters
     ----------
@@ -161,18 +208,29 @@ def test_the_sitemap_of_the_site_is_the_one_of_latest_and_goes_when_there_is_no_
         A new folder.
     """
     site, shared = make_site(tmp_path, folders=("dev", "latest", "v0.0.0"))
-    (site / "latest" / "sitemap.xml").write_text("<urlset>latest</urlset>", encoding="utf-8")
-    (site / "dev" / "sitemap.xml").write_text("<urlset>dev</urlset>", encoding="utf-8")
+    (site / "latest" / "sitemap.xml").write_text(
+        "<urlset>latest</urlset>",
+        encoding="utf-8",
+    )
+    (site / "dev" / "sitemap.xml").write_text(
+        "<urlset>dev</urlset>",
+        encoding="utf-8",
+    )
     docs_site.finish(site, root_files=shared, site_url=SITE_URL)
-    assert (site / "sitemap.xml").read_text(encoding="utf-8") == "<urlset>latest</urlset>"
+    assert (site / "sitemap.xml").read_text(
+        encoding="utf-8",
+    ) == "<urlset>latest</urlset>"
     (site / "latest" / "sitemap.xml").unlink()
     docs_site.finish(site, root_files=shared, site_url=SITE_URL)
     assert not (site / "sitemap.xml").exists()
 
 
-def test_the_shared_files_get_the_address_of_the_site_and_nothing_stops_pages_from_serving_them(tmp_path: Path) -> None:
+def test_shared_files_get_address_of_site_and_nothing_stops(
+    tmp_path: Path,
+) -> None:
     """
-    Check the placeholders in the shared files, and that GitHub Pages is told not to run Jekyll on the finished site.
+    Check the placeholders in the shared files, and that GitHub Pages is
+    told not to run Jekyll on the finished site.
 
     Parameters
     ----------
@@ -180,12 +238,18 @@ def test_the_shared_files_get_the_address_of_the_site_and_nothing_stops_pages_fr
         A new folder.
     """
     site, shared = make_site(tmp_path, folders=("dev",))
-    docs_site.finish(site, root_files=shared, site_url=f"{SITE_URL}/")  # a slash at the end makes no difference
-    assert (site / "robots.txt").read_text(encoding="utf-8") == f"Sitemap: {SITE_URL}/sitemap.xml\nPath: /alto\n"
+    docs_site.finish(
+        site,
+        root_files=shared,
+        site_url=f"{SITE_URL}/",
+    )  # a slash at the end makes no difference
+    assert (site / "robots.txt").read_text(
+        encoding="utf-8",
+    ) == f"Sitemap: {SITE_URL}/sitemap.xml\nPath: /alto\n"
     assert (site / ".nojekyll").is_file()
 
 
-def test_the_command_line_prints_the_latest_and_refuses_a_site_that_is_not_there(
+def test_command_line_prints_latest_and_refuses_site_not_there(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
@@ -201,176 +265,396 @@ def test_the_command_line_prints_the_latest_and_refuses_a_site_that_is_not_there
     """
     assert docs_site.main(["latest", "v0.0.0", "v0.0.1", "v0.1.0-rc1"]) == 0
     assert capsys.readouterr().out.strip() == "v0.0.1"
-    assert docs_site.main(["latest"]) == 0 and capsys.readouterr().out.strip() == ""
-    assert docs_site.main(["finish", str(tmp_path / "nothing"), "--root-files", str(tmp_path), "--site-url", SITE_URL]) == 1
+    assert (
+        docs_site.main(["latest"]) == 0
+        and capsys.readouterr().out.strip() == ""
+    )
+    assert (
+        docs_site.main(
+            [
+                "finish",
+                str(tmp_path / "nothing"),
+                "--root-files",
+                str(tmp_path),
+                "--site-url",
+                SITE_URL,
+            ],
+        )
+        == 1
+    )
     site, shared = make_site(tmp_path, folders=("v0.0.0",))
-    assert docs_site.main(["finish", str(site), "--root-files", str(shared), "--site-url", SITE_URL]) == 0
+    assert (
+        docs_site.main(
+            [
+                "finish",
+                str(site),
+                "--root-files",
+                str(shared),
+                "--site-url",
+                SITE_URL,
+            ],
+        )
+        == 0
+    )
     assert (site / "versions.json").is_file()
 
 
-def test_the_layout_has_the_dropdown_slot_and_sends_search_engines_to_latest() -> None:
-    """Check the layout: a slot the dropdown fills, the canonical address under /latest/, noindex for dev, and the script."""
+def test_layout_dropdown_slot_and_sends_search_engines_to_latest() -> None:
+    """
+    Check the layout: a slot the dropdown fills, the canonical address
+    under /latest/, noindex for dev, and the script.
+    """
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
     assert (
         'id="version-slot"' in layout
         and 'data-version="{{ site.docs_version }}"' in layout
         and 'data-root="{{ site.site_root }}"' in layout
     )
-    assert "prepend: '/latest'" in layout and '<link rel="canonical" href="{{ canonical }}">' in layout
-    assert "site.docs_version == 'dev'" in layout and 'content="noindex"' in layout
+    assert (
+        "prepend: '/latest'" in layout
+        and '<link rel="canonical" href="{{ canonical }}">' in layout
+    )
+    assert (
+        "site.docs_version == 'dev'" in layout
+        and 'content="noindex"' in layout
+    )
     assert "version-switcher.js" in layout
-    assert "site.docs_version == 'latest'" in layout  # the structured data is for the latest release only
+    assert (
+        "site.docs_version == 'latest'" in layout
+    )  # the structured data is for the latest release only
 
 
-def test_the_top_bar_has_the_version_then_the_theme_then_github_and_the_theme_is_only_a_picture_until_clicked() -> None:
-    """Check the order of the top bar, that the theme button has no words of its own, and that the words are in its menu."""
+def test_top_bar_version_then_theme_then_github_and_theme_only() -> None:
+    """
+    Check the order of the top bar, that the theme button has no words
+    of its own, and that the words are in its menu.
+    """
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    bar = layout[layout.index('<div class="top-actions">') : layout.index("</header>")]
-    assert bar.index('id="version-slot"') < bar.index('id="theme-button"') < bar.index('class="icon-link"')
-    button = bar[bar.index('id="theme-button"') : bar.index("</button>", bar.index('id="theme-button"'))]
-    assert 'aria-label="Color theme"' in button and 'aria-haspopup="menu"' in button
-    assert ">Light<" not in button and ">Dark<" not in button  # no words on the button itself
+    bar = layout[
+        layout.index('<div class="top-actions">') : layout.index("</header>")
+    ]
+    assert (
+        bar.index('id="version-slot"')
+        < bar.index('id="theme-button"')
+        < bar.index('class="icon-link"')
+    )
+    button = bar[
+        bar.index('id="theme-button"') : bar.index(
+            "</button>",
+            bar.index('id="theme-button"'),
+        )
+    ]
+    assert (
+        'aria-label="Color theme"' in button
+        and 'aria-haspopup="menu"' in button
+    )
+    assert (
+        ">Light<" not in button and ">Dark<" not in button
+    )  # no words on the button itself
     menu = bar[bar.index('id="theme-menu"') : bar.index('class="icon-link"')]
-    assert "hidden>" in menu and ">Light<" in menu and ">Dark<" in menu and ">System<" in menu
+    assert (
+        "hidden>" in menu
+        and ">Light<" in menu
+        and ">Dark<" in menu
+        and ">System<" in menu
+    )
     assert "theme-toggle" not in layout  # the old button with words is gone
     assert "Match your computer" not in layout  # System has no note under it
-    assert layout.count('class="dd-ico"') == 3  # an icon tile beside each of Light, Dark and System
-    assert 'removeAttribute("data-theme")' in layout and "Escape" in layout  # System forgets the choice; Escape closes the menu
+    assert (
+        layout.count('class="dd-ico"') == 3
+    )  # an icon tile beside each of Light, Dark and System
+    assert (
+        'removeAttribute("data-theme")' in layout and "Escape" in layout
+    )  # System forgets the choice; Escape closes the menu
 
 
-def test_the_version_dropdown_uses_icon_tiles_and_lists_dev_with_its_commit_after_the_releases() -> None:
-    """Check that the dev label includes the build commit while its navigation value stays dev."""
+def test_version_dropdown_uses_icon_tiles_and_lists_dev_with() -> None:
+    """
+    Check that the dev label includes the build commit while its
+    navigation value stays dev.
+    """
     script = (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8")
-    assert 'createElement("select")' not in script and 'class="avs-ico"' in script and "avs-menu" in script
-    assert '"dev (" + data.dev_commit + ")"' in script and "value: name, name: label" in script
-    assert 'concat(data.versions.indexOf("dev") >= 0 ? ["dev"] : [])' in script  # releases first, then dev
+    assert (
+        'createElement("select")' not in script
+        and 'class="avs-ico"' in script
+        and "avs-menu" in script
+    )
+    assert (
+        '"dev (" + data.dev_commit + ")"' in script
+        and "value: name, name: label" in script
+    )
+    assert (
+        'concat(data.versions.indexOf("dev") >= 0 ? ["dev"] : [])' in script
+    )  # releases first, then dev
     assert "Match your computer" not in script
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
-    assert ".dd-menu {" in css and ".dd-item" in css and ".version select" not in css  # the theme menu in the layout uses these
+    assert (
+        ".dd-menu {" in css
+        and ".dd-item" in css
+        and ".version select" not in css
+    )  # the theme menu in the layout uses these
 
 
-def test_the_version_dropdown_brings_its_own_styles_because_a_versions_stylesheet_is_frozen() -> None:
+def test_version_dropdown_brings_own_styles_because_versions() -> None:
     """
-    Check that the dropdown does not depend on the stylesheet of the page it is in.
+    Check that the dropdown does not depend on the stylesheet of the
+    page it is in.
 
-    Each version of the docs keeps the stylesheet it was built with, so a page built before the dropdown was restyled has none of
-    its rules. Without styles of their own the icons had no size, and the menu showed as a giant arrow over unreadable text.
+    Each version of the docs keeps the stylesheet it was built with, so
+    a page built before the dropdown was restyled has none of
+    its rules. Without styles of their own the icons had no size, and
+    the menu showed as a giant arrow over unreadable text.
     """
     script = (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8")
     start = script.index("var STYLE = [")
     style = script[start : script.index('].join("\\n");', start)]
-    classes = set(re.findall(r"avs(?:-[a-z]+)?", script[:start] + script[script.index('].join("\\n");', start) :]))
+    classes = set(
+        re.findall(
+            r"avs(?:-[a-z]+)?",
+            script[:start] + script[script.index('].join("\\n");', start) :],
+        ),
+    )
     classes.discard("avs-style")  # the id of the style element, not a class
-    assert "avs" in classes and 'id = "avs-style"' in script and "addStyle();" in script
+    assert (
+        "avs" in classes
+        and 'id = "avs-style"' in script
+        and "addStyle();" in script
+    )
     for name in classes:
         assert f".{name}" in style, f"the class {name} is used but not styled"
-    assert "width=" in script and "height=" in script  # an icon has its size written on it, in case no rule reaches it
-    assert "dd-" not in script  # none of the classes of the page's own stylesheet
+    assert (
+        "width=" in script and "height=" in script
+    )  # an icon has its size written on it, in case no rule reaches it
+    assert (
+        "dd-" not in script
+    )  # none of the classes of the page's own stylesheet
 
 
-def test_the_config_builds_dev_by_default_and_keeps_the_shared_files_out_of_every_version() -> None:
-    """Check that a plain build is the dev docs, at the address GitHub Pages used before, and that root files are not built in."""
+def test_config_builds_dev_by_default_and_keeps_shared_files_out() -> None:
+    """
+    Check that a plain build is the dev docs, at the address GitHub
+    Pages used before, and that root files are not built in.
+    """
     config = (DOCS / "_config.yml").read_text(encoding="utf-8")
     assert "docs_version: dev" in config and "site_root: /alto" in config
     assert "- site-root" in config and "- Gemfile" in config
-    assert (DOCS / "Gemfile").read_text(encoding="utf-8").count("github-pages") >= 1
+    assert (DOCS / "Gemfile").read_text(encoding="utf-8").count(
+        "github-pages",
+    ) >= 1
 
 
-def test_the_shared_files_are_in_site_root_and_the_google_file_is_exactly_as_google_gave_it() -> None:
-    """Check the files that belong to the whole site, and that the Search Console verification file has not been touched."""
+def test_shared_files_in_site_root_and_google_file_exactly_as() -> None:
+    """
+    Check the files that belong to the whole site, and that the Search
+    Console verification file has not been touched.
+    """
     for name in ("version-switcher.js", "404.html", "robots.txt", "llms.txt"):
         assert (SITE_ROOT / name).is_file()
     assert (
         not (DOCS / "robots.txt").exists() and not (DOCS / "llms.txt").exists()
     )  # they moved: Jekyll would build them into each version
     google = next(SITE_ROOT.glob("google*.html"))
-    assert google.read_bytes() == f"google-site-verification: {google.name}".encode()  # no newline: the file must match exactly
+    assert (
+        google.read_bytes()
+        == f"google-site-verification: {google.name}".encode()
+    )  # no newline: the file must match exactly
     assert not list(DOCS.glob("google*.html"))
     robots = (SITE_ROOT / "robots.txt").read_text(encoding="utf-8")
     assert "Sitemap: @SITE@/sitemap.xml" in robots
-    assert "@SITE@/latest/" in (SITE_ROOT / "llms.txt").read_text(encoding="utf-8")
+    assert "@SITE@/latest/" in (SITE_ROOT / "llms.txt").read_text(
+        encoding="utf-8",
+    )
 
 
-def test_an_old_address_is_sent_to_the_same_page_in_latest_by_the_404_page() -> None:
-    """Check that the 404 page moves a visitor of /alto/getting-started/ to /alto/latest/getting-started/, and does not loop."""
+def test_old_address_sent_to_same_page_in_latest_by_404_page() -> None:
+    """
+    Check that the 404 page moves a visitor of /alto/getting-started/ to
+    /alto/latest/getting-started/, and does not loop.
+    """
     page = (SITE_ROOT / "404.html").read_text(encoding="utf-8")
-    assert 'var root = "@SITE_PATH@"' in page and 'location.replace(root + "/latest/" + rest' in page
-    assert 'first === "latest"' in page and 'first === "dev"' in page  # a missing page inside a version is not sent around again
+    assert (
+        'var root = "@SITE_PATH@"' in page
+        and 'location.replace(root + "/latest/" + rest' in page
+    )
+    assert (
+        'first === "latest"' in page and 'first === "dev"' in page
+    )  # a missing page inside a version is not sent around again
 
 
-def test_the_dropdown_reads_the_list_of_versions_from_the_site_and_warns_on_dev_and_on_old_versions() -> None:
-    """Check the dropdown's script: it fetches the list, falls back to a version's home for a missing page, and shows banners."""
+def test_dropdown_reads_list_of_versions_from_site_and_warns_on() -> None:
+    """
+    Check the dropdown's script: it fetches the list, falls back to a
+    version's home for a missing page, and shows banners.
+    """
     script = (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8")
     assert '"/versions.json"' in script and 'method: "HEAD"' in script
-    assert "version-banner" in script and "development version" in script and "not the latest release" in script
-    assert "latest (" in script  # the alias is shown with the version it stands for
+    assert (
+        "version-banner" in script
+        and "development version" in script
+        and "not the latest release" in script
+    )
+    assert (
+        "latest (" in script
+    )  # the alias is shown with the version it stands for
 
 
-def test_the_docs_workflow_builds_each_version_into_its_own_folder_and_only_writes_to_gh_pages() -> None:
-    """Check the workflow's triggers, its one writer permission, the concurrency group and the builds."""
+def test_docs_workflow_builds_each_version_into_own_folder_and() -> None:
+    """
+    Check the workflow's triggers, its one writer permission, the
+    concurrency group and the builds.
+    """
     yaml = pytest.importorskip("yaml")
-    text = (ROOT / ".github" / "workflows" / "docs.yml").read_text(encoding="utf-8")
+    text = (ROOT / ".github" / "workflows" / "docs.yml").read_text(
+        encoding="utf-8",
+    )
     data = yaml.safe_load(text)
     triggers = data.get(True, data.get("on"))
-    assert triggers["push"]["tags"] == ["v*"] and triggers["push"]["branches"] == ["main"] and "workflow_dispatch" in triggers
+    assert (
+        triggers["push"]["tags"] == ["v*"]
+        and triggers["push"]["branches"] == ["main"]
+        and "workflow_dispatch" in triggers
+    )
     assert data["permissions"] == {"contents": "write"}
-    assert data["concurrency"]["group"] == "docs" and data["concurrency"]["cancel-in-progress"] is False
-    assert "--baseurl" not in text and "baseurl: %s/%s" in text  # the address of each version is given in a config file
+    assert (
+        data["concurrency"]["group"] == "docs"
+        and data["concurrency"]["cancel-in-progress"] is False
+    )
+    assert (
+        "--baseurl" not in text and "baseurl: %s/%s" in text
+    )  # the address of each version is given in a config file
     assert "build latest latest" in text and "docs_site.py latest" in text
-    assert "docs_site.py finish site" in text and "git push --quiet origin HEAD:gh-pages" in text
-    assert "cp -R tooling/docs/_layouts/." in text  # a release without the dropdown gets the current layout
+    assert (
+        "docs_site.py finish site" in text
+        and "git push --quiet origin HEAD:gh-pages" in text
+    )
+    assert (
+        "cp -R tooling/docs/_layouts/." in text
+    )  # a release without the dropdown gets the current layout
 
 
 def test_the_examples_in_the_script_run() -> None:
-    """Check the examples in the docstrings of `scripts/docs_site.py`, which pytest does not collect from `scripts/`."""
-    result = doctest.testmod(docs_site, optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS)
+    """
+    Check the examples in the docstrings of `scripts/docs_site.py`,
+    which pytest does not collect from `scripts/`.
+    """
+    result = doctest.testmod(
+        docs_site,
+        optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS,
+    )
     assert result.attempted > 10 and result.failed == 0
 
 
-def test_the_home_page_has_a_download_button_and_a_download_section_in_place_of_get_started() -> None:
-    """Check the button under the first paragraph, the section it goes to, and the words in it."""
+def test_home_page_download_button_and_download_section_in_place() -> None:
+    """
+    Check the button under the first paragraph, the section it goes to,
+    and the words in it.
+    """
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    assert "## Get started" not in home  # the section for developers is gone; the Getting started page keeps those steps
-    hero = home[home.index('<div class="hero">') : home.index('<div class="practice-gallery"')]
-    assert hero.index('class="lead"') < hero.index('class="dl-go" href="#download"')
+    assert (
+        "## Get started" not in home
+        # the section for developers is gone; the Getting started page
+        # keeps
+        # those steps
+    )
+    hero = home[
+        home.index('<div class="hero">') : home.index(
+            '<div class="practice-gallery"',
+        )
+    ]
+    assert hero.index('class="lead"') < hero.index(
+        'class="dl-go" href="#download"',
+    )
     assert home.count("Free for Desktop") == 1
     assert '<section class="dl" id="download"' in home
-    version = '<b>Version {{ v }}&nbsp;<span class="dl-alpha">Alpha</span></b><br>'
-    assert home.index("<h2>Download Alto</h2>") < home.index(version) < home.index("<small>Free for Desktop</small>")
-    assert "Windows may warn" not in home and "publisher is unknown" not in home
-    assert "run Alto from its source code" in home and "/getting-started/#install-and-run" in home
-    assert "## Install and run" in (DOCS / "getting-started.md").read_text(encoding="utf-8")  # the section that link goes to
+    version = (
+        '<b>Version {{ v }}&nbsp;<span class="dl-alpha">Alpha</span></b><br>'
+    )
+    assert (
+        home.index("<h2>Download Alto</h2>")
+        < home.index(version)
+        < home.index("<small>Free for Desktop</small>")
+    )
+    assert (
+        "Windows may warn" not in home and "publisher is unknown" not in home
+    )
+    assert (
+        "run Alto from its source code" in home
+        and "/getting-started/#install-and-run" in home
+    )
+    assert "## Install and run" in (DOCS / "getting-started.md").read_text(
+        encoding="utf-8",
+    )  # the section that link goes to
 
 
-def test_the_file_names_in_the_download_section_are_the_ones_the_release_workflow_makes() -> None:
-    """Check the file names and the address of a release's files against the name the updater itself looks for."""
+def test_file_names_in_download_section_ones_release_workflow() -> None:
+    """
+    Check the file names and the address of a release's files against
+    the name the updater itself looks for.
+    """
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    linux = updates.platform_asset_name("1.2.3", system="Linux", machine="x86_64")
-    windows = updates.platform_asset_name("1.2.3", system="Windows", machine="AMD64")
+    linux = updates.platform_asset_name(
+        "1.2.3",
+        system="Linux",
+        machine="x86_64",
+    )
+    windows = updates.platform_asset_name(
+        "1.2.3",
+        system="Windows",
+        machine="AMD64",
+    )
     assert linux and windows
-    assert linux.replace("1.2.3", "{{ v }}") in home and windows.replace("1.2.3", "{{ v }}") in home
+    assert (
+        linux.replace("1.2.3", "{{ v }}") in home
+        and windows.replace("1.2.3", "{{ v }}") in home
+    )
     assert "https://github.com/altosaurus/alto/releases/download/v" in home
 
 
-def test_each_build_says_which_release_to_offer_and_a_build_without_a_release_shows_no_download() -> None:
-    """Check that every build is given its release (the newest for dev) and that the page copes with there being none."""
-    workflow = (ROOT / ".github" / "workflows" / "docs.yml").read_text(encoding="utf-8")
-    assert 'app_version: "%s"' in workflow and 'APP_VERSION="${VERSION#v}"' in workflow
-    assert "docs_site.py latest $(git -C source tag --list" in workflow  # for dev: the newest release
+def test_each_build_says_which_release_to_offer_and_build() -> None:
+    """
+    Check that every build is given its release (the newest for dev) and
+    that the page copes with there being none.
+    """
+    workflow = (ROOT / ".github" / "workflows" / "docs.yml").read_text(
+        encoding="utf-8",
+    )
+    assert (
+        'app_version: "%s"' in workflow
+        and 'APP_VERSION="${VERSION#v}"' in workflow
+    )
+    assert (
+        "docs_site.py latest $(git -C source tag --list" in workflow
+    )  # for dev: the newest release
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    assert '{% if site.app_version != "" %}' in home and '{% if v != "" %}' in home
+    assert (
+        '{% if site.app_version != "" %}' in home
+        and '{% if v != "" %}' in home
+    )
     assert "app_version:" in (DOCS / "_config.yml").read_text(encoding="utf-8")
 
 
-def test_the_download_script_detects_the_system_and_keeps_and_sends_nothing() -> None:
+def test_download_script_detects_system_and_keeps_and_sends() -> None:
     """
-    Check the script that chooses the main button: it names the systems, copes with phones and ARM Linux, and stores nothing.
+    Check the script that chooses the main button: it names the systems,
+    copes with phones and ARM Linux, and stores nothing.
 
-    Reading the visitor's system to choose a button is harmless only while it stays in the page, so no way to store or send it may
+    Reading the visitor's system to choose a button is harmless only
+    while it stays in the page, so no way to store or send it may
     ever be added to this file.
     """
-    script = (DOCS / "assets" / "js" / "downloads.js").read_text(encoding="utf-8")
-    for word in ("windows", "linux", "macos", "phone", "other", "aarch64", "userAgentData", "Your system"):
+    script = (DOCS / "assets" / "js" / "downloads.js").read_text(
+        encoding="utf-8",
+    )
+    for word in (
+        "windows",
+        "linux",
+        "macos",
+        "phone",
+        "other",
+        "aarch64",
+        "userAgentData",
+        "Your system",
+    ):
         assert word in script
     for forbidden in (
         "localStorage",
@@ -382,11 +666,16 @@ def test_the_download_script_detects_the_system_and_keeps_and_sends_nothing() ->
         "WebSocket",
         "Image(",
     ):
-        assert forbidden not in script, f"downloads.js must not use {forbidden}"
+        assert forbidden not in script, (
+            f"downloads.js must not use {forbidden}"
+        )
 
 
 def test_the_logos_are_in_the_page_and_credited() -> None:
-    """Check that the three system marks exist as symbols and that the page of credits names where two of them come from."""
+    """
+    Check that the three system marks exist as symbols and that the page
+    of credits names where two of them come from.
+    """
     icons = (DOCS / "_includes" / "os-icons.html").read_text(encoding="utf-8")
     for name in ("os-windows", "os-apple", "os-linux", "os-computer"):
         assert f'id="{name}"' in icons
@@ -394,30 +683,42 @@ def test_the_logos_are_in_the_page_and_credited() -> None:
     assert "Simple Icons" in page and "CC0" in page
 
 
-def test_every_icon_has_its_size_written_on_it_and_the_files_it_needs_are_stamped_with_the_build() -> None:
+def test_every_icon_size_written_on_and_files_needs_stamped_with() -> None:
     """
-    Check what keeps a page readable when the browser still has an old stylesheet.
+    Check what keeps a page readable when the browser still has an old
+    stylesheet.
 
-    An icon with no size is drawn at the browser's default of 300 by 150 pixels, which filled the screen when a new page met an
-    old, cached stylesheet. Each icon now says how big it is, and the stylesheet and the script are asked for by an address that
+    An icon with no size is drawn at the browser's default of 300 by 150
+    pixels, which filled the screen when a new page met an
+    old, cached stylesheet. Each icon now says how big it is, and the
+    stylesheet and the script are asked for by an address that
     changes with every build, so a new page does not meet an old file.
     """
     pages = {
-        "layout": (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8"),
+        "layout": (DOCS / "_layouts" / "default.html").read_text(
+            encoding="utf-8",
+        ),
         "home": (DOCS / "index.md").read_text(encoding="utf-8"),
-        "script": (DOCS / "assets" / "js" / "downloads.js").read_text(encoding="utf-8"),
-        "switcher": (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8"),
+        "script": (DOCS / "assets" / "js" / "downloads.js").read_text(
+            encoding="utf-8",
+        ),
+        "switcher": (SITE_ROOT / "version-switcher.js").read_text(
+            encoding="utf-8",
+        ),
     }
     for name, text in pages.items():
         for tag in re.findall(r"<svg[^>]*>", text):
-            assert "width=" in tag and "height=" in tag, f"an icon in the {name} has no size: {tag}"
+            assert "width=" in tag and "height=" in tag, (
+                f"an icon in the {name} has no size: {tag}"
+            )
     assert "site.css' | relative_url }}?v={{ site.time" in pages["layout"]
     assert "downloads.js' | relative_url }}?v={{ site.time" in pages["home"]
 
 
 def _brightness(color: str) -> float:
     """
-    Give the relative luminance of a color written as "#rrggbb", as the web accessibility guidelines define it.
+    Give the relative luminance of a color written as "#rrggbb", as the
+    web accessibility guidelines define it.
 
     Parameters
     ----------
@@ -430,13 +731,17 @@ def _brightness(color: str) -> float:
         0 for black up to 1 for white.
     """
     parts = [int(color[index : index + 2], 16) / 255 for index in (1, 3, 5)]
-    linear = [value / 12.92 if value <= 0.03928 else ((value + 0.055) / 1.055) ** 2.4 for value in parts]
+    linear = [
+        value / 12.92 if value <= 0.03928 else ((value + 0.055) / 1.055) ** 2.4
+        for value in parts
+    ]
     return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
 
 
 def _contrast(first: str, second: str) -> float:
     """
-    Give the contrast ratio of two colors, from 1 (the same) to 21 (black on white).
+    Give the contrast ratio of two colors, from 1 (the same) to 21
+    (black on white).
 
     Parameters
     ----------
@@ -454,15 +759,26 @@ def _contrast(first: str, second: str) -> float:
     return (high + 0.05) / (low + 0.05)
 
 
-@pytest.mark.parametrize("block", [":root {", ':root:not([data-theme="light"]) {', ':root[data-theme="dark"] {'])
-def test_the_download_buttons_are_readable_and_stand_out_in_light_and_dark(block: str) -> None:
+@pytest.mark.parametrize(
+    "block",
+    [
+        ":root {",
+        ':root:not([data-theme="light"]) {',
+        ':root[data-theme="dark"] {',
+    ],
+)
+def test_the_download_buttons_are_readable_and_stand_out_in_light_and_dark(
+    block: str,
+) -> None:
     """
-    Check each theme's button color: its words are readable on it (4.5 to 1) and the button stands out from the page (3 to 1).
+    Check each theme's button color: its words are readable on it (4.5
+    to 1) and the button stands out from the page (3 to 1).
 
     Parameters
     ----------
     block : str
-        The start of the block of colors: light, dark by the system's setting, and dark by choice.
+        The start of the block of colors: light, dark by the system's
+        setting, and dark by choice.
     """
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     start = css.index(block)
@@ -474,45 +790,75 @@ def test_the_download_buttons_are_readable_and_stand_out_in_light_and_dark(block
     assert _contrast(button.group(1), words.group(1)) >= 4.5
     assert _contrast(button.group(1), page.group(1)) >= 3.0
     if "dark" in block or "light" in block:
-        assert button.group(1).lower() == "#2f6bd0"  # royal blue in both ways of getting dark
+        assert (
+            button.group(1).lower() == "#2f6bd0"
+        )  # royal blue in both ways of getting dark
 
 
 def _nav_pages() -> list[dict[str, str]]:
     """
-    Read the front matter of every page that is listed in the sidebar, in the order the sidebar lists them.
+    Read the front matter of every page that is listed in the sidebar,
+    in the order the sidebar lists them.
 
     Returns
     -------
     list of dict of str to str
-        For each page its title, its `nav_order` and its `nav_group` (empty if it has none), by `nav_order`.
+        For each page its title, its `nav_order` and its `nav_group`
+        (empty if it has none), by `nav_order`.
     """
     pages = []
-    for path in sorted(DOCS.glob("*.md")) + sorted((DOCS / "guide").glob("index.md")) + sorted((DOCS / "api").glob("index.md")):
+    for path in (
+        sorted(DOCS.glob("*.md"))
+        + sorted((DOCS / "guide").glob("index.md"))
+        + sorted((DOCS / "api").glob("index.md"))
+    ):
         text = path.read_text(encoding="utf-8")
         found = re.match(r"---\n(.*?)\n---\n", text, re.DOTALL)
         if not found:
             continue
-        fields = dict(re.findall(r"^([a-z_]+):\s*(.*)$", found.group(1), re.MULTILINE))
+        fields = dict(
+            re.findall(r"^([a-z_]+):\s*(.*)$", found.group(1), re.MULTILINE),
+        )
         if "nav_order" in fields:
-            pages.append({"title": fields["title"], "order": fields["nav_order"], "group": fields.get("nav_group", "")})
+            pages.append(
+                {
+                    "title": fields["title"],
+                    "order": fields["nav_order"],
+                    "group": fields.get("nav_group", ""),
+                },
+            )
     return sorted(pages, key=lambda page: float(page["order"]))
 
 
-def test_every_page_in_the_sidebar_but_home_has_a_group_and_each_group_is_one_block() -> None:
-    """Check that the pages sort into three headings, each a single run in the order of the sidebar, with Home on its own."""
+def test_every_page_in_sidebar_but_home_group_and_each_group_one() -> None:
+    """
+    Check that the pages sort into three headings, each a single run in
+    the order of the sidebar, with Home on its own.
+    """
     pages = _nav_pages()
     assert pages[0]["title"] == "Home" and pages[0]["group"] == ""
     assert all(page["group"] for page in pages[1:])
-    runs = [page["group"] for index, page in enumerate(pages[1:]) if index == 0 or pages[index]["group"] != page["group"]]
-    assert runs == ["Using Alto", "For developers", "About"]  # no heading comes twice
+    runs = [
+        page["group"]
+        for index, page in enumerate(pages[1:])
+        if index == 0 or pages[index]["group"] != page["group"]
+    ]
+    assert runs == [
+        "Using Alto",
+        "For developers",
+        "About",
+    ]  # no heading comes twice
 
 
-def test_no_page_is_listed_twice_and_a_heading_that_is_a_page_is_that_pages_link() -> None:
+def test_no_page_listed_twice_and_heading_page_pages_link() -> None:
     """
-    Check that the sidebar can list each page once: the titles differ, and a heading named like a page stands for that page.
+    Check that the sidebar can list each page once: the titles differ,
+    and a heading named like a page stands for that page.
 
-    "For developers" is both a heading and a page. The layout makes the heading the page's link and leaves the page out of the
-    list under it, so it appears once. Resources and the API reference are single rows that link to their page and
+    "For developers" is both a heading and a page. The layout makes the
+    heading the page's link and leaves the page out of the
+    list under it, so it appears once. Resources and the API reference
+    are single rows that link to their page and
     open their chapters, so they appear once as well.
     """
     pages = _nav_pages()
@@ -521,44 +867,87 @@ def test_no_page_is_listed_twice_and_a_heading_that_is_a_page_is_that_pages_link
     same = [page for page in pages if page["title"] == page["group"]]
     assert [page["title"] for page in same] == ["For developers"]
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert 'where: "title", group' in layout and 'unless group != "" and p.title == group' in layout
+    assert (
+        'where: "title", group' in layout
+        and 'unless group != "" and p.title == group' in layout
+    )
     assert (
         layout.count("<summary") >= 4
         and 'class="count"' not in layout
-        and "count" not in layout.split("<nav")[1].split("</nav>")[0].replace("account", "")
+        and "count"
+        not in layout.split("<nav")[1]
+        .split("</nav>")[0]
+        .replace("account", "")
     )
 
 
-def test_the_sidebar_opens_whatever_holds_the_current_page_and_the_groups_are_remembered() -> None:
-    """Check that the current page's group, section and package are open, and that the script keeps only what you closed."""
+def test_sidebar_opens_whatever_holds_current_page_and_groups() -> None:
+    """
+    Check that the current page's group, section and package are open,
+    and that the script keeps only what you closed.
+    """
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert "page.parent == p.children" in layout and "page.package == a.package" in layout and "data-nav-group" in layout
+    assert (
+        "page.parent == p.children" in layout
+        and "page.package == a.package" in layout
+        and "data-nav-group" in layout
+    )
     script = (DOCS / "assets" / "js" / "nav.js").read_text(encoding="utf-8")
     assert (
-        "localStorage" in script and "try" in script and '[aria-current="page"]' in script
+        "localStorage" in script
+        and "try" in script
+        and '[aria-current="page"]' in script
     )  # never closes the current page's group
     assert "fetch(" not in script and "XMLHttpRequest" not in script
 
 
-def test_the_on_this_page_list_is_made_from_the_headings_and_only_for_pages_with_more_than_one() -> None:
-    """Check the contents list script: it reads h2 and h3, skips pages with under two, follows the scroll, and has a fallback."""
+def test_on_this_page_list_made_from_headings_and_only_for_pages() -> None:
+    """
+    Check the contents list script: it reads h2 and h3, skips pages with
+    under two, follows the scroll, and has a fallback.
+    """
     script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
-    assert '"h2, h3"' in script and "heads.length < 2" in script and "On this page" in script
-    assert "scroll" in script and "toc-inline" in script and "has-toc" in script
+    assert (
+        '"h2, h3"' in script
+        and "heads.length < 2" in script
+        and "On this page" in script
+    )
+    assert (
+        "scroll" in script and "toc-inline" in script and "has-toc" in script
+    )
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert 'id="toc"' in layout and 'id="page-grid"' in layout and "toc.js" in layout and "nav.js" in layout
+    assert (
+        'id="toc"' in layout
+        and 'id="page-grid"' in layout
+        and "toc.js" in layout
+        and "nav.js" in layout
+    )
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
-    assert ".page-grid.has-toc" in css and "min-width: 1240px" in css and ".toc-inline" in css
+    assert (
+        ".page-grid.has-toc" in css
+        and "min-width: 1240px" in css
+        and ".toc-inline" in css
+    )
 
 
-def test_the_home_page_keeps_to_the_download_and_leaves_checking_and_updating_to_the_installation_guide() -> None:
-    """Check the home page's links, and that the instructions that moved off it are in Getting started."""
+def test_home_page_keeps_to_download_and_leaves_checking_and() -> None:
+    """
+    Check the home page's links, and that the instructions that moved
+    off it are in Getting started.
+    """
     home = (DOCS / "index.md").read_text(encoding="utf-8")
     links = home[home.index('<p class="dl-more">') : home.index("</section>")]
     assert (
-        "Release notes" in links and "Older releases" in links and "/getting-started/" in links and ">Getting started<" in links
+        "Release notes" in links
+        and "Older releases" in links
+        and "/getting-started/" in links
+        and ">Getting started<" in links
     )
-    assert "Installation guide" not in home and "SHA256SUMS" not in home and "update themselves" not in home
+    assert (
+        "Installation guide" not in home
+        and "SHA256SUMS" not in home
+        and "update themselves" not in home
+    )
     guide = (DOCS / "getting-started.md").read_text(encoding="utf-8")
     assert (
         "### Check your download" in guide
@@ -566,57 +955,104 @@ def test_the_home_page_keeps_to_the_download_and_leaves_checking_and_updating_to
         and "Get-FileHash" in guide
     )
     assert "## Updating Alto" in guide and "**Check for updates…**" in guide
-    assert "offers to open its download page" not in guide  # a packaged copy replaces itself now
+    assert (
+        "offers to open its download page" not in guide
+    )  # a packaged copy replaces itself now
     assert guide.index("## Updating Alto") < guide.index(
         "## Install and run",
     )  # for everyone, not under the Linux-only script section
 
 
-def test_every_page_in_the_sidebar_ends_with_links_to_the_previous_and_the_next_page() -> None:
-    """Check the layout's links: previous bottom left, next bottom right, in the sidebar's order, children included."""
+def test_every_page_in_sidebar_ends_with_links_to_previous_and() -> None:
+    """
+    Check the layout's links: previous bottom left, next bottom right,
+    in the sidebar's order, children included.
+    """
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert 'class="page-nav"' in layout and 'rel="prev"' in layout and 'rel="next"' in layout
+    assert (
+        'class="page-nav"' in layout
+        and 'rel="prev"' in layout
+        and 'rel="next"' in layout
+    )
     assert 'id="i-prev"' in layout and 'id="i-next"' in layout
-    assert 'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout and 'where: "parent", p.children' in layout
-    assert 'sort: "title" | group_by: "package" | sort: "name"' in layout and 'child_pages | sort: "order"' in layout
-    assert "reading_order | concat: child_pages" in layout and "reading_order[forloop.index]" in layout
-    assert "unless forloop.first" in layout and "reading_order[before]" in layout
+    assert (
+        'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout
+        and 'where: "parent", p.children' in layout
+    )
+    assert (
+        'sort: "title" | group_by: "package" | sort: "name"' in layout
+        and 'child_pages | sort: "order"' in layout
+    )
+    assert (
+        "reading_order | concat: child_pages" in layout
+        and "reading_order[forloop.index]" in layout
+    )
+    assert (
+        "unless forloop.first" in layout and "reading_order[before]" in layout
+    )
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     assert ".page-nav { display: flex; justify-content: space-between;" in css
     assert (
-        ".page-nav a.prev" in css and ".page-nav a.next" in css and "margin-left: auto" in css
+        ".page-nav a.prev" in css
+        and ".page-nav a.next" in css
+        and "margin-left: auto" in css
     )  # a lone next link stays on the right
 
 
-def test_the_home_page_opens_with_the_title_and_the_one_sentence_it_was_asked_to() -> None:
-    """Check the words at the top of the home page, and that the name Alto in the title is marked."""
+def test_home_page_opens_with_title_and_one_sentence_asked_to() -> None:
+    """
+    Check the words at the top of the home page, and that the name Alto
+    in the title is marked.
+    """
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    assert '<h1>Learn music theory with <span class="hl">Alto</span></h1>' in home
-    assert '<p class="lead">Study music theory in short lessons and practice what you learn with spaced repetition.</p>' in home
+    assert (
+        '<h1>Learn music theory with <span class="hl">Alto</span></h1>' in home
+    )
+    assert (
+        '<p class="lead">Study music theory in short lessons and '
+        "practice what you learn with spaced repetition.</p>"
+    ) in home
     assert "Music theory drills for the desktop" not in home
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     assert ".hero h1 .hl { color: var(--accent); }" in css
 
 
-def test_the_home_page_has_no_on_this_page_list_and_a_page_can_opt_out_with_toc_false() -> None:
-    """Check that the home page opts out of the contents list, that the layout passes that on, and that the script respects it."""
+def test_home_page_no_on_this_page_list_and_page_can_opt_out() -> None:
+    """
+    Check that the home page opts out of the contents list, that the
+    layout passes that on, and that the script respects it.
+    """
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    assert re.match(r"---\n(?:[^\n]*\n)*?toc: false\n(?:[^\n]*\n)*?---\n", home)
+    assert re.match(
+        r"---\n(?:[^\n]*\n)*?toc: false\n(?:[^\n]*\n)*?---\n",
+        home,
+    )
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
     assert "{% if page.toc == false %} data-no-toc{% endif %}" in layout
     script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
     assert 'grid.hasAttribute("data-no-toc")' in script
     for path in DOCS.glob("*.md"):
-        front = re.match(r"---\n(.*?)\n---\n", path.read_text(encoding="utf-8"), re.DOTALL)
+        front = re.match(
+            r"---\n(.*?)\n---\n",
+            path.read_text(encoding="utf-8"),
+            re.DOTALL,
+        )
         if path.name != "index.md" and front:
-            assert "toc:" not in front.group(1), f"{path.name} opts out of the contents list"  # every other page keeps its list
+            assert "toc:" not in front.group(1), (
+                f"{path.name} opts out of the contents list"
+            )  # every other page keeps its list
 
 
 def test_every_exercise_name_has_a_capital_on_each_word_but_of() -> None:
-    """Check that the exercises are named in title case, so that the app, the docs and the pictures agree."""
+    """
+    Check that the exercises are named in title case, so that the app,
+    the docs and the pictures agree.
+    """
     for cls in REGISTRY:
         for word in cls.name.split():
-            assert word[0].isupper() or word == "of", f"{cls.name!r}: {word!r} should start with a capital"
+            assert word[0].isupper() or word == "of", (
+                f"{cls.name!r}: {word!r} should start with a capital"
+            )
 
 
 def _icons_script() -> ModuleType:
@@ -628,7 +1064,10 @@ def _icons_script() -> ModuleType:
     ModuleType
         The loaded module.
     """
-    spec = importlib.util.spec_from_file_location("exercise_icons", ROOT / "scripts" / "exercise_icons.py")
+    spec = importlib.util.spec_from_file_location(
+        "exercise_icons",
+        ROOT / "scripts" / "exercise_icons.py",
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -636,18 +1075,33 @@ def _icons_script() -> ModuleType:
 
 
 def test_the_exercise_icons_of_the_docs_are_the_ones_the_app_draws() -> None:
-    """Check that the sprite in `docs/_includes` is up to date with `alto/ui/icons.py`, and holds an icon for every exercise."""
-    sprite = (DOCS / "_includes" / "exercise-icons.html").read_text(encoding="utf-8")
-    assert sprite == _icons_script().render()  # run scripts/exercise_icons.py after a change to the icons
-    assert "COLOR" not in sprite and "currentColor" in sprite  # tinted by the page's own color, so that dark mode works
+    """
+    Check that the sprite in `docs/_includes` is up to date with
+    `alto/ui/icons.py`, and holds an icon for every exercise.
+    """
+    sprite = (DOCS / "_includes" / "exercise-icons.html").read_text(
+        encoding="utf-8",
+    )
+    assert (
+        sprite == _icons_script().render()
+    )  # run scripts/exercise_icons.py after a change to the icons
+    assert (
+        "COLOR" not in sprite and "currentColor" in sprite
+    )  # tinted by the page's own color, so that dark mode works
     for cls in REGISTRY:
         assert f'id="ex-{cls.__name__}"' in sprite
 
 
-def test_home_page_topics_have_distinct_exercise_icons_and_screenshot_controls() -> None:
-    """Check the six topics, their exercise icons, and the radio controls that switch the preview."""
+def test_home_page_topics_distinct_exercise_icons_and_screenshot() -> None:
+    """
+    Check the six topics, their exercise icons, and the radio controls
+    that switch the preview.
+    """
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    topics = re.findall(r"  - title: (.+)\n    icon: (\w+)\n    image: ([\w-]+\.png)", home)
+    topics = re.findall(
+        r"  - title: (.+)\n    icon: (\w+)\n    image: ([\w-]+\.png)",
+        home,
+    )
     assert [title for title, _, _ in topics] == [
         "Circle of Fifths",
         "Scales",
@@ -657,28 +1111,55 @@ def test_home_page_topics_have_distinct_exercise_icons_and_screenshot_controls()
         "Notation",
     ]
     assert len({image for _, _, image in topics}) == 6
-    assert {icon for _, icon, _ in topics} <= {cls.__name__ for cls in REGISTRY}
-    assert "{% include exercise-icons.html %}" in home and 'href="#ex-{{ topic.icon }}"' in home
-    assert "{% for topic in page.topics %}" in home and 'type="radio" name="practice-topic"' in home
-    assert 'aria-controls="preview-{{ topic.icon }}"' in home and 'id="preview-{{ topic.icon }}"' in home
+    assert {icon for _, icon, _ in topics} <= {
+        cls.__name__ for cls in REGISTRY
+    }
+    assert (
+        "{% include exercise-icons.html %}" in home
+        and 'href="#ex-{{ topic.icon }}"' in home
+    )
+    assert (
+        "{% for topic in page.topics %}" in home
+        and 'type="radio" name="practice-topic"' in home
+    )
+    assert (
+        'aria-controls="preview-{{ topic.icon }}"' in home
+        and 'id="preview-{{ topic.icon }}"' in home
+    )
     assert "{% include shot.html src=topic.image alt=topic.alt %}" in home
 
 
-def test_the_first_picture_on_the_home_page_is_the_circle_of_fifths_with_the_list_wide_enough_to_read() -> None:
-    """Check the initially selected topic and the sidebar shown in its screenshot."""
+def test_first_picture_on_home_page_circle_of_fifths_with_list() -> None:
+    """
+    Check the initially selected topic and the sidebar shown in its
+    screenshot.
+    """
     home = (DOCS / "index.md").read_text(encoding="utf-8")
     first = re.search(r"^    image: (.+)$", home, re.MULTILINE)
     assert first is not None and first.group(1) == "circle-of-fifths.png"
     assert "{% if forloop.first %} checked{% endif %}" in home
-    assert "alt: The Circle of Fifths exercise, with the list of exercises open on the left" in home
+    assert (
+        "alt: The Circle of Fifths exercise, with the list of "
+        "exercises open on the left"
+    ) in home
     assert "home.png" not in home
     for suffix in ("", "-dark"):
-        assert (DOCS / "assets" / "img" / f"circle-of-fifths{suffix}.png").is_file()
+        assert (
+            DOCS / "assets" / "img" / f"circle-of-fifths{suffix}.png"
+        ).is_file()
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "docs/assets/img/circle-of-fifths.png" in readme and "docs/assets/img/circle-of-fifths-dark.png" in readme
-    assert readme.index("circle-of-fifths") < readme.index("settings.png")  # the README opens with it too
+    assert (
+        "docs/assets/img/circle-of-fifths.png" in readme
+        and "docs/assets/img/circle-of-fifths-dark.png" in readme
+    )
+    assert readme.index("circle-of-fifths") < readme.index(
+        "settings.png",
+    )  # the README opens with it too
     shots = (ROOT / "scripts" / "screenshots.py").read_text(encoding="utf-8")
-    assert '("CircleOfFifths", "circle-of-fifths")' in shots and 'store().setValue("ui/sidebarWidth"' in shots
+    assert '("CircleOfFifths", "circle-of-fifths")' in shots and re.search(
+        r'store\(\)\.setValue\(\s*"ui/sidebarWidth"',
+        shots,
+    )
 
 
 def _notes_script() -> ModuleType:
@@ -690,7 +1171,10 @@ def _notes_script() -> ModuleType:
     ModuleType
         The loaded module.
     """
-    spec = importlib.util.spec_from_file_location("release_notes", ROOT / "scripts" / "release_notes.py")
+    spec = importlib.util.spec_from_file_location(
+        "release_notes",
+        ROOT / "scripts" / "release_notes.py",
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -698,41 +1182,86 @@ def _notes_script() -> ModuleType:
 
 
 def test_the_release_notes_page_is_the_changelog_and_is_up_to_date() -> None:
-    """Check that the page is what `scripts/release_notes.py` makes of `CHANGELOG.md`, with a heading per version."""
+    """
+    Check that the page is what `scripts/release_notes.py` makes of
+    `CHANGELOG.md`, with a heading per version.
+    """
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     page = (DOCS / "release-notes.md").read_text(encoding="utf-8")
-    assert page == _notes_script().render(changelog)  # run scripts/release_notes.py after a change to the changelog
+    assert page == _notes_script().render(
+        changelog,
+    )  # run scripts/release_notes.py after a change to the changelog
     for name, _date, _notes in _notes_script().sections(changelog):
         if name != "Unreleased":
             assert f"\n## {name}\n" in page, f"no heading for {name}"
-    assert "[Unreleased]:" not in page and "{% raw %}" in page and "{% endraw %}" in page
+    assert (
+        "[Unreleased]:" not in page
+        and "{% raw %}" in page
+        and "{% endraw %}" in page
+    )
 
 
-def test_the_release_notes_are_in_the_sidebar_under_about_and_linked_from_the_home_page() -> None:
-    """Check the page is in the sidebar under About, the home page links to it, and its inner headings stay out of the list."""
+def test_release_notes_in_sidebar_under_about_and_linked_from() -> None:
+    """
+    Check the page is in the sidebar under About, the home page links to
+    it, and its inner headings stay out of the list.
+    """
     page = (DOCS / "release-notes.md").read_text(encoding="utf-8")
     assert "nav_group: About" in page and "permalink: /release-notes/" in page
     assert "{: .no-toc}" in page
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    assert """<a href="{{ '/release-notes/' | relative_url }}">Release notes</a>""" in home
+    assert (
+        "<a href=\"{{ '/release-notes/' | relative_url }}\">Release notes</a>"
+    ) in home
     script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
     assert 'contains("no-toc")' in script
 
 
-def test_the_release_notes_script_shows_unreleased_only_while_it_has_notes_and_the_release_steps_name_it() -> None:
-    """Check that an empty Unreleased section is left out, and that the developer guide tells a releaser to run the script."""
+def test_release_notes_script_shows_unreleased_only_while_notes() -> None:
+    """
+    Check that an empty Unreleased section is left out, and that the
+    developer guide tells a releaser to run the script.
+    """
     script = _notes_script()
-    empty = "# Changelog\n\n## [Unreleased]\n\n## [0.1.0] - 2026-12-01\n\nNotes.\n"
-    full = empty.replace("## [Unreleased]\n", "## [Unreleased]\n\n- A change.\n")
-    assert "## Unreleased" not in script.render(empty) and "## Unreleased" in script.render(full)
-    assert "scripts/release_notes.py" in (DOCS / "development.md").read_text(encoding="utf-8")
+    empty = (
+        "# Changelog\n\n## [Unreleased]\n\n## [0.1.0] - 2026-12-01\n\nNotes.\n"
+    )
+    full = empty.replace(
+        "## [Unreleased]\n",
+        "## [Unreleased]\n\n- A change.\n",
+    )
+    assert "## Unreleased" not in script.render(
+        empty,
+    ) and "## Unreleased" in script.render(full)
+    assert "scripts/release_notes.py" in (DOCS / "development.md").read_text(
+        encoding="utf-8",
+    )
 
 
-def test_the_exercises_page_describes_the_circles_color_schemes_in_words() -> None:
-    """Check the Colors section: the fourteen presets and the five ways to make one. The exercise settings are never pictured."""
+def test_the_exercises_page_describes_the_circles_color_schemes_in_words() -> (
+    None
+):
+    """
+    Check the Colors section: the fourteen presets and the five ways to
+    make one. The exercise settings are never pictured.
+    """
     page = (DOCS / "exercises.md").read_text(encoding="utf-8")
-    colors = " ".join(page[page.index("### Colors") : page.index("### Keys with two names")].split())
-    assert "fourteen presets" in colors and "Cyan to indigo" in colors and "Create your own" in colors
-    for way in ("One color", "Two rings", "By key signature", "Distance from C", "Around the circle"):
+    colors = " ".join(
+        page[
+            page.index("### Colors") : page.index("### Keys with two names")
+        ].split(),
+    )
+    assert (
+        "fourteen presets" in colors
+        and "Cyan to indigo" in colors
+        and "Create your own" in colors
+    )
+    for way in (
+        "One color",
+        "Two rings",
+        "By key signature",
+        "Distance from C",
+        "Around the circle",
+    ):
         assert way in colors, way
     assert "shot.html" not in colors

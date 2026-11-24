@@ -22,7 +22,8 @@ FieldComboBox(parent: QWidget | None = None)
 
 Bases: `QComboBox`
 
-A shared dropdown whose field and popup both use Alto's rounded styling.
+A shared dropdown whose field and popup both use Alto's rounded
+styling.
 
 **Examples**
 
@@ -54,7 +55,8 @@ Create a themed dropdown and prepare to clip its popup corners.
 def showPopup() -> None
 ```
 
-Open the dropdown with a rounded outer window, including its native container.
+Open the dropdown with a rounded outer window, including its
+native container.
 
 **Examples**
 
@@ -73,7 +75,8 @@ False
 def style_combo_popup(combo: QComboBox) -> None
 ```
 
-Apply the shared field and popup styling to a dropdown, including one created by Qt.
+Apply the shared field and popup styling to a dropdown, including
+one created by Qt.
 
 **Parameters**
 

@@ -1,4 +1,7 @@
-"""The shared Buttons option across exercise types, required answers and stored preferences."""
+"""
+The shared Buttons option across exercise types, required answers and
+stored preferences.
+"""
 
 import random
 
@@ -8,7 +11,12 @@ from PySide6.QtWidgets import QApplication, QRadioButton
 from alto import settings
 from alto.exercises import REGISTRY
 from alto.exercises.base import ChoiceExercise, Exercise
-from alto.exercises.library import ChordQualities, ClefBasics, KeyboardNotes, NotationIdentification
+from alto.exercises.library import (
+    ChordQualities,
+    ClefBasics,
+    KeyboardNotes,
+    NotationIdentification,
+)
 from alto.ui import motion
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.exercise_settings import load_choice_buttons
@@ -17,9 +25,13 @@ from alto.ui.store import store
 
 
 @pytest.mark.parametrize("cls", REGISTRY, ids=lambda cls: cls.__name__)
-def test_each_button_answer_has_a_buttons_submenu(app: QApplication, cls: type[Exercise]) -> None:
+def test_each_button_answer_has_a_buttons_submenu(
+    app: QApplication,
+    cls: type[Exercise],
+) -> None:
     """
-    Check every registered exercise at its normal entry point, including the construction exceptions.
+    Check every registered exercise at its normal entry point, including
+    the construction exceptions.
 
     Parameters
     ----------
@@ -33,7 +45,9 @@ def test_each_button_answer_has_a_buttons_submenu(app: QApplication, cls: type[E
     panel = view.settings_panel
     assert panel.next_question_row.value.text() == "After Animation"
     page_titles = [b.text() for b in panel.stack.findChildren(QRadioButton)]
-    assert ("Limited" in page_titles and "All" in page_titles) == bool(view.question.choices)
+    assert ("Limited" in page_titles and "All" in page_titles) == bool(
+        view.question.choices,
+    )
     if isinstance(view.exercise, ChoiceExercise):
         row = panel.choice_buttons_row
         assert row is not None and not row.isHidden()
@@ -60,10 +74,16 @@ def test_each_button_answer_has_a_buttons_submenu(app: QApplication, cls: type[E
     view.close()
 
 
-@pytest.mark.parametrize("cls", [cls for cls in REGISTRY if issubclass(cls, ChoiceExercise)])
-def test_limited_choices_keep_every_correct_answer(cls: type[ChoiceExercise]) -> None:
+@pytest.mark.parametrize(
+    "cls",
+    [cls for cls in REGISTRY if issubclass(cls, ChoiceExercise)],
+)
+def test_limited_choices_keep_every_correct_answer(
+    cls: type[ChoiceExercise],
+) -> None:
     """
-    Check two-part, required and interchangeable answers while sampling distractors.
+    Check two-part, required and interchangeable answers while sampling
+    distractors.
 
     Parameters
     ----------
@@ -72,8 +92,12 @@ def test_limited_choices_keep_every_correct_answer(cls: type[ChoiceExercise]) ->
     """
     settings.clef_basics.question_type = "identification"
     settings.note_names.clefs = {"treble"}
-    settings.note_names.ranges = {"treble": (28, 34)}  # every pitch is in octave four
-    settings.note_names.require_octave = settings.keyboard.require_octave = True
+    settings.note_names.ranges = {
+        "treble": (28, 34),
+    }  # every pitch is in octave four
+    settings.note_names.require_octave = settings.keyboard.require_octave = (
+        True
+    )
     settings.keyboard.black_keys = True
     settings.keyboard.low, settings.keyboard.high = settings.KEYBOARD_FULL
     ex = cls()
@@ -83,14 +107,21 @@ def test_limited_choices_keep_every_correct_answer(cls: type[ChoiceExercise]) ->
     for _ in range(80):
         q = ex.generate(rng)
         assert len(q.choices) <= 2 and len(q.octaves or ()) <= 2
-        offered = {a + q.joiner + b for a in q.choices for b in q.octaves} if q.octaves else set(q.choices)
+        offered = (
+            {a + q.joiner + b for a in q.choices for b in q.octaves}
+            if q.octaves
+            else set(q.choices)
+        )
         assert {q.answer, *q.required, *q.accept} <= offered
         replay = ex.refresh(q)
         assert replay.answer == q.answer and len(replay.choices) <= 2
 
 
 def test_saved_button_modes_are_independent_and_resilient() -> None:
-    """Load valid and invalid values without mixing preferences between exercises."""
+    """
+    Load valid and invalid values without mixing preferences between
+    exercises.
+    """
     saved = store()
     saved.setValue("answerButtons/ChordQualities/mode", "all")
     saved.setValue("answerButtons/ChordQualities/count", "broken")
@@ -98,8 +129,17 @@ def test_saved_button_modes_are_independent_and_resilient() -> None:
     saved.setValue("answerButtons/KeyboardNotes/count", 9)
     load_choice_buttons()
     chord, keyboard = ChordQualities(), KeyboardNotes()
-    assert isinstance(chord, ChoiceExercise) and isinstance(keyboard, ChoiceExercise)
-    assert (chord.button_settings().button_mode, chord.button_settings().button_count) == ("all", 5)
-    assert (keyboard.button_settings().button_mode, keyboard.button_settings().button_count) == ("limited", 9)
+    assert isinstance(chord, ChoiceExercise) and isinstance(
+        keyboard,
+        ChoiceExercise,
+    )
+    assert (
+        chord.button_settings().button_mode,
+        chord.button_settings().button_count,
+    ) == ("all", 5)
+    assert (
+        keyboard.button_settings().button_mode,
+        keyboard.button_settings().button_count,
+    ) == ("limited", 9)
     assert chord.settings_signature() != chord.practice_signature()
     assert len(chord.generate(random.Random(4)).choices) > 5

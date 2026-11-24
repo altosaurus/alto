@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.home/
 ---
 {% raw %}
-The start screen: a card for every exercise, or for every lesson, in rows.
+The start screen: a card for every exercise, or for every lesson, in
+rows.
 
 A switch at the top chooses between the exercises and the lessons.
 
@@ -24,7 +25,8 @@ True
 def category_tree(name: str) -> QTreeWidget
 ```
 
-Build a navigation tree with themed checkboxes and right-aligned expansion arrows.
+Build a navigation tree with themed checkboxes and right-aligned
+expansion arrows.
 
 **Parameters**
 
@@ -57,17 +59,28 @@ TileCard(
 
 Bases: `QPushButton`
 
-A big button: an icon on top, then a category, a name and a short description, and optionally a lesson's progress.
+A big button: an icon on top, then a category, a name and a short
+description, and optionally a lesson's progress.
 
-Progress takes no room in the layout: a strip along the bottom edge shows it, and "Step N/M" sits in the top-right
-corner, both only once the lesson has been begun. A card with or without progress therefore has the same size and the
+Progress takes no room in the layout: a strip along the bottom edge
+shows it, and "Step N/M" sits in the top-right
+corner, both only once the lesson has been begun. A card with or
+without progress therefore has the same size and the
 same icon.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> card = TileCard(icon=icons.EXERCISE_CIRCLE, category="Scales & Keys", name="Circle of Fifths", about="Find keys.")
->>> (card.width(), card.height()) == (CARD_W, CARD_H)
+>>> card = TileCard(
+...     icon=icons.EXERCISE_CIRCLE,
+...     category="Scales & Keys",
+...     name="Circle of Fifths",
+...     about="Find keys.",
+... )
+>>> (card.width(), card.height()) == (
+...     CARD_W,
+...     CARD_H,
+... )
 True
 >>> card.accessibleName()
 'Circle of Fifths, Scales & Keys'
@@ -89,7 +102,13 @@ Build a card.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> card = TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", progress=(1, 8))
+>>> card = TileCard(
+...     icon=icons.HELP,
+...     category="Help",
+...     name="Help",
+...     about="Get help.",
+...     progress=(1, 8),
+... )
 >>> card.toolTip(), card.accessibleDescription()
 ('Get help.', 'Get help. Continue at step 2 of 8.')
 ```
@@ -110,7 +129,9 @@ Recolor the icon when the tile receives a new palette.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = lesson_card(LESSONS[0])
->>> card.changeEvent(QEvent(QEvent.Type.PaletteChange))
+>>> card.changeEvent(
+...     QEvent(QEvent.Type.PaletteChange)
+... )
 ```
 
 ## exercise_icon
@@ -119,7 +140,8 @@ Recolor the icon when the tile receives a new palette.
 def exercise_icon(name: str) -> str
 ```
 
-Find the icon for an exercise: the one its plugin supplies, or Alto's own.
+Find the icon for an exercise: the one its plugin supplies, or
+Alto's own.
 
 **Parameters**
 
@@ -132,9 +154,13 @@ Find the icon for an exercise: the one its plugin supplies, or Alto's own.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> exercise_icon("NoteNames") == icons.EXERCISE_NOTE_NAMES
+>>> exercise_icon(
+...     "NoteNames"
+... ) == icons.EXERCISE_NOTE_NAMES
 True
->>> exercise_icon("pack.nothing.here") == icons.EXERCISE_NOTE_NAMES
+>>> exercise_icon(
+...     "pack.nothing.here"
+... ) == icons.EXERCISE_NOTE_NAMES
 True
 ```
 
@@ -144,7 +170,8 @@ True
 def lesson_icon(lesson: Lesson) -> str
 ```
 
-Find the icon for a lesson's tile: its own if a plugin gave it one, otherwise its primary exercise's.
+Find the icon for a lesson's tile: its own if a plugin gave it one,
+otherwise its primary exercise's.
 
 **Parameters**
 
@@ -157,7 +184,9 @@ Find the icon for a lesson's tile: its own if a plugin gave it one, otherwise it
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> lesson_icon(LESSONS[0]) == exercise_icon(LESSONS[0].exercise)
+>>> lesson_icon(LESSONS[0]) == exercise_icon(
+...     LESSONS[0].exercise
+... )
 True
 ```
 
@@ -173,7 +202,8 @@ ExerciseCard(
 
 Bases: `TileCard`
 
-The card of an exercise: its icon on top, then its category, name and a one-line description.
+The card of an exercise: its icon on top, then its category, name
+and a one-line description.
 
 **Examples**
 
@@ -182,7 +212,10 @@ The card of an exercise: its icon on top, then its category, name and a one-line
 >>> card = ExerciseCard(NoteNames)
 >>> card.toolTip() == NoteNames.description
 True
->>> (card.width(), card.height()) == (CARD_W, CARD_H)
+>>> (card.width(), card.height()) == (
+...     CARD_W,
+...     CARD_H,
+... )
 True
 ```
 
@@ -198,7 +231,9 @@ Build the card for one exercise.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import IntervalNames
+>>> from alto.exercises.library import (
+...     IntervalNames,
+... )
 >>> ExerciseCard(IntervalNames).toolTip()
 'Name the interval between two notes.'
 ```
@@ -209,7 +244,8 @@ Build the card for one exercise.
 def set_counts(counts: tuple[int, int] | tuple[int, int, int] | None) -> None
 ```
 
-Show due reviews, new cards, and outstanding incorrect cards in the upper right corner.
+Show due reviews, new cards, and outstanding incorrect cards in
+the upper right corner.
 
 **Parameters**
 
@@ -237,7 +273,8 @@ def lesson_card(
 ) -> TileCard
 ```
 
-Make the card of a lesson: the icon of the exercise that practices the same topic, and a bar for how far through it you are.
+Make the card of a lesson: the icon of the exercise that practices
+the same topic, and a bar for how far through it you are.
 
 **Parameters**
 
@@ -293,7 +330,9 @@ The start screen: a row of exercise buttons for each category.
 >>> from alto.exercises import REGISTRY
 >>> page = HomePage(REGISTRY)
 >>> chosen = []
->>> _ = page.exercise_chosen.connect(chosen.append)
+>>> _ = page.exercise_chosen.connect(
+...     chosen.append
+... )
 >>> page.cards[0].click()
 >>> chosen == [REGISTRY[0]]
 True
@@ -324,7 +363,8 @@ Build the page.
 def set_search(text: str) -> None
 ```
 
-Show only tiles matching a title, description or category search.
+Show only tiles matching a title, description or category
+search.
 
 **Parameters**
 
@@ -350,7 +390,8 @@ def matches_filter(
 ) -> bool
 ```
 
-Check whether a tile matches the search text and the selection for its section.
+Check whether a tile matches the search text and the selection
+for its section.
 
 **Parameters**
 
@@ -366,7 +407,9 @@ Check whether a tile matches the search text and the selection for its section.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> page = HomePage([NoteNames])
->>> page.matches_filter(page.cards[0], section="exercises")
+>>> page.matches_filter(
+...     page.cards[0], section="exercises"
+... )
 True
 ```
 
@@ -393,7 +436,8 @@ Fit the open filter sidebar when its workspace changes width.
 **Examples**
 
 ```text
-Dragging the navigation divider resizes the space available for the filters.
+Dragging the navigation divider resizes the space available for
+the filters.
 ```
 
 ### HomePage.set_filter_available
@@ -402,7 +446,8 @@ Dragging the navigation divider resizes the space available for the filters.
 def set_filter_available(available: bool) -> None
 ```
 
-Show the filter control on browsing and exercise pages, remembering the sidebar's open state.
+Show the filter control on browsing and exercise pages,
+remembering the sidebar's open state.
 
 **Parameters**
 
@@ -446,7 +491,8 @@ Restore exercise and lesson checkboxes after a theme change.
 def set_category(category: str | None) -> None
 ```
 
-Select the tiles of one category, or all tiles when the category is absent.
+Select the tiles of one category, or all tiles when the category
+is absent.
 
 **Parameters**
 
@@ -470,7 +516,8 @@ def set_mode(
 
 Show the exercises or the lessons, and remember which.
 
-The cards change with the transition that is chosen in the settings. The new cards are in place at once, so nothing
+The cards change with the transition that is chosen in the
+settings. The new cards are in place at once, so nothing
 waits on it.
 
 **Parameters**
@@ -495,7 +542,8 @@ waits on it.
 def page_changed() -> None
 ```
 
-Animate the tiles from an empty grid on return, or stop the animation when leaving.
+Animate the tiles from an empty grid on return, or stop the
+animation when leaving.
 
 **Examples**
 
@@ -512,7 +560,8 @@ False
 def refresh_counts() -> None
 ```
 
-Refresh each exercise tile and the totals for the current filters.
+Refresh each exercise tile and the totals for the current
+filters.
 
 **Examples**
 
@@ -526,7 +575,8 @@ Refresh each exercise tile and the totals for the current filters.
 def showEvent(event: QShowEvent) -> None
 ```
 
-Bring the lesson cards up to date each time the page is shown, so they say where each lesson was left.
+Bring the lesson cards up to date each time the page is shown,
+so they say where each lesson was left.
 
 **Parameters**
 

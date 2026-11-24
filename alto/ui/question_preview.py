@@ -1,10 +1,17 @@
 """
-A popup showing a stored question the way the exercise showed it, with its answer.
+A popup showing a stored question the way the exercise showed it, with
+its answer.
 
 Examples
 --------
->>> question = Question("Name the note.", choices=["C", "D"], answer="C")
->>> QuestionPreview("Note Identification", question=question).windowTitle()
+>>> question = Question(
+...     "Name the note.",
+...     choices=["C", "D"],
+...     answer="C",
+... )
+>>> QuestionPreview(
+...     "Note Identification", question=question
+... ).windowTitle()
 'Note Identification'
 """
 
@@ -34,12 +41,13 @@ from alto.exercises import (
 from alto.settings import spell
 from alto.theory.pitch import Note
 from alto.ui import icons
-from alto.ui.circle import FifthsCircle
+from alto.ui.circle import question_circle
 from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.staff import (
     MAX_STEP,
     StaffWidget,
+    keyboard_key_staff,
 )
 from alto.ui.staff_playback import StaffPlayback
 from alto.ui.zoom import css, px
@@ -47,7 +55,8 @@ from alto.ui.zoom import css, px
 
 class QuestionPreview(QDialog):
     """
-    A question as it appeared (the notes on the staff, or the highlighted key), then what the answer is.
+    A question as it appeared (the notes on the staff, or the
+    highlighted key), then what the answer is.
 
     Attributes
     ----------
@@ -57,8 +66,17 @@ class QuestionPreview(QDialog):
     Examples
     --------
     >>> from alto.theory.pitch import Note
-    >>> question = Question("Name the note.", choices=["C", "D"], answer="C", staff=[[Note.parse("C4")]])
-    >>> dialog = QuestionPreview("Note Identification", question=question, details=["You answered: D"])
+    >>> question = Question(
+    ...     "Name the note.",
+    ...     choices=["C", "D"],
+    ...     answer="C",
+    ...     staff=[[Note.parse("C4")]],
+    ... )
+    >>> dialog = QuestionPreview(
+    ...     "Note Identification",
+    ...     question=question,
+    ...     details=["You answered: D"],
+    ... )
     >>> dialog.question.answer
     'C'
     """
@@ -82,17 +100,27 @@ class QuestionPreview(QDialog):
         question : Question
             The question to show. Keyword-only.
         details : list of str or None, default None
-            Extra lines of HTML, such as what was answered and how long it took. Keyword-only.
+            Extra lines of HTML, such as what was answered and how long
+            it took. Keyword-only.
         statistics : callable or None, default None
-            Opens statistics for the displayed question, with the card as its parent. Keyword-only.
+            Opens statistics for the displayed question, with the card
+            as its parent. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the dialog. Keyword-only.
 
         Examples
         --------
         >>> from alto.theory.pitch import Note
-        >>> question_ = Question("", choices=["C"], answer="C", keyboard=Note.parse("C4"))
-        >>> QuestionPreview("Keyboard Note Identification", question=question_).minimumWidth()
+        >>> question_ = Question(
+        ...     "",
+        ...     choices=["C"],
+        ...     answer="C",
+        ...     keyboard=Note.parse("C4"),
+        ... )
+        >>> QuestionPreview(
+        ...     "Keyboard Note Identification",
+        ...     question=question_,
+        ... ).minimumWidth()
         560
         """
         super().__init__(parent)
@@ -106,7 +134,11 @@ class QuestionPreview(QDialog):
         header.addWidget(title, 1)
         if statistics is not None:
             stats_button = QToolButton()
-            icons.set_svg_icon(stats_button, icons.BAR_CHART, role=QPalette.ColorRole.ButtonText)
+            icons.set_svg_icon(
+                stats_button,
+                icons.BAR_CHART,
+                role=QPalette.ColorRole.ButtonText,
+            )
             stats_button.setIconSize(QSize(px(22), px(22)))
             stats_button.setAccessibleName("Question Statistics")
             stats_button.setToolTip("Question Statistics")
@@ -124,11 +156,20 @@ class QuestionPreview(QDialog):
         staff = None
         if q.staff or q.show_staff or q.construct is not None or scale:
             staff = StaffWidget(max_step=MAX_STEP)
-            staff.interval_voices = any(cls.interval_voices for cls in REGISTRY if cls.name == exercise_name)
-            if q.construct_steps:  # a scale with its steps shows them above the notes
+            staff.interval_voices = any(
+                cls.interval_voices
+                for cls in REGISTRY
+                if cls.name == exercise_name
+            )
+            if (
+                q.construct_steps
+            ):  # a scale with its steps shows them above the notes
                 staff.wedges = list(q.construct_steps)
-            # a "place this note" or "place this scale" question shows the notes that were the answer
-            notes = q.staff or ([[q.construct]] if q.construct is not None else scale)
+            # a "place this note" or "place this scale" question shows
+            # the notes that were the answer
+            notes = q.sounding_columns() or (
+                [[q.construct]] if q.construct is not None else scale
+            )
             staff.show_notes(
                 notes,
                 clef=q.clef,
@@ -139,10 +180,10 @@ class QuestionPreview(QDialog):
                 caption=q.caption,
             )
             lay.addWidget(staff, alignment=Qt.AlignmentFlag.AlignHCenter)
-        if q.circle is not None:  # a circle of fifths question shows the circle with its answer in
-            circle = FifthsCircle()
-            circle.setFixedSize(px(380), px(380))
-            circle.show_question(q.circle_kind, place=q.circle, ring=q.circle_ring, key=q.circle_key, title=q.caption)
+        if (
+            q.circle is not None
+        ):  # a circle of fifths question shows the circle with its answer in
+            circle = question_circle(q)
             circle.reveal(animate=False)
             lay.addWidget(circle, alignment=Qt.AlignmentFlag.AlignHCenter)
         position = q.fingerboard or q.picture
@@ -152,29 +193,36 @@ class QuestionPreview(QDialog):
             lay.addWidget(board)
         if q.keyboard is not None or q.keyboard_notes:
             if q.key_staff:
-                key_staff = StaffWidget(
-                    gap=8.0,
-                    side=12.0,
-                    note_offset=70.0,
-                    margin=3.6,
-                    compact=True,
-                )
-                key_staff.setFixedWidth(px(210))
+                key_staff = keyboard_key_staff()
                 key_staff.show_notes([], clef="treble", key=q.key)
-                lay.addWidget(key_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
+                lay.addWidget(
+                    key_staff,
+                    alignment=Qt.AlignmentFlag.AlignHCenter,
+                )
             keyboard = KeyboardWidget()
             keyboard.max_key_width = px(30.0 if q.key_staff else 38.0)
             if q.keyboard_notes:
-                keyboard.show_keys([note.midi for note in q.keyboard_notes], span=q.keyboard_range)
+                keyboard.show_keys(
+                    [note.midi for note in q.keyboard_notes],
+                    span=q.keyboard_range,
+                )
             elif q.keyboard is not None:
                 keyboard.show_key(q.keyboard.midi, span=q.keyboard_range)
             lay.addWidget(keyboard)
 
         lines = [f"<b>Answer:</b> {self._answer_text()}"]
         if q.choices:
-            lines.append("<span style='color: gray;'>Choices: " + "  ·  ".join(q.choices) + "</span>")
+            lines.append(
+                "<span style='color: gray;'>Choices: "
+                + "  ·  ".join(q.choices)
+                + "</span>",
+            )
         if q.octaves:
-            lines.append(f"<span style='color: gray;'>{q.second_label}: " + "  ·  ".join(q.octaves) + "</span>")
+            lines.append(
+                f"<span style='color: gray;'>{q.second_label}: "
+                + "  ·  ".join(q.octaves)
+                + "</span>",
+            )
         lines += details or []
         if q.explanation:
             lines.append(q.explanation)
@@ -195,16 +243,41 @@ class QuestionPreview(QDialog):
         )
         if position and position.note and board and board.model:
             notes = [[Note.parse(position.note)]]
-        # The simple pitch player cannot perform the rhythmic, microtonal, or instrumental markings in these questions.
-        if notes and (q.notation_target is None or q.notation_target[0] in ("Notehead", "Stem", "Clef", "Staff line")):
+        # The simple pitch player cannot perform the rhythmic,
+        # microtonal, or instrumental markings in these questions.
+        if notes and (
+            q.notation_target is None
+            or q.notation_target[0]
+            in ("Notehead", "Stem", "Clef", "Staff line")
+        ):
             play = QPushButton("Play")
             if staff is not None and staff.columns == notes:
-                playback = StaffPlayback(self, highlight=staff.highlight_column)
-                gap_ms = MELODIC_INTERVAL_GAP_MS if staff.interval_voices and len(notes) == 2 else DEFAULT_NOTE_GAP_MS
-                play.clicked.connect(lambda: playback.play(notes, gap_ms=gap_ms))
+                playback = StaffPlayback(
+                    self,
+                    highlight=staff.highlight_column,
+                )
+                gap_ms = (
+                    MELODIC_INTERVAL_GAP_MS
+                    if staff.interval_voices and len(notes) == 2
+                    else DEFAULT_NOTE_GAP_MS
+                )
+                play.clicked.connect(
+                    lambda: playback.play(notes, gap_ms=gap_ms),
+                )
             elif board is not None:
-                playback = StaffPlayback(self, highlight=lambda step: board.set_sounding(step is not None))
-                play.clicked.connect(lambda: playback.play(notes, gap_ms=board.feedback_gap_ms(), instrument=board.sound_key))
+                playback = StaffPlayback(
+                    self,
+                    highlight=lambda step: board.set_sounding(
+                        step is not None,
+                    ),
+                )
+                play.clicked.connect(
+                    lambda: playback.play(
+                        notes,
+                        gap_ms=board.feedback_gap_ms(),
+                        instrument=board.sound_key,
+                    ),
+                )
             else:
                 play.clicked.connect(lambda: sounds.play_notes(notes))
             buttons.addButton(play, QDialogButtonBox.ButtonRole.ActionRole)
@@ -219,15 +292,28 @@ class QuestionPreview(QDialog):
         Returns
         -------
         str
-            The right answer; for a "place this note" question, the note's name and octave in the chosen naming.
+            The right answer; for a "place this note" question, the
+            note's name and octave in the chosen naming.
 
         Examples
         --------
-        >>> QuestionPreview("Intervals", question=Question("?", choices=["M3"], answer="M3"))._answer_text()
+        >>> QuestionPreview(
+        ...     "Intervals",
+        ...     question=Question(
+        ...         "?", choices=["M3"], answer="M3"
+        ...     ),
+        ... )._answer_text()
         'M3'
         >>> from alto.theory.pitch import Note
-        >>> question = Question("Place C4.", choices=[], answer="C4", construct=Note.parse("C4"))
-        >>> QuestionPreview("Construction", question=question)._answer_text()
+        >>> question = Question(
+        ...     "Place C4.",
+        ...     choices=[],
+        ...     answer="C4",
+        ...     construct=Note.parse("C4"),
+        ... )
+        >>> QuestionPreview(
+        ...     "Construction", question=question
+        ... )._answer_text()
         'C4'
         """
         q = self.question

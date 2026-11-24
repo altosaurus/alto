@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.theme_editor/
 ---
 {% raw %}
-The editor for a theme of the user's own: a name, and a color for every part of its light and dark versions.
+The editor for a theme of the user's own: a name, and a color for every
+part of its light and dark versions.
 
 **Examples**
 
@@ -16,34 +17,6 @@ The editor for a theme of the user's own: a name, and a color for every part of 
 'My theme'
 ```
 
-## theme_of
-
-```python
-def theme_of(
-    colors: dict[str, str],
-    *,
-    dark: bool,
-) -> CustomTheme
-```
-
-Make a theme from a set of colors, to draw a picture of it.
-
-**Parameters**
-
-- `colors` (*dict of str to str*): A color for every part, as "#rrggbb".
-- `dark` (*bool*): True if it is the dark version. Keyword-only.
-
-**Returns**
-
-- *CustomTheme*: The theme, without a key or a name of its own.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> theme_of({part: "#102030" for part in PARTS}, dark=True).window
-'#102030'
-```
-
 ## ThemeEditor
 
 ```python
@@ -52,9 +25,11 @@ ThemeEditor(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-A form to make a theme, or change one: its name, and the colors of its light and dark versions.
+A form to make a theme, or change one: its name, and the colors of
+its light and dark versions.
 
-A small picture of each version follows the colors as they are chosen. Choosing a theme in the "Start from" list takes its
+A small picture of each version follows the colors as they are
+chosen. Choosing a theme in the "Start from" list takes its
 colors at once.
 
 **Attributes**
@@ -101,7 +76,8 @@ def eventFilter(
 ) -> bool
 ```
 
-Light up the code written beside a color while the pointer is over the color.
+Light up the code written beside a color while the pointer is
+over the color.
 
 **Parameters**
 
@@ -117,11 +93,19 @@ Light up the code written beside a color while the pointer is over the color.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = ThemeEditor()
 >>> button = editor.buttons["light"]["accent"]
->>> _ = editor.eventFilter(button, QEvent(QEvent.Type.Enter))
->>> "bold" in editor._values["light"]["accent"].styleSheet()
+>>> _ = editor.eventFilter(
+...     button, QEvent(QEvent.Type.Enter)
+... )
+>>> "bold" in editor._values["light"][
+...     "accent"
+... ].styleSheet()
 True
->>> _ = editor.eventFilter(button, QEvent(QEvent.Type.Leave))
->>> "bold" in editor._values["light"]["accent"].styleSheet()
+>>> _ = editor.eventFilter(
+...     button, QEvent(QEvent.Type.Leave)
+... )
+>>> "bold" in editor._values["light"][
+...     "accent"
+... ].styleSheet()
 False
 ```
 
@@ -131,7 +115,8 @@ False
 def load(record: ThemeRecord | None) -> None
 ```
 
-Fill the form from a theme that was saved, or for a new one that starts as Studio.
+Fill the form from a theme that was saved, or for a new one that
+starts as Studio.
 
 **Parameters**
 
@@ -142,7 +127,10 @@ Fill the form from a theme that was saved, or for a new one that starts as Studi
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = ThemeEditor()
 >>> editor.load(None)
->>> editor.delete_button.isHidden(), editor.name_edit.text()
+>>> (
+...     editor.delete_button.isHidden(),
+...     editor.name_edit.text(),
+... )
 (True, 'My theme')
 ```
 
@@ -162,7 +150,9 @@ Give the theme as it is now in the form.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = ThemeEditor()
->>> editor.record()["light"]["window"] == editor.colors["light"]["window"]
+>>> editor.record()["light"][
+...     "window"
+... ] == editor.colors["light"]["window"]
 True
 ```
 {% endraw %}

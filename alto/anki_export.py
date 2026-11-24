@@ -1,4 +1,7 @@
-"""Write portable Anki decks from Alto questions and optional calendar review dates."""
+"""
+Write portable Anki decks from Alto questions and optional calendar
+review dates.
+"""
 
 from __future__ import annotations
 
@@ -26,26 +29,39 @@ from alto.learning import Learner
 from alto.learning.calendar import CALENDAR_SCHEDULERS
 from alto.learning.grading import Sm2State
 
-# Anki review dates are day numbers relative to the collection's creation day.
+# Anki review dates are day numbers relative to the collection's
+# creation day.
 _EPOCH = date(2000, 1, 1)
 _MODEL = genanki.Model(
     1765974231,
     "Alto exercise",
-    fields=[{"name": name} for name in ("Question", "Illustration", "Answer", "Explanation")],
+    fields=[
+        {"name": name}
+        for name in ("Question", "Illustration", "Answer", "Explanation")
+    ],
     templates=[
         {
             "name": "Practice",
             "qfmt": "{{Question}}<div>{{Illustration}}</div>",
-            "afmt": '{{FrontSide}}<hr id="answer">{{Answer}}<div>{{Explanation}}</div>',
+            "afmt": (
+                "{{FrontSide}}<hr "
+                'id="answer">{{Answer}}<div>{{Explanation}}</div>'
+            ),
         },
     ],
-    css=".card { font-family: sans-serif; text-align: center; font-size: 20px; } img { max-width: 100%; height: auto; }",
+    css=(
+        ".card { font-family: sans-serif; text-align: center; font-size: "
+        "20px; } img { max-width: 100%; height: auto; }"
+    ),
 )
 
 
 @dataclass
 class Review:
-    """One practiced example and its calendar schedule in the exporting profile."""
+    """
+    One practiced example and its calendar schedule in the exporting
+    profile.
+    """
 
     item_key: str
     signature: str
@@ -69,10 +85,13 @@ def profile_reviews(learner: Learner) -> dict[str, list[Review]]:
     result: dict[str, list[Review]] = {}
     if mode in CALENDAR_SCHEDULERS:
         rows = learner.db.conn.execute(
-            "SELECT s.exercise, s.item_key, c.signature, c.payload, s.scheduler, s.due, s.state, COALESCE(i.seen, 1) "
-            "FROM review_schedules s JOIN practice_cards c USING (profile_id, exercise, item_key) "
+            "SELECT s.exercise, s.item_key, c.signature, c.payload, "
+            "s.scheduler, s.due, s.state, COALESCE(i.seen, 1) "
+            "FROM review_schedules s JOIN practice_cards c USING "
+            "(profile_id, exercise, item_key) "
             "LEFT JOIN items i USING (profile_id, exercise, item_key) "
-            "WHERE s.profile_id=? AND s.scheduler=? ORDER BY s.exercise, s.due, s.item_key",
+            "WHERE s.profile_id=? AND s.scheduler=? ORDER BY s.exercise, "
+            "s.due, s.item_key",
             (learner.profile.id, mode),
         )
         for name, *values in rows:
@@ -80,9 +99,14 @@ def profile_reviews(learner: Learner) -> dict[str, list[Review]]:
     return result
 
 
-def deck_candidates(exercise: Exercise, *, reviews: Sequence[Review]) -> Iterator[tuple[Question, Review | None]]:
+def deck_candidates(
+    exercise: Exercise,
+    *,
+    reviews: Sequence[Review],
+) -> Iterator[tuple[Question, Review | None]]:
     """
-    Visit eligible scheduled examples before generating additional questions.
+    Visit eligible scheduled examples before generating additional
+    questions.
 
     Yields
     ------
@@ -98,41 +122,66 @@ def deck_candidates(exercise: Exercise, *, reviews: Sequence[Review]) -> Iterato
         )
         if question is not None:
             yield question, review
-    for question in exercise.daily_candidates(random.Random(type(exercise).__name__)):
+    for question in exercise.daily_candidates(
+        random.Random(type(exercise).__name__),
+    ):
         yield question, schedules.get(question.item_key())
 
 
 def _schedule(review: Review) -> tuple[int, int, int, int, int, int, int, str]:
     """
-    Translate a calendar schedule into the scheduling columns of an Anki card.
+    Translate a calendar schedule into the scheduling columns of an Anki
+    card.
 
     Returns
     -------
     tuple
-        Type, queue, due date, interval, ease in permille, repetitions, remaining steps, and memory state.
+        Type, queue, due date, interval, ease in permille, repetitions,
+        remaining steps, and memory state.
     """
     data = ""
     ease = 2.5
     if review.scheduler == "FSRS":
         card = Card.from_json(review.state)
         last = card.last_review
-        interval = round((review.due - last.timestamp()) / 86400) if last else 0
+        interval = (
+            round((review.due - last.timestamp()) / 86400) if last else 0
+        )
         phase = card.state.name.lower()
-        data = json.dumps({"s": card.stability, "d": card.difficulty, "lrt": int(last.timestamp()) if last else None})
+        data = json.dumps(
+            {
+                "s": card.stability,
+                "d": card.difficulty,
+                "lrt": int(last.timestamp()) if last else None,
+            },
+        )
     else:
         sm2 = Sm2State.read(review.state)
         interval, ease, phase = sm2.interval, sm2.ease, sm2.phase
     if phase == "review":
         # Day numbers use the collection's rollover at 04:00 local time.
-        due = ((datetime.fromtimestamp(review.due) - timedelta(hours=4)).date() - _EPOCH).days
+        due = (
+            (datetime.fromtimestamp(review.due) - timedelta(hours=4)).date()
+            - _EPOCH
+        ).days
         kind, queue, left = 2, 2, 0
         interval = max(1, interval)
     else:
-        # The intraday learning queue stores a Unix timestamp. Resume at the next step.
+        # The intraday learning queue stores a Unix timestamp. Resume at
+        # the next step.
         due = int(review.due)
         kind, queue, left = 3 if phase == "relearning" else 1, 1, 1001
         interval = max(0, interval)
-    return kind, queue, due, interval, round(ease * 1000), max(1, review.seen), left, data
+    return (
+        kind,
+        queue,
+        due,
+        interval,
+        round(ease * 1000),
+        max(1, review.seen),
+        left,
+        data,
+    )
 
 
 def export_deck(
@@ -143,7 +192,8 @@ def export_deck(
     render: Callable[[Question, Path], list[str]],
 ) -> int:
     """
-    Write a deck and replace the destination only after the package is complete.
+    Write a deck and replace the destination only after the package is
+    complete.
 
     Parameters
     ----------
@@ -154,12 +204,14 @@ def export_deck(
     reviews : sequence of Review
         Eligible schedules to prioritize and transfer when requested.
     render : callable
-        Produces Anki fields and writes their PNG illustrations in the working directory.
+        Produces Anki fields and writes their PNG illustrations in the
+        working directory.
 
     Returns
     -------
     int
-        Number of exported cards. An empty selection leaves the destination untouched.
+        Number of exported cards. An empty selection leaves the
+        destination untouched.
     """
     return export_decks(
         path,
@@ -178,7 +230,10 @@ class DeckSelection:
 
 @dataclass
 class PlannedDeck:
-    """Distinct questions and their stable export identities for one exercise."""
+    """
+    Distinct questions and their stable export identities for one
+    exercise.
+    """
 
     exercise: Exercise
     cards: list[tuple[str, Question, Review | None]]
@@ -186,7 +241,8 @@ class PlannedDeck:
 
 def plan_deck(selection: DeckSelection) -> PlannedDeck:
     """
-    Select the exact cards to count in the summary and write to the package.
+    Select the exact cards to count in the summary and write to the
+    package.
 
     Returns
     -------
@@ -197,10 +253,18 @@ def plan_deck(selection: DeckSelection) -> PlannedDeck:
     deck = PlannedDeck(exercise, [])
     groups = exercise.card_groups() or {}
     seen = set()
-    for question, review in deck_candidates(exercise, reviews=selection.reviews):
+    for question, review in deck_candidates(
+        exercise,
+        reviews=selection.reviews,
+    ):
         key = question.item_key()
-        # Each notation term has one identification card and one location card.
-        identity = (groups[key] + (":identify" if question.choices else ":locate")) if key in groups else key
+        # Each notation term has one identification card and one
+        # location card.
+        identity = (
+            (groups[key] + (":identify" if question.choices else ":locate"))
+            if key in groups
+            else key
+        )
         if identity not in seen:
             seen.add(identity)
             deck.cards.append((identity, question, review))
@@ -220,24 +284,35 @@ def export_decks(
     Parameters
     ----------
     path : Path
-        Destination replaced once all selected decks and their media are ready.
+        Destination replaced once all selected decks and their media are
+        ready.
     selections : sequence of DeckSelection
         Exercises to export and their optional schedules.
     render : callable
-        Renders the fields and writes the media for one exercise question.
+        Renders the fields and writes the media for one exercise
+        question.
     progress : callable, optional
-        Receives the current operation, completed work, and a fixed total for the whole package.
+        Receives the current operation, completed work, and a fixed
+        total for the whole package.
 
     Returns
     -------
     int
         Total cards written across all decks.
     """
-    return write_decks(path, plans=[plan_deck(selection) for selection in selections], render=render, progress=progress)
+    return write_decks(
+        path,
+        plans=[plan_deck(selection) for selection in selections],
+        render=render,
+        progress=progress,
+    )
 
 
 class ExportControl:
-    """Coordinate a cancellation decision with the final replacement of the destination."""
+    """
+    Coordinate a cancellation decision with the final replacement of the
+    destination.
+    """
 
     def __init__(self) -> None:
         """Start with a pending export and an untouched destination."""
@@ -247,12 +322,14 @@ class ExportControl:
 
     def confirm_cancel(self, confirm: Callable[[], bool]) -> bool:
         """
-        Reserve the destination until the user decides whether to cancel.
+        Reserve the destination until the user decides whether to
+        cancel.
 
         Returns
         -------
         bool
-            True if cancellation was confirmed before the package was saved.
+            True if cancellation was confirmed before the package was
+            saved.
         """
         with self._save_lock:
             if self._saved or not confirm():
@@ -262,7 +339,8 @@ class ExportControl:
 
     def check(self) -> None:
         """
-        Stop work and unwind temporary files after confirmed cancellation.
+        Stop work and unwind temporary files after confirmed
+        cancellation.
 
         Raises
         ------
@@ -273,7 +351,9 @@ class ExportControl:
             raise CancelledError
 
     def publish(self, package: Path, *, destination: Path) -> None:
-        """Replace the destination only while cancellation is excluded."""
+        """
+        Replace the destination only while cancellation is excluded.
+        """
         with self._save_lock:
             self.check()
             package.replace(destination)
@@ -303,7 +383,8 @@ def write_decks(
     count = 0
     total_cards = sum(len(plan.cards) for plan in plans)
     deck_count = sum(bool(plan.cards) for plan in plans)
-    # Rendering and packing each get one unit per card. The database, compression, and final save get one each.
+    # Rendering and packing each get one unit per card. The database,
+    # compression, and final save get one each.
     total_work = 2 * total_cards + 3
     with TemporaryDirectory(dir=path.parent) as folder:
         work = Path(folder)
@@ -318,17 +399,34 @@ def write_decks(
             if progress:
                 progress(stage, count, total_work)
             name = type(exercise).__name__
-            deck_id = int.from_bytes(hashlib.sha256(f"alto:{name}".encode()).digest()[:4], "big")
+            deck_id = int.from_bytes(
+                hashlib.sha256(f"alto:{name}".encode()).digest()[:4],
+                "big",
+            )
             parent = f"Alto::{exercise.category}" if deck_count > 1 else "Alto"
             deck = genanki.Deck(deck_id, f"{parent}::{exercise.name}")
-            for index, (identity, question, review) in enumerate(plan.cards, start=1):
+            for index, (identity, question, review) in enumerate(
+                plan.cards,
+                start=1,
+            ):
                 control.check()
                 guid = genanki.guid_for("Alto", name, identity)
-                deck.add_note(genanki.Note(model=_MODEL, fields=render(question, work, exercise), guid=guid, due=index))
+                deck.add_note(
+                    genanki.Note(
+                        model=_MODEL,
+                        fields=render(question, work, exercise),
+                        guid=guid,
+                        due=index,
+                    ),
+                )
                 if review is not None:
                     schedules.append((*_schedule(review), guid))
                 if progress:
-                    progress(f"{stage} · Cards prepared: {index} of {target}", count + index, total_work)
+                    progress(
+                        f"{stage} · Cards prepared: {index} of {target}",
+                        count + index,
+                        total_work,
+                    )
             decks.append(deck)
             count += target
             if deck_progress:
@@ -341,11 +439,19 @@ def write_decks(
         with closing(sqlite3.connect(database)) as conn, conn:
             conn.set_progress_handler(control.canceled.is_set, 1000)
             now = time.time()
-            genanki.Package(decks).write_to_db(conn.cursor(), now, itertools.count(int(now * 1000)))
-            conn.execute("UPDATE col SET crt=?", (int(datetime(2000, 1, 1, 4).timestamp()),))
+            genanki.Package(decks).write_to_db(
+                conn.cursor(),
+                now,
+                itertools.count(int(now * 1000)),
+            )
+            conn.execute(
+                "UPDATE col SET crt=?",
+                (int(datetime(2000, 1, 1, 4).timestamp()),),
+            )
             conn.execute("UPDATE col SET conf=json_set(conf, '$.schedVer', 2)")
             conn.executemany(
-                "UPDATE cards SET type=?,queue=?,due=?,ivl=?,factor=?,reps=?,left=?,data=? "
+                "UPDATE cards SET "
+                "type=?,queue=?,due=?,ivl=?,factor=?,reps=?,left=?,data=? "
                 "WHERE nid=(SELECT id FROM notes WHERE guid=?)",
                 schedules,
             )
@@ -353,7 +459,10 @@ def write_decks(
         with ZipFile(package, "w", ZIP_DEFLATED) as archive:
             if progress:
                 progress("Compressing the collection…", count + 1, total_work)
-            with database.open("rb") as source, archive.open(database.name, "w", force_zip64=True) as entry:
+            with (
+                database.open("rb") as source,
+                archive.open(database.name, "w", force_zip64=True) as entry,
+            ):
                 while block := source.read(1024 * 1024):
                     control.check()
                     entry.write(block)
@@ -365,7 +474,11 @@ def write_decks(
                 archive.write(image, str(index))
                 if progress:
                     packed = (index + 1) * count // len(images)
-                    progress(f"Packing images · {index + 1} of {len(images)}", count + 2 + packed, total_work)
+                    progress(
+                        f"Packing images · {index + 1} of {len(images)}",
+                        count + 2 + packed,
+                        total_work,
+                    )
             if progress:
                 progress(f"Saving {path.name}…", total_work - 1, total_work)
             archive.writestr("media", json.dumps(media))

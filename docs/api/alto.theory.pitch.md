@@ -7,9 +7,12 @@ permalink: /api/alto.theory.pitch/
 {% raw %}
 Pitches and intervals, spelled correctly (C# is not Db).
 
-A `Note` is a pitch with its spelling (a letter, an accidental and an octave), so C♯4 and D♭4 are different notes even
-though they sound the same. An `Interval` is a distance between two spelled notes, such as a major third or a perfect
-fifth. Together they can transpose a note by an interval and work out the interval between two notes.
+A `Note` is a pitch with its spelling (a letter, an accidental and an
+octave), so C♯4 and D♭4 are different notes even
+though they sound the same. An `Interval` is a distance between two
+spelled notes, such as a major third or a perfect
+fifth. Together they can transpose a note by an interval and work out
+the interval between two notes.
 
 **Examples**
 
@@ -34,7 +37,8 @@ Note(
 
 A spelled pitch: a letter name, an accidental and an octave.
 
-The spelling matters. C♯4 and D♭4 sound the same (they share a MIDI number) but are different notes, because they sit on
+The spelling matters. C♯4 and D♭4 sound the same (they share a MIDI
+number) but are different notes, because they sit on
 different lines of the staff.
 
 **Attributes**
@@ -73,7 +77,9 @@ Return the MIDI note number, where middle C (C4) is 60.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> Note(4, letter=0).midi
 60
->>> Note(4, letter=1, accidental=-1).midi  # D♭4 sounds like C♯4
+>>> Note(
+...     4, letter=1, accidental=-1
+... ).midi  # D♭4 sounds like C♯4
 61
 ```
 
@@ -84,9 +90,11 @@ Return the MIDI note number, where middle C (C4) is 60.
 def diatonic() -> int
 ```
 
-Return the absolute staff-step index of the note, ignoring its accidental.
+Return the absolute staff-step index of the note, ignoring its
+accidental.
 
-Counting from C0 as 0, D0 as 1 and so on, each line or space of the staff is one step. The distance between two notes in
+Counting from C0 as 0, D0 as 1 and so on, each line or space of
+the staff is one step. The distance between two notes in
 staff steps is the difference of their indexes.
 
 **Returns**
@@ -98,7 +106,9 @@ staff steps is the difference of their indexes.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> Note(4, letter=0).diatonic  # C4
 28
->>> Note(4, letter=2, accidental=1).diatonic  # E♯4 is on the same step as E4
+>>> Note(
+...     4, letter=2, accidental=1
+... ).diatonic  # E♯4 is on the same step as E4
 30
 ```
 
@@ -118,9 +128,13 @@ Return the pitch class: the note's MIDI number modulo 12.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Note(4, letter=0, accidental=1).pitch_class  # C♯4
+>>> Note(
+...     4, letter=0, accidental=1
+... ).pitch_class  # C♯4
 1
->>> Note(3, letter=6, accidental=1).pitch_class  # B♯3 sounds like C
+>>> Note(
+...     3, letter=6, accidental=1
+... ).pitch_class  # B♯3 sounds like C
 0
 ```
 
@@ -131,7 +145,8 @@ Return the pitch class: the note's MIDI number modulo 12.
 def name() -> str
 ```
 
-Return the pitch-class name with Unicode accidentals, without the octave.
+Return the pitch-class name with Unicode accidentals, without
+the octave.
 
 **Returns**
 
@@ -184,7 +199,8 @@ Note(octave=4, letter=2, accidental=0)
 def parse(text: str) -> Note
 ```
 
-Parse a note with ASCII or musical accidentals, such as 'F#4', 'B♭3' or 'E𝄫2'.
+Parse a note with ASCII or musical accidentals, such as 'F#4',
+'B♭3' or 'E𝄫2'.
 
 **Parameters**
 
@@ -224,7 +240,8 @@ def transpose(
 ) -> Note
 ```
 
-Move the note up or down by an interval, keeping the spelling correct.
+Move the note up or down by an interval, keeping the spelling
+correct.
 
 **Parameters**
 
@@ -238,11 +255,24 @@ Move the note up or down by an interval, keeping the spelling correct.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> str(Note.parse("C4").transpose(Interval.parse("M3")))
+>>> str(
+...     Note.parse("C4").transpose(
+...         Interval.parse("M3")
+...     )
+... )
 'E4'
->>> str(Note.parse("C4").transpose(Interval.parse("m3")))
+>>> str(
+...     Note.parse("C4").transpose(
+...         Interval.parse("m3")
+...     )
+... )
 'E♭4'
->>> str(Note.parse("C4").transpose(Interval.parse("P5"), descending=True))
+>>> str(
+...     Note.parse("C4").transpose(
+...         Interval.parse("P5"),
+...         descending=True,
+...     )
+... )
 'F3'
 ```
 
@@ -288,9 +318,15 @@ Invert the spelled interval within an octave.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Interval.parse("M3").inversion.short, Interval.parse("A4").inversion.short
+>>> (
+...     Interval.parse("M3").inversion.short,
+...     Interval.parse("A4").inversion.short,
+... )
 ('m6', 'd5')
->>> Interval.parse("m10").inversion.short, Interval.parse("P15").inversion.short
+>>> (
+...     Interval.parse("m10").inversion.short,
+...     Interval.parse("P15").inversion.short,
+... )
 ('M6', 'P1')
 ```
 
@@ -301,7 +337,8 @@ Invert the spelled interval within an octave.
 def is_perfect_type() -> bool
 ```
 
-Report whether this size of interval is "perfect type" (unison, fourth, fifth, octave) rather than major or minor type.
+Report whether this size of interval is "perfect type" (unison,
+fourth, fifth, octave) rather than major or minor type.
 
 **Returns**
 
@@ -336,7 +373,10 @@ Return the size of the interval in semitones.
 4
 >>> Interval.parse("d5").semitones
 6
->>> Interval.parse("m9").semitones  # a minor ninth is an octave plus a minor second
+>>> Interval.parse(
+...     "m9"
+... # a minor ninth is an octave plus a minor second
+... ).semitones
 13
 ```
 
@@ -347,7 +387,8 @@ Return the size of the interval in semitones.
 def short() -> str
 ```
 
-Return the interval in short form: its quality followed by its number.
+Return the interval in short form: its quality followed by its
+number.
 
 **Returns**
 
@@ -385,9 +426,13 @@ Work out the interval from one note up to a higher one.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Interval.between(Note.parse("C4"), high=Note.parse("E4"))
+>>> Interval.between(
+...     Note.parse("C4"), high=Note.parse("E4")
+... )
 Interval(number=3, quality='M')
->>> Interval.between(Note.parse("C4"), high=Note.parse("F#4")).short
+>>> Interval.between(
+...     Note.parse("C4"), high=Note.parse("F#4")
+... ).short
 'A4'
 ```
 
@@ -398,7 +443,8 @@ Interval(number=3, quality='M')
 def parse(text: str) -> Interval
 ```
 
-Parse an interval written in short form, such as 'M3', 'P5' or 'd7'.
+Parse an interval written in short form, such as 'M3', 'P5' or
+'d7'.
 
 **Parameters**
 

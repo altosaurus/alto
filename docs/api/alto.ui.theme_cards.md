@@ -7,8 +7,10 @@ permalink: /api/alto.ui.theme_cards/
 {% raw %}
 The card of a theme in the settings.
 
-A card is one theme: its name, three pictures of the window one above another that can be clicked (light, dark, and System,
-which is cut through on a slant to show it is light or dark as the desktop is) and the squares of its colors.
+A card is one theme: its name, three pictures of the window one above
+another that can be clicked (light, dark, and System,
+which is cut through on a slant to show it is light or dark as the
+desktop is) and the squares of its colors.
 
 **Examples**
 
@@ -37,7 +39,10 @@ Give the colors of a theme's picture.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> colors_of("dark")["window"], colors_of("studio")["window"]
+>>> (
+...     colors_of("dark")["window"],
+...     colors_of("studio")["window"],
+... )
 ('#2b2b2b', '#eceef1')
 ```
 
@@ -56,7 +61,8 @@ ThemeThumb(
 
 Bases: `QPushButton`
 
-A small picture of the window in a theme, to click to choose the theme.
+A small picture of the window in a theme, to click to choose the
+theme.
 
 **Attributes**
 
@@ -87,7 +93,14 @@ Build the picture.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ThemeThumb("system", colors=LIGHT, other=DARK).width(), ThemeThumb("light", colors=LIGHT, scale=2.0).width()
+>>> (
+...     ThemeThumb(
+...         "system", colors=LIGHT, other=DARK
+...     ).width(),
+...     ThemeThumb(
+...         "light", colors=LIGHT, scale=2.0
+...     ).width(),
+... )
 (116, 232)
 ```
 
@@ -97,7 +110,8 @@ Build the picture.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the window, cut through on a slant if it has two halves, with an outline that is heavier when it is chosen.
+Draw the window, cut through on a slant if it has two halves,
+with an outline that is heavier when it is chosen.
 
 **Parameters**
 
@@ -106,7 +120,9 @@ Draw the window, cut through on a slant if it has two halves, with an outline th
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ThemeThumb("light", colors=LIGHT).grab().isNull()
+>>> ThemeThumb(
+...     "light", colors=LIGHT
+... ).grab().isNull()
 False
 ```
 
@@ -123,9 +139,11 @@ ThemeCard(
 
 Bases: `QFrame`
 
-The card of one theme: its name, three clickable pictures one above another, and with each the squares of its colors.
+The card of one theme: its name, three clickable pictures one above
+another, and with each the squares of its colors.
 
-The pictures are Light, Dark and System. The System one is cut through on a slant, light on one side and dark on the other,
+The pictures are Light, Dark and System. The System one is cut
+through on a slant, light on one side and dark on the other,
 because that version is light or dark as the desktop is.
 
 **Attributes**
@@ -167,7 +185,8 @@ Build the card of a family.
 def show_current(key: str) -> None
 ```
 
-Mark the picture of the theme that is in use, and outline the card that has it.
+Mark the picture of the theme that is in use, and outline the
+card that has it.
 
 **Parameters**
 
@@ -178,7 +197,11 @@ Mark the picture of the theme that is in use, and outline the card that has it.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = ThemeCard("sage")
 >>> card.show_current("sage_dark")
->>> [k for k, picture in card.thumbs.items() if picture.isChecked()]
+>>> [
+...     k
+...     for k, picture in card.thumbs.items()
+...     if picture.isChecked()
+... ]
 ['sage_dark']
 ```
 {% endraw %}

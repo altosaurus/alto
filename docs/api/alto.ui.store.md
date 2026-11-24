@@ -12,7 +12,9 @@ The application's saved settings (a thin layer over `QSettings`).
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings = store()
 >>> settings.setValue("demo/count", 3)
->>> int_value(settings, key="demo/count", default=0)
+>>> int_value(
+...     settings, key="demo/count", default=0
+... )
 3
 >>> settings.remove("demo")
 ```
@@ -25,8 +27,10 @@ def store() -> QSettings
 
 Return the app's saved settings.
 
-The first time it is opened under the name "alto" it brings across anything saved under the old name ("mtheory"), so a
-rename does not reset anyone's preferences. If `ALTO_HOME` is set the settings are kept in a file in that folder instead,
+The first time it is opened under the name "alto" it brings across
+anything saved under the old name ("mtheory"), so a
+rename does not reset anyone's preferences. If `ALTO_HOME` is set
+the settings are kept in a file in that folder instead,
 and nothing is brought across from the system's own.
 
 **Returns**
@@ -56,7 +60,8 @@ def int_value(
 
 Read an integer setting.
 
-`QSettings` hands back whatever was saved, which may be a number or its text.
+`QSettings` hands back whatever was saved, which may be a number or
+its text.
 
 **Parameters**
 
@@ -77,12 +82,18 @@ Read an integer setting.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> settings_.setValue("demo/count", "42")
->>> int_value(settings_, key="demo/count", default=0)
+>>> int_value(
+...     settings_, key="demo/count", default=0
+... )
 42
->>> int_value(settings_, key="demo/missing", default=7)
+>>> int_value(
+...     settings_, key="demo/missing", default=7
+... )
 7
 >>> settings_.setValue("demo/count", "many")
->>> int_value(settings_, key="demo/count", default=0)
+>>> int_value(
+...     settings_, key="demo/count", default=0
+... )
 Traceback (most recent call last):
     ...
 ValueError: invalid literal for int() with base 10: 'many'
@@ -117,9 +128,17 @@ Read a saved setting as text.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> settings_.setValue("demo/name", "viola")
->>> text_value(settings_, key="demo/name", default="piano")
+>>> text_value(
+...     settings_,
+...     key="demo/name",
+...     default="piano",
+... )
 'viola'
->>> text_value(settings_, key="demo/missing", default="piano")
+>>> text_value(
+...     settings_,
+...     key="demo/missing",
+...     default="piano",
+... )
 'piano'
 >>> settings_.remove("demo")
 ```
@@ -151,11 +170,26 @@ Read a switch saved as the text "true" or "false".
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
->>> save_bool(settings_, key="demo/on", value=True)
->>> bool_value(settings_, key="demo/on", default=False), bool_value(settings_, key="demo/missing", default=True)
+>>> save_bool(
+...     settings_, key="demo/on", value=True
+... )
+>>> (
+...     bool_value(
+...         settings_,
+...         key="demo/on",
+...         default=False,
+...     ),
+...     bool_value(
+...         settings_,
+...         key="demo/missing",
+...         default=True,
+...     ),
+... )
 (True, True)
 >>> settings_.setValue("demo/on", "FALSE")
->>> bool_value(settings_, key="demo/on", default=True)
+>>> bool_value(
+...     settings_, key="demo/on", default=True
+... )
 False
 >>> settings_.remove("demo")
 ```
@@ -171,7 +205,8 @@ def save_bool(
 ) -> None
 ```
 
-Save a switch as the text "true" or "false", the form `bool_value` reads.
+Save a switch as the text "true" or "false", the form `bool_value`
+reads.
 
 **Parameters**
 
@@ -183,7 +218,9 @@ Save a switch as the text "true" or "false", the form `bool_value` reads.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
->>> save_bool(settings_, key="demo/on", value=False)
+>>> save_bool(
+...     settings_, key="demo/on", value=False
+... )
 >>> settings_.value("demo/on")
 'false'
 >>> settings_.remove("demo")
@@ -202,7 +239,8 @@ def list_value(
 
 Read a saved list of words, such as "treble,bass".
 
-`QSettings` may hand back text that contains commas as a list of its parts, so both forms are read.
+`QSettings` may hand back text that contains commas as a list of its
+parts, so both forms are read.
 
 **Parameters**
 
@@ -218,11 +256,24 @@ Read a saved list of words, such as "treble,bass".
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
->>> settings_.setValue("demo/clefs", "treble,,bass")
->>> list_value(settings_, key="demo/clefs"), list_value(settings_, key="demo/missing")
+>>> settings_.setValue(
+...     "demo/clefs", "treble,,bass"
+... )
+>>> (
+...     list_value(settings_, key="demo/clefs"),
+...     list_value(
+...         settings_, key="demo/missing"
+...     ),
+... )
 (['treble', 'bass'], [])
->>> settings_.setValue("demo/modes", ["major|minor"])
->>> list_value(settings_, key="demo/modes", separator="|")
+>>> settings_.setValue(
+...     "demo/modes", ["major|minor"]
+... )
+>>> list_value(
+...     settings_,
+...     key="demo/modes",
+...     separator="|",
+... )
 ['major', 'minor']
 >>> settings_.remove("demo")
 ```
@@ -239,7 +290,8 @@ def choices_value(
 ) -> set[str]
 ```
 
-Read a saved set of choices, keeping only the ones that are still offered.
+Read a saved set of choices, keeping only the ones that are still
+offered.
 
 **Parameters**
 
@@ -256,8 +308,16 @@ Read a saved set of choices, keeping only the ones that are still offered.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
->>> settings_.setValue("demo/clefs", "treble,gone,bass")
->>> sorted(choices_value(settings_, key="demo/clefs", allowed=("treble", "bass", "alto")))
+>>> settings_.setValue(
+...     "demo/clefs", "treble,gone,bass"
+... )
+>>> sorted(
+...     choices_value(
+...         settings_,
+...         key="demo/clefs",
+...         allowed=("treble", "bass", "alto"),
+...     )
+... )
 ['bass', 'treble']
 >>> settings_.remove("demo")
 ```
@@ -272,7 +332,8 @@ def keys_value(
 ) -> set[int]
 ```
 
-Read a saved set of key signatures, each a number of sharps (positive) or flats (negative) up to seven.
+Read a saved set of key signatures, each a number of sharps
+(positive) or flats (negative) up to seven.
 
 **Parameters**
 
@@ -287,8 +348,12 @@ Read a saved set of key signatures, each a number of sharps (positive) or flats 
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
->>> settings_.setValue("demo/keys", "-2,0,9,x,3")
->>> sorted(keys_value(settings_, key="demo/keys"))
+>>> settings_.setValue(
+...     "demo/keys", "-2,0,9,x,3"
+... )
+>>> sorted(
+...     keys_value(settings_, key="demo/keys")
+... )
 [-2, 0, 3]
 >>> settings_.remove("demo")
 ```
@@ -303,7 +368,8 @@ def joined(
 ) -> str
 ```
 
-Write values as the text that `list_value`, `choices_value` and `keys_value` read back.
+Write values as the text that `list_value`, `choices_value` and
+`keys_value` read back.
 
 **Parameters**
 
@@ -317,7 +383,12 @@ Write values as the text that `list_value`, `choices_value` and `keys_value` rea
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> joined([-1, 0, 2]), joined(["major", "minor"], separator="|")
+>>> (
+...     joined([-1, 0, 2]),
+...     joined(
+...         ["major", "minor"], separator="|"
+...     ),
+... )
 ('-1,0,2', 'major|minor')
 ```
 
@@ -349,10 +420,13 @@ Return every saved preference, by key, for a backup.
 def import_settings(values: Mapping[str, object]) -> None
 ```
 
-Replace every saved preference with the ones from a backup, so the preferences are exactly as they were.
+Replace every saved preference with the ones from a backup, so the
+preferences are exactly as they were.
 
-Preferences saved now that the backup does not have are removed. The marker that stops old "mtheory" preferences being
-brought across again is kept, so an old installation's leftovers cannot leak back in.
+Preferences saved now that the backup does not have are removed. The
+marker that stops old "mtheory" preferences being
+brought across again is kept, so an old installation's leftovers
+cannot leak back in.
 
 **Parameters**
 
@@ -361,8 +435,15 @@ brought across again is kept, so an old installation's leftovers cannot leak bac
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> import_settings({"demo/name": "Ada", "demo/count": 3})
->>> store().value("demo/name"), int_value(store(), key="demo/count", default=0)
+>>> import_settings(
+...     {"demo/name": "Ada", "demo/count": 3}
+... )
+>>> (
+...     store().value("demo/name"),
+...     int_value(
+...         store(), key="demo/count", default=0
+...     ),
+... )
 ('Ada', 3)
 >>> store().remove("demo")
 >>> store().remove("")

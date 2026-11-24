@@ -25,12 +25,14 @@ from alto.ui.zoom import px
 
 class AnswerBank(QScrollArea):
     """
-    Wrap existing answer buttons to fit the available width and scroll long lists.
+    Wrap existing answer buttons to fit the available width and scroll
+    long lists.
 
     Attributes
     ----------
     buttons : list of QAbstractButton
-        The answer buttons in their display and keyboard navigation order.
+        The answer buttons in their display and keyboard navigation
+        order.
     content : QWidget
         The grid's content widget.
 
@@ -41,7 +43,12 @@ class AnswerBank(QScrollArea):
     []
     """
 
-    def __init__(self, parent: QWidget | None = None, *, show_all_rows: bool = False) -> None:
+    def __init__(
+        self,
+        parent: QWidget | None = None,
+        *,
+        show_all_rows: bool = False,
+    ) -> None:
         """
         Create a bank that can show all rows or scroll longer lists.
 
@@ -54,7 +61,10 @@ class AnswerBank(QScrollArea):
 
         Examples
         --------
-        >>> AnswerBank().horizontalScrollBarPolicy() == Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        >>> (
+        ...     AnswerBank().horizontalScrollBarPolicy()
+        ...     == Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        ... )
         True
         """
         super().__init__(parent)
@@ -68,14 +78,24 @@ class AnswerBank(QScrollArea):
         self.setWidget(self.content)
         self.setWidgetResizable(True)
         self.setFrameShape(QFrame.Shape.NoFrame)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff,
+        )
+        self.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed,
+        )
         self.setMaximumWidth(px(760))
         self.setMaximumHeight(px(240))
         self.setMinimumWidth(px(120))
         self.setAccessibleName("Interval answer buttons")
 
-    def set_buttons(self, buttons: list[QAbstractButton], *, positions: list[tuple[int, int]] | None = None) -> None:
+    def set_buttons(
+        self,
+        buttons: list[QAbstractButton],
+        *,
+        positions: list[tuple[int, int]] | None = None,
+    ) -> None:
         """
         Display answer buttons in a stable order.
 
@@ -84,13 +104,16 @@ class AnswerBank(QScrollArea):
         buttons : list of QAbstractButton
             The buttons to arrange. Their caller owns answer handling.
         positions : list of tuple of (int, int) or None
-            Optional row and column for each button. Each row wraps independently when space is limited.
+            Optional row and column for each button. Each row wraps
+            independently when space is limited.
 
         Examples
         --------
         >>> from PySide6.QtWidgets import QPushButton
         >>> bank = AnswerBank()
-        >>> bank.set_buttons([QPushButton("m3"), QPushButton("P5")])
+        >>> bank.set_buttons(
+        ...     [QPushButton("m3"), QPushButton("P5")]
+        ... )
         >>> len(bank.buttons)
         2
         """
@@ -116,16 +139,38 @@ class AnswerBank(QScrollArea):
         if not self.buttons:
             self.content.setMinimumHeight(0)
             return
-        width = max(72, *(button.sizeHint().width() for button in self.buttons))
-        available = self.width() - self.verticalScrollBar().sizeHint().width() - 16
-        max_columns = max(col for _, col in self._positions) + 1 if self._positions else min(6, len(self.buttons))
+        width = max(
+            72,
+            *(button.sizeHint().width() for button in self.buttons),
+        )
+        available = (
+            self.width() - self.verticalScrollBar().sizeHint().width() - 16
+        )
+        max_columns = (
+            max(col for _, col in self._positions) + 1
+            if self._positions
+            else min(6, len(self.buttons))
+        )
         columns = max(1, min(max_columns, (available + 8) // (width + 8)))
-        height = max(max(button.minimumHeight(), button.sizeHint().height()) for button in self.buttons)
-        positions = self._positions or [(0, index) for index in range(len(self.buttons))]
-        wrapped_rows = sorted({(row, col // columns) for row, col in positions})
-        row_indices = {position: index for index, position in enumerate(wrapped_rows)}
+        height = max(
+            max(button.minimumHeight(), button.sizeHint().height())
+            for button in self.buttons
+        )
+        positions = self._positions or [
+            (0, index) for index in range(len(self.buttons))
+        ]
+        wrapped_rows = sorted(
+            {(row, col // columns) for row, col in positions},
+        )
+        row_indices = {
+            position: index for index, position in enumerate(wrapped_rows)
+        }
         for button, (row, col) in zip(self.buttons, positions, strict=True):
-            self._grid.addWidget(button, row_indices[row, col // columns], col % columns)
+            self._grid.addWidget(
+                button,
+                row_indices[row, col // columns],
+                col % columns,
+            )
         for column in range(columns):
             self._grid.setColumnStretch(column, 1)
         rows = len(wrapped_rows)
@@ -133,13 +178,20 @@ class AnswerBank(QScrollArea):
         self.content.setMinimumHeight(content_height)
         visible_height = content_height
         if not self._show_all_rows:
-            visible_height = min(240, min(rows, 4) * height + max(0, min(rows, 4) - 1) * 8 + 16)
-        if self.minimumHeight() != visible_height or self.maximumHeight() != visible_height:
+            visible_height = min(
+                240,
+                min(rows, 4) * height + max(0, min(rows, 4) - 1) * 8 + 16,
+            )
+        if (
+            self.minimumHeight() != visible_height
+            or self.maximumHeight() != visible_height
+        ):
             self.setFixedHeight(visible_height)
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """
-        Rewrap the buttons when the exercise or settings pane changes width.
+        Rewrap the buttons when the exercise or settings pane changes
+        width.
 
         Parameters
         ----------

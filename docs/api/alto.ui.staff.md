@@ -5,10 +5,13 @@ package: alto.ui
 permalink: /api/alto.ui.staff/
 ---
 {% raw %}
-The staff: lines, clefs, key signatures and notes, drawn on a rounded white "paper".
+The staff: lines, clefs, key signatures and notes, drawn on a rounded
+white "paper".
 
-`StaffWidget` draws one staff, or a grand staff with a brace, in any of the seven clefs. Notes and key signatures are
-placed by their staff step (`Note.diatonic`) measured from the bottom line of the clef, and are engraved in the notation
+`StaffWidget` draws one staff, or a grand staff with a brace, in any of
+the seven clefs. Notes and key signatures are
+placed by their staff step (`Note.diatonic`) measured from the bottom
+line of the clef, and are engraved in the notation
 font chosen in the settings.
 
 **Examples**
@@ -17,7 +20,11 @@ font chosen in the settings.
 >>> key_signature_positions("treble", sign=1)
 ['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
 >>> staff = StaffWidget()
->>> staff.show_notes([[Note.parse("C4")]], clef="treble", key=2)
+>>> staff.show_notes(
+...     [[Note.parse("C4")]],
+...     clef="treble",
+...     key=2,
+... )
 >>> staff.clef, staff.key
 ('treble', 2)
 ```
@@ -28,7 +35,8 @@ font chosen in the settings.
 def clef_targets(clef: str) -> set[tuple[str, int]]
 ```
 
-Return the ways a clef can be written: the symbol and where on the staff it goes.
+Return the ways a clef can be written: the symbol and where on the
+staff it goes.
 
 **Parameters**
 
@@ -41,11 +49,16 @@ Return the ways a clef can be written: the symbol and where on the staff it goes
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> clef_targets("treble") == {("G", 2)} and clef_targets("mezzo") == {("C", 2)}
+>>> clef_targets("treble") == {
+...     ("G", 2)
+... } and clef_targets("mezzo") == {("C", 2)}
 True
 >>> sorted(clef_targets("baritone"))
 [('C', 8), ('F', 4)]
->>> sorted(clef_targets("french") | clef_targets("subbass"))
+>>> sorted(
+...     clef_targets("french")
+...     | clef_targets("subbass")
+... )
 [('F', 8), ('G', 0)]
 ```
 
@@ -68,7 +81,10 @@ Return the symbol and the place of one way of writing a clef.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> clef_target_of("bass"), clef_target_of("soprano")
+>>> (
+...     clef_target_of("bass"),
+...     clef_target_of("soprano"),
+... )
 (('F', 6), ('C', 0))
 ```
 
@@ -109,13 +125,29 @@ Draw the sharps or flats of a key signature, left to right.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
->>> image = QImage(200, 120, QImage.Format.Format_ARGB32)
+>>> image = QImage(
+...     200, 120, QImage.Format.Format_ARGB32
+... )
 >>> image.fill(QColor("white"))
 >>> painter = QPainter(image)
->>> draw_key_signature(painter, clef="treble", key=3, x=10, bottom=80, gap=12, color=QColor("black"), font="bravura")
+>>> draw_key_signature(
+...     painter,
+...     clef="treble",
+...     key=3,
+...     x=10,
+...     bottom=80,
+...     gap=12,
+...     color=QColor("black"),
+...     font="bravura",
+... )
 >>> painter.end()
 True
->>> any(image.pixelColor(x_, y_).lightness() < 128 for x_ in range(10, 60) for y_ in range(20, 100))
+>>> any(
+...     image.pixelColor(x_, y_).lightness()
+...     < 128
+...     for x_ in range(10, 60)
+...     for y_ in range(20, 100)
+... )
 True
 ```
 
@@ -151,7 +183,8 @@ Draw one sharp or flat at its written position in a key signature.
 **Examples**
 
 ```text
-Both the printed signature and signs placed by the learner use this drawing.
+Both the printed signature and signs placed by the learner use this
+drawing.
 ```
 
 ## StaffWidget
@@ -172,7 +205,8 @@ StaffWidget(
 
 Bases: `QWidget`
 
-A staff with notes, a clef, a key signature and, optionally, a caption.
+A staff with notes, a clef, a key signature and, optionally, a
+caption.
 
 **Attributes**
 
@@ -200,7 +234,13 @@ A staff with notes, a clef, a key signature and, optionally, a caption.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
->>> staff.show_notes([[Note.parse("E4")], [Note.parse("G4")]], clef="treble")
+>>> staff.show_notes(
+...     [
+...         [Note.parse("E4")],
+...         [Note.parse("G4")],
+...     ],
+...     clef="treble",
+... )
 >>> len(staff.columns)
 2
 ```
@@ -260,8 +300,19 @@ Show some notes, with a clef and a key signature.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
->>> staff.show_notes([[Note.parse("C4")]], clef="bass", key=-1, value="quarter", caption="_ Major")
->>> staff.clef, staff.key, staff.value, staff.caption
+>>> staff.show_notes(
+...     [[Note.parse("C4")]],
+...     clef="bass",
+...     key=-1,
+...     value="quarter",
+...     caption="_ Major",
+... )
+>>> (
+...     staff.clef,
+...     staff.key,
+...     staff.value,
+...     staff.caption,
+... )
 ('bass', -1, 'quarter', '_ Major')
 ```
 
@@ -273,7 +324,8 @@ def sizeHint() -> QSize
 
 Return the size the staff would like.
 
-A capped staff asks for its full capped width, so a layout that centers it gives it that much.
+A capped staff asks for its full capped width, so a layout that
+centers it gives it that much.
 
 **Returns**
 
@@ -313,7 +365,8 @@ Reflow a lesson excerpt when its available width changes.
 def highlight_column(index: int | None) -> None
 ```
 
-Highlight a sounding note or chord, preserving the staff's other markings.
+Highlight a sounding note or chord, preserving the staff's other
+markings.
 
 **Parameters**
 
@@ -334,7 +387,8 @@ Highlight a sounding note or chord, preserving the staff's other markings.
 def set_note_color(color: QColor | None) -> None
 ```
 
-Apply feedback to the highlighted notation component or to the notes when there is no component target.
+Apply feedback to the highlighted notation component or to the
+notes when there is no component target.
 
 **Parameters**
 
@@ -380,7 +434,8 @@ Return where each staff is drawn.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the paper, the staff lines, the clef, the key signature, the notes and the caption.
+Draw the paper, the staff lines, the clef, the key signature,
+the notes and the caption.
 
 **Parameters**
 
@@ -391,8 +446,12 @@ Draw the paper, the staff lines, the clef, the key signature, the notes and the 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
 >>> staff.resize(400, 400)
->>> staff.show_notes([[Note.parse("C4")]], clef="treble")
->>> staff.grab().toImage().pixelColor(200, 5).name()  # the white paper
+>>> staff.show_notes(
+...     [[Note.parse("C4")]], clef="treble"
+... )
+>>> staff.grab().toImage().pixelColor(
+...     200, 5
+... ).name()  # the white paper
 '#ffffff'
 ```
 
@@ -402,7 +461,8 @@ Draw the paper, the staff lines, the clef, the key signature, the notes and the 
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-Preview the component under the pointer in Click on Staff questions.
+Preview the component under the pointer in Click on Staff
+questions.
 
 **Parameters**
 
@@ -430,7 +490,9 @@ Clear the component preview when the pointer leaves the music.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> StaffWidget().leaveEvent(QEvent(QEvent.Type.Leave))
+>>> StaffWidget().leaveEvent(
+...     QEvent(QEvent.Type.Leave)
+... )
 ```
 
 ### StaffWidget.hits_notation
@@ -439,7 +501,8 @@ Clear the component preview when the pointer leaves the music.
 def hits_notation(point: QPoint) -> bool
 ```
 
-Check for target ink within four logical pixels of a click on the score.
+Check for target ink within four logical pixels of a click on
+the score.
 
 **Parameters**
 
@@ -454,5 +517,24 @@ Check for target ink within four logical pixels of a click on the score.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> StaffWidget().hits_notation(QPoint(0, 0))
 False
+```
+
+## keyboard_key_staff
+
+```python
+def keyboard_key_staff() -> StaffWidget
+```
+
+Build the compact key signature shown above a keyboard question.
+
+**Returns**
+
+- *StaffWidget*: A fixed-width staff sized for the signature.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> keyboard_key_staff().width() == px(210)
+True
 ```
 {% endraw %}

@@ -1,4 +1,7 @@
-"""Sound: the synthesized and recorded instruments, the engine that plays notes, and the volume and fade rules."""
+"""
+Sound: the synthesized and recorded instruments, the engine that plays
+notes, and the volume and fade rules.
+"""
 
 from __future__ import annotations
 
@@ -31,7 +34,10 @@ from alto.audio import (
 from alto.theory.pitch import Note
 
 
-def test_staff_sample_with_unavailable_chord_audio(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_staff_sample_with_unavailable_chord_audio(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Keep the staff moving when the instrument cannot load a chord.
 
@@ -45,11 +51,23 @@ def test_staff_sample_with_unavailable_chord_audio(app: QApplication, monkeypatc
     player = Sounds()
     seen = []
     pending = []
-    monkeypatch.setattr(audio_module.QTimer, "singleShot", lambda delay, callback: pending.append(callback))
-    monkeypatch.setattr(player, "_effect", Mock(side_effect=OSError("unavailable")))
+    monkeypatch.setattr(
+        audio_module.QTimer,
+        "singleShot",
+        lambda delay, callback: pending.append(callback),
+    )
+    monkeypatch.setattr(
+        player,
+        "_effect",
+        Mock(side_effect=OSError("unavailable")),
+    )
     player.play_sample([], gap_ms=450, on_step=seen.append)
     assert not seen and not pending
-    player.play_sample([[Note.parse("C4"), Note.parse("E4")]], gap_ms=450, on_step=seen.append)
+    player.play_sample(
+        [[Note.parse("C4"), Note.parse("E4")]],
+        gap_ms=450,
+        on_step=seen.append,
+    )
     assert seen == [0]
     pending.pop()()
     assert seen == [0, None]
@@ -60,7 +78,8 @@ def test_melody_tail_extends_only_the_last_note(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Keep note onsets fixed while allowing the final note an additional 200 ms before its fade.
+    Keep note onsets fixed while allowing the final note an additional
+    200 ms before its fade.
 
     Parameters
     ----------
@@ -73,14 +92,26 @@ def test_melody_tail_extends_only_the_last_note(
     player._dir = tmp_path
     recording = tmp_path / "note.wav"
     recording.write_bytes(to_wav_bytes(np.full(SAMPLE_RATE, 0.1)))
-    monkeypatch.setattr(player, "_note_file", lambda *_args, **_kwargs: recording)
+    monkeypatch.setattr(
+        player,
+        "_note_file",
+        lambda *_args, **_kwargs: recording,
+    )
     inst = INSTRUMENT_BY_KEY["piano"]
     short = player._preview_file(inst, midis=(60, 62), step_ms=280)
-    ringing = player._preview_file(inst, midis=(60, 62), step_ms=280, tail_ms=200)
+    ringing = player._preview_file(
+        inst,
+        midis=(60, 62),
+        step_ms=280,
+        tail_ms=200,
+    )
     original, rate = read_wav(short)
     extended, _ = read_wav(ringing)
     assert short != ringing and len(extended) - len(original) == rate // 5
-    assert np.allclose(original[: rate * 280 // 1000], extended[: rate * 280 // 1000])
+    assert np.allclose(
+        original[: rate * 280 // 1000],
+        extended[: rate * 280 // 1000],
+    )
     assert extended[rate * 750 // 1000] > 0.09
     assert abs(extended[-1]) < 0.001
 
@@ -119,15 +150,20 @@ def test_wav_roundtrip() -> None:
 
 def test_every_bundled_piano_file_is_a_usable_recording() -> None:
     """
-    Check that every bundled piano file is a mono recording at the engine's sample rate, long enough and not silent.
+    Check that every bundled piano file is a mono recording at the
+    engine's sample rate, long enough and not silent.
     """
     files = list(ASSET_DIR.glob("*.wav"))
     assert len(files) == 30  # one every minor third, A0 to C8
     for path in files:
         with wave.open(str(path)) as w:
-            assert w.getnchannels() == 1 and w.getframerate() == SAMPLE_RATE, path.name
+            assert w.getnchannels() == 1 and w.getframerate() == SAMPLE_RATE, (
+                path.name
+            )
             frames = np.frombuffer(w.readframes(w.getnframes()), dtype="<i2")
-        assert frames.size > SAMPLE_RATE and np.abs(frames).max() > 1000, path.name
+        assert frames.size > SAMPLE_RATE and np.abs(frames).max() > 1000, (
+            path.name
+        )
 
 
 def test_every_instrument_has_recordings_and_covers_the_notes() -> None:
@@ -135,7 +171,8 @@ def test_every_instrument_has_recordings_and_covers_the_notes() -> None:
     Check that every instrument has recordings and covers the notes.
     """
     assert len(INSTRUMENTS) >= 7 and INSTRUMENTS[0].key == "piano"
-    # instruments whose recordings ship with Alto; any other is still being sourced
+    # instruments whose recordings ship with Alto; any other is still
+    # being sourced
     shipped = {
         "piano",
         "marimba",
@@ -149,24 +186,35 @@ def test_every_instrument_has_recordings_and_covers_the_notes() -> None:
     for inst in INSTRUMENTS:
         files = sounds._samples(inst)
         if not files and inst.key not in shipped:
-            continue  # no recordings yet: these notes play as the synthesized piano
+            # no recordings yet: these notes play as the synthesized
+            # piano
+            continue
         assert len(files) >= 15, inst.key
         for midi, path in list(files.items())[:3]:
             audio, rate = read_wav(path)
-            assert np.isfinite(audio).all() and np.abs(audio).max() > 0.05 and len(audio) > rate // 2, (inst.key, midi)
-        # any staff note gets a file: a recording or a pitch-shifted neighbor
+            assert (
+                np.isfinite(audio).all()
+                and np.abs(audio).max() > 0.05
+                and len(audio) > rate // 2
+            ), (inst.key, midi)
+        # any staff note gets a file: a recording or a pitch-shifted
+        # neighbor
         for midi in (
             40,
             61,
             73,
             90,
         ):
-            assert sounds._note_file(inst, midi=midi).exists(), (inst.key, midi)
+            assert sounds._note_file(inst, midi=midi).exists(), (
+                inst.key,
+                midi,
+            )
 
 
 def test_the_piano_is_recorded_across_the_whole_keyboard() -> None:
     """
-    Check that every key from A0 to C8 has a recording or lies within a semitone of one, so none is synthesized.
+    Check that every key from A0 to C8 has a recording or lies within a
+    semitone of one, so none is synthesized.
     """
     have = Sounds().recordings(INSTRUMENT_BY_KEY["piano"])
     assert min(have) == 21 and max(have) == 108
@@ -180,16 +228,22 @@ def test_pitch_shift_moves_the_frequency() -> None:
     """
     t = np.arange(SAMPLE_RATE) / SAMPLE_RATE
     tone = np.sin(2 * np.pi * 440 * t)
-    shifted = shift_pitch(tone.tolist(), semitones=2)  # up a whole tone: ~493.9 Hz
+    shifted = shift_pitch(
+        tone.tolist(),
+        semitones=2,
+    )  # up a whole tone: ~493.9 Hz
     peak = np.argmax(np.abs(np.fft.rfft(shifted))) * SAMPLE_RATE / len(shifted)
     assert abs(peak - 493.9) < 3
 
 
-# -- sustained and ringing notes ------------------------------------------------------------------------------------
+# -- sustained and ringing notes
+# ----------------------------------------------------------------------
 
 
 class FakeEffect:
-    """Stands in for QSoundEffect, so these tests need no audio hardware."""
+    """
+    Stands in for QSoundEffect, so these tests need no audio hardware.
+    """
 
     def __init__(
         self,
@@ -251,7 +305,8 @@ def engine(
     instrument: str,
 ) -> tuple[Sounds, list[object]]:
     """
-    Build a sound engine whose effects are fakes that record what happens to them.
+    Build a sound engine whose effects are fakes that record what
+    happens to them.
 
     Parameters
     ----------
@@ -268,8 +323,16 @@ def engine(
     log, effects = [], {}
     s = Sounds()
     s.instrument = instrument
-    monkeypatch.setattr(s, "_effect", lambda inst, midi: effects.setdefault(midi, FakeEffect(midi, log=log)))
-    monkeypatch.setattr(s, "_release", lambda fx: log.append(("release", fx.label)))
+    monkeypatch.setattr(
+        s,
+        "_effect",
+        lambda inst, midi: effects.setdefault(midi, FakeEffect(midi, log=log)),
+    )
+    monkeypatch.setattr(
+        s,
+        "_release",
+        lambda fx: log.append(("release", fx.label)),
+    )
     return s, log
 
 
@@ -287,14 +350,17 @@ def test_only_bowed_and_blown_instruments_are_sustained() -> None:
     }
 
 
-def test_a_bowed_note_ends_when_the_next_one_begins(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_bowed_note_ends_when_the_next_one_begins(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that a bowed note ends when the next one begins.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, log = engine(monkeypatch, instrument="viola_bowed")
     s.play_midi(60)
@@ -302,14 +368,17 @@ def test_a_bowed_note_ends_when_the_next_one_begins(monkeypatch: pytest.MonkeyPa
     assert log == [("play", 60), ("release", 60), ("play", 62)]
 
 
-def test_struck_and_plucked_notes_ring_on(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_struck_and_plucked_notes_ring_on(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that struck and plucked notes ring on.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     for instrument in (
         "marimba",
@@ -322,80 +391,64 @@ def test_struck_and_plucked_notes_ring_on(monkeypatch: pytest.MonkeyPatch) -> No
         assert log == [("play", 60), ("play", 62)], instrument
 
 
-def test_a_piano_played_without_the_pedal_stops_each_note_as_the_next_begins(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_piano_played_without_the_pedal_stops_each_note_as_the_next_begins(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that a piano note is damped when the next one starts, as if the damper pedal were up, and a chord is not cut short.
+    Check that a piano note is damped when the next one starts, as if
+    the damper pedal were up, and a chord is not cut short.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, log = engine(monkeypatch, instrument="piano")
     s.play_midi(60)
     s.play_midi(62)
     assert log == [("play", 60), ("release", 60), ("play", 62)]
     s, log = engine(monkeypatch, instrument="piano")
-    s.play_notes([[Note(4, letter=1), Note(4, letter=3), Note(4, letter=5)]])  # D F A together
+    s.play_notes(
+        [[Note(4, letter=1), Note(4, letter=3), Note(4, letter=5)]],
+    )  # D F A together
     assert log == [("play", 62), ("play", 65), ("play", 69)]
     s.play_notes([[Note(4, letter=0)]])
-    assert log[3:] == [("release", 62), ("release", 65), ("release", 69), ("play", 60)]
-    assert INSTRUMENT_BY_KEY["piano"].damped and not INSTRUMENT_BY_KEY["marimba"].damped
-
-
-def test_a_piano_scale_hands_over_from_note_to_note_and_leaves_the_last_to_fade(monkeypatch: pytest.MonkeyPatch) -> None:
-    """
-    Check that in a piano melody each note is stopped as the next starts, and that the last note is not stopped.
-
-    Parameters
-    ----------
-    monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
-    """
-    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
-
-    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
-    s, log = engine(monkeypatch, instrument="piano")
-    s.play_notes([[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]], gap_ms=30)
-    QTest.qWait(250)
-    assert log == [("play", 60), ("release", 60), ("play", 62), ("release", 62), ("play", 64)]
-
-
-def test_the_notes_of_a_chord_sound_together_and_end_together(monkeypatch: pytest.MonkeyPatch) -> None:
-    """
-    Check that the notes of a chord sound together and end together.
-
-    Parameters
-    ----------
-    monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
-    """
-    s, log = engine(monkeypatch, instrument="viola_bowed")
-    s.play_notes([[Note(4, letter=0), Note(4, letter=2), Note(4, letter=4)]])  # C4 E4 G4 at once
-    assert log == [("play", 60), ("play", 64), ("play", 67)]  # none of them cuts off another
-    s.play_notes([[Note(4, letter=1)]])
     assert log[3:] == [
-        ("release", 60),
-        ("release", 64),
-        ("release", 67),
-        ("play", 62),
+        ("release", 62),
+        ("release", 65),
+        ("release", 69),
+        ("play", 60),
     ]
+    assert (
+        INSTRUMENT_BY_KEY["piano"].damped
+        and not INSTRUMENT_BY_KEY["marimba"].damped
+    )
 
 
-def test_a_melody_hands_over_from_note_to_note(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_piano_scale_hands_over_from_note_to_note_and_leaves(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that a melody hands over from note to note.
+    Check that in a piano melody each note is stopped as the next
+    starts, and that the last note is not stopped.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
-    s, log = engine(monkeypatch, instrument="viola_bowed")
-    s.play_notes([[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]], gap_ms=30)
+    _app = QApplication.instance() or QApplication(
+        [],
+    )  # kept alive for the timers
+    s, log = engine(monkeypatch, instrument="piano")
+    s.play_notes(
+        [[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]],
+        gap_ms=30,
+    )
     QTest.qWait(250)
     assert log == [
         ("play", 60),
@@ -406,18 +459,86 @@ def test_a_melody_hands_over_from_note_to_note(monkeypatch: pytest.MonkeyPatch) 
     ]
 
 
-def test_a_melody_says_which_note_is_sounding_as_each_one_starts(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_notes_of_a_chord_sound_together_and_end_together(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that the caller is told each note's place as it starts, and then that the melody is over.
+    Check that the notes of a chord sound together and end together.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
+    """
+    s, log = engine(monkeypatch, instrument="viola_bowed")
+    s.play_notes(
+        [[Note(4, letter=0), Note(4, letter=2), Note(4, letter=4)]],
+    )  # C4 E4 G4 at once
+    assert log == [
+        ("play", 60),
+        ("play", 64),
+        ("play", 67),
+    ]  # none of them cuts off another
+    s.play_notes([[Note(4, letter=1)]])
+    assert log[3:] == [
+        ("release", 60),
+        ("release", 64),
+        ("release", 67),
+        ("play", 62),
+    ]
+
+
+def test_a_melody_hands_over_from_note_to_note(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that a melody hands over from note to note.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
+    _app = QApplication.instance() or QApplication(
+        [],
+    )  # kept alive for the timers
+    s, log = engine(monkeypatch, instrument="viola_bowed")
+    s.play_notes(
+        [[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]],
+        gap_ms=30,
+    )
+    QTest.qWait(250)
+    assert log == [
+        ("play", 60),
+        ("release", 60),
+        ("play", 62),
+        ("release", 62),
+        ("play", 64),
+    ]
+
+
+def test_a_melody_says_which_note_is_sounding_as_each_one_starts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that the caller is told each note's place as it starts, and
+    then that the melody is over.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replaces settings, functions or attributes for the length of the
+        test.
+    """
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+    _app = QApplication.instance() or QApplication(
+        [],
+    )  # kept alive for the timers
     s, log = engine(monkeypatch, instrument="viola_bowed")
     seen: list[tuple[int | None, int]] = []
     s.play_notes(
@@ -427,59 +548,86 @@ def test_a_melody_says_which_note_is_sounding_as_each_one_starts(monkeypatch: py
     )
     QTest.qWait(250)
     assert [i for i, _ in seen] == [0, 1, 2, None]
-    assert [n for _, n in seen][:3] == [1, 3, 5]  # each is told after its own note has started, and not before
+    assert [n for _, n in seen][:3] == [
+        1,
+        3,
+        5,
+    ]  # each is told after its own note has started, and not before
 
 
-def test_a_muted_melody_still_says_which_note_would_be_sounding(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_muted_melody_still_says_which_note_would_be_sounding(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that with the sound off the caller is still told each note's place, on the same timing, so a display can follow.
+    Check that with the sound off the caller is still told each note's
+    place, on the same timing, so a display can follow.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
+    _app = QApplication.instance() or QApplication(
+        [],
+    )  # kept alive for the timers
     s, log = engine(monkeypatch, instrument="viola_bowed")
     s.enabled = False
     seen: list[int | None] = []
-    s.play_notes([[Note(4, letter=0)], [Note(4, letter=1)]], gap_ms=30, on_step=seen.append)
+    s.play_notes(
+        [[Note(4, letter=0)], [Note(4, letter=1)]],
+        gap_ms=30,
+        on_step=seen.append,
+    )
     QTest.qWait(200)
     assert seen == [0, 1, None] and log == []
 
 
-def test_a_melody_that_is_replaced_stops_telling_the_caller(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_melody_that_is_replaced_stops_telling_the_caller(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that a melody replaced by a newer one says nothing more, so the display of the old one cannot spill onto the new.
+    Check that a melody replaced by a newer one says nothing more, so
+    the display of the old one cannot spill onto the new.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
+    _app = QApplication.instance() or QApplication(
+        [],
+    )  # kept alive for the timers
     s, _ = engine(monkeypatch, instrument="viola_bowed")
     s.enabled = False
     old: list[int | None] = []
-    s.play_notes([[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]], gap_ms=60, on_step=old.append)
+    s.play_notes(
+        [[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]],
+        gap_ms=60,
+        on_step=old.append,
+    )
     QTest.qWait(20)
     s.play_notes([[Note(4, letter=0)]], gap_ms=60)
     QTest.qWait(300)
     assert old == [0]
 
 
-def test_a_muted_engine_neither_plays_nor_releases(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_muted_engine_neither_plays_nor_releases(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that a muted engine neither plays nor releases.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, log = engine(monkeypatch, instrument="viola_bowed")
     s.enabled = False
@@ -495,11 +643,14 @@ def test_the_two_ways_of_playing_the_viola_are_listed_together() -> None:
     groups = dict(instrument_groups())
     assert [i.key for i in groups["Viola"]] == ["viola_bowed", "viola_plucked"]
     assert [i.variant for i in groups["Viola"]] == ["Arco", "Pizzicato"]
-    assert all(len(v) == 1 for k, v in groups.items() if k != "Viola")  # everything else is on its own
+    assert all(
+        len(v) == 1 for k, v in groups.items() if k != "Viola"
+    )  # everything else is on its own
     assert len(groups) == 6
 
 
-# -- hearing an instrument (the preview in the settings) ------------------------------------------------------------
+# -- hearing an instrument (the preview in the settings)
+# ------------------------------------------------------------
 @pytest.mark.parametrize("rate", [22050, 44100])
 def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
     tmp_path: Path,
@@ -507,7 +658,8 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
     rate: int,
 ) -> None:
     """
-    Check exact note spacing in the first rendered clip, including recordings with a different sample rate.
+    Check exact note spacing in the first rendered clip, including
+    recordings with a different sample rate.
 
     Parameters
     ----------
@@ -533,11 +685,21 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
         path = tmp_path / f"{note_number}.wav"
         path.write_bytes(to_wav_bytes(samples, rate=rate))
         files[note_number] = path
-    monkeypatch.setattr(player, "_note_file", lambda _inst, *, midi: files[midi])
-    path = player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=midis, step_ms=300)
+    monkeypatch.setattr(
+        player,
+        "_note_file",
+        lambda _inst, *, midi: files[midi],
+    )
+    path = player._preview_file(
+        INSTRUMENT_BY_KEY["flute"],
+        midis=midis,
+        step_ms=300,
+    )
     rendered, rendered_rate = read_wav(path)
     samples = np.asarray(rendered)
-    assert rendered_rate == rate  # mixed at the recordings' own rate, without resampling
+    assert (
+        rendered_rate == rate
+    )  # mixed at the recordings' own rate, without resampling
     assert len(samples) >= len(midis) * rate * 300 // 1000
     sounding = np.flatnonzero(np.abs(samples) > 0.01)
     onsets = sounding[np.r_[True, np.diff(sounding) > 1]]
@@ -557,16 +719,30 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
         ],
         atol=0.0001,
     )
-    monkeypatch.setattr(player, "_note_file", lambda *_args, **_kwargs: pytest.fail("cached preview reread its notes"))
-    assert player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=midis, step_ms=300) == path
+    monkeypatch.setattr(
+        player,
+        "_note_file",
+        lambda *_args, **_kwargs: pytest.fail(
+            "cached preview reread its notes",
+        ),
+    )
+    assert (
+        player._preview_file(
+            INSTRUMENT_BY_KEY["flute"],
+            midis=midis,
+            step_ms=300,
+        )
+        == path
+    )
 
 
-def test_a_preview_of_recordings_at_different_rates_is_mixed_at_the_standard_rate(
+def test_preview_of_recordings_at_different_rates_mixed_at(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that notes recorded at different rates are converted to `SAMPLE_RATE` before they are mixed, keeping their spacing.
+    Check that notes recorded at different rates are converted to
+    `SAMPLE_RATE` before they are mixed, keeping their spacing.
 
     Parameters
     ----------
@@ -583,27 +759,50 @@ def test_a_preview_of_recordings_at_different_rates_is_mixed_at_the_standard_rat
         samples[0] = (index + 1) / 10
         files[midi] = tmp_path / f"{midi}.wav"
         files[midi].write_bytes(to_wav_bytes(samples, rate=rate))
-    monkeypatch.setattr(player, "_note_file", lambda _inst, *, midi: files[midi])
-    rendered, rate = read_wav(player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=(60, 62), step_ms=300))
+    monkeypatch.setattr(
+        player,
+        "_note_file",
+        lambda _inst, *, midi: files[midi],
+    )
+    rendered, rate = read_wav(
+        player._preview_file(
+            INSTRUMENT_BY_KEY["flute"],
+            midis=(60, 62),
+            step_ms=300,
+        ),
+    )
     assert rate == SAMPLE_RATE
-    onsets = [k for k, value in enumerate(rendered) if abs(value) > 0.01 and (k == 0 or abs(rendered[k - 1]) <= 0.01)]
+    onsets = [
+        k
+        for k, value in enumerate(rendered)
+        if abs(value) > 0.01 and (k == 0 or abs(rendered[k - 1]) <= 0.01)
+    ]
     assert onsets == [0, SAMPLE_RATE * 300 // 1000]
 
 
-def test_a_pack_preview_is_kept_until_its_recordings_change(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_pack_preview_is_kept_until_its_recordings_change(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that a pack instrument's preview is rendered once, and again when an update changes one of its recordings.
+    Check that a pack instrument's preview is rendered once, and again
+    when an update changes one of its recordings.
 
     Parameters
     ----------
     tmp_path : Path
         A temporary sound cache and pack folder.
     monkeypatch : pytest.MonkeyPatch
-        Makes a second render fail the test while the recordings are unchanged.
+        Makes a second render fail the test while the recordings are
+        unchanged.
     """
     recording = tmp_path / "62.wav"
     recording.write_bytes(to_wav_bytes([0.5] * 4410))
-    pack = replace(INSTRUMENT_BY_KEY["flute"], key="pack-flute", samples=((62, recording),))
+    pack = replace(
+        INSTRUMENT_BY_KEY["flute"],
+        key="pack-flute",
+        samples=((62, recording),),
+    )
     player = Sounds()
     player._dir = tmp_path / "cache"
     first = player._preview_file(pack, midis=(62,), step_ms=300)
@@ -611,10 +810,14 @@ def test_a_pack_preview_is_kept_until_its_recordings_change(tmp_path: Path, monk
         patched.setattr(
             player,
             "_note_file",
-            lambda *_args, **_kwargs: pytest.fail("an unchanged pack preview was rendered again"),
+            lambda *_args, **_kwargs: pytest.fail(
+                "an unchanged pack preview was rendered again",
+            ),
         )
         assert player._preview_file(pack, midis=(62,), step_ms=300) == first
-    recording.write_bytes(to_wav_bytes([0.25] * 2205))  # the pack is updated with another take
+    recording.write_bytes(
+        to_wav_bytes([0.25] * 2205),
+    )  # the pack is updated with another take
     assert player._preview_file(pack, midis=(62,), step_ms=300) != first
 
 
@@ -624,7 +827,8 @@ def test_a_preview_reuses_one_clip_and_stops_it_before_replaying(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that a muted preview starts one clip, reuses it on replay and stops it when another instrument is previewed.
+    Check that a muted preview starts one clip, reuses it on replay and
+    stops it when another instrument is previewed.
 
     Parameters
     ----------
@@ -644,14 +848,30 @@ def test_a_preview_reuses_one_clip_and_stops_it_before_replaying(
         71,
     )
     effect = Mock()
-    effect.setSource.side_effect = lambda url: setattr(effect.source, "return_value", url)
+    effect.setSource.side_effect = lambda url: setattr(
+        effect.source,
+        "return_value",
+        url,
+    )
     effect.isPlaying.return_value = False
     calls = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(audio_module, "QSoundEffect", lambda: effect)
-    monkeypatch.setattr(player, "_preview_file", lambda inst, **_kwargs: tmp_path / f"{inst.key}.wav")
-    monkeypatch.setattr(effect, "play", lambda: calls.append(("play", effect.source().fileName())))
-    monkeypatch.setattr(effect, "stop", lambda: calls.append(("stop", effect.source().fileName())))
+    monkeypatch.setattr(
+        player,
+        "_preview_file",
+        lambda inst, **_kwargs: tmp_path / f"{inst.key}.wav",
+    )
+    monkeypatch.setattr(
+        effect,
+        "play",
+        lambda: calls.append(("play", effect.source().fileName())),
+    )
+    monkeypatch.setattr(
+        effect,
+        "stop",
+        lambda: calls.append(("stop", effect.source().fileName())),
+    )
     player.preview("flute", midis=midis)
     player.preview("flute", midis=midis)
     player.preview("piano", midis=midis)
@@ -674,12 +894,14 @@ def preview_engine(
     monkeypatch: pytest.MonkeyPatch,
 ) -> tuple[Sounds, list[tuple[int, float]]]:
     """
-    Build an engine whose notes are recorded with the time they were started.
+    Build an engine whose notes are recorded with the time they were
+    started.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
 
     Returns
     -------
@@ -690,7 +912,9 @@ def preview_engine(
 
     # noinspection PyGlobalUndefined
     global _preview_app
-    _preview_app = QApplication.instance() or QApplication([])  # kept alive for the timers
+    _preview_app = QApplication.instance() or QApplication(
+        [],
+    )  # kept alive for the timers
     s, started = Sounds(), []
 
     class Quiet(FakeEffect):
@@ -711,18 +935,25 @@ def preview_engine(
             return False
 
     monkeypatch.setattr(s, "_effect", lambda inst, midi: Quiet(midi, log=[]))
-    monkeypatch.setattr(s, "play_midi", lambda midi, *a, **k: started.append((midi, time.monotonic())))
+    monkeypatch.setattr(
+        s,
+        "play_midi",
+        lambda midi, *a, **k: started.append((midi, time.monotonic())),
+    )
     return s, started
 
 
-def test_a_sequence_plays_its_notes_in_order_one_step_apart(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_sequence_plays_its_notes_in_order_one_step_apart(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that a sequence plays its notes in order one step apart.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, started = preview_engine(monkeypatch)
     s._play_sequence(
@@ -737,14 +968,18 @@ def test_a_sequence_plays_its_notes_in_order_one_step_apart(monkeypatch: pytest.
     assert all(b - a >= 0.05 for a, b in zip(times, times[1:]))
 
 
-def test_a_pause_in_the_program_delays_the_notes_instead_of_making_them_sound_together(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_pause_in_program_delays_notes_instead_of_making_them(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that a pause in the program delays the notes instead of making them sound together.
+    Check that a pause in the program delays the notes instead of making
+    them sound together.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, started = preview_engine(monkeypatch)
     s._play_sequence(
@@ -753,21 +988,26 @@ def test_a_pause_in_the_program_delays_the_notes_instead_of_making_them_sound_to
         gap_ms=80,
         force=True,
     )
-    time.sleep(0.5)  # the sound system starting up, say, which blocks the timers
+    time.sleep(
+        0.5,
+    )  # the sound system starting up, say, which blocks the timers
     QTest.qWait(500)
     assert [m for m, _ in started] == [60, 64, 67]
     times = [t for _, t in started]
     assert all(b - a >= 0.07 for a, b in zip(times, times[1:]))
 
 
-def test_starting_a_second_sequence_ends_the_first(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_starting_a_second_sequence_ends_the_first(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that starting a second sequence ends the first.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, started = preview_engine(monkeypatch)
     s._play_sequence(
@@ -789,7 +1029,8 @@ def test_starting_a_second_sequence_ends_the_first(monkeypatch: pytest.MonkeyPat
     assert 67 not in played  # the old one never reached its last note
 
 
-# -- the rhythm of a melody (the arpeggio that plays on a right answer) ----------------------------------------------
+# -- the rhythm of a melody (the arpeggio that plays on a right answer)
+# ----------------------------------------------
 
 
 def melody(n: int) -> list[list[Note]]:
@@ -809,14 +1050,17 @@ def melody(n: int) -> list[list[Note]]:
     return [[Note(4, letter=i % 7)] for i in range(n)]
 
 
-def test_the_notes_of_a_melody_are_evenly_spaced(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_notes_of_a_melody_are_evenly_spaced(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that the notes of a melody are evenly spaced.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, started = preview_engine(monkeypatch)
     s.play_notes(melody(5), gap_ms=70)
@@ -826,14 +1070,17 @@ def test_the_notes_of_a_melody_are_evenly_spaced(monkeypatch: pytest.MonkeyPatch
     assert all(0.06 <= g <= 0.14 for g in gaps), gaps
 
 
-def test_a_note_that_is_slow_to_start_does_not_upset_the_rhythm(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_note_that_is_slow_to_start_does_not_upset_the_rhythm(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that a note that is slow to start does not upset the rhythm.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, started = preview_engine(monkeypatch)
 
@@ -854,7 +1101,10 @@ def test_a_note_that_is_slow_to_start_does_not_upset_the_rhythm(monkeypatch: pyt
         kwargs : object
             Ignored.
         """
-        del args, kwargs  # accepted to match what it stands in for, but not needed
+        del (
+            args,
+            kwargs,
+        )  # accepted to match what it stands in for, but not needed
         if not started:
             time.sleep(0.06)
         started.append((midi, time.monotonic()))
@@ -866,14 +1116,17 @@ def test_a_note_that_is_slow_to_start_does_not_upset_the_rhythm(monkeypatch: pyt
     assert len(started) == 4 and all(0.09 <= g <= 0.16 for g in gaps), gaps
 
 
-def test_a_stall_delays_the_notes_instead_of_bunching_them(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_stall_delays_the_notes_instead_of_bunching_them(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that a stall delays the notes instead of bunching them.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, started = preview_engine(monkeypatch)
     s.play_notes(melody(4), gap_ms=80)
@@ -883,14 +1136,18 @@ def test_a_stall_delays_the_notes_instead_of_bunching_them(monkeypatch: pytest.M
     assert len(started) == 4 and all(g >= 0.07 for g in gaps), gaps
 
 
-def test_a_new_melody_cancels_the_notes_still_waiting_from_the_last(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_new_melody_cancels_the_notes_still_waiting_from_the_last(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that a new melody cancels the notes still waiting from the last.
+    Check that a new melody cancels the notes still waiting from the
+    last.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, started = preview_engine(monkeypatch)
     s.play_notes(melody(5), gap_ms=80)
@@ -898,7 +1155,9 @@ def test_a_new_melody_cancels_the_notes_still_waiting_from_the_last(monkeypatch:
     s.play_notes([[n] for n in melody(1)[0]] * 3, gap_ms=80)
     QTest.qWait(500)
     first = [m for m, _ in started]
-    assert first.count(first[0]) >= 3 and len(started) < 5 + 3  # the old melody never reached its end
+    assert (
+        first.count(first[0]) >= 3 and len(started) < 5 + 3
+    )  # the old melody never reached its end
     assert len([m for m in first]) <= 2 + 3
 
 
@@ -909,7 +1168,8 @@ def test_a_muted_melody_plays_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     s, started = preview_engine(monkeypatch)
     s.enabled = False

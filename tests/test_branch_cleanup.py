@@ -1,4 +1,7 @@
-"""Exercise Alto's post-merge hook during a fast-forward pull in an isolated clone."""
+"""
+Exercise Alto's post-merge hook during a fast-forward pull in an
+isolated clone.
+"""
 
 from __future__ import annotations
 
@@ -13,9 +16,13 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_pull_prunes_only_merged_local_branches(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_pull_prunes_only_merged_local_branches(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check the hook, manual preview, and keep list with a real origin and two checkouts.
+    Check the hook, manual preview, and keep list with a real origin and
+    two checkouts.
 
     Parameters
     ----------
@@ -55,18 +62,27 @@ def test_pull_prunes_only_merged_local_branches(tmp_path: Path, monkeypatch: pyt
         str
             Standard output with surrounding whitespace removed.
         """
-        return subprocess.check_output(["git", *args], cwd=cwd, text=True).strip()
+        return subprocess.check_output(
+            ["git", *args],
+            cwd=cwd,
+            text=True,
+        ).strip()
 
     origin = tmp_path / "origin.git"
     git("init", "--bare", "--initial-branch=main", str(origin))
     git("init", "--initial-branch=main")
     git("remote", "add", "origin", str(origin))
 
-    # Exercise the real configured hook without downloading unrelated linters.
+    # Exercise the real configured hook without downloading unrelated
+    # linters.
     config = yaml.safe_load((ROOT / ".pre-commit-config.yaml").read_text())
     assert "post-merge" in config["default_install_hook_types"]
     hooks = [
-        hook for repo in config["repos"] if repo["repo"] == "local" for hook in repo["hooks"] if "post-merge" in hook["stages"]
+        hook
+        for repo in config["repos"]
+        if repo["repo"] == "local"
+        for hook in repo["hooks"]
+        if "post-merge" in hook["stages"]
     ]
     assert [hook["id"] for hook in hooks] == ["prune-merged-branches"]
     config["repos"] = [{"repo": "local", "hooks": hooks}]
@@ -78,13 +94,21 @@ def test_pull_prunes_only_merged_local_branches(tmp_path: Path, monkeypatch: pyt
     git("commit", "-qm", "initial")
     git("push", "-u", "origin", "main")
 
-    # A branch with a live upstream is still eligible once both mains contain it.
+    # A branch with a live upstream is still eligible once both mains
+    # contain it.
     git("switch", "-c", "feature/merged")
     git("commit", "--allow-empty", "-qm", "feature")
     tip = git("rev-parse", "--short", "HEAD")
     git("push", "-u", "origin", "feature/merged")
     git("push", "origin", "HEAD:main")
-    for branch in ("release/next", "personal", "gh-pages", "asv-results", "in-use", "feature/another"):
+    for branch in (
+        "release/next",
+        "personal",
+        "gh-pages",
+        "asv-results",
+        "in-use",
+        "feature/another",
+    ):
         git("branch", branch)
     git("config", "--add", "alto.keepBranch", "release/next")
     git("config", "--add", "alto.keepBranch", "personal")
@@ -92,21 +116,57 @@ def test_pull_prunes_only_merged_local_branches(tmp_path: Path, monkeypatch: pyt
     git("switch", "-c", "feature/continued")
     git("commit", "--allow-empty", "-qm", "unmerged work")
 
-    subprocess.run([sys.executable, "-m", "pre_commit", "install"], cwd=clone, check=True)
+    subprocess.run(
+        [sys.executable, "-m", "pre_commit", "install"],
+        cwd=clone,
+        check=True,
+    )
     git("switch", "-c", "side", "main")
     git("merge", "--ff-only", "origin/main")
     assert git("branch", "--list", "feature/merged")
     git("switch", "main")
-    preview = subprocess.check_output(["sh", str(script), "--dry-run"], cwd=clone, text=True)
-    assert "feature/merged" not in preview  # origin/main has it, local main still does not
-    report = subprocess.check_output(["git", "pull", "--ff-only"], cwd=clone, text=True, stderr=subprocess.STDOUT)
+    preview = subprocess.check_output(
+        ["sh", str(script), "--dry-run"],
+        cwd=clone,
+        text=True,
+    )
+    assert (
+        "feature/merged" not in preview
+    )  # origin/main has it, local main still does not
+    report = subprocess.check_output(
+        ["git", "pull", "--ff-only"],
+        cwd=clone,
+        text=True,
+        stderr=subprocess.STDOUT,
+    )
     assert f"feature/merged (was {tip})" in report
-    remaining = set(git("for-each-ref", "--format=%(refname:lstrip=2)", "refs/heads").splitlines())
-    assert remaining == {"main", "release/next", "personal", "gh-pages", "asv-results", "in-use", "feature/continued"}
-    assert git("rev-parse", "--short", "refs/heads/feature/merged", cwd=origin) == tip
+    remaining = set(
+        git(
+            "for-each-ref",
+            "--format=%(refname:lstrip=2)",
+            "refs/heads",
+        ).splitlines(),
+    )
+    assert remaining == {
+        "main",
+        "release/next",
+        "personal",
+        "gh-pages",
+        "asv-results",
+        "in-use",
+        "feature/continued",
+    }
+    assert (
+        git("rev-parse", "--short", "refs/heads/feature/merged", cwd=origin)
+        == tip
+    )
 
     git("branch", "preview-me")
-    preview = subprocess.check_output(["sh", str(script), "--dry-run"], cwd=clone, text=True)
+    preview = subprocess.check_output(
+        ["sh", str(script), "--dry-run"],
+        cwd=clone,
+        text=True,
+    )
     assert f"preview-me ({tip})" in preview
     assert git("branch", "--list", "preview-me")
     # A local merge can advance main beyond origin/main.

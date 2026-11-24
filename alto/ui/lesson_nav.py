@@ -1,5 +1,6 @@
 """
-The list on the left in lesson mode: the lessons, and the steps of the one that is open.
+The list on the left in lesson mode: the lessons, and the steps of the
+one that is open.
 
 It is the lessons' counterpart of the exercise list, and looks the same.
 
@@ -31,8 +32,12 @@ from alto.ui.home import lesson_icon
 from alto.ui.style import navigation_heading_style
 from alto.ui.zoom import px
 
-LESSON_ROLE = Qt.ItemDataRole.UserRole  # holds the lesson's key on a lesson's row
-STEP_ROLE = Qt.ItemDataRole.UserRole + 1  # holds the step's number on a step's row
+LESSON_ROLE = (
+    Qt.ItemDataRole.UserRole
+)  # holds the lesson's key on a lesson's row
+STEP_ROLE = (
+    Qt.ItemDataRole.UserRole + 1
+)  # holds the step's number on a step's row
 
 
 def section_item(
@@ -41,7 +46,8 @@ def section_item(
     palette: QPalette,
 ) -> QListWidgetItem:
     """
-    Make a section label for a list: small, gray capitals that cannot be selected.
+    Make a section label for a list: small, gray capitals that cannot be
+    selected.
 
     Parameters
     ----------
@@ -57,22 +63,29 @@ def section_item(
 
     Examples
     --------
-    >>> section_item("Scales & Keys", palette=QPalette()).text()
+    >>> section_item(
+    ...     "Scales & Keys", palette=QPalette()
+    ... ).text()
     'SCALES & KEYS'
     """
     font, ink = navigation_heading_style(palette)
     item = QListWidgetItem(text.upper())
-    item.setFlags(Qt.ItemFlag.NoItemFlags)  # a section label: not selectable, no hover highlight
+    item.setFlags(
+        Qt.ItemFlag.NoItemFlags,
+    )  # a section label: not selectable, no hover highlight
     item.setFont(font)
     item.setForeground(ink)
-    item.setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
+    item.setTextAlignment(
+        Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom,
+    )
     item.setSizeHint(QSize(0, px(40)))
     return item
 
 
 class LessonNav(QListWidget):
     """
-    A flat list of the lessons by category, with the steps of the open lesson listed under it.
+    A flat list of the lessons by category, with the steps of the open
+    lesson listed under it.
 
     Attributes
     ----------
@@ -111,8 +124,12 @@ class LessonNav(QListWidget):
         'nav'
         """
         super().__init__(parent)
-        self.setObjectName("nav")  # styled in style.py, as the exercise list is
-        self.setIconSize(QSize(px(icons.ACTIVITY_ICON_SIZE), px(icons.ACTIVITY_ICON_SIZE)))
+        self.setObjectName(
+            "nav",
+        )  # styled in style.py, as the exercise list is
+        self.setIconSize(
+            QSize(px(icons.ACTIVITY_ICON_SIZE), px(icons.ACTIVITY_ICON_SIZE)),
+        )
         self.setVerticalScrollMode(QListWidget.ScrollMode.ScrollPerPixel)
         self.setAccessibleName("Lessons")
         self.step_items: list[QListWidgetItem] = []
@@ -145,7 +162,9 @@ class LessonNav(QListWidget):
         for lesson in LESSONS:
             if lesson.category not in seen:
                 seen.add(lesson.category)
-                self.addItem(section_item(lesson.category, palette=self.palette()))
+                self.addItem(
+                    section_item(lesson.category, palette=self.palette()),
+                )
             row = QListWidgetItem(lesson.title)
             drawings.append((lesson_icon(lesson), row.setIcon))
             row.setData(LESSON_ROLE, lesson.key)
@@ -158,7 +177,9 @@ class LessonNav(QListWidget):
             self.addItem(row)
             if lesson.key == key:
                 for number, step in enumerate(lesson.steps):
-                    item = QListWidgetItem(f"      {number + 1}.  {step.title}")
+                    item = QListWidgetItem(
+                        f"      {number + 1}.  {step.title}",
+                    )
                     item.setData(LESSON_ROLE, lesson.key)
                     item.setData(STEP_ROLE, number)
                     item.setSizeHint(QSize(0, px(30)))

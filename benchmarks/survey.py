@@ -1,4 +1,7 @@
-"""Time every operation once, and print the table: `python -m benchmarks.survey`."""
+"""
+Time every operation once, and print the table: `python -m
+benchmarks.survey`.
+"""
 
 from __future__ import annotations
 
@@ -12,7 +15,10 @@ from benchmarks.operations import (
 
 
 def main() -> None:
-    """Measure each operation, slowest first, and print how long it took in milliseconds."""
+    """
+    Measure each operation, slowest first, and print how long it took in
+    milliseconds.
+    """
     isolate()
     bench = Workbench()
     rows = []

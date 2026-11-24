@@ -17,13 +17,20 @@ ResponseTimes(
 )
 ```
 
-Sorted millisecond timings and the profile's fastest and slowest tail percentages.
+Sorted millisecond timings and the profile's fastest and slowest
+tail percentages.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> sample = ResponseTimes(tuple(range(1, 101)), 15, 15)
->>> sample.grade(1).name, sample.grade(50).name, sample.grade(100).name
+>>> sample = ResponseTimes(
+...     tuple(range(1, 101)), 15, 15
+... )
+>>> (
+...     sample.grade(1).name,
+...     sample.grade(50).name,
+...     sample.grade(100).name,
+... )
 ('Easy', 'Good', 'Hard')
 ```
 
@@ -53,7 +60,8 @@ False
 def percentile(percent: int) -> float
 ```
 
-Interpolate a percentile between adjacent observations in a nonempty sample.
+Interpolate a percentile between adjacent observations in a
+nonempty sample.
 
 **Parameters**
 
@@ -66,7 +74,9 @@ Interpolate a percentile between adjacent observations in a nonempty sample.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ResponseTimes((1000, 2000), 15, 15).percentile(25)
+>>> ResponseTimes(
+...     (1000, 2000), 15, 15
+... ).percentile(25)
 1250.0
 ```
 
@@ -76,7 +86,8 @@ Interpolate a percentile between adjacent observations in a nonempty sample.
 def grade(milliseconds: int) -> Rating
 ```
 
-Grade a correct first answer against earlier answers to this exercise.
+Grade a correct first answer against earlier answers to this
+exercise.
 
 **Parameters**
 
@@ -89,7 +100,9 @@ Grade a correct first answer against earlier answers to this exercise.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ResponseTimes((1000,) * 40, 15, 15).grade(1000).name
+>>> ResponseTimes((1000,) * 40, 15, 15).grade(
+...     1000
+... ).name
 'Good'
 ```
 {% endraw %}

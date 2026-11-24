@@ -5,13 +5,18 @@ package: alto.theory
 permalink: /api/alto.theory.fifths/
 ---
 {% raw %}
-The circle of fifths: the twelve keys in order, each major with its relative minor.
+The circle of fifths: the twelve keys in order, each major with its
+relative minor.
 
-Going clockwise from C at the top, each key is a fifth above the one before, so it has one more sharp (or one fewer flat).
-The relative minor of a major key has the same key signature and starts on its sixth note: A minor goes with C major.
+Going clockwise from C at the top, each key is a fifth above the one
+before, so it has one more sharp (or one fewer flat).
+The relative minor of a major key has the same key signature and starts
+on its sixth note: A minor goes with C major.
 
-A key has six chords that fit on the circle: the major triads I, IV and V on the outer ring, and the minor triads ii, iii and
-vi on the inner ring. They are the key's own wedge and the wedge on each side of it, on both rings. (The seventh chord, vii°,
+A key has six chords that fit on the circle: the major triads I, IV and
+V on the outer ring, and the minor triads ii, iii and
+vi on the inner ring. They are the key's own wedge and the wedge on each
+side of it, on both rings. (The seventh chord, vii°,
 is diminished and has no wedge.)
 
 **Examples**
@@ -50,7 +55,11 @@ Return where a major key is on the circle, by either of its names.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> place_of_major("A"), place_of_major("C♭"), place_of_major("G♭")
+>>> (
+...     place_of_major("A"),
+...     place_of_major("C♭"),
+...     place_of_major("G♭"),
+... )
 (3, 5, 6)
 ```
 
@@ -73,7 +82,11 @@ Return the relative minor of a major key.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> relative_minor("C"), relative_minor("E♭"), relative_minor("C♯")
+>>> (
+...     relative_minor("C"),
+...     relative_minor("E♭"),
+...     relative_minor("C♯"),
+... )
 ('Am', 'Cm', 'B♭m')
 ```
 
@@ -83,7 +96,8 @@ Return the relative minor of a major key.
 def cells_of_key(place: int) -> dict[tuple[str, int], str]
 ```
 
-Return the six wedges that hold the chords of a major key, and the Roman numeral of each.
+Return the six wedges that hold the chords of a major key, and the
+Roman numeral of each.
 
 **Parameters**
 
@@ -97,11 +111,18 @@ Return the six wedges that hold the chords of a major key, and the Roman numeral
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> cells = cells_of_key(0)
->>> cells[("outer", 11)], cells[("inner", 0)], cells[("inner", 1)]  # F is IV; Am is vi; Em is iii
+>>> (
+...     cells[("outer", 11)],
+...     cells[("inner", 0)],
+...     cells[("inner", 1)],
+... )  # F is IV; Am is vi; Em is iii
 ('IV', 'vi', 'iii')
 >>> cells[("outer", 1)]  # G is V
 'V'
->>> len(cells_of_key(11)), cells_of_key(11)[("outer", 10)]  # in F major, B♭ is IV
+>>> (
+...     len(cells_of_key(11)),
+...     cells_of_key(11)[("outer", 10)],
+... )  # in F major, B♭ is IV
 (6, 'IV')
 ```
 
@@ -111,9 +132,11 @@ Return the six wedges that hold the chords of a major key, and the Roman numeral
 def numeral_chords(place: int) -> dict[str, str]
 ```
 
-Return the six chords of a major key that are on the circle, spelled as that key spells them.
+Return the six chords of a major key that are on the circle, spelled
+as that key spells them.
 
-A wedge with two names, such as D♭ and C♯, is the same chord, but the key decides which name is right: C♯ is the V of F♯.
+A wedge with two names, such as D♭ and C♯, is the same chord, but
+the key decides which name is right: C♯ is the V of F♯.
 
 **Parameters**
 
@@ -128,7 +151,10 @@ A wedge with two names, such as D♭ and C♯, is the same chord, but the key de
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> numeral_chords(0)
 {'I': 'C', 'ii': 'Dm', 'iii': 'Em', 'IV': 'F', 'V': 'G', 'vi': 'Am'}
->>> numeral_chords(6)["V"], numeral_chords(7)["IV"]  # in F♯ major the V is C♯; in D♭ major the IV is G♭
+>>> (
+...     numeral_chords(6)["V"],
+...     numeral_chords(7)["IV"],
+... )  # in F♯ major the V is C♯; in D♭ major the IV is G♭
 ('C♯', 'G♭')
 ```
 
@@ -138,7 +164,8 @@ A wedge with two names, such as D♭ and C♯, is the same chord, but the key de
 def display_major(place: int) -> str
 ```
 
-Return the major key of a place as it is written to ask about it: "A major", or "B major / C♭ major".
+Return the major key of a place as it is written to ask about it: "A
+major", or "B major / C♭ major".
 
 **Parameters**
 
@@ -161,7 +188,8 @@ Return the major key of a place as it is written to ask about it: "A major", or 
 def display_minor(place: int) -> str
 ```
 
-Return the minor key of a place as it is written to ask about it: "F♯ minor", or "G♯ minor / A♭ minor".
+Return the minor key of a place as it is written to ask about it:
+"F♯ minor", or "G♯ minor / A♭ minor".
 
 **Parameters**
 
@@ -184,7 +212,8 @@ Return the minor key of a place as it is written to ask about it: "F♯ minor", 
 def accidentals_of(signature: int) -> list[str]
 ```
 
-Return the sharps or flats of a key signature, in the order they are written.
+Return the sharps or flats of a key signature, in the order they are
+written.
 
 **Parameters**
 
@@ -211,7 +240,8 @@ def explain(
 ) -> str
 ```
 
-Explain a cell of the circle: its key signature, where it comes from, its relative key and its chords.
+Explain a cell of the circle: its key signature, where it comes
+from, its relative key and its chords.
 
 **Parameters**
 
@@ -226,11 +256,19 @@ Explain a cell of the circle: its key signature, where it comes from, its relati
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> text = explain("outer", place=1)
->>> "<b>G major</b>" in text and "1 sharp: F♯" in text and "a fifth above C" in text
+>>> (
+...     "<b>G major</b>" in text
+...     and "1 sharp: F♯" in text
+...     and "a fifth above C" in text
+... )
 True
->>> "relative major, <b>C major</b>" in explain("inner", place=0)
+>>> "relative major, <b>C major</b>" in explain(
+...     "inner", place=0
+... )
 True
->>> "<b>C♭ major</b>" in explain("outer", place=5) and "7 flats" in explain("outer", place=5)
+>>> "<b>C♭ major</b>" in explain(
+...     "outer", place=5
+... ) and "7 flats" in explain("outer", place=5)
 True
 ```
 {% endraw %}

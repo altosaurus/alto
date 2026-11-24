@@ -1,17 +1,20 @@
 """
-The color schemes of the circle of fifths: the presets, the schemes of the user's own, and the settings pages that choose them.
+The color schemes of the circle of fifths: the presets, the schemes of
+the user's own, and the settings pages that choose them.
 """
 
 from __future__ import annotations
 
 import random
+from unittest.mock import patch
 
+import pytest
 from PySide6.QtCore import QPoint
 from PySide6.QtGui import (
     QColor,
     QPalette,
 )
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QColorDialog
 
 from alto import settings
 from alto.circle_schemes import (
@@ -42,12 +45,18 @@ from alto.ui.circle_colors import SchemeEditor
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.store import store
 
-MINE = record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"])
+MINE = record_of(
+    "custom-1",
+    name="Mine",
+    mode="rings",
+    colors=["#2f6bd0", "#18a0c0"],
+)
 
 
 def test_legacy_color_settings_survive_the_spelling_change() -> None:
     """
-    Check that earlier preset choices and custom schemes retain their colors after loading.
+    Check that earlier preset choices and custom schemes retain their
+    colors after loading.
     """
     legacy = dict(MINE)
     legacy["colours"] = legacy.pop("colors")
@@ -68,39 +77,63 @@ def test_legacy_color_settings_survive_the_spelling_change() -> None:
         es.load_circle()
 
 
-def test_there_are_fourteen_presets_and_cyan_to_indigo_is_the_default_and_comes_first() -> None:
+def test_there_fourteen_presets_and_cyan_to_indigo_default_and() -> None:
     """
-    Check the list of presets: their number, their keys and names, and the default.
+    Check the list of presets: their number, their keys and names, and
+    the default.
     """
-    assert len(PRESETS) == 14 and next(iter(PRESETS)) == DEFAULT_SCHEME == "cyan-indigo"
+    assert (
+        len(PRESETS) == 14
+        and next(iter(PRESETS)) == DEFAULT_SCHEME == "cyan-indigo"
+    )
     assert len({scheme.name for scheme in PRESETS.values()}) == 14
     for key, scheme in PRESETS.items():
-        assert scheme.key == key and scheme.description and len(scheme.cells["outer"]) == len(scheme.cells["inner"]) == 12
+        assert (
+            scheme.key == key
+            and scheme.description
+            and len(scheme.cells["outer"]) == len(scheme.cells["inner"]) == 12
+        )
 
 
-def test_a_cell_is_never_too_bright_for_white_names_on_dark_wedges_and_a_lit_one_differs_from_a_quiet_one() -> None:
+def test_cell_never_too_bright_for_white_names_on_dark_wedges() -> None:
     """
-    Check every preset: on dark wedges no cell is brighter than white names can be read on, and lighting a cell changes it.
+    Check every preset: on dark wedges no cell is brighter than white
+    names can be read on, and lighting a cell changes it.
     """
     for scheme in PRESETS.values():
         for ring in ("outer", "inner"):
             for place in range(12):
-                quiet, lit = scheme.color(ring, place=place, lift=0.0), scheme.color(ring, place=place, lift=1.0)
+                quiet, lit = (
+                    scheme.color(ring, place=place, lift=0.0),
+                    scheme.color(ring, place=place, lift=1.0),
+                )
                 assert quiet != lit, (scheme.key, ring, place)
                 for lift in (0.0, 0.5, 1.0):
-                    red, green, blue = scheme.color(ring, place=place, lift=lift)
-                    assert scheme.light or 0.299 * red + 0.587 * green + 0.114 * blue <= MAX_BRIGHTNESS + 0.01, (
+                    red, green, blue = scheme.color(
+                        ring,
+                        place=place,
+                        lift=lift,
+                    )
+                    assert (
+                        scheme.light
+                        or 0.299 * red + 0.587 * green + 0.114 * blue
+                        <= MAX_BRIGHTNESS + 0.01
+                    ), (
                         scheme.key,
                         place,
                     )
 
 
-def test_in_cyan_to_indigo_the_flat_keys_are_cyan_the_sharp_keys_indigo_and_c_between() -> None:
+def test_in_cyan_to_indigo_flat_keys_cyan_sharp_keys_indigo_and() -> None:
     """
-    Check the default scheme's idea: hue goes from cyan through royal blue at C to indigo as sharps are added.
+    Check the default scheme's idea: hue goes from cyan through royal
+    blue at C to indigo as sharps are added.
     """
     scheme = PRESETS["cyan-indigo"]
-    hue = {place: hsl_of(hex_of(scheme.color("outer", place=place, lift=1.0)))[0] for place in range(12)}
+    hue = {
+        place: hsl_of(hex_of(scheme.color("outer", place=place, lift=1.0)))[0]
+        for place in range(12)
+    }
     assert 185 < hue[7] < 200  # five flats: cyan
     assert 214 < hue[0] < 222  # C: royal blue
     assert 250 < hue[6] < 258  # six sharps: indigo
@@ -109,15 +142,21 @@ def test_in_cyan_to_indigo_the_flat_keys_are_cyan_the_sharp_keys_indigo_and_c_be
     )  # steadily from cyan to indigo along the circle's sharps and flats
 
 
-def test_light_presets_have_light_wedges_with_dark_names_and_the_others_the_opposite() -> None:
+def test_light_presets_light_wedges_with_dark_names_and_others() -> None:
     """
     Check that the colors of the names follow the wedges.
     """
-    assert {key for key, scheme in PRESETS.items() if scheme.light} == {"glacier", "paper"}
-    assert PRESETS["paper"].names()["ink"] == "#1b2030" and PRESETS["midnight"].names()["ink"] == "#f5f5f5"
+    assert {key for key, scheme in PRESETS.items() if scheme.light} == {
+        "glacier",
+        "paper",
+    }
+    assert (
+        PRESETS["paper"].names()["ink"] == "#1b2030"
+        and PRESETS["midnight"].names()["ink"] == "#f5f5f5"
+    )
 
 
-def test_a_saved_choice_that_is_gone_falls_back_to_the_default_and_a_custom_one_is_found() -> None:
+def test_saved_choice_gone_falls_back_to_default_and_custom_one() -> None:
     """
     Check how a key is turned into a scheme.
     """
@@ -127,7 +166,9 @@ def test_a_saved_choice_that_is_gone_falls_back_to_the_default_and_a_custom_one_
     assert resolve("custom-2", customs=[MINE]).key == DEFAULT_SCHEME
 
 
-def test_records_that_are_not_valid_are_refused_and_the_rest_are_tidied() -> None:
+def test_records_that_are_not_valid_are_refused_and_the_rest_are_tidied() -> (
+    None
+):
     """
     Check the validation of what is read back from the saved settings.
     """
@@ -148,7 +189,7 @@ def test_records_that_are_not_valid_are_refused_and_the_rest_are_tidied() -> Non
         assert clean_record(bad) is None, bad
 
 
-def test_saved_schemes_survive_a_round_trip_and_bad_ones_and_clashing_keys_are_left_out() -> None:
+def test_saved_schemes_survive_round_trip_and_bad_ones_and() -> None:
     """
     Check writing and reading the user's schemes, including the limit.
     """
@@ -158,7 +199,10 @@ def test_saved_schemes_survive_a_round_trip_and_bad_ones_and_clashing_keys_are_l
     assert load_customs(dump_customs([clash, MINE, MINE])) == [MINE]  # type: ignore[list-item]
     many = [{**MINE, "id": f"custom-{n}"} for n in range(CUSTOM_LIMIT + 5)]
     assert len(load_customs(dump_customs(many))) == CUSTOM_LIMIT  # type: ignore[arg-type]
-    assert next_custom_key([MINE]) == "custom-2" and next_custom_key([]) == "custom-1"
+    assert (
+        next_custom_key([MINE]) == "custom-2"
+        and next_custom_key([]) == "custom-1"
+    )
 
 
 def test_each_way_of_making_a_scheme_gives_the_colors_it_promises() -> None:
@@ -191,39 +235,82 @@ def test_each_way_of_making_a_scheme_gives_the_colors_it_promises() -> None:
         """
         return custom_scheme(record).cells[ring][place][1][0]
 
-    single = record_of("custom-1", name="Mine", mode="single", colors=["#ff0000"])
-    assert {lit(single, ring=ring, place=place) for ring in ("outer", "inner") for place in range(12)} == {0.0}
+    single = record_of(
+        "custom-1",
+        name="Mine",
+        mode="single",
+        colors=["#ff0000"],
+    )
+    assert {
+        lit(single, ring=ring, place=place)
+        for ring in ("outer", "inner")
+        for place in range(12)
+    } == {0.0}
     assert lit(MINE, ring="outer", place=3) != lit(MINE, ring="inner", place=3)
-    signature = record_of("custom-1", name="Mine", mode="signature", colors=["#00ffff", "#0000ff", "#ff00ff"])
+    signature = record_of(
+        "custom-1",
+        name="Mine",
+        mode="signature",
+        colors=["#00ffff", "#0000ff", "#ff00ff"],
+    )
     assert (
         lit(signature, ring="outer", place=0) == 240.0
         and lit(signature, ring="outer", place=6) == 300.0
         and lit(signature, ring="outer", place=7) < 240.0
     )
-    distance = record_of("custom-1", name="Mine", mode="distance", colors=["#ff0000", "#00ff00"])
+    distance = record_of(
+        "custom-1",
+        name="Mine",
+        mode="distance",
+        colors=["#ff0000", "#00ff00"],
+    )
     assert (
         lit(distance, ring="outer", place=0) == 0.0
         and lit(distance, ring="outer", place=6) == 120.0
         and lit(distance, ring="outer", place=5)
-        == lit(distance, ring="outer", place=7)  # five sharps and five flats are as far from C
+        == lit(
+            distance,
+            ring="outer",
+            place=7,
+        )  # five sharps and five flats are as far from C
     )
-    wheel = record_of("custom-1", name="Mine", mode="wheel", colors=["#ff0000"])
-    assert [lit(wheel, ring="outer", place=place) for place in (0, 1, 6)] == [0.0, 30.0, 180.0]
+    wheel = record_of(
+        "custom-1",
+        name="Mine",
+        mode="wheel",
+        colors=["#ff0000"],
+    )
+    assert [lit(wheel, ring="outer", place=place) for place in (0, 1, 6)] == [
+        0.0,
+        30.0,
+        180.0,
+    ]
 
 
-def test_a_light_scheme_of_your_own_has_light_wedges_that_darken_when_lit() -> None:
+def test_light_scheme_of_your_own_light_wedges_darken_when_lit() -> None:
     """
     Check the direction of the glow for a light custom scheme.
     """
-    scheme = custom_scheme(record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"], light=True))
+    scheme = custom_scheme(
+        record_of(
+            "custom-1",
+            name="Mine",
+            mode="rings",
+            colors=["#2f6bd0", "#18a0c0"],
+            light=True,
+        ),
+    )
     assert scheme.light
     quiet, lit = scheme.cells["outer"][0]
     assert lit[2] < quiet[2]
 
 
-def test_the_wedges_take_the_scheme_chosen_and_the_disc_in_the_middle_takes_the_apps_background(app: QApplication) -> None:
+def test_wedges_take_scheme_chosen_and_disc_in_middle_takes_apps(
+    app: QApplication,
+) -> None:
     """
-    Check by looking at the pixels: choosing a scheme changes the wedges, and the disc is the window color, light or dark.
+    Check by looking at the pixels: choosing a scheme changes the
+    wedges, and the disc is the window color, light or dark.
 
     Parameters
     ----------
@@ -235,11 +322,16 @@ def test_the_wedges_take_the_scheme_chosen_and_the_disc_in_the_middle_takes_the_
     circle.resize(500, 500)
     center, radius = circle.geometry_of()
     wedge = wedge_middle(center=center, radius=0.87 * radius, index=3)
-    middle = QPoint(int(center.x() + 0.15 * radius), int(center.y() - 0.1 * radius))  # inside the disc, clear of the words
+    middle = QPoint(
+        int(center.x() + 0.15 * radius),
+        int(center.y() - 0.1 * radius),
+    )  # inside the disc, clear of the words
     seen = {}
     for key in ("midnight", "paper"):
         settings.circle.scheme = key
-        seen[key] = circle.grab().toImage().pixelColor(int(wedge.x()), int(wedge.y()))
+        seen[key] = (
+            circle.grab().toImage().pixelColor(int(wedge.x()), int(wedge.y()))
+        )
         assert seen[key].name() == wedge_color(3, inner=False).name()
     assert seen["midnight"] != seen["paper"]
     for window in ("#f4f4f6", "#202124"):  # a light theme and a dark one
@@ -248,14 +340,17 @@ def test_the_wedges_take_the_scheme_chosen_and_the_disc_in_the_middle_takes_the_
         circle.setPalette(palette)
         for key in ("midnight", "paper"):
             settings.circle.scheme = key
-            assert circle.grab().toImage().pixelColor(middle).name() == window, (key, window)
+            assert (
+                circle.grab().toImage().pixelColor(middle).name() == window
+            ), (key, window)
 
 
-def test_the_colors_page_chooses_creates_edits_and_deletes_and_it_all_survives_a_restart(
+def test_colors_page_chooses_creates_edits_and_deletes_and_all(
     app: QApplication,
 ) -> None:
     """
-    Check the whole path through the settings: choose a preset, make a scheme, change it, delete it, and load it all back.
+    Check the whole path through the settings: choose a preset, make a
+    scheme, change it, delete it, and load it all back.
 
     Parameters
     ----------
@@ -278,8 +373,14 @@ def test_the_colors_page_chooses_creates_edits_and_deletes_and_it_all_survives_a
 
     view = ExerciseView(CircleOfFifths(), rng=random.Random(4))
     pane = view.settings_panel
-    assert isinstance(pane, sp.CircleSettingsPanel) and pane.colors_row.value.text() == "Cyan to indigo"
-    assert len(pane.schemes.thumbs) == 14 and pane.schemes.thumbs[DEFAULT_SCHEME].isChecked()
+    assert (
+        isinstance(pane, sp.CircleSettingsPanel)
+        and pane.colors_row.value.text() == "Cyan to indigo"
+    )
+    assert (
+        len(pane.schemes.thumbs) == 14
+        and pane.schemes.thumbs[DEFAULT_SCHEME].isChecked()
+    )
     asked, restyled = [], []
     question = view.question
     pane.restyled.connect(lambda: restyled.append(1))
@@ -287,21 +388,39 @@ def test_the_colors_page_chooses_creates_edits_and_deletes_and_it_all_survives_a
     pane.schemes.thumbs["ember"].click()
     assert chosen() == "ember" and store().value("circle/scheme") == "ember"
     assert (
-        pane.colors_row.value.text() == "Ember" and restyled == [1] and asked == [] and view.question is question
+        pane.colors_row.value.text() == "Ember"
+        and restyled == [1]
+        and asked == []
+        and view.question is question
     )  # same question
     pane.schemes.new.emit()
     pane.editor.name.setText("Sea")
     pane.editor.set_color(0, color="#00ffff")
     pane.editor.saved.emit(pane.editor.record())
-    assert chosen() == "custom-1" and [r["name"] for r in settings.circle.customs] == ["Sea"]
-    assert "custom-1" in pane.schemes.thumbs and pane.colors_row.value.text() == "Sea"
+    assert chosen() == "custom-1" and [
+        r["name"] for r in settings.circle.customs
+    ] == ["Sea"]
+    assert (
+        "custom-1" in pane.schemes.thumbs
+        and pane.colors_row.value.text() == "Sea"
+    )
     settings.circle.scheme, settings.circle.customs = DEFAULT_SCHEME, []
     es.load_circle()
-    assert chosen() == "custom-1" and settings.circle.customs[0]["colors"][0] == "#00ffff"  # a restart finds it
+    assert (
+        chosen() == "custom-1"
+        and settings.circle.customs[0]["colors"][0] == "#00ffff"
+    )  # a restart finds it
     pane.schemes.edit_asked.emit("custom-1")
-    assert pane.editor.name.text() == "Sea" and not pane.editor.delete_button.isHidden()
+    assert (
+        pane.editor.name.text() == "Sea"
+        and not pane.editor.delete_button.isHidden()
+    )
     pane.editor.deleted.emit("custom-1")
-    assert settings.circle.customs == [] and chosen() == DEFAULT_SCHEME and "custom-1" not in pane.schemes.thumbs
+    assert (
+        settings.circle.customs == []
+        and chosen() == DEFAULT_SCHEME
+        and "custom-1" not in pane.schemes.thumbs
+    )
     store().remove("circle")
 
 
@@ -319,21 +438,32 @@ def test_a_saved_scheme_that_no_longer_exists_loads_as_the_default() -> None:
     store().remove("circle")
 
 
-def test_the_editor_shows_only_the_colors_its_way_of_making_a_scheme_takes() -> None:
+def test_editor_shows_only_colors_way_of_making_scheme_takes() -> None:
     """
     Check the number of color buttons for each way of making a scheme.
     """
     editor = SchemeEditor()
     editor.load(None, taken=[])
-    for mode, count in {"single": 1, "rings": 2, "signature": 3, "distance": 2, "wheel": 1}.items():
+    for mode, count in {
+        "single": 1,
+        "rings": 2,
+        "signature": 3,
+        "distance": 2,
+        "wheel": 1,
+    }.items():
         editor.mode.setCurrentIndex(editor.mode.findData(mode))
-        assert [not button.isHidden() for button in editor.swatches] == [number < count for number in range(3)], mode
+        assert [not button.isHidden() for button in editor.swatches] == [
+            number < count for number in range(3)
+        ], mode
         assert len(editor.record()["colors"]) == count
 
 
-def test_opening_the_colors_pages_never_makes_the_exercise_or_its_window_bigger(app: QApplication) -> None:
+def test_opening_colors_pages_never_makes_exercise_or_window(
+    app: QApplication,
+) -> None:
     """
-    Check that the long list of color schemes and the editor scroll inside the settings pane instead of growing the window.
+    Check that the long list of color schemes and the editor scroll
+    inside the settings pane instead of growing the window.
 
     Parameters
     ----------
@@ -354,8 +484,29 @@ def test_opening_the_colors_pages_never_makes_the_exercise_or_its_window_bigger(
         pane.stack.setCurrentIndex(page)
         pane.schemes.load(
             current="ember",
-            customs=[record_of(f"custom-{n}", name="Mine", mode="single", colors=["#2f6bd0"]) for n in range(1, 9)],
+            customs=[
+                record_of(
+                    f"custom-{n}",
+                    name="Mine",
+                    mode="single",
+                    colors=["#2f6bd0"],
+                )
+                for n in range(1, 9)
+            ],
         )
         app.processEvents()
-        assert view.minimumSizeHint().height() <= smallest + 4, page  # no page asks for more room than the exercise needs
+        assert view.minimumSizeHint().height() <= smallest + 4, (
+            page
+        )  # no page asks for more room than the exercise needs
         assert view.size() == size, page
+
+
+@pytest.mark.usefixtures("app")
+def test_swatch_records_the_selected_color() -> None:
+    """Apply a color chosen in the dialog and preserve it on cancel."""
+    editor = SchemeEditor()
+    editor.load(None, taken=[])
+    for choice in (QColor("#112233"), QColor()):
+        with patch.object(QColorDialog, "getColor", return_value=choice):
+            editor.swatches[0].click()
+        assert editor.record()["colors"][0] == "#112233"

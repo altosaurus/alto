@@ -1,12 +1,17 @@
 """
-Ties the profile, the database and the scheduler together for the exercise screen.
+Ties the profile, the database and the scheduler together for the
+exercise screen.
 
 Examples
 --------
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
->>> learner = Learner(db, profile=db.add_profile("Ada"))
->>> question = learner.pick(NoteNames(), rng=random.Random(1))
+>>> learner = Learner(
+...     db, profile=db.add_profile("Ada")
+... )
+>>> question = learner.pick(
+...     NoteNames(), rng=random.Random(1)
+... )
 >>> question.answer in question.choices
 True
 """
@@ -24,7 +29,13 @@ from alto.exercises.base import (
     Question,
 )
 from alto.learning import scheduler
-from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER, SCHEDULERS, CalendarPractice, ReviewInterval
+from alto.learning.calendar import (
+    CALENDAR_SCHEDULERS,
+    DEFAULT_SCHEDULER,
+    SCHEDULERS,
+    CalendarPractice,
+    ReviewInterval,
+)
 from alto.learning.database import (
     Database,
     ItemRecord,
@@ -32,7 +43,8 @@ from alto.learning.database import (
 )
 from alto.learning.response_times import WINDOW, ResponseTimes
 
-# The database identifier predates the ASRS name and is shared with older backups.
+# The database identifier predates the ASRS name and is shared with
+# older backups.
 _STORED_ASRS = "Alto"
 
 
@@ -53,7 +65,8 @@ class PracticeComplete(Exception):
         Parameters
         ----------
         retry_at : float or None
-            Scheduled timestamp, or None when practice is finished for now.
+            Scheduled timestamp, or None when practice is finished for
+            now.
 
         Examples
         --------
@@ -66,12 +79,14 @@ class PracticeComplete(Exception):
 
 class Learner:
     """
-    Chooses what a profile is asked next and records how it was answered.
+    Chooses what a profile is asked next and records how it was
+    answered.
 
     Attributes
     ----------
     FRESH : int
-        How many new questions are generated for each pick, alongside the ones asked before.
+        How many new questions are generated for each pick, alongside
+        the ones asked before.
     db : Database
         Where answers and what is known about each question are stored.
     profile : Profile
@@ -81,15 +96,28 @@ class Learner:
     --------
     >>> from alto.exercises.library import NoteNames
     >>> db = Database()
-    >>> learner = Learner(db, profile=db.add_profile("Ada"))
+    >>> learner = Learner(
+    ...     db, profile=db.add_profile("Ada")
+    ... )
     >>> rng = random.Random(2)
-    >>> question = learner.pick(NoteNames(), rng=rng)
-    >>> learner.record(NoteNames(), question=question, answer=question.answer, correct=True, attempt_no=1, seconds=2.5)
+    >>> question = learner.pick(
+    ...     NoteNames(), rng=rng
+    ... )
+    >>> learner.record(
+    ...     NoteNames(),
+    ...     question=question,
+    ...     answer=question.answer,
+    ...     correct=True,
+    ...     attempt_no=1,
+    ...     seconds=2.5,
+    ... )
     >>> db.count_attempts(learner.profile.id)
     1
     """
 
-    FRESH = 10  # new questions generated for each pick, alongside the ones asked before
+    # new questions generated for each pick, alongside the ones asked
+    # before
+    FRESH = 10
 
     def __init__(
         self,
@@ -110,7 +138,10 @@ class Learner:
         Examples
         --------
         >>> database = Database()
-        >>> learner = Learner(database, profile=database.add_profile("Ada"))
+        >>> learner = Learner(
+        ...     database,
+        ...     profile=database.add_profile("Ada"),
+        ... )
         >>> learner.profile.name
         'Ada'
         """
@@ -119,17 +150,21 @@ class Learner:
 
     def set_profile(self, profile: Profile) -> None:
         """
-        Open a profile's practice queues and resume its selected scheduler.
+        Open a profile's practice queues and resume its selected
+        scheduler.
 
         Parameters
         ----------
         profile : Profile
-            Profile loaded at launch, selected in the app, or restored from backup.
+            Profile loaded at launch, selected in the app, or restored
+            from backup.
 
         Examples
         --------
         >>> db = Database()
-        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> learner = Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... )
         >>> learner.set_profile(db.add_profile("Ben"))
         >>> learner.profile.name
         'Ben'
@@ -151,10 +186,15 @@ class Learner:
         Examples
         --------
         >>> db = Database()
-        >>> Learner(db, profile=db.add_profile("Ada")).mode
+        >>> Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... ).mode
         'ASRS'
         """
-        stored = self.db.conn.execute("SELECT scheduler FROM profiles WHERE id = ?", (self.profile.id,)).fetchone()[0]
+        stored = self.db.conn.execute(
+            "SELECT scheduler FROM profiles WHERE id = ?",
+            (self.profile.id,),
+        ).fetchone()[0]
         return DEFAULT_SCHEDULER if stored == _STORED_ASRS else stored
 
     @property
@@ -170,14 +210,22 @@ class Learner:
         Examples
         --------
         >>> db = Database()
-        >>> Learner(db, profile=db.add_profile("Ada")).self_grading
+        >>> Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... ).self_grading
         False
         """
-        return bool(self.db.conn.execute("SELECT self_grading FROM profiles WHERE id = ?", (self.profile.id,)).fetchone()[0])
+        return bool(
+            self.db.conn.execute(
+                "SELECT self_grading FROM profiles WHERE id = ?",
+                (self.profile.id,),
+            ).fetchone()[0],
+        )
 
     def response_times(self, exercise: str) -> ResponseTimes:
         """
-        Read the rolling sample for one exercise and the current profile's thresholds.
+        Read the rolling sample for one exercise and the current
+        profile's thresholds.
 
         Parameters
         ----------
@@ -187,12 +235,15 @@ class Learner:
         Returns
         -------
         ResponseTimes
-            Up to 100 recent, uninterrupted, correct first answers across practice modes.
+            Up to 100 recent, uninterrupted, correct first answers
+            across practice modes.
 
         Examples
         --------
         >>> db = Database()
-        >>> Learner(db, profile=db.add_profile("Ada")).response_times("KeyboardNotes").times
+        >>> Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... ).response_times("KeyboardNotes").times
         ()
         """
         easy, hard = self.db.conn.execute(
@@ -200,8 +251,10 @@ class Learner:
             (self.profile.id,),
         ).fetchone()
         rows = self.db.conn.execute(
-            "SELECT duration_ms FROM attempts WHERE profile_id=? AND exercise=? AND attempt_no=1 AND correct=1 "
-            "AND duration_ms>0 AND timing_valid=1 ORDER BY answered_at DESC, id DESC LIMIT ?",
+            "SELECT duration_ms FROM attempts WHERE profile_id=? AND "
+            "exercise=? AND attempt_no=1 AND correct=1 "
+            "AND duration_ms>0 AND timing_valid=1 ORDER BY answered_at "
+            "DESC, id DESC LIMIT ?",
             (self.profile.id, exercise, WINDOW),
         )
         return ResponseTimes(tuple(sorted(row[0] for row in rows)), easy, hard)
@@ -224,12 +277,24 @@ class Learner:
 
         Examples
         --------
-        Setting both tails to zero assigns Good to every correct first answer.
+        Setting both tails to zero assigns Good to every correct first
+        answer.
         """
         if min(easy, hard) < 0 or easy + hard > 100:
-            raise ValueError("The two percentages must be nonnegative and total at most 100.")
+            raise ValueError(
+                (
+                    "The two percentages must be nonnegative and total at "
+                    "most 100."
+                ),
+            )
         with self.db.write_transaction():
-            self.db.conn.execute("UPDATE profiles SET easy_percent=?, hard_percent=? WHERE id=?", (easy, hard, self.profile.id))
+            self.db.conn.execute(
+                (
+                    "UPDATE profiles SET easy_percent=?, hard_percent=? "
+                    "WHERE id=?"
+                ),
+                (easy, hard, self.profile.id),
+            )
 
     def set_self_grading(self, enabled: bool) -> None:
         """
@@ -243,13 +308,18 @@ class Learner:
         Examples
         --------
         >>> db = Database()
-        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> learner = Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... )
         >>> learner.set_self_grading(True)
         >>> learner.self_grading
         True
         """
         with self.db.conn:
-            self.db.conn.execute("UPDATE profiles SET self_grading = ? WHERE id = ?", (enabled, self.profile.id))
+            self.db.conn.execute(
+                "UPDATE profiles SET self_grading = ? WHERE id = ?",
+                (enabled, self.profile.id),
+            )
 
     def set_mode(self, mode: str) -> None:
         """
@@ -268,7 +338,9 @@ class Learner:
         Examples
         --------
         >>> db = Database()
-        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> learner = Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... )
         >>> learner.set_mode("FSRS")
         >>> learner.mode
         'FSRS'
@@ -278,7 +350,10 @@ class Learner:
         stored = _STORED_ASRS if mode == DEFAULT_SCHEDULER else mode
         with self.db.write_transaction():
             self.calendar.inherit_schedules(self.profile.id, mode=mode)
-            self.db.conn.execute("UPDATE profiles SET scheduler = ? WHERE id = ?", (stored, self.profile.id))
+            self.db.conn.execute(
+                "UPDATE profiles SET scheduler = ? WHERE id = ?",
+                (stored, self.profile.id),
+            )
 
     def pick(
         self,
@@ -289,18 +364,22 @@ class Learner:
         now: float | None = None,
     ) -> Question:
         """
-        Return the next eligible question using the profile's selected scheduler.
+        Return the next eligible question using the profile's selected
+        scheduler.
 
         Parameters
         ----------
         exercise : Exercise
             The exercise being practiced.
         rng : random.Random
-            The random number generator used to make new questions and to draw one. Keyword-only.
+            The random number generator used to make new questions and
+            to draw one. Keyword-only.
         avoid : str or None, default None
-            The `item_key` of the question just asked, so it does not come straight back. Keyword-only.
+            The `item_key` of the question just asked, so it does not
+            come straight back. Keyword-only.
         now : float or None, default None
-            The current time as a timestamp; the clock is used if None. Keyword-only.
+            The current time as a timestamp; the clock is used if None.
+            Keyword-only.
 
         Returns
         -------
@@ -316,9 +395,17 @@ class Learner:
         --------
         >>> from alto.exercises.library import NoteNames
         >>> db = Database()
-        >>> learner = Learner(db, profile=db.add_profile("Ada"))
-        >>> first = learner.pick(NoteNames(), rng=random.Random(3))
-        >>> second = learner.pick(NoteNames(), rng=random.Random(3), avoid=first.item_key())
+        >>> learner = Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... )
+        >>> first = learner.pick(
+        ...     NoteNames(), rng=random.Random(3)
+        ... )
+        >>> second = learner.pick(
+        ...     NoteNames(),
+        ...     rng=random.Random(3),
+        ...     avoid=first.item_key(),
+        ... )
         >>> second.item_key() != first.item_key()
         True
         """
@@ -333,7 +420,8 @@ class Learner:
                 mode=mode,
                 now=now,
                 avoid=avoid,
-                wait_learning=self.self_grading or self.response_times(type(exercise).__name__).ready,
+                wait_learning=self.self_grading
+                or self.response_times(type(exercise).__name__).ready,
             )
             if card is None:
                 raise PracticeComplete(retry_at)
@@ -345,27 +433,55 @@ class Learner:
             key = q.item_key()
             if key in options or key == avoid:
                 continue
-            item = self.db.get_item(self.profile.id, exercise=name, item_key=key)
+            item = self.db.get_item(
+                self.profile.id,
+                exercise=name,
+                item_key=key,
+            )
             options[key] = (
                 q,
-                scheduler.weight(item.strain if item else None, last_seen=item.last_seen if item else None, now=now),
+                scheduler.weight(
+                    item.strain if item else None,
+                    last_seen=item.last_seen if item else None,
+                    now=now,
+                ),
             )
-        for item in self.db.replay_candidates(self.profile.id, exercise=name, signature=exercise.settings_signature()):
+        for item in self.db.replay_candidates(
+            self.profile.id,
+            exercise=name,
+            signature=exercise.settings_signature(),
+        ):
             if item.item_key in options or item.item_key == avoid:
                 continue
             try:
-                q = exercise.refresh(Question.from_dict(json.loads(item.payload)))
+                q = exercise.refresh(
+                    Question.from_dict(json.loads(item.payload)),
+                )
             except (ValueError, KeyError, TypeError):
                 continue
-            options[item.item_key] = (q, scheduler.weight(item.strain, last_seen=item.last_seen, now=now))
+            options[item.item_key] = (
+                q,
+                scheduler.weight(
+                    item.strain,
+                    last_seen=item.last_seen,
+                    now=now,
+                ),
+            )
         if not options:  # every candidate was the question to avoid
             return exercise.generate(rng)
         questions, weights = zip(*options.values())
         return scheduler.choose(questions, weights=weights, rng=rng)
 
-    def _pick_arts(self, exercise: Exercise, *, rng: random.Random, avoid: str | None) -> Question:
+    def _pick_arts(
+        self,
+        exercise: Exercise,
+        *,
+        rng: random.Random,
+        avoid: str | None,
+    ) -> Question:
         """
-        Choose the highest-priority eligible question, breaking ties at random.
+        Choose the highest-priority eligible question, breaking ties at
+        random.
 
         Parameters
         ----------
@@ -385,21 +501,38 @@ class Learner:
         --------
         >>> from alto.exercises.library import NoteNames
         >>> db = Database()
-        >>> learner = Learner(db, profile=db.add_profile("Ada"))
-        >>> bool(learner._pick_arts(NoteNames(), rng=random.Random(1), avoid=None).answer)
+        >>> learner = Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... )
+        >>> bool(
+        ...     learner._pick_arts(
+        ...         NoteNames(),
+        ...         rng=random.Random(1),
+        ...         avoid=None,
+        ...     ).answer
+        ... )
         True
         """
-        fresh = {q.item_key(): q for q in (exercise.generate(rng) for _ in range(self.FRESH))}
+        fresh = {
+            q.item_key(): q
+            for q in (exercise.generate(rng) for _ in range(self.FRESH))
+        }
         priorities = dict.fromkeys(fresh, 1.0)
         name = type(exercise).__name__
         signature = exercise.settings_signature()
-        # Rank first submissions within this exercise. SQLite takes the answer columns from
-        # the row with the minimum gap, which is unique and is the item's latest trial.
+        # Rank first submissions within this exercise. SQLite takes the
+        # answer columns from
+        # the row with the minimum gap, which is unique and is the
+        # item's latest trial.
         rows = self.db.conn.execute(
-            "WITH trials AS (SELECT item_key, correct, duration_ms, ROW_NUMBER() OVER (ORDER BY id DESC) - 1 AS gap "
-            "FROM attempts WHERE profile_id = ? AND exercise = ? AND attempt_no = 1), "
-            "latest AS (SELECT item_key, correct, duration_ms, MIN(gap) AS intervening FROM trials GROUP BY item_key) "
-            "SELECT latest.*, i.signature FROM latest JOIN items i ON i.item_key = latest.item_key "
+            "WITH trials AS (SELECT item_key, correct, duration_ms, "
+            "ROW_NUMBER() OVER (ORDER BY id DESC) - 1 AS gap "
+            "FROM attempts WHERE profile_id = ? AND exercise = ? AND "
+            "attempt_no = 1), "
+            "latest AS (SELECT item_key, correct, duration_ms, MIN(gap) AS "
+            "intervening FROM trials GROUP BY item_key) "
+            "SELECT latest.*, i.signature FROM latest JOIN items i ON "
+            "i.item_key = latest.item_key "
             "WHERE i.profile_id = ? AND i.exercise = ?",
             (self.profile.id, name, self.profile.id, name),
         )
@@ -415,13 +548,21 @@ class Learner:
             priorities.pop(avoid, None)
         while priorities:
             highest = max(priorities.values())
-            key = rng.choice([key for key, score in priorities.items() if score == highest])
+            key = rng.choice(
+                [key for key, score in priorities.items() if score == highest],
+            )
             if key in fresh:
                 return fresh[key]
-            item = self.db.get_item(self.profile.id, exercise=name, item_key=key)
+            item = self.db.get_item(
+                self.profile.id,
+                exercise=name,
+                item_key=key,
+            )
             if item is not None:
                 try:
-                    return exercise.refresh(Question.from_dict(json.loads(item.payload)))
+                    return exercise.refresh(
+                        Question.from_dict(json.loads(item.payload)),
+                    )
                 except (ValueError, KeyError, TypeError):
                     pass
             del priorities[key]
@@ -456,38 +597,70 @@ class Learner:
         correct : bool
             Whether the answer was right. Keyword-only.
         attempt_no : int
-            1 for the first answer to this showing of the question, 2 for the second and so on. Keyword-only.
+            1 for the first answer to this showing of the question, 2
+            for the second and so on. Keyword-only.
         seconds : float
             How long the answer took. Keyword-only.
         now : float or None, default None
-            When it was answered, as a timestamp; the clock is used if None. Keyword-only.
+            When it was answered, as a timestamp; the clock is used if
+            None. Keyword-only.
         preview : ReviewInterval or None
             Correct-answer interval displayed for this question.
         passing_previews : dict or None
             Hard, Good, and Easy intervals shown during speed grading.
         self_grading : bool
-            Defer scheduling a correct calendar answer until the learner rates it.
+            Defer scheduling a correct calendar answer until the learner
+            rates it.
 
         timing_valid : bool
-            Whether the presentation was uninterrupted. False excludes it from timing.
+            Whether the presentation was uninterrupted. False excludes
+            it from timing.
 
         Returns
         -------
         ReviewInterval or None
-            The interval chosen by speed grading, once enough earlier answers exist.
+            The interval chosen by speed grading, once enough earlier
+            answers exist.
 
         Examples
         --------
         >>> from alto.exercises.library import NoteNames
         >>> db = Database()
-        >>> learner = Learner(db, profile=db.add_profile("Ada"))
-        >>> q = learner.pick(NoteNames(), rng=random.Random(4))
-        >>> learner.record(NoteNames(), question=q, answer="?", correct=False, attempt_no=1, seconds=3.0)
-        >>> learner.record(NoteNames(), question=q, answer=q.answer, correct=True, attempt_no=2, seconds=1.0)
-        >>> [row["correct"] for row in db.attempts(learner.profile.id)]
+        >>> learner = Learner(
+        ...     db, profile=db.add_profile("Ada")
+        ... )
+        >>> q = learner.pick(
+        ...     NoteNames(), rng=random.Random(4)
+        ... )
+        >>> learner.record(
+        ...     NoteNames(),
+        ...     question=q,
+        ...     answer="?",
+        ...     correct=False,
+        ...     attempt_no=1,
+        ...     seconds=3.0,
+        ... )
+        >>> learner.record(
+        ...     NoteNames(),
+        ...     question=q,
+        ...     answer=q.answer,
+        ...     correct=True,
+        ...     attempt_no=2,
+        ...     seconds=1.0,
+        ... )
+        >>> [
+        ...     row["correct"]
+        ...     for row in db.attempts(
+        ...         learner.profile.id
+        ...     )
+        ... ]
         [0, 1]
         >>> # noinspection PyUnresolvedReferences
-        >>> db.get_item(learner.profile.id, exercise="NoteNames", item_key=q.item_key()).wrong_attempts
+        >>> db.get_item(
+        ...     learner.profile.id,
+        ...     exercise="NoteNames",
+        ...     item_key=q.item_key(),
+        ... ).wrong_attempts
         1
         """
         now = time.time() if now is None else now
@@ -501,7 +674,11 @@ class Learner:
             if first and mode in CALENDAR_SCHEDULERS and not self_grading:
                 sample = self.response_times(name)
                 if sample.ready:
-                    rating = sample.grade(duration if timing_valid else 0) if correct else Rating.Again
+                    rating = (
+                        sample.grade(duration if timing_valid else 0)
+                        if correct
+                        else Rating.Again
+                    )
                     if correct:
                         assigned = self.calendar.passing_intervals(
                             name,
@@ -523,7 +700,11 @@ class Learner:
                 timing_valid=timing_valid,
                 answered_at=now,
             )
-            old = self.db.get_item(self.profile.id, exercise=name, item_key=key)
+            old = self.db.get_item(
+                self.profile.id,
+                exercise=name,
+                item_key=key,
+            )
             strain = old.strain if old else scheduler.NEW_STRAIN
             strain = scheduler.update_strain(
                 strain,
@@ -539,16 +720,24 @@ class Learner:
                 item=ItemRecord(
                     strain=strain,
                     seen=(old.seen if old else 0) + (1 if first else 0),
-                    first_try_right=(old.first_try_right if old else 0) + (1 if first and correct else 0),
-                    wrong_attempts=(old.wrong_attempts if old else 0) + (0 if correct else 1),
-                    total_first_ms=(old.total_first_ms if old else 0) + (round(seconds * 1000) if first else 0),
+                    first_try_right=(old.first_try_right if old else 0)
+                    + (1 if first and correct else 0),
+                    wrong_attempts=(old.wrong_attempts if old else 0)
+                    + (0 if correct else 1),
+                    total_first_ms=(old.total_first_ms if old else 0)
+                    + (round(seconds * 1000) if first else 0),
                     last_seen=now,
                     signature=exercise.settings_signature(),
                     payload=json.dumps(question.to_dict()),
                 ),
             )
             if first and mode in CALENDAR_SCHEDULERS:
-                self.calendar.introduce(exercise, profile=self.profile.id, question=question, now=now)
+                self.calendar.introduce(
+                    exercise,
+                    profile=self.profile.id,
+                    question=question,
+                    now=now,
+                )
                 if not (correct and self_grading):
                     self.calendar.grade(
                         name,

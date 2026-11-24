@@ -1,7 +1,9 @@
 """
-Tests for the ways a plugin can be wrong, or an install can fail, that the other plugin tests do not reach.
+Tests for the ways a plugin can be wrong, or an install can fail, that
+the other plugin tests do not reach.
 
-Each case damages the manifest of an example pack, or an installation, in one way and checks that Alto says why.
+Each case damages the manifest of an example pack, or an installation,
+in one way and checks that Alto says why.
 """
 
 from __future__ import annotations
@@ -34,7 +36,12 @@ from viola_pack import MANIFEST as VIOLA
 from viola_pack import ZIP as VIOLA_ZIP
 
 
-def edited(tmp_path: Path, *, source: Path, edit: Callable[[dict], None]) -> Path:
+def edited(
+    tmp_path: Path,
+    *,
+    source: Path,
+    edit: Callable[[dict], None],
+) -> Path:
     """
     Copy an example pack with its manifest changed by ``edit``.
 
@@ -64,16 +71,38 @@ def edited(tmp_path: Path, *, source: Path, edit: Callable[[dict], None]) -> Pat
     ("edit", "message"),
     [
         (lambda m: m.update(lessons=[]), "between 1 and"),
-        (lambda m: m["lessons"][0]["steps"][0].update(hear=[[]]), "one to four note names"),
-        (lambda m: m["lessons"][0]["steps"][0].update(picture="the front"), "as an object"),
-        (lambda m: m["lessons"][0]["steps"][0]["picture"].update(marker="yes"), "true or false"),
-        (lambda m: m["lessons"][0]["steps"][2]["picture"].pop("point"), "a point, or set marker"),
-        (lambda m: m["lessons"][1]["steps"][0]["task"].pop("choices"), "choices with an answer"),
+        (
+            lambda m: m["lessons"][0]["steps"][0].update(hear=[[]]),
+            "one to four note names",
+        ),
+        (
+            lambda m: m["lessons"][0]["steps"][0].update(picture="the front"),
+            "as an object",
+        ),
+        (
+            lambda m: m["lessons"][0]["steps"][0]["picture"].update(
+                marker="yes",
+            ),
+            "true or false",
+        ),
+        (
+            lambda m: m["lessons"][0]["steps"][2]["picture"].pop("point"),
+            "a point, or set marker",
+        ),
+        (
+            lambda m: m["lessons"][1]["steps"][0]["task"].pop("choices"),
+            "choices with an answer",
+        ),
     ],
 )
-def test_bad_lessons_say_why(tmp_path: Path, edit: Callable[[dict], None], message: str) -> None:
+def test_bad_lessons_say_why(
+    tmp_path: Path,
+    edit: Callable[[dict], None],
+    message: str,
+) -> None:
     """
-    Refuse a lesson with a missing icon, a malformed chord, picture or task, and name the fault.
+    Refuse a lesson with a missing icon, a malformed chord, picture or
+    task, and name the fault.
 
     Parameters
     ----------
@@ -90,7 +119,8 @@ def test_bad_lessons_say_why(tmp_path: Path, edit: Callable[[dict], None], messa
 
 def test_a_lesson_key_must_be_a_keyboard_and_a_pitch(tmp_path: Path) -> None:
     """
-    Refuse a highlighted key that is not written as a keyboard name and a pitch.
+    Refuse a highlighted key that is not written as a keyboard name and
+    a pitch.
 
     Parameters
     ----------
@@ -98,26 +128,41 @@ def test_a_lesson_key_must_be_a_keyboard_and_a_pitch(tmp_path: Path) -> None:
         Isolated copy of the example pack.
     """
     picture = lambda m: m["lessons"][1]["steps"][1]["picture"]  # noqa: E731
-    path = edited(tmp_path, source=HARPSICHORD, edit=lambda m: picture(m).update(keys=[["Lower manual"]]))
+    path = edited(
+        tmp_path,
+        source=HARPSICHORD,
+        edit=lambda m: picture(m).update(keys=[["Lower manual"]]),
+    )
     with pytest.raises(ValueError, match="Write each key"):
         read_pack(path)
 
 
-def test_an_exercise_can_name_other_exercises_as_related(tmp_path: Path) -> None:
+def test_an_exercise_can_name_other_exercises_as_related(
+    tmp_path: Path,
+) -> None:
     """
-    Accept a lesson that lists another exercise of the plugin as related.
+    Accept a lesson that lists another exercise of the plugin as
+    related.
 
     Parameters
     ----------
     tmp_path : Path
         Isolated copy of the example pack.
     """
-    path = edited(tmp_path, source=VIOLA, edit=lambda m: m["lessons"][0].update(related_exercises=["first-position"]))
+    path = edited(
+        tmp_path,
+        source=VIOLA,
+        edit=lambda m: m["lessons"][0].update(
+            related_exercises=["first-position"],
+        ),
+    )
     assert read_pack(path)
 
 
 def test_a_lesson_icon_must_be_one_the_plugin_supplies() -> None:
-    """Refuse a lesson whose icon is not among the icons the pack loaded."""
+    """
+    Refuse a lesson whose icon is not among the icons the pack loaded.
+    """
     row = {
         "id": "a",
         "title": "A",
@@ -128,12 +173,20 @@ def test_a_lesson_icon_must_be_one_the_plugin_supplies() -> None:
         "steps": [{"title": "One", "text": ["First."]}],
     }
     with pytest.raises(ValueError, match="icon of"):
-        read_lessons([row], pack_id="demo", pack_name="Demo", instruments={}, exercises={"first": "pack.demo.first"}, icons={})
+        read_lessons(
+            [row],
+            pack_id="demo",
+            pack_name="Demo",
+            instruments={},
+            exercises={"first": "pack.demo.first"},
+            icons={},
+        )
 
 
 def _plain_instrument(manifest: dict) -> None:
     """
-    Add a second instrument with the harpsichord's picture and nothing else, and an exercise of each type that needs more.
+    Add a second instrument with the harpsichord's picture and nothing
+    else, and an exercise of each type that needs more.
 
     Parameters
     ----------
@@ -141,15 +194,24 @@ def _plain_instrument(manifest: dict) -> None:
         The parsed harpsichord manifest, changed in place.
     """
     picture = manifest["instruments"][0]["image"]
-    manifest["instruments"].append({"id": "plain", "name": "Plain", "image": picture})
+    manifest["instruments"].append(
+        {"id": "plain", "name": "Plain", "image": picture},
+    )
     manifest["exercises"].append(
-        {"id": "no-strings", "title": "No Strings", "type": "fingerboard-notes", "instrument": "plain", "notes": {}},
+        {
+            "id": "no-strings",
+            "title": "No Strings",
+            "type": "fingerboard-notes",
+            "instrument": "plain",
+            "notes": {},
+        },
     )
 
 
 def _short_upper_manual(manifest: dict) -> None:
     """
-    Let the upper manual end an octave and a half below where the exercise's range ends.
+    Let the upper manual end an octave and a half below where the
+    exercise's range ends.
 
     Parameters
     ----------
@@ -176,16 +238,30 @@ def _one_octave_range(manifest: dict) -> None:
 @pytest.mark.parametrize(
     ("edit", "message"),
     [
-        (lambda m: m["exercises"][0]["settings"].update(range="alto"), "Set range in the settings"),
+        (
+            lambda m: m["exercises"][0]["settings"].update(range="alto"),
+            "Set range in the settings",
+        ),
         (_plain_instrument, "Declare strings"),
-        (lambda m: m["exercises"][0].update(default_range="C3"), "default_range of"),
-        (lambda m: m["exercises"][0].update(default_range=["D1", "C3"]), "Keep the default_range"),
+        (
+            lambda m: m["exercises"][0].update(default_range="C3"),
+            "default_range of",
+        ),
+        (
+            lambda m: m["exercises"][0].update(default_range=["D1", "C3"]),
+            "Keep the default_range",
+        ),
         (_one_octave_range, "no pair of keys"),
     ],
 )
-def test_bad_keyboard_exercises_say_why(tmp_path: Path, edit: Callable[[dict], None], message: str) -> None:
+def test_bad_keyboard_exercises_say_why(
+    tmp_path: Path,
+    edit: Callable[[dict], None],
+    message: str,
+) -> None:
     """
-    Refuse a keyboard exercise with a malformed setting or range, or one that asks nothing, and name the fault.
+    Refuse a keyboard exercise with a malformed setting or range, or one
+    that asks nothing, and name the fault.
 
     Parameters
     ----------
@@ -202,7 +278,8 @@ def test_bad_keyboard_exercises_say_why(tmp_path: Path, edit: Callable[[dict], N
 
 def test_a_keyboard_exercise_needs_keyboards(tmp_path: Path) -> None:
     """
-    Refuse a keyboard interval exercise on an instrument that declares no keyboards.
+    Refuse a keyboard interval exercise on an instrument that declares
+    no keyboards.
 
     Parameters
     ----------
@@ -221,7 +298,10 @@ def test_a_keyboard_exercise_needs_keyboards(tmp_path: Path) -> None:
         """
         _plain_instrument(manifest)
         manifest["exercises"].pop()
-        manifest["exercises"][0].update(instrument="plain", keyboards=["Lower manual"])
+        manifest["exercises"][0].update(
+            instrument="plain",
+            keyboards=["Lower manual"],
+        )
 
     with pytest.raises(ValueError, match="Declare keyboards"):
         read_pack(edited(tmp_path, source=HARPSICHORD, edit=edit))
@@ -236,17 +316,34 @@ def test_keys_a_manual_lacks_are_not_asked(tmp_path: Path) -> None:
     tmp_path : Path
         Isolated copy of the example pack.
     """
-    exercise = read_pack(edited(tmp_path, source=HARPSICHORD, edit=_short_upper_manual))[0]
+    exercise = read_pack(
+        edited(tmp_path, source=HARPSICHORD, edit=_short_upper_manual),
+    )[0]
     assert exercise.cards
     for card in exercise.cards:
         assert card.picture is not None
-        for (board, _), name in zip(card.picture.keys, card.picture.notes, strict=True):
-            assert board != "Upper manual" or Note.parse(name).midi <= Note.parse("C5").midi
+        for (board, _), name in zip(
+            card.picture.keys,
+            card.picture.notes,
+            strict=True,
+        ):
+            assert (
+                board != "Upper manual"
+                or Note.parse(name).midi <= Note.parse("C5").midi
+            )
 
 
 def test_the_choice_cache_does_not_grow_without_end() -> None:
-    """Forget the cards chosen for earlier ranges once many ranges have been tried."""
-    card = Question("?", choices=["M3"], answer="M3", picture=PicturePosition("a", (0, 0), notes=("C4", "E4")))
+    """
+    Forget the cards chosen for earlier ranges once many ranges have
+    been tried.
+    """
+    card = Question(
+        "?",
+        choices=["M3"],
+        answer="M3",
+        picture=PicturePosition("a", (0, 0), notes=("C4", "E4")),
+    )
     cache: dict = {}
     for top in range(64, 100):
         _keyboard_subset((card,), keys=(48, top), names=("M3",), cache=cache)
@@ -269,7 +366,13 @@ def test_an_instrument_kind_must_be_plain_text(tmp_path: Path) -> None:
         Isolated copy of the example pack.
     """
     with pytest.raises(ValueError, match="kind of"):
-        read_pack(edited(tmp_path, source=VIOLA, edit=lambda m: m["instruments"][0].update(kind=5)))
+        read_pack(
+            edited(
+                tmp_path,
+                source=VIOLA,
+                edit=lambda m: m["instruments"][0].update(kind=5),
+            ),
+        )
 
 
 def test_an_animation_needs_more_than_one_frame(tmp_path: Path) -> None:
@@ -287,9 +390,12 @@ def test_an_animation_needs_more_than_one_frame(tmp_path: Path) -> None:
         read_pack(path)
 
 
-def test_an_icon_is_drawn_in_the_theme_s_ink_and_kept_small(tmp_path: Path) -> None:
+def test_an_icon_is_drawn_in_the_theme_s_ink_and_kept_small(
+    tmp_path: Path,
+) -> None:
     """
-    Redraw an icon's fills and strokes in the theme's ink, and refuse one over the size limit.
+    Redraw an icon's fills and strokes in the theme's ink, and refuse
+    one over the size limit.
 
     Parameters
     ----------
@@ -298,36 +404,59 @@ def test_an_icon_is_drawn_in_the_theme_s_ink_and_kept_small(tmp_path: Path) -> N
     """
     path = edited(tmp_path, source=VIOLA, edit=lambda m: None)
     icon = path.parent / "icons/viola.svg"
-    box = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">{}</svg>'
-    icon.write_text(box.format('<path d="M1 1h4v4z" fill="#f00" stroke="#00f"/>'))
-    assert 'fill="COLOR"' in read_pack(path)[0].icon and 'stroke="COLOR"' in read_pack(path)[0].icon
+    box = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">{}</svg>'
+    )
+    icon.write_text(
+        box.format('<path d="M1 1h4v4z" fill="#f00" stroke="#00f"/>'),
+    )
+    assert (
+        'fill="COLOR"' in read_pack(path)[0].icon
+        and 'stroke="COLOR"' in read_pack(path)[0].icon
+    )
     icon.write_text(box.format("<!-- " + "x" * 120_000 + " -->"))
     with pytest.raises(ValueError, match="under 100 KB"):
         read_pack(path)
 
 
 def test_an_exercise_without_settings_keeps_its_history_signature() -> None:
-    """Keep the practice signature of an exercise that offers no settings the same as its catalog's."""
-    parts = next(cls for cls in read_pack(VIOLA) if cls.__name__.endswith("viola-parts"))
+    """
+    Keep the practice signature of an exercise that offers no settings
+    the same as its catalog's.
+    """
+    parts = next(
+        cls for cls in read_pack(VIOLA) if cls.__name__.endswith("viola-parts")
+    )
     assert parts().practice_signature() == parts.catalog_signature
 
 
-def test_a_missing_recording_gives_the_usual_feedback_time(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_missing_recording_gives_the_usual_feedback_time(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Use the usual interval between notes when a note's recording cannot be read.
+    Use the usual interval between notes when a note's recording cannot
+    be read.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
         Point the note at a file that is not there.
     """
-    monkeypatch.setattr(Sounds, "_note_file", lambda self, instrument, *, midi: Path("/no/such/recording.wav"))
+    monkeypatch.setattr(
+        Sounds,
+        "_note_file",
+        lambda self, instrument, *, midi: Path("/no/such/recording.wav"),
+    )
     assert sounds.note_duration_ms(60) == DEFAULT_NOTE_GAP_MS
 
 
-def test_an_entry_that_cannot_be_read_is_reported(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_an_entry_that_cannot_be_read_is_reported(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Report a plugins-folder entry that raises while it is checked, and keep listing the others.
+    Report a plugins-folder entry that raises while it is checked, and
+    keep listing the others.
 
     Parameters
     ----------
@@ -369,12 +498,13 @@ def test_an_entry_that_cannot_be_read_is_reported(tmp_path: Path, monkeypatch: p
     assert problems == ["broken.zip — Input/output error"]
 
 
-def test_a_plugin_whose_manifest_or_state_cannot_be_read_is_still_listed_or_reported(
+def test_plugin_whose_manifest_or_state_cannot_be_read_still(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    List a plugin by its file name when its manifest cannot be opened, and report one that cannot be inspected at all.
+    List a plugin by its file name when its manifest cannot be opened,
+    and report one that cannot be inspected at all.
 
     Parameters
     ----------
@@ -404,7 +534,10 @@ def test_a_plugin_whose_manifest_or_state_cannot_be_read_is_still_listed_or_repo
 
     monkeypatch.setattr(packs, "installed_pack_info", unreadable)
     plugins, problems = installed_plugins(tmp_path)
-    assert problems == [] and sorted(plugin.title for plugin in plugins) == ["other", "viola"]
+    assert problems == [] and sorted(plugin.title for plugin in plugins) == [
+        "other",
+        "viola",
+    ]
     real = Path.lstat
 
     def lstat(self: Path, **kwargs: bool) -> os.stat_result:
@@ -434,7 +567,9 @@ def test_a_plugin_whose_manifest_or_state_cannot_be_read_is_still_listed_or_repo
 
     monkeypatch.setattr(Path, "lstat", lstat)
     plugins, problems = installed_plugins(tmp_path)
-    assert [plugin.title for plugin in plugins] == ["viola"] and problems == ["other.zip — gone"]
+    assert [plugin.title for plugin in plugins] == ["viola"] and problems == [
+        "other.zip — gone",
+    ]
 
 
 def test_installing_refuses_what_is_not_a_zip(tmp_path: Path) -> None:
@@ -453,7 +588,8 @@ def test_installing_refuses_what_is_not_a_zip(tmp_path: Path) -> None:
 
 def test_installing_waits_for_nobody_else_installing(tmp_path: Path) -> None:
     """
-    Refuse to install while another installation holds the plugins folder's lock.
+    Refuse to install while another installation holds the plugins
+    folder's lock.
 
     Parameters
     ----------
@@ -471,9 +607,13 @@ def test_installing_waits_for_nobody_else_installing(tmp_path: Path) -> None:
         lock.unlock()
 
 
-def test_installing_stops_at_an_unreadable_plugins_folder(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_installing_stops_at_an_unreadable_plugins_folder(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Report the entries of the plugins folder that could not be checked, and install nothing.
+    Report the entries of the plugins folder that could not be checked,
+    and install nothing.
 
     Parameters
     ----------
@@ -482,15 +622,22 @@ def test_installing_stops_at_an_unreadable_plugins_folder(tmp_path: Path, monkey
     monkeypatch : pytest.MonkeyPatch
         Make the folder's listing report a problem.
     """
-    monkeypatch.setattr(packs, "pack_manifests", lambda folder: ([], ["trouble — Input/output error"]))
+    monkeypatch.setattr(
+        packs,
+        "pack_manifests",
+        lambda folder: ([], ["trouble — Input/output error"]),
+    )
     with pytest.raises(OSError, match="trouble"):
         install_pack(VIOLA_ZIP, folder=tmp_path / "plugins")
     assert not (tmp_path / "plugins/viola.zip").exists()
 
 
-def test_only_an_installed_zip_in_the_folder_can_be_updated(tmp_path: Path) -> None:
+def test_only_an_installed_zip_in_the_folder_can_be_updated(
+    tmp_path: Path,
+) -> None:
     """
-    Refuse to update a plugin that is not a ZIP at the top of the plugins folder.
+    Refuse to update a plugin that is not a ZIP at the top of the
+    plugins folder.
 
     Parameters
     ----------
@@ -501,14 +648,23 @@ def test_only_an_installed_zip_in_the_folder_can_be_updated(tmp_path: Path) -> N
     folder.mkdir()
     elsewhere = tmp_path / "viola.zip"
     shutil.copyfile(VIOLA_ZIP, elsewhere)
-    shape = InstalledPlugin(title="Viola", path=elsewhere, manifest=elsewhere, snapshot=elsewhere.lstat())
+    shape = InstalledPlugin(
+        title="Viola",
+        path=elsewhere,
+        manifest=elsewhere,
+        snapshot=elsewhere.lstat(),
+    )
     with pytest.raises(ValueError, match="Only an installed plugin ZIP"):
         install_pack(VIOLA_ZIP, folder=folder, replacing=shape)
 
 
-def test_a_failed_move_into_place_is_reported(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_failed_move_into_place_is_reported(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Report the reason when the checked ZIP cannot be moved into the plugins folder.
+    Report the reason when the checked ZIP cannot be moved into the
+    plugins folder.
 
     Parameters
     ----------

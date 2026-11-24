@@ -1,10 +1,15 @@
 """
-Backup files: everything Alto keeps, in one file that can be read back into a clean install. Pure Python (no Qt).
+Backup files: everything Alto keeps, in one file that can be read back
+into a clean install. Pure Python (no Qt).
 
-A backup is a zip file holding three things: the whole database (profiles, every answer, what is known about each question),
-the saved preferences (theme, fonts, instrument, every exercise's settings, the last profile used) and a manifest that says
-which version of Alto made it and carries a checksum of each part. Reading a backup back checks the checksums and the database
-before anything is changed, so a damaged or foreign file is refused instead of half applied.
+A backup is a zip file holding three things: the whole database
+(profiles, every answer, what is known about each question),
+the saved preferences (theme, fonts, instrument, every exercise's
+settings, the last profile used) and a manifest that says
+which version of Alto made it and carries a checksum of each part.
+Reading a backup back checks the checksums and the database
+before anything is changed, so a damaged or foreign file is refused
+instead of half applied.
 
 Examples
 --------
@@ -13,10 +18,16 @@ Examples
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> folder = Path(tempfile.mkdtemp())
->>> info = write_backup(db, settings={"ui/theme": "dark"}, path=folder / "ada.altobackup")
+>>> info = write_backup(
+...     db,
+...     settings={"ui/theme": "dark"},
+...     path=folder / "ada.altobackup",
+... )
 >>> info.profiles, info.attempts
 (1, 0)
->>> backup = read_backup(folder / "ada.altobackup")
+>>> backup = read_backup(
+...     folder / "ada.altobackup"
+... )
 >>> backup.settings
 {'ui/theme': 'dark'}
 """
@@ -41,16 +52,25 @@ if TYPE_CHECKING:
     from alto.learning.database import Database
 
 FORMAT = 1
-DATABASE_FILE, SETTINGS_FILE, MANIFEST_FILE = "alto.db", "settings.json", "manifest.json"
+DATABASE_FILE, SETTINGS_FILE, MANIFEST_FILE = (
+    "alto.db",
+    "settings.json",
+    "manifest.json",
+)
 
 
 class BackupError(Exception):
     """
-    A backup file could not be written or read: it is damaged, is not a backup, or was made by a newer Alto.
+    A backup file could not be written or read: it is damaged, is not a
+    backup, or was made by a newer Alto.
 
     Examples
     --------
-    >>> str(BackupError("This is not an Alto backup."))
+    >>> str(
+    ...     BackupError(
+    ...         "This is not an Alto backup."
+    ...     )
+    ... )
     'This is not an Alto backup.'
     """
 
@@ -75,7 +95,13 @@ class BackupInfo:
 
     Examples
     --------
-    >>> BackupInfo(100.0, app_version="0.1.0", schema_version=1, profiles=2, attempts=30).profiles
+    >>> BackupInfo(
+    ...     100.0,
+    ...     app_version="0.1.0",
+    ...     schema_version=1,
+    ...     profiles=2,
+    ...     attempts=30,
+    ... ).profiles
     2
     """
 
@@ -102,7 +128,17 @@ class Backup:
 
     Examples
     --------
-    >>> Backup(BackupInfo(1.0, app_version="0.1.0", schema_version=1, profiles=0, attempts=0), settings={}, database=b"").settings
+    >>> Backup(
+    ...     BackupInfo(
+    ...         1.0,
+    ...         app_version="0.1.0",
+    ...         schema_version=1,
+    ...         profiles=0,
+    ...         attempts=0,
+    ...     ),
+    ...     settings={},
+    ...     database=b"",
+    ... ).settings
     {}
     """
 
@@ -118,7 +154,8 @@ def app_version() -> str:
     Returns
     -------
     str
-        The installed version, or "unknown" if Alto was not installed as a package.
+        The installed version, or "unknown" if Alto was not installed as
+        a package.
 
     Examples
     --------
@@ -127,7 +164,8 @@ def app_version() -> str:
     """
     try:
         return metadata.version("alto")
-    except metadata.PackageNotFoundError:  # pragma: no cover  (running from a source tree that was never installed)
+    # A source checkout may lack installed package metadata.
+    except metadata.PackageNotFoundError:  # pragma: no cover
         return "unknown"
 
 
@@ -135,8 +173,10 @@ def encode_value(value: object) -> object:
     r"""
     Turn a saved preference into something JSON can hold.
 
-    Text, numbers, true and false and lists of them are kept as they are. Bytes, which Qt settings can hold, become a small
-    dictionary with the bytes in base64, so `decode_value` can bring them back.
+    Text, numbers, true and false and lists of them are kept as they
+    are. Bytes, which Qt settings can hold, become a small
+    dictionary with the bytes in base64, so `decode_value` can bring
+    them back.
 
     Parameters
     ----------
@@ -150,7 +190,11 @@ def encode_value(value: object) -> object:
 
     Examples
     --------
-    >>> encode_value("dark"), encode_value(5), encode_value(["a", "b"])
+    >>> (
+    ...     encode_value("dark"),
+    ...     encode_value(5),
+    ...     encode_value(["a", "b"]),
+    ... )
     ('dark', 5, ['a', 'b'])
     >>> encode_value(b"\x00\x01")
     {'bytes': 'AAE='}
@@ -231,7 +275,8 @@ def write_backup(
     path : Path
         The file to write; it is replaced if it exists. Keyword-only.
     now : float or None, default None
-        The time to record, as a timestamp; the clock is used if None. Keyword-only.
+        The time to record, as a timestamp; the clock is used if None.
+        Keyword-only.
 
     Returns
     -------
@@ -241,19 +286,28 @@ def write_backup(
     Raises
     ------
     BackupError
-        If the file cannot be written. Nothing is left at `path` in that case.
+        If the file cannot be written. Nothing is left at `path` in that
+        case.
 
     Examples
     --------
     >>> import tempfile
     >>> from alto.learning.database import Database
     >>> folder = Path(tempfile.mkdtemp())
-    >>> write_backup(Database(), settings={}, path=folder / "empty.altobackup", now=5.0).created
+    >>> write_backup(
+    ...     Database(),
+    ...     settings={},
+    ...     path=folder / "empty.altobackup",
+    ...     now=5.0,
+    ... ).created
     5.0
     """
     data = db.snapshot()
     schema_version, profiles, attempts = check_snapshot(data)
-    plain = json.dumps({k: encode_value(v) for k, v in sorted(settings.items())}, indent=2).encode("utf-8")
+    plain = json.dumps(
+        {k: encode_value(v) for k, v in sorted(settings.items())},
+        indent=2,
+    ).encode("utf-8")
     info = BackupInfo(
         created=time.time() if now is None else now,
         app_version=app_version(),
@@ -269,11 +323,16 @@ def write_backup(
         "schema_version": info.schema_version,
         "profiles": info.profiles,
         "attempts": info.attempts,
-        "checksums": {DATABASE_FILE: _digest(data), SETTINGS_FILE: _digest(plain)},
+        "checksums": {
+            DATABASE_FILE: _digest(data),
+            SETTINGS_FILE: _digest(plain),
+        },
     }
     partial = path.with_name(
         path.name + ".part",
-    )  # written beside the target and moved into place, so a failure leaves no half file
+        # written beside the target and moved into place, so a failure
+        # leaves no half file
+    )
     try:
         with zipfile.ZipFile(partial, "w", zipfile.ZIP_DEFLATED) as z:
             z.writestr(MANIFEST_FILE, json.dumps(manifest, indent=2))
@@ -282,13 +341,16 @@ def write_backup(
         partial.replace(path)
     except OSError as error:
         partial.unlink(missing_ok=True)
-        raise BackupError(f"The backup could not be written: {error.strerror or error}.") from error
+        raise BackupError(
+            f"The backup could not be written: {error.strerror or error}.",
+        ) from error
     return info
 
 
 def read_backup(path: Path) -> Backup:
     """
-    Read a backup file and check it all the way through, without changing anything.
+    Read a backup file and check it all the way through, without
+    changing anything.
 
     Parameters
     ----------
@@ -303,14 +365,17 @@ def read_backup(path: Path) -> Backup:
     Raises
     ------
     BackupError
-        If the file cannot be read, is not an Alto backup, is damaged (a part does not match its checksum, or the database is
+        If the file cannot be read, is not an Alto backup, is damaged (a
+        part does not match its checksum, or the database is
         not intact), or was made by a newer version of Alto.
 
     Examples
     --------
     >>> import tempfile
     >>> folder = Path(tempfile.mkdtemp())
-    >>> (folder / "x.altobackup").write_bytes(b"not a zip")
+    >>> (folder / "x.altobackup").write_bytes(
+    ...     b"not a zip"
+    ... )
     9
     >>> read_backup(folder / "x.altobackup")
     Traceback (most recent call last):
@@ -324,17 +389,39 @@ def read_backup(path: Path) -> Backup:
                 raise BackupError("This is not an Alto backup.")
             manifest = json.loads(z.read(MANIFEST_FILE))
             plain, data = z.read(SETTINGS_FILE), z.read(DATABASE_FILE)
-    except (zipfile.BadZipFile, json.JSONDecodeError, KeyError, UnicodeDecodeError):
+    except (
+        zipfile.BadZipFile,
+        json.JSONDecodeError,
+        KeyError,
+        UnicodeDecodeError,
+    ):
         raise BackupError("This is not an Alto backup.") from None
     except OSError as error:
-        raise BackupError(f"The file could not be read: {error.strerror or error}.") from error
+        raise BackupError(
+            f"The file could not be read: {error.strerror or error}.",
+        ) from error
     if not isinstance(manifest, dict) or manifest.get("app") != "alto":
         raise BackupError("This is not an Alto backup.")
-    if not isinstance(manifest.get("format"), int) or manifest["format"] > FORMAT:
-        raise BackupError("This backup was made by a newer version of Alto. Update Alto to read it.")
+    if (
+        not isinstance(manifest.get("format"), int)
+        or manifest["format"] > FORMAT
+    ):
+        raise BackupError(
+            (
+                "This backup was made by a newer version of Alto. Update "
+                "Alto to read it."
+            ),
+        )
     checksums = manifest.get("checksums", {})
-    if checksums.get(DATABASE_FILE) != _digest(data) or checksums.get(SETTINGS_FILE) != _digest(plain):
-        raise BackupError("This backup is damaged: its contents do not match their checksums.")
+    if checksums.get(DATABASE_FILE) != _digest(data) or checksums.get(
+        SETTINGS_FILE,
+    ) != _digest(plain):
+        raise BackupError(
+            (
+                "This backup is damaged: its contents do not match their "
+                "checksums."
+            ),
+        )
     try:
         schema_version, profiles, attempts = check_snapshot(data)
         settings = json.loads(plain)
@@ -373,7 +460,8 @@ def restore_database(
     Raises
     ------
     BackupError
-        If the database in the backup cannot be loaded. The database is not changed.
+        If the database in the backup cannot be loaded. The database is
+        not changed.
 
     Examples
     --------
@@ -382,9 +470,18 @@ def restore_database(
     >>> source = Database()
     >>> _ = source.add_profile("Ada")
     >>> folder = Path(tempfile.mkdtemp())
-    >>> _ = write_backup(source, settings={}, path=folder / "a.altobackup")
+    >>> _ = write_backup(
+    ...     source,
+    ...     settings={},
+    ...     path=folder / "a.altobackup",
+    ... )
     >>> clean = Database()
-    >>> restore_database(clean, backup=read_backup(folder / "a.altobackup"))
+    >>> restore_database(
+    ...     clean,
+    ...     backup=read_backup(
+    ...         folder / "a.altobackup"
+    ...     ),
+    ... )
     >>> [p.name for p in clean.profiles()]
     ['Ada']
     """

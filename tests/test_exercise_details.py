@@ -1,4 +1,7 @@
-"""Help texts, stored questions, and the small helpers around the exercises."""
+"""
+Help texts, stored questions, and the small helpers around the
+exercises.
+"""
 
 from __future__ import annotations
 
@@ -72,10 +75,17 @@ def test_the_keyboard_help_follows_the_settings() -> None:
     cfg = settings.keyboard
     cfg.require_octave, cfg.key_signature = False, False
     plain = KeyboardNotes().instructions()
-    assert "C♯ and D♭" in plain and "octave" not in plain.lower().replace("octaves", "")
+    assert "C♯ and D♭" in plain and "octave" not in plain.lower().replace(
+        "octaves",
+        "",
+    )
     cfg.require_octave, cfg.key_signature = True, True
     full = KeyboardNotes().instructions()
-    assert "middle C" in full and "key signature is shown" in full and "C♯ and D♭" not in full
+    assert (
+        "middle C" in full
+        and "key signature is shown" in full
+        and "C♯ and D♭" not in full
+    )
 
 
 def test_the_note_construction_help_follows_the_settings() -> None:
@@ -113,21 +123,34 @@ def test_a_stored_question_comes_back_exactly() -> None:
     )
     again = Question.from_dict(q.to_dict())
     assert again == q
-    assert again.grid == {"a": (0, 0), "b": (1, 0), "c": (1, 1)} and again.keyboard_range == (48, 72)
-    assert again.accept == ("B", "b") and again.check("B") and again.check("b") and not again.check("c")
+    assert again.grid == {
+        "a": (0, 0),
+        "b": (1, 0),
+        "c": (1, 1),
+    } and again.keyboard_range == (48, 72)
+    assert (
+        again.accept == ("B", "b")
+        and again.check("B")
+        and again.check("b")
+        and not again.check("c")
+    )
 
 
-def test_an_arpeggio_that_fits_nowhere_is_reported(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_an_arpeggio_that_fits_nowhere_is_reported(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that an arpeggio that fits nowhere is reported.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     tiny = {
-        clef: (Note(4, letter=0), Note(4, letter=1)) for clef in ARPEGGIO_WINDOWS
+        clef: (Note(4, letter=0), Note(4, letter=1))
+        for clef in ARPEGGIO_WINDOWS
     }  # two staff steps: too small for any arpeggio
     monkeypatch.setattr("alto.exercises.library.ARPEGGIO_WINDOWS", tiny)
     with pytest.raises(RuntimeError, match="no arpeggio fits"):
@@ -138,32 +161,59 @@ def test_diatonic_names_and_tonics() -> None:
     """
     Test diatonic names and tonics.
     """
-    assert diatonic_name(Note(4, letter=0).diatonic) == "C4" and diatonic_name(Note(2, letter=6).diatonic) == "B2"
+    assert (
+        diatonic_name(Note(4, letter=0).diatonic) == "C4"
+        and diatonic_name(Note(2, letter=6).diatonic) == "B2"
+    )
     tonics = all_tonics()
-    assert len(tonics) == 21 and Note(4, letter=3, accidental=1) in tonics and Note(4, letter=0, accidental=2) not in tonics
+    assert (
+        len(tonics) == 21
+        and Note(4, letter=3, accidental=1) in tonics
+        and Note(4, letter=0, accidental=2) not in tonics
+    )
     assert len(all_tonics(0)) == 7 and len(all_tonics(2)) == 35
 
 
-def test_a_stored_question_is_only_asked_again_under_the_settings_it_was_made_for() -> None:
+def test_stored_question_only_asked_again_under_settings_made() -> None:
     """
-    Check that a stored question is only asked again under the settings it was made for.
+    Check that a stored question is only asked again under the settings
+    it was made for.
     """
     for exercise, change in (
-        (NoteNames(), lambda: setattr(settings.note_names, "naming", "solfege")),
-        (KeyboardNotes(), lambda: setattr(settings.keyboard, "black_keys", False)),
-        (NoteConstruction(), lambda: setattr(settings.construction, "accidentals", True)),
+        (
+            NoteNames(),
+            lambda: setattr(settings.note_names, "naming", "solfege"),
+        ),
+        (
+            KeyboardNotes(),
+            lambda: setattr(settings.keyboard, "black_keys", False),
+        ),
+        (
+            NoteConstruction(),
+            lambda: setattr(settings.construction, "accidentals", True),
+        ),
     ):
         before = exercise.settings_signature()
         change()
         assert exercise.settings_signature() != before, type(exercise).__name__
 
 
-def test_stored_construction_questions_keep_distinct_practice_histories() -> None:
-    """Distinguish question variants on replay and honor the legacy hidden staff signature."""
+def test_stored_construction_questions_keep_distinct_practice_histories() -> (
+    None
+):
+    """
+    Distinguish question variants on replay and honor the legacy hidden
+    staff signature.
+    """
     q = Question("C", choices=[], answer="C", construct=Note.parse("C4"))
     variants = [
         Question.from_dict({**q.to_dict(), **flags})
-        for flags in ({"notes_only": True}, {"any_octave": True}, {"staff_signature": 0}, {"minor": True})
+        for flags in (
+            {"notes_only": True},
+            {"any_octave": True},
+            {"staff_signature": 0},
+            {"minor": True},
+        )
     ]
     assert len({item.item_key() for item in [q, *variants]}) == 5
     assert variants[1].check_placed(Note.parse("C5"))

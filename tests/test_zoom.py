@@ -1,8 +1,11 @@
 """
-Tests for zoom: the steps, what the zoom is applied to, and the controls that change it.
+Tests for zoom: the steps, what the zoom is applied to, and the controls
+that change it.
 
-The zoom scales the application font, the lengths in stylesheets, the sizes the interface fixes in pixels, the hand-drawn
-notation and the icons, and the window is made again at the new size. It is changed with Ctrl and Plus or Minus, or Ctrl and
+The zoom scales the application font, the lengths in stylesheets, the
+sizes the interface fixes in pixels, the hand-drawn
+notation and the icons, and the window is made again at the new size. It
+is changed with Ctrl and Plus or Minus, or Ctrl and
 the mouse wheel, and it is saved.
 """
 
@@ -35,7 +38,8 @@ def wheel(delta: int, *, control: bool) -> QWheelEvent:
     Parameters
     ----------
     delta : int
-        How far it turned, 120 for one click, positive away from the user.
+        How far it turned, 120 for one click, positive away from the
+        user.
     control : bool
         Whether Ctrl is held. Keyword-only.
 
@@ -44,7 +48,11 @@ def wheel(delta: int, *, control: bool) -> QWheelEvent:
     QWheelEvent
         The event.
     """
-    modifier = Qt.KeyboardModifier.ControlModifier if control else Qt.KeyboardModifier.NoModifier
+    modifier = (
+        Qt.KeyboardModifier.ControlModifier
+        if control
+        else Qt.KeyboardModifier.NoModifier
+    )
     return QWheelEvent(
         QPointF(5, 5),
         QPointF(5, 5),
@@ -58,7 +66,10 @@ def wheel(delta: int, *, control: bool) -> QWheelEvent:
 
 
 def test_the_zoom_moves_through_its_steps_and_stops_at_the_ends() -> None:
-    """Zoom in and out one step at a time between the smallest and the largest, and say so when it changes."""
+    """
+    Zoom in and out one step at a time between the smallest and the
+    largest, and say so when it changes.
+    """
     heard: list[int] = []
     zoom.signals.changed.connect(heard.append)
     assert zoom.percent() == 100 and zoom.factor() == 1.0
@@ -74,8 +85,14 @@ def test_the_zoom_moves_through_its_steps_and_stops_at_the_ends() -> None:
     assert heard[0] == 110 and heard[-1] == 100
 
 
-@pytest.mark.parametrize(("asked", "got"), [(103, 100), (1, 50), (1000, 300), (140, 150), (126, 125)])
-def test_a_zoom_that_is_not_a_step_goes_to_the_nearest(asked: int, got: int) -> None:
+@pytest.mark.parametrize(
+    ("asked", "got"),
+    [(103, 100), (1, 50), (1000, 300), (140, 150), (126, 125)],
+)
+def test_a_zoom_that_is_not_a_step_goes_to_the_nearest(
+    asked: int,
+    got: int,
+) -> None:
     """
     Round a percentage to the nearest step.
 
@@ -91,7 +108,10 @@ def test_a_zoom_that_is_not_a_step_goes_to_the_nearest(asked: int, got: int) -> 
 
 
 def test_the_zoom_is_saved_and_a_bad_saved_zoom_is_ignored() -> None:
-    """Remember the zoom between sessions, and fall back to 100% for anything that is not a step."""
+    """
+    Remember the zoom between sessions, and fall back to 100% for
+    anything that is not a step.
+    """
     zoom.set_percent(150)
     assert str(store().value(zoom.SETTING)) == "150"
     zoom._percent = 100
@@ -106,29 +126,48 @@ def test_the_zoom_is_saved_and_a_bad_saved_zoom_is_ignored() -> None:
 
 
 def test_lengths_scale_with_the_zoom_and_never_vanish() -> None:
-    """Scale pixel lengths, keeping zero at zero and a small length at least one pixel."""
+    """
+    Scale pixel lengths, keeping zero at zero and a small length at
+    least one pixel.
+    """
     zoom.set_percent(200)
-    assert zoom.px(20) == 40 and zoom.px(0) == 0 and zoom.px(1) == 2 and zoom.px(-4) == -8
+    assert (
+        zoom.px(20) == 40
+        and zoom.px(0) == 0
+        and zoom.px(1) == 2
+        and zoom.px(-4) == -8
+    )
     zoom.set_percent(50)
     assert zoom.px(20) == 10 and zoom.px(1) == 1 and zoom.px(-1) == -1
 
 
 def test_a_stylesheet_has_its_lengths_scaled_but_not_its_colors() -> None:
-    """Scale each pixel and point length in a stylesheet, leaving colors, counts and names alone."""
-    sheet = "QLabel#a1px { color: #123px; padding: 8px 12px; font-size: 14pt; margin: 0px; width: 1.5px; opacity: 0.5 }"
+    """
+    Scale each pixel and point length in a stylesheet, leaving colors,
+    counts and names alone.
+    """
+    sheet = (
+        "QLabel#a1px { color: #123px; padding: 8px 12px; font-size: 14pt; "
+        "margin: 0px; width: 1.5px; opacity: 0.5 }"
+    )
     assert zoom.css(sheet) == sheet
     zoom.set_percent(200)
-    assert (
-        zoom.css(sheet)
-        == "QLabel#a1px { color: #123px; padding: 16px 24px; font-size: 28pt; margin: 0px; width: 3px; opacity: 0.5 }"
+    assert zoom.css(sheet) == (
+        "QLabel#a1px { color: #123px; padding: 16px 24px; font-size: "
+        "28pt; margin: 0px; width: 3px; opacity: 0.5 }"
     )
     zoom.set_percent(50)
-    assert "padding: 4px 6px" in zoom.css(sheet) and "font-size: 7pt" in zoom.css(sheet)
+    assert "padding: 4px 6px" in zoom.css(
+        sheet,
+    ) and "font-size: 7pt" in zoom.css(sheet)
 
 
-def test_the_application_font_follows_the_zoom_without_compounding(app: QApplication) -> None:
+def test_the_application_font_follows_the_zoom_without_compounding(
+    app: QApplication,
+) -> None:
     """
-    Make the font as large as the zoom says each time, always from its size at 100%.
+    Make the font as large as the zoom says each time, always from its
+    size at 100%.
 
     Parameters
     ----------
@@ -152,7 +191,8 @@ def test_the_application_font_follows_the_zoom_without_compounding(app: QApplica
 
 def test_the_theme_stylesheet_is_scaled(app: QApplication) -> None:
     """
-    Scale the lengths in the application stylesheet, so that padding and corners grow with the text.
+    Scale the lengths in the application stylesheet, so that padding and
+    corners grow with the text.
 
     Parameters
     ----------
@@ -170,16 +210,34 @@ def test_the_theme_stylesheet_is_scaled(app: QApplication) -> None:
 
 
 def test_the_wheel_zooms_with_ctrl_held_and_scrolls_without_it() -> None:
-    """Take a turn of the wheel with Ctrl as a zoom step per click, and leave an ordinary turn alone."""
+    """
+    Take a turn of the wheel with Ctrl as a zoom step per click, and
+    leave an ordinary turn alone.
+    """
     handler = zoom.WheelZoom()
     nobody = QObject()
     assert not handler.eventFilter(nobody, wheel(120, control=False))
     assert zoom.percent() == 100
-    assert handler.eventFilter(nobody, wheel(120, control=True)) and zoom.percent() == 110
-    assert handler.eventFilter(nobody, wheel(-120, control=True)) and zoom.percent() == 100
-    assert handler.eventFilter(nobody, wheel(-240, control=True)) and zoom.percent() == 80
-    assert handler.eventFilter(nobody, wheel(40, control=True)) and zoom.percent() == 80  # a small turn adds up
-    assert handler.eventFilter(nobody, wheel(40, control=True)) and handler.eventFilter(nobody, wheel(40, control=True))
+    assert (
+        handler.eventFilter(nobody, wheel(120, control=True))
+        and zoom.percent() == 110
+    )
+    assert (
+        handler.eventFilter(nobody, wheel(-120, control=True))
+        and zoom.percent() == 100
+    )
+    assert (
+        handler.eventFilter(nobody, wheel(-240, control=True))
+        and zoom.percent() == 80
+    )
+    assert (
+        handler.eventFilter(nobody, wheel(40, control=True))
+        and zoom.percent() == 80
+    )  # a small turn adds up
+    assert handler.eventFilter(
+        nobody,
+        wheel(40, control=True),
+    ) and handler.eventFilter(nobody, wheel(40, control=True))
     assert zoom.percent() == 90
     pixels = QWheelEvent(
         QPointF(),
@@ -194,13 +252,20 @@ def test_the_wheel_zooms_with_ctrl_held_and_scrolls_without_it() -> None:
     assert handler.eventFilter(nobody, pixels) and zoom.percent() == 100
     assert not handler.eventFilter(nobody, QEvent(QEvent.Type.None_))
     handler.eventFilter(nobody, wheel(60, control=True))
-    handler.eventFilter(nobody, wheel(60, control=False))  # releasing Ctrl forgets a half turn
+    handler.eventFilter(
+        nobody,
+        wheel(60, control=False),
+    )  # releasing Ctrl forgets a half turn
     assert handler._turned == 0
 
 
-def test_the_window_has_the_zoom_shortcuts_and_the_wheel(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_window_has_the_zoom_shortcuts_and_the_wheel(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Offer Ctrl with Plus, Equals, Minus and 0 as shortcuts that work anywhere in the app, and make the window again after a pause.
+    Offer Ctrl with Plus, Equals, Minus and 0 as shortcuts that work
+    anywhere in the app, and make the window again after a pause.
 
     Parameters
     ----------
@@ -210,11 +275,23 @@ def test_the_window_has_the_zoom_shortcuts_and_the_wheel(app: QApplication, monk
         Count the times the window is made again.
     """
     window = main_window.MainWindow()
-    actions = {action.objectName(): action for action in window.actions() if action.objectName().startswith("zoom")}
+    actions = {
+        action.objectName(): action
+        for action in window.actions()
+        if action.objectName().startswith("zoom")
+    }
     assert set(actions) == {"zoomIn", "zoomOut", "zoomReset"}
-    assert all(action.shortcutContext() == Qt.ShortcutContext.ApplicationShortcut for action in actions.values())
-    assert {key.toString() for key in actions["zoomIn"].shortcuts()} >= {"Ctrl+="}
-    assert actions["zoomOut"].shortcut().toString() == "Ctrl+-" and actions["zoomReset"].shortcut().toString() == "Ctrl+0"
+    assert all(
+        action.shortcutContext() == Qt.ShortcutContext.ApplicationShortcut
+        for action in actions.values()
+    )
+    assert {key.toString() for key in actions["zoomIn"].shortcuts()} >= {
+        "Ctrl+=",
+    }
+    assert (
+        actions["zoomOut"].shortcut().toString() == "Ctrl+-"
+        and actions["zoomReset"].shortcut().toString() == "Ctrl+0"
+    )
     rebuilt = Mock()
     monkeypatch.setattr(window, "rebuild", rebuilt)
     actions["zoomIn"].trigger()
@@ -230,18 +307,30 @@ def test_the_window_has_the_zoom_shortcuts_and_the_wheel(app: QApplication, monk
     assert rebuilt.call_count == 2
     window.show()
     window.activateWindow()
-    assert QTest.qWaitForWindowActive(window, 2000)  # the window gains the focus, so the zoom watches it
+    assert QTest.qWaitForWindowActive(
+        window,
+        2000,
+    )  # the window gains the focus, so the zoom watches it
     handle = window.windowHandle()
     assert handle is not None
-    app.sendEvent(handle, wheel(120, control=True))  # a turn reaches the window before any widget in it
+    app.sendEvent(
+        handle,
+        wheel(120, control=True),
+    )  # a turn reaches the window before any widget in it
     assert zoom.percent() == 110
-    app.sendEvent(app, wheel(120, control=True))  # nothing watches the application itself, which every widget's events cross
+    app.sendEvent(
+        app,
+        wheel(120, control=True),
+        # nothing watches the application itself, which every widget's
+        # events cross
+    )
     assert zoom.percent() == 110
 
 
 def test_zoom_feedback_and_settled_layout(app: QApplication) -> None:
     """
-    Preview a burst immediately, place its percentage left of Glossary, and hide it after the final change.
+    Preview a burst immediately, place its percentage left of Glossary,
+    and hide it after the final change.
 
     Parameters
     ----------
@@ -258,12 +347,20 @@ def test_zoom_feedback_and_settled_layout(app: QApplication) -> None:
     assert preview.isEnabled() and window.splitter.graphicsEffect() is preview
     app.processEvents()
     assert not preview.frame.isNull()
-    assert window.zoom_indicator.text() == "110%" and window.zoom_indicator.isVisible()
+    assert (
+        window.zoom_indicator.text() == "110%"
+        and window.zoom_indicator.isVisible()
+    )
     zoom.step(1)
-    assert window._zoom_preview is preview and preview.animation.endValue() == 1.25
+    assert (
+        window._zoom_preview is preview
+        and preview.animation.endValue() == 1.25
+    )
     zoom.reset()
     QTest.qWait(main_window.ZOOM_SETTLE_MS + 50)
-    assert window.centralWidget() is root and not window._zoom_preview.isEnabled()
+    assert (
+        window.centralWidget() is root and not window._zoom_preview.isEnabled()
+    )
     assert window.zoom_indicator.text() == "100%"
 
     window.open_exercise(NoteNames)
@@ -271,22 +368,32 @@ def test_zoom_feedback_and_settled_layout(app: QApplication) -> None:
     app.processEvents()
     QTest.qWait(main_window.ZOOM_SETTLE_MS + 50)
     assert not window._zoom_preview.isEnabled() and window._layout_zoom == 90
-    assert window.title_label.text() == NoteNames.name and window.zoom_indicator.text() == "90%"
+    assert (
+        window.title_label.text() == NoteNames.name
+        and window.zoom_indicator.text() == "90%"
+    )
     assert window.zoom_indicator.isVisible()
-    assert window.zoom_indicator.geometry().right() < window.glossary_button.geometry().left()
+    assert (
+        window.zoom_indicator.geometry().right()
+        < window.glossary_button.geometry().left()
+    )
     window._reset_zoom()
     window._zoom_timer.stop()
     window._apply_zoom()
     window._zoom_notice_timer.setInterval(20)
     window._reset_zoom()
-    assert window.zoom_indicator.isVisible() and window.zoom_indicator.text() == "100%"
+    assert (
+        window.zoom_indicator.isVisible()
+        and window.zoom_indicator.text() == "100%"
+    )
     QTest.qWait(50)
     assert window.zoom_indicator.isHidden()
 
 
 def test_the_window_opens_at_the_saved_zoom(app: QApplication) -> None:
     """
-    Take the saved zoom into use as the window starts, so that the first thing drawn is already at it.
+    Take the saved zoom into use as the window starts, so that the first
+    thing drawn is already at it.
 
     Parameters
     ----------
@@ -296,12 +403,15 @@ def test_the_window_opens_at_the_saved_zoom(app: QApplication) -> None:
     base = app.font().pointSizeF()
     store().setValue(zoom.SETTING, 200)
     main_window.MainWindow()
-    assert zoom.percent() == 200 and app.font().pointSizeF() == pytest.approx(base * 2)
+    assert zoom.percent() == 200 and app.font().pointSizeF() == pytest.approx(
+        base * 2,
+    )
 
 
 def test_fixed_sizes_follow_the_zoom(app: QApplication) -> None:
     """
-    Make the sizes the interface fixes in pixels as much larger as the zoom says.
+    Make the sizes the interface fixes in pixels as much larger as the
+    zoom says.
 
     Parameters
     ----------
@@ -327,10 +437,22 @@ def test_notation_is_drawn_at_the_zoom(app: QApplication) -> None:
     """
     del app
     staff, keys = StaffWidget(max_step=10.0), KeyboardWidget()
-    assert (staff.GAP, staff.side, staff.max_step, keys.pad, keys.max_key_width) == (16.0, 20.0, 10.0, 10, 38)
+    assert (
+        staff.GAP,
+        staff.side,
+        staff.max_step,
+        keys.pad,
+        keys.max_key_width,
+    ) == (16.0, 20.0, 10.0, 10, 38)
     zoom.set_percent(200)
     staff, keys = StaffWidget(max_step=10.0), KeyboardWidget()
-    assert (staff.GAP, staff.side, staff.max_step, keys.pad, keys.max_key_width) == (32.0, 40.0, 20.0, 20, 76)
+    assert (
+        staff.GAP,
+        staff.side,
+        staff.max_step,
+        keys.pad,
+        keys.max_key_width,
+    ) == (32.0, 40.0, 20.0, 20, 76)
     assert StaffWidget().maximumWidth() >= 0 and staff.height() >= 0
 
 
@@ -346,13 +468,16 @@ def test_icons_are_drawn_as_large_as_the_zoom_asks(app: QApplication) -> None:
     del app
     small = svg_icon(PLAY, color=QColor("#000000"), size=20).pixmap(40, 40)
     zoom.set_percent(200)
-    large = svg_icon(PLAY, color=QColor("#000000"), size=20).availableSizes()[0]
+    large = svg_icon(PLAY, color=QColor("#000000"), size=20).availableSizes()[
+        0
+    ]
     assert small.width() == 40 and large.width() == 80
 
 
 def test_charts_keep_their_margins_in_proportion(app: QApplication) -> None:
     """
-    Scale the margins and rows of a chart, including the ones a kind of chart sets for itself.
+    Scale the margins and rows of a chart, including the ones a kind of
+    chart sets for itself.
 
     Parameters
     ----------
@@ -369,9 +494,13 @@ def test_charts_keep_their_margins_in_proportion(app: QApplication) -> None:
 
 
 @pytest.mark.parametrize("percent", [50, 150, 300])
-def test_an_open_exercise_still_works_at_any_zoom(app: QApplication, percent: int) -> None:
+def test_an_open_exercise_still_works_at_any_zoom(
+    app: QApplication,
+    percent: int,
+) -> None:
     """
-    Ask questions on the staff and on the keyboard at the smallest, a large and the largest zoom.
+    Ask questions on the staff and on the keyboard at the smallest, a
+    large and the largest zoom.
 
     Parameters
     ----------
@@ -389,9 +518,12 @@ def test_an_open_exercise_still_works_at_any_zoom(app: QApplication, percent: in
         assert view.question is not None and not view.grab().isNull()
 
 
-def test_the_font_is_left_alone_without_an_application(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_font_is_left_alone_without_an_application(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that applying the zoom to the font does nothing, and does not fail, when there is no application yet.
+    Check that applying the zoom to the font does nothing, and does not
+    fail, when there is no application yet.
 
     Parameters
     ----------

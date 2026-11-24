@@ -63,19 +63,27 @@ def slide_to(self, index):
     old, new = self.currentWidget(), self.widget(index)
     w, sign = self.width(), 1 if index > self.currentIndex() else -1
     new.setGeometry(0, 0, w, self.height())
-    new.move(sign * w, 0)  # park the new page just outside, on the side it enters from
+    new.move(
+        sign * w, 0
+    )  # park the new page just outside, on the side it enters from
     new.show()
     new.raise_()
     group = QParallelAnimationGroup(self)
     for widget, start, end in ((old, 0, -sign * w), (new, sign * w, 0)):
-        anim = QPropertyAnimation(widget, b"pos", group)  # animate the widget's own position property
+        anim = QPropertyAnimation(
+            widget, b"pos", group
+        )  # animate the widget's own position property
         anim.setDuration(220)
         anim.setEasingCurve(QEasingCurve.Type.OutCubic)
         anim.setStartValue(QPoint(start, 0))
         anim.setEndValue(QPoint(end, 0))
         group.addAnimation(anim)
-    group.finished.connect(done)  # setCurrentIndex(index) and put both pages at (0, 0)
-    motion.play(group)  # group.start(), held still in tests until they settle it
+    group.finished.connect(
+        done
+    )  # setCurrentIndex(index) and put both pages at (0, 0)
+    motion.play(
+        group
+    )  # group.start(), held still in tests until they settle it
 ```
 
 Points to copy: the new page is positioned off-screen *before* it is shown (otherwise it flashes in place for one frame); the two
@@ -166,7 +174,9 @@ looks like this:
 
 ```python
 view.answer_button.click()
-assert view.missed and view.scale_input.locked  # the wrong-answer feedback is showing
+assert (
+    view.missed and view.scale_input.locked
+)  # the wrong-answer feedback is showing
 motion.settle()  # the feedback ends
 assert not view.scale_input.locked  # cleared to try again
 ```

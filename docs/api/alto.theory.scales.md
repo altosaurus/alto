@@ -7,15 +7,29 @@ permalink: /api/alto.theory.scales/
 {% raw %}
 Scales, modes, key signatures and chords, built from spelled intervals.
 
-`SCALES` and `CHORDS` map a name to the list of intervals above the tonic or root. `build` turns such a list into notes,
-and the other functions work out key signatures, mode tonics and arpeggios from them.
+`SCALES` and `CHORDS` map a name to the list of intervals above the
+tonic or root. `build` turns such a list into notes,
+and the other functions work out key signatures, mode tonics and
+arpeggios from them.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> [str(n) for n in build(Note.parse("D4"), intervals=SCALES["Dorian"])]
+>>> [
+...     str(n)
+...     for n in build(
+...         Note.parse("D4"),
+...         intervals=SCALES["Dorian"],
+...     )
+... ]
 ['D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
->>> [str(n) for n in build(Note.parse("C4"), intervals=CHORDS["minor 7th"])]
+>>> [
+...     str(n)
+...     for n in build(
+...         Note.parse("C4"),
+...         intervals=CHORDS["minor 7th"],
+...     )
+... ]
 ['C4', 'E♭4', 'G4', 'B♭4']
 ```
 
@@ -25,7 +39,8 @@ and the other functions work out key signatures, mode tonics and arpeggios from 
 def major_key_tonic(count: int) -> Note
 ```
 
-Return the tonic of the major key with a given number of sharps or flats.
+Return the tonic of the major key with a given number of sharps or
+flats.
 
 **Parameters**
 
@@ -42,9 +57,13 @@ Return the tonic of the major key with a given number of sharps or flats.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> str(major_key_tonic(2))  # two sharps: D major
+>>> str(
+...     major_key_tonic(2)
+... )  # two sharps: D major
 'D4'
->>> str(major_key_tonic(-3))  # three flats: E♭ major
+>>> str(
+...     major_key_tonic(-3)
+... )  # three flats: E♭ major
 'E♭4'
 ```
 
@@ -58,9 +77,11 @@ def mode_tonic(
 ) -> Note
 ```
 
-Return the note a scale in a given mode starts on, for a given key signature.
+Return the note a scale in a given mode starts on, for a given key
+signature.
 
-The notes of a mode are those of a major scale started from another degree. D Dorian, for example, has the key
+The notes of a mode are those of a major scale started from another
+degree. D Dorian, for example, has the key
 signature of C major, started from its second note.
 
 **Parameters**
@@ -75,9 +96,15 @@ signature of C major, started from its second note.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> str(mode_tonic(0, mode="Dorian"))  # no sharps or flats: D Dorian
+>>> str(
+...     mode_tonic(0, mode="Dorian")
+... )  # no sharps or flats: D Dorian
 'D4'
->>> str(mode_tonic(2, mode="Natural minor (Aeolian)"))  # two sharps: B minor
+>>> str(
+...     mode_tonic(
+...         2, mode="Natural minor (Aeolian)"
+...     )
+... )  # two sharps: B minor
 'B4'
 ```
 
@@ -92,7 +119,8 @@ def arpeggio(
 ) -> list[Note]
 ```
 
-Return a chord broken and rising from its lowest note, then that note again an octave higher.
+Return a chord broken and rising from its lowest note, then that
+note again an octave higher.
 
 **Parameters**
 
@@ -107,9 +135,22 @@ Return a chord broken and rising from its lowest note, then that note again an o
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> [str(n) for n in arpeggio(Note.parse("C4"), intervals=CHORDS["major"])]
+>>> [
+...     str(n)
+...     for n in arpeggio(
+...         Note.parse("C4"),
+...         intervals=CHORDS["major"],
+...     )
+... ]
 ['C4', 'E4', 'G4', 'C5']
->>> [str(n) for n in arpeggio(Note.parse("C4"), intervals=CHORDS["major"], inversion=1)]
+>>> [
+...     str(n)
+...     for n in arpeggio(
+...         Note.parse("C4"),
+...         intervals=CHORDS["major"],
+...         inversion=1,
+...     )
+... ]
 ['E4', 'G4', 'C5', 'E5']
 ```
 
@@ -137,7 +178,13 @@ Build the notes of a scale or chord above a tonic.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> [str(n) for n in build(Note.parse("G4"), intervals=SCALES["Major (Ionian)"])]
+>>> [
+...     str(n)
+...     for n in build(
+...         Note.parse("G4"),
+...         intervals=SCALES["Major (Ionian)"],
+...     )
+... ]
 ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F♯5']
 ```
 
@@ -151,7 +198,8 @@ def key_signature(
 ) -> int
 ```
 
-Return the key signature of a scale as a signed count of accidentals.
+Return the key signature of a scale as a signed count of
+accidentals.
 
 **Parameters**
 
@@ -167,9 +215,13 @@ Return the key signature of a scale as a signed count of accidentals.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> key_signature("G")  # G major has one sharp
 1
->>> key_signature("Eb")  # E♭ major has three flats
+>>> key_signature(
+...     "Eb"
+... )  # E♭ major has three flats
 -3
->>> key_signature("A", scale="Natural minor (Aeolian)")  # A minor has none
+>>> key_signature(
+...     "A", scale="Natural minor (Aeolian)"
+... )  # A minor has none
 0
 ```
 
@@ -206,7 +258,8 @@ Describe a key signature in words.
 def all_tonics(max_accidentals: int = 1) -> list[Note]
 ```
 
-Return every spelled tonic in octave 4, within a limit on accidentals.
+Return every spelled tonic in octave 4, within a limit on
+accidentals.
 
 **Parameters**
 

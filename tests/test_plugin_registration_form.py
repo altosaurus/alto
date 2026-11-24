@@ -1,4 +1,7 @@
-"""Exercise the registration issue template and the approval workflow's registry writer."""
+"""
+Exercise the registration issue template and the approval workflow's
+registry writer.
+"""
 
 import json
 import os
@@ -45,13 +48,23 @@ _No response_
         (BODY.replace(ATTESTATION, "I read the form."), "Rights and licenses"),
         (BODY.replace("viola-studio", "_No response_"), "Pack ID"),
         (BODY + "\n### Pack ID\nother", "Duplicate"),
-        (BODY.replace("https://github.com/example/strings", "https://example.net/strings"), "GitHub repository"),
-        (BODY.replace("_No response_", "http://example.org/info.json"), "HTTPS URL"),
+        (
+            BODY.replace(
+                "https://github.com/example/strings",
+                "https://example.net/strings",
+            ),
+            "GitHub repository",
+        ),
+        (
+            BODY.replace("_No response_", "http://example.org/info.json"),
+            "HTTPS URL",
+        ),
     ],
 )
 def test_incomplete_registration(body: str, error: str) -> None:
     """
-    Refuse incomplete or ambiguous answers and require the exact checked attestation.
+    Refuse incomplete or ambiguous answers and require the exact checked
+    attestation.
 
     Parameters
     ----------
@@ -66,7 +79,8 @@ def test_incomplete_registration(body: str, error: str) -> None:
 
 def test_approval_creates_registry_entry(tmp_path: Path) -> None:
     """
-    Run the approval script on an issue event, repeat it, and check conflict handling.
+    Run the approval script on an issue event, repeat it, and check
+    conflict handling.
 
     Parameters
     ----------
@@ -76,7 +90,18 @@ def test_approval_creates_registry_entry(tmp_path: Path) -> None:
     assert TEMPLATE["body"][-1]["attributes"]["options"][0]["required"] is True
     subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
     subprocess.run(
-        ["git", "-c", "user.name=Test", "-c", "user.email=test@example.org", "commit", "-q", "--allow-empty", "-m", "initial"],
+        [
+            "git",
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.org",
+            "commit",
+            "-q",
+            "--allow-empty",
+            "-m",
+            "initial",
+        ],
         cwd=tmp_path,
         check=True,
     )
@@ -103,18 +128,36 @@ def test_approval_creates_registry_entry(tmp_path: Path) -> None:
             },
         ]
     original = registry.read_bytes()
-    event.write_text(json.dumps({"issue": data | {"number": 248}}), encoding="utf-8")
-    result = subprocess.run(command, cwd=tmp_path, env=env, capture_output=True, text=True)
+    event.write_text(
+        json.dumps({"issue": data | {"number": 248}}),
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        command,
+        cwd=tmp_path,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
     assert result.returncode != 0 and "already registered" in result.stderr
     assert registry.read_bytes() == original
 
 
 def test_optional_metadata() -> None:
-    """Keep an explicit author metadata URL and accept a blank optional field."""
+    """
+    Keep an explicit author metadata URL and accept a blank optional
+    field.
+    """
     address = "https://example.org/plugin.json"
-    entry = issue_entry({"number": 248, "body": BODY.replace("_No response_", address)}, form=TEMPLATE)
+    entry = issue_entry(
+        {"number": 248, "body": BODY.replace("_No response_", address)},
+        form=TEMPLATE,
+    )
     assert entry["metadata"] == address
     assert "metadata" not in issue_entry(
-        {"number": 248, "body": BODY.replace("### Metadata URL\n\n_No response_", "")},
+        {
+            "number": 248,
+            "body": BODY.replace("### Metadata URL\n\n_No response_", ""),
+        },
         form=TEMPLATE,
     )

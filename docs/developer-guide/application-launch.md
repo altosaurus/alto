@@ -39,7 +39,11 @@ For the interactive run, follow these lines:
 ```python
 app = QApplication(sys.argv)
 app.setApplicationName("Alto")
-app.setApplicationDisplayName("Alto - Music Theory" if alto_home() is None else "Alto (dev) - Music Theory")
+app.setApplicationDisplayName(
+    "Alto - Music Theory"
+    if alto_home() is None
+    else "Alto (dev) - Music Theory"
+)
 apply_theme(saved_theme())
 ```
 

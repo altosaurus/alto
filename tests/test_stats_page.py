@@ -1,4 +1,7 @@
-"""The statistics page: its numbers follow the answers recorded and the filters chosen."""
+"""
+The statistics page: its numbers follow the answers recorded and the
+filters chosen.
+"""
 
 from __future__ import annotations
 
@@ -54,10 +57,15 @@ def test_durations_read_naturally() -> None:
     """
     assert format_duration(5) == "5 s" and format_duration(29) == "29 s"
     assert format_duration(90) == "2 min" and format_duration(3000) == "50 min"
-    assert format_duration(3600) == "1 h 00 min" and format_duration(3 * 3600 + 7 * 60) == "3 h 07 min"
+    assert (
+        format_duration(3600) == "1 h 00 min"
+        and format_duration(3 * 3600 + 7 * 60) == "3 h 07 min"
+    )
 
 
-def test_a_profile_with_no_answers_gets_an_invitation_not_numbers(app: QApplication) -> None:
+def test_a_profile_with_no_answers_gets_an_invitation_not_numbers(
+    app: QApplication,
+) -> None:
     """
     Check that a profile with no answers gets an invitation not numbers.
 
@@ -69,8 +77,14 @@ def test_a_profile_with_no_answers_gets_an_invitation_not_numbers(app: QApplicat
     db = Database()
     page = StatsPage(Learner(db, profile=db.add_profile("Ben")))
     assert "No answers recorded for Ben" in page.note.text()
-    assert page.tiles["questions"].value.text() == "0" and page.tiles["accuracy"].value.text() == "–"
-    assert page.tiles["speed"].value.text() == "–" and page.tiles["tries"].value.text() == "–"
+    assert (
+        page.tiles["questions"].value.text() == "0"
+        and page.tiles["accuracy"].value.text() == "–"
+    )
+    assert (
+        page.tiles["speed"].value.text() == "–"
+        and page.tiles["tries"].value.text() == "–"
+    )
     assert page.table.rowCount() == 0
     assert page.grab().width() > 0
 
@@ -106,10 +120,17 @@ def test_the_numbers_come_from_the_active_profiles_answers(
     total = int(page.tiles["questions"].value.text())
     assert total > 20 and "Showing Ada" in page.note.text()
     assert page.tiles["accuracy"].value.text().endswith("%")
-    assert page.tiles["speed"].value.text().endswith(" s") and float(page.tiles["tries"].value.text()) >= 1.0
+    assert (
+        page.tiles["speed"].value.text().endswith(" s")
+        and float(page.tiles["tries"].value.text()) >= 1.0
+    )
     assert page.tiles["time"].value.text().endswith(("s", "min"))
     first_question = page.table.item(0, 1)
-    assert page.table.rowCount() > 0 and first_question is not None and first_question.text()
+    assert (
+        page.table.rowCount() > 0
+        and first_question is not None
+        and first_question.text()
+    )
     assert page.table.horizontalHeader().height() > 0
     assert page.grab().width() > 0
 
@@ -129,13 +150,23 @@ def test_every_timeframe_and_exercise_can_be_chosen(
         Builds a learner with a history of answers.
     """
     page = StatsPage(practiced_learner())
-    assert isinstance(page.exercise, FieldComboBox) and isinstance(page.timeframe, FieldComboBox)
+    assert isinstance(page.exercise, FieldComboBox) and isinstance(
+        page.timeframe,
+        FieldComboBox,
+    )
     counts = {}
     for i in range(page.timeframe.count()):
         page.timeframe.setCurrentIndex(i)
-        counts[page.timeframe.currentText()] = int(page.tiles["questions"].value.text())
+        counts[page.timeframe.currentText()] = int(
+            page.tiles["questions"].value.text(),
+        )
         assert page.volume.title.startswith("Questions answered per ")
-    assert counts["Last 7 days"] <= counts["Last 30 days"] <= counts["Last 90 days"] <= counts["All time"]
+    assert (
+        counts["Last 7 days"]
+        <= counts["Last 30 days"]
+        <= counts["Last 90 days"]
+        <= counts["All time"]
+    )
     assert counts["Last year"] <= counts["All time"]
     page.timeframe.setCurrentIndex(page.timeframe.findText("All time"))
     for i in range(1, page.exercise.count()):
@@ -164,9 +195,17 @@ def test_back_is_offered_by_a_button_and_by_escape(
     """
     page = StatsPage(practiced_learner(30))
     spy = QSignalSpy(page.back)
-    escape = [s for s in page.findChildren(QShortcut) if s.key() == QKeySequence(Qt.Key.Key_Escape)]
+    escape = [
+        s
+        for s in page.findChildren(QShortcut)
+        if s.key() == QKeySequence(Qt.Key.Key_Escape)
+    ]
     assert len(escape) == 1
-    escape[0].activated.emit()  # what pressing Esc does (a headless window is never the active one)
+    escape[
+        0
+        # what pressing Esc does (a headless window is never the active
+        # one)
+    ].activated.emit()
     assert spy.count() == 1
 
 
@@ -210,7 +249,8 @@ def all_time_page(learner: Learner) -> StatsPage:
 
 def test_volume_filter_stays_in_the_upper_right(app: QApplication) -> None:
     """
-    Keep the filter aligned with the plot and clear of the title as the chart resizes.
+    Keep the filter aligned with the plot and clear of the title as the
+    chart resizes.
 
     Parameters
     ----------
@@ -229,16 +269,23 @@ def test_volume_filter_stays_in_the_upper_right(app: QApplication) -> None:
         assert corner.y() == 0
         assert corner.x() + field.width() == chart._plot().right()
         heading = chart._heading
-        assert heading is not None and heading.text() == "Questions answered per month"
+        assert (
+            heading is not None
+            and heading.text() == "Questions answered per month"
+        )
         assert heading.height() >= heading.heightForWidth(heading.width())
         assert heading.geometry().right() < corner.x()
         assert max(heading.height(), field.height()) < chart._plot().top()
     page.close()
 
 
-def test_volume_granularity_and_period_details(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_volume_granularity_and_period_details(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Group the same first attempts at each resolution and drill into their original answers.
+    Group the same first attempts at each resolution and drill into
+    their original answers.
 
     Parameters
     ----------
@@ -251,7 +298,12 @@ def test_volume_granularity_and_period_details(app: QApplication, monkeypatch: p
     learner = Learner(db, profile=db.add_profile("Ada"))
     now = datetime(2026, 3, 10, 12).timestamp()
     monkeypatch.setattr(time, "time", lambda: now)
-    for day, hour, attempt, ok in [(1, 8, 1, True), (10, 10, 1, False), (10, 10, 2, True), (10, 11, 1, True)]:
+    for day, hour, attempt, ok in [
+        (1, 8, 1, True),
+        (10, 10, 1, False),
+        (10, 10, 2, True),
+        (10, 11, 1, True),
+    ]:
         db.add_attempt(
             learner.profile.id,
             exercise="NoteNames",
@@ -264,7 +316,10 @@ def test_volume_granularity_and_period_details(app: QApplication, monkeypatch: p
         )
     page = all_time_page(learner)
     trends = page.accuracy.labels.copy()
-    assert page.granularity.currentText() == "Auto" and page.volume.labels == trends
+    assert (
+        page.granularity.currentText() == "Auto"
+        and page.volume.labels == trends
+    )
     for period, bars in [("Month", 1), ("Week", 3), ("Day", 10)]:
         page.granularity.setCurrentText(period)
         assert page.volume.title == f"Questions answered per {period.lower()}"
@@ -279,14 +334,19 @@ def test_volume_granularity_and_period_details(app: QApplication, monkeypatch: p
     assert page.volume.selected == missed and page.accuracy.selected is None
     page.accuracy.clicked.emit(len(trends) - 1)
     assert page.answers.proxy.rowCount() == 3
-    assert page.volume.selected is None and page.speed.selected == len(trends) - 1
+    assert (
+        page.volume.selected is None and page.speed.selected == len(trends) - 1
+    )
     page.volume_scroll.setValue(0)
     assert page.detail.isHidden() and sum(page.volume.right) == 1
     page.volume.clicked.emit(page.volume.right.index(1))
     assert page.answers.proxy.rowCount() == 1
     page.timeframe.setCurrentText("Today")
     assert page.volume_scroll.isHidden() and page.detail.isHidden()
-    assert page.volume.title.endswith("hour") and sum(page.volume.right) == sum(page.volume.wrong) == 1
+    assert (
+        page.volume.title.endswith("hour")
+        and sum(page.volume.right) == sum(page.volume.wrong) == 1
+    )
     page.granularity.setCurrentText("Month")
     page.volume.clicked.emit(0)
     assert page.answers.proxy.rowCount() == 3
@@ -303,7 +363,8 @@ def test_clicking_a_bar_lists_the_answers_of_that_period(
     practiced_learner: Callable[..., Learner],
 ) -> None:
     """
-    Check that clicking a bar lists exactly the answers given in its period, and highlights the period in all three charts.
+    Check that clicking a bar lists exactly the answers given in its
+    period, and highlights the period in all three charts.
 
     Parameters
     ----------
@@ -315,17 +376,31 @@ def test_clicking_a_bar_lists_the_answers_of_that_period(
     learner = practiced_learner()
     page = all_time_page(learner)
     assert page.detail.isHidden()
-    busiest = max(range(len(page.volume.labels)), key=lambda i: page.volume.right[i] + page.volume.wrong[i])
+    busiest = max(
+        range(len(page.volume.labels)),
+        key=lambda i: page.volume.right[i] + page.volume.wrong[i],
+    )
     page.volume.clicked.emit(busiest)
     assert page._stats is not None
     bucket = page._stats.buckets[busiest]
     wanted = learner.db.count_attempts(
         learner.profile.id,
         since=bucket.start.timestamp(),
-        until=stats.period_end(bucket.start, granularity=page._stats.granularity).timestamp(),
+        until=stats.period_end(
+            bucket.start,
+            granularity=page._stats.granularity,
+        ).timestamp(),
     )
-    assert not page.detail.isHidden() and page.answers.proxy.rowCount() == wanted > 0
-    assert page.volume.selected == page.accuracy.selected == page.speed.selected == busiest
+    assert (
+        not page.detail.isHidden()
+        and page.answers.proxy.rowCount() == wanted > 0
+    )
+    assert (
+        page.volume.selected
+        == page.accuracy.selected
+        == page.speed.selected
+        == busiest
+    )
     assert str(wanted) in page.detail_note.text().replace(",", "")
 
 
@@ -334,7 +409,8 @@ def test_clicking_the_same_element_again_or_the_close_button_closes_the_list(
     practiced_learner: Callable[..., Learner],
 ) -> None:
     """
-    Check that the list of answers closes, and the highlight goes, when the same element is clicked again or Close is pressed.
+    Check that the list of answers closes, and the highlight goes, when
+    the same element is clicked again or Close is pressed.
 
     Parameters
     ----------
@@ -344,7 +420,10 @@ def test_clicking_the_same_element_again_or_the_close_button_closes_the_list(
         Builds a learner with a history of answers.
     """
     page = all_time_page(practiced_learner())
-    busiest = max(range(len(page.volume.labels)), key=lambda i: page.volume.right[i] + page.volume.wrong[i])
+    busiest = max(
+        range(len(page.volume.labels)),
+        key=lambda i: page.volume.right[i] + page.volume.wrong[i],
+    )
     page.volume.clicked.emit(busiest)
     page.volume.clicked.emit(busiest)
     assert page.detail.isHidden() and page.volume.selected is None
@@ -358,7 +437,8 @@ def test_clicking_an_exercise_lists_only_its_answers(
     practiced_learner: Callable[..., Learner],
 ) -> None:
     """
-    Check that clicking an exercise's row lists answers to that exercise only.
+    Check that clicking an exercise's row lists answers to that exercise
+    only.
 
     Parameters
     ----------
@@ -383,7 +463,8 @@ def test_clicking_a_day_of_the_calendar_lists_that_days_answers(
     practiced_learner: Callable[..., Learner],
 ) -> None:
     """
-    Check that clicking a day lists the answers given on it, however long a timeframe the other charts cover.
+    Check that clicking a day lists the answers given on it, however
+    long a timeframe the other charts cover.
 
     Parameters
     ----------
@@ -394,11 +475,18 @@ def test_clicking_a_day_of_the_calendar_lists_that_days_answers(
     """
     learner = practiced_learner()
     page = StatsPage(learner)
-    page.timeframe.setCurrentIndex(page.timeframe.findText("Today"))  # the calendar ignores the timeframe
+    page.timeframe.setCurrentIndex(
+        page.timeframe.findText("Today"),
+    )  # the calendar ignores the timeframe
     day = max(page.heatmap.counts, key=lambda d: page.heatmap.counts[d])
     page.heatmap.clicked.emit(day)
-    assert page.answers.proxy.rowCount() >= page.heatmap.counts[day] > 0  # every question was answered at least once
-    assert page.heatmap.selected == day and page.detail_title.text().startswith("<b>Answers on ")
+    assert (
+        page.answers.proxy.rowCount() >= page.heatmap.counts[day] > 0
+    )  # every question was answered at least once
+    assert (
+        page.heatmap.selected == day
+        and page.detail_title.text().startswith("<b>Answers on ")
+    )
 
 
 def test_changing_a_filter_closes_the_list_of_answers(
@@ -406,7 +494,8 @@ def test_changing_a_filter_closes_the_list_of_answers(
     practiced_learner: Callable[..., Learner],
 ) -> None:
     """
-    Check that choosing another exercise or timeframe closes the list, since its numbers would no longer match.
+    Check that choosing another exercise or timeframe closes the list,
+    since its numbers would no longer match.
 
     Parameters
     ----------
@@ -428,7 +517,8 @@ def test_a_long_list_of_answers_says_how_many_are_shown(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that a list cut short says so, and that clicks that mean nothing are ignored.
+    Check that a list cut short says so, and that clicks that mean
+    nothing are ignored.
 
     Parameters
     ----------
@@ -437,14 +527,23 @@ def test_a_long_list_of_answers_says_how_many_are_shown(
     practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     monkeypatch.setattr(stats_dialog, "DETAIL_LIMIT", 3)
     page = all_time_page(practiced_learner())
     page.by_exercise.clicked.emit(0)
-    assert page.answers.proxy.rowCount() == 3 and "Showing the newest 3" in page.detail_note.text()
+    assert (
+        page.answers.proxy.rowCount() == 3
+        and "Showing the newest 3" in page.detail_note.text()
+    )
     page._close_detail()
-    for nothing in (None, "x", -1, 10_000):  # not an index of any period, row or day
+    for nothing in (
+        None,
+        "x",
+        -1,
+        10_000,
+    ):  # not an index of any period, row or day
         page.volume.clicked.emit(nothing)
         page.by_exercise.clicked.emit(nothing)
         page.heatmap.clicked.emit(nothing)

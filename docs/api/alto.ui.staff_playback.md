@@ -19,7 +19,8 @@ StaffPlayback(
 
 Bases: `QObject`
 
-Follow a sample's audio onsets and end playback when its view closes.
+Follow a sample's audio onsets and end playback when its view
+closes.
 
 **Constructor**
 

@@ -1,14 +1,17 @@
 """
-The exercises: note names, intervals, key signatures, scales, chords, arpeggios, keyboard keys and note construction.
+The exercises: note names, intervals, key signatures, scales, chords,
+arpeggios, keyboard keys and note construction.
 
-Each class makes one kind of `Question` and registers itself with `@register`, so importing this module is what adds
+Each class makes one kind of `Question` and registers itself with
+`@register`, so importing this module is what adds
 the exercises to the home screen.
 
 Examples
 --------
 >>> from alto.exercises import REGISTRY
 >>> [cls.name for cls in REGISTRY][:3]
-['Note Identification', 'Keyboard Note Identification', 'Note Construction']
+['Note Identification', 'Keyboard Note Identification', 'Note
+Construction']
 """
 
 from __future__ import annotations
@@ -43,6 +46,7 @@ from alto.theory.fifths import (
 from alto.theory.key_signatures import written_signature
 from alto.theory.pitch import (
     MAJOR_KEYS,
+    NATURAL_LETTER_INDEX,
     NATURAL_SEMITONES,
     QUALITY_NAMES,
     Interval,
@@ -81,11 +85,14 @@ def _random_note(
     rng : random.Random
         The random number generator.
     clef : str
-        "treble" or "bass", which decides the default range. Keyword-only.
+        "treble" or "bass", which decides the default range.
+        Keyword-only.
     accidentals : bool
-        Give the note a random sharp, flat or natural; otherwise it is natural. Keyword-only.
+        Give the note a random sharp, flat or natural; otherwise it is
+        natural. Keyword-only.
     span : tuple of (int, int) or None, default None
-        An inclusive range of staff steps (`Note.diatonic`); the clef's comfortable range if None. Keyword-only.
+        An inclusive range of staff steps (`Note.diatonic`); the clef's
+        comfortable range if None. Keyword-only.
 
     Returns
     -------
@@ -94,12 +101,25 @@ def _random_note(
 
     Examples
     --------
-    >>> str(_random_note(random.Random(1), clef="treble", accidentals=False, span=(28, 28)))
+    >>> str(
+    ...     _random_note(
+    ...         random.Random(1),
+    ...         clef="treble",
+    ...         accidentals=False,
+    ...         span=(28, 28),
+    ...     )
+    ... )
     'C4'
     """
-    lo, hi = span or (CLEF_RANGES[clef][0].diatonic, CLEF_RANGES[clef][1].diatonic)
+    lo, hi = span or (
+        CLEF_RANGES[clef][0].diatonic,
+        CLEF_RANGES[clef][1].diatonic,
+    )
     d = rng.randint(lo, hi)
-    return Note.from_diatonic(d, accidental=rng.choice((-1, 0, 1)) if accidentals else 0)
+    return Note.from_diatonic(
+        d,
+        accidental=rng.choice((-1, 0, 1)) if accidentals else 0,
+    )
 
 
 def _degree_choices(
@@ -110,7 +130,8 @@ def _degree_choices(
     minor: bool = False,
 ) -> tuple[list[str], dict[str, tuple[int, int]]]:
     """
-    Arrange scale-degree answers by degree, with raised degrees above lowered degrees.
+    Arrange scale-degree answers by degree, with raised degrees above
+    lowered degrees.
 
     Parameters
     ----------
@@ -119,14 +140,17 @@ def _degree_choices(
     key : int
         The major key signature. Keyword-only.
     naming : str, default "degrees"
-        Caret notation ("degrees") or function names ("functions"). Keyword-only.
+        Caret notation ("degrees") or function names ("functions").
+        Keyword-only.
     minor : bool, default False
-        Count degrees from the relative natural minor tonic. Keyword-only.
+        Count degrees from the relative natural minor tonic.
+        Keyword-only.
 
     Returns
     -------
     tuple of (list of str, dict of str to tuple of (int, int))
-        Answer labels and their grid positions: seven degree columns for carets, or four wider columns for function names.
+        Answer labels and their grid positions: seven degree columns for
+        carets, or four wider columns for function names.
 
     Examples
     --------
@@ -134,20 +158,45 @@ def _degree_choices(
     (['7̂'], {'7̂': (0, 6)})
     """
     tonic_letter = (4 * key + (5 if minor else 0)) % 7
-    ordered = sorted(pool, key=lambda item: ((item[0] - tonic_letter) % 7, item[1]))
-    alterations = [accidental - key_accidental(letter, count=key) for letter, accidental in ordered]
-    rows = {alteration: row for row, alteration in enumerate(sorted(set(alterations), reverse=True))}
+    ordered = sorted(
+        pool,
+        key=lambda item: ((item[0] - tonic_letter) % 7, item[1]),
+    )
+    alterations = [
+        accidental - key_accidental(letter, count=key)
+        for letter, accidental in ordered
+    ]
+    rows = {
+        alteration: row
+        for row, alteration in enumerate(
+            sorted(set(alterations), reverse=True),
+        )
+    }
     choices, grid = [], {}
-    for (letter, accidental), alteration in zip(ordered, alterations, strict=True):
-        label = spell(Note(4, letter=letter, accidental=accidental), naming=naming, key=key, minor=minor)
+    for (letter, accidental), alteration in zip(
+        ordered,
+        alterations,
+        strict=True,
+    ):
+        label = spell(
+            Note(4, letter=letter, accidental=accidental),
+            naming=naming,
+            key=key,
+            minor=minor,
+        )
         choices.append(label)
-        grid[label] = divmod(len(choices) - 1, 4) if naming == "functions" else (rows[alteration], (letter - tonic_letter) % 7)
+        grid[label] = (
+            divmod(len(choices) - 1, 4)
+            if naming == "functions"
+            else (rows[alteration], (letter - tonic_letter) % 7)
+        )
     return choices, grid
 
 
 def _note_card_prompt(q: Question) -> str:
     """
-    Say how to name a note on a flashcard in the chosen naming: letters, solfège or a scale degree, with the octave if it counts.
+    Say how to name a note on a flashcard in the chosen naming: letters,
+    solfège or a scale degree, with the octave if it counts.
 
     Parameters
     ----------
@@ -161,7 +210,14 @@ def _note_card_prompt(q: Question) -> str:
 
     Examples
     --------
-    >>> _note_card_prompt(Question("", choices=[], answer="C4", octaves=["C4"]))
+    >>> _note_card_prompt(
+    ...     Question(
+    ...         "",
+    ...         choices=[],
+    ...         answer="C4",
+    ...         octaves=["C4"],
+    ...     )
+    ... )
     'Identify the note. Include the octave.'
     """
     naming = settings.note_names.naming
@@ -169,8 +225,14 @@ def _note_card_prompt(q: Question) -> str:
     if naming == "solfege":
         prompt += " Use solfège."
     elif naming in settings.DEGREE_NAMINGS:
-        term = "scale degree" if naming == "degrees" else "scale-degree function"
-        tonic = mode_tonic(q.key, mode="Natural minor (Aeolian)").name if q.minor else MAJOR_KEYS[q.key]
+        term = (
+            "scale degree" if naming == "degrees" else "scale-degree function"
+        )
+        tonic = (
+            mode_tonic(q.key, mode="Natural minor (Aeolian)").name
+            if q.minor
+            else MAJOR_KEYS[q.key]
+        )
         mode = "natural minor" if q.minor else "major"
         prompt += f" Give its {term} in {tonic} {mode}."
     if q.octaves:
@@ -197,7 +259,8 @@ class NoteNames(ChoiceExercise):
 
     def card_prompt(self, question: Question) -> str:
         """
-        Say what to name on a flashcard, and in which form: letters, solfège or a scale degree, with the octave if it counts.
+        Say what to name on a flashcard, and in which form: letters,
+        solfège or a scale degree, with the octave if it counts.
 
         Parameters
         ----------
@@ -211,7 +274,9 @@ class NoteNames(ChoiceExercise):
 
         Examples
         --------
-        >>> NoteNames().card_prompt(Question("", choices=[], answer="C"))
+        >>> NoteNames().card_prompt(
+        ...     Question("", choices=[], answer="C")
+        ... )
         'Identify the note.'
         """
         return _note_card_prompt(question)
@@ -223,11 +288,14 @@ class NoteNames(ChoiceExercise):
         Returns
         -------
         str
-            The clefs, ranges, key signatures, note values and naming in force, and whether accidentals are asked.
+            The clefs, ranges, key signatures, note values and naming in
+            force, and whether accidentals are asked.
 
         Examples
         --------
-        >>> NoteNames().settings_signature() != NoteNames(accidentals=True).settings_signature()
+        >>> NoteNames().settings_signature() != NoteNames(
+        ...     accidentals=True
+        ... ).settings_signature()
         True
         """
         cfg = settings.note_names
@@ -247,21 +315,29 @@ class NoteNames(ChoiceExercise):
 
         Examples
         --------
-        >>> "Press the button with its name" in NoteNames().instructions()
+        >>> (
+        ...     "Press the button with its name"
+        ...     in NoteNames().instructions()
+        ... )
         True
         """
         text = (
-            "<b>Note Identification</b><br>A note is shown on the staff. Press the button with its name, or press the "
+            "<b>Note Identification</b><br>A note is shown on the staff. "
+            "Press the button with its name, or press the "
             "keys shown on it.<br><br>"
-            "Use the sliders button to choose the clefs, the range of notes, key signatures (the name then has to "
-            "match the signature), note values, letter, solfège or scale-degree names, and whether sharps, flats "
+            "Use the sliders button to choose the clefs, the range of "
+            "notes, key signatures (the name then has to "
+            "match the signature), note values, letter, solfège or "
+            "scale-degree names, and whether sharps, flats "
             "and naturals appear, and whether to ask for the octave too."
         )
         if settings.note_names.naming in settings.DEGREE_NAMINGS:
             text += (
-                "<br><br>Degrees 1–7 start at the tonic of the major or natural minor key named in the question. "
+                "<br><br>Degrees 1–7 start at the tonic of the major or "
+                "natural minor key named in the question. "
                 "A prefix such as ♭3 or ♯4 lowers or "
-                "raises that degree. Type the degree digit; in a chromatic bank, add Shift for a sharp or Ctrl for a flat. "
+                "raises that degree. Type the degree digit; in a chromatic "
+                "bank, add Shift for a sharp or Ctrl for a flat. "
                 "Add Alt as well for a double alteration."
             )
         return text
@@ -273,7 +349,8 @@ class NoteNames(ChoiceExercise):
         Parameters
         ----------
         accidentals : bool, default False
-            Ask notes with explicit sharps, flats and naturals, whatever the settings say.
+            Ask notes with explicit sharps, flats and naturals, whatever
+            the settings say.
 
         Examples
         --------
@@ -284,7 +361,8 @@ class NoteNames(ChoiceExercise):
 
     def make_question(self, rng: random.Random) -> Question:
         """
-        Make a note to name, on one of the chosen clefs, in a chosen key.
+        Make a note to name, on one of the chosen clefs, in a chosen
+        key.
 
         Parameters
         ----------
@@ -294,12 +372,22 @@ class NoteNames(ChoiceExercise):
         Returns
         -------
         Question
-            The note drawn on a staff, with one button for each name that could be the answer.
+            The note drawn on a staff, with one button for each name
+            that could be the answer.
 
         Examples
         --------
         >>> q = NoteNames().generate(random.Random(2))
-        >>> q.clef in ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone", "grand")
+        >>> q.clef in (
+        ...     "treble",
+        ...     "bass",
+        ...     "alto",
+        ...     "tenor",
+        ...     "soprano",
+        ...     "mezzo",
+        ...     "baritone",
+        ...     "grand",
+        ... )
         True
         """
         cfg = settings.note_names
@@ -311,7 +399,9 @@ class NoteNames(ChoiceExercise):
         letter_pos = rng.randint(*cfg.range_for(clef))
         in_key = key_accidental(letter_pos % 7, count=key)
         acc = in_key
-        if with_accidentals and rng.random() < 0.5:  # an explicit sign that differs from the key signature
+        if (
+            with_accidentals and rng.random() < 0.5
+        ):  # an explicit sign that differs from the key signature
             acc = rng.choice([a for a in (-1, 0, 1) if a != in_key])
         note = Note.from_diatonic(letter_pos, accidental=acc)
 
@@ -319,12 +409,14 @@ class NoteNames(ChoiceExercise):
 
     def card_count(self) -> int:
         """
-        Count written pitches across the selected ranges, clefs and signatures.
+        Count written pitches across the selected ranges, clefs and
+        signatures.
 
         Returns
         -------
         int
-            Each staff position contributes one spelling, or three when accidentals are enabled.
+            Each staff position contributes one spelling, or three when
+            accidentals are enabled.
 
         Examples
         --------
@@ -332,8 +424,17 @@ class NoteNames(ChoiceExercise):
         True
         """
         cfg = settings.note_names
-        positions = sum(high - low + 1 for low, high in (cfg.range_for(clef) for clef in cfg.active_clefs()))
-        return positions * len(cfg.active_keys()) * (3 if self.accidentals or cfg.accidentals else 1)
+        positions = sum(
+            high - low + 1
+            for low, high in (
+                cfg.range_for(clef) for clef in cfg.active_clefs()
+            )
+        )
+        return (
+            positions
+            * len(cfg.active_keys())
+            * (3 if self.accidentals or cfg.accidentals else 1)
+        )
 
     def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
         """
@@ -347,11 +448,19 @@ class NoteNames(ChoiceExercise):
         Yields
         ------
         Question
-            A distinct question within the selected clefs, ranges and keys.
+            A distinct question within the selected clefs, ranges and
+            keys.
 
         Examples
         --------
-        >>> isinstance(next(NoteNames().daily_candidates(random.Random(0))), Question)
+        >>> isinstance(
+        ...     next(
+        ...         NoteNames().daily_candidates(
+        ...             random.Random(0)
+        ...         )
+        ...     ),
+        ...     Question,
+        ... )
         True
         """
         cfg = settings.note_names
@@ -360,15 +469,36 @@ class NoteNames(ChoiceExercise):
             low, high = cfg.range_for(clef)
             for key in cfg.active_keys():
                 for step in range(low, high + 1):
-                    signs = (-1, 0, 1) if self.accidentals or cfg.accidentals else (key_accidental(step % 7, count=key),)
-                    pitches.extend((clef, key, Note.from_diatonic(step, accidental=sign)) for sign in signs)
+                    signs = (
+                        (-1, 0, 1)
+                        if self.accidentals or cfg.accidentals
+                        else (key_accidental(step % 7, count=key),)
+                    )
+                    pitches.extend(
+                        (clef, key, Note.from_diatonic(step, accidental=sign))
+                        for sign in signs
+                    )
         rng.shuffle(pitches)
         for clef, key, note in pitches:
-            yield self.limit_buttons(self._question_for(note, clef=clef, key=key, value=rng.choice(cfg.active_values())), rng=rng)
+            yield self.limit_buttons(
+                self._question_for(
+                    note,
+                    clef=clef,
+                    key=key,
+                    value=rng.choice(cfg.active_values()),
+                ),
+                rng=rng,
+            )
 
-    def review_question(self, question: Question, *, same_settings: bool) -> Question | None:
+    def review_question(
+        self,
+        question: Question,
+        *,
+        same_settings: bool,
+    ) -> Question | None:
         """
-        Rebuild a previously seen note when its pitch and answer are eligible.
+        Rebuild a previously seen note when its pitch and answer are
+        eligible.
 
         Parameters
         ----------
@@ -380,13 +510,16 @@ class NoteNames(ChoiceExercise):
         Returns
         -------
         Question or None
-            The note with the current answer bank, or None outside the selected material.
+            The note with the current answer bank, or None outside the
+            selected material.
 
         Examples
         --------
         >>> ex = NoteNames()
         >>> q = ex.generate(random.Random(1))
-        >>> ex.review_question(q, same_settings=True) == q
+        >>> ex.review_question(
+        ...     q, same_settings=True
+        ... ) == q
         True
         """
         if same_settings:
@@ -403,13 +536,34 @@ class NoteNames(ChoiceExercise):
         low, high = cfg.range_for(question.clef)
         if not low <= note.diatonic <= high:
             return None
-        if not (self.accidentals or cfg.accidentals) and note.accidental != key_accidental(note.letter, count=question.key):
+        if not (
+            self.accidentals or cfg.accidentals
+        ) and note.accidental != key_accidental(
+            note.letter,
+            count=question.key,
+        ):
             return None
         rng = random.Random(question.item_key())
-        updated = self._question_for(note, clef=question.clef, key=question.key, value=rng.choice(cfg.active_values()))
-        return self.limit_buttons(updated, rng=rng) if updated.item_key() == question.item_key() else None
+        updated = self._question_for(
+            note,
+            clef=question.clef,
+            key=question.key,
+            value=rng.choice(cfg.active_values()),
+        )
+        return (
+            self.limit_buttons(updated, rng=rng)
+            if updated.item_key() == question.item_key()
+            else None
+        )
 
-    def _question_for(self, note: Note, *, clef: str, key: int, value: str) -> Question:
+    def _question_for(
+        self,
+        note: Note,
+        *,
+        clef: str,
+        key: int,
+        value: str,
+    ) -> Question:
         """
         Build the prompt and answer bank for a written pitch.
 
@@ -431,7 +585,12 @@ class NoteNames(ChoiceExercise):
 
         Examples
         --------
-        >>> NoteNames()._question_for(Note.parse("C4"), clef="treble", key=0, value="whole").staff[0][0].name
+        >>> NoteNames()._question_for(
+        ...     Note.parse("C4"),
+        ...     clef="treble",
+        ...     key=0,
+        ...     value="whole",
+        ... ).staff[0][0].name
         'C'
         """
         cfg = settings.note_names
@@ -447,37 +606,70 @@ class NoteNames(ChoiceExercise):
             possible_octaves = set()
             for active_clef in cfg.active_clefs():
                 low, high = cfg.range_for(active_clef)
-                possible_octaves.update(Note.from_diatonic(step).octave for step in range(low, high + 1))
+                possible_octaves.update(
+                    Note.from_diatonic(step).octave
+                    for step in range(low, high + 1)
+                )
             octaves = [str(octave) for octave in sorted(possible_octaves)]
             joiner = " / " if cfg.naming in settings.DEGREE_NAMINGS else ""
             answer += f"{joiner}{note.octave}"
-        # One button for every name that can be the answer under the current settings.
+        # One button for every name that can be the answer under the
+        # current settings.
         if with_accidentals:
             pool = {(l, a) for l in range(7) for a in (-1, 0, 1)}
         elif cfg.naming in settings.DEGREE_NAMINGS:
             pool = {(l, key_accidental(l, count=key)) for l in range(7)}
         else:
-            pool = {(l, key_accidental(l, count=k)) for l in range(7) for k in cfg.active_keys()}
+            pool = {
+                (l, key_accidental(l, count=k))
+                for l in range(7)
+                for k in cfg.active_keys()
+            }
         if cfg.naming in settings.DEGREE_NAMINGS:
-            choices, grid = _degree_choices(pool, key=key, naming=cfg.naming, minor=minor)
+            choices, grid = _degree_choices(
+                pool,
+                key=key,
+                naming=cfg.naming,
+                minor=minor,
+            )
         else:
             ordered = sorted(pool)
-            choices = [spell(Note(4, letter=l, accidental=a), naming=cfg.naming) for l, a in ordered]
-            if len(pool) == 7:  # one name per letter: a single row, one column per letter
+            choices = [
+                spell(Note(4, letter=l, accidental=a), naming=cfg.naming)
+                for l, a in ordered
+            ]
+            if (
+                len(pool) == 7
+            ):  # one name per letter: a single row, one column per letter
                 grid = {c: (0, l) for c, (l, _) in zip(choices, ordered)}
-            else:  # columns are letters; sharps on the top row, then naturals, then flats
-                rows = {a: r for r, a in enumerate(sorted({a for _, a in pool}, reverse=True))}
+            # columns are letters; sharps on the top row, then naturals,
+            # then flats
+            else:
+                rows = {
+                    a: r
+                    for r, a in enumerate(
+                        sorted({a for _, a in pool}, reverse=True),
+                    )
+                }
                 grid = {c: (rows[a], l) for c, (l, a) in zip(choices, ordered)}
 
-        tonic = mode_tonic(key, mode="Natural minor (Aeolian)").name if minor else MAJOR_KEYS[key]
+        tonic = (
+            mode_tonic(key, mode="Natural minor (Aeolian)").name
+            if minor
+            else MAJOR_KEYS[key]
+        )
         mode = "natural minor" if minor else "major"
         expl = []
         if cfg.naming in settings.DEGREE_NAMINGS:
-            expl.append(f"{note.name} is scale degree {name} in {tonic} {mode}.")
+            expl.append(
+                f"{note.name} is scale degree {name} in {tonic} {mode}.",
+            )
         if key:
             expl.append(f"{tonic} {mode} has {format_key_signature(key)}.")
         if acc != in_key:
-            expl.append("The accidental on the note overrides the key signature.")
+            expl.append(
+                "The accidental on the note overrides the key signature.",
+            )
         return Question(
             "",
             choices=choices,
@@ -503,7 +695,8 @@ def _interval_starts(
     accidentals: frozenset[int],
 ) -> dict[Interval, list[Note]]:
     """
-    Find lower notes whose upper partners also fit the staff and accidental selection.
+    Find lower notes whose upper partners also fit the staff and
+    accidental selection.
 
     Parameters
     ----------
@@ -514,7 +707,8 @@ def _interval_starts(
     key : int
         Signature drawn on the staff.
     accidentals : frozenset of int
-        Allowed written signs. Zero allows a note with no sign beside it.
+        Allowed written signs. Zero allows a note with no sign beside
+        it.
 
     Returns
     -------
@@ -524,7 +718,12 @@ def _interval_starts(
     Examples
     --------
     >>> third = Interval.parse("M3")
-    >>> _interval_starts((third,), bounds=(28, 30), key=0, accidentals=frozenset({0}))[third]
+    >>> _interval_starts(
+    ...     (third,),
+    ...     bounds=(28, 30),
+    ...     key=0,
+    ...     accidentals=frozenset({0}),
+    ... )[third]
     [Note(octave=4, letter=0, accidental=0)]
     """
     allowed = []
@@ -568,8 +767,13 @@ class IntervalNames(Exercise):
 
     Examples
     --------
-    >>> q = IntervalNames().generate(random.Random(3))
-    >>> [len(chord) for chord in q.staff], q.answer in q.choices
+    >>> q = IntervalNames().generate(
+    ...     random.Random(3)
+    ... )
+    >>> (
+    ...     [len(chord) for chord in q.staff],
+    ...     q.answer in q.choices,
+    ... )
     ([2], True)
     """
 
@@ -581,7 +785,8 @@ class IntervalNames(Exercise):
 
     def card_prompt(self, question: Question) -> str:
         """
-        Say whether to name the interval's number, its quality, both, or its inversion.
+        Say whether to name the interval's number, its quality, both, or
+        its inversion.
 
         Parameters
         ----------
@@ -595,13 +800,20 @@ class IntervalNames(Exercise):
 
         Examples
         --------
-        >>> IntervalNames().card_prompt(Question("", choices=[], answer="3"))
+        >>> IntervalNames().card_prompt(
+        ...     Question("", choices=[], answer="3")
+        ... )
         'Identify the numeric interval.'
-        >>> IntervalNames().card_prompt(Question("", choices=[], answer="M3"))
+        >>> IntervalNames().card_prompt(
+        ...     Question("", choices=[], answer="M3")
+        ... )
         'Identify the interval and quality.'
         """
         q = question
-        if q.prompt == INTERVAL_CONSONANCE_PROMPT or q.prompt in INTERVAL_INVERSION_PROMPTS.values():
+        if (
+            q.prompt == INTERVAL_CONSONANCE_PROMPT
+            or q.prompt in INTERVAL_INVERSION_PROMPTS.values()
+        ):
             return q.prompt
         if q.answer.isdecimal():
             return "Identify the numeric interval."
@@ -620,20 +832,33 @@ class IntervalNames(Exercise):
 
         Examples
         --------
-        >>> "quality followed by a number" in IntervalNames().instructions()
+        >>> (
+        ...     "quality followed by a number"
+        ...     in IntervalNames().instructions()
+        ... )
         True
         """
         return (
-            "<b>Interval Identification</b><br>Name the interval between the two written notes."
-            "<br><br>An interval has a quality followed by a number. The number counts the letter names it "
-            "spans, including both notes. The quality is P (perfect), M (major), m (minor), A (augmented) or "
-            "d (diminished). In Quality, choose whether to answer with the number, the full interval, or the quality alone. "
-            "Turn on Consonance to classify the interval. In this exercise, perfect unisons, fourths, fifths and octaves, "
-            "and major or minor thirds and sixths, are consonant, including their compound forms. "
-            "Turn on Inversions to name the inverted interval. For example, C up to E is a major third. "
-            "Move C up an octave. From E up to C, the interval is a minor sixth. Reduce compound intervals first. "
-            "Use Display Mode to choose how the two notes appear. Under Melodic, check Ascending, Descending, or both. "
-            "Note Value sets the written duration of both notes. You can click an answer or use the shortcut "
+            "<b>Interval Identification</b><br>Name the interval between "
+            "the two written notes."
+            "<br><br>An interval has a quality followed by a number. The "
+            "number counts the letter names it "
+            "spans, including both notes. The quality is P (perfect), M "
+            "(major), m (minor), A (augmented) or "
+            "d (diminished). In Quality, choose whether to answer with the "
+            "number, the full interval, or the quality alone. "
+            "Turn on Consonance to classify the interval. In this exercise,"
+            " perfect unisons, fourths, fifths and octaves, "
+            "and major or minor thirds and sixths, are consonant, including"
+            " their compound forms. "
+            "Turn on Inversions to name the inverted interval. For example,"
+            " C up to E is a major third. "
+            "Move C up an octave. From E up to C, the interval is a minor "
+            "sixth. Reduce compound intervals first. "
+            "Use Display Mode to choose how the two notes appear. Under "
+            "Melodic, check Ascending, Descending, or both. "
+            "Note Value sets the written duration of both notes. You can "
+            "click an answer or use the shortcut "
             "shown on its button."
         )
 
@@ -653,25 +878,39 @@ class IntervalNames(Exercise):
         """
         cfg = settings.intervals
         if cfg == settings.IntervalSettings(displays={"Melodic"}):
-            # The original melodic questions were stored with an empty signature.
+            # The original melodic questions were stored with an empty
+            # signature.
             return ""
         parts = vars(cfg).copy()
         if not cfg.consonance:
             del parts["consonance"]
         if not cfg.inversions:
-            del parts["inversions"]  # Keep earlier identification questions eligible for review.
+            del parts[
+                "inversions"
+            ]  # Keep earlier identification questions eligible for review.
         if cfg.quality_mode != "quality":
-            # Keep reviews saved under the original on/off Quality switch.
+            # Keep reviews saved under the original on/off Quality
+            # switch.
             del parts["quality_mode"]
             parts["quality"] = cfg.quality_mode == "combined"
-        if cfg.accidentals == settings.DEFAULT_INTERVAL_ACCIDENTALS and cfg.staff_keys == {0}:
-            del parts["accidentals"]  # These are the same spellings that earlier blank-staff questions allowed.
+        if (
+            cfg.accidentals == settings.DEFAULT_INTERVAL_ACCIDENTALS
+            and cfg.staff_keys == {0}
+        ):
+            del parts[
+                "accidentals"
+                # These are the same spellings that earlier blank-staff
+                # questions allowed.
+            ]
         del parts["directions"]
         if "Melodic" in cfg.displays and "descending" in cfg.directions:
-            # Preserve the stored motion key and its single-direction value for existing reviews.
+            # Preserve the stored motion key and its single-direction
+            # value for existing reviews.
             parts["motion"] = ",".join(sorted(cfg.directions))
         if cfg.note_values == {"whole"}:
-            del parts["note_values"]  # Preserve review signatures for earlier whole-note questions.
+            del parts[
+                "note_values"
+            ]  # Preserve review signatures for earlier whole-note questions.
         if cfg.button_mode == "limited" and cfg.button_count == 6:
             # Match questions saved before the Buttons setting existed.
             del parts["button_mode"], parts["button_count"]
@@ -681,7 +920,8 @@ class IntervalNames(Exercise):
 
     def refresh(self, question: Question) -> Question:
         """
-        Arrange written interval answers by quality, with interval numbers in columns.
+        Arrange written interval answers by quality, with interval
+        numbers in columns.
 
         Parameters
         ----------
@@ -691,21 +931,36 @@ class IntervalNames(Exercise):
         Returns
         -------
         Question
-            The same answer choices in reading order. Perfect and major share a row.
+            The same answer choices in reading order. Perfect and major
+            share a row.
 
         Examples
         --------
-        >>> q = Question("", choices=["d3", "m3", "P4", "M3", "A3"], answer="m3")
+        >>> q = Question(
+        ...     "",
+        ...     choices=["d3", "m3", "P4", "M3", "A3"],
+        ...     answer="m3",
+        ... )
         >>> IntervalNames().refresh(q).choices
         ['A3', 'M3', 'P4', 'm3', 'd3']
         """
         rows = settings.INTERVAL_QUALITY_ORDER
-        if not question.choices or any(name[:1] not in rows or not name[1:].isdigit() for name in question.choices):
+        if not question.choices or any(
+            name[:1] not in rows or not name[1:].isdigit()
+            for name in question.choices
+        ):
             return question
         intervals = [Interval.parse(name) for name in question.choices]
         numbers = sorted({iv.number for iv in intervals})
-        grid = {iv.short: (rows[iv.quality], numbers.index(iv.number)) for iv in intervals}
-        return replace(question, choices=sorted(question.choices, key=grid.__getitem__), grid=grid)
+        grid = {
+            iv.short: (rows[iv.quality], numbers.index(iv.number))
+            for iv in intervals
+        }
+        return replace(
+            question,
+            choices=sorted(question.choices, key=grid.__getitem__),
+            grid=grid,
+        )
 
     def generate(self, rng: random.Random) -> Question:
         """
@@ -719,20 +974,37 @@ class IntervalNames(Exercise):
         Returns
         -------
         Question
-            The lower and higher note on a staff, and the interval (such as 'M3' or 'P5') as the answer.
+            The lower and higher note on a staff, and the interval (such
+            as 'M3' or 'P5') as the answer.
 
         Examples
         --------
-        >>> q = IntervalNames().generate(random.Random(4))
-        >>> q.answer[0] in "PMmAd" and q.answer[1:].isdigit()
+        >>> q = IntervalNames().generate(
+        ...     random.Random(4)
+        ... )
+        >>> q.answer[0] in "PMmAd" and q.answer[
+        ...     1:
+        ... ].isdigit()
         True
         """
-        return self.refresh(_written_interval_question(settings.intervals, rng=rng, construction=False))
+        return self.refresh(
+            _written_interval_question(
+                settings.intervals,
+                rng=rng,
+                construction=False,
+            ),
+        )
 
 
-def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Random, construction: bool) -> Question:
+def _written_interval_question(
+    cfg: settings.IntervalSettings,
+    *,
+    rng: random.Random,
+    construction: bool,
+) -> Question:
     """
-    Choose a playable written interval under the active clef, range, and spelling constraints.
+    Choose a playable written interval under the active clef, range, and
+    spelling constraints.
 
     Parameters
     ----------
@@ -746,43 +1018,95 @@ def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Ra
     Returns
     -------
     Question
-        The playable interval or an instruction to change incompatible options.
+        The playable interval or an instruction to change incompatible
+        options.
 
     Examples
     --------
     An ascending melodic presentation starts on the lower endpoint.
     """
-    selected = tuple(iv for name, iv in settings.WRITTEN_INTERVALS.items() if name in cfg.intervals)
+    selected = tuple(
+        iv
+        for name, iv in settings.WRITTEN_INTERVALS.items()
+        if name in cfg.intervals
+    )
     smallest = min((iv.number for iv in selected), default=2)
-    clefs = [clef for clef in cfg.active_clefs() if cfg.staff_span(clef) >= smallest]
+    clefs = [
+        clef for clef in cfg.active_clefs() if cfg.staff_span(clef) >= smallest
+    ]
     if not clefs:
-        return Question("Widen a clef’s Range or choose a smaller interval in Settings.", choices=[], answer="")
+        return Question(
+            "Widen a clef’s Range or choose a smaller interval in Settings.",
+            choices=[],
+            answer="",
+        )
     if not selected:
-        return Question("Select an interval in Settings to continue.", choices=[], answer="")
+        return Question(
+            "Select an interval in Settings to continue.",
+            choices=[],
+            answer="",
+        )
     staves = [(clef, key) for clef in clefs for key in sorted(cfg.staff_keys)]
     rng.shuffle(staves)
     for clef, key in staves:
-        starts = _interval_starts(selected, bounds=cfg.range_for(clef), key=key, accidentals=frozenset(cfg.accidentals))
+        starts = _interval_starts(
+            selected,
+            bounds=cfg.range_for(clef),
+            key=key,
+            accidentals=frozenset(cfg.accidentals),
+        )
         if starts:
             break
     else:
-        return Question("Change Accidentals, Intervals, Staff Key, or Range to fit an interval.", choices=[], answer="")
+        return Question(
+            (
+                "Change Accidentals, Intervals, Staff Key, or Range to fit"
+                " an interval."
+            ),
+            choices=[],
+            answer="",
+        )
     available = list(starts)
     iv = rng.choice(available)
     low = rng.choice(starts[iv])
     high = low.transpose(iv)
     display = rng.choice(sorted(cfg.displays))
-    descending = display == "Melodic" and rng.choice(sorted(cfg.directions)) == "descending"
+    descending = (
+        display == "Melodic"
+        and rng.choice(sorted(cfg.directions)) == "descending"
+    )
     first, second = (high, low) if descending else (low, high)
     staff = [[first, second]] if display == "Harmonic" else [[first], [second]]
     if construction:
-        return _interval_placement(cfg, rng=rng, clef=clef, key=key, interval=iv, staff=staff, starts=starts)
-    explanation = f"{first} to {second}: {QUALITY_NAMES[iv.quality]} {iv.number}, {iv.semitones} semitones."
+        return _interval_placement(
+            cfg,
+            rng=rng,
+            clef=clef,
+            key=key,
+            interval=iv,
+            staff=staff,
+            starts=starts,
+        )
+    explanation = (
+        f"{first}"
+        " to "
+        f"{second}"
+        ": "
+        f"{QUALITY_NAMES[iv.quality]}"
+        " "
+        f"{iv.number}"
+        ", "
+        f"{iv.semitones}"
+        " semitones."
+    )
     if cfg.inversions:
         inverted = iv.inversion
         explanation += f" The inversion of {iv.short} is {inverted.short}."
         iv = inverted
-        available = sorted(dict.fromkeys(other.inversion for other in available), key=lambda other: other.number)
+        available = sorted(
+            dict.fromkeys(other.inversion for other in available),
+            key=lambda other: other.number,
+        )
     mode = "consonance" if cfg.consonance else cfg.quality_mode
     if mode == "consonance":
         prompt = INTERVAL_CONSONANCE_PROMPT
@@ -802,9 +1126,16 @@ def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Ra
         prompt, answer = "What is the interval number?", str(iv.number)
         pool = list(dict.fromkeys(str(other.number) for other in available))
     elif mode == "quality":
-        prompt, answer = "What is the interval quality?", QUALITY_NAMES[iv.quality]
+        prompt, answer = (
+            "What is the interval quality?",
+            QUALITY_NAMES[iv.quality],
+        )
         qualities = {other.quality for other in available}
-        pool = [QUALITY_NAMES[quality] for quality in settings.INTERVAL_QUALITY_ORDER if quality in qualities]
+        pool = [
+            QUALITY_NAMES[quality]
+            for quality in settings.INTERVAL_QUALITY_ORDER
+            if quality in qualities
+        ]
     else:
         prompt, answer = "", iv.short
         pool = [other.short for other in available]
@@ -812,7 +1143,12 @@ def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Ra
         INTERVAL_INVERSION_PROMPTS[mode] if cfg.inversions else prompt,
         choices=pool
         if mode == "consonance" or cfg.button_mode == "all"
-        else pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng),
+        else pick_distractors(
+            answer,
+            pool=pool,
+            n=cfg.button_count - 1,
+            rng=rng,
+        ),
         answer=answer,
         staff=staff,
         clef=clef,
@@ -833,7 +1169,8 @@ def _interval_placement(
     starts: dict[Interval, list[Note]],
 ) -> Question:
     """
-    Build a placement prompt and all eligible spellings that satisfy it from the given note.
+    Build a placement prompt and all eligible spellings that satisfy it
+    from the given note.
 
     Parameters
     ----------
@@ -855,11 +1192,13 @@ def _interval_placement(
     Returns
     -------
     Question
-        A reproducible example solution and any other valid written endpoints.
+        A reproducible example solution and any other valid written
+        endpoints.
 
     Examples
     --------
-    A third above C can accept both E and E♭ when major and minor thirds are selected.
+    A third above C can accept both E and E♭ when major and minor thirds
+    are selected.
     """
     first, target = staff[0][0], staff[-1][-1]
     descending = first.diatonic > target.diatonic
@@ -889,16 +1228,27 @@ def _interval_placement(
         description = size if by_number else f"{quality} interval"
         targets = []
         for other, lower_notes in starts.items():
-            matches = other.number == interval.number if by_number else other.quality == interval.quality
+            matches = (
+                other.number == interval.number
+                if by_number
+                else other.quality == interval.quality
+            )
             if matches:
                 end = first.transpose(other, descending=descending)
                 if (end if descending else first) in lower_notes:
                     targets.append(end)
-    # A number or quality can have several solutions. Keep its card identity independent of which one was drawn.
+    # A number or quality can have several solutions. Keep its card
+    # identity independent of which one was drawn.
     target, *alternatives = targets
     solution = [[first, target]] if len(staff) == 1 else [[first], [target]]
     return Question(
-        f"Place {'an' if description[0] in 'aeiou' else 'a'} {description} {direction} the given note.",
+        "Place "
+        f"{('an' if description[0] in 'aeiou' else 'a')}"
+        " "
+        f"{description}"
+        " "
+        f"{direction}"
+        " the given note.",
         choices=[],
         answer=str(target),
         accept=tuple(map(str, alternatives)),
@@ -909,26 +1259,35 @@ def _interval_placement(
         notes_only=True,
         accidentals=True,
         value=rng.choice(cfg.active_values()),
-        explanation=f"{target} is one valid placement." if alternatives else f"The second note is {target}.",
+        explanation=f"{target} is one valid placement."
+        if alternatives
+        else f"The second note is {target}.",
     )
 
 
 @register
 class IntervalConstruction(Exercise):
     """
-    Place a second written note at the requested interval from a given note.
+    Place a second written note at the requested interval from a given
+    note.
 
     Examples
     --------
-    >>> q = IntervalConstruction().generate(random.Random(2))
-    >>> q.construct is not None and q.check_placed(q.construct)
+    >>> q = IntervalConstruction().generate(
+    ...     random.Random(2)
+    ... )
+    >>> q.construct is not None and q.check_placed(
+    ...     q.construct
+    ... )
     True
     """
 
     name = "Interval Construction"
     interval_voices = True
     category = "Intervals"
-    description = "Place a note above or below the given note to build an interval."
+    description = (
+        "Place a note above or below the given note to build an interval."
+    )
     par_seconds = 8.0
 
     def instructions(self) -> str:
@@ -942,18 +1301,24 @@ class IntervalConstruction(Exercise):
 
         Examples
         --------
-        The reference describes the difference between melodic and harmonic placement.
+        The reference describes the difference between melodic and
+        harmonic placement.
         """
         return (
-            "<b>Interval Construction</b><br>Count lines and spaces from the given note in the requested direction. "
-            "Choose an accidental if needed, then click to place the second note. You can also move with the arrow keys "
-            "and press Enter. A harmonic interval stacks both notes. A melodic interval places them in sequence. "
-            "For Interval Only or Quality Only, any selected interval that fits the prompt and settings counts."
+            "<b>Interval Construction</b><br>Count lines and spaces from "
+            "the given note in the requested direction. "
+            "Choose an accidental if needed, then click to place the second"
+            " note. You can also move with the arrow keys "
+            "and press Enter. A harmonic interval stacks both notes. A "
+            "melodic interval places them in sequence. "
+            "For Interval Only or Quality Only, any selected interval that "
+            "fits the prompt and settings counts."
         )
 
     def settings_signature(self) -> str:
         """
-        Identify the construction settings used to generate a stored card.
+        Identify the construction settings used to generate a stored
+        card.
 
         Returns
         -------
@@ -962,7 +1327,8 @@ class IntervalConstruction(Exercise):
 
         Examples
         --------
-        A change in staff ranges changes which stored questions are eligible.
+        A change in staff ranges changes which stored questions are
+        eligible.
         """
         parts = vars(settings.interval_construction).copy()
         del parts["inversions"], parts["consonance"]
@@ -970,7 +1336,8 @@ class IntervalConstruction(Exercise):
 
     def generate(self, rng: random.Random) -> Question:
         """
-        Generate a staff, an interval prompt, and its eligible placements.
+        Generate a staff, an interval prompt, and its eligible
+        placements.
 
         Parameters
         ----------
@@ -986,7 +1353,11 @@ class IntervalConstruction(Exercise):
         --------
         A harmonic question asks for a note above its starting note.
         """
-        return _written_interval_question(settings.interval_construction, rng=rng, construction=True)
+        return _written_interval_question(
+            settings.interval_construction,
+            rng=rng,
+            construction=True,
+        )
 
 
 @register
@@ -997,12 +1368,19 @@ class KeyboardIntervals(Exercise):
     Attributes
     ----------
     INTERVALS : tuple of str
-        Conventional names for every distance on the piano, including compound intervals and combined tritone answers.
+        Conventional names for every distance on the piano, including
+        compound intervals and combined tritone answers.
 
     Examples
     --------
-    >>> q = KeyboardIntervals().generate(random.Random(5))
-    >>> len(q.keyboard_notes), q.answer in q.choices, q.staff
+    >>> q = KeyboardIntervals().generate(
+    ...     random.Random(5)
+    ... )
+    >>> (
+    ...     len(q.keyboard_notes),
+    ...     q.answer in q.choices,
+    ...     q.staff,
+    ... )
     (2, True, [])
     """
 
@@ -1028,7 +1406,9 @@ class KeyboardIntervals(Exercise):
 
         Examples
         --------
-        >>> KeyboardIntervals().card_prompt(Question("", choices=[], answer="P5"))
+        >>> KeyboardIntervals().card_prompt(
+        ...     Question("", choices=[], answer="P5")
+        ... )
         'Identify the interval.'
         """
         del question
@@ -1036,7 +1416,8 @@ class KeyboardIntervals(Exercise):
 
     def settings_signature(self) -> str:
         """
-        Identify the keyboard range and selected intervals for stored-question reviews.
+        Identify the keyboard range and selected intervals for
+        stored-question reviews.
 
         Returns
         -------
@@ -1045,7 +1426,9 @@ class KeyboardIntervals(Exercise):
 
         Examples
         --------
-        >>> bool(KeyboardIntervals().settings_signature())
+        >>> bool(
+        ...     KeyboardIntervals().settings_signature()
+        ... )
         True
         """
         return signature(settings.keyboard_intervals)
@@ -1057,7 +1440,8 @@ class KeyboardIntervals(Exercise):
         Returns
         -------
         str
-            HTML explaining interval names and enharmonic ambiguity on the keyboard.
+            HTML explaining interval names and enharmonic ambiguity on
+            the keyboard.
 
         Examples
         --------
@@ -1065,20 +1449,28 @@ class KeyboardIntervals(Exercise):
         True
         """
         return (
-            "<b>Keyboard Interval Identification</b><br>Two piano keys are highlighted. Identify the interval from the "
-            "lower key to the higher key. Intervals beyond an octave are included when they fit the selected range.<br><br>"
+            "<b>Keyboard Interval Identification</b><br>Two piano keys are "
+            "highlighted. Identify the interval from the "
+            "lower key to the higher key. Intervals beyond an octave are "
+            "included when they fit the selected range.<br><br>"
             "Count the half steps between "
-            "the keys, including black keys: adjacent keys are one half step apart. P means perfect, M means major, "
-            "and m means minor.<br><br>A keyboard shows pitches without their written spellings. Use the standard "
-            "interval name for each distance. Six half steps form a tritone, labeled <b>A4 / d5</b> because an augmented "
-            "fourth and a diminished fifth use the same keys.<br><br>Use Settings to choose the keyboard range and "
-            "the intervals to practice. Only intervals that fit the selected range are available. Click an answer or "
+            "the keys, including black keys: adjacent keys are one half "
+            "step apart. P means perfect, M means major, "
+            "and m means minor.<br><br>A keyboard shows pitches without "
+            "their written spellings. Use the standard "
+            "interval name for each distance. Six half steps form a "
+            "tritone, labeled <b>A4 / d5</b> because an augmented "
+            "fourth and a diminished fifth use the same keys.<br><br>Use "
+            "Settings to choose the keyboard range and "
+            "the intervals to practice. Only intervals that fit the "
+            "selected range are available. Click an answer or "
             "press its number."
         )
 
     def generate(self, rng: random.Random) -> Question:
         """
-        Highlight two distinct keys at a selected interval within the chosen range.
+        Highlight two distinct keys at a selected interval within the
+        chosen range.
 
         Parameters
         ----------
@@ -1088,20 +1480,29 @@ class KeyboardIntervals(Exercise):
         Returns
         -------
         Question
-            Two highlighted keys and either a limited number of choices or a fixed bank for every selected interval.
+            Two highlighted keys and either a limited number of choices
+            or a fixed bank for every selected interval.
             A prompt is returned if none are selected.
 
         Examples
         --------
-        >>> q = KeyboardIntervals().generate(random.Random(7))
-        >>> 1 <= q.keyboard_notes[1].midi - q.keyboard_notes[0].midi <= 12
+        >>> q = KeyboardIntervals().generate(
+        ...     random.Random(7)
+        ... )
+        >>> 1 <= q.keyboard_notes[
+        ...     1
+        ... ].midi - q.keyboard_notes[0].midi <= 12
         True
         """
         cfg = settings.keyboard_intervals
         lo, hi = cfg.bounds()
         intervals = cfg.active_intervals()
         if not intervals:
-            return Question("Select at least one interval in Settings to continue.", choices=[], answer="")
+            return Question(
+                "Select at least one interval in Settings to continue.",
+                choices=[],
+                answer="",
+            )
         distance = rng.choice(intervals)
         lower = rng.randint(lo, hi - distance)
         notes = [
@@ -1124,9 +1525,18 @@ class KeyboardIntervals(Exercise):
         numbers: list[str] | None = None
         accepted: tuple[str, ...] = ()
         if cfg.compact_buttons:
-            spellings = [name for interval in pool for name in interval.split(" / ")]
-            choices = [quality for quality in ("P", "M", "m", "A", "d") if any(name.startswith(quality) for name in spellings)]
-            numbers = sorted({name[1:] for name in spellings}, key=lambda number: int(number))
+            spellings = [
+                name for interval in pool for name in interval.split(" / ")
+            ]
+            choices = [
+                quality
+                for quality in ("P", "M", "m", "A", "d")
+                if any(name.startswith(quality) for name in spellings)
+            ]
+            numbers = sorted(
+                {name[1:] for name in spellings},
+                key=lambda number: int(number),
+            )
             accepted = tuple(answer.split(" / "))
         return Question(
             "",
@@ -1137,7 +1547,15 @@ class KeyboardIntervals(Exercise):
             answer=answer,
             keyboard_notes=notes,
             keyboard_range=(lo, hi),
-            explanation=f"The highlighted keys are {distance} half step{'s' if distance != 1 else ''} apart: {answer}.",
+            explanation=(
+                "The highlighted keys are "
+                f"{distance}"
+                " half step"
+                f"{('s' if distance != 1 else '')}"
+                " apart: "
+                f"{answer}"
+                "."
+            ),
         )
 
 
@@ -1153,7 +1571,8 @@ def _scale_name(mode: str) -> str:
     Returns
     -------
     str
-        'major' or 'minor' for those two, otherwise the mode's own name such as 'Dorian'.
+        'major' or 'minor' for those two, otherwise the mode's own name
+        such as 'Dorian'.
 
     Examples
     --------
@@ -1162,7 +1581,10 @@ def _scale_name(mode: str) -> str:
     >>> _scale_name("Dorian")
     'Dorian'
     """
-    return {"Major (Ionian)": "major", "Natural minor (Aeolian)": "minor"}.get(mode, mode)
+    return {"Major (Ionian)": "major", "Natural minor (Aeolian)": "minor"}.get(
+        mode,
+        mode,
+    )
 
 
 def _blank_scale(mode: str) -> str:
@@ -1177,11 +1599,16 @@ def _blank_scale(mode: str) -> str:
     Returns
     -------
     str
-        The scale's name after a blank: '_ Major', '_ minor', '_ Dorian' and so on.
+        The scale's name after a blank: '_ Major', '_ minor', '_ Dorian'
+        and so on.
 
     Examples
     --------
-    >>> _blank_scale("Major (Ionian)"), _blank_scale("Natural minor (Aeolian)"), _blank_scale("Dorian")
+    >>> (
+    ...     _blank_scale("Major (Ionian)"),
+    ...     _blank_scale("Natural minor (Aeolian)"),
+    ...     _blank_scale("Dorian"),
+    ... )
     ('_ Major', '_ minor', '_ Dorian')
     """
     scale = _scale_name(mode)
@@ -1191,11 +1618,14 @@ def _blank_scale(mode: str) -> str:
 @register
 class KeySignatures(ChoiceExercise):
     """
-    Read a key signature drawn on a staff and name the key it belongs to.
+    Read a key signature drawn on a staff and name the key it belongs
+    to.
 
     Examples
     --------
-    >>> q = KeySignatures().generate(random.Random(5))
+    >>> q = KeySignatures().generate(
+    ...     random.Random(5)
+    ... )
     >>> q.answer in q.choices
     True
     """
@@ -1213,11 +1643,14 @@ class KeySignatures(ChoiceExercise):
         Returns
         -------
         str
-            The kinds of question, clefs, scales and key signatures in force.
+            The kinds of question, clefs, scales and key signatures in
+            force.
 
         Examples
         --------
-        >>> KeySignatures().settings_signature().startswith("[")
+        >>> KeySignatures().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         return signature(settings.key_signatures)
@@ -1233,22 +1666,32 @@ class KeySignatures(ChoiceExercise):
 
         Examples
         --------
-        >>> "Key Signature Identification" in KeySignatures().instructions()
+        >>> (
+        ...     "Key Signature Identification"
+        ...     in KeySignatures().instructions()
+        ... )
         True
         """
         return (
-            "<b>Key Signature Identification</b><br>A key signature is drawn on a staff: press the tonic of the scale it "
-            "belongs to (the caption under the staff says whether it is a major key, a minor key or a mode such as "
+            "<b>Key Signature Identification</b><br>A key signature is "
+            "drawn on a staff: press the tonic of the scale it "
+            "belongs to (the caption under the staff says whether it is a "
+            "major key, a minor key or a mode such as "
             "Dorian).<br><br>"
-            "Sharp keys add sharps (G, D, A ...) and flat keys add flats (F, B♭, E♭ ...). A mode uses the signature of a "
-            "major key, started from another degree: D Dorian has the signature of C major, started from its second note."
-            "<br><br>You can press an answer's number instead of the button: 1 is the first.<br><br>"
-            "Use the sliders button to choose the clefs, the scales and the key signatures."
+            "Sharp keys add sharps (G, D, A ...) and flat keys add flats "
+            "(F, B♭, E♭ ...). A mode uses the signature of a "
+            "major key, started from another degree: D Dorian has the "
+            "signature of C major, started from its second note."
+            "<br><br>You can press an answer's number instead of the "
+            "button: 1 is the first.<br><br>"
+            "Use the sliders button to choose the clefs, the scales and the"
+            " key signatures."
         )
 
     def refresh(self, question: Question) -> Question:
         """
-        Give a stored signature question the caption on its staff that older versions did not write.
+        Give a stored signature question the caption on its staff that
+        older versions did not write.
 
         Parameters
         ----------
@@ -1258,22 +1701,34 @@ class KeySignatures(ChoiceExercise):
         Returns
         -------
         Question
-            The same question, captioned '_ Major' (or '_ minor', '_ Dorian' and so on) if it shows a staff and had no caption.
+            The same question, captioned '_ Major' (or '_ minor', '_
+            Dorian' and so on) if it shows a staff and had no caption.
 
         Examples
         --------
-        >>> old = Question("Which minor key has this key signature?", choices=["C"], answer="C", key=-3, show_staff=True)
+        >>> old = Question(
+        ...     "Which minor key has this key signature?",
+        ...     choices=["C"],
+        ...     answer="C",
+        ...     key=-3,
+        ...     show_staff=True,
+        ... )
         >>> KeySignatures().refresh(old).caption
         '_ minor'
         """
         if not question.show_staff:
             return question
         for mode in SCALES:
-            if question.prompt == f"Which {MODE_WORDS.get(mode, f'{mode} scale')} has this key signature?":
+            if question.prompt == (
+                "Which "
+                f"{MODE_WORDS.get(mode, f'{mode} scale')}"
+                " has this key signature?"
+            ):
+                modes = settings.key_signatures.active_modes()
                 choices = list(
                     dict.fromkeys(
                         mode_tonic(c, mode=selected_mode).name
-                        for selected_mode in settings.key_signatures.active_modes()
+                        for selected_mode in modes
                         for c in settings.key_signatures.active_keys()
                     ),
                 )
@@ -1282,11 +1737,17 @@ class KeySignatures(ChoiceExercise):
                     caption=question.caption or _blank_scale(mode),
                     choices=choices,
                     grid={
-                        choice: (0 if "♯" in choice else 2 if "♭" in choice else 1, "CDEFGAB".index(choice[0]))
+                        choice: (
+                            0 if "♯" in choice else 2 if "♭" in choice else 1,
+                            "CDEFGAB".index(choice[0]),
+                        )
                         for choice in choices
                     },
                 )
-                return self.limit_buttons(updated, rng=random.Random(question.item_key()))
+                return self.limit_buttons(
+                    updated,
+                    rng=random.Random(question.item_key()),
+                )
         return question
 
     def make_question(self, rng: random.Random) -> Question:
@@ -1301,11 +1762,14 @@ class KeySignatures(ChoiceExercise):
         Returns
         -------
         Question
-            A signature on a staff; the answer is the tonic of the scale that has it.
+            A signature on a staff; the answer is the tonic of the scale
+            that has it.
 
         Examples
         --------
-        >>> q = KeySignatures().generate(random.Random(6))
+        >>> q = KeySignatures().generate(
+        ...     random.Random(6)
+        ... )
         >>> q.show_staff and q.answer in q.choices
         True
         """
@@ -1330,7 +1794,8 @@ class KeySignatures(ChoiceExercise):
         rng: random.Random,
     ) -> Question:
         """
-        Show a key signature on a staff and ask for the tonic of the scale that has it.
+        Show a key signature on a staff and ask for the tonic of the
+        scale that has it.
 
         Parameters
         ----------
@@ -1339,28 +1804,38 @@ class KeySignatures(ChoiceExercise):
         mode : str
             A key of `SCALES`, such as "Major (Ionian)". Keyword-only.
         count : int
-            The key signature to draw: positive for sharps, negative for flats. Keyword-only.
+            The key signature to draw: positive for sharps, negative for
+            flats. Keyword-only.
         clef : str
             The clef to draw it on. Keyword-only.
         rng : random.Random
-            The random number generator, used to choose the wrong answers. Keyword-only.
+            The random number generator, used to choose the wrong
+            answers. Keyword-only.
 
         Returns
         -------
         Question
-            A staff with only a clef and the signature, captioned '_ Major' (or '_ minor', '_ Dorian' and so on).
+            A staff with only a clef and the signature, captioned '_
+            Major' (or '_ minor', '_ Dorian' and so on).
 
         Examples
         --------
         >>> # noinspection PyProtectedMember
-        >>> q = KeySignatures._read_question(Note.parse("G4"), mode="Major (Ionian)", count=1, clef="treble",
-        ...                                  rng=random.Random(0))
+        >>> q = KeySignatures._read_question(
+        ...     Note.parse("G4"),
+        ...     mode="Major (Ionian)",
+        ...     count=1,
+        ...     clef="treble",
+        ...     rng=random.Random(0),
+        ... )
         >>> q.answer, q.caption, q.show_staff
         ('G', '_ Major', True)
         """
         correct = tonic.name
-        # Offer only tonics represented by the key signatures enabled in settings.
-        # Different signatures can spell to the same tonic in some modes, so
+        # Offer only tonics represented by the key signatures enabled in
+        # settings.
+        # Different signatures can spell to the same tonic in some
+        # modes, so
         # preserve order while removing duplicates.
         enabled = settings.key_signatures.active_keys()
         allowed = list(
@@ -1377,28 +1852,48 @@ class KeySignatures(ChoiceExercise):
             rng=rng,
         )
         word = MODE_WORDS.get(mode, f"{mode} scale")
-        notes = [*build(tonic, intervals=SCALES[mode]), tonic.transpose(Interval(8, quality="P"))]  # the scale, up to its octave
+        notes = [
+            *build(tonic, intervals=SCALES[mode]),
+            tonic.transpose(Interval(8, quality="P")),
+        ]  # the scale, up to its octave
         return Question(
             f"Which {word} has this key signature?",
             choices=choices,
-            grid={choice: (0 if "♯" in choice else 2 if "♭" in choice else 1, "CDEFGAB".index(choice[0])) for choice in choices},
+            grid={
+                choice: (
+                    0 if "♯" in choice else 2 if "♭" in choice else 1,
+                    "CDEFGAB".index(choice[0]),
+                )
+                for choice in choices
+            },
             answer=correct,
             clef=clef,
             key=count,
             show_staff=True,
             caption=_blank_scale(mode),
-            explanation=f"{format_key_signature(count)}: {tonic.name} {_scale_name(mode)}: " + " ".join(n.name for n in notes),
+            explanation=(
+                f"{format_key_signature(count)}"
+                ": "
+                f"{tonic.name}"
+                " "
+                f"{_scale_name(mode)}"
+                ": "
+            )
+            + " ".join(n.name for n in notes),
         )
 
 
 @register
 class KeySignatureConstruction(Exercise):
     """
-    Build the key signature of a named key on a blank staff, with the fork.
+    Build the key signature of a named key on a blank staff, with the
+    fork.
 
     Examples
     --------
-    >>> q = KeySignatureConstruction().generate(random.Random(5))
+    >>> q = KeySignatureConstruction().generate(
+    ...     random.Random(5)
+    ... )
     >>> q.build_key, q.staff, q.choices
     (True, [], [])
     """
@@ -1420,7 +1915,9 @@ class KeySignatureConstruction(Exercise):
 
         Examples
         --------
-        >>> KeySignatureConstruction().settings_signature().startswith("[")
+        >>> KeySignatureConstruction().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         return signature(settings.key_construction)
@@ -1436,18 +1933,28 @@ class KeySignatureConstruction(Exercise):
 
         Examples
         --------
-        >>> "Key Signature Construction" in KeySignatureConstruction().instructions()
+        >>> (
+        ...     "Key Signature Construction"
+        ...     in KeySignatureConstruction().instructions()
+        ... )
         True
         """
         return (
-            "<b>Key Signature Construction</b><br>The key under the staff is the one to build. Pick how many sharps (top) "
-            "or flats (bottom) it has on the fork under the staff, then press Answer (or Return). The staff shows what you "
-            "have picked.<br><br>Click a number on the fork, or turn the mouse wheel to move the circle along it. The "
-            "natural sign at the end of the stem is C major, with no sharps or flats.<br><br>"
-            "Without the mouse: the Up or Right arrow adds a sharp, the Down or Left arrow adds a flat, and Home goes "
+            "<b>Key Signature Construction</b><br>The key under the staff "
+            "is the one to build. Pick how many sharps (top) "
+            "or flats (bottom) it has on the fork under the staff, then "
+            "press Answer (or Return). The staff shows what you "
+            "have picked.<br><br>Click a number on the fork, or turn the "
+            "mouse wheel to move the circle along it. The "
+            "natural sign at the end of the stem is C major, with no sharps"
+            " or flats.<br><br>"
+            "Without the mouse: the Up or Right arrow adds a sharp, the "
+            "Down or Left arrow adds a flat, and Home goes "
             "back to none. Then press Return to answer.<br><br>"
-            "A mode uses the signature of a major key, started from another degree: D Dorian has the signature of C "
-            "major.<br><br>Use the sliders button to choose the clefs, the scales and the key signatures."
+            "A mode uses the signature of a major key, started from another"
+            " degree: D Dorian has the signature of C "
+            "major.<br><br>Use the sliders button to choose the clefs, the "
+            "scales and the key signatures."
         )
 
     def generate(self, rng: random.Random) -> Question:
@@ -1462,12 +1969,23 @@ class KeySignatureConstruction(Exercise):
         Returns
         -------
         Question
-            A blank staff captioned with the key, such as 'D Major'; the answer is its sharps or flats.
+            A blank staff captioned with the key, such as 'D Major'; the
+            answer is its sharps or flats.
 
         Examples
         --------
-        >>> q = KeySignatureConstruction().generate(random.Random(1))
-        >>> q.caption.split()[0] in {"C", "D", "E", "F", "G", "A", "B"} or "♯" in q.caption or "♭" in q.caption
+        >>> q = KeySignatureConstruction().generate(
+        ...     random.Random(1)
+        ... )
+        >>> q.caption.split()[0] in {
+        ...     "C",
+        ...     "D",
+        ...     "E",
+        ...     "F",
+        ...     "G",
+        ...     "A",
+        ...     "B",
+        ... } or "♯" in q.caption or "♭" in q.caption
         True
         >>> q.answer == format_key_signature(q.key)
         True
@@ -1476,8 +1994,12 @@ class KeySignatureConstruction(Exercise):
         mode = rng.choice(cfg.active_modes())
         count = rng.choice(cfg.active_keys())
         tonic = mode_tonic(count, mode=mode)
-        name = f"{tonic.name} {_blank_scale(mode)[2:]}"  # "D Major", "A♯ minor", "E Dorian"
-        notes = [*build(tonic, intervals=SCALES[mode]), tonic.transpose(Interval(8, quality="P"))]  # the scale, up to its octave
+        # "D Major", "A♯ minor", "E Dorian"
+        name = f"{tonic.name} {_blank_scale(mode)[2:]}"
+        notes = [
+            *build(tonic, intervals=SCALES[mode]),
+            tonic.transpose(Interval(8, quality="P")),
+        ]  # the scale, up to its octave
         return Question(
             f"Build the key signature of {name}.",
             choices=[],
@@ -1487,7 +2009,8 @@ class KeySignatureConstruction(Exercise):
             show_staff=True,
             caption=name,
             build_key=True,
-            explanation=f"{name}: {format_key_signature(count)}: " + " ".join(n.name for n in notes),
+            explanation=f"{name}: {format_key_signature(count)}: "
+            + " ".join(n.name for n in notes),
         )
 
 
@@ -1498,7 +2021,9 @@ class OrderOfKeys(Exercise):
 
     Examples
     --------
-    >>> OrderOfKeys().generate(random.Random(1)).place_signature
+    >>> OrderOfKeys().generate(
+    ...     random.Random(1)
+    ... ).place_signature
     True
     """
 
@@ -1515,7 +2040,8 @@ class OrderOfKeys(Exercise):
         Returns
         -------
         str
-            The original empty signature at the defaults, so earlier questions remain available for review.
+            The original empty signature at the defaults, so earlier
+            questions remain available for review.
 
         Examples
         --------
@@ -1523,9 +2049,17 @@ class OrderOfKeys(Exercise):
         ''
         """
         cfg = settings.order_of_keys
-        base = settings.KeySignatureSettings(clefs=cfg.clefs, modes=cfg.modes, keys=cfg.keys)
+        base = settings.KeySignatureSettings(
+            clefs=cfg.clefs,
+            modes=cfg.modes,
+            keys=cfg.keys,
+        )
         if cfg.starting_accidentals == {0}:
-            return "" if base == settings.KeySignatureSettings() else signature(base)
+            return (
+                ""
+                if base == settings.KeySignatureSettings()
+                else signature(base)
+            )
         return signature(base, cfg.starting_accidentals)
 
     def instructions(self) -> str:
@@ -1543,16 +2077,21 @@ class OrderOfKeys(Exercise):
         True
         """
         return (
-            "Read the key below the staff. Choose ♯ or ♭ and click the line or space for each sign, "
-            "starting with the leftmost empty position. Leave any printed signs in place. "
-            "You can also use ↑ and ↓ to choose a position and P to place the sign. "
-            "Use Undo to take back the last sign. Press Answer or Return when the signature is complete. "
+            "Read the key below the staff. Choose ♯ or ♭ and click the line"
+            " or space for each sign, "
+            "starting with the leftmost empty position. Leave any printed "
+            "signs in place. "
+            "You can also use ↑ and ↓ to choose a position and P to place "
+            "the sign. "
+            "Use Undo to take back the last sign. Press Answer or Return "
+            "when the signature is complete. "
             "If the key has no sharps or flats, submit the empty staff."
         )
 
     def generate(self, rng: random.Random) -> Question:
         """
-        Choose a key from the selected scales and signatures and spell it in a selected clef.
+        Choose a key from the selected scales and signatures and spell
+        it in a selected clef.
 
         Parameters
         ----------
@@ -1562,7 +2101,8 @@ class OrderOfKeys(Exercise):
         Returns
         -------
         Question
-            The named key and the ordered signs with their exact staff octaves.
+            The named key and the ordered signs with their exact staff
+            octaves.
 
         Examples
         --------
@@ -1571,9 +2111,15 @@ class OrderOfKeys(Exercise):
         True
         """
         cfg = settings.order_of_keys
-        starts = sorted(cfg.starting_accidentals.intersection(cfg.available_starts())) or [0]
+        starts = sorted(
+            cfg.starting_accidentals.intersection(cfg.available_starts()),
+        ) or [0]
         start = starts[0] if len(starts) == 1 else rng.choice(starts)
-        keys = [key for key in cfg.active_keys() if min(0, key) <= start <= max(0, key)]
+        keys = [
+            key
+            for key in cfg.active_keys()
+            if min(0, key) <= start <= max(0, key)
+        ]
         count = rng.choice(keys)
         mode = rng.choice(cfg.active_modes())
         clef = rng.choice(cfg.active_clefs())
@@ -1615,7 +2161,8 @@ def _scale_notes(
     mode : str
         The scale type in `SCALES`. Keyword-only.
     exact_octave : bool, default False
-        Allow any starting octave within the construction staff's input range. Keyword-only.
+        Allow any starting octave within the construction staff's input
+        range. Keyword-only.
 
     Returns
     -------
@@ -1624,26 +2171,44 @@ def _scale_notes(
 
     Examples
     --------
-    >>> notes = _scale_notes(random.Random(1), clef="bass", named=Note.parse("D4"), mode="Dorian")
-    >>> len(notes), notes[0].name, notes[-1].midi - notes[0].midi
+    >>> notes = _scale_notes(
+    ...     random.Random(1),
+    ...     clef="bass",
+    ...     named=Note.parse("D4"),
+    ...     mode="Dorian",
+    ... )
+    >>> (
+    ...     len(notes),
+    ...     notes[0].name,
+    ...     notes[-1].midi - notes[0].midi,
+    ... )
     (8, 'D', 12)
     """
     bottom = settings.BOTTOM_LINES[clef].diatonic
-    starts = [d for d in range(bottom - 3, bottom + 4) if d % 7 == named.letter]
+    starts = [
+        d for d in range(bottom - 3, bottom + 4) if d % 7 == named.letter
+    ]
     if exact_octave:
         low, high = settings.RANGE_LIMITS[clef]
-        starts = [d for d in range(low, high - 6) if d % 7 == named.letter] or starts
+        starts = [
+            d for d in range(low, high - 6) if d % 7 == named.letter
+        ] or starts
     tonic = Note.from_diatonic(rng.choice(starts), accidental=named.accidental)
-    return [*build(tonic, intervals=SCALES[mode]), tonic.transpose(Interval(8, quality="P"))]
+    return [
+        *build(tonic, intervals=SCALES[mode]),
+        tonic.transpose(Interval(8, quality="P")),
+    ]
 
 
 def _scale_material(
     rng: random.Random,
     *,
-    cfg: settings.ScaleIdentificationSettings | settings.ScaleConstructionSettings,
+    cfg: settings.ScaleIdentificationSettings
+    | settings.ScaleConstructionSettings,
 ) -> tuple[str, int, str, int, list[Note]]:
     """
-    Sample the shared musical material for scale identification and construction.
+    Sample the shared musical material for scale identification and
+    construction.
 
     Parameters
     ----------
@@ -1655,11 +2220,15 @@ def _scale_material(
     Returns
     -------
     tuple of (str, int, str, int, list of Note)
-        Mode, scale signature, clef, staff signature and eight notes in the selected motion.
+        Mode, scale signature, clef, staff signature and eight notes in
+        the selected motion.
 
     Examples
     --------
-    >>> material = _scale_material(random.Random(1), cfg=settings.ScaleIdentificationSettings())
+    >>> material = _scale_material(
+    ...     random.Random(1),
+    ...     cfg=settings.ScaleIdentificationSettings(),
+    ... )
     >>> len(material[-1])
     8
     """
@@ -1669,9 +2238,17 @@ def _scale_material(
         mode = rng.choice(modes)
         count = rng.choice(cfg.active_keys())
     else:
-        available = [mode for mode in modes if (cfg.minor_keys if mode == minor_mode else cfg.keys)]
-        mode = rng.choice(available or (["Major (Ionian)"] if cfg.keys else [minor_mode]))
-        count = rng.choice(sorted(cfg.minor_keys if mode == minor_mode else cfg.keys) or [0])
+        available = [
+            mode
+            for mode in modes
+            if (cfg.minor_keys if mode == minor_mode else cfg.keys)
+        ]
+        mode = rng.choice(
+            available or (["Major (Ionian)"] if cfg.keys else [minor_mode]),
+        )
+        count = rng.choice(
+            sorted(cfg.minor_keys if mode == minor_mode else cfg.keys) or [0],
+        )
     clef = rng.choice(cfg.active_clefs())
     staff_key = rng.choice(cfg.active_staff_keys())
     notes = _scale_notes(
@@ -1679,7 +2256,8 @@ def _scale_material(
         clef=clef,
         named=mode_tonic(count, mode=mode),
         mode=mode,
-        exact_octave=isinstance(cfg, settings.ScaleConstructionSettings) and cfg.octave,
+        exact_octave=isinstance(cfg, settings.ScaleConstructionSettings)
+        and cfg.octave,
     )
     if cfg.motion == "descending":
         notes.reverse()
@@ -1693,7 +2271,9 @@ class ScaleIdentification(Exercise):
 
     Examples
     --------
-    >>> q = ScaleIdentification().generate(random.Random(7))
+    >>> q = ScaleIdentification().generate(
+    ...     random.Random(7)
+    ... )
     >>> len(q.staff), q.answer in q.choices
     (8, True)
     """
@@ -1705,7 +2285,8 @@ class ScaleIdentification(Exercise):
 
     def settings_signature(self) -> str:
         """
-        Identify the clefs, scale types and staff and scale signatures in force.
+        Identify the clefs, scale types and staff and scale signatures
+        in force.
 
         Returns
         -------
@@ -1714,11 +2295,14 @@ class ScaleIdentification(Exercise):
 
         Examples
         --------
-        >>> ScaleIdentification().settings_signature().startswith("[")
+        >>> ScaleIdentification().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         cfg = settings.scale_identification
-        # Keep existing ascending reviews under their original settings signature.
+        # Keep existing ascending reviews under their original settings
+        # signature.
         parts = vars(cfg).copy()
         if cfg.motion == "ascending":
             del parts["motion"]
@@ -1734,7 +2318,8 @@ class ScaleIdentification(Exercise):
 
     def instructions(self) -> str:
         """
-        Explain how to identify the scale, including a staff with a different signature.
+        Explain how to identify the scale, including a staff with a
+        different signature.
 
         Returns
         -------
@@ -1743,22 +2328,33 @@ class ScaleIdentification(Exercise):
 
         Examples
         --------
-        >>> "Scale Identification" in ScaleIdentification().instructions()
+        >>> (
+        ...     "Scale Identification"
+        ...     in ScaleIdentification().instructions()
+        ... )
         True
         """
         return (
-            "<b>Scale Identification</b><br>Read the scale on the staff and choose its tonic and scale type. "
-            "The first and last notes are the tonic, one octave apart. Read the clef, key signature and each note's "
-            "accidental, then use the whole and half steps to identify the scale or mode. "
-            "The staff's key signature need not be the scale's own: written accidentals show where they differ. "
-            "Use Settings to choose Clefs, Scales, Staff Key, Scale Key, Motion, Buttons, and Question Type. "
-            "When asked for both with All buttons, choose the tonic and mode in either order. "
-            "You can press an answer's number instead of clicking its button: 1 is the first."
+            "<b>Scale Identification</b><br>Read the scale on the staff and"
+            " choose its tonic and scale type. "
+            "The first and last notes are the tonic, one octave apart. Read"
+            " the clef, key signature and each note's "
+            "accidental, then use the whole and half steps to identify the "
+            "scale or mode. "
+            "The staff's key signature need not be the scale's own: written"
+            " accidentals show where they differ. "
+            "Use Settings to choose Clefs, Scales, Staff Key, Scale Key, "
+            "Motion, Buttons, and Question Type. "
+            "When asked for both with All buttons, choose the tonic and "
+            "mode in either order. "
+            "You can press an answer's number instead of clicking its "
+            "button: 1 is the first."
         )
 
     def generate(self, rng: random.Random) -> Question:
         """
-        Draw a one-octave scale and offer scale names without revealing the answer on the staff.
+        Draw a one-octave scale and offer scale names without revealing
+        the answer on the staff.
 
         Parameters
         ----------
@@ -1772,8 +2368,12 @@ class ScaleIdentification(Exercise):
 
         Examples
         --------
-        >>> q = ScaleIdentification().generate(random.Random(8))
-        >>> q.staff[0][0].name == q.staff[-1][0].name and not q.caption
+        >>> q = ScaleIdentification().generate(
+        ...     random.Random(8)
+        ... )
+        >>> q.staff[0][0].name == q.staff[-1][
+        ...     0
+        ... ].name and not q.caption
         True
         """
         cfg = settings.scale_identification
@@ -1781,23 +2381,52 @@ class ScaleIdentification(Exercise):
         tonic = notes[0]
         kind = _blank_scale(mode)[2:]
         modes = [_blank_scale(m)[2:] for m in settings.KEY_MODES]
-        tonics = [Note.from_diatonic(letter, accidental=sign).name for sign in (-1, 0, 1) for letter in range(7)]
+        tonics = [
+            Note.from_diatonic(letter, accidental=sign).name
+            for sign in (-1, 0, 1)
+            for letter in range(7)
+        ]
         all_buttons = cfg.button_mode == "all"
         combined = cfg.question_type == "combined"
         if cfg.question_type == "mode":
-            prompt, answer, pool = "Identify the mode on the staff.", kind, modes
+            prompt, answer, pool = (
+                "Identify the mode on the staff.",
+                kind,
+                modes,
+            )
         elif cfg.question_type == "key":
-            prompt, answer, pool = "Identify the tonic of the scale on the staff.", tonic.name, tonics
+            prompt, answer, pool = (
+                "Identify the tonic of the scale on the staff.",
+                tonic.name,
+                tonics,
+            )
         else:
-            prompt, answer = "Identify the scale on the staff.", f"{tonic.name} {kind}"
-            pool = [f"{tonic.name} {_blank_scale(m)[2:]}" for m in cfg.active_modes()]
-            pool += [f"{mode_tonic(k, mode=mode).name} {kind}" for k in range(-7, 8)]
+            prompt, answer = (
+                "Identify the scale on the staff.",
+                f"{tonic.name} {kind}",
+            )
+            pool = [
+                f"{tonic.name} {_blank_scale(m)[2:]}"
+                for m in cfg.active_modes()
+            ]
+            pool += [
+                f"{mode_tonic(k, mode=mode).name} {kind}" for k in range(-7, 8)
+            ]
         if all_buttons:
             choices = modes if cfg.question_type == "mode" else tonics
             grid = {choice: divmod(i, 7) for i, choice in enumerate(choices)}
         else:
-            choices = pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng)
-            grid = {choice: divmod(i, 5) for i, choice in enumerate(choices)} if len(choices) > 6 else None
+            choices = pick_distractors(
+                answer,
+                pool=pool,
+                n=cfg.button_count - 1,
+                rng=rng,
+            )
+            grid = (
+                {choice: divmod(i, 5) for i, choice in enumerate(choices)}
+                if len(choices) > 6
+                else None
+            )
         split_buttons = all_buttons and combined
         return Question(
             prompt,
@@ -1810,19 +2439,27 @@ class ScaleIdentification(Exercise):
             staff=[[note] for note in notes],
             clef=clef,
             key=staff_key,
-            explanation=f"{tonic.name} {kind}: " + " ".join(note.name for note in notes),
+            explanation=f"{tonic.name} {kind}: "
+            + " ".join(note.name for note in notes),
         )
 
 
 @register
 class ScaleConstruction(Exercise):
     """
-    Place the notes of a named scale on a blank staff, one after another.
+    Place the notes of a named scale on a blank staff, one after
+    another.
 
     Examples
     --------
-    >>> q = ScaleConstruction().generate(random.Random(5))
-    >>> len(q.construct_scale or []), q.choices, q.key
+    >>> q = ScaleConstruction().generate(
+    ...     random.Random(5)
+    ... )
+    >>> (
+    ...     len(q.construct_scale or []),
+    ...     q.choices,
+    ...     q.key,
+    ... )
     (8, [], 0)
     """
 
@@ -1842,11 +2479,14 @@ class ScaleConstruction(Exercise):
 
         Examples
         --------
-        >>> ScaleConstruction().settings_signature().startswith("[")
+        >>> ScaleConstruction().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         cfg = settings.scale_construction
-        # Keep existing ascending reviews under their original settings signature.
+        # Keep existing ascending reviews under their original settings
+        # signature.
         parts = vars(cfg).copy()
         if cfg.motion == "ascending":
             del parts["motion"]
@@ -1870,50 +2510,77 @@ class ScaleConstruction(Exercise):
         """
         text = [
             (
-                "<b>Scale Construction</b><br>The name of a scale is under the blank staff. Click the staff to place its "
-                "notes from left to right in the requested direction, ending an octave from the first note: eight notes in "
-                "all. The note follows the pointer, and each click puts it in the next place. "
+                "<b>Scale Construction</b><br>The name of a scale is under "
+                "the blank staff. Click the staff to place its "
+                "notes from left to right in the requested direction, "
+                "ending an octave from the first note: eight notes in "
+                "all. The note follows the pointer, and each click puts it "
+                "in the next place. "
                 + (
-                    "The name says which octave the first note is in, such as G2 Major: start on that note, G in octave 2 "
-                    "(middle C is C4), and place the remaining notes in the requested direction."
+                    "The name says which octave the first note is in, such "
+                    "as G2 Major: start on that note, G in octave 2 "
+                    "(middle C is C4), and place the remaining notes in the"
+                    " requested direction."
                     if settings.scale_construction.octave
-                    else "Any octave will do for the first note. End one octave away."
+                    else (
+                        "Any octave will do for the first note. End one "
+                        "octave away."
+                    )
                 )
             ),
             (
-                "The staff has no key signature, so a note that needs a sharp or a flat needs its own sign. Right click "
-                "the staff or turn the mouse wheel to step through no sign, ♯ and ♭ for the next note (or choose a sign "
-                "with the buttons), then click. Only the exact spelling counts, so G♯ is not A♭."
+                "The staff has no key signature, so a note that needs a "
+                "sharp or a flat needs its own sign. Right click "
+                "the staff or turn the mouse wheel to step through no sign,"
+                " ♯ and ♭ for the next note (or choose a sign "
+                "with the buttons), then click. Only the exact spelling "
+                "counts, so G♯ is not A♭."
             ),
         ]
         if any(settings.scale_construction.staff_keys):
             text.append(
-                "The staff may have a key signature, and it need not be the scale's. A note you place with no sign takes "
-                "the sign that the staff's signature gives its letter: with two flats, B and E are flat. So a scale with a "
-                "different signature needs signs where it differs: a C major scale on that staff needs a natural (♮) on "
-                "its B and E, and a note that the staff does not flatten but the scale does needs a flat.",
+                "The staff may have a key signature, and it need not be the"
+                " scale's. A note you place with no sign takes "
+                "the sign that the staff's signature gives its letter: with"
+                " two flats, B and E are flat. So a scale with a "
+                "different signature needs signs where it differs: a C "
+                "major scale on that staff needs a natural (♮) on "
+                "its B and E, and a note that the staff does not flatten "
+                "but the scale does needs a flat.",
             )
         if settings.scale_construction.steps:
             text.append(
-                "Once the eight notes are placed, mark the steps between them. Two lines rise from each pair of "
-                "neighboring notes to a point above them, and the point takes W for a whole step or H for a half step. "
-                "Turn the mouse wheel, right click, press the W and H buttons or keys, or use the arrow keys to choose, "
-                "then click the staff (or press Return) to mark it and move on to the next pair.",
+                "Once the eight notes are placed, mark the steps between "
+                "them. Two lines rise from each pair of "
+                "neighboring notes to a point above them, and the point "
+                "takes W for a whole step or H for a half step. "
+                "Turn the mouse wheel, right click, press the W and H "
+                "buttons or keys, or use the arrow keys to choose, "
+                "then click the staff (or press Return) to mark it and move"
+                " on to the next pair.",
             )
         text.append(
-            "You can do all of this without the mouse. The Up and Down arrows (or the Higher and Lower buttons) move the "
-            "next note a line or space, Page Up and Page Down (or the Octave buttons) an octave, and typing a letter from A "
-            "to G jumps to the nearest note with that name. The Left and Right arrows, or the keys + - and 0, choose its "
-            "sign. Press Return (or Place note) to place it. The line under the staff says what comes next.",
+            "You can do all of this without the mouse. The Up and Down "
+            "arrows (or the Higher and Lower buttons) move the "
+            "next note a line or space, Page Up and Page Down (or the "
+            "Octave buttons) an octave, and typing a letter from A "
+            "to G jumps to the nearest note with that name. The Left and "
+            "Right arrows, or the keys + - and 0, choose its "
+            "sign. Press Return (or Place note) to place it. The line under"
+            " the staff says what comes next.",
         )
         text.append(
-            "Undo (or Backspace) takes back the last thing you placed, the steps first. Press Answer (or Return) when "
-            "everything is placed. A wrong scale is cleared so that you can try again. A right one is played, each note "
+            "Undo (or Backspace) takes back the last thing you placed, the "
+            "steps first. Press Answer (or Return) when "
+            "everything is placed. A wrong scale is cleared so that you can"
+            " try again. A right one is played, each note "
             "turning green as it sounds.",
         )
         text.append(
-            "A mode uses the signature of a major key, started from another degree: D Dorian has the notes of C major, "
-            "started from D. Use the sliders button to choose the clefs, the scales, the key signatures, Motion, and whether to "
+            "A mode uses the signature of a major key, started from another"
+            " degree: D Dorian has the notes of C major, "
+            "started from D. Use the sliders button to choose the clefs, "
+            "the scales, the key signatures, Motion, and whether to "
             "mark the steps.",
         )
         return "<br><br>".join(text)
@@ -1930,14 +2597,19 @@ class ScaleConstruction(Exercise):
         Returns
         -------
         Question
-            A blank staff captioned with the scale, such as 'D Major'. The eight notes in the selected
+            A blank staff captioned with the scale, such as 'D Major'.
+            The eight notes in the selected
             direction are stored in `construct_scale`.
 
         Examples
         --------
-        >>> q = ScaleConstruction().generate(random.Random(1))
+        >>> q = ScaleConstruction().generate(
+        ...     random.Random(1)
+        ... )
         >>> scale = q.construct_scale or []
-        >>> scale[0].name == scale[-1].name and q.accidentals
+        >>> scale[0].name == scale[
+        ...     -1
+        ... ].name and q.accidentals
         True
         >>> q.check_scale(scale)
         True
@@ -1946,16 +2618,36 @@ class ScaleConstruction(Exercise):
         mode, count, clef, staff_key, notes = _scale_material(rng, cfg=cfg)
         tonic = notes[0]
         kind = _blank_scale(mode)[2:]  # "Major", "minor", "Dorian"
-        name = f"{tonic.name}{tonic.octave} {kind}" if cfg.octave else f"{tonic.name} {kind}"  # "G2 Major", or "G Major"
-        steps = ["W" if abs(b.midi - a.midi) == 2 else "H" for a, b in zip(notes, notes[1:], strict=False)] if cfg.steps else None
-        motion = "descending" if notes[0].midi > notes[-1].midi else "ascending"
+        name = (
+            f"{tonic.name}{tonic.octave} {kind}"
+            if cfg.octave
+            else f"{tonic.name} {kind}"
+        )  # "G2 Major", or "G Major"
+        steps = (
+            [
+                "W" if abs(b.midi - a.midi) == 2 else "H"
+                for a, b in zip(notes, notes[1:], strict=False)
+            ]
+            if cfg.steps
+            else None
+        )
+        motion = (
+            "descending" if notes[0].midi > notes[-1].midi else "ascending"
+        )
         direction = f" {motion}" if cfg.motion != "ascending" else ""
         caption = f"{name} ({motion})" if direction else name
         explanation = f"{caption}: " + " ".join(n.name for n in notes)
         if steps:
             explanation += f" ({' '.join(steps)})"
-        if staff_key and staff_key != count:  # a signature that is not the scale's own: say so
-            explanation += f". The staff has {format_key_signature(staff_key)}, but the scale has {format_key_signature(count)}"
+        if (
+            staff_key and staff_key != count
+        ):  # a signature that is not the scale's own: say so
+            explanation += (
+                ". The staff has "
+                f"{format_key_signature(staff_key)}"
+                ", but the scale has "
+                f"{format_key_signature(count)}"
+            )
         return Question(
             f"Place the notes of the {name}{direction} scale on the staff"
             + (", then mark its whole and half steps." if steps else "."),
@@ -1988,7 +2680,10 @@ MAJOR_CHOICES = (
     "G♭",
     "A♭",
     "B♭",
-)  # the major keys that can be named: the naturals, and the sharp and flat keys
+    # the major keys that can be named: the naturals, and the sharp and
+    # flat
+    # keys
+)
 MAJOR_GRID = {
     "C♯": (0, 0),
     "F♯": (0, 3),
@@ -2005,7 +2700,9 @@ MAJOR_GRID = {
     "G♭": (2, 4),
     "A♭": (2, 5),
     "B♭": (2, 6),
-}  # the letters in the middle row, the sharps above them and the flats below, as on the piano keyboard exercise
+    # the letters in the middle row, the sharps above them and the flats
+    # below, as on the piano keyboard exercise
+}
 
 
 MINOR_CHOICES = (
@@ -2024,7 +2721,10 @@ MINOR_CHOICES = (
     "E♭m",
     "A♭m",
     "B♭m",
-)  # the minor keys that can be named: the ones on the circle, with their other names
+    # the minor keys that can be named: the ones on the circle, with
+    # their
+    # other names
+)
 MINOR_GRID = {
     "C♯m": (0, 0),
     "D♯m": (0, 1),
@@ -2041,27 +2741,37 @@ MINOR_GRID = {
     "E♭m": (2, 2),
     "A♭m": (2, 5),
     "B♭m": (2, 6),
-}  # laid out like the major keys: the letters in the middle row, the sharps above and the flats below
+    # laid out like the major keys: the letters in the middle row, the
+    # sharps above and the flats below
+}
 NUMERAL_CHOICES: list[str] = list(
     NUMERALS,
-)  # the six chords of a key that are on the circle: capitals are major, small letters minor
+    # the six chords of a key that are on the circle: capitals are
+    # major,
+    # small letters minor
+)
 
 
 @register
 class CircleOfFifths(ChoiceExercise):
     """
-    Questions on the circle of fifths: a relative major, a relative minor, or the Roman numeral of a chord.
+    Questions on the circle of fifths: a relative major, a relative
+    minor, or the Roman numeral of a chord.
 
     Examples
     --------
-    >>> q = CircleOfFifths().generate(random.Random(3))
+    >>> q = CircleOfFifths().generate(
+    ...     random.Random(3)
+    ... )
     >>> q.circle is not None and q.answer in q.choices
     True
     """
 
     name = "Circle of Fifths"
     category = "Scales & keys"
-    description = "Find relative keys and the chords of a key on the circle of fifths."
+    description = (
+        "Find relative keys and the chords of a key on the circle of fifths."
+    )
     par_seconds = 7.0
     has_sound = False
 
@@ -2076,7 +2786,9 @@ class CircleOfFifths(ChoiceExercise):
 
         Examples
         --------
-        >>> CircleOfFifths().settings_signature().startswith("[")
+        >>> CircleOfFifths().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         return signature(settings.circle)
@@ -2088,7 +2800,8 @@ class CircleOfFifths(ChoiceExercise):
         Returns
         -------
         str
-            Simple HTML, with a paragraph for each kind of question that is switched on.
+            Simple HTML, with a paragraph for each kind of question that
+            is switched on.
 
         Examples
         --------
@@ -2098,28 +2811,49 @@ class CircleOfFifths(ChoiceExercise):
         kinds = settings.circle.active_questions()
         text = [
             (
-                "<b>Circle of Fifths</b><br>This is the circle of fifths. The outer ring has the major keys, with C at the "
-                "top and a fifth higher at each step clockwise. The inner ring has their relative minors, which have the "
-                "same key signature: A minor sits under C major. Each question lights one cell and leaves its answer blank. "
-                "A right answer lights the cell, writes its name and shows the key signature on the staff in the middle. A "
-                "wrong one flashes the cell red, striped, so you can try again."
+                "<b>Circle of Fifths</b><br>This is the circle of fifths. "
+                "The outer ring has the major keys, with C at the "
+                "top and a fifth higher at each step clockwise. The inner "
+                "ring has their relative minors, which have the "
+                "same key signature: A minor sits under C major. Each "
+                "question lights one cell and leaves its answer blank. "
+                "A right answer lights the cell, writes its name and shows "
+                "the key signature on the staff in the middle. A "
+                "wrong one flashes the cell red, striped, so you can try "
+                "again."
             ),
         ]
         if "major" in kinds:
-            text.append("<b>Relative major.</b> A minor key is shown. Press the name of its relative major.")
+            text.append(
+                (
+                    "<b>Relative major.</b> A minor key is shown. Press "
+                    "the name of its relative major."
+                ),
+            )
         if "minor" in kinds:
-            text.append("<b>Relative minor.</b> A major key is shown. Press the name of its relative minor.")
+            text.append(
+                (
+                    "<b>Relative minor.</b> A major key is shown. Press "
+                    "the name of its relative minor."
+                ),
+            )
         if "numeral" in kinds:
             text.append(
-                "<b>Roman numerals.</b> A key is in the middle, with its staff, and its six chords that are on the circle "
-                "are lit: the major chords I, IV and V on the outer ring, and the minor chords ii, iii and vi on the inner "
-                "ring. (There is a seventh chord, vii°, which is diminished, and has no place on the circle.) Press the "
-                "numeral of the chord asked about. Capitals are major chords and small letters are minor ones. A right "
+                "<b>Roman numerals.</b> A key is in the middle, with its "
+                "staff, and its six chords that are on the circle "
+                "are lit: the major chords I, IV and V on the outer ring, "
+                "and the minor chords ii, iii and vi on the inner "
+                "ring. (There is a seventh chord, vii°, which is "
+                "diminished, and has no place on the circle.) Press the "
+                "numeral of the chord asked about. Capitals are major "
+                "chords and small letters are minor ones. A right "
                 "answer shows the numerals of all six chords.",
             )
         text.append(
-            "Some keys have two names, such as B and C♭ or G♯m and A♭m. For those you press both names, in either order. "
-            "Press the letter of a key, Shift and the letter for a sharp, or Ctrl and the letter for a flat. A numeral is "
+            "Some keys have two names, such as B and C♭ or G♯m and A♭m. For"
+            " those you press both names, in either order. "
+            "Press the letter of a key, Shift and the letter for a sharp, "
+            "or Ctrl and the letter for a flat. A numeral is "
             "on the number keys.",
         )
         return "<br><br>".join(text)
@@ -2141,16 +2875,24 @@ class CircleOfFifths(ChoiceExercise):
         Examples
         --------
         >>> settings.circle.questions = {"minor"}
-        >>> q = CircleOfFifths().generate(random.Random(5))
+        >>> q = CircleOfFifths().generate(
+        ...     random.Random(5)
+        ... )
         >>> q.circle_kind, q.prompt
         ('minor', 'Which minor key is the relative minor of F major?')
-        >>> settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+        >>> settings.circle.questions = set(
+        ...     settings.CIRCLE_QUESTIONS
+        ... )
         """
         kind = rng.choice(settings.circle.active_questions())
         if kind == "numeral":
             return self._numeral_question(rng)
         place = rng.randrange(len(MAJORS))
-        return self._minor_question(place) if kind == "minor" else self._major_question(place)
+        return (
+            self._minor_question(place)
+            if kind == "minor"
+            else self._major_question(place)
+        )
 
     @staticmethod
     def _major_question(place: int) -> Question:
@@ -2165,7 +2907,8 @@ class CircleOfFifths(ChoiceExercise):
         Returns
         -------
         Question
-            The minor key is shown; the answer is its major. A key with two names needs both.
+            The minor key is shown; the answer is its major. A key with
+            two names needs both.
 
         Examples
         --------
@@ -2174,14 +2917,19 @@ class CircleOfFifths(ChoiceExercise):
         >>> q.answer, q.required, q.circle_ring
         ('B', ('B', 'C♭'), 'outer')
         >>> # noinspection PyProtectedMember
-        >>> CircleOfFifths._major_question(3).required  # one name: nothing more to press
+        >>> CircleOfFifths._major_question(
+        ...     3
+        ... ).required  # one name: nothing more to press
         ()
         """
         names = MAJORS[place]
         main, double = names[0], len(names) > 1
         both = " Press both of its names." if double else ""
         return Question(
-            f"Which major key is the relative major of {display_minor(place)}?{both}",
+            "Which major key is the relative major of "
+            f"{display_minor(place)}"
+            "?"
+            f"{both}",
             choices=list(MAJOR_CHOICES),
             answer=main,
             required=names if double else (),
@@ -2191,8 +2939,13 @@ class CircleOfFifths(ChoiceExercise):
             circle_ring="outer",
             caption=f"{MINORS[place][0][:-1]} minor",
             explanation=(
-                f"{display_major(place)} and {display_minor(place)} have the same key signature: "
-                f"{format_key_signature(SIGNATURES[place])}. A relative minor starts on the sixth note of the major."
+                f"{display_major(place)}"
+                " and "
+                f"{display_minor(place)}"
+                " have the same key signature: "
+                f"{format_key_signature(SIGNATURES[place])}"
+                ". A relative minor starts on the sixth note of the "
+                "major."
             ),
         )
 
@@ -2209,7 +2962,8 @@ class CircleOfFifths(ChoiceExercise):
         Returns
         -------
         Question
-            The major key is shown; the answer is its minor. A key with two names needs both.
+            The major key is shown; the answer is its minor. A key with
+            two names needs both.
 
         Examples
         --------
@@ -2222,7 +2976,10 @@ class CircleOfFifths(ChoiceExercise):
         main, double = names[0], len(names) > 1
         both = " Press both of its names." if double else ""
         return Question(
-            f"Which minor key is the relative minor of {display_major(place)}?{both}",
+            "Which minor key is the relative minor of "
+            f"{display_major(place)}"
+            "?"
+            f"{both}",
             choices=list(MINOR_CHOICES),
             answer=main,
             required=names if double else (),
@@ -2232,15 +2989,21 @@ class CircleOfFifths(ChoiceExercise):
             circle_ring="inner",
             caption=f"{MAJORS[place][0]} major",
             explanation=(
-                f"{display_major(place)} and {display_minor(place)} have the same key signature: "
-                f"{format_key_signature(SIGNATURES[place])}. A relative minor starts on the sixth note of the major."
+                f"{display_major(place)}"
+                " and "
+                f"{display_minor(place)}"
+                " have the same key signature: "
+                f"{format_key_signature(SIGNATURES[place])}"
+                ". A relative minor starts on the sixth note of the "
+                "major."
             ),
         )
 
     @staticmethod
     def _numeral_question(rng: random.Random) -> Question:
         """
-        Ask for the Roman numeral of one of the six chords of a key that are on the circle.
+        Ask for the Roman numeral of one of the six chords of a key that
+        are on the circle.
 
         Parameters
         ----------
@@ -2250,13 +3013,20 @@ class CircleOfFifths(ChoiceExercise):
         Returns
         -------
         Question
-            A key is shown, with its six chords lit; the answer is the numeral of one of them.
+            A key is shown, with its six chords lit; the answer is the
+            numeral of one of them.
 
         Examples
         --------
         >>> # noinspection PyProtectedMember
-        >>> q = CircleOfFifths._numeral_question(random.Random(2))
-        >>> q.circle_kind, q.circle_key is not None, q.answer in NUMERAL_CHOICES
+        >>> q = CircleOfFifths._numeral_question(
+        ...     random.Random(2)
+        ... )
+        >>> (
+        ...     q.circle_kind,
+        ...     q.circle_key is not None,
+        ...     q.answer in NUMERAL_CHOICES,
+        ... )
         ('numeral', True, True)
         """
         key = rng.randrange(len(MAJORS))
@@ -2264,7 +3034,11 @@ class CircleOfFifths(ChoiceExercise):
         chords = numeral_chords(key)
         tonic = MAJORS[key][0]
         return Question(
-            f"In {tonic} major, which Roman numeral is the chord {chords[numeral]}?",
+            "In "
+            f"{tonic}"
+            " major, which Roman numeral is the chord "
+            f"{chords[numeral]}"
+            "?",
             choices=list(NUMERAL_CHOICES),
             answer=numeral,
             circle=place,
@@ -2272,7 +3046,9 @@ class CircleOfFifths(ChoiceExercise):
             circle_ring=ring,
             circle_key=key,
             caption=f"{tonic} major",
-            explanation=f"In {tonic} major: " + ", ".join(f"{n} {chords[n]}" for n in NUMERALS) + ".",
+            explanation=f"In {tonic} major: "
+            + ", ".join(f"{n} {chords[n]}" for n in NUMERALS)
+            + ".",
         )
 
 
@@ -2283,8 +3059,13 @@ class ChordQualities(ChoiceExercise):
 
     Examples
     --------
-    >>> q = ChordQualities().generate(random.Random(9))
-    >>> len(q.staff[0]) in (3, 4) and q.answer in q.choices
+    >>> q = ChordQualities().generate(
+    ...     random.Random(9)
+    ... )
+    >>> len(q.staff[0]) in (
+    ...     3,
+    ...     4,
+    ... ) and q.answer in q.choices
     True
     """
 
@@ -2310,7 +3091,9 @@ class ChordQualities(ChoiceExercise):
 
         Examples
         --------
-        >>> ChordQualities().card_prompt(Question("", choices=[], answer="Major"))
+        >>> ChordQualities().card_prompt(
+        ...     Question("", choices=[], answer="Major")
+        ... )
         'Identify the Chord Quality.'
         """
         del question
@@ -2331,8 +3114,10 @@ class ChordQualities(ChoiceExercise):
         True
         """
         return (
-            "<b>Chord Quality</b><br>A chord is shown in root position. Press its type. Check the size of the "
-            "intervals stacked above the lowest note to tell the types apart. You can press an answer's number instead "
+            "<b>Chord Quality</b><br>A chord is shown in root position. "
+            "Press its type. Check the size of the "
+            "intervals stacked above the lowest note to tell the types "
+            "apart. You can press an answer's number instead "
             "of the button: 1 is the first."
         )
 
@@ -2348,11 +3133,14 @@ class ChordQualities(ChoiceExercise):
         Returns
         -------
         Question
-            The chord drawn as one stack of notes, with its type (such as 'minor 7th') as the answer.
+            The chord drawn as one stack of notes, with its type (such
+            as 'minor 7th') as the answer.
 
         Examples
         --------
-        >>> q = ChordQualities().generate(random.Random(10))
+        >>> q = ChordQualities().generate(
+        ...     random.Random(10)
+        ... )
         >>> q.answer in CHORDS
         True
         """
@@ -2361,7 +3149,10 @@ class ChordQualities(ChoiceExercise):
         root = _random_note(rng, clef=clef, accidentals=True)
         lo, hi = CLEF_RANGES[clef]
         chord = build(root, intervals=CHORDS[quality])
-        if any(abs(n.accidental) > 1 for n in chord) or chord[-1].diatonic > hi.diatonic + 3:
+        if (
+            any(abs(n.accidental) > 1 for n in chord)
+            or chord[-1].diatonic > hi.diatonic + 3
+        ):
             return self.make_question(rng)
         choices = list(CHORDS)
         if self.button_settings().button_mode == "limited":
@@ -2377,7 +3168,8 @@ class ChordQualities(ChoiceExercise):
         )
 
 
-# Where the lowest and highest note of an arpeggio may sit on each clef (up to two ledger lines either side of the staff).
+# Where the lowest and highest note of an arpeggio may sit on each clef
+# (up to two ledger lines either side of the staff).
 ARPEGGIO_WINDOWS = {
     "treble": (Note(3, letter=6), Note(6, letter=0)),  # B3..C6
     "bass": (Note(2, letter=0), Note(4, letter=2)),  # C2..E4
@@ -2396,7 +3188,9 @@ class ArpeggioNames(ChoiceExercise):
 
     Examples
     --------
-    >>> q = ArpeggioNames().generate(random.Random(11))
+    >>> q = ArpeggioNames().generate(
+    ...     random.Random(11)
+    ... )
     >>> q.octaves is not None and len(q.staff) >= 4
     True
     """
@@ -2413,11 +3207,14 @@ class ArpeggioNames(ChoiceExercise):
         Returns
         -------
         str
-            The clefs, chord types, inversions and key signatures in force.
+            The clefs, chord types, inversions and key signatures in
+            force.
 
         Examples
         --------
-        >>> ArpeggioNames().settings_signature().startswith("[")
+        >>> ArpeggioNames().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         return signature(settings.arpeggio)
@@ -2437,18 +3234,25 @@ class ArpeggioNames(ChoiceExercise):
         True
         """
         return (
-            "<b>Arpeggio Identification</b><br>A chord is played one note at a time, rising from its lowest note to "
-            "the same note an octave higher. Press its type, then its inversion. The type is on the number keys, 1 for the "
-            "first, and the inversion is on the home row: A for the first, S for the second and so on.<br><br>"
-            "Find the chord's root by looking for the notes a third apart. The inversion is which chord tone is "
-            "lowest: the root (root position), the third (1st inversion), the fifth (2nd inversion) or the seventh "
+            "<b>Arpeggio Identification</b><br>A chord is played one note "
+            "at a time, rising from its lowest note to "
+            "the same note an octave higher. Press its type, then its "
+            "inversion. The type is on the number keys, 1 for the "
+            "first, and the inversion is on the home row: A for the first, "
+            "S for the second and so on.<br><br>"
+            "Find the chord's root by looking for the notes a third apart. "
+            "The inversion is which chord tone is "
+            "lowest: the root (root position), the third (1st inversion), "
+            "the fifth (2nd inversion) or the seventh "
             "(3rd inversion, seventh chords only).<br><br>"
-            "Use the sliders button to choose the clefs, the types of arpeggio, the inversions and key signatures."
+            "Use the sliders button to choose the clefs, the types of "
+            "arpeggio, the inversions and key signatures."
         )
 
     def make_question(self, rng: random.Random) -> Question:
         """
-        Make an arpeggio on one of the chosen clefs, in a chosen position.
+        Make an arpeggio on one of the chosen clefs, in a chosen
+        position.
 
         Parameters
         ----------
@@ -2458,17 +3262,21 @@ class ArpeggioNames(ChoiceExercise):
         Returns
         -------
         Question
-            The arpeggio's notes one after another on a staff; the answer is the chord type and inversion, such as
+            The arpeggio's notes one after another on a staff; the
+            answer is the chord type and inversion, such as
             'major · 1st inversion'.
 
         Raises
         ------
         RuntimeError
-            If no arpeggio fits the chosen clefs, chord types and inversions.
+            If no arpeggio fits the chosen clefs, chord types and
+            inversions.
 
         Examples
         --------
-        >>> q = ArpeggioNames().generate(random.Random(12))
+        >>> q = ArpeggioNames().generate(
+        ...     random.Random(12)
+        ... )
         >>> " · " in q.answer
         True
         """
@@ -2478,7 +3286,11 @@ class ArpeggioNames(ChoiceExercise):
             inversion = rng.choice(cfg.inversions_for(chord_type))
             clef = rng.choice(cfg.active_clefs())
             key = rng.choice(cfg.active_keys()) if cfg.key_signature else 0
-            root = Note(4, letter=rng.randrange(7), accidental=rng.choice((-1, 0, 1)))
+            root = Note(
+                4,
+                letter=rng.randrange(7),
+                accidental=rng.choice((-1, 0, 1)),
+            )
             if (root.letter, root.accidental) in (
                 (2, 1),
                 (6, 1),
@@ -2486,15 +3298,33 @@ class ArpeggioNames(ChoiceExercise):
                 (3, -1),
             ):  # E♯ B♯ C♭ F♭ are not worth asking
                 continue
-            notes = arpeggio(root, intervals=CHORDS[chord_type], inversion=inversion)
-            if any(abs(n.accidental) > 1 for n in notes):  # no double sharps or flats
+            notes = arpeggio(
+                root,
+                intervals=CHORDS[chord_type],
+                inversion=inversion,
+            )
+            if any(
+                abs(n.accidental) > 1 for n in notes
+            ):  # no double sharps or flats
                 continue
             low, high = (n.diatonic for n in ARPEGGIO_WINDOWS[clef])
-            fits = [s for s in range(-28, 29, 7) if notes[0].diatonic + s >= low and notes[-1].diatonic + s <= high]
+            fits = [
+                s
+                for s in range(-28, 29, 7)
+                if notes[0].diatonic + s >= low
+                and notes[-1].diatonic + s <= high
+            ]
             if not fits:
                 continue
             shift = rng.choice(fits) // 7
-            notes = [Note(n.octave + shift, letter=n.letter, accidental=n.accidental) for n in notes]
+            notes = [
+                Note(
+                    n.octave + shift,
+                    letter=n.letter,
+                    accidental=n.accidental,
+                )
+                for n in notes
+            ]
             return self._question(
                 chord_type,
                 inversion=inversion,
@@ -2525,29 +3355,44 @@ class ArpeggioNames(ChoiceExercise):
         chord_type : str
             A key of `CHORDS`, such as "major".
         inversion : int
-            0 for root position, 1 for the first inversion and so on. Keyword-only.
+            0 for root position, 1 for the first inversion and so on.
+            Keyword-only.
         root : Note
             The root of the chord. Keyword-only.
         notes : list of Note
-            The arpeggio's notes, already moved to the right octave. Keyword-only.
+            The arpeggio's notes, already moved to the right octave.
+            Keyword-only.
         clef : str
             The clef to draw on. Keyword-only.
         key : int
             The key signature to draw. Keyword-only.
         cfg : ArpeggioSettings
-            The settings, which decide which types and inversions have buttons. Keyword-only.
+            The settings, which decide which types and inversions have
+            buttons. Keyword-only.
 
         Returns
         -------
         Question
-            The notes drawn one after another, with a row of type buttons and a row of inversion buttons.
+            The notes drawn one after another, with a row of type
+            buttons and a row of inversion buttons.
 
         Examples
         --------
         >>> cfg_ = settings.ArpeggioSettings()
-        >>> notes_ = arpeggio(Note.parse("C4"), intervals=CHORDS["major"])
+        >>> notes_ = arpeggio(
+        ...     Note.parse("C4"),
+        ...     intervals=CHORDS["major"],
+        ... )
         >>> # noinspection PyProtectedMember
-        >>> q = ArpeggioNames._question("major", inversion=0, root=Note.parse("C4"), notes=notes_, clef="treble", key=0, cfg=cfg_)
+        >>> q = ArpeggioNames._question(
+        ...     "major",
+        ...     inversion=0,
+        ...     root=Note.parse("C4"),
+        ...     notes=notes_,
+        ...     clef="treble",
+        ...     key=0,
+        ...     cfg=cfg_,
+        ... )
         >>> q.answer
         'major · root position'
         """
@@ -2555,8 +3400,15 @@ class ArpeggioNames(ChoiceExercise):
         types = cfg.active_types()
         inversions = sorted({i for t in types for i in cfg.inversions_for(t)})
         answer = f"{chord_type}{joiner}{INVERSION_NAMES[inversion]}"
-        grid = {t: divmod(i, 5) for i, t in enumerate(types)} if len(types) > 5 else None  # two rows once there are many
-        expl = f"{root.name} {chord_type}, {INVERSION_NAMES[inversion]}: " + " ".join(n.name for n in notes)
+        grid = (
+            {t: divmod(i, 5) for i, t in enumerate(types)}
+            if len(types) > 5
+            else None
+        )  # two rows once there are many
+        expl = (
+            f"{root.name} {chord_type}, {INVERSION_NAMES[inversion]}: "
+            + " ".join(n.name for n in notes)
+        )
         return Question(
             "What type of arpeggio is this, and which inversion?",
             choices=types,
@@ -2573,22 +3425,14 @@ class ArpeggioNames(ChoiceExercise):
         )
 
 
-# Black keys: pitch class -> (letter, accidental) for the sharp name and for the flat name.
+# Black keys: pitch class -> (letter, accidental) for the sharp name and
+# for the flat name.
 _BLACK_KEY_NAMES = {
     1: ((0, 1), (1, -1)),
     3: ((1, 1), (2, -1)),
     6: ((3, 1), (4, -1)),
     8: ((4, 1), (5, -1)),
     10: ((5, 1), (6, -1)),
-}
-_WHITE_KEY_LETTER = {
-    0: 0,
-    2: 1,
-    4: 2,
-    5: 3,
-    7: 4,
-    9: 5,
-    11: 6,
 }
 
 
@@ -2599,7 +3443,8 @@ def _key_tonic(count: int) -> Note:
     Parameters
     ----------
     count : int
-        Sharps (positive) or flats (negative) in the key signature, from -7 to 7.
+        Sharps (positive) or flats (negative) in the key signature, from
+        -7 to 7.
 
     Returns
     -------
@@ -2612,7 +3457,11 @@ def _key_tonic(count: int) -> Note:
     ('D4', 'E♭4')
     """
     name = MAJOR_KEYS[count]
-    return Note(4, letter="CDEFGAB".index(name[0]), accidental=1 if "♯" in name else -1 if "♭" in name else 0)
+    return Note(
+        4,
+        letter="CDEFGAB".index(name[0]),
+        accidental=1 if "♯" in name else -1 if "♭" in name else 0,
+    )
 
 
 def _key_spellings(
@@ -2621,10 +3470,13 @@ def _key_spellings(
     count: int | None,
 ) -> list[tuple[int, int]]:
     """
-    Return the names that are correct for a piano key in a key signature.
+    Return the names that are correct for a piano key in a key
+    signature.
 
-    Notes of the key keep the spelling the key gives them (the F key is E♯ in C♯ major). Other white keys use their natural
-    name. Other black keys are spelled with sharps in a sharp key and flats in a flat key; with no signature (or none given)
+    Notes of the key keep the spelling the key gives them (the F key is
+    E♯ in C♯ major). Other white keys use their natural
+    name. Other black keys are spelled with sharps in a sharp key and
+    flats in a flat key; with no signature (or none given)
     either name is right.
 
     Parameters
@@ -2632,7 +3484,8 @@ def _key_spellings(
     pc : int
         The key's pitch class, 0 for C up to 11 for B.
     count : int or None
-        The key signature: sharps if positive, flats if negative, 0 for none, or None for no key signature shown. Keyword-only.
+        The key signature: sharps if positive, flats if negative, 0 for
+        none, or None for no key signature shown. Keyword-only.
 
     Returns
     -------
@@ -2641,20 +3494,32 @@ def _key_spellings(
 
     Examples
     --------
-    >>> _key_spellings(6, count=None)  # a black key with no signature: F♯ or G♭
+    >>> _key_spellings(
+    ...     6, count=None
+    ... )  # a black key with no signature: F♯ or G♭
     [(3, 1), (4, -1)]
-    >>> _key_spellings(6, count=-2)  # in B♭ major it is not in the key, so a flat key spells it with a flat
+    >>> _key_spellings(
+    ...     6, count=-2
+    ... # in B♭ major it is not in the key, so a flat key spells it with
+    ... # a flat
+    ... )
     [(4, -1)]
     >>> _key_spellings(0, count=None)
     [(0, 0)]
     """
     diatonic = {}
     if count is not None:
-        diatonic = {n.pitch_class: (n.letter, n.accidental) for n in build(_key_tonic(count), intervals=SCALES["Major (Ionian)"])}
+        diatonic = {
+            n.pitch_class: (n.letter, n.accidental)
+            for n in build(
+                _key_tonic(count),
+                intervals=SCALES["Major (Ionian)"],
+            )
+        }
     if pc in diatonic:
         return [diatonic[pc]]
-    if pc in _WHITE_KEY_LETTER:
-        return [(_WHITE_KEY_LETTER[pc], 0)]
+    if pc in NATURAL_LETTER_INDEX:
+        return [(NATURAL_LETTER_INDEX[pc], 0)]
     sharp, flat = _BLACK_KEY_NAMES[pc]
     if count and count > 0:
         return [sharp]
@@ -2670,7 +3535,8 @@ def _spelled(
     accidental: int,
 ) -> Note:
     """
-    Return the note that sounds as a MIDI number when written with a given letter name.
+    Return the note that sounds as a MIDI number when written with a
+    given letter name.
 
     Parameters
     ----------
@@ -2688,12 +3554,20 @@ def _spelled(
 
     Examples
     --------
-    >>> str(_spelled(61, letter=1, accidental=-1))  # MIDI 61 written as D♭
+    >>> str(
+    ...     _spelled(61, letter=1, accidental=-1)
+    ... )  # MIDI 61 written as D♭
     'D♭4'
-    >>> str(_spelled(59, letter=0, accidental=-1))  # MIDI 59 written as C♭
+    >>> str(
+    ...     _spelled(59, letter=0, accidental=-1)
+    ... )  # MIDI 59 written as C♭
     'C♭4'
     """
-    return Note((midi - accidental - NATURAL_SEMITONES[letter]) // 12 - 1, letter=letter, accidental=accidental)
+    return Note(
+        (midi - accidental - NATURAL_SEMITONES[letter]) // 12 - 1,
+        letter=letter,
+        accidental=accidental,
+    )
 
 
 @register
@@ -2703,7 +3577,9 @@ class KeyboardNotes(ChoiceExercise):
 
     Examples
     --------
-    >>> q = KeyboardNotes().generate(random.Random(13))
+    >>> q = KeyboardNotes().generate(
+    ...     random.Random(13)
+    ... )
     >>> q.keyboard is not None and q.answer in q.choices
     True
     """
@@ -2715,7 +3591,8 @@ class KeyboardNotes(ChoiceExercise):
 
     def card_prompt(self, question: Question) -> str:
         """
-        Say what to name on a flashcard. Letter names give the octave if it counts, and follow the key signature if one is shown.
+        Say what to name on a flashcard. Letter names give the octave if
+        it counts, and follow the key signature if one is shown.
 
         Parameters
         ----------
@@ -2729,13 +3606,24 @@ class KeyboardNotes(ChoiceExercise):
 
         Examples
         --------
-        >>> KeyboardNotes().card_prompt(Question("", choices=[], answer="C4", octaves=["C4"]))
+        >>> KeyboardNotes().card_prompt(
+        ...     Question(
+        ...         "",
+        ...         choices=[],
+        ...         answer="C4",
+        ...         octaves=["C4"],
+        ...     )
+        ... )
         'Identify the note by letter and octave.'
         """
         q = question
         if settings.note_names.naming != "letters":
             return _note_card_prompt(q)
-        prompt = "Identify the note by letter and octave." if q.octaves else "Identify the note by letter."
+        prompt = (
+            "Identify the note by letter and octave."
+            if q.octaves
+            else "Identify the note by letter."
+        )
         if q.key_staff:
             prompt += " Use the spelling for the displayed key signature."
         return prompt
@@ -2747,11 +3635,14 @@ class KeyboardNotes(ChoiceExercise):
         Returns
         -------
         str
-            The keyboard range, black keys, octave and key signature settings, and the naming in force.
+            The keyboard range, black keys, octave and key signature
+            settings, and the naming in force.
 
         Examples
         --------
-        >>> KeyboardNotes().settings_signature().startswith("[")
+        >>> KeyboardNotes().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         return signature(settings.keyboard, settings.note_names.naming)
@@ -2763,7 +3654,8 @@ class KeyboardNotes(ChoiceExercise):
         Returns
         -------
         str
-            Simple HTML, with paragraphs added for the octave and key signature settings that are on.
+            Simple HTML, with paragraphs added for the octave and key
+            signature settings that are on.
 
         Examples
         --------
@@ -2773,33 +3665,48 @@ class KeyboardNotes(ChoiceExercise):
         cfg = settings.keyboard
         text = [
             (
-                "<b>Keyboard Note Identification</b><br>One key on the keyboard is highlighted. Press the button with its name, "
-                "or type its name on the keyboard: the letter for a natural, Shift and the letter for a sharp, Ctrl and "
+                "<b>Keyboard Note Identification</b><br>One key on the "
+                "keyboard is highlighted. Press the button with its name, "
+                "or type its name on the keyboard: the letter for a "
+                "natural, Shift and the letter for a sharp, Ctrl and "
                 "the letter for a flat."
             ),
         ]
         if settings.note_names.naming in settings.DEGREE_NAMINGS:
             text = [
                 (
-                    "<b>Keyboard Note Identification</b><br>Name the highlighted key by its scale degree, 1–7, in the major key "
-                    "of the signature. Without a key signature, use C major. Altered degrees have a prefix, such "
-                    "as ♭3 or ♯4. Type the degree digit; add Shift for a sharp or Ctrl for a flat, "
+                    "<b>Keyboard Note Identification</b><br>Name the "
+                    "highlighted key by its scale degree, 1–7, in the major"
+                    " key "
+                    "of the signature. Without a key signature, use C "
+                    "major. Altered degrees have a prefix, such "
+                    "as ♭3 or ♯4. Type the degree digit; add Shift for a "
+                    "sharp or Ctrl for a flat, "
                     "and Alt for a double alteration."
                 ),
             ]
         if cfg.require_octave:
             text.append(
-                "Choose its octave too, from the row below, using the shortcuts shown on the buttons. "
+                "Choose its octave too, from the row below, using the "
+                "shortcuts shown on the buttons. "
                 "Octaves count up from C, so middle C is the C in octave 4.",
             )
         if cfg.key_signature:
             text.append(
-                "A key signature is shown above the keyboard. Name the key the way that signature spells it. Only "
-                "that spelling counts, so F♯ and G♭ are not interchangeable. A black key that is not in the key "
-                "is spelled with sharps in a sharp key and with flats in a flat key.",
+                "A key signature is shown above the keyboard. Name the key "
+                "the way that signature spells it. Only "
+                "that spelling counts, so F♯ and G♭ are not "
+                "interchangeable. A black key that is not in the key "
+                "is spelled with sharps in a sharp key and with flats in a "
+                "flat key.",
             )
         else:
-            text.append("Black keys have two names, such as C♯ and D♭. Either one is accepted.")
+            text.append(
+                (
+                    "Black keys have two names, such as C♯ and D♭. Either "
+                    "one is accepted."
+                ),
+            )
         return "<br><br>".join(text)
 
     def make_question(self, rng: random.Random) -> Question:
@@ -2814,25 +3721,41 @@ class KeyboardNotes(ChoiceExercise):
         Returns
         -------
         Question
-            The keyboard, a grid of name buttons (and a row of octave buttons if octaves are asked), and the key's name as
+            The keyboard, a grid of name buttons (and a row of octave
+            buttons if octaves are asked), and the key's name as
             the answer, with the other spelling of a black key accepted.
 
         Examples
         --------
-        >>> q = KeyboardNotes().generate(random.Random(14))
+        >>> q = KeyboardNotes().generate(
+        ...     random.Random(14)
+        ... )
         >>> # noinspection PyUnresolvedReferences
-        >>> q.keyboard_range[0] <= q.keyboard.midi <= q.keyboard_range[1]
+        >>> q.keyboard_range[
+        ...     0
+        ... ] <= q.keyboard.midi <= q.keyboard_range[1]
         True
         """
         cfg = settings.keyboard
         naming = settings.note_names.naming
         lo, hi = sorted((cfg.low, cfg.high))
-        candidates = [m for m in range(lo, hi + 1) if cfg.black_keys or m % 12 in _WHITE_KEY_LETTER] or [lo]
+        span = range(lo, hi + 1)
+        naturals = [midi for midi in span if midi % 12 in NATURAL_LETTER_INDEX]
+        candidates = list(span) if cfg.black_keys else naturals
+        candidates = candidates or [lo]
         count = rng.choice(cfg.active_keys()) if cfg.key_signature else None
         midi = rng.choice(candidates)
 
-        spelled = [_spelled(midi, letter=letter, accidental=acc) for letter, acc in _key_spellings(midi % 12, count=count)]
-        key = spelled[0]  # the key as the signature spells it (also what plays when you answer correctly)
+        spelled = [
+            _spelled(midi, letter=letter, accidental=acc)
+            for letter, acc in _key_spellings(midi % 12, count=count)
+        ]
+        key = spelled[
+            0
+            # the key as the signature spells it (also what plays when
+            # you
+            # answer correctly)
+        ]
         names = [spell(n, naming=naming, key=count or 0) for n in spelled]
         answer, accept = names[0], tuple(names[1:])
         octaves = None
@@ -2841,9 +3764,16 @@ class KeyboardNotes(ChoiceExercise):
                 str(o)
                 for o in sorted(
                     {
-                        _spelled(m, letter=letter, accidental=accidental).octave
+                        _spelled(
+                            m,
+                            letter=letter,
+                            accidental=accidental,
+                        ).octave
                         for m in candidates
-                        for letter, accidental in _key_spellings(m % 12, count=count)[:1]  # the first spelling of each
+                        for letter, accidental in _key_spellings(
+                            m % 12,
+                            count=count,
+                        )[:1]  # the first spelling of each
                     },
                 )
             ]
@@ -2856,25 +3786,52 @@ class KeyboardNotes(ChoiceExercise):
                 )
                 for n in spelled
             ]
-            answer, accept = names_with_octaves[0], tuple(names_with_octaves[1:])
+            answer, accept = (
+                names_with_octaves[0],
+                tuple(names_with_octaves[1:]),
+            )
 
         if len(spelled) > 1:
             explanation = f"{names[0]} and {names[1]} are the same black key."
         elif count is not None:
             # noinspection PyTypeChecker
-            in_key = midi % 12 in {n.pitch_class for n in build(_key_tonic(count), intervals=SCALES["Major (Ionian)"])}
+            in_key = midi % 12 in {
+                n.pitch_class
+                for n in build(
+                    _key_tonic(count),
+                    intervals=SCALES["Major (Ionian)"],
+                )
+            }
             # noinspection PyTypeChecker
-            explanation = f"In {MAJOR_KEYS[count]} major ({format_key_signature(count)}) this key is called {names[0]}."
-            if not in_key and midi % 12 not in _WHITE_KEY_LETTER:
+            explanation = (
+                "In "
+                f"{MAJOR_KEYS[count]}"
+                " major ("
+                f"{format_key_signature(count)}"
+                ") this key is called "
+                f"{names[0]}"
+                "."
+            )
+            if not in_key and midi % 12 not in NATURAL_LETTER_INDEX:
                 # noinspection PyTypeChecker
-                explanation += f" It is not in the key, so it is spelled with {'sharps' if count > 0 else 'flats'}."
+                explanation += (
+                    " It is not in the key, so it is spelled with "
+                    f"{('sharps' if count > 0 else 'flats')}"
+                    "."
+                )
         else:
             explanation = ""
 
-        # One button per name: sharps on the top row, naturals in the middle, flats below, a column per letter.
-        # A key signature can need any spelling (E♯, C♭ ...), so it gets the full set.
+        # One button per name: sharps on the top row, naturals in the
+        # middle, flats below, a column per letter.
+        # A key signature can need any spelling (E♯, C♭ ...), so it gets
+        # the full set.
         if cfg.key_signature:
-            extra = [(letter, acc, 0 if acc > 0 else 2) for letter in range(7) for acc in (1, -1)]
+            extra = [
+                (letter, acc, 0 if acc > 0 else 2)
+                for letter in range(7)
+                for acc in (1, -1)
+            ]
         elif cfg.black_keys:
             extra = [
                 (letter, acc, row)
@@ -2884,8 +3841,14 @@ class KeyboardNotes(ChoiceExercise):
         else:
             extra = []
         if naming in settings.DEGREE_NAMINGS:
-            pool = {(letter, 0) for letter in range(7)} | {(letter, acc) for letter, acc, _row in extra}
-            choices, grid = _degree_choices(pool, key=count or 0, naming=naming)
+            pool = {(letter, 0) for letter in range(7)} | {
+                (letter, acc) for letter, acc, _row in extra
+            }
+            choices, grid = _degree_choices(
+                pool,
+                key=count or 0,
+                naming=naming,
+            )
         else:
             grid, choices = {}, []
             for letter in range(7):
@@ -2893,7 +3856,10 @@ class KeyboardNotes(ChoiceExercise):
                 choices.append(n)
                 grid[n] = (1, letter)
             for letter, acc, row in extra:
-                n = spell(Note(4, letter=letter, accidental=acc), naming=naming)
+                n = spell(
+                    Note(4, letter=letter, accidental=acc),
+                    naming=naming,
+                )
                 choices.append(n)
                 grid[n] = (row, letter)
 
@@ -2920,8 +3886,12 @@ class NoteConstruction(Exercise):
 
     Examples
     --------
-    >>> q = NoteConstruction().generate(random.Random(15))
-    >>> q.construct is not None and q.prompt.startswith("Place ")
+    >>> q = NoteConstruction().generate(
+    ...     random.Random(15)
+    ... )
+    >>> q.construct is not None and q.prompt.startswith(
+    ...     "Place "
+    ... )
     True
     """
 
@@ -2932,7 +3902,8 @@ class NoteConstruction(Exercise):
 
     def card_prompt(self, question: Question) -> str:
         """
-        Say which note to place, whichever way the on-screen prompt words it.
+        Say which note to place, whichever way the on-screen prompt
+        words it.
 
         Parameters
         ----------
@@ -2946,13 +3917,26 @@ class NoteConstruction(Exercise):
 
         Examples
         --------
-        >>> NoteConstruction().card_prompt(Question("Place F♯4 on the staff.", choices=[], answer="F♯4"))
+        >>> NoteConstruction().card_prompt(
+        ...     Question(
+        ...         "Place F♯4 on the staff.",
+        ...         choices=[],
+        ...         answer="F♯4",
+        ...     )
+        ... )
         'Place F♯4 on the staff.'
-        >>> NoteConstruction().card_prompt(Question("", choices=[], answer="B♭3"))
+        >>> NoteConstruction().card_prompt(
+        ...     Question("", choices=[], answer="B♭3")
+        ... )
         'Place B♭3 on the staff.'
         """
         q = question
-        target = (q.prompt or q.answer).removeprefix("Place ").removesuffix(".").removesuffix(" on the staff")
+        target = (
+            (q.prompt or q.answer)
+            .removeprefix("Place ")
+            .removesuffix(".")
+            .removesuffix(" on the staff")
+        )
         return f"Place {target} on the staff."
 
     def settings_signature(self) -> str:
@@ -2962,11 +3946,14 @@ class NoteConstruction(Exercise):
         Returns
         -------
         str
-            The clefs, accidentals and key signature settings, and the naming in force.
+            The clefs, accidentals and key signature settings, and the
+            naming in force.
 
         Examples
         --------
-        >>> NoteConstruction().settings_signature().startswith("[")
+        >>> NoteConstruction().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         cfg = settings.construction
@@ -2978,7 +3965,13 @@ class NoteConstruction(Exercise):
         if cfg.staff_keys is None:
             del parts["staff_keys"]
         if cfg.question_type == "notes":
-            for field in ("keys", "minor_keys", "major", "minor", "key_signature"):
+            for field in (
+                "keys",
+                "minor_keys",
+                "major",
+                "minor",
+                "key_signature",
+            ):
                 del parts[field]
         else:
             del parts["question_type"]
@@ -2986,7 +3979,12 @@ class NoteConstruction(Exercise):
                 del parts["minor"]
             if not cfg.minor or not cfg.major:
                 del parts["major"]
-            if not cfg.minor or not cfg.key_signature or cfg.minor_keys is None or cfg.minor_keys == cfg.keys:
+            if (
+                not cfg.minor
+                or not cfg.key_signature
+                or cfg.minor_keys is None
+                or cfg.minor_keys == cfg.keys
+            ):
                 del parts["minor_keys"]
         return signature(parts, settings.note_names.naming)
 
@@ -2997,7 +3995,8 @@ class NoteConstruction(Exercise):
         Returns
         -------
         str
-            Simple HTML, with paragraphs added for the key signature and accidental settings that are on.
+            Simple HTML, with paragraphs added for the key signature and
+            accidental settings that are on.
 
         Examples
         --------
@@ -3007,35 +4006,56 @@ class NoteConstruction(Exercise):
         cfg = settings.construction
         text = [
             (
-                "<b>Note Construction</b><br>A note name is shown. Click the staff where that note belongs. The octave "
-                "counts when shown: the number says which C-to-B you mean, and middle C is C4. Otherwise, any octave works. "
+                "<b>Note Construction</b><br>A note name is shown. Click "
+                "the staff where that note belongs. The octave "
+                "counts when shown: the number says which C-to-B you mean, "
+                "and middle C is C4. Otherwise, any octave works. "
                 "On a grand staff, click the upper"
-                "staff for notes from middle C up and the lower staff for the notes below it."
+                "staff for notes from middle C up and the lower staff for "
+                "the notes below it."
             ),
         ]
-        if cfg.question_type == "scale" and settings.note_names.naming in settings.DEGREE_NAMINGS:
+        if (
+            cfg.question_type == "scale"
+            and settings.note_names.naming in settings.DEGREE_NAMINGS
+        ):
             text.append(
-                "The question gives a scale degree in the named key. Degree 1 is the tonic; "
+                "The question gives a scale degree in the named key. Degree"
+                " 1 is the tonic; "
                 "a prefix such as ♭3 or ♯4 lowers or raises the degree. "
-                "The octave is the written note's C-to-B octave, not a count from the tonic.",
+                "The octave is the written note's C-to-B octave, not a "
+                "count from the tonic.",
             )
         if cfg.key_signature:
             text.append(
-                "A key signature is drawn at the start of the staff according to Staff Key. It applies to every note of that "
-                "letter, so in G major you place F♯ on the F line with no sign. A note that the key does not "
-                "give you needs its own sign. The staff signature may differ from the key named in the prompt.",
+                "A key signature is drawn at the start of the staff "
+                "according to Staff Key. It applies to every note of that "
+                "letter, so in G major you place F♯ on the F line with no "
+                "sign. A note that the key does not "
+                "give you needs its own sign. The staff signature may "
+                "differ from the key named in the prompt.",
             )
         text.append(
-            "Choose ♯, ♮ or ♭ before placing a note, or right-click the staff to cycle through the signs. "
-            "♮ cancels a sharp or flat from the key signature. Only the exact spelling counts.",
+            "Choose ♯, ♮ or ♭ before placing a note, or right-click the "
+            "staff to cycle through the signs. "
+            "♮ cancels a sharp or flat from the key signature. Only the "
+            "exact spelling counts.",
         )
         text.append(
-            "You can do all of this without the mouse. The Up and Down arrows (or the Higher and Lower buttons) move the "
-            "note a line or space, and Page Up and Page Down (or the Octave buttons) an octave. Typing a letter from A to G "
-            "jumps to the nearest note with that name. Press Return (or Place note) to place it. "
+            "You can do all of this without the mouse. The Up and Down "
+            "arrows (or the Higher and Lower buttons) move the "
+            "note a line or space, and Page Up and Page Down (or the Octave"
+            " buttons) an octave. Typing a letter from A to G "
+            "jumps to the nearest note with that name. Press Return (or "
+            "Place note) to place it. "
             "The Left and Right arrows, or the keys + - and 0, choose a sign.",
         )
-        text.append("A wrong click shows the note you placed so you can adjust and try again.")
+        text.append(
+            (
+                "A wrong click shows the note you placed so you can adjust"
+                " and try again."
+            ),
+        )
         return "<br><br>".join(text)
 
     def generate(self, rng: random.Random) -> Question:
@@ -3050,28 +4070,54 @@ class NoteConstruction(Exercise):
         Returns
         -------
         Question
-            A prompt such as 'Place F♯4 on the staff.'; the answer is the note's name, and `construct` is the note to place.
+            A prompt such as 'Place F♯4 on the staff.'; the answer is
+            the note's name, and `construct` is the note to place.
 
         Examples
         --------
-        >>> q = NoteConstruction().generate(random.Random(16))
+        >>> q = NoteConstruction().generate(
+        ...     random.Random(16)
+        ... )
         >>> q.answer in q.prompt
         True
         """
         cfg = settings.construction
         clef = rng.choice(cfg.active_clefs())
         notes_only = cfg.question_type == "notes"
-        minor = not notes_only and cfg.minor and (not cfg.major or rng.choice((False, True)))
-        count = rng.choice(self._scale_keys(minor)) if cfg.key_signature and not notes_only else 0
+        minor = (
+            not notes_only
+            and cfg.minor
+            and (not cfg.major or rng.choice((False, True)))
+        )
+        count = (
+            rng.choice(self._scale_keys(minor))
+            if cfg.key_signature and not notes_only
+            else 0
+        )
         diatonic = rng.choice(self._positions(clef, count=count, minor=minor))
         staff_keys = self._staff_keys(count)
-        staff_signature = rng.choice(staff_keys) if len(staff_keys) > 1 else staff_keys[0]
-        implied = key_accidental(diatonic % 7, count=staff_signature if notes_only else count)
+        staff_signature = (
+            rng.choice(staff_keys) if len(staff_keys) > 1 else staff_keys[0]
+        )
+        implied = key_accidental(
+            diatonic % 7,
+            count=staff_signature if notes_only else count,
+        )
         accidental = implied
-        if cfg.accidentals and rng.random() < (0.4 if cfg.key_signature else 0.5):
-            accidental = rng.choice([a for a in (-1, 0, 1) if a != implied])  # a sign that differs from the key
+        if cfg.accidentals and rng.random() < (
+            0.4 if cfg.key_signature else 0.5
+        ):
+            accidental = rng.choice(
+                [a for a in (-1, 0, 1) if a != implied],
+            )  # a sign that differs from the key
         note = Note.from_diatonic(diatonic, accidental=accidental)
-        return self._placement(note, clef=clef, count=count, minor=minor, staff_signature=staff_signature)
+        return self._placement(
+            note,
+            clef=clef,
+            count=count,
+            minor=minor,
+            staff_signature=staff_signature,
+        )
 
     @staticmethod
     def _scale_keys(minor: bool) -> list[int]:
@@ -3096,7 +4142,11 @@ class NoteConstruction(Exercise):
         cfg = settings.construction
         if not cfg.key_signature or cfg.question_type == "notes":
             return [0]
-        return sorted(cfg.minor_keys) if minor and cfg.minor_keys else cfg.active_keys()
+        return (
+            sorted(cfg.minor_keys)
+            if minor and cfg.minor_keys
+            else cfg.active_keys()
+        )
 
     @staticmethod
     def _staff_keys(count: int) -> list[int]:
@@ -3111,7 +4161,8 @@ class NoteConstruction(Exercise):
         Returns
         -------
         list of int
-            Selected staff signatures, or the scale signature when the staff follows the key.
+            Selected staff signatures, or the scale signature when the
+            staff follows the key.
 
         Examples
         --------
@@ -3142,29 +4193,43 @@ class NoteConstruction(Exercise):
 
         Examples
         --------
-        >>> bool(NoteConstruction()._positions("treble", count=0, minor=False))
+        >>> bool(
+        ...     NoteConstruction()._positions(
+        ...         "treble", count=0, minor=False
+        ...     )
+        ... )
         True
         """
         cfg = settings.construction
         low, high = settings.DEFAULT_RANGES[clef]
         positions = range(low, high + 1)
-        if cfg.question_type == "notes" or not cfg.degrees or cfg.degrees == set(range(1, 8)):
+        if (
+            cfg.question_type == "notes"
+            or not cfg.degrees
+            or cfg.degrees == set(range(1, 8))
+        ):
             return positions
         tonic = 4 * count + (5 if minor else 0)
         return [d for d in positions if (d - tonic) % 7 + 1 in cfg.degrees]
 
-    def _groups(self) -> Iterator[tuple[str, bool, int, int, range | list[int]]]:
+    def _groups(
+        self,
+    ) -> Iterator[tuple[str, bool, int, int, range | list[int]]]:
         """
-        Group construction cards by clef, mode, scale key and staff signature.
+        Group construction cards by clef, mode, scale key and staff
+        signature.
 
         Yields
         ------
         tuple
-            A combination of settings and its eligible diatonic positions.
+            A combination of settings and its eligible diatonic
+            positions.
 
         Examples
         --------
-        >>> next(NoteConstruction()._groups())[0] in settings.RANGE_KEYS
+        >>> next(NoteConstruction()._groups())[
+        ...     0
+        ... ] in settings.RANGE_KEYS
         True
         """
         cfg = settings.construction
@@ -3185,14 +4250,17 @@ class NoteConstruction(Exercise):
         Returns
         -------
         int
-            Number of eligible written placements under the current settings.
+            Number of eligible written placements under the current
+            settings.
 
         Examples
         --------
         >>> NoteConstruction().card_count() > 0
         True
         """
-        return sum(len(positions) for *_, positions in self._groups()) * (3 if settings.construction.accidentals else 1)
+        return sum(len(positions) for *_, positions in self._groups()) * (
+            3 if settings.construction.accidentals else 1
+        )
 
     def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
         """
@@ -3210,7 +4278,11 @@ class NoteConstruction(Exercise):
 
         Examples
         --------
-        >>> next(NoteConstruction().daily_candidates(random.Random(5))).construct is not None
+        >>> next(
+        ...     NoteConstruction().daily_candidates(
+        ...         random.Random(5)
+        ...     )
+        ... ).construct is not None
         True
         """
         cfg = settings.construction
@@ -3219,7 +4291,16 @@ class NoteConstruction(Exercise):
         for clef, minor, count, staff_key, positions in self._groups():
             size = len(positions) * spellings
             if size:
-                groups.append((clef, minor, count, staff_key, positions, rng.sample(range(size), size)))
+                groups.append(
+                    (
+                        clef,
+                        minor,
+                        count,
+                        staff_key,
+                        positions,
+                        rng.sample(range(size), size),
+                    ),
+                )
         while groups:
             index = rng.randrange(len(groups))
             clef, minor, count, staff_key, positions, remaining = groups[index]
@@ -3228,7 +4309,10 @@ class NoteConstruction(Exercise):
             accidental = (
                 sign - 1
                 if cfg.accidentals
-                else key_accidental(step % 7, count=staff_key if cfg.question_type == "notes" else count)
+                else key_accidental(
+                    step % 7,
+                    count=staff_key if cfg.question_type == "notes" else count,
+                )
             )
             if not remaining:
                 groups[index] = groups[-1]
@@ -3241,9 +4325,15 @@ class NoteConstruction(Exercise):
                 staff_signature=staff_key,
             )
 
-    def review_question(self, question: Question, *, same_settings: bool) -> Question | None:
+    def review_question(
+        self,
+        question: Question,
+        *,
+        same_settings: bool,
+    ) -> Question | None:
         """
-        Determine whether an introduced placement belongs to the current construction catalog.
+        Determine whether an introduced placement belongs to the current
+        construction catalog.
 
         Parameters
         ----------
@@ -3255,13 +4345,16 @@ class NoteConstruction(Exercise):
         Returns
         -------
         Question or None
-            The playable card if its placement and prompt remain eligible.
+            The playable card if its placement and prompt remain
+            eligible.
 
         Examples
         --------
         >>> ex = NoteConstruction()
         >>> q = ex.generate(random.Random(3))
-        >>> ex.review_question(q, same_settings=True) == q
+        >>> ex.review_question(
+        ...     q, same_settings=True
+        ... ) == q
         True
         """
         if same_settings:
@@ -3270,23 +4363,57 @@ class NoteConstruction(Exercise):
         note = question.construct
         minor = question.minor
         notes_only = cfg.question_type == "notes"
-        if note is None or question.notes_only != notes_only or question.clef not in cfg.active_clefs():
+        if (
+            note is None
+            or question.notes_only != notes_only
+            or question.clef not in cfg.active_clefs()
+        ):
             return None
-        if minor and (notes_only or not cfg.minor) or (not minor and not notes_only and cfg.minor and not cfg.major):
+        if (
+            minor
+            and (notes_only or not cfg.minor)
+            or (not minor and not notes_only and cfg.minor and not cfg.major)
+        ):
             return None
         count = question.key
-        staff = count if question.staff_signature is None else question.staff_signature
-        if count not in self._scale_keys(minor) or staff not in self._staff_keys(count):
+        staff = (
+            count
+            if question.staff_signature is None
+            else question.staff_signature
+        )
+        if count not in self._scale_keys(
+            minor,
+        ) or staff not in self._staff_keys(count):
             return None
-        if note.diatonic not in self._positions(question.clef, count=count, minor=minor):
+        if note.diatonic not in self._positions(
+            question.clef,
+            count=count,
+            minor=minor,
+        ):
             return None
-        if not cfg.accidentals and note.accidental != key_accidental(note.letter, count=staff if notes_only else count):
+        if not cfg.accidentals and note.accidental != key_accidental(
+            note.letter,
+            count=staff if notes_only else count,
+        ):
             return None
-        rebuilt = self._placement(note, clef=question.clef, count=count, minor=minor, staff_signature=staff)
+        rebuilt = self._placement(
+            note,
+            clef=question.clef,
+            count=count,
+            minor=minor,
+            staff_signature=staff,
+        )
         return rebuilt if rebuilt.item_key() == question.item_key() else None
 
     @staticmethod
-    def _placement(note: Note, *, clef: str, count: int, minor: bool, staff_signature: int) -> Question:
+    def _placement(
+        note: Note,
+        *,
+        clef: str,
+        count: int,
+        minor: bool,
+        staff_signature: int,
+    ) -> Question:
         """
         Build the question for a selected placement.
 
@@ -3310,12 +4437,22 @@ class NoteConstruction(Exercise):
 
         Examples
         --------
-        >>> NoteConstruction()._placement(Note.parse("C4"), clef="treble", count=0, minor=False, staff_signature=0).construct.name
+        >>> NoteConstruction()._placement(
+        ...     Note.parse("C4"),
+        ...     clef="treble",
+        ...     count=0,
+        ...     minor=False,
+        ...     staff_signature=0,
+        ... ).construct.name
         'C'
         """
         cfg = settings.construction
         notes_only = cfg.question_type == "notes"
-        tonic = mode_tonic(count, mode="Natural minor (Aeolian)").name if minor else MAJOR_KEYS[count]
+        tonic = (
+            mode_tonic(count, mode="Natural minor (Aeolian)").name
+            if minor
+            else MAJOR_KEYS[count]
+        )
         key_name = f"{tonic} {'minor' if minor else 'major'}"
         accidental = note.accidental
         naming = settings.note_names.naming
@@ -3332,19 +4469,35 @@ class NoteConstruction(Exercise):
         if naming in settings.DEGREE_NAMINGS:
             degree = spell(note, naming=naming, key=count, minor=minor)
             if naming == "degrees":
-                octave = str(note.octave).translate(str.maketrans("0123456789-", "₀₁₂₃₄₅₆₇₈₉₋")) if cfg.octave else ""
+                octave = (
+                    str(note.octave).translate(
+                        str.maketrans("0123456789-", "₀₁₂₃₄₅₆₇₈₉₋"),
+                    )
+                    if cfg.octave
+                    else ""
+                )
                 prompt = f"{tonic}{'m' if minor else 'M'} {degree}{octave}"
             else:
-                target = f"the {degree}" if naming == "functions" else f"degree {degree}"
+                target = (
+                    f"the {degree}"
+                    if naming == "functions"
+                    else f"degree {degree}"
+                )
                 register = f", octave {note.octave}," if cfg.octave else ""
                 prompt = f"Place {target}{register} in {key_name}."
         staff_accidental = key_accidental(note.letter, count=staff_signature)
         explanation = ""
         word = {1: "sharp", -1: "flat", 0: "natural"}
         if accidental != staff_accidental:
-            explanation = f"{note.name} needs a {word[accidental]} on this staff."
+            explanation = (
+                f"{note.name} needs a {word[accidental]} on this staff."
+            )
         elif staff_accidental:
-            explanation = f"The staff signature already makes this note {word[staff_accidental]}, so it needs no sign."
+            explanation = (
+                "The staff signature already makes this note "
+                f"{word[staff_accidental]}"
+                ", so it needs no sign."
+            )
         return Question(
             prompt,
             choices=[],
@@ -3356,35 +4509,71 @@ class NoteConstruction(Exercise):
             accidentals=True,
             key=count,
             minor=minor,
-            staff_signature=staff_signature if staff_signature != count else None,
+            staff_signature=staff_signature
+            if staff_signature != count
+            else None,
             explanation=explanation,
-            caption=prompt if notes_only or naming in settings.DEGREE_NAMINGS else "",
+            caption=prompt
+            if notes_only or naming in settings.DEGREE_NAMINGS
+            else "",
         )
 
 
-# What to say about where each clef goes, for the explanation after a question about it.
+# What to say about where each clef goes, for the explanation after a
+# question about it.
 CLEF_FACTS = {
-    "treble": "The treble clef is the G clef on the second line: its curl circles the G above middle C.",
-    "bass": "The bass clef is the F clef on the fourth line: its two dots are either side of the F below middle C.",
-    "alto": "The alto clef is the C clef on the middle line: its middle is on middle C.",
-    "tenor": "The tenor clef is the C clef on the fourth line: its middle is on middle C.",
-    "soprano": "The soprano clef is the C clef on the bottom line: its middle is on middle C.",
-    "mezzo": "The mezzo-soprano clef is the C clef on the second line: its middle is on middle C.",
-    "baritone": "The baritone clef is the F clef on the middle line, or the C clef on the top line: both are used.",
-    "french": "The French violin clef is the G clef on the bottom line, a step lower than the treble clef.",
-    "subbass": "The subbass clef is the F clef on the top line, a step higher than the bass clef.",
+    "treble": (
+        "The treble clef is the G clef on the second line: its curl "
+        "circles the G above middle C."
+    ),
+    "bass": (
+        "The bass clef is the F clef on the fourth line: its two dots are "
+        "either side of the F below middle C."
+    ),
+    "alto": (
+        "The alto clef is the C clef on the middle line: its middle is on "
+        "middle C."
+    ),
+    "tenor": (
+        "The tenor clef is the C clef on the fourth line: its middle is on"
+        " middle C."
+    ),
+    "soprano": (
+        "The soprano clef is the C clef on the bottom line: its middle is "
+        "on middle C."
+    ),
+    "mezzo": (
+        "The mezzo-soprano clef is the C clef on the second line: its "
+        "middle is on middle C."
+    ),
+    "baritone": (
+        "The baritone clef is the F clef on the middle line, or the C clef"
+        " on the top line: both are used."
+    ),
+    "french": (
+        "The French violin clef is the G clef on the bottom line, a step "
+        "lower than the treble clef."
+    ),
+    "subbass": (
+        "The subbass clef is the F clef on the top line, a step higher "
+        "than the bass clef."
+    ),
 }
 
 
 @register
 class ClefBasics(ChoiceExercise):
     """
-    Put a named clef on a blank staff: choose the G, C or F symbol and put it on the line that makes the clef asked for.
+    Put a named clef on a blank staff: choose the G, C or F symbol and
+    put it on the line that makes the clef asked for.
 
     Examples
     --------
     >>> q = ClefBasics().generate(random.Random(1))
-    >>> q.answer == q.place_clef and q.place_clef in settings.CLEF_BASICS_CLEFS
+    >>> (
+    ...     q.answer == q.place_clef
+    ...     and q.place_clef in settings.CLEF_BASICS_CLEFS
+    ... )
     True
     """
 
@@ -3396,7 +4585,8 @@ class ClefBasics(ChoiceExercise):
 
     def settings_signature(self) -> str:
         """
-        Use button preferences for reviews only when the learner answers with buttons.
+        Use button preferences for reviews only when the learner answers
+        with buttons.
 
         Returns
         -------
@@ -3407,7 +4597,11 @@ class ClefBasics(ChoiceExercise):
         --------
         Changing Button count leaves staff-placement reviews available.
         """
-        return self.practice_signature() if settings.clef_basics.active_type() == "construction" else super().settings_signature()
+        return (
+            self.practice_signature()
+            if settings.clef_basics.active_type() == "construction"
+            else super().settings_signature()
+        )
 
     def practice_signature(self) -> str:
         """
@@ -3420,14 +4614,17 @@ class ClefBasics(ChoiceExercise):
 
         Examples
         --------
-        >>> ClefBasics().settings_signature().startswith("[")
+        >>> ClefBasics().settings_signature().startswith(
+        ...     "["
+        ... )
         True
         """
         return signature(settings.clef_basics)
 
     def instructions(self) -> str:
         """
-        Return the help text for the exercise, for the kind of question that is being asked.
+        Return the help text for the exercise, for the kind of question
+        that is being asked.
 
         Returns
         -------
@@ -3441,23 +4638,37 @@ class ClefBasics(ChoiceExercise):
         """
         if settings.clef_basics.active_type() == "identification":
             return (
-                "<b>Clef Basics: Clef Identification</b><br>A clef is drawn on a staff. Press the button with its name. The "
-                "C clef is the alto, tenor, mezzo-soprano or soprano clef, by the line it is centered on (the line of middle C); "
-                "the G clef is the treble clef, or the French violin clef on the bottom line; the F clef is the bass clef, "
-                "the baritone clef on the middle line, or the subbass clef on the top line. The baritone clef can also be "
-                "written as a C clef on the top line.<br><br>Use the sliders button to choose which clefs are asked for, and "
+                "<b>Clef Basics: Clef Identification</b><br>A clef is drawn"
+                " on a staff. Press the button with its name. The "
+                "C clef is the alto, tenor, mezzo-soprano or soprano clef, "
+                "by the line it is centered on (the line of middle C); "
+                "the G clef is the treble clef, or the French violin clef "
+                "on the bottom line; the F clef is the bass clef, "
+                "the baritone clef on the middle line, or the subbass clef "
+                "on the top line. The baritone clef can also be "
+                "written as a C clef on the top line.<br><br>Use the "
+                "sliders button to choose which clefs are asked for, and "
                 "to ask you to put a named clef on a blank staff instead."
             )
         return (
-            "<b>Clef Basics: Clef Construction</b><br>The staff is blank and the name of a clef is shown. Every clef is one of "
-            "three symbols, the G clef, the C clef or the F clef, put on a line: the G clef circles the G line, the F clef has "
-            "its dots around the F line, and a C clef is centered on middle C. So the mezzo-soprano clef is the C clef on the "
-            "second line.<br><br>Choose the symbol with the buttons under the staff, the mouse wheel or a right click, then "
-            "click where it goes. The clef can be tried on the lines, the spaces and the ledger lines above and below the "
-            "staff, but only one place is right, except for the baritone clef, which is the F clef on the middle line or the "
-            "C clef on the top line.<br><br>Without the mouse: the Left and Right arrows choose the symbol, the Up and Down "
-            "arrows move it up or down a line or space, and Answer (or Return) places it.<br><br>Use the sliders button to "
-            "choose which clefs are asked for, and to ask you to name a clef on a staff instead."
+            "<b>Clef Basics: Clef Construction</b><br>The staff is blank "
+            "and the name of a clef is shown. Every clef is one of "
+            "three symbols, the G clef, the C clef or the F clef, put on a "
+            "line: the G clef circles the G line, the F clef has "
+            "its dots around the F line, and a C clef is centered on middle"
+            " C. So the mezzo-soprano clef is the C clef on the "
+            "second line.<br><br>Choose the symbol with the buttons under "
+            "the staff, the mouse wheel or a right click, then "
+            "click where it goes. The clef can be tried on the lines, the "
+            "spaces and the ledger lines above and below the "
+            "staff, but only one place is right, except for the baritone "
+            "clef, which is the F clef on the middle line or the "
+            "C clef on the top line.<br><br>Without the mouse: the Left and"
+            " Right arrows choose the symbol, the Up and Down "
+            "arrows move it up or down a line or space, and Answer (or "
+            "Return) places it.<br><br>Use the sliders button to "
+            "choose which clefs are asked for, and to ask you to name a "
+            "clef on a staff instead."
         )
 
     def make_question(self, rng: random.Random) -> Question:
@@ -3472,19 +4683,31 @@ class ClefBasics(ChoiceExercise):
         Returns
         -------
         Question
-            For construction, a blank staff and the name of the clef, which is the question written under the staff. For
-            identification, a staff with the clef drawn on it, and a button for each clef that can be asked for.
+            For construction, a blank staff and the name of the clef,
+            which is the question written under the staff. For
+            identification, a staff with the clef drawn on it, and a
+            button for each clef that can be asked for.
 
         Examples
         --------
         >>> q = ClefBasics().generate(random.Random(3))
-        >>> q.prompt.startswith("Place the ") and q.caption == q.prompt
+        >>> q.prompt.startswith(
+        ...     "Place the "
+        ... ) and q.caption == q.prompt
         True
-        >>> settings.clef_basics.question_type = "identification"
+        >>> settings.clef_basics.question_type = (
+        ...     "identification"
+        ... )
         >>> q = ClefBasics().generate(random.Random(3))
-        >>> q.answer in q.choices, q.place_clef, q.caption
+        >>> (
+        ...     q.answer in q.choices,
+        ...     q.place_clef,
+        ...     q.caption,
+        ... )
         (True, '', 'Which clef is this?')
-        >>> settings.clef_basics.question_type = "construction"
+        >>> settings.clef_basics.question_type = (
+        ...     "construction"
+        ... )
         """
         cfg = settings.clef_basics
         clef = rng.choice(cfg.active_clefs())
@@ -3495,19 +4718,25 @@ class ClefBasics(ChoiceExercise):
                 "Which clef is this?",
                 choices=names,
                 answer=name,
-                grid={choice: divmod(i, 5) for i, choice in enumerate(names)},  # rows of five, not one long row
+                grid={
+                    choice: divmod(i, 5) for i, choice in enumerate(names)
+                },  # rows of five, not one long row
                 clef=clef,
                 show_staff=True,
-                caption="Which clef is this?",  # the question goes under the staff, in the white area
+                # the question goes under the staff, in the white area
+                caption="Which clef is this?",
                 explanation=CLEF_FACTS[clef],
             )
-        words = name if name.startswith("French") else name.lower()  # "mezzo-soprano", but "French violin"
+        words = (
+            name if name.startswith("French") else name.lower()
+        )  # "mezzo-soprano", but "French violin"
         return Question(
             f"Place the {words} clef.",
             choices=[],
             answer=clef,
             show_staff=True,
-            caption=f"Place the {words} clef.",  # the question goes under the staff, in the white area
+            # the question goes under the staff, in the white area
+            caption=f"Place the {words} clef.",
             place_clef=clef,
             explanation=CLEF_FACTS[clef],
         )
@@ -3520,14 +4749,20 @@ class NotationIdentification(ChoiceExercise):
 
     Examples
     --------
-    >>> q = NotationIdentification().generate(random.Random(2))
-    >>> bool(q.staff or q.notation_excerpt) and q.answer in q.choices
+    >>> q = NotationIdentification().generate(
+    ...     random.Random(2)
+    ... )
+    >>> bool(
+    ...     q.staff or q.notation_excerpt
+    ... ) and q.answer in q.choices
     True
     """
 
     name = "Notation Identification"
     category = "Notation"
-    description = "Name a highlighted marking or find a named component on the staff."
+    description = (
+        "Name a highlighted marking or find a named component on the staff."
+    )
     has_sound = False
 
     default_limit = 4
@@ -3535,7 +4770,8 @@ class NotationIdentification(ChoiceExercise):
 
     def settings_signature(self) -> str:
         """
-        Use button preferences for reviews only when the learner answers with buttons.
+        Use button preferences for reviews only when the learner answers
+        with buttons.
 
         Returns
         -------
@@ -3546,7 +4782,11 @@ class NotationIdentification(ChoiceExercise):
         --------
         Changing Button count leaves staff-placement reviews available.
         """
-        return self.practice_signature() if settings.notation.question_type == "staff" else super().settings_signature()
+        return (
+            self.practice_signature()
+            if settings.notation.question_type == "staff"
+            else super().settings_signature()
+        )
 
     def practice_signature(self) -> str:
         """
@@ -3555,7 +4795,8 @@ class NotationIdentification(ChoiceExercise):
         Returns
         -------
         str
-            The selected terms, or the original empty signature when all terms are enabled.
+            The selected terms, or the original empty signature when all
+            terms are enabled.
 
         Examples
         --------
@@ -3564,7 +4805,11 @@ class NotationIdentification(ChoiceExercise):
         """
         if settings.notation.question_type == "staff":
             return signature("staff", settings.notation.terms)
-        return "" if settings.notation.terms == set(settings.NOTATION_TERMS) else signature(settings.notation.terms)
+        return (
+            ""
+            if settings.notation.terms == set(settings.NOTATION_TERMS)
+            else signature(settings.notation.terms)
+        )
 
     def instructions(self) -> str:
         """
@@ -3581,13 +4826,25 @@ class NotationIdentification(ChoiceExercise):
         True
         """
         if settings.notation.question_type == "staff":
-            return "Read the prompt, then click the named component in the music."
-        return "Look for the blue part of the music. Click its name or press the number shown on the matching button."
+            return (
+                "Read the prompt, then click the named component in the music."
+            )
+        return (
+            "Look for the blue part of the music. Click its name or press "
+            "the number shown on the matching button."
+        )
 
     @classmethod
-    def _choices(cls, part: str, *, group: str, rng: random.Random) -> list[str]:
+    def _choices(
+        cls,
+        part: str,
+        *,
+        group: str,
+        rng: random.Random,
+    ) -> list[str]:
         """
-        Pick checked terms, favoring the target's category and close visual matches.
+        Pick checked terms, favoring the target's category and close
+        visual matches.
 
         Parameters
         ----------
@@ -3605,28 +4862,54 @@ class NotationIdentification(ChoiceExercise):
 
         Examples
         --------
-        >>> "Turn" in NotationIdentification._choices("Turn", group="Ornaments", rng=random.Random(0))
+        >>> "Turn" in NotationIdentification._choices(
+        ...     "Turn",
+        ...     group="Ornaments",
+        ...     rng=random.Random(0),
+        ... )
         True
         """
         cfg = cls.button_settings()
         if cfg.button_mode == "all":
-            return [term for term in settings.NOTATION_TERMS if term in settings.notation.terms]
+            return [
+                term
+                for term in settings.NOTATION_TERMS
+                if term in settings.notation.terms
+            ]
         needed = cfg.button_count - 1
-        alternatives = [term for term in CATALOG[group] if term != part and term in settings.notation.terms]
+        alternatives = [
+            term
+            for term in CATALOG[group]
+            if term != part and term in settings.notation.terms
+        ]
         rng.shuffle(alternatives)
         if rng.random() < 0.8:
-            similar = next((family for family in SIMILAR_MARKS if part in family), ())
+            similar = next(
+                (family for family in SIMILAR_MARKS if part in family),
+                (),
+            )
             alternatives.sort(key=lambda term: term not in similar)
         if len(alternatives) < needed:
-            others = [term for term in settings.NOTATION_TERMS if term in settings.notation.terms and term not in CATALOG[group]]
-            alternatives.extend(rng.sample(others, min(len(others), needed - len(alternatives))))
+            others = [
+                term
+                for term in settings.NOTATION_TERMS
+                if term in settings.notation.terms
+                and term not in CATALOG[group]
+            ]
+            alternatives.extend(
+                rng.sample(
+                    others,
+                    min(len(others), needed - len(alternatives)),
+                ),
+            )
         choices = [part, *alternatives[:needed]]
         rng.shuffle(choices)
         return choices
 
     def refresh(self, question: Question) -> Question:
         """
-        Replace unchecked distractors in older practice questions before replay.
+        Replace unchecked distractors in older practice questions before
+        replay.
 
         Parameters
         ----------
@@ -3647,7 +4930,10 @@ class NotationIdentification(ChoiceExercise):
         """
         if all(term in settings.notation.terms for term in question.choices):
             return question
-        return self._with_buttons(question, rng=random.Random(question.item_key()))
+        return self._with_buttons(
+            question,
+            rng=random.Random(question.item_key()),
+        )
 
     def make_question(self, rng: random.Random) -> Question:
         """
@@ -3661,21 +4947,34 @@ class NotationIdentification(ChoiceExercise):
         Returns
         -------
         Question
-            A short phrase with the selected marking and checked answer choices.
+            A short phrase with the selected marking and checked answer
+            choices.
 
         Examples
         --------
-        >>> q = NotationIdentification().generate(random.Random(0))
+        >>> q = NotationIdentification().generate(
+        ...     random.Random(0)
+        ... )
         >>> q.notation_target[0] == q.answer
         True
         """
         if not settings.notation.terms:
-            return Question("Select a notation term in Settings to continue.", choices=[], answer="")
+            return Question(
+                "Select a notation term in Settings to continue.",
+                choices=[],
+                answer="",
+            )
         phrase = rng.choice(self._phrases)
-        selected = [term for term in settings.NOTATION_TERMS if term in settings.notation.terms]
+        selected = [
+            term
+            for term in settings.NOTATION_TERMS
+            if term in settings.notation.terms
+        ]
         repertoire = passages_by_term()
         represented = [term for term in selected if term in repertoire]
-        part = rng.choice(represented if represented and rng.random() < 0.5 else selected)
+        part = rng.choice(
+            represented if represented and rng.random() < 0.5 else selected,
+        )
         group = next(name for name, terms in CATALOG.items() if part in terms)
         locate = settings.notation.question_type == "staff"
         choices = [] if locate else self._choices(part, group=group, rng=rng)
@@ -3683,9 +4982,25 @@ class NotationIdentification(ChoiceExercise):
             passage = rng.choice(list(repertoire[part]))
             locations = repertoire[part][passage]
             index = locations[0] if locate else rng.choice(locations)
-            return self._example(part, group=group, locate=locate, choices=choices, source=passage, position=index, excerpt=True)
+            return self._example(
+                part,
+                group=group,
+                locate=locate,
+                choices=choices,
+                source=passage,
+                position=index,
+                excerpt=True,
+            )
         position = rng.randrange(5 if part == "Staff line" else 4)
-        return self._example(part, group=group, locate=locate, choices=choices, source=phrase, position=position, excerpt=False)
+        return self._example(
+            part,
+            group=group,
+            locate=locate,
+            choices=choices,
+            source=phrase,
+            position=position,
+            excerpt=False,
+        )
 
     @staticmethod
     def _example(
@@ -3699,7 +5014,8 @@ class NotationIdentification(ChoiceExercise):
         excerpt: bool,
     ) -> Question:
         """
-        Build one playable question from an excerpt marker or a generated staff position.
+        Build one playable question from an excerpt marker or a
+        generated staff position.
 
         Parameters
         ----------
@@ -3726,8 +5042,15 @@ class NotationIdentification(ChoiceExercise):
         Examples
         --------
         >>> ex = NotationIdentification()
-        >>> ex._example("Slur", group="Staff and rhythm", locate=True, choices=[], source="E4 G4 A4 G4",
-        ...             position=0, excerpt=False).prompt
+        >>> ex._example(
+        ...     "Slur",
+        ...     group="Staff and rhythm",
+        ...     locate=True,
+        ...     choices=[],
+        ...     source="E4 G4 A4 G4",
+        ...     position=0,
+        ...     excerpt=False,
+        ... ).prompt
         'Click the slur.'
         """
         if excerpt:
@@ -3745,7 +5068,9 @@ class NotationIdentification(ChoiceExercise):
                 notation_excerpt=source,
                 notation_target=(part, position),
                 choices=choices,
-                grid={choice: divmod(i, 2) for i, choice in enumerate(choices)},
+                grid={
+                    choice: divmod(i, 2) for i, choice in enumerate(choices)
+                },
                 answer=part,
             )
         placement, symbol = MARKS[part]
@@ -3753,7 +5078,11 @@ class NotationIdentification(ChoiceExercise):
         clef = "treble"
         if placement == "clef":
             clef = str(symbol)
-            phrase = {"bass": "G2 B2 C3 D3", "tenor": "D3 F3 A3 G3", "baritone": "B2 D3 F3 G3"}.get(clef, "C4 D4 E4 D4")
+            phrase = {
+                "bass": "G2 B2 C3 D3",
+                "tenor": "D3 F3 A3 G3",
+                "baritone": "B2 D3 F3 G3",
+            }.get(clef, "C4 D4 E4 D4")
         notes = phrase.split()
         if part in ("Tie", "Slur", "Beam", "Triplet", "Glissando"):
             position = 0
@@ -3774,7 +5103,11 @@ class NotationIdentification(ChoiceExercise):
             "Strings and plucked instruments": "string part",
             "Keyboard and organ": "keyboard part",
         }.get(group)
-        prompt = f"Which marking in this {context} is highlighted?" if context else "Which part of the music is highlighted?"
+        prompt = (
+            f"Which marking in this {context} is highlighted?"
+            if context
+            else "Which part of the music is highlighted?"
+        )
         if locate:
             ordinal = ("first", "second", "third", "fourth", "fifth")[position]
             if part == "Staff line":
@@ -3798,7 +5131,8 @@ class NotationIdentification(ChoiceExercise):
     @classmethod
     def _examples(cls, part: str) -> dict[str, Question]:
         """
-        Index the current score examples for a term by their persistent card identities.
+        Index the current score examples for a term by their persistent
+        card identities.
 
         Parameters
         ----------
@@ -3812,21 +5146,34 @@ class NotationIdentification(ChoiceExercise):
 
         Examples
         --------
-        >>> len(NotationIdentification._examples("Koron")) > 0
+        >>> len(
+        ...     NotationIdentification._examples(
+        ...         "Koron"
+        ...     )
+        ... ) > 0
         True
         """
         passages = passages_by_term().get(part, {})
         return cls._catalog(
             part,
             locate=settings.notation.question_type == "staff",
-            passages=tuple((name, tuple(indices)) for name, indices in passages.items()),
+            passages=tuple(
+                (name, tuple(indices)) for name, indices in passages.items()
+            ),
         )
 
     @classmethod
     @lru_cache(maxsize=512)
-    def _catalog(cls, part: str, *, locate: bool, passages: tuple[tuple[str, tuple[int, ...]], ...]) -> dict[str, Question]:
+    def _catalog(
+        cls,
+        part: str,
+        *,
+        locate: bool,
+        passages: tuple[tuple[str, tuple[int, ...]], ...],
+    ) -> dict[str, Question]:
         """
-        Enumerate distinct targets using the same engraving and prompts as ordinary practice.
+        Enumerate distinct targets using the same engraving and prompts
+        as ordinary practice.
 
         Parameters
         ----------
@@ -3844,12 +5191,18 @@ class NotationIdentification(ChoiceExercise):
 
         Examples
         --------
-        >>> len(NotationIdentification._catalog("Slur", locate=True, passages=()))
+        >>> len(
+        ...     NotationIdentification._catalog(
+        ...         "Slur", locate=True, passages=()
+        ...     )
+        ... )
         1
         """
         group = next(name for name, terms in CATALOG.items() if part in terms)
         positions = tuple(range(5 if part == "Staff line" else 4))
-        sources = passages or tuple((phrase, positions) for phrase in cls._phrases)
+        sources = passages or tuple(
+            (phrase, positions) for phrase in cls._phrases
+        )
         examples = {}
         for source, indices in sources:
             for index in indices[:1] if passages and locate else indices:
@@ -3867,19 +5220,25 @@ class NotationIdentification(ChoiceExercise):
 
     def card_groups(self) -> dict[str, str]:
         """
-        Group the active question type’s playable examples by the symbol being practiced.
+        Group the active question type’s playable examples by the symbol
+        being practiced.
 
         Returns
         -------
         dict of str to str
-            Map from each eligible example’s item key to its selected term.
+            Map from each eligible example’s item key to its selected
+            term.
 
         Examples
         --------
         >>> bool(NotationIdentification().card_groups())
         True
         """
-        return {key: term for term in settings.notation.terms for key in self._examples(term)}
+        return {
+            key: term
+            for term in settings.notation.terms
+            for key in self._examples(term)
+        }
 
     def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
         """
@@ -3897,7 +5256,11 @@ class NotationIdentification(ChoiceExercise):
 
         Examples
         --------
-        >>> next(NotationIdentification().daily_candidates(random.Random(4))).answer in settings.notation.terms
+        >>> next(
+        ...     NotationIdentification().daily_candidates(
+        ...         random.Random(4)
+        ...     )
+        ... ).answer in settings.notation.terms
         True
         """
         terms = sorted(settings.notation.terms)
@@ -3906,7 +5269,12 @@ class NotationIdentification(ChoiceExercise):
             example = rng.choice(list(self._examples(term).values()))
             yield self._with_buttons(example, rng=rng)
 
-    def _with_buttons(self, question: Question, *, rng: random.Random) -> Question:
+    def _with_buttons(
+        self,
+        question: Question,
+        *,
+        rng: random.Random,
+    ) -> Question:
         """
         Apply the current answer controls to a notation card.
 
@@ -3926,18 +5294,32 @@ class NotationIdentification(ChoiceExercise):
         --------
         >>> ex = NotationIdentification()
         >>> q = ex.generate(random.Random(4))
-        >>> ex._with_buttons(q, rng=random.Random(1)).item_key() == q.item_key()
+        >>> ex._with_buttons(
+        ...     q, rng=random.Random(1)
+        ... ).item_key() == q.item_key()
         True
         """
         if settings.notation.question_type == "staff":
             return question
-        group = next(name for name, terms in CATALOG.items() if question.answer in terms)
+        group = next(
+            name for name, terms in CATALOG.items() if question.answer in terms
+        )
         choices = self._choices(question.answer, group=group, rng=rng)
-        return replace(question, choices=choices, grid={choice: divmod(i, 2) for i, choice in enumerate(choices)})
+        return replace(
+            question,
+            choices=choices,
+            grid={choice: divmod(i, 2) for i, choice in enumerate(choices)},
+        )
 
-    def review_question(self, question: Question, *, same_settings: bool) -> Question | None:
+    def review_question(
+        self,
+        question: Question,
+        *,
+        same_settings: bool,
+    ) -> Question | None:
         """
-        Recover an eligible saved example under the current term and button selections.
+        Recover an eligible saved example under the current term and
+        button selections.
 
         Parameters
         ----------
@@ -3949,18 +5331,31 @@ class NotationIdentification(ChoiceExercise):
         Returns
         -------
         Question or None
-            The current presentation of the card, or None if its term or example is outside the catalog.
+            The current presentation of the card, or None if its term or
+            example is outside the catalog.
 
         Examples
         --------
         >>> ex = NotationIdentification()
         >>> q = ex.generate(random.Random(4))
-        >>> ex.review_question(q, same_settings=True) == q
+        >>> ex.review_question(
+        ...     q, same_settings=True
+        ... ) == q
         True
         """
-        if question.answer not in settings.notation.terms or question.item_key() not in self._examples(question.answer):
+        if (
+            question.answer not in settings.notation.terms
+            or question.item_key() not in self._examples(question.answer)
+        ):
             return None
-        return self.refresh(question) if same_settings else self._with_buttons(question, rng=random.Random(question.item_key()))
+        return (
+            self.refresh(question)
+            if same_settings
+            else self._with_buttons(
+                question,
+                rng=random.Random(question.item_key()),
+            )
+        )
 
 
 @register
@@ -3970,7 +5365,9 @@ class RythmicEquations(ChoiceExercise):
 
     Examples
     --------
-    >>> q = RythmicEquations().generate(random.Random(2))
+    >>> q = RythmicEquations().generate(
+    ...     random.Random(2)
+    ... )
     >>> "_" in q.prompt and q.answer in q.choices
     True
     """
@@ -3984,7 +5381,8 @@ class RythmicEquations(ChoiceExercise):
 
     def instructions(self) -> str:
         """
-        Explain how to complete the equation with a button or its shortcut.
+        Explain how to complete the equation with a button or its
+        shortcut.
 
         Returns
         -------
@@ -3996,7 +5394,10 @@ class RythmicEquations(ChoiceExercise):
         >>> "keys" in RythmicEquations().instructions()
         True
         """
-        return "Choose the symbol that balances the durations. Click its button or use the keys shown when you hover."
+        return (
+            "Choose the symbol that balances the durations. Click its "
+            "button or use the keys shown when you hover."
+        )
 
     def card_prompt(self, question: Question) -> str:
         """
@@ -4014,7 +5415,9 @@ class RythmicEquations(ChoiceExercise):
 
         Examples
         --------
-        >>> RythmicEquations().card_prompt(Question("", choices=[], answer=""))
+        >>> RythmicEquations().card_prompt(
+        ...     Question("", choices=[], answer="")
+        ... )
         'Which note or rest balances the equation?'
         """
         return "Which note or rest balances the equation?"
@@ -4026,18 +5429,35 @@ class RythmicEquations(ChoiceExercise):
         Returns
         -------
         str
-            The selected operators and symbols, or an empty string for the original defaults.
+            The selected operators and symbols, or an empty string for
+            the original defaults.
 
         Examples
         --------
         >>> RythmicEquations().practice_signature()
         ''
         """
-        default_operators = settings.rhythm_operators == settings.DEFAULT_RHYTHM_OPERATORS
-        groups = {name: True for name, enabled in (("ties", settings.rhythm_ties), ("beams", settings.rhythm_beams)) if enabled}
+        default_operators = (
+            settings.rhythm_operators == settings.DEFAULT_RHYTHM_OPERATORS
+        )
+        groups = {
+            name: True
+            for name, enabled in (
+                ("ties", settings.rhythm_ties),
+                ("beams", settings.rhythm_beams),
+            )
+            if enabled
+        }
         if groups:
-            return signature(settings.rhythm_operators, settings.rhythm_symbols, groups)
-        if default_operators and settings.rhythm_symbols == settings.DEFAULT_RHYTHM_SYMBOLS:
+            return signature(
+                settings.rhythm_operators,
+                settings.rhythm_symbols,
+                groups,
+            )
+        if (
+            default_operators
+            and settings.rhythm_symbols == settings.DEFAULT_RHYTHM_SYMBOLS
+        ):
             return ""
         return signature(settings.rhythm_operators, settings.rhythm_symbols)
 
@@ -4057,16 +5477,24 @@ class RythmicEquations(ChoiceExercise):
 
         Examples
         --------
-        >>> RythmicEquations().make_question(random.Random(0)).prompt.count("_")
+        >>> RythmicEquations().make_question(
+        ...     random.Random(0)
+        ... ).prompt.count("_")
         1
         """
-        symbols = {name: duration for name, duration in self.durations.items() if name in settings.rhythm_symbols}
+        symbols = {
+            name: duration
+            for name, duration in self.durations.items()
+            if name in settings.rhythm_symbols
+        }
         durations = symbols.copy()
         if settings.rhythm_ties:
             notes = [name for name in symbols if not name.endswith("-rest")]
             for index, first in enumerate(notes):
                 for second in notes[index:]:
-                    durations[f"{first}~{second}"] = symbols[first] + symbols[second]
+                    durations[f"{first}~{second}"] = (
+                        symbols[first] + symbols[second]
+                    )
         if settings.rhythm_beams:
             for name in settings.RHYTHM_BEAM_COUNTS:
                 if name in symbols:
@@ -4079,21 +5507,51 @@ class RythmicEquations(ChoiceExercise):
         for operator in sorted(settings.rhythm_operators):
             groups = {"ordinary": [], "tied": [], "beamed": []}
             for left, duration in durations.items():
-                operands = durations.items() if operator in {"+", "−"} else [(str(n), n) for n in range(2, 9)]
+                operands = (
+                    durations.items()
+                    if operator in {"+", "−"}
+                    else [(str(n), n) for n in range(2, 9)]
+                )
                 for right, amount in operands:
-                    total = duration + amount if operator in {"+", "−"} else duration * amount
+                    total = (
+                        duration + amount
+                        if operator in {"+", "−"}
+                        else duration * amount
+                    )
                     for result in by_duration.get(total, ()):
-                        terms = (result, right, left) if operator in {"−", "÷"} else (left, right, result)
-                        groups_in_question = ["tied" if "~" in term else "beamed" for term in terms if "~" in term or "|" in term]
-                        blanks = [index for index, term in enumerate(terms) if term in symbols]
+                        terms = (
+                            (result, right, left)
+                            if operator in {"−", "÷"}
+                            else (left, right, result)
+                        )
+                        groups_in_question = [
+                            "tied" if "~" in term else "beamed"
+                            for term in terms
+                            if "~" in term or "|" in term
+                        ]
+                        blanks = [
+                            index
+                            for index, term in enumerate(terms)
+                            if term in symbols
+                        ]
                         if len(groups_in_question) <= 1 and blanks:
-                            group = groups_in_question[0] if groups_in_question else "ordinary"
+                            group = (
+                                groups_in_question[0]
+                                if groups_in_question
+                                else "ordinary"
+                            )
                             groups[group].append((terms, blanks))
             if any(groups.values()):
-                available[operator] = [group for group in groups.values() if group]
+                available[operator] = [
+                    group for group in groups.values() if group
+                ]
 
         if not available:
-            return Question("Choose operators and symbols that can form an equation.", choices=[], answer="")
+            return Question(
+                "Choose operators and symbols that can form an equation.",
+                choices=[],
+                answer="",
+            )
         operator = rng.choice(list(available))
         terms, blanks = rng.choice(rng.choice(available[operator]))
         terms = list(terms)
@@ -4104,5 +5562,9 @@ class RythmicEquations(ChoiceExercise):
             f"{terms[0]} {operator} {terms[1]} = {terms[2]}",
             choices=list(symbols),
             answer=answer,
-            accept=tuple(name for name, duration in symbols.items() if name != answer and duration == symbols[answer]),
+            accept=tuple(
+                name
+                for name, duration in symbols.items()
+                if name != answer and duration == symbols[answer]
+            ),
         )

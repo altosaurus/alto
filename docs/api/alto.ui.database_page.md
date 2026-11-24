@@ -5,12 +5,15 @@ package: alto.ui
 permalink: /api/alto.ui.database_page/
 ---
 {% raw %}
-A read-only look at what is stored: every answer, every question's record, and the profiles.
+A read-only look at what is stored: every answer, every question's
+record, and the profiles.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> len(_when(0.0)[0])  # a timestamp as 'YYYY-MM-DD HH:MM:SS'
+>>> len(
+...     _when(0.0)[0]
+... )  # a timestamp as 'YYYY-MM-DD HH:MM:SS'
 19
 ```
 
@@ -29,7 +32,8 @@ RowsModel(
 
 Bases: `QAbstractTableModel`
 
-Rows of (text shown, value to sort by) cells, as a table model. Numbers are right-aligned.
+Rows of (text shown, value to sort by) cells, as a table model.
+Numbers are right-aligned.
 
 **Attributes**
 
@@ -41,10 +45,19 @@ Rows of (text shown, value to sort by) cells, as a table model. Numbers are righ
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> model = RowsModel(["Name", "Count"], rows=[[("Ada", "Ada"), ("3", 3)]], numeric={1})
+>>> model = RowsModel(
+...     ["Name", "Count"],
+...     rows=[[("Ada", "Ada"), ("3", 3)]],
+...     numeric={1},
+... )
 >>> model.rowCount(), model.columnCount()
 (1, 2)
->>> model.data(model.index(0, 1)), model.data(model.index(0, 1), SORT_ROLE)
+>>> (
+...     model.data(model.index(0, 1)),
+...     model.data(
+...         model.index(0, 1), SORT_ROLE
+...     ),
+... )
 ('3', 3)
 ```
 
@@ -63,7 +76,9 @@ Create the model.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> RowsModel(["Name"], rows=[[("Ada", "Ada")]]).extras
+>>> RowsModel(
+...     ["Name"], rows=[[("Ada", "Ada")]]
+... ).extras
 [{}]
 ```
 
@@ -86,7 +101,13 @@ Return the number of rows.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> RowsModel(["Name"], rows=[[("Ada", "Ada")], [("Ben", "Ben")]]).rowCount()
+>>> RowsModel(
+...     ["Name"],
+...     rows=[
+...         [("Ada", "Ada")],
+...         [("Ben", "Ben")],
+...     ],
+... ).rowCount()
 2
 ```
 
@@ -109,7 +130,9 @@ Return the number of columns.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> RowsModel(["Name", "Count"], rows=[]).columnCount()
+>>> RowsModel(
+...     ["Name", "Count"], rows=[]
+... ).columnCount()
 2
 ```
 
@@ -136,11 +159,19 @@ Return one piece of a cell for a role.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> model = RowsModel(["Name", "Count"], rows=[[("Ada", "Ada"), ("3", 3)]], numeric={1})
+>>> model = RowsModel(
+...     ["Name", "Count"],
+...     rows=[[("Ada", "Ada"), ("3", 3)]],
+...     numeric={1},
+... )
 >>> model.data(model.index(0, 0))
 'Ada'
 >>> align = Qt.ItemDataRole.TextAlignmentRole
->>> model.data(model.index(0, 1), align) != model.data(model.index(0, 0), align)  # numbers are right-aligned
+>>> model.data(
+...     model.index(0, 1), align
+... ) != model.data(
+...     model.index(0, 0), align
+... )  # numbers are right-aligned
 True
 ```
 
@@ -169,8 +200,12 @@ Return a column heading.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> model = RowsModel(["Name", "Count"], rows=[])
->>> model.headerData(1, Qt.Orientation.Horizontal)
+>>> model = RowsModel(
+...     ["Name", "Count"], rows=[]
+... )
+>>> model.headerData(
+...     1, Qt.Orientation.Horizontal
+... )
 'Count'
 ```
 
@@ -180,7 +215,8 @@ Return a column heading.
 QuestionTexts()
 ```
 
-Describes stored questions in words, remembering each one so it is worked out only once.
+Describes stored questions in words, remembering each one so it is
+worked out only once.
 
 **Examples**
 
@@ -212,7 +248,8 @@ def answer_cells(
 ) -> tuple[list[list[tuple[str, object]]], list[dict]]
 ```
 
-Turn answers read from the database into the cells of a table, and the hidden details of each row.
+Turn answers read from the database into the cells of a table, and
+the hidden details of each row.
 
 **Parameters**
 
@@ -230,13 +267,26 @@ Turn answers read from the database into the cells of a table, and the hidden de
 >>> from alto.learning import Database
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                duration_ms=2500, answered_at=1000.0)
+>>> db.add_attempt(
+...     ada.id,
+...     exercise="NoteNames",
+...     item_key="k",
+...     attempt_no=1,
+...     answer="C",
+...     correct=True,
+...     duration_ms=2500,
+...     answered_at=1000.0,
+... )
 >>> table, hidden = answer_cells(
-...     db.attempt_rows(ada.id), names={"NoteNames": "Note Identification"}, texts=QuestionTexts()
+...     db.attempt_rows(ada.id),
+...     names={
+...         "NoteNames": "Note Identification"
+...     },
+...     texts=QuestionTexts(),
 ... )
 >>> [text for text, _ in table[0]][1:]
-['Note Identification', '(no longer stored)', 'C', 'Right', '1', '2.5 s', '—']
+['Note Identification', '(no longer stored)', 'C', 'Right', '1',
+'2.5 s', '—']
 >>> hidden[0]["exercise"]
 'NoteNames'
 ```
@@ -253,7 +303,8 @@ def open_preview(
 ) -> None
 ```
 
-Show the question behind a row of an answers table, if its record is still stored.
+Show the question behind a row of an answers table, if its record is
+still stored.
 
 **Parameters**
 
@@ -265,8 +316,14 @@ Show the question behind a row of an answers table, if its record is still store
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> model = RowsModel(["Name"], rows=[[("Ada", "Ada")]])
->>> open_preview(model.index(0, 0), names={}, parent=QWidget())  # a row with no stored question shows nothing
+>>> model = RowsModel(
+...     ["Name"], rows=[[("Ada", "Ada")]]
+... )
+>>> open_preview(
+...     model.index(0, 0),
+...     names={},
+...     parent=QWidget(),
+... )  # a row with no stored question shows nothing
 ```
 
 ## AnswerList
@@ -282,7 +339,8 @@ AnswerList(
 
 Bases: `QTableView`
 
-A table of answers that sorts when a heading is clicked and opens the question behind a row on a double click.
+A table of answers that sorts when a heading is clicked and opens
+the question behind a row on a double click.
 
 **Attributes**
 
@@ -351,7 +409,8 @@ Bases: `QWidget`
 
 The tables behind the app.
 
-Answers and questions are the active profile's own; profiles lists everyone.
+Answers and questions are the active profile's own; profiles lists
+everyone.
 
 **Attributes**
 
@@ -367,7 +426,11 @@ Answers and questions are the active profile's own; profiles lists everyone.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
->>> page = DatabasePage(Learner(db, profile=db.add_profile("Ada")))
+>>> page = DatabasePage(
+...     Learner(
+...         db, profile=db.add_profile("Ada")
+...     )
+... )
 >>> page.note.text()
 '0 answers by Ada.'
 ```
@@ -386,7 +449,11 @@ Build the page, showing the answers table.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
->>> page = DatabasePage(Learner(db, profile=db.add_profile("Ada")))
+>>> page = DatabasePage(
+...     Learner(
+...         db, profile=db.add_profile("Ada")
+...     )
+... )
 >>> page.tabs["answers"].isChecked()
 True
 ```
@@ -413,7 +480,11 @@ Show one of the tables.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
->>> page = DatabasePage(Learner(db, profile=db.add_profile("Ada")))
+>>> page = DatabasePage(
+...     Learner(
+...         db, profile=db.add_profile("Ada")
+...     )
+... )
 >>> page.show_table("profiles")
 >>> page.note.text()
 '1 profile.'

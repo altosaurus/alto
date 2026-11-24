@@ -1,8 +1,12 @@
-"""Notation Identification terms, grouped by subject with their score placement and SMuFL code points."""
+"""
+Notation Identification terms, grouped by subject with their score
+placement and SMuFL code points.
+"""
 
 from __future__ import annotations
 
-# Code points follow the W3C SMuFL glyphnames metadata. Structural parts use the staff renderer.
+# Code points follow the W3C SMuFL glyphnames metadata. Structural parts
+# use the staff renderer.
 CATALOG: dict[str, dict[str, tuple[str, int | str | None]]] = {
     "Staff and rhythm": {
         "Notehead": ("structural", None),
@@ -188,9 +192,12 @@ CATALOG: dict[str, dict[str, tuple[str, int | str | None]]] = {
     },
 }
 
-MARKS = {term: spec for group in CATALOG.values() for term, spec in group.items()}
+MARKS = {
+    term: spec for group in CATALOG.values() for term, spec in group.items()
+}
 
-# Symbols whose visual distinctions are particularly useful to practice together.
+# Symbols whose visual distinctions are particularly useful to practice
+# together.
 SIMILAR_MARKS = (
     ("Notehead", "Stem", "Flag", "Beam"),
     ("Staff line", "Ledger line"),
@@ -198,18 +205,41 @@ SIMILAR_MARKS = (
     ("Whole note", "Half note", "Double whole note"),
     ("Eighth note", "Sixteenth note", "Thirty-second note"),
     ("Whole rest", "Half rest", "Double whole rest"),
-    ("Eighth rest", "Sixteenth rest", "Thirty-second rest", "Sixty-fourth rest"),
+    (
+        "Eighth rest",
+        "Sixteenth rest",
+        "Thirty-second rest",
+        "Sixty-fourth rest",
+    ),
     ("128th rest", "256th rest", "512th rest", "1024th rest"),
     ("Sharp", "Double sharp", "Triple sharp"),
     ("Flat", "Double flat", "Triple flat"),
     ("Quarter-tone sharp", "Three-quarter-tone sharp"),
     ("Quarter-tone flat", "Three-quarter-tone flat"),
     ("Alto clef", "Tenor clef", "Soprano clef", "Mezzo-soprano clef"),
-    ("Barline", "Double barline", "Final barline", "Dotted barline", "Dashed barline"),
+    (
+        "Barline",
+        "Double barline",
+        "Final barline",
+        "Dotted barline",
+        "Dashed barline",
+    ),
     ("Start repeat", "End repeat"),
     ("Breath mark", "Caesura"),
-    ("Fermata", "Short fermata", "Long fermata", "Very short fermata", "Very long fermata"),
-    ("Staccato", "Staccatissimo", "Portato", "Accented staccato", "Marcato staccato"),
+    (
+        "Fermata",
+        "Short fermata",
+        "Long fermata",
+        "Very short fermata",
+        "Very long fermata",
+    ),
+    (
+        "Staccato",
+        "Staccatissimo",
+        "Portato",
+        "Accented staccato",
+        "Marcato staccato",
+    ),
     ("Piano", "Pianissimo", "Pianississimo", "Mezzo piano"),
     ("Forte", "Fortissimo", "Fortississimo", "Mezzo forte"),
     ("Crescendo hairpin", "Diminuendo hairpin", "Messa di voce"),

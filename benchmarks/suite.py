@@ -1,8 +1,11 @@
 """
-The ASV benchmarks: every operation's time, and the first-use times, recorded for each release so they can be compared.
+The ASV benchmarks: every operation's time, and the first-use times,
+recorded for each release so they can be compared.
 
-Run `asv run` for the current commit, `asv run v0.0.0..HEAD` for the commits since a tag, and `asv compare v0.0.0 HEAD` to see
-what changed between two of them. `asv publish` writes the pages with a graph for each operation.
+Run `asv run` for the current commit, `asv run v0.0.0..HEAD` for the
+commits since a tag, and `asv compare v0.0.0 HEAD` to see
+what changed between two of them. `asv publish` writes the pages with a
+graph for each operation.
 """
 
 from __future__ import annotations
@@ -21,7 +24,8 @@ _BENCH: list[Workbench] = []
 
 def workbench() -> Workbench:
     """
-    Give the app and its long history, building them the first time in this process.
+    Give the app and its long history, building them the first time in
+    this process.
 
     Returns
     -------
@@ -35,11 +39,16 @@ def workbench() -> Workbench:
 
 
 class TimeOperation:
-    """Time one operation of the app, with the app already warm: pages, questions, painting and data."""
+    """
+    Time one operation of the app, with the app already warm: pages,
+    questions, painting and data.
+    """
 
     params = [operation_names()]
     param_names = ["operation"]
-    number = 1  # one run for each sample, with `setup` before each, so the state is the same every time
+    # one run for each sample, with `setup` before each, so the state is
+    # the same every time
+    number = 1
     repeat = (5, 11, 20.0)
     warmup_time = 0.0
     timeout = 120.0
@@ -71,7 +80,10 @@ class TimeOperation:
 
 
 class TrackFirstUse:
-    """Time the first use of something in a new process: starting the app, and the first look at a page."""
+    """
+    Time the first use of something in a new process: starting the app,
+    and the first look at a page.
+    """
 
     params = [list(COLD)]
     param_names = ["operation"]

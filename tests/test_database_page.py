@@ -1,4 +1,7 @@
-"""The database browser: three read-only tables, a search box, and a popup for the question a row is about."""
+"""
+The database browser: three read-only tables, a search box, and a popup
+for the question a row is about.
+"""
 
 from __future__ import annotations
 
@@ -43,9 +46,12 @@ if TYPE_CHECKING:
     )
 
 
-def test_the_table_model_shows_text_sorts_by_value_and_right_aligns_numbers(app: QApplication) -> None:
+def test_the_table_model_shows_text_sorts_by_value_and_right_aligns_numbers(
+    app: QApplication,
+) -> None:
     """
-    Check that the table model shows text sorts by value and right aligns numbers.
+    Check that the table model shows text sorts by value and right
+    aligns numbers.
 
     Parameters
     ----------
@@ -60,17 +66,34 @@ def test_the_table_model_shows_text_sorts_by_value_and_right_aligns_numbers(app:
     )
     first = model.index(0, 1)
     assert model.rowCount() == 2 and model.columnCount() == 2
-    assert model.rowCount(first) == 0 and model.columnCount(first) == 0  # a table has no children
-    assert model.data(first) == "10" and model.data(first, database_page.SORT_ROLE) == 10
+    assert (
+        model.rowCount(first) == 0 and model.columnCount(first) == 0
+    )  # a table has no children
+    assert (
+        model.data(first) == "10"
+        and model.data(first, database_page.SORT_ROLE) == 10
+    )
     assert model.data(first, ROW_ROLE) == {"x": 1}
     right = int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
     assert model.data(first, Qt.ItemDataRole.TextAlignmentRole) == right
-    assert model.data(model.index(0, 0), Qt.ItemDataRole.TextAlignmentRole) is None
+    assert (
+        model.data(model.index(0, 0), Qt.ItemDataRole.TextAlignmentRole)
+        is None
+    )
     assert model.data(first, Qt.ItemDataRole.ToolTipRole) is None
     assert model.headerData(1, Qt.Orientation.Horizontal) == "Count"
     assert model.headerData(1, Qt.Orientation.Vertical) is None
-    assert model.headerData(1, Qt.Orientation.Horizontal, Qt.ItemDataRole.ToolTipRole) is None
-    assert RowsModel(["A"], rows=[[("x", 1)]]).extras == [{}]  # rows with nothing hidden get an empty note each
+    assert (
+        model.headerData(
+            1,
+            Qt.Orientation.Horizontal,
+            Qt.ItemDataRole.ToolTipRole,
+        )
+        is None
+    )
+    assert RowsModel(["A"], rows=[[("x", 1)]]).extras == [
+        {},
+    ]  # rows with nothing hidden get an empty note each
 
 
 def test_the_answers_table_lists_every_answer_newest_first(
@@ -90,8 +113,13 @@ def test_the_answers_table_lists_every_answer_newest_first(
     learner = practiced_learner(30)
     page = DatabasePage(learner)
     total = learner.db.count_attempts(learner.profile.id)
-    assert page.proxy.rowCount() == total and f"{total:,} answers by Ada." in page.note.text()
-    assert page.proxy.index(0, 0).data() >= page.proxy.index(total - 1, 0).data()  # sorted by time, newest at the top
+    assert (
+        page.proxy.rowCount() == total
+        and f"{total:,} answers by Ada." in page.note.text()
+    )
+    assert (
+        page.proxy.index(0, 0).data() >= page.proxy.index(total - 1, 0).data()
+    )  # sorted by time, newest at the top
     assert page.model.headers == [
         "When",
         "Exercise",
@@ -120,11 +148,15 @@ def test_a_long_history_says_how_much_of_it_is_shown(
     practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     monkeypatch.setattr(database_page, "ROW_LIMIT", 5)
     page = DatabasePage(practiced_learner(60))
-    assert page.proxy.rowCount() == 5 and "Showing the newest 5." in page.note.text()
+    assert (
+        page.proxy.rowCount() == 5
+        and "Showing the newest 5." in page.note.text()
+    )
 
 
 def test_the_questions_and_profiles_tables(
@@ -145,21 +177,36 @@ def test_the_questions_and_profiles_tables(
     Learner(learner.db, profile=learner.db.add_profile("Ben"))
     page = DatabasePage(learner)
     page.tabs["questions"].click()
-    assert page.proxy.rowCount() > 0 and "questions asked of Ada" in page.note.text()
-    strains = [page.proxy.index(r, 2).data(database_page.SORT_ROLE) for r in range(page.proxy.rowCount())]
+    assert (
+        page.proxy.rowCount() > 0
+        and "questions asked of Ada" in page.note.text()
+    )
+    strains = [
+        page.proxy.index(r, 2).data(database_page.SORT_ROLE)
+        for r in range(page.proxy.rowCount())
+    ]
     assert strains == sorted(strains, reverse=True)  # the hardest first
     page.tabs["profiles"].click()
-    assert page.proxy.rowCount() == 2 and page.note.text().startswith("2 profiles.")
-    assert [page.proxy.index(r, 0).data() for r in range(2)] == ["Ada", "Ben"]  # alphabetical
+    assert page.proxy.rowCount() == 2 and page.note.text().startswith(
+        "2 profiles.",
+    )
+    assert [page.proxy.index(r, 0).data() for r in range(2)] == [
+        "Ada",
+        "Ben",
+    ]  # alphabetical
     only = DatabasePage(practiced_learner(3, name="Solo"))
     only.tabs["profiles"].click()
     assert only.note.text() == "1 profile."
 
 
 @pytest.mark.parametrize("tab", ["answers", "questions"])
-def test_browser_shows_due_for_the_selected_scheduler(app: QApplication, tab: str) -> None:
+def test_browser_shows_due_for_the_selected_scheduler(
+    app: QApplication,
+    tab: str,
+) -> None:
     """
-    Sort actual due timestamps and refresh the open table when the scheduler changes.
+    Sort actual due timestamps and refresh the open table when the
+    scheduler changes.
 
     Parameters
     ----------
@@ -171,12 +218,35 @@ def test_browser_shows_due_for_the_selected_scheduler(app: QApplication, tab: st
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     exercise = NoteNames()
-    questions = [Question("Name the note", choices=["A", "B", "C"], answer=note) for note in "ABC"]
-    for question, (mode, when) in zip(questions, (("ASRS", 300), ("SM-2", 200), ("SM-2", 100)), strict=True):
+    questions = [
+        Question("Name the note", choices=["A", "B", "C"], answer=note)
+        for note in "ABC"
+    ]
+    for question, (mode, when) in zip(
+        questions,
+        (("ASRS", 300), ("SM-2", 200), ("SM-2", 100)),
+        strict=True,
+    ):
         learner.set_mode(mode)
-        learner.record(exercise, question=question, answer=question.answer, correct=True, attempt_no=1, seconds=1, now=when)
+        learner.record(
+            exercise,
+            question=question,
+            answer=question.answer,
+            correct=True,
+            attempt_no=1,
+            seconds=1,
+            now=when,
+        )
     learner.set_mode("FSRS")
-    learner.record(exercise, question=questions[2], answer="?", correct=False, attempt_no=1, seconds=1, now=500)
+    learner.record(
+        exercise,
+        question=questions[2],
+        answer="?",
+        correct=False,
+        attempt_no=1,
+        seconds=1,
+        now=500,
+    )
     learner.set_mode("SM-2")
 
     window = MainWindow(learner)
@@ -198,13 +268,27 @@ def test_browser_shows_due_for_the_selected_scheduler(app: QApplication, tab: st
         ("ARTS", []),
         ("ASRS", []),
     ):
-        item = dialog.scheduler_list.findItems(mode, Qt.MatchFlag.MatchExactly)[0]
+        item = dialog.scheduler_list.findItems(
+            mode,
+            Qt.MatchFlag.MatchExactly,
+        )[0]
         dialog.scheduler_list.setCurrentItem(item)
-        assert page.proxy.sortColumn() == column and page.proxy.rowCount() == 2 + repetitions
-        cells = [page.proxy.index(row, column) for row in range(page.proxy.rowCount())]
-        assert [cell.data(database_page.SORT_ROLE) for cell in cells if cell.data() != "—"] == due
+        assert (
+            page.proxy.sortColumn() == column
+            and page.proxy.rowCount() == 2 + repetitions
+        )
+        cells = [
+            page.proxy.index(row, column)
+            for row in range(page.proxy.rowCount())
+        ]
+        assert [
+            cell.data(database_page.SORT_ROLE)
+            for cell in cells
+            if cell.data() != "—"
+        ] == due
         assert [cell.data() for cell in cells if cell.data() != "—"] == [
-            datetime.fromtimestamp(stamp).strftime("%Y-%m-%d %H:%M:%S") for stamp in due
+            datetime.fromtimestamp(stamp).strftime("%Y-%m-%d %H:%M:%S")
+            for stamp in due
         ]
     dialog.close()
     window.close()
@@ -229,11 +313,20 @@ def test_searching_narrows_every_table_and_says_so(
     everything = page.proxy.rowCount()
     page.search.setText("Right")
     matching = page.proxy.rowCount()
-    assert 0 < matching < everything and f"{matching:,} match the search." in page.note.text()
+    assert (
+        0 < matching < everything
+        and f"{matching:,} match the search." in page.note.text()
+    )
     page.search.setText("zzzz-nothing-matches")
-    assert page.proxy.rowCount() == 0 and "0 match the search." in page.note.text()
+    assert (
+        page.proxy.rowCount() == 0
+        and "0 match the search." in page.note.text()
+    )
     page.search.clear()
-    assert page.proxy.rowCount() == everything and "match the search" not in page.note.text()
+    assert (
+        page.proxy.rowCount() == everything
+        and "match the search" not in page.note.text()
+    )
 
 
 def test_questions_whose_record_is_gone_or_unreadable_are_labeled(
@@ -290,9 +383,14 @@ def test_questions_whose_record_is_gone_or_unreadable_are_labeled(
         answered_at=98.0,
     )
     page = DatabasePage(learner)
-    texts = [page.proxy.index(r, 2).data() for r in range(page.proxy.rowCount())]
+    texts = [
+        page.proxy.index(r, 2).data() for r in range(page.proxy.rowCount())
+    ]
     assert "(no longer stored)" in texts and "(unreadable)" in texts
-    assert page._question_text("NoteNames", key="broken", payload="{not json") == "(unreadable)"  # remembered, not parsed again
+    assert (
+        page._question_text("NoteNames", key="broken", payload="{not json")
+        == "(unreadable)"
+    )  # remembered, not parsed again
 
 
 def test_double_clicking_a_row_shows_the_question_it_is_about(
@@ -310,13 +408,15 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
     practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     opened = []
 
     class Preview:
         """
-        A stand-in for the question preview popup that records how it was opened.
+        A stand-in for the question preview popup that records how it
+        was opened.
         """
 
         # noinspection PyShadowingNames
@@ -345,7 +445,10 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
             parent : QWidget or None
                 The owning widget.
             """
-            del parent, statistics  # accepted to match what it stands in for, but not needed
+            del (
+                parent,
+                statistics,
+            )  # accepted to match what it stands in for, but not needed
             opened.append((name, question, details))
 
         # noinspection PyMethodMayBeStatic
@@ -362,7 +465,10 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
     page._preview(page.proxy.index(0, 0))
     assert opened[-1] == "exec"
     name, question, details = opened[0]
-    assert name in {cls.name for cls in REGISTRY} and isinstance(question, Question)
+    assert name in {cls.name for cls in REGISTRY} and isinstance(
+        question,
+        Question,
+    )
     assert details and details[0].startswith("<b>You answered:</b>")
     opened.clear()
     page.tabs["questions"].click()
@@ -401,8 +507,14 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
         answered_at=200.0,
     )
     page.tabs["answers"].click()
-    row = next(r for r in range(page.proxy.rowCount()) if page.proxy.index(r, 3).data() == "x")
-    page._preview(page.proxy.index(row, 0))  # the stored question cannot be read: nothing opens
+    row = next(
+        r
+        for r in range(page.proxy.rowCount())
+        if page.proxy.index(r, 3).data() == "x"
+    )
+    page._preview(
+        page.proxy.index(row, 0),
+    )  # the stored question cannot be read: nothing opens
     assert opened == []
 
 
@@ -422,15 +534,27 @@ def test_back_is_offered_by_a_button_and_by_escape(
     """
     page = DatabasePage(practiced_learner(3))
     spy = QSignalSpy(page.back)
-    escape = [s for s in page.findChildren(QShortcut) if s.key() == QKeySequence(Qt.Key.Key_Escape)]
+    escape = [
+        s
+        for s in page.findChildren(QShortcut)
+        if s.key() == QKeySequence(Qt.Key.Key_Escape)
+    ]
     escape[0].activated.emit()
     assert spy.count() == 1
 
 
-@pytest.mark.parametrize("source", ["answers", "questions", "statistics", "needs_practice"])
-def test_question_statistics_from_a_stored_card(app: QApplication, monkeypatch: pytest.MonkeyPatch, source: str) -> None:
+@pytest.mark.parametrize(
+    "source",
+    ["answers", "questions", "statistics", "needs_practice"],
+)
+def test_question_statistics_from_a_stored_card(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    source: str,
+) -> None:
     """
-    Open a saved question and its lifetime statistics from each table that lists it.
+    Open a saved question and its lifetime statistics from each table
+    that lists it.
 
     Parameters
     ----------
@@ -479,7 +603,11 @@ def test_question_statistics_from_a_stored_card(app: QApplication, monkeypatch: 
             answered_at=40.0 if duration == 4000 else 20.0,
         )
     dialogs = []
-    monkeypatch.setattr(database_page.QDialog, "exec", lambda dialog: dialogs.append(dialog))
+    monkeypatch.setattr(
+        database_page.QDialog,
+        "exec",
+        lambda dialog: dialogs.append(dialog),
+    )
 
     def open_statistics(card: QuestionPreview) -> None:
         """
@@ -496,9 +624,19 @@ def test_question_statistics_from_a_stored_card(app: QApplication, monkeypatch: 
         layout = card.layout()
         assert layout is not None
         layout.setGeometry(card.rect())
-        button = next(b for b in card.findChildren(QToolButton) if b.accessibleName() == "Question Statistics")
-        assert not button.icon().isNull() and button.toolTip() == "Question Statistics"
-        assert button.geometry().topRight() == card.rect().marginsRemoved(layout.contentsMargins()).topRight()
+        button = next(
+            b
+            for b in card.findChildren(QToolButton)
+            if b.accessibleName() == "Question Statistics"
+        )
+        assert (
+            not button.icon().isNull()
+            and button.toolTip() == "Question Statistics"
+        )
+        assert (
+            button.geometry().topRight()
+            == card.rect().marginsRemoved(layout.contentsMargins()).topRight()
+        )
         button.click()
 
     monkeypatch.setattr(QuestionPreview, "exec", open_statistics)
@@ -521,12 +659,25 @@ def test_question_statistics_from_a_stored_card(app: QApplication, monkeypatch: 
         page.show_table(source)
         table, model = page.view, page.proxy
     indices = (model.index(row, 0) for row in range(model.rowCount()))
-    index = next(i for i in indices if i.data(ROW_ROLE)["exercise"] == "NoteNames" and i.data(ROW_ROLE)["item_key"] == "target")
+    index = next(
+        i
+        for i in indices
+        if i.data(ROW_ROLE)["exercise"] == "NoteNames"
+        and i.data(ROW_ROLE)["item_key"] == "target"
+    )
     if source == "needs_practice":
         position = table.visualRect(index.siblingAtColumn(2)).center()
-        QTest.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=position)
+        QTest.mouseClick(
+            table.viewport(),
+            Qt.MouseButton.LeftButton,
+            pos=position,
+        )
         assert not dialogs
-        QTest.mouseDClick(table.viewport(), Qt.MouseButton.LeftButton, pos=position)
+        QTest.mouseDClick(
+            table.viewport(),
+            Qt.MouseButton.LeftButton,
+            pos=position,
+        )
     else:
         table.doubleClicked.emit(index)
     [dialog] = dialogs

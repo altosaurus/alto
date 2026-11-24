@@ -1,5 +1,6 @@
 """
-Helpers for tests that press keys: open an exercise with the keyboard on it, and press a key the way a person does.
+Helpers for tests that press keys: open an exercise with the keyboard on
+it, and press a key the way a person does.
 """
 
 from __future__ import annotations
@@ -23,7 +24,8 @@ def opened(
     seed: int = 4,
 ) -> ExerciseView:
     """
-    Open an exercise on a window that is shown and active, with the keyboard on it, as when it is opened for use.
+    Open an exercise on a window that is shown and active, with the
+    keyboard on it, as when it is opened for use.
 
     Parameters
     ----------
@@ -42,7 +44,9 @@ def opened(
     view.show()
     view.activateWindow()
     view.setFocus()
-    assert QTest.qWaitForWindowActive(view, 2000), "the window did not become active, so no key would reach it"
+    assert QTest.qWaitForWindowActive(view, 2000), (
+        "the window did not become active, so no key would reach it"
+    )
     return view
 
 
@@ -68,7 +72,8 @@ def press(
     text: str,
 ) -> None:
     """
-    Press a key, written as in a tooltip or a shortcut: "Return", "PgUp", "Shift+C", "3".
+    Press a key, written as in a tooltip or a shortcut: "Return",
+    "PgUp", "Shift+C", "3".
 
     Parameters
     ----------
@@ -78,9 +83,20 @@ def press(
         The key, with any modifiers before it, joined by "+".
     """
     *modifiers, name = text.split("+")
-    key = NAMED_KEYS.get(name) or Qt.Key(ord(name.upper()))  # a letter, digit or sign is its character
+    key = NAMED_KEYS.get(name) or Qt.Key(
+        ord(name.upper()),
+    )  # a letter, digit or sign is its character
     held = Qt.KeyboardModifier.NoModifier
     for modifier in modifiers:
         held |= MODIFIER_KEYS[modifier]
-    QApplication.processEvents()  # widgets that were just added become visible, and so their keys live, in the event loop
-    QTest.keyClick(view, key, held)  # a button whose key it is clicks at once: tests do not wait for its pressed look
+    # widgets that were just added become visible, and so their keys
+    # live, in the event loop
+    QApplication.processEvents()
+    QTest.keyClick(
+        view,
+        key,
+        held,
+        # a button whose key it is clicks at once: tests do not wait for
+        # its
+        # pressed look
+    )
