@@ -34,9 +34,15 @@ is diminished and has no wedge.)
 
 ## place_of_major
 
+<div class="api-signature" markdown="1">
+
 ```python
 def place_of_major(name: str) -> int
 ```
+
+{% endraw %}{% include api-source.html name="place_of_major" line=118 %}{% raw %}
+
+</div>
 
 Return where a major key is on the circle, by either of its names.
 
@@ -65,9 +71,15 @@ Return where a major key is on the circle, by either of its names.
 
 ## relative_minor
 
+<div class="api-signature" markdown="1">
+
 ```python
 def relative_minor(name: str) -> str
 ```
+
+{% endraw %}{% include api-source.html name="relative_minor" line=152 %}{% raw %}
+
+</div>
 
 Return the relative minor of a major key.
 
@@ -92,9 +104,15 @@ Return the relative minor of a major key.
 
 ## cells_of_key
 
+<div class="api-signature" markdown="1">
+
 ```python
 def cells_of_key(place: int) -> dict[tuple[str, int], str]
 ```
+
+{% endraw %}{% include api-source.html name="cells_of_key" line=178 %}{% raw %}
+
+</div>
 
 Return the six wedges that hold the chords of a major key, and the
 Roman numeral of each.
@@ -128,9 +146,15 @@ Roman numeral of each.
 
 ## numeral_chords
 
+<div class="api-signature" markdown="1">
+
 ```python
 def numeral_chords(place: int) -> dict[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="numeral_chords" line=217 %}{% raw %}
+
+</div>
 
 Return the six chords of a major key that are on the circle, spelled
 as that key spells them.
@@ -160,9 +184,15 @@ the key decides which name is right: C♯ is the V of F♯.
 
 ## display_major
 
+<div class="api-signature" markdown="1">
+
 ```python
 def display_major(place: int) -> str
 ```
+
+{% endraw %}{% include api-source.html name="display_major" line=258 %}{% raw %}
+
+</div>
 
 Return the major key of a place as it is written to ask about it: "A
 major", or "B major / C♭ major".
@@ -184,9 +214,15 @@ major", or "B major / C♭ major".
 
 ## display_minor
 
+<div class="api-signature" markdown="1">
+
 ```python
 def display_minor(place: int) -> str
 ```
+
+{% endraw %}{% include api-source.html name="display_minor" line=281 %}{% raw %}
+
+</div>
 
 Return the minor key of a place as it is written to ask about it:
 "F♯ minor", or "G♯ minor / A♭ minor".
@@ -208,9 +244,15 @@ Return the minor key of a place as it is written to ask about it:
 
 ## accidentals_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def accidentals_of(signature: int) -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="accidentals_of" line=304 %}{% raw %}
+
+</div>
 
 Return the sharps or flats of a key signature, in the order they are
 written.
@@ -232,6 +274,8 @@ written.
 
 ## explain
 
+<div class="api-signature" markdown="1">
+
 ```python
 def explain(
     ring: str,
@@ -239,6 +283,10 @@ def explain(
     place: int,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="explain" line=364 %}{% raw %}
+
+</div>
 
 Explain a cell of the circle: its key signature, where it comes
 from, its relative key and its chords.

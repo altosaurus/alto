@@ -21,9 +21,15 @@ The application's saved settings (a thin layer over `QSettings`).
 
 ## store
 
+<div class="api-signature" markdown="1">
+
 ```python
 def store() -> QSettings
 ```
+
+{% endraw %}{% include api-source.html name="store" line=30 %}{% raw %}
+
+</div>
 
 Return the app's saved settings.
 
@@ -49,6 +55,8 @@ and nothing is brought across from the system's own.
 
 ## int_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def int_value(
     settings: QSettings,
@@ -57,6 +65,10 @@ def int_value(
     default: int,
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="int_value" line=77 %}{% raw %}
+
+</div>
 
 Read an integer setting.
 
@@ -102,6 +114,8 @@ ValueError: invalid literal for int() with base 10: 'many'
 
 ## text_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def text_value(
     settings: QSettings,
@@ -110,6 +124,10 @@ def text_value(
     default: str,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="text_value" line=134 %}{% raw %}
+
+</div>
 
 Read a saved setting as text.
 
@@ -145,6 +163,8 @@ Read a saved setting as text.
 
 ## bool_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def bool_value(
     settings: QSettings,
@@ -153,6 +173,10 @@ def bool_value(
     default: bool,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="bool_value" line=180 %}{% raw %}
+
+</div>
 
 Read a switch saved as the text "true" or "false".
 
@@ -196,6 +220,8 @@ False
 
 ## save_bool
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_bool(
     settings: QSettings,
@@ -204,6 +230,10 @@ def save_bool(
     value: bool,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_bool" line=234 %}{% raw %}
+
+</div>
 
 Save a switch as the text "true" or "false", the form `bool_value`
 reads.
@@ -228,6 +258,8 @@ reads.
 
 ## list_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def list_value(
     settings: QSettings,
@@ -236,6 +268,10 @@ def list_value(
     separator: str = ',',
 ) -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="list_value" line=266 %}{% raw %}
+
+</div>
 
 Read a saved list of words, such as "treble,bass".
 
@@ -280,6 +316,8 @@ parts, so both forms are read.
 
 ## choices_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def choices_value(
     settings: QSettings,
@@ -289,6 +327,10 @@ def choices_value(
     separator: str = ',',
 ) -> set[str]
 ```
+
+{% endraw %}{% include api-source.html name="choices_value" line=325 %}{% raw %}
+
+</div>
 
 Read a saved set of choices, keeping only the ones that are still
 offered.
@@ -324,6 +366,8 @@ offered.
 
 ## keys_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def keys_value(
     settings: QSettings,
@@ -331,6 +375,10 @@ def keys_value(
     key: str,
 ) -> set[int]
 ```
+
+{% endraw %}{% include api-source.html name="keys_value" line=377 %}{% raw %}
+
+</div>
 
 Read a saved set of key signatures, each a number of sharps
 (positive) or flats (negative) up to seven.
@@ -360,6 +408,8 @@ Read a saved set of key signatures, each a number of sharps
 
 ## joined
 
+<div class="api-signature" markdown="1">
+
 ```python
 def joined(
     values: Iterable[object],
@@ -367,6 +417,10 @@ def joined(
     separator: str = ',',
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="joined" line=418 %}{% raw %}
+
+</div>
 
 Write values as the text that `list_value`, `choices_value` and
 `keys_value` read back.
@@ -394,9 +448,15 @@ Write values as the text that `list_value`, `choices_value` and
 
 ## export_settings
 
+<div class="api-signature" markdown="1">
+
 ```python
 def export_settings() -> dict[str, object]
 ```
+
+{% endraw %}{% include api-source.html name="export_settings" line=452 %}{% raw %}
+
+</div>
 
 Return every saved preference, by key, for a backup.
 
@@ -416,9 +476,15 @@ Return every saved preference, by key, for a backup.
 
 ## import_settings
 
+<div class="api-signature" markdown="1">
+
 ```python
 def import_settings(values: Mapping[str, object]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="import_settings" line=506 %}{% raw %}
+
+</div>
 
 Replace every saved preference with the ones from a backup, so the
 preferences are exactly as they were.

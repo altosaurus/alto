@@ -24,6 +24,8 @@ its answer.
 
 ## QuestionPreview
 
+<div class="api-signature" markdown="1">
+
 ```python
 QuestionPreview(
     exercise_name: str,
@@ -34,6 +36,10 @@ QuestionPreview(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="QuestionPreview" line=56 %}{% raw %}
+
+</div>
 
 Bases: `QDialog`
 

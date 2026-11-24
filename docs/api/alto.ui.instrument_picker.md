@@ -19,9 +19,15 @@ one is made from.
 
 ## load_instrument
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_instrument() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_instrument" line=68 %}{% raw %}
+
+</div>
 
 Apply the saved instrument.
 
@@ -47,9 +53,15 @@ instrument.
 
 ## save_instrument
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_instrument() -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_instrument" line=94 %}{% raw %}
+
+</div>
 
 Remember the instrument in use.
 
@@ -66,9 +78,15 @@ Remember the instrument in use.
 
 ## tokens
 
+<div class="api-signature" markdown="1">
+
 ```python
 def tokens(widget: QWidget) -> dict[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="tokens" line=110 %}{% raw %}
+
+</div>
 
 Return the summary page's colors.
 
@@ -95,9 +113,15 @@ True
 
 ## format_size
 
+<div class="api-signature" markdown="1">
+
 ```python
 def format_size(nbytes: int) -> str
 ```
+
+{% endraw %}{% include api-source.html name="format_size" line=173 %}{% raw %}
+
+</div>
 
 Write a file size the way the instrument page shows it.
 
@@ -122,9 +146,15 @@ Write a file size the way the instrument page shows it.
 
 ## InstrumentPicker
 
+<div class="api-signature" markdown="1">
+
 ```python
 InstrumentPicker(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="InstrumentPicker" line=204 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -170,9 +200,15 @@ True
 
 ### InstrumentPicker.select
 
+<div class="api-signature" markdown="1">
+
 ```python
 def select(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="InstrumentPicker.select" line=424 %}{% raw %}
+
+</div>
 
 Show the page of the entry an instrument belongs to.
 
@@ -191,9 +227,15 @@ Show the page of the entry an instrument belongs to.
 
 ### InstrumentPicker.show_group
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_group(group: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="InstrumentPicker.show_group" line=768 %}{% raw %}
+
+</div>
 
 Fill the summary page for an entry from what is known about it
 and what is on disk.
@@ -213,9 +255,15 @@ and what is on disk.
 
 ### InstrumentPicker.changeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def changeEvent(event: QEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="InstrumentPicker.changeEvent" line=985 %}{% raw %}
+
+</div>
 
 Redraw the summary page when the palette changes, so its colors
 follow the theme.
@@ -238,9 +286,15 @@ follow the theme.
 
 ### InstrumentPicker.use
 
+<div class="api-signature" markdown="1">
+
 ```python
 def use(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="InstrumentPicker.use" line=1012 %}{% raw %}
+
+</div>
 
 Make an instrument the one for notes and the correct-answer
 chime.
@@ -265,9 +319,15 @@ Nothing happens if it has no recordings installed.
 
 ### InstrumentPicker.preview
 
+<div class="api-signature" markdown="1">
+
 ```python
 def preview(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="InstrumentPicker.preview" line=1043 %}{% raw %}
+
+</div>
 
 Play the DSCH motif in an instrument, even if sound is muted.
 

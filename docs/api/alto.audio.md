@@ -27,6 +27,8 @@ The module-level `sounds` is the one the interface uses.
 
 ## synth_piano
 
+<div class="api-signature" markdown="1">
+
 ```python
 def synth_piano(
     midi: int,
@@ -34,6 +36,10 @@ def synth_piano(
     duration: float = 1.6,
 ) -> list[float]
 ```
+
+{% endraw %}{% include api-source.html name="synth_piano" line=60 %}{% raw %}
+
+</div>
 
 Synthesize a piano note, for notes outside the recorded range.
 
@@ -63,6 +69,8 @@ time, which needs no sine or exponential per sample.
 
 ## Instrument
 
+<div class="api-signature" markdown="1">
+
 ```python
 Instrument(
     key: str,
@@ -79,6 +87,10 @@ Instrument(
     kind: str = '',
 )
 ```
+
+{% endraw %}{% include api-source.html name="Instrument" line=158 %}{% raw %}
+
+</div>
 
 An instrument that notes can be played on, and where its recordings
 are.
@@ -116,10 +128,16 @@ are.
 
 ### Instrument.kind_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def kind_name() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Instrument.kind_name" line=245 %}{% raw %}
+
+</div>
 
 Name what sort of instrument this is, in lowercase.
 
@@ -141,10 +159,16 @@ Name what sort of instrument this is, in lowercase.
 
 ### Instrument.picker_group
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def picker_group() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Instrument.picker_group" line=268 %}{% raw %}
+
+</div>
 
 Identify the instrument's entry in the sound picker.
 
@@ -163,9 +187,15 @@ Identify the instrument's entry in the sound picker.
 
 ### Instrument.playback_volume
 
+<div class="api-signature" markdown="1">
+
 ```python
 def playback_volume(level: float = 1.0) -> float
 ```
+
+{% endraw %}{% include api-source.html name="Instrument.playback_volume" line=287 %}{% raw %}
+
+</div>
 
 Return the output volume for a note or clip played on this
 instrument.
@@ -187,9 +217,15 @@ instrument.
 
 ## instrument_groups
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instrument_groups() -> list[tuple[str, list[Instrument]]]
 ```
+
+{% endraw %}{% include api-source.html name="instrument_groups" line=366 %}{% raw %}
+
+</div>
 
 Return the instruments as they are listed for choosing.
 
@@ -215,9 +251,15 @@ Ways of playing one instrument share a single entry.
 
 ## read_wav
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_wav(path: Path) -> tuple[list[float], int]
 ```
+
+{% endraw %}{% include api-source.html name="read_wav" line=460 %}{% raw %}
+
+</div>
 
 Read a mono 16-bit WAV file.
 
@@ -246,6 +288,8 @@ Read a mono 16-bit WAV file.
 
 ## shift_pitch
 
+<div class="api-signature" markdown="1">
+
 ```python
 def shift_pitch(
     samples: Sequence[float],
@@ -253,6 +297,10 @@ def shift_pitch(
     semitones: float,
 ) -> list[float]
 ```
+
+{% endraw %}{% include api-source.html name="shift_pitch" line=541 %}{% raw %}
+
+</div>
 
 Change the pitch of samples by resampling them.
 
@@ -278,6 +326,8 @@ It also changes the length, which is fine for a few semitones.
 
 ## to_wav_bytes
 
+<div class="api-signature" markdown="1">
+
 ```python
 def to_wav_bytes(
     samples: Iterable[float],
@@ -285,6 +335,10 @@ def to_wav_bytes(
     rate: int = SAMPLE_RATE,
 ) -> bytes
 ```
+
+{% endraw %}{% include api-source.html name="to_wav_bytes" line=576 %}{% raw %}
+
+</div>
 
 Encode samples as a mono 16-bit WAV file in memory.
 
@@ -318,6 +372,8 @@ b'RIFF'
 
 ## write_file_atomically
 
+<div class="api-signature" markdown="1">
+
 ```python
 def write_file_atomically(
     path: Path,
@@ -325,6 +381,10 @@ def write_file_atomically(
     data: bytes,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="write_file_atomically" line=631 %}{% raw %}
+
+</div>
 
 Write a file so that nothing ever reads it half written, even
 another copy of Alto writing the same file.
@@ -353,9 +413,15 @@ the file in one step.
 
 ## Sounds
 
+<div class="api-signature" markdown="1">
+
 ```python
 Sounds()
 ```
+
+{% endraw %}{% include api-source.html name="Sounds" line=671 %}{% raw %}
+
+</div>
 
 A lazy cache of notes played through `QSoundEffect`, in the chosen
 instrument.
@@ -389,9 +455,15 @@ Create a player with the piano chosen and sound on.
 
 ### Sounds.recordings
 
+<div class="api-signature" markdown="1">
+
 ```python
 def recordings(inst: Instrument) -> dict[int, Path]
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.recordings" line=758 %}{% raw %}
+
+</div>
 
 Return the notes an instrument has a recording for on disk.
 
@@ -414,9 +486,15 @@ True
 
 ### Sounds.unrecorded
 
+<div class="api-signature" markdown="1">
+
 ```python
 def unrecorded(instrument: str | None = None) -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.unrecorded" line=860 %}{% raw %}
+
+</div>
 
 List the notes within an instrument's recorded range that have
 no recording of their own, nearest middle C first.
@@ -445,6 +523,8 @@ recording. `alto.ui.warmup` makes them ahead of time with
 
 ### Sounds.prepare
 
+<div class="api-signature" markdown="1">
+
 ```python
 def prepare(
     midi: int,
@@ -452,6 +532,10 @@ def prepare(
     instrument: str | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.prepare" line=902 %}{% raw %}
+
+</div>
 
 Make the file a note plays, if it has no recording and was not
 made before, so that its first play is quick.
@@ -469,6 +553,8 @@ made before, so that its first play is quick.
 
 ### Sounds.note_duration_ms
 
+<div class="api-signature" markdown="1">
+
 ```python
 def note_duration_ms(
     midi: int,
@@ -476,6 +562,10 @@ def note_duration_ms(
     instrument: str | None = None,
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.note_duration_ms" line=988 %}{% raw %}
+
+</div>
 
 Read the playback length of a note for synchronized instrument
 animations.
@@ -498,6 +588,8 @@ muted.
 
 ### Sounds.play_midi
 
+<div class="api-signature" markdown="1">
+
 ```python
 def play_midi(
     midi: int,
@@ -508,6 +600,10 @@ def play_midi(
     release_previous: bool = True,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.play_midi" line=1117 %}{% raw %}
+
+</div>
 
 Play a note in the chosen instrument (or another one).
 
@@ -538,9 +634,15 @@ so audio can never break an exercise.
 
 ### Sounds.stop_all
 
+<div class="api-signature" markdown="1">
+
 ```python
 def stop_all() -> None
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.stop_all" line=1183 %}{% raw %}
+
+</div>
 
 Silence every note at once, and cancel any fade-outs underway.
 
@@ -552,6 +654,8 @@ Silence every note at once, and cancel any fade-outs underway.
 
 ### Sounds.preview
 
+<div class="api-signature" markdown="1">
+
 ```python
 def preview(
     key: str,
@@ -560,6 +664,10 @@ def preview(
     step_ms: int = 300,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.preview" line=1320 %}{% raw %}
+
+</div>
 
 Play notes one after another in an instrument, even while muted,
 to hear what it sounds like.
@@ -584,6 +692,8 @@ Starting a preview silences the one before it.
 
 ### Sounds.play_notes
 
+<div class="api-signature" markdown="1">
+
 ```python
 def play_notes(
     columns: Iterable[Sequence[Note]],
@@ -595,6 +705,10 @@ def play_notes(
     on_step: Callable[[int | None], object] | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.play_notes" line=1658 %}{% raw %}
+
+</div>
 
 Play staff columns left to right, evenly spaced.
 
@@ -628,9 +742,15 @@ more there are.
 
 ### Sounds.stop_sample
 
+<div class="api-signature" markdown="1">
+
 ```python
 def stop_sample(on_step: Callable[[int | None], object]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.stop_sample" line=1740 %}{% raw %}
+
+</div>
 
 Stop a displayed sample if it still owns playback.
 
@@ -646,6 +766,8 @@ Stop a displayed sample if it still owns playback.
 
 ### Sounds.play_sample
 
+<div class="api-signature" markdown="1">
+
 ```python
 def play_sample(
     columns: Sequence[Sequence[Note]],
@@ -657,6 +779,10 @@ def play_sample(
     warmup: bool = False,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.play_sample" line=1756 %}{% raw %}
+
+</div>
 
 Play a displayed sample and report the sounding column until it
 ends or is interrupted.
@@ -687,9 +813,15 @@ None
 
 ### Sounds.play_correct
 
+<div class="api-signature" markdown="1">
+
 ```python
 def play_correct(streak: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Sounds.play_correct" line=1832 %}{% raw %}
+
+</div>
 
 Play a note that climbs the C major scale (C5 to C6) as the
 streak grows, then wraps.

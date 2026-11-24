@@ -10,9 +10,15 @@ endpoints.
 
 ## ruler_reach
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ruler_reach(model: PackInstrument) -> int
 ```
+
+{% endraw %}{% include api-source.html name="ruler_reach" line=55 %}{% raw %}
+
+</div>
 
 Find how many half steps the ruler covers: an octave, or further if
 the pack names a position beyond it.
@@ -53,6 +59,8 @@ the pack names a position beyond it.
 
 ## ruler_base
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ruler_base(
     model: PackInstrument,
@@ -60,6 +68,10 @@ def ruler_base(
     step: int,
 ) -> tuple[QPointF, QPointF, float]
 ```
+
+{% endraw %}{% include api-source.html name="ruler_base" line=97 %}{% raw %}
+
+</div>
 
 Locate where a ruler tick for one half step starts, beside the
 fingerboard rather than on it.
@@ -98,6 +110,8 @@ fingerboard rather than on it.
 
 ## neck_view
 
+<div class="api-signature" markdown="1">
+
 ```python
 def neck_view(
     model: PackInstrument,
@@ -105,6 +119,10 @@ def neck_view(
     gap: float,
 ) -> QRectF
 ```
+
+{% endraw %}{% include api-source.html name="neck_view" line=152 %}{% raw %}
+
+</div>
 
 Choose the part of the picture a note question needs: the nut, the
 neck with its ruler, and the bridge.
@@ -149,9 +167,15 @@ True
 
 ## manual_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def manual_style(model: PackInstrument) -> tuple[KeyboardStyle | None, float]
 ```
+
+{% endraw %}{% include api-source.html name="manual_style" line=219 %}{% raw %}
+
+</div>
 
 Build the look of an instrument's drawn keyboards from its plugin's
 ``keyboard_style``.
@@ -202,9 +226,15 @@ Build the look of an instrument's drawn keyboards from its plugin's
 
 ## FingerboardWidget
 
+<div class="api-signature" markdown="1">
+
 ```python
 FingerboardWidget()
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget" line=285 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -217,9 +247,15 @@ Create an empty fingerboard display.
 
 ### FingerboardWidget.sizeHint
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sizeHint() -> QSize
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.sizeHint" line=331 %}{% raw %}
+
+</div>
 
 Reserve space for the whole instrument.
 
@@ -229,18 +265,30 @@ Reserve space for the whole instrument.
 
 ### FingerboardWidget.show_position
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_position(position: FingerboardPosition | PicturePosition | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.show_position" line=360 %}{% raw %}
+
+</div>
 
 Resolve the saved pack identity and clear the previous playback
 highlight.
 
 ### FingerboardWidget.resizeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def resizeEvent(event: QResizeEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.resizeEvent" line=494 %}{% raw %}
+
+</div>
 
 Fit the drawn keyboards to the new height.
 
@@ -250,9 +298,15 @@ Fit the drawn keyboards to the new height.
 
 ### FingerboardWidget.set_pickable
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_pickable(pickable: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.set_pickable" line=519 %}{% raw %}
+
+</div>
 
 Let a click on the picture be an answer, and say so with the
 pointer.
@@ -272,9 +326,15 @@ True
 
 ### FingerboardWidget.show_target
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_target(point: tuple[float, float] | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.show_target" line=543 %}{% raw %}
+
+</div>
 
 Mark the right place on a picture that has no marker, or clear
 the mark.
@@ -293,9 +353,15 @@ the mark.
 
 ### FingerboardWidget.mousePressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mousePressEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.mousePressEvent" line=562 %}{% raw %}
+
+</div>
 
 Turn a click into a point on the picture when the picture is
 being used for an answer.
@@ -306,17 +372,29 @@ being used for an answer.
 
 ### FingerboardWidget.set_sounding
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_sounding(sounding: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.set_sounding" line=583 %}{% raw %}
+
+</div>
 
 Mark the pitch during answer playback.
 
 ### FingerboardWidget.feedback_gap_ms
 
+<div class="api-signature" markdown="1">
+
 ```python
 def feedback_gap_ms() -> int
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.feedback_gap_ms" line=596 %}{% raw %}
+
+</div>
 
 Use the sounding note's full length for an animated single-note
 question.
@@ -327,26 +405,44 @@ question.
 
 ### FingerboardWidget.animate_silent_answer
 
+<div class="api-signature" markdown="1">
+
 ```python
 def animate_silent_answer(duration_ms: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.animate_silent_answer" line=613 %}{% raw %}
+
+</div>
 
 Show an image-anchored overlay during the usual silent picture
 feedback interval.
 
 ### FingerboardWidget.hideEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hideEvent(event: QHideEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.hideEvent" line=637 %}{% raw %}
+
+</div>
 
 End any silent or sounding overlay when leaving the diagram.
 
 ### FingerboardWidget.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(event: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardWidget.paintEvent" line=644 %}{% raw %}
+
+</div>
 
 Draw the whole picture for a marked location, or only the neck
 and ruler for a note on a string.

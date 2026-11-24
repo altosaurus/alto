@@ -23,6 +23,8 @@ shown, not stored here. Pure Python, no Qt.
 
 ## InstrumentInfo
 
+<div class="api-signature" markdown="1">
+
 ```python
 InstrumentInfo(
     summary: str,
@@ -36,6 +38,10 @@ InstrumentInfo(
     note: str = '',
 )
 ```
+
+{% endraw %}{% include api-source.html name="InstrumentInfo" line=43 %}{% raw %}
+
+</div>
 
 The facts about where an instrument's recordings came from.
 
@@ -64,6 +70,8 @@ True
 
 ## Coverage
 
+<div class="api-signature" markdown="1">
+
 ```python
 Coverage(
     count: int,
@@ -73,6 +81,10 @@ Coverage(
     gaps: int = 0,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Coverage" line=192 %}{% raw %}
+
+</div>
 
 Which notes an instrument has recordings for.
 
@@ -92,10 +104,16 @@ Which notes an instrument has recordings for.
 
 ### Coverage.installed
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def installed() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Coverage.installed" line=221 %}{% raw %}
+
+</div>
 
 Report whether any recordings are on disk.
 
@@ -115,9 +133,15 @@ Report whether any recordings are on disk.
 
 ### Coverage.describe
 
+<div class="api-signature" markdown="1">
+
 ```python
 def describe() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Coverage.describe" line=240 %}{% raw %}
+
+</div>
 
 Describe the coverage in a sentence for the instrument settings.
 
@@ -143,9 +167,15 @@ are shifted from a neighbor.'
 
 ## coverage
 
+<div class="api-signature" markdown="1">
+
 ```python
 def coverage(midis: Iterable[int]) -> Coverage
 ```
+
+{% endraw %}{% include api-source.html name="coverage" line=292 %}{% raw %}
+
+</div>
 
 Summarize the notes that have a recording.
 

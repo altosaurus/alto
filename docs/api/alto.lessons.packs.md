@@ -24,9 +24,15 @@ nothing about any particular plugin or instrument.
 
 ## inline
 
+<div class="api-signature" markdown="1">
+
 ```python
 def inline(text: str) -> str
 ```
+
+{% endraw %}{% include api-source.html name="inline" line=87 %}{% raw %}
+
+</div>
 
 Escape plain text for a lesson page, turning ``**word**`` into bold
 type for a term being defined.
@@ -48,6 +54,8 @@ type for a term being defined.
 
 ## read_lessons
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_lessons(
     value: object,
@@ -59,6 +67,10 @@ def read_lessons(
     icons: Mapping[str, str] | None = None,
 ) -> tuple[Lesson, ...]
 ```
+
+{% endraw %}{% include api-source.html name="read_lessons" line=114 %}{% raw %}
+
+</div>
 
 Validate the optional ``lessons`` list of a plugin manifest and
 build its lessons.
@@ -95,6 +107,8 @@ build its lessons.
 
 ## read_picture
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_picture(
     spec: object,
@@ -104,6 +118,10 @@ def read_picture(
     instruments: Mapping[str, PackInstrument],
 ) -> PicturePosition | FingerboardPosition
 ```
+
+{% endraw %}{% include api-source.html name="read_picture" line=480 %}{% raw %}
+
+</div>
 
 Build a step's instrument picture: a note on a string, or a marked
 place on the picture.

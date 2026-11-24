@@ -21,6 +21,8 @@ and highlights.
 
 ## blend
 
+<div class="api-signature" markdown="1">
+
 ```python
 def blend(
     a: QColor,
@@ -29,6 +31,10 @@ def blend(
     t: float,
 ) -> QColor
 ```
+
+{% endraw %}{% include api-source.html name="blend" line=22 %}{% raw %}
+
+</div>
 
 Return the color a given fraction of the way from one color to
 another.
@@ -62,6 +68,8 @@ another.
 
 ## blend_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def blend_name(
     a: QColor,
@@ -70,6 +78,10 @@ def blend_name(
     t: float,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="blend_name" line=69 %}{% raw %}
+
+</div>
 
 Return the hex name of a blended color, for use in a stylesheet.
 

@@ -23,9 +23,15 @@ Construction']
 
 ## NoteNames
 
+<div class="api-signature" markdown="1">
+
 ```python
 NoteNames(accidentals: bool = False)
 ```
+
+{% endraw %}{% include api-source.html name="NoteNames" line=244 %}{% raw %}
+
+</div>
 
 Bases: `ChoiceExercise`
 
@@ -56,9 +62,15 @@ True
 
 ### NoteNames.card_prompt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_prompt(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="NoteNames.card_prompt" line=260 %}{% raw %}
+
+</div>
 
 Say what to name on a flashcard, and in which form: letters,
 solfège or a scale degree, with the octave if it counts.
@@ -82,9 +94,15 @@ solfège or a scale degree, with the octave if it counts.
 
 ### NoteNames.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="NoteNames.practice_signature" line=284 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -103,9 +121,15 @@ True
 
 ### NoteNames.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="NoteNames.instructions" line=307 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -125,9 +149,15 @@ True
 
 ### NoteNames.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="NoteNames.make_question" line=362 %}{% raw %}
+
+</div>
 
 Make a note to name, on one of the chosen clefs, in a chosen
 key.
@@ -159,9 +189,15 @@ True
 
 ### NoteNames.card_count
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_count() -> int
 ```
+
+{% endraw %}{% include api-source.html name="NoteNames.card_count" line=410 %}{% raw %}
+
+</div>
 
 Count written pitches across the selected ranges, clefs and
 signatures.
@@ -179,9 +215,15 @@ True
 
 ### NoteNames.daily_candidates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
+
+{% endraw %}{% include api-source.html name="NoteNames.daily_candidates" line=439 %}{% raw %}
+
+</div>
 
 Visit each selectable written note once, in shuffled order.
 
@@ -209,6 +251,8 @@ True
 
 ### NoteNames.review_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def review_question(
     question: Question,
@@ -216,6 +260,10 @@ def review_question(
     same_settings: bool,
 ) -> Question | None
 ```
+
+{% endraw %}{% include api-source.html name="NoteNames.review_question" line=493 %}{% raw %}
+
+</div>
 
 Rebuild a previously seen note when its pitch and answer are
 eligible.
@@ -242,9 +290,15 @@ True
 
 ## IntervalNames
 
+<div class="api-signature" markdown="1">
+
 ```python
 class IntervalNames(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="IntervalNames" line=764 %}{% raw %}
+
+</div>
 
 Name the interval between two written notes.
 
@@ -263,9 +317,15 @@ Name the interval between two written notes.
 
 ### IntervalNames.card_prompt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_prompt(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="IntervalNames.card_prompt" line=786 %}{% raw %}
+
+</div>
 
 Say whether to name the interval's number, its quality, both, or
 its inversion.
@@ -293,9 +353,15 @@ its inversion.
 
 ### IntervalNames.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="IntervalNames.instructions" line=824 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -315,9 +381,15 @@ True
 
 ### IntervalNames.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="IntervalNames.settings_signature" line=865 %}{% raw %}
+
+</div>
 
 Identify the settings used to generate and grade the interval.
 
@@ -334,9 +406,15 @@ True
 
 ### IntervalNames.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh(question: Question) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="IntervalNames.refresh" line=921 %}{% raw %}
+
+</div>
 
 Arrange written interval answers by quality, with interval
 numbers in columns.
@@ -363,9 +441,15 @@ numbers in columns.
 
 ### IntervalNames.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="IntervalNames.generate" line=965 %}{% raw %}
+
+</div>
 
 Make two notes whose interval is to be named.
 
@@ -391,9 +475,15 @@ True
 
 ## IntervalConstruction
 
+<div class="api-signature" markdown="1">
+
 ```python
 class IntervalConstruction(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="IntervalConstruction" line=1269 %}{% raw %}
+
+</div>
 
 Place a second written note at the requested interval from a given
 note.
@@ -412,9 +502,15 @@ True
 
 ### IntervalConstruction.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="IntervalConstruction.instructions" line=1293 %}{% raw %}
+
+</div>
 
 Explain staff placement and spelling for interval construction.
 
@@ -431,9 +527,15 @@ harmonic placement.
 
 ### IntervalConstruction.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="IntervalConstruction.settings_signature" line=1318 %}{% raw %}
+
+</div>
 
 Identify the construction settings used to generate a stored
 card.
@@ -451,9 +553,15 @@ eligible.
 
 ### IntervalConstruction.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="IntervalConstruction.generate" line=1337 %}{% raw %}
+
+</div>
 
 Generate a staff, an interval prompt, and its eligible
 placements.
@@ -474,9 +582,15 @@ A harmonic question asks for a note above its starting note.
 
 ## KeyboardIntervals
 
+<div class="api-signature" markdown="1">
+
 ```python
 class KeyboardIntervals(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervals" line=1364 %}{% raw %}
+
+</div>
 
 Identify the ascending interval between two highlighted piano keys.
 
@@ -500,9 +614,15 @@ Identify the ascending interval between two highlighted piano keys.
 
 ### KeyboardIntervals.card_prompt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_prompt(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervals.card_prompt" line=1393 %}{% raw %}
+
+</div>
 
 Say what to name on a flashcard.
 
@@ -525,9 +645,15 @@ Say what to name on a flashcard.
 
 ### KeyboardIntervals.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervals.settings_signature" line=1417 %}{% raw %}
+
+</div>
 
 Identify the keyboard range and selected intervals for
 stored-question reviews.
@@ -547,9 +673,15 @@ True
 
 ### KeyboardIntervals.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervals.instructions" line=1436 %}{% raw %}
+
+</div>
 
 Explain how to identify an interval from two highlighted keys.
 
@@ -566,9 +698,15 @@ True
 
 ### KeyboardIntervals.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervals.generate" line=1470 %}{% raw %}
+
+</div>
 
 Highlight two distinct keys at a selected interval within the
 chosen range.
@@ -595,9 +733,15 @@ True
 
 ## KeySignatures
 
+<div class="api-signature" markdown="1">
+
 ```python
 class KeySignatures(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatures" line=1619 %}{% raw %}
+
+</div>
 
 Read a key signature drawn on a staff and name the key it belongs
 to.
@@ -614,9 +758,15 @@ True
 
 ### KeySignatures.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatures.practice_signature" line=1639 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -635,9 +785,15 @@ True
 
 ### KeySignatures.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatures.instructions" line=1658 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -657,9 +813,15 @@ True
 
 ### KeySignatures.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh(question: Question) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatures.refresh" line=1691 %}{% raw %}
+
+</div>
 
 Give a stored signature question the caption on its staff that
 older versions did not write.
@@ -688,9 +850,15 @@ older versions did not write.
 
 ### KeySignatures.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatures.make_question" line=1753 %}{% raw %}
+
+</div>
 
 Make a key signature to read.
 
@@ -714,9 +882,15 @@ True
 
 ## KeySignatureConstruction
 
+<div class="api-signature" markdown="1">
+
 ```python
 class KeySignatureConstruction(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatureConstruction" line=1887 %}{% raw %}
+
+</div>
 
 Build the key signature of a named key on a blank staff, with the
 fork.
@@ -733,9 +907,15 @@ fork.
 
 ### KeySignatureConstruction.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatureConstruction.settings_signature" line=1907 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -754,9 +934,15 @@ True
 
 ### KeySignatureConstruction.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatureConstruction.instructions" line=1925 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -776,9 +962,15 @@ True
 
 ### KeySignatureConstruction.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatureConstruction.generate" line=1960 %}{% raw %}
+
+</div>
 
 Name a key whose signature is to be built.
 
@@ -812,9 +1004,15 @@ True
 
 ## OrderOfKeys
 
+<div class="api-signature" markdown="1">
+
 ```python
 class OrderOfKeys(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="OrderOfKeys" line=2018 %}{% raw %}
+
+</div>
 
 Write the accidentals of a named key signature in order.
 
@@ -829,9 +1027,15 @@ True
 
 ### OrderOfKeys.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="OrderOfKeys.settings_signature" line=2036 %}{% raw %}
+
+</div>
 
 Identify the selections used to generate a practice question.
 
@@ -848,9 +1052,15 @@ Identify the selections used to generate a practice question.
 
 ### OrderOfKeys.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="OrderOfKeys.instructions" line=2065 %}{% raw %}
+
+</div>
 
 Explain how to enter and submit a signature.
 
@@ -867,9 +1077,15 @@ True
 
 ### OrderOfKeys.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="OrderOfKeys.generate" line=2091 %}{% raw %}
+
+</div>
 
 Choose a key from the selected scales and signatures and spell
 it in a selected clef.
@@ -892,9 +1108,15 @@ True
 
 ## ScaleIdentification
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ScaleIdentification(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="ScaleIdentification" line=2268 %}{% raw %}
+
+</div>
 
 Identify the tonic and type of a scale drawn on a staff.
 
@@ -910,9 +1132,15 @@ Identify the tonic and type of a scale drawn on a staff.
 
 ### ScaleIdentification.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ScaleIdentification.settings_signature" line=2286 %}{% raw %}
+
+</div>
 
 Identify the clefs, scale types and staff and scale signatures
 in force.
@@ -932,9 +1160,15 @@ True
 
 ### ScaleIdentification.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ScaleIdentification.instructions" line=2319 %}{% raw %}
+
+</div>
 
 Explain how to identify the scale, including a staff with a
 different signature.
@@ -955,9 +1189,15 @@ True
 
 ### ScaleIdentification.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="ScaleIdentification.generate" line=2354 %}{% raw %}
+
+</div>
 
 Draw a one-octave scale and offer scale names without revealing
 the answer on the staff.
@@ -984,9 +1224,15 @@ True
 
 ## ScaleConstruction
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ScaleConstruction(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="ScaleConstruction" line=2448 %}{% raw %}
+
+</div>
 
 Place the notes of a named scale on a blank staff, one after
 another.
@@ -1007,9 +1253,15 @@ another.
 
 ### ScaleConstruction.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ScaleConstruction.settings_signature" line=2471 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -1028,9 +1280,15 @@ True
 
 ### ScaleConstruction.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ScaleConstruction.instructions" line=2497 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -1047,9 +1305,15 @@ True
 
 ### ScaleConstruction.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="ScaleConstruction.generate" line=2588 %}{% raw %}
+
+</div>
 
 Name a scale to be placed on the staff.
 
@@ -1078,9 +1342,15 @@ True
 
 ## CircleOfFifths
 
+<div class="api-signature" markdown="1">
+
 ```python
 class CircleOfFifths(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="CircleOfFifths" line=2756 %}{% raw %}
+
+</div>
 
 Questions on the circle of fifths: a relative major, a relative
 minor, or the Roman numeral of a chord.
@@ -1097,9 +1367,15 @@ True
 
 ### CircleOfFifths.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="CircleOfFifths.practice_signature" line=2778 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -1118,9 +1394,15 @@ True
 
 ### CircleOfFifths.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="CircleOfFifths.instructions" line=2796 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -1137,9 +1419,15 @@ True
 
 ### CircleOfFifths.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="CircleOfFifths.make_question" line=2861 %}{% raw %}
+
+</div>
 
 Pick a kind of question that is switched on, and ask it.
 
@@ -1167,9 +1455,15 @@ Pick a kind of question that is switched on, and ask it.
 
 ## ChordQualities
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ChordQualities(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="ChordQualities" line=3056 %}{% raw %}
+
+</div>
 
 Identify the quality of a triad or seventh chord in root position.
 
@@ -1188,9 +1482,15 @@ True
 
 ### ChordQualities.card_prompt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_prompt(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="ChordQualities.card_prompt" line=3078 %}{% raw %}
+
+</div>
 
 Say what to name on a flashcard.
 
@@ -1213,9 +1513,15 @@ Say what to name on a flashcard.
 
 ### ChordQualities.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ChordQualities.instructions" line=3102 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -1232,9 +1538,15 @@ True
 
 ### ChordQualities.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="ChordQualities.make_question" line=3124 %}{% raw %}
+
+</div>
 
 Make a chord in root position whose quality is to be named.
 
@@ -1258,9 +1570,15 @@ True
 
 ## ArpeggioNames
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ArpeggioNames(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioNames" line=3185 %}{% raw %}
+
+</div>
 
 Name the type and the inversion of a broken chord.
 
@@ -1276,9 +1594,15 @@ True
 
 ### ArpeggioNames.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioNames.practice_signature" line=3203 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -1297,9 +1621,15 @@ True
 
 ### ArpeggioNames.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioNames.instructions" line=3222 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -1316,9 +1646,15 @@ True
 
 ### ArpeggioNames.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioNames.make_question" line=3252 %}{% raw %}
+
+</div>
 
 Make an arpeggio on one of the chosen clefs, in a chosen
 position.
@@ -1347,9 +1683,15 @@ True
 
 ## KeyboardNotes
 
+<div class="api-signature" markdown="1">
+
 ```python
 class KeyboardNotes(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardNotes" line=3574 %}{% raw %}
+
+</div>
 
 Name the highlighted key on a piano keyboard.
 
@@ -1365,9 +1707,15 @@ True
 
 ### KeyboardNotes.card_prompt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_prompt(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardNotes.card_prompt" line=3592 %}{% raw %}
+
+</div>
 
 Say what to name on a flashcard. Letter names give the octave if
 it counts, and follow the key signature if one is shown.
@@ -1396,9 +1744,15 @@ it counts, and follow the key signature if one is shown.
 
 ### KeyboardNotes.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardNotes.practice_signature" line=3631 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -1417,9 +1771,15 @@ True
 
 ### KeyboardNotes.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardNotes.instructions" line=3650 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -1436,9 +1796,15 @@ True
 
 ### KeyboardNotes.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardNotes.make_question" line=3712 %}{% raw %}
+
+</div>
 
 Make a keyboard with one key highlighted.
 
@@ -1465,9 +1831,15 @@ True
 
 ## NoteConstruction
 
+<div class="api-signature" markdown="1">
+
 ```python
 class NoteConstruction(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstruction" line=3883 %}{% raw %}
+
+</div>
 
 Place a named note on the staff.
 
@@ -1485,9 +1857,15 @@ True
 
 ### NoteConstruction.card_prompt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_prompt(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstruction.card_prompt" line=3903 %}{% raw %}
+
+</div>
 
 Say which note to place, whichever way the on-screen prompt
 words it.
@@ -1519,9 +1897,15 @@ words it.
 
 ### NoteConstruction.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstruction.settings_signature" line=3942 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -1540,9 +1924,15 @@ True
 
 ### NoteConstruction.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstruction.instructions" line=3991 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise.
 
@@ -1559,9 +1949,15 @@ True
 
 ### NoteConstruction.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstruction.generate" line=4061 %}{% raw %}
+
+</div>
 
 Make a note name to be placed on the staff.
 
@@ -1585,9 +1981,15 @@ True
 
 ### NoteConstruction.card_count
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_count() -> int
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstruction.card_count" line=4246 %}{% raw %}
+
+</div>
 
 Count distinct construction cards without rendering them.
 
@@ -1604,9 +2006,15 @@ True
 
 ### NoteConstruction.daily_candidates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstruction.daily_candidates" line=4265 %}{% raw %}
+
+</div>
 
 Visit all eligible placements in a randomized order.
 
@@ -1631,6 +2039,8 @@ True
 
 ### NoteConstruction.review_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def review_question(
     question: Question,
@@ -1638,6 +2048,10 @@ def review_question(
     same_settings: bool,
 ) -> Question | None
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstruction.review_question" line=4328 %}{% raw %}
+
+</div>
 
 Determine whether an introduced placement belongs to the current
 construction catalog.
@@ -1664,9 +2078,15 @@ True
 
 ## ClefBasics
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ClefBasics(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasics" line=4565 %}{% raw %}
+
+</div>
 
 Put a named clef on a blank staff: choose the G, C or F symbol and
 put it on the line that makes the clef asked for.
@@ -1684,9 +2104,15 @@ True
 
 ### ClefBasics.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasics.settings_signature" line=4586 %}{% raw %}
+
+</div>
 
 Use button preferences for reviews only when the learner answers
 with buttons.
@@ -1703,9 +2129,15 @@ Changing Button count leaves staff-placement reviews available.
 
 ### ClefBasics.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasics.practice_signature" line=4606 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape these questions.
 
@@ -1724,9 +2156,15 @@ True
 
 ### ClefBasics.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasics.instructions" line=4624 %}{% raw %}
+
+</div>
 
 Return the help text for the exercise, for the kind of question
 that is being asked.
@@ -1744,9 +2182,15 @@ True
 
 ### ClefBasics.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasics.make_question" line=4674 %}{% raw %}
+
+</div>
 
 Name a clef to place, or draw a clef to name.
 
@@ -1783,9 +2227,15 @@ True
 
 ## NotationIdentification
 
+<div class="api-signature" markdown="1">
+
 ```python
 class NotationIdentification(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification" line=4746 %}{% raw %}
+
+</div>
 
 Identify the highlighted part of a written phrase.
 
@@ -1803,9 +2253,15 @@ True
 
 ### NotationIdentification.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification.settings_signature" line=4771 %}{% raw %}
+
+</div>
 
 Use button preferences for reviews only when the learner answers
 with buttons.
@@ -1822,9 +2278,15 @@ Changing Button count leaves staff-placement reviews available.
 
 ### NotationIdentification.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification.practice_signature" line=4791 %}{% raw %}
+
+</div>
 
 Identify the terms eligible for review.
 
@@ -1841,9 +2303,15 @@ Identify the terms eligible for review.
 
 ### NotationIdentification.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification.instructions" line=4814 %}{% raw %}
+
+</div>
 
 Explain how to answer the notation question.
 
@@ -1860,9 +2328,15 @@ True
 
 ### NotationIdentification.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh(question: Question) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification.refresh" line=4909 %}{% raw %}
+
+</div>
 
 Replace unchecked distractors in older practice questions before
 replay.
@@ -1886,9 +2360,15 @@ True
 
 ### NotationIdentification.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification.make_question" line=4938 %}{% raw %}
+
+</div>
 
 Choose a phrase and a single visible feature to highlight.
 
@@ -1912,9 +2392,15 @@ True
 
 ### NotationIdentification.card_groups
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_groups() -> dict[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification.card_groups" line=5221 %}{% raw %}
+
+</div>
 
 Group the active question type’s playable examples by the symbol
 being practiced.
@@ -1932,9 +2418,15 @@ True
 
 ### NotationIdentification.daily_candidates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification.daily_candidates" line=5243 %}{% raw %}
+
+</div>
 
 Choose one example for each selected notation term.
 
@@ -1959,6 +2451,8 @@ True
 
 ### NotationIdentification.review_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def review_question(
     question: Question,
@@ -1966,6 +2460,10 @@ def review_question(
     same_settings: bool,
 ) -> Question | None
 ```
+
+{% endraw %}{% include api-source.html name="NotationIdentification.review_question" line=5314 %}{% raw %}
+
+</div>
 
 Recover an eligible saved example under the current term and
 button selections.
@@ -1992,9 +2490,15 @@ True
 
 ## RythmicEquations
 
+<div class="api-signature" markdown="1">
+
 ```python
 class RythmicEquations(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="RythmicEquations" line=5362 %}{% raw %}
+
+</div>
 
 Complete arithmetic equations with written note values.
 
@@ -2010,9 +2514,15 @@ True
 
 ### RythmicEquations.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="RythmicEquations.instructions" line=5382 %}{% raw %}
+
+</div>
 
 Explain how to complete the equation with a button or its
 shortcut.
@@ -2030,9 +2540,15 @@ True
 
 ### RythmicEquations.card_prompt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_prompt(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="RythmicEquations.card_prompt" line=5402 %}{% raw %}
+
+</div>
 
 Ask for the missing note or rest on an exported card.
 
@@ -2055,9 +2571,15 @@ Ask for the missing note or rest on an exported card.
 
 ### RythmicEquations.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="RythmicEquations.practice_signature" line=5425 %}{% raw %}
+
+</div>
 
 Keep review questions tied to the options that generated them.
 
@@ -2074,9 +2596,15 @@ Keep review questions tied to the options that generated them.
 
 ### RythmicEquations.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="RythmicEquations.make_question" line=5464 %}{% raw %}
+
+</div>
 
 Write a rhythm equation and hide one of its note values.
 

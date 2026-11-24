@@ -27,6 +27,8 @@ light and dark themes.
 
 ## symbol_icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 def symbol_icon(
     symbol: str,
@@ -35,6 +37,10 @@ def symbol_icon(
     height: int = 56,
 ) -> QIcon
 ```
+
+{% endraw %}{% include api-source.html name="symbol_icon" line=103 %}{% raw %}
+
+</div>
 
 Draw a clef symbol on its own, without a staff, as an icon.
 
@@ -62,6 +68,8 @@ False
 
 ## ClefPictures
 
+<div class="api-signature" markdown="1">
+
 ```python
 ClefPictures(
     clefs: list[str] | None = None,
@@ -70,6 +78,10 @@ ClefPictures(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ClefPictures" line=560 %}{% raw %}
+
+</div>
 
 Bases: `_Picture`
 
@@ -111,9 +123,15 @@ Create the picture.
 
 ### ClefPictures.set_clefs
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_clefs(clefs: list[str]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefPictures.set_clefs" line=616 %}{% raw %}
+
+</div>
 
 Show different clefs and size the picture for them.
 
@@ -136,6 +154,8 @@ Show different clefs and size the picture for them.
 
 ### ClefPictures.icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def icon(
@@ -144,6 +164,10 @@ def icon(
     scale: float = 1.8,
 ) -> QIcon
 ```
+
+{% endraw %}{% include api-source.html name="ClefPictures.icon" line=643 %}{% raw %}
+
+</div>
 
 Return one clef as an icon.
 
@@ -165,9 +189,15 @@ False
 
 ### ClefPictures.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefPictures.paintEvent" line=671 %}{% raw %}
+
+</div>
 
 Draw each clef on its staff, or the grand staff with its brace.
 
@@ -186,6 +216,8 @@ False
 
 ## ValuePictures
 
+<div class="api-signature" markdown="1">
+
 ```python
 ValuePictures(
     values: list[str] | None = None,
@@ -195,6 +227,10 @@ ValuePictures(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ValuePictures" line=800 %}{% raw %}
+
+</div>
 
 Bases: `_Picture`
 
@@ -238,9 +274,15 @@ True
 
 ### ValuePictures.set_values
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_values(values: list[str]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ValuePictures.set_values" line=870 %}{% raw %}
+
+</div>
 
 Show different note values and size the picture for them.
 
@@ -259,6 +301,8 @@ Show different note values and size the picture for them.
 
 ### ValuePictures.icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def icon(
@@ -267,6 +311,10 @@ def icon(
     scale: float = 1.7,
 ) -> QIcon
 ```
+
+{% endraw %}{% include api-source.html name="ValuePictures.icon" line=898 %}{% raw %}
+
+</div>
 
 Return one note value as an icon.
 
@@ -288,9 +336,15 @@ False
 
 ### ValuePictures.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ValuePictures.paintEvent" line=926 %}{% raw %}
+
+</div>
 
 Draw each note value.
 
@@ -309,9 +363,15 @@ False
 
 ## rhythm_picture
 
+<div class="api-signature" markdown="1">
+
 ```python
 def rhythm_picture(term: str) -> ValuePictures | None
 ```
+
+{% endraw %}{% include api-source.html name="rhythm_picture" line=1027 %}{% raw %}
+
+</div>
 
 Render a single note, rest, tied pair, or beamed pair from an
 equation term.
@@ -333,6 +393,8 @@ equation term.
 
 ## KeySignaturePicture
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeySignaturePicture(
     key: int = 0,
@@ -341,6 +403,10 @@ KeySignaturePicture(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeySignaturePicture" line=1059 %}{% raw %}
+
+</div>
 
 Bases: `_Picture`
 
@@ -384,6 +450,8 @@ Create the picture.
 
 ### KeySignaturePicture.icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def icon(
@@ -392,6 +460,10 @@ def icon(
     scale: float = 1.2,
 ) -> QIcon
 ```
+
+{% endraw %}{% include api-source.html name="KeySignaturePicture.icon" line=1140 %}{% raw %}
+
+</div>
 
 Return a key signature as an icon.
 
@@ -413,9 +485,15 @@ False
 
 ### KeySignaturePicture.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeySignaturePicture.paintEvent" line=1234 %}{% raw %}
+
+</div>
 
 Draw the row of sharps or flats, or a natural sign for C major.
 
@@ -432,6 +510,8 @@ False
 
 ## RangePictures
 
+<div class="api-signature" markdown="1">
+
 ```python
 RangePictures(
     items: list[tuple[str, int, int]] | None = None,
@@ -441,6 +521,10 @@ RangePictures(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="RangePictures" line=1272 %}{% raw %}
+
+</div>
 
 Bases: `_Picture`
 
@@ -486,9 +570,15 @@ Create the picture.
 
 ### RangePictures.set_items
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_items(items: list[tuple[str, int, int]]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="RangePictures.set_items" line=1337 %}{% raw %}
+
+</div>
 
 Show the ranges of some clefs and size the picture for them.
 
@@ -509,9 +599,15 @@ Show the ranges of some clefs and size the picture for them.
 
 ### RangePictures.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="RangePictures.paintEvent" line=1457 %}{% raw %}
+
+</div>
 
 Draw a staff for each clef with its lowest and highest note.
 
@@ -530,6 +626,8 @@ False
 
 ## NamePicture
 
+<div class="api-signature" markdown="1">
+
 ```python
 NamePicture(
     naming: str = 'letters',
@@ -538,6 +636,10 @@ NamePicture(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="NamePicture" line=1569 %}{% raw %}
+
+</div>
 
 Bases: `_Picture`
 
@@ -576,9 +678,15 @@ Create the picture.
 
 ### NamePicture.set_naming
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_naming(naming: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="NamePicture.set_naming" line=1621 %}{% raw %}
+
+</div>
 
 Choose which labels are drawn.
 
@@ -597,6 +705,8 @@ Choose which labels are drawn.
 
 ### NamePicture.icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def icon(
@@ -605,6 +715,10 @@ def icon(
     scale: float = 1.6,
 ) -> QIcon
 ```
+
+{% endraw %}{% include api-source.html name="NamePicture.icon" line=1647 %}{% raw %}
+
+</div>
 
 Return the picture as an icon.
 
@@ -626,9 +740,15 @@ False
 
 ### NamePicture.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="NamePicture.paintEvent" line=1675 %}{% raw %}
+
+</div>
 
 Draw the staff, the clef, the three notes and their labels.
 

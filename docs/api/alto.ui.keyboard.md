@@ -24,6 +24,8 @@ materials come from `keyboard_styles`.
 
 ## KeyboardWidget
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardWidget(
     parent: QWidget | None = None,
@@ -31,6 +33,10 @@ KeyboardWidget(
     label_middle_c: bool = False,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget" line=137 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -79,10 +85,16 @@ True
 
 ### KeyboardWidget.style
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def style() -> KeyboardStyle
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget.style" line=231 %}{% raw %}
+
+</div>
 
 Return the style the keyboard is drawn in.
 
@@ -103,9 +115,15 @@ Return the style the keyboard is drawn in.
 
 ### KeyboardWidget.refit
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refit() -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget.refit" line=252 %}{% raw %}
+
+</div>
 
 Size and redraw the keyboard after the style changes.
 
@@ -122,9 +140,15 @@ True
 
 ### KeyboardWidget.full_width
 
+<div class="api-signature" markdown="1">
+
 ```python
 def full_width() -> int
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget.full_width" line=290 %}{% raw %}
+
+</div>
 
 Measure the keyboard case when its keys reach their maximum
 width.
@@ -142,9 +166,15 @@ width.
 
 ### KeyboardWidget.resizeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def resizeEvent(event: QResizeEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget.resizeEvent" line=375 %}{% raw %}
+
+</div>
 
 Change the height to match the new width, since keys are drawn
 to real proportions.
@@ -165,6 +195,8 @@ to real proportions.
 
 ### KeyboardWidget.show_key
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_key(
     midi: int | None,
@@ -172,6 +204,10 @@ def show_key(
     span: tuple[int, int] | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget.show_key" line=396 %}{% raw %}
+
+</div>
 
 Highlight a key, and optionally choose the range of keys to
 show.
@@ -198,6 +234,8 @@ show.
 
 ### KeyboardWidget.show_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_keys(
     midis: list[int],
@@ -205,6 +243,10 @@ def show_keys(
     span: tuple[int, int] | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget.show_keys" line=441 %}{% raw %}
+
+</div>
 
 Highlight several keys together, clearing highlights from the
 previous question.
@@ -231,9 +273,15 @@ set()
 
 ### KeyboardWidget.set_highlight_color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_highlight_color(color: QColor) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget.set_highlight_color" line=477 %}{% raw %}
+
+</div>
 
 Choose the color of the highlighted key and redraw.
 
@@ -254,9 +302,15 @@ Choose the color of the highlighted key and redraw.
 
 ### KeyboardWidget.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardWidget.paintEvent" line=499 %}{% raw %}
+
+</div>
 
 Draw the case, the keys, the highlighted key and the style's
 extras.
@@ -276,6 +330,8 @@ False
 
 ## KeyboardSpan
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardSpan(
     parent: QWidget | None = None,
@@ -284,6 +340,10 @@ KeyboardSpan(
     size: tuple[int, int] = (124, 26),
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSpan" line=768 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -331,9 +391,15 @@ Create the miniature, shading the default range.
 
 ### KeyboardSpan.key_at
 
+<div class="api-signature" markdown="1">
+
 ```python
 def key_at(pos: QPointF) -> int
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSpan.key_at" line=850 %}{% raw %}
+
+</div>
 
 Return the key under a point.
 
@@ -361,9 +427,15 @@ Return the key under a point.
 
 ### KeyboardSpan.mousePressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mousePressEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSpan.mousePressEvent" line=987 %}{% raw %}
+
+</div>
 
 Start choosing a span: grab an edge, pick the span up, or start
 a new one.
@@ -399,9 +471,15 @@ a new one.
 
 ### KeyboardSpan.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSpan.mouseMoveEvent" line=1028 %}{% raw %}
+
+</div>
 
 Drag the span, or (with no button held) show the cursor for what
 a press here would do.
@@ -434,9 +512,15 @@ True
 
 ### KeyboardSpan.mouseReleaseEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseReleaseEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSpan.mouseReleaseEvent" line=1082 %}{% raw %}
+
+</div>
 
 Finish a drag and refresh the cursor for where the pointer now
 is.
@@ -468,6 +552,8 @@ True
 
 ### KeyboardSpan.set_span
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_span(
     lo: int,
@@ -475,6 +561,10 @@ def set_span(
     hi: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSpan.set_span" line=1116 %}{% raw %}
+
+</div>
 
 Choose which keys are shaded and redraw.
 
@@ -494,9 +584,15 @@ Choose which keys are shaded and redraw.
 
 ### KeyboardSpan.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSpan.paintEvent" line=1142 %}{% raw %}
+
+</div>
 
 Draw the whole piano in miniature with the asked keys shaded and
 the span's edges marked.

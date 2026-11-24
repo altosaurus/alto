@@ -30,6 +30,8 @@ True
 
 ## PluginTerm
 
+<div class="api-signature" markdown="1">
+
 ```python
 PluginTerm(
     name: str,
@@ -42,6 +44,10 @@ PluginTerm(
     lessons: tuple[str, ...] = (),
 )
 ```
+
+{% endraw %}{% include api-source.html name="PluginTerm" line=55 %}{% raw %}
+
+</div>
 
 One glossary entry from a plugin.
 
@@ -69,9 +75,15 @@ One glossary entry from a plugin.
 
 ## register_term
 
+<div class="api-signature" markdown="1">
+
 ```python
 def register_term(entry: PluginTerm) -> None
 ```
+
+{% endraw %}{% include api-source.html name="register_term" line=106 %}{% raw %}
+
+</div>
 
 Add a plugin's glossary entry.
 
@@ -108,6 +120,8 @@ ValueError: The term bridge is already supplied by Demo.
 
 ## read_terms
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_terms(
     value: object,
@@ -119,6 +133,10 @@ def read_terms(
     lessons: Mapping[str, str],
 ) -> tuple[PluginTerm, ...]
 ```
+
+{% endraw %}{% include api-source.html name="read_terms" line=152 %}{% raw %}
+
+</div>
 
 Validate the optional ``glossary`` list of a plugin manifest.
 

@@ -21,9 +21,15 @@ right. Browsing tiles retains the active activity.
 
 ## default_size
 
+<div class="api-signature" markdown="1">
+
 ```python
 def default_size() -> tuple[int, int]
 ```
+
+{% endraw %}{% include api-source.html name="default_size" line=153 %}{% raw %}
+
+</div>
 
 Return the size a new window opens at.
 
@@ -44,9 +50,15 @@ True
 
 ## MainWindow
 
+<div class="api-signature" markdown="1">
+
 ```python
 MainWindow(learner: Learner | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow" line=416 %}{% raw %}
+
+</div>
 
 Bases: `QMainWindow`
 
@@ -107,9 +119,15 @@ False
 
 ### MainWindow.closeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def closeEvent(event: QCloseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.closeEvent" line=548 %}{% raw %}
+
+</div>
 
 Remember the window's size and position when the app closes.
 
@@ -125,12 +143,18 @@ Remember the window's size and position when the app closes.
 
 ### MainWindow.eventFilter
 
+<div class="api-signature" markdown="1">
+
 ```python
 def eventFilter(
     watched: QObject,
     event: QEvent,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.eventFilter" line=1076 %}{% raw %}
+
+</div>
 
 Highlight the search field's outline while it has keyboard
 focus.
@@ -159,9 +183,15 @@ True
 
 ### MainWindow.sidebar_width
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sidebar_width() -> int
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.sidebar_width" line=1123 %}{% raw %}
+
+</div>
 
 Return how wide the exercise list is.
 
@@ -178,9 +208,15 @@ Return how wide the exercise list is.
 
 ### MainWindow.toggle_sidebar
 
+<div class="api-signature" markdown="1">
+
 ```python
 def toggle_sidebar() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.toggle_sidebar" line=1222 %}{% raw %}
+
+</div>
 
 Slide the list closed, or back open, for the user's button. The
 choice is remembered for next time.
@@ -196,9 +232,15 @@ True
 
 ### MainWindow.open_exercise
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_exercise(cls: type[Exercise] | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.open_exercise" line=1438 %}{% raw %}
+
+</div>
 
 Show an exercise.
 
@@ -220,9 +262,15 @@ Show an exercise.
 
 ### MainWindow.show_about
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_about() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.show_about" line=1485 %}{% raw %}
+
+</div>
 
 Show the installed version, development status, and purpose of
 Alto.
@@ -235,9 +283,15 @@ Alto.
 
 ### MainWindow.open_anki_exporter
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_anki_exporter() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.open_anki_exporter" line=1515 %}{% raw %}
+
+</div>
 
 Open the modeless exporter with a private copy of the current
 exercise settings.
@@ -251,9 +305,15 @@ the exercise open.
 
 ### MainWindow.open_settings
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_settings() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.open_settings" line=1539 %}{% raw %}
+
+</div>
 
 Open the application settings without blocking the window, or
 bring them forward if they are already open.
@@ -279,9 +339,15 @@ True
 
 ### MainWindow.rebuild
 
+<div class="api-signature" markdown="1">
+
 ```python
 def rebuild() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.rebuild" line=1763 %}{% raw %}
+
+</div>
 
 Make the window's contents again in the same window, so every
 icon and color is drawn in the new theme.
@@ -302,9 +368,15 @@ False
 
 ### MainWindow.open_glossary
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_glossary() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.open_glossary" line=2004 %}{% raw %}
+
+</div>
 
 Toggle the glossary from its toolbar button.
 
@@ -316,9 +388,15 @@ Toggle the glossary from its toolbar button.
 
 ### MainWindow.open_stats
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_stats() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.open_stats" line=2020 %}{% raw %}
+
+</div>
 
 Show the statistics in place of the current page. Nothing
 happens without a profile.
@@ -341,9 +419,15 @@ happens without a profile.
 
 ### MainWindow.toggle_navigation
 
+<div class="api-signature" markdown="1">
+
 ```python
 def toggle_navigation() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.toggle_navigation" line=2195 %}{% raw %}
+
+</div>
 
 Open the workspace from tiles, or toggle its navigation pane
 without leaving the activity.
@@ -363,9 +447,15 @@ without leaving the activity.
 
 ### MainWindow.show_lessons
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_lessons() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.show_lessons" line=2283 %}{% raw %}
+
+</div>
 
 Go to the start screen showing the lessons.
 
@@ -381,9 +471,15 @@ Go to the start screen showing the lessons.
 
 ### MainWindow.open_lessons
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_lessons(lesson: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.open_lessons" line=2298 %}{% raw %}
+
+</div>
 
 Open a lesson in place of the current page, at the step it was
 left at, with the lesson list on the left.
@@ -408,9 +504,15 @@ left at, with the lesson list on the left.
 
 ### MainWindow.open_database
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_database() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.open_database" line=2529 %}{% raw %}
+
+</div>
 
 Show the database browser in place of the current page. Nothing
 happens without a profile.
@@ -433,9 +535,15 @@ happens without a profile.
 
 ### MainWindow.close_overlay
 
+<div class="api-signature" markdown="1">
+
 ```python
 def close_overlay() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.close_overlay" line=2652 %}{% raw %}
+
+</div>
 
 Leave the statistics or database page and show the page that was
 open before it.
@@ -458,9 +566,15 @@ open before it.
 
 ### MainWindow.switch_profile
 
+<div class="api-signature" markdown="1">
+
 ```python
 def switch_profile() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.switch_profile" line=2684 %}{% raw %}
+
+</div>
 
 Choose or add a profile.
 
@@ -477,9 +591,15 @@ comes from theirs.
 
 ### MainWindow.export_backup
 
+<div class="api-signature" markdown="1">
+
 ```python
 def export_backup() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.export_backup" line=2725 %}{% raw %}
+
+</div>
 
 Save a backup of everything: ask where, then write profiles,
 history and settings to one file.
@@ -493,9 +613,15 @@ history and settings to one file.
 
 ### MainWindow.check_for_updates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_for_updates() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.check_for_updates" line=2738 %}{% raw %}
+
+</div>
 
 Ask whether a newer Alto is available; if so and the person
 agrees, install it and restart.
@@ -508,9 +634,15 @@ agrees, install it and restart.
 
 ### MainWindow.import_backup
 
+<div class="api-signature" markdown="1">
+
 ```python
 def import_backup() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.import_backup" line=2749 %}{% raw %}
+
+</div>
 
 Replace everything with a backup: ask for the file, check it,
 ask again, and reload the whole window from it.
@@ -524,9 +656,15 @@ ask again, and reload the whole window from it.
 
 ### MainWindow.show_home
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_home() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.show_home" line=2788 %}{% raw %}
+
+</div>
 
 Go back to the start screen, closing the statistics or database
 and hiding the exercise list.
@@ -544,9 +682,15 @@ and hiding the exercise list.
 
 ### MainWindow.open_plugins
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_plugins() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.open_plugins" line=2852 %}{% raw %}
+
+</div>
 
 Manage installed plugins, install by code or ZIP, and update
 from registered releases.
@@ -559,12 +703,18 @@ Choose Plugins in Tools to see the installed viola pack.
 
 ### MainWindow.install_plugin
 
+<div class="api-signature" markdown="1">
+
 ```python
 def install_plugin(
     *,
     parent: QWidget | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.install_plugin" line=2872 %}{% raw %}
+
+</div>
 
 Install a downloaded instrument pack and offer to restart Alto.
 
@@ -581,6 +731,8 @@ viola.zip.
 
 ### MainWindow.uninstall_plugin
 
+<div class="api-signature" markdown="1">
+
 ```python
 def uninstall_plugin(
     plugin: InstalledPlugin,
@@ -588,6 +740,10 @@ def uninstall_plugin(
     parent: QWidget | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.uninstall_plugin" line=2919 %}{% raw %}
+
+</div>
 
 Move a plugin to the system trash after confirming, then restart
 Alto.
@@ -606,12 +762,18 @@ Uninstall plugin.
 
 ### MainWindow.restart_app
 
+<div class="api-signature" markdown="1">
+
 ```python
 def restart_app(
     *,
     quit_on_failure: bool = False,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="MainWindow.restart_app" line=2998 %}{% raw %}
+
+</div>
 
 Launch a fresh copy of the app, then close this one.
 

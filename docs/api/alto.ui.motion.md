@@ -47,9 +47,15 @@ since its pressed look is all there is to see in the meantime.
 
 ## instant
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instant() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="instant" line=192 %}{% raw %}
+
+</div>
 
 Say whether motion waits for `settle`, as it does in tests.
 
@@ -66,9 +72,15 @@ False
 
 ## set_instant
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_instant(on: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_instant" line=209 %}{% raw %}
+
+</div>
 
 Make motion wait for `settle`, for tests, or give it back its real
 time.
@@ -88,6 +100,8 @@ True
 
 ## later
 
+<div class="api-signature" markdown="1">
+
 ```python
 def later(
     delay: int,
@@ -96,6 +110,10 @@ def later(
     step: Callable[[], object],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="later" line=253 %}{% raw %}
+
+</div>
 
 Run a step after a delay, such as clearing wrong-answer feedback so
 the learner can try again.
@@ -125,6 +143,8 @@ the learner can try again.
 
 ## start_timer
 
+<div class="api-signature" markdown="1">
+
 ```python
 def start_timer(
     timer: QTimer,
@@ -132,6 +152,10 @@ def start_timer(
     delay: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="start_timer" line=295 %}{% raw %}
+
+</div>
 
 Start a single-shot timer whose timeout is part of the interface's
 motion, such as moving on to the next question.
@@ -169,9 +193,15 @@ The timer can be stopped as usual, and then it does not fire.
 
 ## play
 
+<div class="api-signature" markdown="1">
+
 ```python
 def play(animation: QAbstractAnimation) -> None
 ```
+
+{% endraw %}{% include api-source.html name="play" line=357 %}{% raw %}
+
+</div>
 
 Start an animation. With instant motion it holds still at its start
 until `settle` moves it to its end.
@@ -208,9 +238,15 @@ until `settle` moves it to its end.
 
 ## busy
 
+<div class="api-signature" markdown="1">
+
 ```python
 def busy() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="busy" line=403 %}{% raw %}
+
+</div>
 
 Say whether any motion is still to come: a delayed step, an active
 timer or a running animation.
@@ -228,12 +264,18 @@ False
 
 ## settle
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settle(
     *,
     rounds: int = 1000,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="settle" line=421 %}{% raw %}
+
+</div>
 
 Let every piece of motion happen: delayed steps run, timers fire and
 animations reach their end.
@@ -274,6 +316,8 @@ RuntimeError: Motion is still going after 3 rounds.
 
 ## set_shortcut
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_shortcut(
     button: QAbstractButton,
@@ -281,6 +325,10 @@ def set_shortcut(
     key: QKeySequence | str,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_shortcut" line=572 %}{% raw %}
+
+</div>
 
 Give a button a key that presses it. In the app Qt handles the key;
 with instant motion it clicks the button at once.

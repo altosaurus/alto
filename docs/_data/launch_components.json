@@ -9,7 +9,7 @@
     {"label": "Exercise and lesson switch", "type": "SegmentedControl", "href": "/api/alto.ui.widgets/#segmentedcontrol", "rect": [5.5,1,9,5]},
     {"label": "Search field", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,7.5,30,5]},
     {"label": "Note Identification tile", "type": "ExerciseCard", "href": "/api/alto.ui.home/#exercisecard", "rect": [13.5,15,17.3,26]},
-    {"label": "Exercise catalog", "type": "HomePage", "href": "/api/alto.ui.home/#homepage", "rect": [13.5,42.5,73,54]}
+    {"label": "Exercise catalog", "type": "HomePage", "href": "/api/alto.ui.home/#homepage", "rect": [13,14.5,74,84.5], "group": true}
   ],
   "note-identification": [
     {"label": "Exercise list", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,15,30,77]},

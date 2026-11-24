@@ -22,6 +22,8 @@ name that keeps its own history.
 
 ## ProfileDialog
 
+<div class="api-signature" markdown="1">
+
 ```python
 ProfileDialog(
     db: Database,
@@ -30,6 +32,10 @@ ProfileDialog(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ProfileDialog" line=43 %}{% raw %}
+
+</div>
 
 Bases: `QDialog`
 
@@ -78,9 +84,15 @@ Build the dialog for the profiles in a database.
 
 ## remember_profile
 
+<div class="api-signature" markdown="1">
+
 ```python
 def remember_profile(profile: Profile) -> None
 ```
+
+{% endraw %}{% include api-source.html name="remember_profile" line=220 %}{% raw %}
+
+</div>
 
 Remember which profile was used, so the next launch can open with
 it.
@@ -101,9 +113,15 @@ it.
 
 ## startup_profile
 
+<div class="api-signature" markdown="1">
+
 ```python
 def startup_profile(db: Database) -> Profile | None
 ```
+
+{% endraw %}{% include api-source.html name="startup_profile" line=241 %}{% raw %}
+
+</div>
 
 Return the profile to open with: the one used last time, else ask.
 

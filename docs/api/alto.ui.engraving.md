@@ -26,6 +26,8 @@ so they are flipped on screen.
 
 ## notation_glyph
 
+<div class="api-signature" markdown="1">
+
 ```python
 @cache
 def notation_glyph(
@@ -34,6 +36,10 @@ def notation_glyph(
     codepoint: int,
 ) -> QPainterPath
 ```
+
+{% endraw %}{% include api-source.html name="notation_glyph" line=350 %}{% raw %}
+
+</div>
 
 Read a score marking from a bundled font at four staff spaces per
 em.
@@ -58,6 +64,8 @@ False
 
 ## staff_line_width
 
+<div class="api-signature" markdown="1">
+
 ```python
 def staff_line_width(
     font: str,
@@ -65,6 +73,10 @@ def staff_line_width(
     gap: float,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="staff_line_width" line=382 %}{% raw %}
+
+</div>
 
 Return the thickness of a staff line, as the font specifies.
 
@@ -86,6 +98,8 @@ True
 
 ## ledger_width
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ledger_width(
     font: str,
@@ -93,6 +107,10 @@ def ledger_width(
     gap: float,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="ledger_width" line=410 %}{% raw %}
+
+</div>
 
 Return the thickness of a ledger line, as the font specifies.
 
@@ -114,6 +132,8 @@ True
 
 ## fill_path
 
+<div class="api-signature" markdown="1">
+
 ```python
 def fill_path(
     p: QPainter,
@@ -122,6 +142,10 @@ def fill_path(
     color: QColor,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="fill_path" line=438 %}{% raw %}
+
+</div>
 
 Fill a path with a color and no outline.
 
@@ -155,6 +179,8 @@ True
 
 ## draw_note
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_note(
     p: QPainter,
@@ -169,6 +195,10 @@ def draw_note(
     flag_color: QColor | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="draw_note" line=483 %}{% raw %}
+
+</div>
 
 Draw a note with its head centered on a point.
 
@@ -213,6 +243,8 @@ True
 
 ## draw_clef
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_clef(
     p: QPainter,
@@ -225,6 +257,10 @@ def draw_clef(
     color: QColor,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="draw_clef" line=629 %}{% raw %}
+
+</div>
 
 Draw a clef with its left edge at a point.
 
@@ -269,6 +305,8 @@ True
 
 ## accidental_width
 
+<div class="api-signature" markdown="1">
+
 ```python
 def accidental_width(
     *,
@@ -277,6 +315,10 @@ def accidental_width(
     gap: float,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="accidental_width" line=701 %}{% raw %}
+
+</div>
 
 Return how wide a sharp, flat or natural is drawn, so that it can be
 placed beside other things.
@@ -304,6 +346,8 @@ True
 
 ## draw_accidental
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_accidental(
     p: QPainter,
@@ -317,6 +361,10 @@ def draw_accidental(
     fit: float | None = None,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="draw_accidental" line=740 %}{% raw %}
+
+</div>
 
 Draw a sharp, flat or natural with its left edge at a point.
 
@@ -370,6 +418,8 @@ True
 
 ## draw_brace
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_brace(
     p: QPainter,
@@ -382,6 +432,10 @@ def draw_brace(
     width: float,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="draw_brace" line=829 %}{% raw %}
+
+</div>
 
 Draw the font's brace stretched between two heights, for a grand
 staff.

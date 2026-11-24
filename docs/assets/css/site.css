@@ -129,6 +129,9 @@ pre code { background: none; padding: 0; }
 .code-snippet button:hover { background: var(--accent-soft); }
 .code-snippet [role="status"]:not(.copy-help) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .code-snippet .copy-help { grid-column: 1 / -1; padding: 0 16px 8px; color: var(--muted); font-size: .85rem; }
+.api-signature { margin: 1em 0; padding-bottom: 8px; border-radius: 10px; background: var(--code-bg); }
+.api-signature :is(pre, .code-snippet, p) { margin: 0; }
+.api-signature .api-source { display: block; width: fit-content; margin: 0 10px 0 auto; font-size: .85rem; }
 
 /* Rouge marks tokens in fenced code at build time. */
 .highlight :is(.c, .c1, .ch, .cm, .cp, .cpf, .cs) { color: var(--muted); font-style: italic; }
@@ -190,8 +193,9 @@ blockquote p:last-child { margin-bottom: 0; }
 .practice-chart { max-width: 36rem; margin: 1.25rem 0; }
 .practice-plot { display: block; width: 100%; height: auto; stroke-linejoin: round; }
 .practice-chart figcaption { margin-top: .4rem; color: var(--muted); font-size: .9rem; }
-.component-map { position: relative; width: fit-content; max-width: 100%; }
-.component-region { position: absolute; border-radius: 4px; }
+.component-map { position: relative; isolation: isolate; width: fit-content; max-width: 100%; }
+.component-region { position: absolute; z-index: 1; border-radius: 4px; }
+.component-region.component-group { z-index: 0; display: flex; justify-content: flex-end; }
 .component-region span {
   display: grid; place-items: center; width: 1.3rem; height: 1.3rem; border: 1px solid white; border-radius: 50%;
   background: var(--button); color: var(--button-text); font-size: .78rem; font-weight: 700; line-height: 1;

@@ -29,9 +29,15 @@ each question. Pure Python (no Qt).
 
 ## check_snapshot
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_snapshot(data: bytes) -> tuple[int, int, int]
 ```
+
+{% endraw %}{% include api-source.html name="check_snapshot" line=198 %}{% raw %}
+
+</div>
 
 Check that bytes are an intact Alto database that this version can
 read, and say what is in it.
@@ -65,6 +71,8 @@ ValueError: This is not an Alto database.
 
 ## Profile
 
+<div class="api-signature" markdown="1">
+
 ```python
 Profile(
     id: int,
@@ -72,6 +80,10 @@ Profile(
     name: str,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Profile" line=279 %}{% raw %}
+
+</div>
 
 A person who practices: their answers are kept apart from everyone
 else's.
@@ -90,6 +102,8 @@ Profile(id=1, name='Ada')
 
 ## ItemRecord
 
+<div class="api-signature" markdown="1">
+
 ```python
 ItemRecord(
     strain: float,
@@ -104,6 +118,10 @@ ItemRecord(
     item_key: str = '',
 )
 ```
+
+{% endraw %}{% include api-source.html name="ItemRecord" line=303 %}{% raw %}
+
+</div>
 
 What a profile's history says about one question.
 
@@ -138,9 +156,15 @@ What a profile's history says about one question.
 
 ## Database
 
+<div class="api-signature" markdown="1">
+
 ```python
 Database(path: str | Path = ':memory:')
 ```
+
+{% endraw %}{% include api-source.html name="Database" line=364 %}{% raw %}
+
+</div>
 
 The SQLite database behind profiles, answers and per-question
 history.
@@ -180,10 +204,16 @@ True
 
 ### Database.write_transaction
 
+<div class="api-signature" markdown="1">
+
 ```python
 @contextmanager
 def write_transaction() -> Iterator[None]
 ```
+
+{% endraw %}{% include api-source.html name="Database.write_transaction" line=464 %}{% raw %}
+
+</div>
 
 Share the caller's write transaction or begin one before reading
 the state to be updated.
@@ -205,9 +235,15 @@ False
 
 ### Database.close
 
+<div class="api-signature" markdown="1">
+
 ```python
 def close() -> None
 ```
+
+{% endraw %}{% include api-source.html name="Database.close" line=490 %}{% raw %}
+
+</div>
 
 Close the connection.
 
@@ -220,9 +256,15 @@ Close the connection.
 
 ### Database.snapshot
 
+<div class="api-signature" markdown="1">
+
 ```python
 def snapshot() -> bytes
 ```
+
+{% endraw %}{% include api-source.html name="Database.snapshot" line=501 %}{% raw %}
+
+</div>
 
 Return the whole database as bytes: every profile, answer and
 question record, exactly as they are now.
@@ -246,9 +288,15 @@ True
 
 ### Database.restore
 
+<div class="api-signature" markdown="1">
+
 ```python
 def restore(data: bytes) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Database.restore" line=526 %}{% raw %}
+
+</div>
 
 Replace everything in the database with a snapshot, so it is
 exactly as it was when the snapshot was taken.
@@ -280,9 +328,15 @@ Alto is brought up to date.
 
 ### Database.profiles
 
+<div class="api-signature" markdown="1">
+
 ```python
 def profiles() -> list[Profile]
 ```
+
+{% endraw %}{% include api-source.html name="Database.profiles" line=576 %}{% raw %}
+
+</div>
 
 Return every profile, sorted by name without regard to case.
 
@@ -302,9 +356,15 @@ Return every profile, sorted by name without regard to case.
 
 ### Database.profile
 
+<div class="api-signature" markdown="1">
+
 ```python
 def profile(profile_id: int) -> Profile | None
 ```
+
+{% endraw %}{% include api-source.html name="Database.profile" line=598 %}{% raw %}
+
+</div>
 
 Return one profile by its id.
 
@@ -330,9 +390,15 @@ True
 
 ### Database.add_profile
 
+<div class="api-signature" markdown="1">
+
 ```python
 def add_profile(name: str) -> Profile
 ```
+
+{% endraw %}{% include api-source.html name="Database.add_profile" line=628 %}{% raw %}
+
+</div>
 
 Create a profile.
 
@@ -362,9 +428,15 @@ ValueError: There is already a profile called ada lovelace.
 
 ### Database.delete_profile
 
+<div class="api-signature" markdown="1">
+
 ```python
 def delete_profile(profile_id: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Database.delete_profile" line=675 %}{% raw %}
+
+</div>
 
 Delete a profile together with all of its answers and question
 history.
@@ -385,6 +457,8 @@ history.
 
 ### Database.get_item
 
+<div class="api-signature" markdown="1">
+
 ```python
 def get_item(
     profile_id: int,
@@ -393,6 +467,10 @@ def get_item(
     item_key: str,
 ) -> ItemRecord | None
 ```
+
+{% endraw %}{% include api-source.html name="Database.get_item" line=702 %}{% raw %}
+
+</div>
 
 Return what is known about one question for a profile.
 
@@ -421,6 +499,8 @@ True
 
 ### Database.save_item
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_item(
     profile_id: int,
@@ -430,6 +510,10 @@ def save_item(
     item: ItemRecord,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Database.save_item" line=746 %}{% raw %}
+
+</div>
 
 Store what is known about a question, replacing any earlier
 record of it.
@@ -473,6 +557,8 @@ record of it.
 
 ### Database.add_attempt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def add_attempt(
     profile_id: int,
@@ -487,6 +573,10 @@ def add_attempt(
     timing_valid: bool = True,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Database.add_attempt" line=826 %}{% raw %}
+
+</div>
 
 Log one answer, right or wrong.
 
@@ -526,6 +616,8 @@ Log one answer, right or wrong.
 
 ### Database.attempts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def attempts(
     profile_id: int,
@@ -533,6 +625,10 @@ def attempts(
     exercise: str | None = None,
 ) -> list[sqlite3.Row]
 ```
+
+{% endraw %}{% include api-source.html name="Database.attempts" line=905 %}{% raw %}
+
+</div>
 
 Return all of a profile's answers in the order they were given.
 
@@ -576,6 +672,8 @@ Return all of a profile's answers in the order they were given.
 
 ### Database.attempts_in
 
+<div class="api-signature" markdown="1">
+
 ```python
 def attempts_in(
     profile_ids: list[int] | None = None,
@@ -585,6 +683,10 @@ def attempts_in(
     item_key: str | None = None,
 ) -> list[sqlite3.Row]
 ```
+
+{% endraw %}{% include api-source.html name="Database.attempts_in" line=1024 %}{% raw %}
+
+</div>
 
 Return answers given, oldest first, for some profiles, an
 exercise and a period.
@@ -627,6 +729,8 @@ exercise and a period.
 
 ### Database.first_attempts_per_day
 
+<div class="api-signature" markdown="1">
+
 ```python
 def first_attempts_per_day(
     profile_ids: list[int] | None = None,
@@ -635,6 +739,10 @@ def first_attempts_per_day(
     since: float | None = None,
 ) -> dict[str, int]
 ```
+
+{% endraw %}{% include api-source.html name="Database.first_attempts_per_day" line=1095 %}{% raw %}
+
+</div>
 
 Count the questions first answered on each day, in local time,
 counting the days in the database.
@@ -675,6 +783,8 @@ counting the days in the database.
 
 ### Database.strained_items
 
+<div class="api-signature" markdown="1">
+
 ```python
 def strained_items(
     profile_ids: list[int] | None = None,
@@ -685,6 +795,10 @@ def strained_items(
     limit: int = 10,
 ) -> list[sqlite3.Row]
 ```
+
+{% endraw %}{% include api-source.html name="Database.strained_items" line=1159 %}{% raw %}
+
+</div>
 
 Return the questions that need most practice, the same question
 from different profiles counted together.
@@ -737,6 +851,8 @@ from different profiles counted together.
 
 ### Database.count_attempts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def count_attempts(
     profile_id: int,
@@ -746,6 +862,10 @@ def count_attempts(
     until: float | None = None,
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="Database.count_attempts" line=1247 %}{% raw %}
+
+</div>
 
 Return how many answers a profile has given, optionally of one
 exercise and within a period.
@@ -788,6 +908,8 @@ exercise and within a period.
 
 ### Database.attempt_rows
 
+<div class="api-signature" markdown="1">
+
 ```python
 def attempt_rows(
     profile_id: int,
@@ -798,6 +920,10 @@ def attempt_rows(
     until: float | None = None,
 ) -> list[sqlite3.Row]
 ```
+
+{% endraw %}{% include api-source.html name="Database.attempt_rows" line=1382 %}{% raw %}
+
+</div>
 
 Return the newest answers first, each with the stored question
 it was an answer to (if that is still known).
@@ -846,6 +972,8 @@ it was an answer to (if that is still known).
 
 ### Database.item_rows
 
+<div class="api-signature" markdown="1">
+
 ```python
 def item_rows(
     profile_id: int,
@@ -853,6 +981,10 @@ def item_rows(
     limit: int = 10000,
 ) -> list[sqlite3.Row]
 ```
+
+{% endraw %}{% include api-source.html name="Database.item_rows" line=1470 %}{% raw %}
+
+</div>
 
 Return what is known about each of a profile's questions, the
 most strained first.
@@ -877,9 +1009,15 @@ most strained first.
 
 ### Database.profile_rows
 
+<div class="api-signature" markdown="1">
+
 ```python
 def profile_rows() -> list[sqlite3.Row]
 ```
+
+{% endraw %}{% include api-source.html name="Database.profile_rows" line=1511 %}{% raw %}
+
+</div>
 
 Return every profile with how many answers and questions it has.
 
@@ -905,6 +1043,8 @@ Return every profile with how many answers and questions it has.
 
 ### Database.replay_candidates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def replay_candidates(
     profile_id: int,
@@ -915,6 +1055,10 @@ def replay_candidates(
     random_extra: int = 10,
 ) -> list[ItemRecord]
 ```
+
+{% endraw %}{% include api-source.html name="Database.replay_candidates" line=1543 %}{% raw %}
+
+</div>
 
 Return questions asked before under these same settings: the
 ones that need most practice, plus a few at random.

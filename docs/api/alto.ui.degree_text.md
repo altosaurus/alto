@@ -18,6 +18,8 @@ font-specific combining accents.
 
 ## draw_degree_text
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_degree_text(
     painter: QPainter,
@@ -27,6 +29,10 @@ def draw_degree_text(
     alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="draw_degree_text" line=44 %}{% raw %}
+
+</div>
 
 Draw text with each combining circumflex centered above its
 preceding digit.
@@ -55,9 +61,15 @@ True
 
 ## degree_tooltip
 
+<div class="api-signature" markdown="1">
+
 ```python
 def degree_tooltip(text: str) -> str
 ```
+
+{% endraw %}{% include api-source.html name="degree_tooltip" line=123 %}{% raw %}
+
+</div>
 
 Render caret examples as an inline image for Qt's rich-text tooltip.
 
@@ -82,9 +94,15 @@ True
 
 ## DegreeButton
 
+<div class="api-signature" markdown="1">
+
 ```python
 class DegreeButton(QPushButton)
 ```
+
+{% endraw %}{% include api-source.html name="DegreeButton" line=182 %}{% raw %}
+
+</div>
 
 An answer button that draws scale-degree carets directly above the
 digits.
@@ -98,9 +116,15 @@ digits.
 
 ### DegreeButton.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(event: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="DegreeButton.paintEvent" line=193 %}{% raw %}
+
+</div>
 
 Keep the native button appearance and position degree accents
 explicitly.
@@ -118,27 +142,45 @@ False
 
 ## DegreeCheckBox
 
+<div class="api-signature" markdown="1">
+
 ```python
 class DegreeCheckBox(QCheckBox)
 ```
+
+{% endraw %}{% include api-source.html name="DegreeCheckBox" line=230 %}{% raw %}
+
+</div>
 
 Draw the scale degree caret centered above the checkbox label's
 digit.
 
 ### DegreeCheckBox.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(event: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="DegreeCheckBox.paintEvent" line=236 %}{% raw %}
+
+</div>
 
 Paint the native checkbox and use the shared scale degree
 renderer for its label.
 
 ## DegreeLabel
 
+<div class="api-signature" markdown="1">
+
 ```python
 class DegreeLabel(QLabel)
 ```
+
+{% endraw %}{% include api-source.html name="DegreeLabel" line=270 %}{% raw %}
+
+</div>
 
 A plain-text label with explicitly positioned scale-degree carets.
 
@@ -151,9 +193,15 @@ A plain-text label with explicitly positioned scale-degree carets.
 
 ### DegreeLabel.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(event: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="DegreeLabel.paintEvent" line=280 %}{% raw %}
+
+</div>
 
 Paint degree labels with carets centered above their numbers.
 

@@ -20,6 +20,8 @@ that add or remove one on the right.
 
 ## PluginsDialog
 
+<div class="api-signature" markdown="1">
+
 ```python
 PluginsDialog(
     folder: Path,
@@ -27,6 +29,10 @@ PluginsDialog(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="PluginsDialog" line=49 %}{% raw %}
+
+</div>
 
 Bases: `QDialog`
 
@@ -82,9 +88,15 @@ True
 
 ### PluginsDialog.selected
 
+<div class="api-signature" markdown="1">
+
 ```python
 def selected() -> InstalledPlugin | None
 ```
+
+{% endraw %}{% include api-source.html name="PluginsDialog.selected" line=191 %}{% raw %}
+
+</div>
 
 Return the plugin selected in the list.
 
@@ -104,9 +116,15 @@ True
 
 ### PluginsDialog.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh() -> None
 ```
+
+{% endraw %}{% include api-source.html name="PluginsDialog.refresh" line=211 %}{% raw %}
+
+</div>
 
 Read the plugins folder again and keep the same plugin selected
 if it is still there.
@@ -125,9 +143,15 @@ False
 
 ### PluginsDialog.done
 
+<div class="api-signature" markdown="1">
+
 ```python
 def done(result: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="PluginsDialog.done" line=274 %}{% raw %}
+
+</div>
 
 Keep the dialog available until a requested install or update
 finishes.

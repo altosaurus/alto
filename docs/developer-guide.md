@@ -5,6 +5,10 @@ nav_group: For developers
 children: developer-guide
 permalink: /developer-guide/
 ---
+## Development environment
+
+Follow [Development environment]({{ '/developer-guide/environment-setup/' | relative_url }}) to set up your checkout with uv, install the developer tools, and run a first test.
+
 ## Application launch
 
 For a code walkthrough, start with [Application launch]({{ '/developer-guide/application-launch/' | relative_url }}). It follows `alto/__main__.py` from the terminal command to the first click on an exercise tile.
@@ -38,6 +42,8 @@ On the first launch, the main window opens to the exercise tiles. The toolbar an
 ### Exercise workspace
 
 Choosing **Note Identification** calls `MainWindow.open_exercise()`. It opens an `ExerciseView` for the exercise and connects it to the active learner. The staff is a separate widget. When tracing a misplaced note, start with `StaffWidget`. For a click on an answer button, start with `ExerciseView`.
+
+Follow a note from the staff to the graded answer, then turn on **Octave** to trace how the settings rebuild the question. [Exercise view walkthrough]({{ '/developer-guide/exercise-view/' | relative_url }})
 
 {% include component-shot.html screen="note-identification" width=1100 height=720 alt="Note Identification with the exercise list on the left and a note on the staff above the letter buttons." %}
 

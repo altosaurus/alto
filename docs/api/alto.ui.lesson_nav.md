@@ -21,6 +21,8 @@ True
 
 ## section_item
 
+<div class="api-signature" markdown="1">
+
 ```python
 def section_item(
     text: str,
@@ -28,6 +30,10 @@ def section_item(
     palette: QPalette,
 ) -> QListWidgetItem
 ```
+
+{% endraw %}{% include api-source.html name="section_item" line=43 %}{% raw %}
+
+</div>
 
 Make a section label for a list: small, gray capitals that cannot be
 selected.
@@ -52,9 +58,15 @@ selected.
 
 ## LessonNav
 
+<div class="api-signature" markdown="1">
+
 ```python
 LessonNav(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="LessonNav" line=85 %}{% raw %}
+
+</div>
 
 Bases: `QListWidget`
 
@@ -96,9 +108,15 @@ Build the list with no lesson open.
 
 ### LessonNav.show_lesson
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_lesson(key: str | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="LessonNav.show_lesson" line=139 %}{% raw %}
+
+</div>
 
 Fill the list, with the steps of one lesson under it.
 
@@ -120,9 +138,15 @@ Fill the list, with the steps of one lesson under it.
 
 ### LessonNav.select_step
 
+<div class="api-signature" markdown="1">
+
 ```python
 def select_step(number: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="LessonNav.select_step" line=190 %}{% raw %}
+
+</div>
 
 Highlight the step that is showing.
 

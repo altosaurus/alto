@@ -21,6 +21,8 @@ exercise's name.
 
 ## PackSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 PackSettingsPanel(
     exercise: type[PackExercise],
@@ -28,6 +30,10 @@ PackSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="PackSettingsPanel" line=149 %}{% raw %}
+
+</div>
 
 Bases: `NoteAnswerSettingsPanel`
 
@@ -83,6 +89,8 @@ Build the menu and, if the plugin offers a range, its page.
 
 ## PackKeyboardSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 PackKeyboardSettingsPanel(
     exercise: type[PackExercise],
@@ -90,6 +98,10 @@ PackKeyboardSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="PackKeyboardSettingsPanel" line=438 %}{% raw %}
+
+</div>
 
 Bases: `KeyboardRangePanel`
 
@@ -162,9 +174,15 @@ Build the menu and the pages the plugin offers.
 
 ### PackKeyboardSettingsPanel.flush
 
+<div class="api-signature" markdown="1">
+
 ```python
 def flush() -> None
 ```
+
+{% endraw %}{% include api-source.html name="PackKeyboardSettingsPanel.flush" line=1009 %}{% raw %}
+
+</div>
 
 Save the options and ask a new question now, if an edit is
 waiting.
@@ -185,9 +203,15 @@ False
 
 ### PackKeyboardSettingsPanel.hideEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hideEvent(event: QHideEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="PackKeyboardSettingsPanel.hideEvent" line=1031 %}{% raw %}
+
+</div>
 
 Keep an edit that is still waiting when the panel closes.
 

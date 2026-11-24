@@ -19,9 +19,15 @@ the keyboard range.
 
 ## IntervalRangeSlider
 
+<div class="api-signature" markdown="1">
+
 ```python
 IntervalRangeSlider(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="IntervalRangeSlider" line=36 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -60,6 +66,8 @@ Create the slider with a one-octave selection.
 
 ### IntervalRangeSlider.set_range
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_range(
     low: int,
@@ -70,6 +78,10 @@ def set_range(
     active: bool = True,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="IntervalRangeSlider.set_range" line=97 %}{% raw %}
+
+</div>
 
 Synchronize the slider without emitting an edit.
 
@@ -92,6 +104,8 @@ Synchronize the slider without emitting an edit.
 
 ### IntervalRangeSlider.move_endpoint
 
+<div class="api-signature" markdown="1">
+
 ```python
 def move_endpoint(
     which: str,
@@ -99,6 +113,10 @@ def move_endpoint(
     delta: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="IntervalRangeSlider.move_endpoint" line=141 %}{% raw %}
+
+</div>
 
 Move an endpoint by a number of half-step distances.
 
@@ -118,9 +136,15 @@ Move an endpoint by a number of half-step distances.
 
 ### IntervalRangeSlider.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(event: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="IntervalRangeSlider.paintEvent" line=219 %}{% raw %}
+
+</div>
 
 Draw the track, selected span, and both handles.
 
@@ -137,9 +161,15 @@ False
 
 ### IntervalRangeSlider.mousePressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mousePressEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="IntervalRangeSlider.mousePressEvent" line=276 %}{% raw %}
+
+</div>
 
 Choose the nearest handle and start dragging it.
 
@@ -156,9 +186,15 @@ False
 
 ### IntervalRangeSlider.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="IntervalRangeSlider.mouseMoveEvent" line=304 %}{% raw %}
+
+</div>
 
 Move the active handle while dragging.
 
@@ -175,9 +211,15 @@ Move the active handle while dragging.
 
 ### IntervalRangeSlider.mouseReleaseEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseReleaseEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="IntervalRangeSlider.mouseReleaseEvent" line=332 %}{% raw %}
+
+</div>
 
 Finish dragging a handle.
 
@@ -194,9 +236,15 @@ False
 
 ### IntervalRangeSlider.keyPressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def keyPressEvent(event: QKeyEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="IntervalRangeSlider.keyPressEvent" line=352 %}{% raw %}
+
+</div>
 
 Adjust the active endpoint with arrow keys, Home, or End.
 

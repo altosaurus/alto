@@ -9,6 +9,8 @@ Daily card allowances in profile and exercise settings.
 
 ## DailyLimitsEditor
 
+<div class="api-signature" markdown="1">
+
 ```python
 DailyLimitsEditor(
     learner: Learner,
@@ -16,6 +18,10 @@ DailyLimitsEditor(
     exercise: str = '',
 )
 ```
+
+{% endraw %}{% include api-source.html name="DailyLimitsEditor" line=19 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -54,9 +60,15 @@ settings.
 
 ### DailyLimitsEditor.reload
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reload() -> None
 ```
+
+{% endraw %}{% include api-source.html name="DailyLimitsEditor.reload" line=100 %}{% raw %}
+
+</div>
 
 Show current values and disable fields that follow the profile
 defaults.

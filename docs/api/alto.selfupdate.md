@@ -31,22 +31,36 @@ True
 
 ## UpdateError
 
+<div class="api-signature" markdown="1">
+
 ```python
 class UpdateError(Exception)
 ```
+
+{% endraw %}{% include api-source.html name="UpdateError" line=105 %}{% raw %}
+
+</div>
 
 Something went wrong in getting or checking an update. The message
 says what, in words for the person.
 
 ## UpdateCanceled
 
+<div class="api-signature" markdown="1">
+
 ```python
 class UpdateCanceled(Exception)
 ```
 
+{% endraw %}{% include api-source.html name="UpdateCanceled" line=112 %}{% raw %}
+
+</div>
+
 The person canceled the update before it was ready.
 
 ## Target
+
+<div class="api-signature" markdown="1">
 
 ```python
 Target(
@@ -55,6 +69,10 @@ Target(
     prefix: Path | None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Target" line=117 %}{% raw %}
+
+</div>
 
 A packaged copy that can replace itself, and where it is.
 
@@ -77,6 +95,8 @@ A packaged copy that can replace itself, and where it is.
 
 ## Prepared
 
+<div class="api-signature" markdown="1">
+
 ```python
 Prepared(
     work: Path,
@@ -84,6 +104,10 @@ Prepared(
     root: Path | None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Prepared" line=147 %}{% raw %}
+
+</div>
 
 An update that has been downloaded and checked, and is ready to be
 handed over.
@@ -107,6 +131,8 @@ True
 
 ## self_update_target
 
+<div class="api-signature" markdown="1">
+
 ```python
 def self_update_target(
     *,
@@ -114,6 +140,10 @@ def self_update_target(
     system: str | None = None,
 ) -> Target | None
 ```
+
+{% endraw %}{% include api-source.html name="self_update_target" line=177 %}{% raw %}
+
+</div>
 
 Say whether the running copy can replace itself, and if so where it
 is.
@@ -149,6 +179,8 @@ True
 
 ## download
 
+<div class="api-signature" markdown="1">
+
 ```python
 def download(
     url: str,
@@ -161,6 +193,10 @@ def download(
     seconds: int = 30,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="download" line=241 %}{% raw %}
+
+</div>
 
 Fetch a file, checking the address, the size and the connection, and
 give its SHA-256 hash.
@@ -186,6 +222,8 @@ give its SHA-256 hash.
 
 ## extract_tarball
 
+<div class="api-signature" markdown="1">
+
 ```python
 def extract_tarball(
     archive: Path,
@@ -193,6 +231,10 @@ def extract_tarball(
     destination: Path,
 ) -> Path
 ```
+
+{% endraw %}{% include api-source.html name="extract_tarball" line=359 %}{% raw %}
+
+</div>
 
 Unpack the Linux download, refusing anything that would land outside
 the folder.
@@ -212,12 +254,18 @@ the folder.
 
 ## ignore_progress
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ignore_progress(
     done: int,
     total: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ignore_progress" line=416 %}{% raw %}
+
+</div>
 
 Take a note of progress and do nothing with it, for a download whose
 progress nobody watches.
@@ -235,6 +283,8 @@ progress nobody watches.
 
 ## prepare_update
 
+<div class="api-signature" markdown="1">
+
 ```python
 def prepare_update(
     release: updates.Release,
@@ -249,6 +299,10 @@ def prepare_update(
     canceled: Callable[[], bool],
 ) -> Prepared
 ```
+
+{% endraw %}{% include api-source.html name="prepare_update" line=435 %}{% raw %}
+
+</div>
 
 Download a release for this copy and check it: its signed list of
 checksums, then the file against its listed hash.
@@ -276,9 +330,15 @@ checksums, then the file against its listed hash.
 
 ## clean_environment
 
+<div class="api-signature" markdown="1">
+
 ```python
 def clean_environment(env: Mapping[str, str]) -> dict[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="clean_environment" line=591 %}{% raw %}
+
+</div>
 
 Undo what PyInstaller did to the environment, for a program that
 this one starts.
@@ -324,9 +384,15 @@ only, so it is dropped too.
 
 ## log_path
 
+<div class="api-signature" markdown="1">
+
 ```python
 def log_path() -> Path
 ```
+
+{% endraw %}{% include api-source.html name="log_path" line=653 %}{% raw %}
+
+</div>
 
 Give the file the Linux helper writes to, so that a failed update
 can be looked into.
@@ -344,6 +410,8 @@ can be looked into.
 
 ## windows_handoff_command
 
+<div class="api-signature" markdown="1">
+
 ```python
 def windows_handoff_command(
     installer: Path,
@@ -352,6 +420,10 @@ def windows_handoff_command(
     alto: Path,
 ) -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="windows_handoff_command" line=675 %}{% raw %}
+
+</div>
 
 Give the command that waits for Alto to end, runs the installer, and
 starts the old Alto again if the installer fails.
@@ -394,6 +466,8 @@ True
 
 ## start_handoff
 
+<div class="api-signature" markdown="1">
+
 ```python
 def start_handoff(
     prepared: Prepared,
@@ -404,6 +478,10 @@ def start_handoff(
     environ: Mapping[str, str] | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="start_handoff" line=782 %}{% raw %}
+
+</div>
 
 Start the program that installs the update, and return at once so
 that Alto can quit.
@@ -422,9 +500,15 @@ that Alto can quit.
 
 ## new_work_folder
 
+<div class="api-signature" markdown="1">
+
 ```python
 def new_work_folder() -> Path
 ```
+
+{% endraw %}{% include api-source.html name="new_work_folder" line=872 %}{% raw %}
+
+</div>
 
 Make a new temporary folder for an update, whose name says what it
 is for.
@@ -446,6 +530,8 @@ True
 
 ## remove_leftovers
 
+<div class="api-signature" markdown="1">
+
 ```python
 def remove_leftovers(
     *,
@@ -454,6 +540,10 @@ def remove_leftovers(
     root: Path | None = None,
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="remove_leftovers" line=894 %}{% raw %}
+
+</div>
 
 Remove the temporary folders of earlier updates that were never
 cleaned up, such as a Windows installer that was run and left.

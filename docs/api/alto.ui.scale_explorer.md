@@ -17,6 +17,8 @@ Interactive notation and step patterns for learning scales.
 
 ## ScaleExplorer
 
+<div class="api-signature" markdown="1">
+
 ```python
 ScaleExplorer(
     *,
@@ -26,6 +28,10 @@ ScaleExplorer(
     lesson_layout: bool = False,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ScaleExplorer" line=30 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -60,9 +66,15 @@ Build the scale diagram and its controls.
 
 ### ScaleExplorer.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleExplorer.refresh" line=170 %}{% raw %}
+
+</div>
 
 Rebuild the notation and gap labels for the selected example.
 
@@ -79,9 +91,15 @@ Rebuild the notation and gap labels for the selected example.
 
 ### ScaleExplorer.select_gap
 
+<div class="api-signature" markdown="1">
+
 ```python
 def select_gap(index: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleExplorer.select_gap" line=210 %}{% raw %}
+
+</div>
 
 Highlight and play the notes around a gap.
 
@@ -98,12 +116,18 @@ Highlight and play the notes around a gap.
 
 ### ScaleExplorer.hear
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hear(
     *,
     force: bool = True,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleExplorer.hear" line=249 %}{% raw %}
+
+</div>
 
 Play the example using the selected instrument.
 

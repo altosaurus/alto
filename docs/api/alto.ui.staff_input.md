@@ -20,9 +20,15 @@ True
 
 ## StaffInput
 
+<div class="api-signature" markdown="1">
+
 ```python
 StaffInput(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput" line=65 %}{% raw %}
+
+</div>
 
 Bases: `StaffWidget`
 
@@ -74,6 +80,8 @@ True
 
 ### StaffInput.reset
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reset(
     clef: str,
@@ -83,6 +91,10 @@ def reset(
     placement: Question | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.reset" line=144 %}{% raw %}
+
+</div>
 
 Clear the staff for a new question, drawing a key signature.
 
@@ -109,9 +121,15 @@ Clear the staff for a new question, drawing a key signature.
 
 ### StaffInput.note_at
 
+<div class="api-signature" markdown="1">
+
 ```python
 def note_at(y: float) -> Note
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.note_at" line=194 %}{% raw %}
+
+</div>
 
 Return the note on the line or space nearest to a height on the
 staff.
@@ -151,9 +169,15 @@ staff and the lower half on the bass staff.
 
 ### StaffInput.note_for
 
+<div class="api-signature" markdown="1">
+
 ```python
 def note_for(diatonic: int) -> Note
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.note_for" line=257 %}{% raw %}
+
+</div>
 
 Return the note on a staff step, with the chosen sign or the one
 the key signature gives it.
@@ -193,9 +217,15 @@ clicking is.
 
 ### StaffInput.caret_start
 
+<div class="api-signature" markdown="1">
+
 ```python
 def caret_start() -> int
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.caret_start" line=304 %}{% raw %}
+
+</div>
 
 Return the staff step the caret starts from, when the keyboard
 first moves it.
@@ -218,9 +248,15 @@ first moves it.
 
 ### StaffInput.caret_note
 
+<div class="api-signature" markdown="1">
+
 ```python
 def caret_note() -> Note | None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.caret_note" line=326 %}{% raw %}
+
+</div>
 
 Return the note that the keyboard would place.
 
@@ -242,9 +278,15 @@ True
 
 ### StaffInput.move_cursor
 
+<div class="api-signature" markdown="1">
+
 ```python
 def move_cursor(steps: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.move_cursor" line=348 %}{% raw %}
+
+</div>
 
 Move the caret up (positive) or down (negative) by staff steps,
 and show the note there.
@@ -276,9 +318,15 @@ True
 
 ### StaffInput.jump_to_letter
 
+<div class="api-signature" markdown="1">
+
 ```python
 def jump_to_letter(letter: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.jump_to_letter" line=383 %}{% raw %}
+
+</div>
 
 Move the caret to the nearest note with a letter name, above or
 below where it is.
@@ -307,9 +355,15 @@ below where it is.
 
 ### StaffInput.place_caret
 
+<div class="api-signature" markdown="1">
+
 ```python
 def place_caret() -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.place_caret" line=420 %}{% raw %}
+
+</div>
 
 Place the note at the caret, as a click would.
 
@@ -328,6 +382,8 @@ Place the note at the caret, as a click would.
 
 ### StaffInput.show_note
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_note(
     note: Note | None,
@@ -335,6 +391,10 @@ def show_note(
     color: QColor | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.show_note" line=443 %}{% raw %}
+
+</div>
 
 Draw a single note on the staff, or clear it.
 
@@ -357,9 +417,15 @@ Draw a single note on the staff, or clear it.
 
 ### StaffInput.refresh_preview
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh_preview() -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.refresh_preview" line=480 %}{% raw %}
+
+</div>
 
 Redraw the note that would be placed, for example after the
 accidental changes.
@@ -385,9 +451,15 @@ has put the caret somewhere.
 
 ### StaffInput.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.mouseMoveEvent" line=512 %}{% raw %}
+
+</div>
 
 Show the note under the pointer, in a lighter color.
 
@@ -421,9 +493,15 @@ Show the note under the pointer, in a lighter color.
 
 ### StaffInput.leaveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def leaveEvent(event: QEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.leaveEvent" line=546 %}{% raw %}
+
+</div>
 
 Remove the pointer's note when the pointer leaves the staff,
 showing the note at the caret instead if there is one.
@@ -444,9 +522,15 @@ showing the note at the caret instead if there is one.
 
 ### StaffInput.mousePressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mousePressEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffInput.mousePressEvent" line=567 %}{% raw %}
+
+</div>
 
 Place the note on a left click, or step through the accidentals
 on a right click.
@@ -483,9 +567,15 @@ on a right click.
 
 ## ScaleInput
 
+<div class="api-signature" markdown="1">
+
 ```python
 ScaleInput(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput" line=611 %}{% raw %}
+
+</div>
 
 Bases: `StaffInput`
 
@@ -559,6 +649,8 @@ Create the staff.
 
 ### ScaleInput.reset_scale
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reset_scale(
     clef: str,
@@ -569,6 +661,10 @@ def reset_scale(
     key: int = 0,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.reset_scale" line=701 %}{% raw %}
+
+</div>
 
 Clear the staff for a new scale: a staff with room for its
 notes, and the key signature it is to have.
@@ -606,10 +702,16 @@ notes, and the key signature it is to have.
 
 ### ScaleInput.complete
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def complete() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.complete" line=766 %}{% raw %}
+
+</div>
 
 Report whether every note of the scale has been placed.
 
@@ -631,10 +733,16 @@ True
 
 ### ScaleInput.placing_steps
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def placing_steps() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.placing_steps" line=788 %}{% raw %}
+
+</div>
 
 Report whether it is the turn of the steps: they are asked for,
 every note is placed and some step is still to mark.
@@ -662,10 +770,16 @@ False
 
 ### ScaleInput.done
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def done() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.done" line=820 %}{% raw %}
+
+</div>
 
 Report whether everything asked for is placed: every note and,
 if they are asked for, every step.
@@ -693,6 +807,8 @@ True
 
 ### ScaleInput.show_note
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_note(
     note: Note | None,
@@ -700,6 +816,10 @@ def show_note(
     color: QColor | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.show_note" line=891 %}{% raw %}
+
+</div>
 
 Show the pointer's note in the next place, or take it away.
 
@@ -720,9 +840,15 @@ Show the pointer's note in the next place, or take it away.
 
 ### ScaleInput.set_pending_step
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_pending_step(step: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.set_pending_step" line=918 %}{% raw %}
+
+</div>
 
 Choose the step that the next click marks.
 
@@ -748,9 +874,15 @@ Choose the step that the next click marks.
 
 ### ScaleInput.toggle_step
 
+<div class="api-signature" markdown="1">
+
 ```python
 def toggle_step() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.toggle_step" line=946 %}{% raw %}
+
+</div>
 
 Switch the step that the next click marks between whole and
 half.
@@ -772,9 +904,15 @@ half.
 
 ### ScaleInput.undo
 
+<div class="api-signature" markdown="1">
+
 ```python
 def undo() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.undo" line=966 %}{% raw %}
+
+</div>
 
 Take back the last thing placed: the last step if there is one,
 otherwise the last note.
@@ -792,9 +930,15 @@ otherwise the last note.
 
 ### ScaleInput.wheelEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def wheelEvent(event: QWheelEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.wheelEvent" line=989 %}{% raw %}
+
+</div>
 
 Use the mouse wheel for what comes next: the sign of the note to
 place, or the step to mark.
@@ -844,9 +988,15 @@ half. Once everything is placed it does nothing.
 
 ### ScaleInput.caret_start
 
+<div class="api-signature" markdown="1">
+
 ```python
 def caret_start() -> int
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.caret_start" line=1050 %}{% raw %}
+
+</div>
 
 Return the staff step the caret starts from: that of the last
 note placed, or the middle line.
@@ -873,9 +1023,15 @@ note placed, or the middle line.
 
 ### ScaleInput.place_next
 
+<div class="api-signature" markdown="1">
+
 ```python
 def place_next(note: Note | None = None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.place_next" line=1076 %}{% raw %}
+
+</div>
 
 Place the next note, or mark the next step once the notes are
 placed.
@@ -901,9 +1057,15 @@ placed.
 
 ### ScaleInput.place_caret
 
+<div class="api-signature" markdown="1">
+
 ```python
 def place_caret() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.place_caret" line=1125 %}{% raw %}
+
+</div>
 
 Place the next note at the caret, or mark the next step, as a
 click would.
@@ -921,9 +1083,15 @@ click would.
 
 ### ScaleInput.mousePressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mousePressEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ScaleInput.mousePressEvent" line=1141 %}{% raw %}
+
+</div>
 
 Place the next note or mark the next step on a left click;
 change the sign or the step on a right click.
@@ -960,9 +1128,15 @@ change the sign or the step on a right click.
 
 ## SignatureInput
 
+<div class="api-signature" markdown="1">
+
 ```python
 class SignatureInput(ScaleInput)
 ```
+
+{% endraw %}{% include api-source.html name="SignatureInput" line=1192 %}{% raw %}
+
+</div>
 
 Place accidentals in consecutive key-signature slots immediately
 after the clef.
@@ -981,6 +1155,8 @@ after the clef.
 
 ### SignatureInput.reset_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reset_signature(
     clef: str,
@@ -990,6 +1166,10 @@ def reset_signature(
     starting_slots: list[int],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SignatureInput.reset_signature" line=1212 %}{% raw %}
+
+</div>
 
 Set the fixed signs for this question and clear the learner’s
 entries.
@@ -1017,9 +1197,15 @@ entries.
 
 ### SignatureInput.entered_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def entered_signature() -> list[Note | None]
 ```
+
+{% endraw %}{% include api-source.html name="SignatureInput.entered_signature" line=1259 %}{% raw %}
+
+</div>
 
 Combine the fixed signs and the learner's entries in staff
 order.
@@ -1049,9 +1235,15 @@ order.
 
 ### SignatureInput.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(event: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SignatureInput.paintEvent" line=1312 %}{% raw %}
+
+</div>
 
 Draw the blank staff and caption, then the placed signs and the
 next sign under the pointer.
@@ -1072,9 +1264,15 @@ False
 
 ## ClefInput
 
+<div class="api-signature" markdown="1">
+
 ```python
 ClefInput(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput" line=1367 %}{% raw %}
+
+</div>
 
 Bases: `StaffWidget`
 
@@ -1124,6 +1322,8 @@ True
 
 ### ClefInput.reset
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reset(
     options: list[str],
@@ -1131,6 +1331,10 @@ def reset(
     caption: str = '',
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.reset" line=1451 %}{% raw %}
+
+</div>
 
 Clear the staff for a new question and offer some symbols to
 choose from.
@@ -1158,9 +1362,15 @@ choose from.
 
 ### ClefInput.select
 
+<div class="api-signature" markdown="1">
+
 ```python
 def select(symbol: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.select" line=1496 %}{% raw %}
+
+</div>
 
 Choose a symbol.
 
@@ -1180,9 +1390,15 @@ Choose a symbol.
 
 ### ClefInput.step_symbol
 
+<div class="api-signature" markdown="1">
+
 ```python
 def step_symbol(direction: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.step_symbol" line=1527 %}{% raw %}
+
+</div>
 
 Choose the next symbol of the options, or the one before, going
 around.
@@ -1203,9 +1419,15 @@ around.
 
 ### ClefInput.step_at
 
+<div class="api-signature" markdown="1">
+
 ```python
 def step_at(y: float) -> int
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.step_at" line=1552 %}{% raw %}
+
+</div>
 
 Return the line or space nearest to a height in the widget.
 
@@ -1235,9 +1457,15 @@ Return the line or space nearest to a height in the widget.
 
 ### ClefInput.move_caret
 
+<div class="api-signature" markdown="1">
+
 ```python
 def move_caret(steps: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.move_caret" line=1588 %}{% raw %}
+
+</div>
 
 Move the place the keyboard would put the symbol.
 
@@ -1260,9 +1488,15 @@ Move the place the keyboard would put the symbol.
 
 ### ClefInput.place
 
+<div class="api-signature" markdown="1">
+
 ```python
 def place(step: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.place" line=1622 %}{% raw %}
+
+</div>
 
 Put the chosen symbol in a place, drawn solid, and say so.
 
@@ -1288,9 +1522,15 @@ Put the chosen symbol in a place, drawn solid, and say so.
 
 ### ClefInput.place_caret
 
+<div class="api-signature" markdown="1">
+
 ```python
 def place_caret() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.place_caret" line=1657 %}{% raw %}
+
+</div>
 
 Place the symbol where the keyboard put it, or on the middle
 line if it has not moved.
@@ -1308,9 +1548,15 @@ line if it has not moved.
 
 ### ClefInput.clear_placed
 
+<div class="api-signature" markdown="1">
+
 ```python
 def clear_placed() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.clear_placed" line=1673 %}{% raw %}
+
+</div>
 
 Take the placed symbol off the staff, so another can be tried.
 
@@ -1326,9 +1572,15 @@ True
 
 ### ClefInput.set_clef_color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_clef_color(color: QColor | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.set_clef_color" line=1688 %}{% raw %}
+
+</div>
 
 Draw the placed symbol in a color, for feedback, or back in
 black.
@@ -1348,9 +1600,15 @@ True
 
 ### ClefInput.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.mouseMoveEvent" line=1708 %}{% raw %}
+
+</div>
 
 Show the symbol in the place under the pointer, in a lighter
 color.
@@ -1387,9 +1645,15 @@ color.
 
 ### ClefInput.leaveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def leaveEvent(event: QEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.leaveEvent" line=1746 %}{% raw %}
+
+</div>
 
 Stop following the pointer when it leaves the staff.
 
@@ -1409,9 +1673,15 @@ True
 
 ### ClefInput.mousePressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mousePressEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.mousePressEvent" line=1767 %}{% raw %}
+
+</div>
 
 Place the symbol on a left click, or choose the next symbol on a
 right click.
@@ -1446,9 +1716,15 @@ right click.
 
 ### ClefInput.wheelEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def wheelEvent(event: QWheelEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.wheelEvent" line=1806 %}{% raw %}
+
+</div>
 
 Choose the next symbol for each notch of the wheel turned up,
 and the one before for each turned down.
@@ -1482,9 +1758,15 @@ and the one before for each turned down.
 
 ### ClefInput.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ClefInput.paintEvent" line=1847 %}{% raw %}
+
+</div>
 
 Draw the staff, then the symbol that was placed or, until one
 is, the one that would be placed.

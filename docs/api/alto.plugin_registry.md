@@ -10,6 +10,8 @@ public GitHub repositories.
 
 ## install_registered
 
+<div class="api-signature" markdown="1">
+
 ```python
 def install_registered(
     code: str,
@@ -18,6 +20,10 @@ def install_registered(
     selected: InstalledPlugin | None = None,
 ) -> str | None
 ```
+
+{% endraw %}{% include api-source.html name="install_registered" line=131 %}{% raw %}
+
+</div>
 
 Install by registration code, or update a selected ZIP from its
 registered repository.

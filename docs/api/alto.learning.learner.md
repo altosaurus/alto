@@ -25,9 +25,15 @@ True
 
 ## PracticeComplete
 
+<div class="api-signature" markdown="1">
+
 ```python
 PracticeComplete(retry_at: float | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="PracticeComplete" line=51 %}{% raw %}
+
+</div>
 
 Bases: `Exception`
 
@@ -57,6 +63,8 @@ True
 
 ## Learner
 
+<div class="api-signature" markdown="1">
+
 ```python
 Learner(
     db: Database,
@@ -64,6 +72,10 @@ Learner(
     profile: Profile,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Learner" line=80 %}{% raw %}
+
+</div>
 
 Chooses what a profile is asked next and records how it was
 answered.
@@ -121,9 +133,15 @@ Create a learner for one profile.
 
 ### Learner.set_profile
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_profile(profile: Profile) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Learner.set_profile" line=151 %}{% raw %}
+
+</div>
 
 Open a profile's practice queues and resume its selected
 scheduler.
@@ -146,10 +164,16 @@ scheduler.
 
 ### Learner.mode
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def mode() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Learner.mode" line=177 %}{% raw %}
+
+</div>
 
 Return this profile's question scheduler.
 
@@ -169,10 +193,16 @@ Return this profile's question scheduler.
 
 ### Learner.self_grading
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def self_grading() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Learner.self_grading" line=201 %}{% raw %}
+
+</div>
 
 Read the profile's SM-2 and FSRS grading preference.
 
@@ -192,9 +222,15 @@ False
 
 ### Learner.response_times
 
+<div class="api-signature" markdown="1">
+
 ```python
 def response_times(exercise: str) -> ResponseTimes
 ```
+
+{% endraw %}{% include api-source.html name="Learner.response_times" line=225 %}{% raw %}
+
+</div>
 
 Read the rolling sample for one exercise and the current
 profile's thresholds.
@@ -219,6 +255,8 @@ profile's thresholds.
 
 ### Learner.set_speed_thresholds
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_speed_thresholds(
     *,
@@ -226,6 +264,10 @@ def set_speed_thresholds(
     hard: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Learner.set_speed_thresholds" line=262 %}{% raw %}
+
+</div>
 
 Save the two tail percentages for this profile.
 
@@ -247,9 +289,15 @@ answer.
 
 ### Learner.set_self_grading
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_self_grading(enabled: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Learner.set_self_grading" line=299 %}{% raw %}
+
+</div>
 
 Choose how this profile grades correct calendar reviews.
 
@@ -271,9 +319,15 @@ True
 
 ### Learner.set_mode
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_mode(mode: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Learner.set_mode" line=324 %}{% raw %}
+
+</div>
 
 Select the question scheduler for this profile.
 
@@ -299,6 +353,8 @@ Select the question scheduler for this profile.
 
 ### Learner.pick
 
+<div class="api-signature" markdown="1">
+
 ```python
 def pick(
     exercise: Exercise,
@@ -308,6 +364,10 @@ def pick(
     now: float | None = None,
 ) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="Learner.pick" line=358 %}{% raw %}
+
+</div>
 
 Return the next eligible question using the profile's selected
 scheduler.
@@ -349,6 +409,8 @@ True
 
 ### Learner.record
 
+<div class="api-signature" markdown="1">
+
 ```python
 def record(
     exercise: Exercise,
@@ -365,6 +427,10 @@ def record(
     timing_valid: bool = True,
 ) -> ReviewInterval | None
 ```
+
+{% endraw %}{% include api-source.html name="Learner.record" line=571 %}{% raw %}
+
+</div>
 
 Log one answer and update what is known about the question.
 

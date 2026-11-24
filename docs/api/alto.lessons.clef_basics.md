@@ -22,9 +22,15 @@ points at middle C, and the rarer clefs.
 
 ## symbol_task
 
+<div class="api-signature" markdown="1">
+
 ```python
 def symbol_task(rng: random.Random) -> Task
 ```
+
+{% endraw %}{% include api-source.html name="symbol_task" line=60 %}{% raw %}
+
+</div>
 
 Ask which of the three symbols a clef is made with.
 
@@ -48,9 +54,15 @@ True
 
 ## identify_task
 
+<div class="api-signature" markdown="1">
+
 ```python
 def identify_task(rng: random.Random) -> Task
 ```
+
+{% endraw %}{% include api-source.html name="identify_task" line=103 %}{% raw %}
+
+</div>
 
 Ask which clef is drawn on a staff.
 
@@ -72,9 +84,15 @@ True
 
 ## line_task
 
+<div class="api-signature" markdown="1">
+
 ```python
 def line_task(rng: random.Random) -> Task
 ```
+
+{% endraw %}{% include api-source.html name="line_task" line=146 %}{% raw %}
+
+</div>
 
 Ask which line of a blank staff a named clef is written on.
 

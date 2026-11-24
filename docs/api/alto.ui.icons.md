@@ -23,12 +23,18 @@ False
 
 ## set_palette_icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_palette_icon(
     target: QAbstractButton | QAction | QMenu,
     render: Callable[[QPalette], QIcon],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_palette_icon" line=150 %}{% raw %}
+
+</div>
 
 Assign a native Qt icon and refresh it whenever the application
 palette changes.
@@ -55,6 +61,8 @@ False
 
 ## set_svg_icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_svg_icon(
     target: QAbstractButton | QAction | QMenu,
@@ -64,6 +72,10 @@ def set_svg_icon(
     size: int = 24,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_svg_icon" line=200 %}{% raw %}
+
+</div>
 
 Tint an SVG icon with the control's current foreground or accent
 color.
@@ -87,12 +99,18 @@ False
 
 ## set_item_icons
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_item_icons(
     view: QAbstractItemView,
     items: list[tuple[str, Callable[[QIcon], None]]],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_item_icons" line=236 %}{% raw %}
+
+</div>
 
 Recolor the current rows of a navigation list or tree without
 rebuilding it.
@@ -111,6 +129,8 @@ changes.
 
 ## svg_icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 def svg_icon(
     inner: str,
@@ -120,6 +140,10 @@ def svg_icon(
     scale: float = 2.0,
 ) -> QIcon
 ```
+
+{% endraw %}{% include api-source.html name="svg_icon" line=286 %}{% raw %}
+
+</div>
 
 Render 24 by 24 SVG shapes into a crisp icon.
 

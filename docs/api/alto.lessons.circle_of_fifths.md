@@ -22,6 +22,8 @@ key mean.
 
 ## key_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def key_name(
     ring: str,
@@ -29,6 +31,10 @@ def key_name(
     place: int,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="key_name" line=37 %}{% raw %}
+
+</div>
 
 Return the first name of the key in a cell, written out.
 
@@ -53,6 +59,8 @@ Return the first name of the key in a cell, written out.
 
 ## summary
 
+<div class="api-signature" markdown="1">
+
 ```python
 def summary(
     ring: str,
@@ -60,6 +68,10 @@ def summary(
     place: int,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="summary" line=68 %}{% raw %}
+
+</div>
 
 Say a key and its key signature in one line.
 
@@ -85,9 +97,15 @@ Say a key and its key signature in one line.
 
 ## fifth_task
 
+<div class="api-signature" markdown="1">
+
 ```python
 def fifth_task(rng: random.Random) -> Task
 ```
+
+{% endraw %}{% include api-source.html name="fifth_task" line=110 %}{% raw %}
+
+</div>
 
 Ask for the letter a fifth above a random letter, answered with
 buttons.
@@ -112,9 +130,15 @@ True
 
 ## sharps_task
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sharps_task(rng: random.Random) -> Task
 ```
+
+{% endraw %}{% include api-source.html name="sharps_task" line=156 %}{% raw %}
+
+</div>
 
 Ask for the major key with a given number of sharps, answered on the
 circle.
@@ -146,9 +170,15 @@ circle.
 
 ## flats_task
 
+<div class="api-signature" markdown="1">
+
 ```python
 def flats_task(rng: random.Random) -> Task
 ```
+
+{% endraw %}{% include api-source.html name="flats_task" line=213 %}{% raw %}
+
+</div>
 
 Ask for the major key with a given number of flats, answered on the
 circle.
@@ -180,9 +210,15 @@ circle.
 
 ## relative_task
 
+<div class="api-signature" markdown="1">
+
 ```python
 def relative_task(rng: random.Random) -> Task
 ```
+
+{% endraw %}{% include api-source.html name="relative_task" line=266 %}{% raw %}
+
+</div>
 
 Ask for the relative minor of a major key, answered on the circle.
 
@@ -206,9 +242,15 @@ True
 
 ## neighbor_task
 
+<div class="api-signature" markdown="1">
+
 ```python
 def neighbor_task(rng: random.Random) -> Task
 ```
+
+{% endraw %}{% include api-source.html name="neighbor_task" line=314 %}{% raw %}
+
+</div>
 
 Ask for the key a fifth above or below a random key, answered on the
 circle.

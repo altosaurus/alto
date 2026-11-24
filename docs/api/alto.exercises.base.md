@@ -28,6 +28,8 @@ a new exercise needs no new interface code.
 
 ## FingerboardPosition
 
+<div class="api-signature" markdown="1">
+
 ```python
 FingerboardPosition(
     strings: tuple[str, ...],
@@ -36,6 +38,10 @@ FingerboardPosition(
     instrument: str = '',
 )
 ```
+
+{% endraw %}{% include api-source.html name="FingerboardPosition" line=47 %}{% raw %}
+
+</div>
 
 A written pitch on one string, with the tuning needed to redraw it.
 
@@ -49,6 +55,8 @@ A written pitch on one string, with the tuning needed to redraw it.
 ```
 
 ## PicturePosition
+
+<div class="api-signature" markdown="1">
 
 ```python
 PicturePosition(
@@ -64,6 +72,10 @@ PicturePosition(
     span: tuple[str, ...] = (),
 )
 ```
+
+{% endraw %}{% include api-source.html name="PicturePosition" line=66 %}{% raw %}
+
+</div>
 
 A pack-owned image and a marked location in its original pixels.
 
@@ -96,6 +108,8 @@ A pack-owned image and a marked location in its original pixels.
 ```
 
 ## Question
+
+<div class="api-signature" markdown="1">
 
 ```python
 Question(
@@ -143,6 +157,10 @@ Question(
     notation_excerpt: str | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Question" line=133 %}{% raw %}
+
+</div>
 
 One question, with what to show for it and which answer is right.
 
@@ -209,9 +227,15 @@ True
 
 ### Question.check_placed
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_placed(note: Note) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Question.check_placed" line=389 %}{% raw %}
+
+</div>
 
 Report whether a note placed on the staff is the one asked for.
 
@@ -245,9 +269,15 @@ False
 
 ### Question.sounding_columns
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sounding_columns() -> list[list[Note]]
 ```
+
+{% endraw %}{% include api-source.html name="Question.sounding_columns" line=428 %}{% raw %}
+
+</div>
 
 Return pitches from the staff or keyboard in playback order.
 
@@ -263,9 +293,15 @@ A keyboard interval plays both of its highlighted pitches.
 
 ### Question.placement_columns
 
+<div class="api-signature" markdown="1">
+
 ```python
 def placement_columns(note: Note | None) -> list[list[Note]]
 ```
+
+{% endraw %}{% include api-source.html name="Question.placement_columns" line=447 %}{% raw %}
+
+</div>
 
 Return the given and placed notes grouped by onset, omitting the
 answer until it is placed.
@@ -297,9 +333,15 @@ True
 
 ### Question.check_scale
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_scale(notes: list[Note]) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Question.check_scale" line=484 %}{% raw %}
+
+</div>
 
 Report whether the notes placed on the staff are the scale asked
 for.
@@ -369,9 +411,15 @@ False
 
 ### Question.check_steps
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_steps(steps: list[str]) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Question.check_steps" line=567 %}{% raw %}
+
+</div>
 
 Report whether the steps marked between the notes of a scale are
 the right ones.
@@ -407,9 +455,15 @@ True
 
 ### Question.check_built
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_built(count: int) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Question.check_built" line=605 %}{% raw %}
+
+</div>
 
 Report whether a key signature built with the fork is the one
 asked for.
@@ -439,10 +493,16 @@ asked for.
 
 ### Question.places_sequence
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def places_sequence() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Question.places_sequence" line=637 %}{% raw %}
+
+</div>
 
 Report whether the learner enters successive positions on the
 staff.
@@ -465,9 +525,15 @@ True
 
 ### Question.check
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check(choice: str) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Question.check" line=659 %}{% raw %}
+
+</div>
 
 Report whether a chosen answer is right.
 
@@ -506,9 +572,15 @@ Report whether a chosen answer is right.
 
 ### Question.complete
 
+<div class="api-signature" markdown="1">
+
 ```python
 def complete(given: set[str]) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Question.complete" line=703 %}{% raw %}
+
+</div>
 
 Report whether the answers given so far are all of those needed.
 
@@ -542,9 +614,15 @@ True
 
 ### Question.item_key
 
+<div class="api-signature" markdown="1">
+
 ```python
 def item_key() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Question.item_key" line=742 %}{% raw %}
+
+</div>
 
 Return a stable identity for the question, so the same one can
 be recognized when it comes around again.
@@ -577,9 +655,15 @@ True
 
 ### Question.to_dict
 
+<div class="api-signature" markdown="1">
+
 ```python
 def to_dict() -> dict
 ```
+
+{% endraw %}{% include api-source.html name="Question.to_dict" line=861 %}{% raw %}
+
+</div>
 
 Return the question as plain data, so it can be stored and asked
 again.
@@ -603,10 +687,16 @@ again.
 
 ### Question.from_dict
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def from_dict(d: dict) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="Question.from_dict" line=892 %}{% raw %}
+
+</div>
 
 Rebuild a question from the data that `to_dict` made.
 
@@ -634,9 +724,15 @@ True
 
 ## note_from
 
+<div class="api-signature" markdown="1">
+
 ```python
 def note_from(v: dict | None) -> Note | None
 ```
+
+{% endraw %}{% include api-source.html name="note_from" line=972 %}{% raw %}
+
+</div>
 
 Rebuild a note from stored data.
 
@@ -665,9 +761,15 @@ True
 
 ## signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def signature(*parts: object) -> str
 ```
+
+{% endraw %}{% include api-source.html name="signature" line=1002 %}{% raw %}
+
+</div>
 
 Describe the exercise settings in force, so a stored question is
 only asked again under the settings it was made for.
@@ -695,9 +797,15 @@ True
 
 ## Exercise
 
+<div class="api-signature" markdown="1">
+
 ```python
 class Exercise(ABC)
 ```
+
+{% endraw %}{% include api-source.html name="Exercise" line=1066 %}{% raw %}
+
+</div>
 
 What every exercise provides: its name, how it makes questions and
 how long a good answer takes.
@@ -730,9 +838,15 @@ how long a good answer takes.
 
 ### Exercise.sound_instrument
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sound_instrument(key: str | None) -> str | None
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.sound_instrument" line=1125 %}{% raw %}
+
+</div>
 
 Choose the instrument that plays this exercise's notes.
 
@@ -756,9 +870,15 @@ Choose the instrument that plays this exercise's notes.
 
 ### Exercise.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.settings_signature" line=1152 %}{% raw %}
+
+</div>
 
 Return what identifies the settings that shape the questions.
 
@@ -783,9 +903,15 @@ Exercises with settings override it.
 
 ### Exercise.card_prompt
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_prompt(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.card_prompt" line=1176 %}{% raw %}
+
+</div>
 
 Say what to do on a flashcard made from a question, where
 nothing on screen explains the task.
@@ -830,9 +956,15 @@ to press, a staff to click) override this.
 
 ### Exercise.card_groups
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_groups() -> dict[str, str] | None
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.card_groups" line=1229 %}{% raw %}
+
+</div>
 
 Map playable examples to the skills that share a calendar review
 date.
@@ -853,9 +985,15 @@ True
 
 ### Exercise.card_count
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_count() -> int | None
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.card_count" line=1250 %}{% raw %}
+
+</div>
 
 Count distinct cards possible with the current settings when the
 exercise has an exact catalog.
@@ -876,9 +1014,15 @@ True
 
 ### Exercise.daily_candidates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.daily_candidates" line=1272 %}{% raw %}
+
+</div>
 
 Yield distinct questions until 100 consecutive draws find no new
 playable item.
@@ -910,6 +1054,8 @@ True
 
 ### Exercise.review_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def review_question(
     question: Question,
@@ -917,6 +1063,10 @@ def review_question(
     same_settings: bool,
 ) -> Question | None
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.review_question" line=1315 %}{% raw %}
+
+</div>
 
 Adapt a stored question for review under the active settings.
 
@@ -945,9 +1095,15 @@ True
 
 ### Exercise.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh(question: Question) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.refresh" line=1351 %}{% raw %}
+
+</div>
 
 Bring a stored question up to date with how the exercise draws
 its questions now.
@@ -979,9 +1135,15 @@ True
 
 ### Exercise.instructions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def instructions() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.instructions" line=1383 %}{% raw %}
+
+</div>
 
 Return the help text shown from the exercise's help button.
 
@@ -1007,10 +1169,16 @@ Exercises override it to describe themselves.
 
 ### Exercise.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 @abstractmethod
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="Exercise.generate" line=1409 %}{% raw %}
+
+</div>
 
 Make one new question.
 
@@ -1033,12 +1201,18 @@ True
 
 ## ButtonSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 ButtonSettings(
     button_mode: str = 'all',
     button_count: int = 6,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ButtonSettings" line=1435 %}{% raw %}
+
+</div>
 
 An exercise’s choice of answer layout and maximum number of buttons
 per group.
@@ -1052,9 +1226,15 @@ per group.
 
 ## ChoiceExercise
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ChoiceExercise(Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceExercise" line=1450 %}{% raw %}
+
+</div>
 
 A button-answer exercise with its own standard Buttons submenu.
 
@@ -1073,11 +1253,17 @@ to start in Limited mode.
 
 ### ChoiceExercise.button_settings
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 @cache
 def button_settings() -> ButtonSettings
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceExercise.button_settings" line=1470 %}{% raw %}
+
+</div>
 
 Return the preferences shared by instances of this particular
 exercise.
@@ -1096,9 +1282,15 @@ exercise.
 
 ### ChoiceExercise.settings_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceExercise.settings_signature" line=1491 %}{% raw %}
+
+</div>
 
 Include custom answer layouts when deciding which questions can
 be replayed.
@@ -1119,9 +1311,15 @@ be replayed.
 
 ### ChoiceExercise.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceExercise.practice_signature" line=1519 %}{% raw %}
+
+</div>
 
 Identify the exercise settings other than the answer layout.
 
@@ -1141,9 +1339,15 @@ Identify the exercise settings other than the answer layout.
 
 ### ChoiceExercise.generate
 
+<div class="api-signature" markdown="1">
+
 ```python
 def generate(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceExercise.generate" line=1538 %}{% raw %}
+
+</div>
 
 Generate the musical task and apply the selected button count.
 
@@ -1171,6 +1375,8 @@ Generate the musical task and apply the selected button count.
 
 ### ChoiceExercise.limit_buttons
 
+<div class="api-signature" markdown="1">
+
 ```python
 def limit_buttons(
     question: Question,
@@ -1178,6 +1384,10 @@ def limit_buttons(
     rng: random.Random,
 ) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceExercise.limit_buttons" line=1566 %}{% raw %}
+
+</div>
 
 Limit each answer group while keeping all the buttons needed to
 complete the question.
@@ -1200,10 +1410,16 @@ their respective groups.
 
 ### ChoiceExercise.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 @abstractmethod
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceExercise.make_question" line=1655 %}{% raw %}
+
+</div>
 
 Generate the task and eligible answer choices before the button
 limit is applied.
@@ -1225,9 +1441,15 @@ active clef and key settings.
 
 ## register
 
+<div class="api-signature" markdown="1">
+
 ```python
 def register() -> type[Exercise]
 ```
+
+{% endraw %}{% include api-source.html name="register" line=1681 %}{% raw %}
+
+</div>
 
 Add an exercise to `REGISTRY`, next to the others of its category.
 
@@ -1264,6 +1486,8 @@ True
 
 ## pick_distractors
 
+<div class="api-signature" markdown="1">
+
 ```python
 def pick_distractors(
     correct: str,
@@ -1273,6 +1497,10 @@ def pick_distractors(
     rng: random.Random,
 ) -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="pick_distractors" line=1732 %}{% raw %}
+
+</div>
 
 Choose wrong answers to offer alongside the right one, and shuffle
 them all.

@@ -31,9 +31,15 @@ font chosen in the settings.
 
 ## clef_targets
 
+<div class="api-signature" markdown="1">
+
 ```python
 def clef_targets(clef: str) -> set[tuple[str, int]]
 ```
+
+{% endraw %}{% include api-source.html name="clef_targets" line=132 %}{% raw %}
+
+</div>
 
 Return the ways a clef can be written: the symbol and where on the
 staff it goes.
@@ -64,9 +70,15 @@ True
 
 ## clef_target_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def clef_target_of(shape: str) -> tuple[str, int]
 ```
+
+{% endraw %}{% include api-source.html name="clef_target_of" line=172 %}{% raw %}
+
+</div>
 
 Return the symbol and the place of one way of writing a clef.
 
@@ -90,6 +102,8 @@ Return the symbol and the place of one way of writing a clef.
 
 ## draw_key_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_key_signature(
     p: QPainter,
@@ -105,6 +119,10 @@ def draw_key_signature(
     font: str | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="draw_key_signature" line=219 %}{% raw %}
+
+</div>
 
 Draw the sharps or flats of a key signature, left to right.
 
@@ -153,6 +171,8 @@ True
 
 ## draw_signature_sign
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_signature_sign(
     p: QPainter,
@@ -167,6 +187,10 @@ def draw_signature_sign(
     font: str | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="draw_signature_sign" line=313 %}{% raw %}
+
+</div>
 
 Draw one sharp or flat at its written position in a key signature.
 
@@ -189,6 +213,8 @@ drawing.
 
 ## StaffWidget
 
+<div class="api-signature" markdown="1">
+
 ```python
 StaffWidget(
     parent: QWidget | None = None,
@@ -202,6 +228,10 @@ StaffWidget(
     lesson_layout: bool = False,
 )
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget" line=539 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -269,6 +299,8 @@ Create an empty treble staff.
 
 ### StaffWidget.show_notes
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_notes(
     columns: list[list[Note]],
@@ -282,6 +314,10 @@ def show_notes(
     notation_excerpt: str | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.show_notes" line=729 %}{% raw %}
+
+</div>
 
 Show some notes, with a clef and a key signature.
 
@@ -318,9 +354,15 @@ Show some notes, with a clef and a key signature.
 
 ### StaffWidget.sizeHint
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sizeHint() -> QSize
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.sizeHint" line=879 %}{% raw %}
+
+</div>
 
 Return the size the staff would like.
 
@@ -342,9 +384,15 @@ centers it gives it that much.
 
 ### StaffWidget.resizeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def resizeEvent(event: QResizeEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.resizeEvent" line=1142 %}{% raw %}
+
+</div>
 
 Reflow a lesson excerpt when its available width changes.
 
@@ -361,9 +409,15 @@ Reflow a lesson excerpt when its available width changes.
 
 ### StaffWidget.highlight_column
 
+<div class="api-signature" markdown="1">
+
 ```python
 def highlight_column(index: int | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.highlight_column" line=1203 %}{% raw %}
+
+</div>
 
 Highlight a sounding note or chord, preserving the staff's other
 markings.
@@ -383,9 +437,15 @@ markings.
 
 ### StaffWidget.set_note_color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_note_color(color: QColor | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.set_note_color" line=1223 %}{% raw %}
+
+</div>
 
 Apply feedback to the highlighted notation component or to the
 notes when there is no component target.
@@ -409,9 +469,15 @@ True
 
 ### StaffWidget.staff_bottoms
 
+<div class="api-signature" markdown="1">
+
 ```python
 def staff_bottoms() -> dict[str, float]
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.staff_bottoms" line=1248 %}{% raw %}
+
+</div>
 
 Return where each staff is drawn.
 
@@ -430,9 +496,15 @@ Return where each staff is drawn.
 
 ### StaffWidget.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.paintEvent" line=1276 %}{% raw %}
+
+</div>
 
 Draw the paper, the staff lines, the clef, the key signature,
 the notes and the caption.
@@ -457,9 +529,15 @@ the notes and the caption.
 
 ### StaffWidget.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.mouseMoveEvent" line=1334 %}{% raw %}
+
+</div>
 
 Preview the component under the pointer in Click on Staff
 questions.
@@ -477,9 +555,15 @@ False
 
 ### StaffWidget.leaveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def leaveEvent(event: QEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.leaveEvent" line=1354 %}{% raw %}
+
+</div>
 
 Clear the component preview when the pointer leaves the music.
 
@@ -497,9 +581,15 @@ Clear the component preview when the pointer leaves the music.
 
 ### StaffWidget.hits_notation
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hits_notation(point: QPoint) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="StaffWidget.hits_notation" line=1374 %}{% raw %}
+
+</div>
 
 Check for target ink within four logical pixels of a click on
 the score.
@@ -521,9 +611,15 @@ False
 
 ## keyboard_key_staff
 
+<div class="api-signature" markdown="1">
+
 ```python
 def keyboard_key_staff() -> StaffWidget
 ```
+
+{% endraw %}{% include api-source.html name="keyboard_key_staff" line=2642 %}{% raw %}
+
+</div>
 
 Build the compact key signature shown above a keyboard question.
 

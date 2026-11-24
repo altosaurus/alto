@@ -24,6 +24,8 @@ settings panel both read and write.
 
 ## spell
 
+<div class="api-signature" markdown="1">
+
 ```python
 def spell(
     note: Note,
@@ -34,6 +36,10 @@ def spell(
     minor: bool = False,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="spell" line=203 %}{% raw %}
+
+</div>
 
 Return a note name in the chosen naming system, optionally including
 its octave.
@@ -94,9 +100,15 @@ its octave.
 
 ## diatonic_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def diatonic_name(d: int) -> str
 ```
+
+{% endraw %}{% include api-source.html name="diatonic_name" line=305 %}{% raw %}
+
+</div>
 
 Return the name and octave of the natural note on a staff step.
 
@@ -117,9 +129,15 @@ Return the name and octave of the natural note on a staff step.
 
 ## ClefChoice
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ClefChoice
 ```
+
+{% endraw %}{% include api-source.html name="ClefChoice" line=328 %}{% raw %}
+
+</div>
 
 Settings with a set of chosen clefs, which are always used in the
 same order.
@@ -140,9 +158,15 @@ same order.
 
 ### ClefChoice.active_clefs
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_clefs() -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="ClefChoice.active_clefs" line=353 %}{% raw %}
+
+</div>
 
 Return the clefs to use, in canonical order.
 
@@ -167,9 +191,15 @@ Return the clefs to use, in canonical order.
 
 ## KeyChoice
 
+<div class="api-signature" markdown="1">
+
 ```python
 class KeyChoice
 ```
+
+{% endraw %}{% include api-source.html name="KeyChoice" line=379 %}{% raw %}
+
+</div>
 
 Settings with a set of chosen key signatures.
 
@@ -186,9 +216,15 @@ Settings with a set of chosen key signatures.
 
 ### KeyChoice.active_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_keys() -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="KeyChoice.active_keys" line=398 %}{% raw %}
+
+</div>
 
 Return the key signatures to draw from, lowest first.
 
@@ -211,6 +247,8 @@ Return the key signatures to draw from, lowest first.
 
 ## StaffRangeSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 StaffRangeSettings(
     clefs: set[str] = field(default_factory=lambda: {'treble', 'bass'}),
@@ -219,6 +257,10 @@ StaffRangeSettings(
     note_values: set[str] = field(default_factory=lambda: {'whole'}),
 )
 ```
+
+{% endraw %}{% include api-source.html name="StaffRangeSettings" line=423 %}{% raw %}
+
+</div>
 
 Bases: `ClefChoice`
 
@@ -233,9 +275,15 @@ Selected clefs and inclusive pitch limits for each staff.
 
 ### StaffRangeSettings.active_values
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_values() -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="StaffRangeSettings.active_values" line=445 %}{% raw %}
+
+</div>
 
 Return the note values to draw, from longest to shortest.
 
@@ -254,9 +302,15 @@ Return the note values to draw, from longest to shortest.
 
 ### StaffRangeSettings.range_for
 
+<div class="api-signature" markdown="1">
+
 ```python
 def range_for(clef: str) -> tuple[int, int]
 ```
+
+{% endraw %}{% include api-source.html name="StaffRangeSettings.range_for" line=464 %}{% raw %}
+
+</div>
 
 Return the range of notes that may be asked on a clef.
 
@@ -283,6 +337,8 @@ Return the range of notes that may be asked on a clef.
 
 ## NoteNameSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 NoteNameSettings(
     *,
@@ -293,6 +349,10 @@ NoteNameSettings(
     require_octave: bool = False,
 )
 ```
+
+{% endraw %}{% include api-source.html name="NoteNameSettings" line=495 %}{% raw %}
+
+</div>
 
 Bases: `StaffRangeSettings`
 
@@ -320,9 +380,15 @@ The settings of the note identification exercise.
 
 ### NoteNameSettings.active_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_keys() -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="NoteNameSettings.active_keys" line=544 %}{% raw %}
+
+</div>
 
 Return the key signatures to draw from, lowest first.
 
@@ -346,6 +412,8 @@ would orphan every learner's saved questions.
 
 ## PackExerciseSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 PackExerciseSettings(
     *,
@@ -357,6 +425,10 @@ PackExerciseSettings(
     manuals: frozenset[str] | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="PackExerciseSettings" line=573 %}{% raw %}
+
+</div>
 
 Bases: `StaffRangeSettings`
 
@@ -392,6 +464,8 @@ True
 
 ## IntervalSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 IntervalSettings(
     *,
@@ -408,6 +482,10 @@ IntervalSettings(
 )
 ```
 
+{% endraw %}{% include api-source.html name="IntervalSettings" line=662 %}{% raw %}
+
+</div>
+
 Bases: `StaffRangeSettings`
 
 Staff signatures, presentations, answer format and spelled intervals
@@ -422,9 +500,15 @@ for Interval Identification.
 
 ### IntervalSettings.staff_span
 
+<div class="api-signature" markdown="1">
+
 ```python
 def staff_span(clef: str) -> int
 ```
+
+{% endraw %}{% include api-source.html name="IntervalSettings.staff_span" line=695 %}{% raw %}
+
+</div>
 
 Count the written staff positions in a clef's selected range,
 including both endpoints.
@@ -448,9 +532,15 @@ including both endpoints.
 
 ## key_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def key_name(midi: int) -> str
 ```
+
+{% endraw %}{% include api-source.html name="key_name" line=777 %}{% raw %}
+
+</div>
 
 Return the name of a MIDI note with its octave, black keys as
 sharps.
@@ -472,6 +562,8 @@ sharps.
 
 ## KeyboardSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardSettings(
     black_keys: bool = True,
@@ -483,6 +575,10 @@ KeyboardSettings(
     keys: set[int] = field(default_factory=lambda: {-3, -2, -1, 0, 1, 2, 3}),
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSettings" line=801 %}{% raw %}
+
+</div>
 
 Bases: `KeyChoice`
 
@@ -507,9 +603,15 @@ The settings of the keyboard identification exercise.
 
 ## keyboard_interval_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def keyboard_interval_name(distance: int) -> str
 ```
+
+{% endraw %}{% include api-source.html name="keyboard_interval_name" line=876 %}{% raw %}
+
+</div>
 
 Name a keyboard interval by its distance, including compound
 intervals.
@@ -541,6 +643,8 @@ intervals.
 
 ## KeyboardIntervalSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardIntervalSettings(
     low: int = KEYBOARD_DEFAULT[0],
@@ -551,6 +655,10 @@ KeyboardIntervalSettings(
     button_count: int = 6,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettings" line=925 %}{% raw %}
+
+</div>
 
 The keyboard range and interval distances used for keyboard interval
 identification.
@@ -573,9 +681,15 @@ identification.
 
 ### KeyboardIntervalSettings.answer_button_limit
 
+<div class="api-signature" markdown="1">
+
 ```python
 def answer_button_limit() -> int
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.answer_button_limit" line=962 %}{% raw %}
+
+</div>
 
 Return the requested count within the supported range of 1 to 87
 buttons.
@@ -597,9 +711,15 @@ buttons.
 
 ### KeyboardIntervalSettings.bounds
 
+<div class="api-signature" markdown="1">
+
 ```python
 def bounds() -> tuple[int, int]
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.bounds" line=984 %}{% raw %}
+
+</div>
 
 Return a piano range containing at least two distinct keys.
 
@@ -618,9 +738,15 @@ Return a piano range containing at least two distinct keys.
 
 ### KeyboardIntervalSettings.active_intervals
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_intervals() -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.active_intervals" line=1012 %}{% raw %}
+
+</div>
 
 Return selected interval distances that fit the keyboard range.
 
@@ -643,6 +769,8 @@ Return selected interval distances that fit the keyboard range.
 
 ## ConstructionSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 ConstructionSettings(
     clefs: set[str] = field(default_factory=lambda: {'treble', 'bass'}),
@@ -659,6 +787,10 @@ ConstructionSettings(
     minor_keys: set[int] | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ConstructionSettings" line=1047 %}{% raw %}
+
+</div>
 
 Bases: `ClefChoice, KeyChoice`
 
@@ -689,6 +821,8 @@ The settings of the note construction exercise.
 
 ## ArpeggioSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 ArpeggioSettings(
     clefs: set[str] = field(default_factory=lambda: {'treble', 'bass'}),
@@ -699,6 +833,10 @@ ArpeggioSettings(
     keys: set[int] = field(default_factory=lambda: {-3, -2, -1, 0, 1, 2, 3}),
 )
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioSettings" line=1157 %}{% raw %}
+
+</div>
 
 Bases: `ClefChoice, KeyChoice`
 
@@ -721,9 +859,15 @@ The settings of the arpeggio identification exercise.
 
 ### ArpeggioSettings.active_types
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_types() -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioSettings.active_types" line=1211 %}{% raw %}
+
+</div>
 
 Return the chord types to ask, triads first and then seventh
 chords.
@@ -743,9 +887,15 @@ chords.
 
 ### ArpeggioSettings.active_inversions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_inversions() -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioSettings.active_inversions" line=1231 %}{% raw %}
+
+</div>
 
 Return the inversions to ask, root position first.
 
@@ -764,9 +914,15 @@ Return the inversions to ask, root position first.
 
 ### ArpeggioSettings.inversions_for
 
+<div class="api-signature" markdown="1">
+
 ```python
 def inversions_for(chord_type: str) -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioSettings.inversions_for" line=1250 %}{% raw %}
+
+</div>
 
 Return the inversions that can be asked for a chord type.
 
@@ -799,6 +955,8 @@ used.
 
 ## KeySignatureSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeySignatureSettings(
     *,
@@ -807,6 +965,10 @@ KeySignatureSettings(
     keys: set[int] = field(default_factory=lambda: set(range(-7, 8))),
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatureSettings" line=1315 %}{% raw %}
+
+</div>
 
 Bases: `ClefChoice, KeyChoice`
 
@@ -828,9 +990,15 @@ The settings of the key signature identification exercise.
 
 ### KeySignatureSettings.active_modes
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_modes() -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatureSettings.active_modes" line=1347 %}{% raw %}
+
+</div>
 
 Return the scales to ask about, in the order of `KEY_MODES`.
 
@@ -847,12 +1015,18 @@ Return the scales to ask about, in the order of `KEY_MODES`.
 
 ## OrderOfKeysSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 OrderOfKeysSettings(
     *,
     starting_accidentals: set[int] = field(default_factory=lambda: {0}),
 )
 ```
+
+{% endraw %}{% include api-source.html name="OrderOfKeysSettings" line=1368 %}{% raw %}
+
+</div>
 
 Bases: `KeySignatureSettings`
 
@@ -873,9 +1047,15 @@ range(-2, 5)
 
 ### OrderOfKeysSettings.available_starts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def available_starts() -> range
 ```
+
+{% endraw %}{% include api-source.html name="OrderOfKeysSettings.available_starts" line=1389 %}{% raw %}
+
+</div>
 
 Return starting counts that fit at least one selected signature.
 
@@ -896,9 +1076,15 @@ Return starting counts that fit at least one selected signature.
 
 ## KeyConstructionSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyConstructionSettings()
 ```
+
+{% endraw %}{% include api-source.html name="KeyConstructionSettings" line=1416 %}{% raw %}
+
+</div>
 
 Bases: `KeySignatureSettings`
 
@@ -921,6 +1107,8 @@ choices as key signature identification.
 
 ## ScaleIdentificationSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 ScaleIdentificationSettings(
     *,
@@ -932,6 +1120,10 @@ ScaleIdentificationSettings(
     staff_keys: set[int] = field(default_factory=lambda: {0}),
 )
 ```
+
+{% endraw %}{% include api-source.html name="ScaleIdentificationSettings" line=1444 %}{% raw %}
+
+</div>
 
 Bases: `KeySignatureSettings`
 
@@ -959,9 +1151,15 @@ signatures for identification.
 
 ### ScaleIdentificationSettings.active_staff_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_staff_keys() -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="ScaleIdentificationSettings.active_staff_keys" line=1489 %}{% raw %}
+
+</div>
 
 Return the selected staff signatures, falling back to no
 signature.
@@ -981,6 +1179,8 @@ signature.
 
 ## ScaleConstructionSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 ScaleConstructionSettings(
     *,
@@ -991,6 +1191,10 @@ ScaleConstructionSettings(
     staff_keys: set[int] = field(default_factory=lambda: {0}),
 )
 ```
+
+{% endraw %}{% include api-source.html name="ScaleConstructionSettings" line=1513 %}{% raw %}
+
+</div>
 
 Bases: `KeySignatureSettings`
 
@@ -1031,9 +1235,15 @@ otherwise flatten the notes.
 
 ### ScaleConstructionSettings.active_staff_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_staff_keys() -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="ScaleConstructionSettings.active_staff_keys" line=1579 %}{% raw %}
+
+</div>
 
 Return the key signatures that may be drawn on the staff, lowest
 first.
@@ -1057,6 +1267,8 @@ first.
 
 ## ClefBasicsSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 ClefBasicsSettings(
     *,
@@ -1064,6 +1276,10 @@ ClefBasicsSettings(
     question_type: str = 'construction',
 )
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasicsSettings" line=1623 %}{% raw %}
+
+</div>
 
 Bases: `ClefChoice`
 
@@ -1092,9 +1308,15 @@ on the second line. The three symbols can always be chosen from.
 
 ### ClefBasicsSettings.active_type
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_type() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasicsSettings.active_type" line=1660 %}{% raw %}
+
+</div>
 
 Return the kind of question to ask.
 
@@ -1117,9 +1339,15 @@ Return the kind of question to ask.
 
 ### ClefBasicsSettings.answer_clefs
 
+<div class="api-signature" markdown="1">
+
 ```python
 def answer_clefs() -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasicsSettings.answer_clefs" line=1687 %}{% raw %}
+
+</div>
 
 Return the clefs to offer as buttons when a clef is to be named:
 those asked for, and enough others to have a choice.
@@ -1143,12 +1371,18 @@ those asked for, and enough others to have a choice.
 
 ## NotationSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 NotationSettings(
     terms: set[str] = field(default_factory=lambda: set(NOTATION_TERMS)),
     question_type: str = 'button',
 )
 ```
+
+{% endraw %}{% include api-source.html name="NotationSettings" line=1723 %}{% raw %}
+
+</div>
 
 Terms eligible to be highlighted in Notation Identification.
 
@@ -1161,6 +1395,8 @@ True
 
 ## CircleSettings
 
+<div class="api-signature" markdown="1">
+
 ```python
 CircleSettings(
     questions: set[str] = field(default_factory=lambda: set(CIRCLE_QUESTIONS)),
@@ -1168,6 +1404,10 @@ CircleSettings(
     customs: list[CustomRecord] = field(default_factory=list),
 )
 ```
+
+{% endraw %}{% include api-source.html name="CircleSettings" line=1754 %}{% raw %}
+
+</div>
 
 The settings of the circle of fifths exercise.
 
@@ -1192,9 +1432,15 @@ The settings of the circle of fifths exercise.
 
 ### CircleSettings.active_questions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_questions() -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="CircleSettings.active_questions" line=1788 %}{% raw %}
+
+</div>
 
 Return the kinds of question to ask, in the order they are
 listed.
@@ -1218,9 +1464,15 @@ listed.
 
 ### CircleSettings.active_scheme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_scheme() -> Scheme
 ```
+
+{% endraw %}{% include api-source.html name="CircleSettings.active_scheme" line=1813 %}{% raw %}
+
+</div>
 
 Return the color scheme to draw the circle in.
 
