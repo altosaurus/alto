@@ -60,6 +60,7 @@
   inline.appendChild(links());
   var first = article.querySelector("h1");
   var anchor = first ? (first.closest(".hero") || first) : null;  // on the home page the title is inside the hero
+  anchor = article.querySelector(".os-picker") || anchor;
   if (anchor && anchor.nextSibling) { article.insertBefore(inline, anchor.nextSibling); } else { article.insertBefore(inline, article.firstChild); }
   inline.addEventListener("click", function (event) { if (event.target.closest("a")) { inline.open = false; } });
 

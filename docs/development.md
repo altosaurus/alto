@@ -628,6 +628,7 @@ You need Ruby and Bundler. In `docs/`, `bundle install` once, then build one ver
 cd docs
 printf 'baseurl: /alto/dev\ndocs_version: dev\n' > /tmp/version.yml
 bundle exec jekyll build --destination /tmp/site/dev --config _config.yml,/tmp/version.yml
+bundle exec ruby ../scripts/docs_search.rb /tmp/site/dev
 git rev-parse --short HEAD > /tmp/site/dev/commit.txt
 python ../scripts/docs_site.py finish /tmp/site --root-files site-root --site-url https://altosaurus.github.io/alto
 ```
