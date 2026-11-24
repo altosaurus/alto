@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>https://altosaurus.github.io/alto/dev/about/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.anki_export/</loc>
 </url>
 <url>
@@ -298,6 +301,9 @@
 <loc>https://altosaurus.github.io/alto/dev/guide/audio/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/contents/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/credits/</loc>
 </url>
 <url>
@@ -389,6 +395,9 @@
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/developer-guide/ui-style-guide/</loc>
+</url>
+<url>
+<loc>https://altosaurus.github.io/alto/dev/using-alto/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/plugins/viola/</loc>
