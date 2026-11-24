@@ -504,30 +504,20 @@ def prepare_update(
         "list of checksums": updates.CHECKSUMS_NAME,
         "signature": updates.SIGNATURE_NAME,
     }
-    found = {
-        what: updates.find_asset(release, name=file, base=base)
-        for what, file in wanted.items()
-    }
-    for what, asset in found.items():
+    found: dict[str, updates.Asset] = {}
+    for what, file in wanted.items():
+        asset = updates.find_asset(release, name=file, base=base)
         if asset is None:
             raise UpdateError(
-                "This release has no "
-                f"{what}"
-                " ("
-                f"{wanted[what]}"
-                "), so it was not installed.",
+                f"This release has no {what} ({file}), "
+                "so it was not installed.",
             )
+        found[what] = asset
     package, listing, signature = (
         found["download"],
         found["list of checksums"],
         found["signature"],
     )
-    if (
-        package is None or listing is None or signature is None
-    ):  # said already, and a type checker cannot see that
-        raise UpdateError(
-            "This release is incomplete, so it was not installed.",
-        )
     status("Checking the signature…")
     list_file, signature_file = (
         work / updates.CHECKSUMS_NAME,

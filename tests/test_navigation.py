@@ -32,6 +32,7 @@ from alto.ui.glossary import GlossaryPage
 from alto.ui.lesson import LessonsPage
 from alto.ui.main_window import MainWindow
 from alto.ui.transitions import SIDEBAR_SLIDE_MS, save_transition
+from alto.ui.widgets import SidebarToggle
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -1520,3 +1521,49 @@ def test_glossary_location_survives_theme_rebuild(window: MainWindow) -> None:
     assert restored._example_index == 1
     window.close_overlay()
     assert isinstance(window.stack.currentWidget(), ExerciseView)
+
+
+def test_sidebar_toggle_follows_the_browsing_section(
+    window: MainWindow,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Label a page's sidebar toggle for the current browsing section.
+
+    Parameters
+    ----------
+    window : MainWindow
+        Navigation window with its workspace pages.
+    monkeypatch : pytest.MonkeyPatch
+        Attaches a toggle to the page for this test.
+    """
+    toggle = SidebarToggle(window.home)
+    monkeypatch.setattr(window.home, "sidebar_button", toggle, raising=False)
+    for mode, noun in (
+        ("lessons", "lesson list"),
+        ("exercises", "exercise list"),
+    ):
+        window.home.set_mode(mode, animate=False)
+        window._update_sidebar_button()
+        assert toggle.noun == noun and noun in toggle.toolTip()
+
+
+def test_restored_lesson_returns_to_its_original_page(
+    window: MainWindow,
+) -> None:
+    """
+    Keep the lesson return destination across a theme rebuild.
+
+    Parameters
+    ----------
+    window : MainWindow
+        Window browsing lessons from the tiles.
+    """
+    window.open_lessons("circle-of-fifths")
+    state = window._page_state()
+    window._restore_page(state)
+    assert window._lesson_return is not None
+    expected = (
+        window.empty_page if state.lesson_parent == "empty" else window.home
+    )
+    assert window._lesson_return[0] is expected

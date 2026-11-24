@@ -92,6 +92,7 @@ class Server:
         """Start listening, on a port the system chooses."""
         self.files: dict[str, bytes] = {}
         self.redirects: dict[str, str] = {}
+        self.omit_length: set[str] = set()
         self.requests: list[str] = []
         outer = self
 
@@ -114,7 +115,8 @@ class Server:
                     self.end_headers()
                     return
                 self.send_response(200)
-                self.send_header("Content-Length", str(len(body)))
+                if self.path not in outer.omit_length:
+                    self.send_header("Content-Length", str(len(body)))
                 self.end_headers()
                 self.wfile.write(body)
 

@@ -1024,3 +1024,13 @@ def test_compact_mode_is_saved_and_replaces_full_answer_buttons(
     assert view.question is not None and not view.question.octaves
     assert len(view.buttons) == 6
     view.close()
+
+
+def test_keyboard_interval_name_requires_distinct_keys_in_range() -> None:
+    """Reject unisons and intervals wider than the keyboard."""
+    for distance in (
+        0,
+        settings.KEYBOARD_FULL[1] - settings.KEYBOARD_FULL[0] + 1,
+    ):
+        with pytest.raises(ValueError, match="two distinct piano keys"):
+            settings.keyboard_interval_name(distance)

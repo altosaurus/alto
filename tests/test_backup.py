@@ -480,3 +480,16 @@ def test_a_zip_of_the_wrong_kind_is_not_mistaken_for_a_backup(
     (tmp_path / "x.zip").write_bytes(buffer.getvalue())
     with pytest.raises(BackupError, match="not an Alto backup"):
         read_backup(tmp_path / "x.zip")
+
+
+def test_missing_backup_reports_a_read_error(tmp_path: Path) -> None:
+    """
+    Explain why a selected backup that disappeared cannot be read.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Folder without the selected backup.
+    """
+    with pytest.raises(BackupError, match="file could not be read"):
+        read_backup(tmp_path / "removed.altobackup")

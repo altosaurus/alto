@@ -1169,3 +1169,30 @@ def test_rhythm_settings_apply_symbols_and_grouped_notes(
     assert question is not None and question.choices == []
     assert view.prompt.isVisible() and not view.rhythm_equation.isVisible()
     view.close()
+
+
+@pytest.mark.usefixtures("app")
+def test_keyboard_feedback_colors_the_key_during_the_flash() -> None:
+    """A keyboard question uses the staff feedback color on its key."""
+    view = view_of(KeyboardNotes())
+    view._flash(None, target="#c62828", staff=True)
+    animation = view._anims[-1]
+    animation.setCurrentTime(animation.duration())
+    assert view.keyboard.highlight_color.name() == "#c62828"
+    view.close()
+
+
+@pytest.mark.motion
+def test_settle_waits_for_a_real_timer(app: QApplication) -> None:
+    """
+    Return after a delayed feedback step has actually run.
+
+    Parameters
+    ----------
+    app : QApplication
+        Owns the timer and processes its events.
+    """
+    completed: list[bool] = []
+    motion.later(15, owner=app, step=lambda: completed.append(True))
+    motion.settle()
+    assert completed == [True]

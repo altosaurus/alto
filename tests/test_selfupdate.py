@@ -370,6 +370,14 @@ def test_a_download_that_fails_too_large_or_is_canceled_leaves_nothing_behind(
             destination=tmp_path / "b",
             max_bytes=1000,
         )
+    server.omit_length.add("/releases/download/v1/big")
+    with pytest.raises(UpdateError, match="download was stopped"):
+        fetch(
+            server,
+            path="/releases/download/v1/big",
+            destination=tmp_path / "stream",
+            max_bytes=1000,
+        )
     with pytest.raises(UpdateCanceled):
         fetch(
             server,
@@ -1384,3 +1392,65 @@ def test_the_log_is_kept_in_altos_folder_of_the_cache(
     """
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path))
     assert selfupdate.log_path() == tmp_path / "alto" / "update.log"
+
+
+def test_unpack_requires_safe_tar_support(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Refuse extraction when the interpreter lacks the data filter.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Destination for the unpacked update.
+    monkeypatch : pytest.MonkeyPatch
+        Simulates the older interpreter.
+    """
+    monkeypatch.delattr(tarfile, "data_filter", raising=False)
+    with pytest.raises(UpdateError, match="cannot unpack an update safely"):
+        selfupdate.extract_tarball(tmp_path / "archive", destination=tmp_path)
+
+
+def test_signed_checksum_list_requires_utf8(
+    server: Server,
+    keys: Keys,
+    tmp_path: Path,
+) -> None:
+    """
+    Report a signed checksum list with an invalid text encoding.
+
+    Parameters
+    ----------
+    server : Server
+        Serves the test release.
+    keys : Keys
+        Signs the replacement list.
+    tmp_path : Path
+        Holds the downloaded files.
+    """
+    release = publish(server, keys=keys, package=linux_package(), name=NAME)
+    prefix = f"/releases/download/{release.tag}/"
+    listing = bytes([255])
+    server.files[prefix + updates.CHECKSUMS_NAME] = listing
+    server.files[prefix + updates.SIGNATURE_NAME] = keys.sign(listing).encode()
+    with pytest.raises(UpdateError, match="checksums cannot be read"):
+        prepare(release, server, keys, tmp_path)
+    assert not (tmp_path / "work" / NAME).exists()
+
+
+def test_linux_handoff_requires_unpacked_files(tmp_path: Path) -> None:
+    """
+    Refuse to launch an installer when the unpacked files are missing.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The installation prefix.
+    """
+    with pytest.raises(UpdateError, match="nothing unpacked"):
+        selfupdate.start_handoff(
+            Prepared(tmp_path, installer=None, root=None),
+            target=Target("linux", folder=tmp_path, prefix=tmp_path),
+        )

@@ -449,6 +449,16 @@ def test_the_preparer_reports_through_signals_and_stays_quiet_when_canceled(
         lambda code, message: quiet_ends.append((code, message)),
     )
     quiet.cancel()
+    canceled_work = tmp_path / "canceled"
+    canceled_work.mkdir()
+    quiet._work(
+        release=release,
+        target=Target("linux", folder=tmp_path, prefix=tmp_path),
+        work=canceled_work,
+        keys=(window.keys.public,),
+        channel=quiet._channel,
+    )
+    assert not canceled_work.exists()
     quiet._say(0, message="")
     quiet._say(1, message="x")
     assert quiet_ends == [] and quiet.is_canceled()

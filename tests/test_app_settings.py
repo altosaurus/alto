@@ -1290,3 +1290,24 @@ def test_a_dialog_opens_with_the_main_branch_ticked_if_that_was_chosen(
     releases.categories.setCurrentRow(6)
     assert not releases.main_channel.isChecked()
     assert dialog is not None
+
+
+def test_collapsing_appearance_selects_the_parent(
+    dialog: AppSettingsDialog,
+) -> None:
+    """
+    Keep the selection visible when hiding the appearance subpages.
+
+    Parameters
+    ----------
+    dialog : AppSettingsDialog
+        Settings with an appearance subpage selected.
+    """
+    parent = dialog.categories.item(0)
+    child = dialog.categories.item(1)
+    assert parent is not None and child is not None
+    dialog.categories.setCurrentItem(child)
+    dialog.appearance_toggle.click()
+    assert child.isHidden() and dialog.categories.currentItem() == parent
+    dialog.appearance_toggle.click()
+    assert not child.isHidden()

@@ -6,13 +6,15 @@ the user's own, and the settings pages that choose them.
 from __future__ import annotations
 
 import random
+from unittest.mock import patch
 
+import pytest
 from PySide6.QtCore import QPoint
 from PySide6.QtGui import (
     QColor,
     QPalette,
 )
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QColorDialog
 
 from alto import settings
 from alto.circle_schemes import (
@@ -497,3 +499,14 @@ def test_opening_colors_pages_never_makes_exercise_or_window(
             page
         )  # no page asks for more room than the exercise needs
         assert view.size() == size, page
+
+
+@pytest.mark.usefixtures("app")
+def test_swatch_records_the_selected_color() -> None:
+    """Apply a color chosen in the dialog and preserve it on cancel."""
+    editor = SchemeEditor()
+    editor.load(None, taken=[])
+    for choice in (QColor("#112233"), QColor()):
+        with patch.object(QColorDialog, "getColor", return_value=choice):
+            editor.swatches[0].click()
+        assert editor.record()["colors"][0] == "#112233"

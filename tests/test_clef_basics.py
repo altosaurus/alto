@@ -24,6 +24,7 @@ from alto.exercises import REGISTRY
 from alto.exercises.base import Question
 from alto.exercises.library import ClefBasics
 from alto.ui import exercise_settings as es
+from alto.ui import motion
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.staff import (
@@ -610,8 +611,8 @@ def test_a_wrong_place_or_a_wrong_symbol_is_wrong_and_can_be_tried_again(
     assert (
         view.clef_input.locked and not view.answer_button.isEnabled()
     )  # the retry has not cleared it yet
-    view.clef_input.locked, view._busy = False, False
-    view.clef_input.clear_placed()
+    motion.settle()
+    assert not view.clef_input.locked and not view._busy
     other = next(s for s in ("G", "C", "F") if s != symbol)
     choose(view, other)
     click(

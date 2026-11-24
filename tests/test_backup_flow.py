@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import TYPE_CHECKING
+from unittest.mock import patch
 
 import pytest
 from PySide6.QtWidgets import (
@@ -298,6 +299,15 @@ def test_an_import_that_is_refused_or_declined_leaves_everything_as_it_was(
         backup_flow.import_backup(window, db=db) is False
         and dialogs.shown[-1][0] == "question"
     )
+    dialogs.answer = YES
+    with patch.object(
+        backup_flow,
+        "restore_database",
+        side_effect=backup_flow.BackupError("disk full"),
+    ):
+        assert not backup_flow.import_backup(window, db=db)
+    assert dialogs.shown[-1][0] == "warning"
+    assert "disk full" in dialogs.shown[-1][1]
     assert rows(db) == before and export_settings() == saved
 
 

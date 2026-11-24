@@ -849,6 +849,18 @@ def test_the_built_in_self_check_passes_and_notices_a_key_that_is_not_a_key(
         Replaces the keys in the code.
     """
     assert self_check() == []
+    with monkeypatch.context() as changed:
+        changed.setattr(
+            updates,
+            "ssl_context",
+            lambda: ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT),
+        )
+        assert self_check() == [
+            (
+                "The list of certificate authorities did not load, so a "
+                "secure connection could not be made."
+            ),
+        ]
     public, _ = signed(b"x")
     monkeypatch.setattr(updates, "UPDATE_PUBLIC_KEYS", (public,))
     assert self_check() == []
