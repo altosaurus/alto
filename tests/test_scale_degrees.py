@@ -1,5 +1,6 @@
 """
-Scale-degree names follow the question's key in each exercise that shares note naming.
+Scale-degree names follow the question's key in each exercise that
+shares note naming.
 """
 
 from __future__ import annotations
@@ -47,27 +48,43 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize("key", range(-7, 8))
 def test_diatonic_degrees_follow_the_major_scale(key: int) -> None:
     """
-    Check all seven degrees against scale spelling, including the extreme signatures.
+    Check all seven degrees against scale spelling, including the
+    extreme signatures.
 
     Parameters
     ----------
     key : int
         The major key signature.
     """
-    tonic = Note.parse(f"{MAJOR_KEYS[key].replace('♭', 'b').replace('♯', '#')}4")
+    tonic = Note.parse(
+        f"{MAJOR_KEYS[key].replace('♭', 'b').replace('♯', '#')}4",
+    )
     notes = build(tonic, intervals=SCALES["Major (Ionian)"])
-    assert [settings.spell(n, naming="degrees", key=key) for n in notes[:7]] == [f"{i}̂" for i in range(1, 8)]
+    assert [
+        settings.spell(n, naming="degrees", key=key) for n in notes[:7]
+    ] == [f"{i}̂" for i in range(1, 8)]
     for index, note in enumerate(notes[:7], start=1):
-        lowered = Note(note.octave, letter=note.letter, accidental=note.accidental - 1)
-        raised = Note(note.octave, letter=note.letter, accidental=note.accidental + 1)
-        assert settings.spell(lowered, naming="degrees", key=key) == f"♭{index}̂"
+        lowered = Note(
+            note.octave,
+            letter=note.letter,
+            accidental=note.accidental - 1,
+        )
+        raised = Note(
+            note.octave,
+            letter=note.letter,
+            accidental=note.accidental + 1,
+        )
+        assert (
+            settings.spell(lowered, naming="degrees", key=key) == f"♭{index}̂"
+        )
         assert settings.spell(raised, naming="degrees", key=key) == f"♯{index}̂"
 
 
 @pytest.mark.parametrize("accidentals", [False, True])
 def test_identification_degree_answers_and_columns(accidentals: bool) -> None:
     """
-    Check answers, key context and degree columns with multiple active signatures.
+    Check answers, key context and degree columns with multiple active
+    signatures.
 
     Parameters
     ----------
@@ -75,7 +92,11 @@ def test_identification_degree_answers_and_columns(accidentals: bool) -> None:
         Whether chromatic notes are included.
     """
     cfg = settings.note_names
-    cfg.naming, cfg.accidentals, cfg.key_signatures = "degrees", accidentals, {-7, -2, 0, 1, 7}
+    cfg.naming, cfg.accidentals, cfg.key_signatures = (
+        "degrees",
+        accidentals,
+        {-7, -2, 0, 1, 7},
+    )
     rng = random.Random(12)
     for _ in range(200):
         question = NoteNames().generate(rng)
@@ -85,7 +106,9 @@ def test_identification_degree_answers_and_columns(accidentals: bool) -> None:
         assert len(set(question.choices)) == len(question.choices)
         assert question.caption == ""
         for label in question.choices:
-            assert question.grid[label][1] == int(label.replace("̂", "")[-1]) - 1
+            assert (
+                question.grid[label][1] == int(label.replace("̂", "")[-1]) - 1
+            )
         if not accidentals:
             assert question.choices == [f"{i}̂" for i in range(1, 8)]
 
@@ -98,7 +121,8 @@ def test_keyboard_degree_answers_include_enharmonics_and_octaves(
     octave: bool,
 ) -> None:
     """
-    Check that keyboard answers remain reachable for every key and spelling.
+    Check that keyboard answers remain reachable for every key and
+    spelling.
 
     Parameters
     ----------
@@ -109,7 +133,11 @@ def test_keyboard_degree_answers_include_enharmonics_and_octaves(
     """
     settings.note_names.naming = "degrees"
     cfg = settings.keyboard
-    cfg.key_signature, cfg.require_octave, cfg.keys = signature, octave, {-7, -2, 0, 1, 7}
+    cfg.key_signature, cfg.require_octave, cfg.keys = (
+        signature,
+        octave,
+        {-7, -2, 0, 1, 7},
+    )
     cfg.low, cfg.high = 60, 72
     rng = random.Random(14)
     for _ in range(200):
@@ -123,7 +151,11 @@ def test_keyboard_degree_answers_include_enharmonics_and_octaves(
             octave=octave,
         )
         for answer in (question.answer, *question.accept):
-            degree, _, number = answer.partition(question.joiner) if octave else (answer, "", "")
+            degree, _, number = (
+                answer.partition(question.joiner)
+                if octave
+                else (answer, "", "")
+            )
             assert degree in question.choices
             if octave:
                 assert question.octaves is not None
@@ -133,12 +165,16 @@ def test_keyboard_degree_answers_include_enharmonics_and_octaves(
         cfg.low = cfg.high = 61
         question = KeyboardNotes().generate(rng)
         suffix = " / 4" if octave else ""
-        assert {question.answer, *question.accept} == {f"♯1̂{suffix}", f"♭2̂{suffix}"}
+        assert {question.answer, *question.accept} == {
+            f"♯1̂{suffix}",
+            f"♭2̂{suffix}",
+        }
 
 
 def test_construction_degree_prompt_and_accessible_caret() -> None:
     """
-    Keep target labels, placement feedback and accessible names in the same key.
+    Keep target labels, placement feedback and accessible names in the
+    same key.
     """
     settings.note_names.naming = "degrees"
     settings.construction.key_signature = True
@@ -149,22 +185,34 @@ def test_construction_degree_prompt_and_accessible_caret() -> None:
         question = NoteConstruction().generate(rng)
         assert question.construct is not None
         assert question.check_placed(question.construct)
-        assert question.answer == note_name(question.construct, key=question.key)
+        assert question.answer == note_name(
+            question.construct,
+            key=question.key,
+        )
         assert question.caption == question.prompt
         degree, octave = question.answer.split(" / ")
-        subscript = octave.translate(str.maketrans("0123456789-", "₀₁₂₃₄₅₆₇₈₉₋"))
+        subscript = octave.translate(
+            str.maketrans("0123456789-", "₀₁₂₃₄₅₆₇₈₉₋"),
+        )
         assert question.prompt == f"GM {degree}{subscript}"
     note = Note.parse("F4")
     assert note_name(note, key=1) == "♭7̂ / 4"
     assert note_words(note, key=1) == "flat degree 7, octave 4"
-    assert note_name(note) == "F4"  # scale construction has no degree reference
+    assert (
+        note_name(note) == "F4"
+    )  # scale construction has no degree reference
 
 
 def test_degree_shortcuts_leave_octave_keys_available() -> None:
     """
-    Ensure chromatic degree banks have unique shortcuts and a separate octave row.
+    Ensure chromatic degree banks have unique shortcuts and a separate
+    octave row.
     """
-    labels = [f"{sign}{degree}" for sign in ("", "♯", "♭", "𝄪", "𝄫") for degree in range(1, 8)]
+    labels = [
+        f"{sign}{degree}"
+        for sign in ("", "♯", "♭", "𝄪", "𝄫")
+        for degree in range(1, 8)
+    ]
     keys = choice_keys(labels)
     assert len(set(keys)) == len(labels)
     assert keys[0] == "1"
@@ -177,7 +225,8 @@ def test_degree_shortcuts_leave_octave_keys_available() -> None:
 
 def test_degree_option_saves_and_reloads(app: QApplication) -> None:
     """
-    Check the settings control offers degrees and persists the selection.
+    Check the settings control offers degrees and persists the
+    selection.
 
     Parameters
     ----------
@@ -193,9 +242,12 @@ def test_degree_option_saves_and_reloads(app: QApplication) -> None:
     panel.close()
 
 
-def test_chromatic_degree_and_octave_shortcuts_answer_the_question(app: QApplication) -> None:
+def test_chromatic_degree_and_octave_shortcuts_answer_the_question(
+    app: QApplication,
+) -> None:
     """
-    Answer a black key with its altered degree and octave using the actual buttons' shortcuts.
+    Answer a black key with its altered degree and octave using the
+    actual buttons' shortcuts.
 
     Parameters
     ----------
@@ -212,9 +264,12 @@ def test_chromatic_degree_and_octave_shortcuts_answer_the_question(app: QApplica
     view.close()
 
 
-def test_construction_degree_caption_is_shown_on_the_staff(app: QApplication) -> None:
+def test_construction_degree_caption_is_shown_on_the_staff(
+    app: QApplication,
+) -> None:
     """
-    Show the key and octave context below the input staff rather than hiding the target prompt.
+    Show the key and octave context below the input staff rather than
+    hiding the target prompt.
 
     Parameters
     ----------
@@ -238,7 +293,8 @@ def test_construction_degree_caption_is_shown_on_the_staff(app: QApplication) ->
 
 def test_note_name_labels_and_degree_group(app: QApplication) -> None:
     """
-    Keep text visible beside every preview and both degree subtypes in one exclusive group.
+    Keep text visible beside every preview and both degree subtypes in
+    one exclusive group.
 
     Parameters
     ----------
@@ -263,7 +319,11 @@ def test_note_name_labels_and_degree_group(app: QApplication) -> None:
         load_note_names()
         assert settings.note_names.naming == naming
     radios["degrees"].click()
-    natural_minor = next(radio for radio in group.findChildren(QRadioButton) if radio.text() == "Natural minor")
+    natural_minor = next(
+        radio
+        for radio in group.findChildren(QRadioButton)
+        if radio.text() == "Natural minor"
+    )
     natural_minor.click()
     settings.note_names.minor_degrees = False
     load_note_names()
@@ -274,7 +334,11 @@ def test_note_name_labels_and_degree_group(app: QApplication) -> None:
     position = Note.parse("E4").diatonic
     settings.note_names.ranges = {"treble": (position, position)}
     q = exercise.generate(random.Random(0))
-    assert q.minor and q.answer == "1̂" and "E natural minor" in exercise.card_prompt(q)
+    assert (
+        q.minor
+        and q.answer == "1̂"
+        and "E natural minor" in exercise.card_prompt(q)
+    )
     assert q.grid[q.answer] == (0, 0)
     panel.close()
 
@@ -282,17 +346,30 @@ def test_note_name_labels_and_degree_group(app: QApplication) -> None:
 @pytest.mark.parametrize("key", [-7, -2, 0, 1, 7])
 def test_function_names_and_exercise_answers(key: int) -> None:
     """
-    Check function names against each major scale and exercise answer banks.
+    Check function names against each major scale and exercise answer
+    banks.
 
     Parameters
     ----------
     key : int
         The major key signature.
     """
-    functions = ["Tonic", "Supertonic", "Mediant", "Subdominant", "Dominant", "Submediant", "Leading tone"]
-    tonic = Note.parse(f"{MAJOR_KEYS[key].replace('♭', 'b').replace('♯', '#')}4")
+    functions = [
+        "Tonic",
+        "Supertonic",
+        "Mediant",
+        "Subdominant",
+        "Dominant",
+        "Submediant",
+        "Leading tone",
+    ]
+    tonic = Note.parse(
+        f"{MAJOR_KEYS[key].replace('♭', 'b').replace('♯', '#')}4",
+    )
     notes = build(tonic, intervals=SCALES["Major (Ionian)"])
-    assert [settings.spell(n, naming="functions", key=key) for n in notes[:7]] == functions
+    assert [
+        settings.spell(n, naming="functions", key=key) for n in notes[:7]
+    ] == functions
     settings.note_names.naming = "functions"
     settings.note_names.key_signatures = {key}
     settings.note_names.accidentals = True
@@ -320,9 +397,12 @@ def test_function_names_and_exercise_answers(key: int) -> None:
         assert question.answer == note_name(question.construct, key=key)
 
 
-def test_function_notation_uses_degree_shortcuts_and_accessible_names(app: QApplication) -> None:
+def test_function_notation_uses_degree_shortcuts_and_accessible_names(
+    app: QApplication,
+) -> None:
     """
-    Answer an altered function with the degree shortcut and announce the chosen function in words.
+    Answer an altered function with the degree shortcut and announce the
+    chosen function in words.
 
     Parameters
     ----------
@@ -336,7 +416,9 @@ def test_function_notation_uses_degree_shortcuts_and_accessible_names(app: QAppl
     press(view, "Shift+1")
     press(view, "A")
     assert view.answered and not view.missed
-    assert note_words(Note.parse("F4"), key=1) == "lowered leading tone, octave 4"
+    assert (
+        note_words(Note.parse("F4"), key=1) == "lowered leading tone, octave 4"
+    )
     view.close()
 
 
@@ -355,7 +437,8 @@ def test_altered_functions_use_words(
     expected: str,
 ) -> None:
     """
-    Spell altered functions in words while keeping caret accidentals unchanged.
+    Spell altered functions in words while keeping caret accidentals
+    unchanged.
 
     Parameters
     ----------
@@ -369,7 +452,8 @@ def test_altered_functions_use_words(
 
 def test_function_buttons_fit_the_answer_area(app: QApplication) -> None:
     """
-    Give long altered function names enough width and keep their shortcuts unique.
+    Give long altered function names enough width and keep their
+    shortcuts unique.
 
     Parameters
     ----------
@@ -383,18 +467,30 @@ def test_function_buttons_fit_the_answer_area(app: QApplication) -> None:
     question = view.question
     assert question is not None and question.grid is not None
     assert max(col for _, col in question.grid.values()) == 3
-    assert all(button.width() >= button.minimumSizeHint().width() for button in view.buttons)
-    assert all(button.height() >= button.minimumSizeHint().height() for button in view.buttons)
-    assert all(button.geometry().right() < view.choice_area.width() for button in view.buttons)
+    assert all(
+        button.width() >= button.minimumSizeHint().width()
+        for button in view.buttons
+    )
+    assert all(
+        button.height() >= button.minimumSizeHint().height()
+        for button in view.buttons
+    )
+    assert all(
+        button.geometry().right() < view.choice_area.width()
+        for button in view.buttons
+    )
     assert any("Lowered\n" in button.text() for button in view.buttons)
     keys = choice_keys(question.choices)
     assert len(set(keys)) == len(keys)
     view.close()
 
 
-def test_minor_degree_selection_and_notes_only_preview(app: QApplication) -> None:
+def test_minor_degree_selection_and_notes_only_preview(
+    app: QApplication,
+) -> None:
     """
-    Practice only the seventh in A minor and read a Notes Only question independently of degree naming.
+    Practice only the seventh in A minor and read a Notes Only question
+    independently of degree naming.
 
     Parameters
     ----------
@@ -412,7 +508,15 @@ def test_minor_degree_selection_and_notes_only_preview(app: QApplication) -> Non
         q = exercise.generate(rng)
         assert q.construct is not None and q.construct.name == "G"
         assert "Subtonic" in q.answer
-    assert settings.spell(Note.parse("G#4"), naming="functions", key=0, minor=True) == "Leading tone"
+    assert (
+        settings.spell(
+            Note.parse("G#4"),
+            naming="functions",
+            key=0,
+            minor=True,
+        )
+        == "Leading tone"
+    )
 
     cfg.question_type, cfg.octave = "notes", False
     signature = exercise.settings_signature()
@@ -420,12 +524,19 @@ def test_minor_degree_selection_and_notes_only_preview(app: QApplication) -> Non
     assert exercise.settings_signature() == signature
     q = exercise.generate(rng)
     assert q.construct is not None
-    assert QuestionPreview(exercise.name, question=q)._answer_text() == q.construct.name == q.answer
+    assert (
+        QuestionPreview(exercise.name, question=q)._answer_text()
+        == q.construct.name
+        == q.answer
+    )
 
 
-def test_plain_degree_checkbox_uses_the_native_label(app: QApplication) -> None:
+def test_plain_degree_checkbox_uses_the_native_label(
+    app: QApplication,
+) -> None:
     """
-    Render an ordinary checkbox label through the same native control as the settings pane.
+    Render an ordinary checkbox label through the same native control as
+    the settings pane.
 
     Parameters
     ----------

@@ -5,9 +5,11 @@ package: alto.ui
 permalink: /api/alto.ui.notation/
 ---
 {% raw %}
-Notation styles: which music font the staff, clefs, notes and accidentals are engraved in.
+Notation styles: which music font the staff, clefs, notes and
+accidentals are engraved in.
 
-Also holds the choice of how the baritone clef is written (an F clef or a C clef).
+Also holds the choice of how the baritone clef is written (an F clef or
+a C clef).
 
 **Examples**
 
@@ -92,7 +94,9 @@ Return the clef as it is drawn.
 >>> set_baritone_clef("c")
 >>> clef_shape("baritone")
 'baritone_c'
->>> set_baritone_clef("f")  # back to the default
+>>> set_baritone_clef(
+...     "f"
+... )  # back to the default
 >>> clef_shape("baritone")
 'baritone_f'
 ```
@@ -103,7 +107,8 @@ Return the clef as it is drawn.
 def set_baritone_clef(kind: str) -> None
 ```
 
-Choose and save how the baritone clef is written, and redraw every staff already on screen.
+Choose and save how the baritone clef is written, and redraw every
+staff already on screen.
 
 **Parameters**
 
@@ -115,7 +120,9 @@ Choose and save how the baritone clef is written, and redraw every staff already
 >>> set_baritone_clef("c")
 >>> baritone_clef()
 'c'
->>> set_baritone_clef("sideways")  # not a choice: the default
+>>> set_baritone_clef(
+...     "sideways"
+... )  # not a choice: the default
 >>> baritone_clef()
 'f'
 ```
@@ -145,7 +152,8 @@ True
 def load_style() -> None
 ```
 
-Apply the saved choices: the style (Finale Maestro if none is saved or it is unknown) and the baritone clef.
+Apply the saved choices: the style (Finale Maestro if none is saved
+or it is unknown) and the baritone clef.
 
 **Examples**
 
@@ -186,7 +194,8 @@ def on_redraw(hook: Callable[[], None]) -> None
 
 Register a function to call whenever the notation style changes.
 
-The staff widgets live in a module that imports this one, so they register themselves here instead of being found by
+The staff widgets live in a module that imports this one, so they
+register themselves here instead of being found by
 this module.
 
 **Parameters**

@@ -11,16 +11,25 @@ import pytest
 from PySide6.QtWidgets import QApplication
 
 from alto import settings
-from alto.exercises.library import IntervalConstruction, NoteNames, ScaleConstruction
+from alto.exercises.library import (
+    IntervalConstruction,
+    NoteNames,
+    ScaleConstruction,
+)
 from alto.theory.pitch import Note
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.midi_input import MidiInput
 
 
 @pytest.mark.skipif(sys.platform != "linux", reason="ALSA sequencer input")
-def test_play_interval(app: QApplication, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_play_interval(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
     """
-    Deliver ALSA events through the source menu, grade a played note, and disconnect on navigation.
+    Deliver ALSA events through the source menu, grade a played note,
+    and disconnect on navigation.
 
     Parameters
     ----------
@@ -71,7 +80,11 @@ def test_play_interval(app: QApplication, monkeypatch: pytest.MonkeyPatch, tmp_p
     source.trigger()
     process = midi._process
     assert process.waitForStarted(1000)
-    process.write(b"128:0 Note off 1, note 66\n128:0 Note on 1, note 66, velocity 0\n128:0 Control change 1, controller 2\n")
+    process.write(
+        b"128:0 Note off 1, note 66\n"
+        b"128:0 Note on 1, note 66, velocity 0\n"
+        b"128:0 Control change 1, controller 2\n",
+    )
     process.write(b"128:0 Note on 1, note 66, ")
     assert process.waitForReadyRead(2000)
     assert view.total == 1
@@ -98,7 +111,8 @@ def test_play_interval(app: QApplication, monkeypatch: pytest.MonkeyPatch, tmp_p
 
 def test_unavailable_sources(app: QApplication) -> None:
     """
-    Explain missing ALSA utilities, unavailable sequencers, and empty device lists in the menu.
+    Explain missing ALSA utilities, unavailable sequencers, and empty
+    device lists in the menu.
 
     Parameters
     ----------
@@ -113,16 +127,31 @@ def test_unavailable_sources(app: QApplication) -> None:
         with patch("alto.ui.midi_input.subprocess.run", side_effect=failure):
             midi._refresh()
             assert label in midi.menu().actions()[-1].text()
-    with patch("alto.ui.midi_input.subprocess.run", return_value=subprocess.CompletedProcess([], 0, b" 0:0 System Timer\n")):
+    with patch(
+        "alto.ui.midi_input.subprocess.run",
+        return_value=subprocess.CompletedProcess(
+            [],
+            0,
+            b" 0:0 System Timer\n",
+        ),
+    ):
         midi._refresh()
         assert midi.menu().actions()[-1].text() == "No MIDI inputs found"
 
 
 @pytest.mark.skipif(sys.platform != "linux", reason="ALSA sequencer input")
-@pytest.mark.parametrize(("naming", "octave"), [("solfege", False), ("degrees", True)])
-def test_identify_played_note(app: QApplication, naming: str, octave: bool) -> None:
+@pytest.mark.parametrize(
+    ("naming", "octave"),
+    [("solfege", False), ("degrees", True)],
+)
+def test_identify_played_note(
+    app: QApplication,
+    naming: str,
+    octave: bool,
+) -> None:
     """
-    Score a played note in the chosen naming system and respect the question's octave requirement.
+    Score a played note in the chosen naming system and respect the
+    question's octave requirement.
 
     Parameters
     ----------
@@ -144,10 +173,16 @@ def test_identify_played_note(app: QApplication, naming: str, octave: bool) -> N
     if octave:
         view.buttons[-1].click()  # MIDI replaces an unfinished mouse answer.
     midi.note_pressed.emit(target.midi + (12 if octave else 1))
-    assert view.total == 1 and view.missed and "Try again" in view.prompt.text()
+    assert (
+        view.total == 1 and view.missed and "Try again" in view.prompt.text()
+    )
     midi.note_pressed.emit(target.midi + (0 if octave else 12))
     midi.note_pressed.emit(target.midi)
-    assert view.answered and view._attempts == 2 and (view.correct, view.total) == (0, 1)
+    assert (
+        view.answered
+        and view._attempts == 2
+        and (view.correct, view.total) == (0, 1)
+    )
     if octave:
         assert view._pending["octave"][0] == str(target.octave)
     view.close()
@@ -157,7 +192,8 @@ def test_identify_played_note(app: QApplication, naming: str, octave: bool) -> N
 @pytest.mark.parametrize("steps", [True, False])
 def test_play_scale(app: QApplication, steps: bool) -> None:
     """
-    Place and undo played notes, then grade the scale with the configured octave and step rules.
+    Place and undo played notes, then grade the scale with the
+    configured octave and step rules.
 
     Parameters
     ----------
@@ -175,7 +211,11 @@ def test_play_scale(app: QApplication, steps: bool) -> None:
     midi, q = view.midi_input, view.question
     assert midi is not None and q is not None and q.construct_scale
     scale = q.construct_scale
-    foreign = next(n for n in range(60, 72) if all(note.pitch_class != n % 12 for note in scale))
+    foreign = next(
+        n
+        for n in range(60, 72)
+        if all(note.pitch_class != n % 12 for note in scale)
+    )
     midi.note_pressed.emit(foreign)
     assert view.scale_input.notes[-1].midi == foreign
     view.undo_button.click()

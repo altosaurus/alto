@@ -1,4 +1,7 @@
-"""Check the musical relationships a learner sees and hears in the glossary."""
+"""
+Check the musical relationships a learner sees and hears in the
+glossary.
+"""
 
 from itertools import pairwise
 from unittest.mock import patch
@@ -15,14 +18,20 @@ _STEPS = {
     "tetrachord": [(2, 2, 1)] * 2,
     "natural minor scale": [(2, 1, 2, 2, 1, 2, 2)] * 2,
     "harmonic minor scale": [(2, 1, 2, 2, 1, 3, 1)] * 2,
-    "melodic minor scale": [(2, 1, 2, 2, 2, 2, 1), (-2, -2, -1, -2, -2, -1, -2)],
+    "melodic minor scale": [
+        (2, 1, 2, 2, 2, 2, 1),
+        (-2, -2, -1, -2, -2, -1, -2),
+    ],
     "minor pentachord": [(2, 1, 2, 2)] * 2,
 }
 
 
-def test_glossary_examples_show_and_play_the_same_pitches(app: QApplication) -> None:
+def test_glossary_examples_show_and_play_the_same_pitches(
+    app: QApplication,
+) -> None:
     """
-    Cycle every term, checking each diagram, its musical intervals, and the pitches sent to playback.
+    Cycle every term, checking each diagram, its musical intervals, and
+    the pitches sent to playback.
 
     Parameters
     ----------
@@ -37,19 +46,34 @@ def test_glossary_examples_show_and_play_the_same_pitches(app: QApplication) -> 
         patch.object(sounds, "stop_all", wraps=sounds.stop_all) as stop,
     ):
         for term, entry in TERMS.items():
-            page.terms.setCurrentItem(page.terms.findItems(term, Qt.MatchFlag.MatchExactly)[0])
+            page.terms.setCurrentItem(
+                page.terms.findItems(term, Qt.MatchFlag.MatchExactly)[0],
+            )
             for index, example in enumerate(entry.examples):
                 assert page.example_label.text() == example.caption
-                assert page.example_circle.isVisible() == (term == "circle of fifths")
+                assert page.example_circle.isVisible() == (
+                    term == "circle of fifths"
+                )
                 if term == "circle of fifths":
-                    assert page.example_circle.cell == ("outer", example.signature % 12)
+                    assert page.example_circle.cell == (
+                        "outer",
+                        example.signature % 12,
+                    )
                     assert page.example_circle.signature == example.signature
                 page.hear.click()
                 if entry.keyboard:
                     midis = preview.call_args.kwargs["midis"]
-                    assert page.example_keyboard.isVisible() and page.example_staff.isHidden()
-                    assert midis == [page.example_keyboard.highlight, *page.example_keyboard.additional_highlights]
-                    assert midis[1] - midis[0] == (1 if term == "half step" else 2)
+                    assert (
+                        page.example_keyboard.isVisible()
+                        and page.example_staff.isHidden()
+                    )
+                    assert midis == [
+                        page.example_keyboard.highlight,
+                        *page.example_keyboard.additional_highlights,
+                    ]
+                    assert midis[1] - midis[0] == (
+                        1 if term == "half step" else 2
+                    )
                 else:
                     midis = [col[0].midi for col in notes.call_args.args[0]]
                     assert notes.call_args.kwargs["force"]
@@ -58,20 +82,34 @@ def test_glossary_examples_show_and_play_the_same_pitches(app: QApplication) -> 
                     for column in range(len(midis)):
                         highlight(column)
                         assert staff.playback_column == column
-                    assert staff.isVisible() and page.example_keyboard.isHidden()
+                    assert (
+                        staff.isVisible() and page.example_keyboard.isHidden()
+                    )
                     assert midis == [col[0].midi for col in staff.columns]
-                    assert (staff.clef, staff.key) == (example.clef, example.signature)
+                    assert (staff.clef, staff.key) == (
+                        example.clef,
+                        example.signature,
+                    )
                     if term in _STEPS:
                         expected = _STEPS[term][index]
-                        assert tuple(b - a for a, b in pairwise(midis)) == expected
-                        assert staff.wedges == [{1: "H", 2: "W", 3: "3H"}[abs(step)] for step in expected]
+                        assert (
+                            tuple(b - a for a, b in pairwise(midis))
+                            == expected
+                        )
+                        assert staff.wedges == [
+                            {1: "H", 2: "W", 3: "3H"}[abs(step)]
+                            for step in expected
+                        ]
                     else:
                         assert not staff.wedges
                     if term == "octave":
                         assert midis[1] - midis[0] == 12
                     if term == "accidental":
                         before, after = (col[0] for col in staff.columns)
-                        assert before.diatonic == after.diatonic and abs(after.midi - before.midi) == 1
+                        assert (
+                            before.diatonic == after.diatonic
+                            and abs(after.midi - before.midi) == 1
+                        )
                 stop.reset_mock()
                 page.next_example.click()
                 stop.assert_called_once()
@@ -81,7 +119,10 @@ def test_glossary_examples_show_and_play_the_same_pitches(app: QApplication) -> 
 
 
 def test_glossary_comparison_pairs() -> None:
-    """Check the pitch and key relationships that changing examples demonstrates."""
+    """
+    Check the pitch and key relationships that changing examples
+    demonstrates.
+    """
 
     def phrases(term: str) -> list[list[Note]]:
         """
@@ -97,14 +138,23 @@ def test_glossary_comparison_pairs() -> None:
         list of list of Note
             The notes of each example in display order.
         """
-        return [[Note.parse(name) for name in example.pitches.split()] for example in TERMS[term].examples]
+        return [
+            [Note.parse(name) for name in example.pitches.split()]
+            for example in TERMS[term].examples
+        ]
 
     for first, second in phrases("enharmonically equivalent"):
         assert first.midi == second.midi and first.letter != second.letter
     rising, falling = phrases("enharmonic")
-    assert rising[1].midi == falling[1].midi and rising[1].letter != falling[1].letter
+    assert (
+        rising[1].midi == falling[1].midi
+        and rising[1].letter != falling[1].letter
+    )
     original, transposed = phrases("transpose")
-    assert all((b.diatonic - a.diatonic, b.midi - a.midi) == (1, 2) for a, b in zip(original, transposed, strict=True))
+    assert all(
+        (b.diatonic - a.diatonic, b.midi - a.midi) == (1, 2)
+        for a, b in zip(original, transposed, strict=True)
+    )
     major, minor = phrases("relative keys")
     assert major[-1].midi - minor[-1].midi == 3
     assert len({ex.signature for ex in TERMS["relative keys"].examples}) == 1
@@ -115,7 +165,8 @@ def test_glossary_comparison_pairs() -> None:
 
 def test_glossary_scale_fits_after_resizing(app: QApplication) -> None:
     """
-    Keep both the longest staff and the complete definition reachable when the pane changes shape.
+    Keep both the longest staff and the complete definition reachable
+    when the pane changes shape.
 
     Parameters
     ----------
@@ -139,9 +190,12 @@ def test_glossary_scale_fits_after_resizing(app: QApplication) -> None:
     page.close()
 
 
-def test_search_without_matches_clears_the_example_and_recovers(app: QApplication) -> None:
+def test_search_without_matches_clears_the_example_and_recovers(
+    app: QApplication,
+) -> None:
     """
-    Clear the example and practice links for an empty search result and restore them for the next match.
+    Clear the example and practice links for an empty search result and
+    restore them for the next match.
 
     Parameters
     ----------
@@ -159,7 +213,10 @@ def test_search_without_matches_clears_the_example_and_recovers(app: QApplicatio
 
 
 def test_interval_entries_describe_what_their_examples_show() -> None:
-    """Check each interval example against the number and half steps its caption and entry claim."""
+    """
+    Check each interval example against the number and half steps its
+    caption and entry claim.
+    """
     sizes = {
         "interval": None,
         "unison": {(1, 0), (1, 1)},
@@ -172,9 +229,17 @@ def test_interval_entries_describe_what_their_examples_show() -> None:
     for term, expected in sizes.items():
         found = set()
         for example in TERMS[term].examples:
-            columns = [[Note.parse(name) for name in column.split("+")] for column in example.pitches.split()]
+            columns = [
+                [Note.parse(name) for name in column.split("+")]
+                for column in example.pitches.split()
+            ]
             low, high = columns[0][0], columns[1][0]
-            found.add((abs(high.diatonic - low.diatonic) + 1, abs(high.midi - low.midi)))
+            found.add(
+                (
+                    abs(high.diatonic - low.diatonic) + 1,
+                    abs(high.midi - low.midi),
+                ),
+            )
             number = abs(high.diatonic - low.diatonic) + 1
             if term == "simple intervals":
                 assert number <= 8
@@ -187,4 +252,6 @@ def test_interval_entries_describe_what_their_examples_show() -> None:
         assert len(columns) == 1 and len(columns[0]) == 2
     for example in TERMS["melodic interval"].examples:
         columns = [column.split("+") for column in example.pitches.split()]
-        assert len(columns) == 2 and all(len(column) == 1 for column in columns)
+        assert len(columns) == 2 and all(
+            len(column) == 1 for column in columns
+        )

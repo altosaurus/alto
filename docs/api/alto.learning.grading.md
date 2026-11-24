@@ -5,7 +5,8 @@ package: alto.learning
 permalink: /api/alto.learning.grading/
 ---
 {% raw %}
-Answer-button intervals for Anki's default SM-2 and FSRS-6 deck settings.
+Answer-button intervals for Anki's default SM-2 and FSRS-6 deck
+settings.
 
 ## Sm2State
 
@@ -20,7 +21,8 @@ Sm2State(
 )
 ```
 
-SM-2 learning step, review history, and actual delay for the current presentation.
+SM-2 learning step, review history, and actual delay for the current
+presentation.
 
 **Examples**
 
@@ -66,7 +68,8 @@ def inherited_state(
 ) -> str
 ```
 
-Translate one saved calendar schedule into the other scheduler's initial state.
+Translate one saved calendar schedule into the other scheduler's
+initial state.
 
 **Parameters**
 
@@ -83,9 +86,44 @@ Translate one saved calendar schedule into the other scheduler's initial state.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> result = inherited_state("abc", source="SM-2", state="[8, 180, 2.5]", due=200 * DAY, rating=Rating.Good)
+>>> result = inherited_state(
+...     "abc",
+...     source="SM-2",
+...     state="[8, 180, 2.5]",
+...     due=200 * DAY,
+...     rating=Rating.Good,
+... )
 >>> Card.from_json(result).stability
 180.0
+```
+
+## read_fsrs_card
+
+```python
+def read_fsrs_card(
+    key: str,
+    *,
+    previous: str | None,
+    due: datetime,
+) -> Card
+```
+
+Restore a saved FSRS card or start one for the question.
+
+**Parameters**
+
+- `key` (*str*): The question's stable card key.
+- `previous` (*str or None*): The saved JSON, if the question has been reviewed.
+- `due` (*datetime*): Initial due time for a new card.
+
+**Returns**
+
+- *Card*: The restored or newly scheduled card.
+
+**Examples**
+
+```text
+A new card is due at the time of its first review.
 ```
 
 ## review_options
@@ -101,7 +139,8 @@ def review_options(
 ) -> dict[Rating, tuple[int, str]]
 ```
 
-Calculate a consistent set of answer-button intervals from one scheduling state.
+Calculate a consistent set of answer-button intervals from one
+scheduling state.
 
 **Parameters**
 
@@ -118,7 +157,13 @@ Calculate a consistent set of answer-button intervals from one scheduling state.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> review_options("abc", mode="SM-2", previous=None, due=0, now=0)[Rating.Again][0]
+>>> review_options(
+...     "abc",
+...     mode="SM-2",
+...     previous=None,
+...     due=0,
+...     now=0,
+... )[Rating.Again][0]
 60
 ```
 {% endraw %}

@@ -5,11 +5,15 @@ package: alto.lessons
 permalink: /api/alto.lessons.packs/
 ---
 {% raw %}
-Turn the lessons that an instrument plugin declares into `Lesson`s that Alto lists and shows.
+Turn the lessons that an instrument plugin declares into `Lesson`s that
+Alto lists and shows.
 
-A plugin describes each lesson in its manifest as plain text and small objects: paragraphs, an optional picture of its own
-instrument, notes to hear, and a question with buttons. This module checks all of that and builds the same `Lesson` and `Step`
-objects the built-in lessons use, so the lesson pages need to know nothing about any particular plugin or instrument.
+A plugin describes each lesson in its manifest as plain text and small
+objects: paragraphs, an optional picture of its own
+instrument, notes to hear, and a question with buttons. This module
+checks all of that and builds the same `Lesson` and `Step`
+objects the built-in lessons use, so the lesson pages need to know
+nothing about any particular plugin or instrument.
 
 **Examples**
 
@@ -24,7 +28,8 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 def inline(text: str) -> str
 ```
 
-Escape plain text for a lesson page, turning ``**word**`` into bold type for a term being defined.
+Escape plain text for a lesson page, turning ``**word**`` into bold
+type for a term being defined.
 
 **Parameters**
 
@@ -55,7 +60,8 @@ def read_lessons(
 ) -> tuple[Lesson, ...]
 ```
 
-Validate the optional ``lessons`` list of a plugin manifest and build its lessons.
+Validate the optional ``lessons`` list of a plugin manifest and
+build its lessons.
 
 **Parameters**
 
@@ -77,7 +83,13 @@ Validate the optional ``lessons`` list of a plugin manifest and build its lesson
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> read_lessons(None, pack_id="demo", pack_name="Demo", instruments={}, exercises={})
+>>> read_lessons(
+...     None,
+...     pack_id="demo",
+...     pack_name="Demo",
+...     instruments={},
+...     exercises={},
+... )
 ()
 ```
 
@@ -93,7 +105,8 @@ def read_picture(
 ) -> PicturePosition | FingerboardPosition
 ```
 
-Build a step's instrument picture: a note on a string, or a marked place on the picture.
+Build a step's instrument picture: a note on a string, or a marked
+place on the picture.
 
 **Parameters**
 

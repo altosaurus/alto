@@ -5,11 +5,15 @@ package: alto
 permalink: /api/alto.audio/
 ---
 {% raw %}
-Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes.
+Note playback: recorded instrument samples (University of Iowa), with
+pitch-shifting for missing notes.
 
-`Sounds` plays notes through Qt's `QSoundEffect`, one effect per note, created the first time it is needed. A note with
-no recording is made by shifting the nearest recording (or, for the piano outside its sampled range, by synthesis).
-Instrument previews render the phrase as one cached clip, with fixed spacing between its notes.
+`Sounds` plays notes through Qt's `QSoundEffect`, one effect per note,
+created the first time it is needed. A note with
+no recording is made by shifting the nearest recording (or, for the
+piano outside its sampled range, by synthesis).
+Instrument previews render the phrase as one cached clip, with fixed
+spacing between its notes.
 The module-level `sounds` is the one the interface uses.
 
 **Examples**
@@ -33,8 +37,10 @@ def synth_piano(
 
 Synthesize a piano note, for notes outside the recorded range.
 
-An additive model: stretched partials, a decay for each partial, a detuned string pair, and a hammer thump. Each partial
-is a decaying sine made by rotating a complex number one sample at a time, which needs no sine or exponential per sample.
+An additive model: stretched partials, a decay for each partial, a
+detuned string pair, and a hammer thump. Each partial
+is a decaying sine made by rotating a complex number one sample at a
+time, which needs no sine or exponential per sample.
 
 **Parameters**
 
@@ -74,7 +80,8 @@ Instrument(
 )
 ```
 
-An instrument that notes can be played on, and where its recordings are.
+An instrument that notes can be played on, and where its recordings
+are.
 
 **Attributes**
 
@@ -93,9 +100,17 @@ An instrument that notes can be played on, and where its recordings are.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> Instrument("flute", label="Flute", folder="samples/flute", sustained=True).gain
+>>> Instrument(
+...     "flute",
+...     label="Flute",
+...     folder="samples/flute",
+...     sustained=True,
+... ).gain
 1.0
->>> INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
+>>> (
+...     INSTRUMENT_BY_KEY["piano"].damped,
+...     INSTRUMENT_BY_KEY["marimba"].damped,
+... )
 (True, False)
 ```
 
@@ -115,7 +130,12 @@ Name what sort of instrument this is, in lowercase.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> INSTRUMENT_BY_KEY["viola_bowed"].kind_name, INSTRUMENT_BY_KEY["flute"].kind_name
+>>> (
+...     INSTRUMENT_BY_KEY[
+...         "viola_bowed"
+...     ].kind_name,
+...     INSTRUMENT_BY_KEY["flute"].kind_name,
+... )
 ('viola', 'flute')
 ```
 
@@ -135,7 +155,9 @@ Identify the instrument's entry in the sound picker.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> INSTRUMENT_BY_KEY["viola_bowed"].picker_group
+>>> INSTRUMENT_BY_KEY[
+...     "viola_bowed"
+... ].picker_group
 'Viola'
 ```
 
@@ -145,7 +167,8 @@ Identify the instrument's entry in the sound picker.
 def playback_volume(level: float = 1.0) -> float
 ```
 
-Return the output volume for a note or clip played on this instrument.
+Return the output volume for a note or clip played on this
+instrument.
 
 **Parameters**
 
@@ -181,7 +204,12 @@ Ways of playing one instrument share a single entry.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> [name for name, _ in instrument_groups()]
 ['Piano', 'Flute', 'French Horn', 'Viola', 'Marimba', 'Vibraphone']
->>> [inst_.variant for inst_ in dict(instrument_groups())["Viola"]]
+>>> [
+...     inst_.variant
+...     for inst_ in dict(instrument_groups())[
+...         "Viola"
+...     ]
+... ]
 ['Arco', 'Pizzicato']
 ```
 
@@ -205,8 +233,12 @@ Read a mono 16-bit WAV file.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> import tempfile
->>> path_ = Path(tempfile.mkdtemp()) / "silence.wav"
->>> _ = path_.write_bytes(to_wav_bytes([0.0] * 10))
+>>> path_ = (
+...     Path(tempfile.mkdtemp()) / "silence.wav"
+... )
+>>> _ = path_.write_bytes(
+...     to_wav_bytes([0.0] * 10)
+... )
 >>> samples, rate = read_wav(path_)
 >>> len(samples), rate
 (10, 44100)
@@ -238,7 +270,9 @@ It also changes the length, which is fine for a few semitones.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> len(shift_pitch([0.0] * 100, semitones=12))  # an octave up: half as long
+>>> len(
+...     shift_pitch([0.0] * 100, semitones=12)
+... )  # an octave up: half as long
 50
 ```
 
@@ -269,9 +303,16 @@ Encode samples as a mono 16-bit WAV file in memory.
 >>> to_wav_bytes([0.0] * 10)[:4]
 b'RIFF'
 >>> import tempfile
->>> clipped = Path(tempfile.mkdtemp()) / "clipped.wav"
->>> _ = clipped.write_bytes(to_wav_bytes([2.0, -3.0, 0.5]))
->>> [round(value, 3) for value in read_wav(clipped)[0]]  # beyond full scale is clipped
+>>> clipped = (
+...     Path(tempfile.mkdtemp()) / "clipped.wav"
+... )
+>>> _ = clipped.write_bytes(
+...     to_wav_bytes([2.0, -3.0, 0.5])
+... )
+>>> [
+...     round(value, 3)
+...     for value in read_wav(clipped)[0]
+... ]  # beyond full scale is clipped
 [1.0, -1.0, 0.5]
 ```
 
@@ -285,9 +326,11 @@ def write_file_atomically(
 ) -> None
 ```
 
-Write a file so that nothing ever reads it half written, even another copy of Alto writing the same file.
+Write a file so that nothing ever reads it half written, even
+another copy of Alto writing the same file.
 
-The bytes go to a file of the writer's own first and then replace the file in one step.
+The bytes go to a file of the writer's own first and then replace
+the file in one step.
 
 **Parameters**
 
@@ -298,8 +341,13 @@ The bytes go to a file of the writer's own first and then replace the file in on
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> folder = Path(tempfile.mkdtemp())
->>> write_file_atomically(folder / "note.wav", data=b"RIFF")
->>> (folder / "note.wav").read_bytes(), [p.name for p in folder.iterdir()]
+>>> write_file_atomically(
+...     folder / "note.wav", data=b"RIFF"
+... )
+>>> (
+...     (folder / "note.wav").read_bytes(),
+...     [p.name for p in folder.iterdir()],
+... )
 (b'RIFF', ['note.wav'])
 ```
 
@@ -309,7 +357,8 @@ The bytes go to a file of the writer's own first and then replace the file in on
 Sounds()
 ```
 
-A lazy cache of notes played through `QSoundEffect`, in the chosen instrument.
+A lazy cache of notes played through `QSoundEffect`, in the chosen
+instrument.
 
 **Attributes**
 
@@ -357,7 +406,9 @@ Return the notes an instrument has a recording for on disk.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> 60 in Sounds().recordings(INSTRUMENT_BY_KEY["piano"])
+>>> 60 in Sounds().recordings(
+...     INSTRUMENT_BY_KEY["piano"]
+... )
 True
 ```
 
@@ -367,9 +418,11 @@ True
 def unrecorded(instrument: str | None = None) -> list[int]
 ```
 
-List the notes within an instrument's recorded range that have no recording of their own, nearest middle C first.
+List the notes within an instrument's recorded range that have
+no recording of their own, nearest middle C first.
 
-Each is made the first time it plays, by shifting the nearest recording. `alto.ui.warmup` makes them ahead of time with
+Each is made the first time it plays, by shifting the nearest
+recording. `alto.ui.warmup` makes them ahead of time with
 `prepare`, so that even a first play is quick.
 
 **Parameters**
@@ -383,7 +436,9 @@ Each is made the first time it plays, by shifting the nearest recording. `alto.u
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> notes = Sounds().unrecorded("piano")  # the piano is recorded every third semitone
+>>> notes = Sounds().unrecorded(
+...     "piano"
+... )  # the piano is recorded every third semitone
 >>> notes[:2], 60 in notes, len(notes)
 ([61, 59], False, 58)
 ```
@@ -398,7 +453,8 @@ def prepare(
 ) -> None
 ```
 
-Make the file a note plays, if it has no recording and was not made before, so that its first play is quick.
+Make the file a note plays, if it has no recording and was not
+made before, so that its first play is quick.
 
 **Parameters**
 
@@ -421,7 +477,8 @@ def note_duration_ms(
 ) -> int
 ```
 
-Read the playback length of a note for synchronized instrument animations.
+Read the playback length of a note for synchronized instrument
+animations.
 
 **Parameters**
 
@@ -435,7 +492,8 @@ Read the playback length of a note for synchronized instrument animations.
 **Examples**
 
 ```text
-A one-second sample has the same 1000 ms feedback interval when muted.
+A one-second sample has the same 1000 ms feedback interval when
+muted.
 ```
 
 ### Sounds.play_midi
@@ -453,10 +511,13 @@ def play_midi(
 
 Play a note in the chosen instrument (or another one).
 
-A sustained instrument (bowed or blown) ends the notes still sounding first, as a player would, and so does a damped
-one (the piano, played without the pedal), unless `release_previous` is False, which is for the notes of a chord
+A sustained instrument (bowed or blown) ends the notes still
+sounding first, as a player would, and so does a damped
+one (the piano, played without the pedal), unless
+`release_previous` is False, which is for the notes of a chord
 that start together. Nothing plays while muted unless
-`force` is set. A failure to play is reported but never raised, so audio can never break an exercise.
+`force` is set. A failure to play is reported but never raised,
+so audio can never break an exercise.
 
 **Parameters**
 
@@ -500,9 +561,11 @@ def preview(
 ) -> None
 ```
 
-Play notes one after another in an instrument, even while muted, to hear what it sounds like.
+Play notes one after another in an instrument, even while muted,
+to hear what it sounds like.
 
-The phrase is rendered as one audio clip, so first-use loading cannot change the spacing between notes.
+The phrase is rendered as one audio clip, so first-use loading
+cannot change the spacing between notes.
 Starting a preview silences the one before it.
 
 **Parameters**
@@ -514,7 +577,9 @@ Starting a preview silences the one before it.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> sounds.preview("flute", midis=[60, 64, 67])  # doctest: +SKIP
+>>> sounds.preview(
+...     "flute", midis=[60, 64, 67]
+... )  # doctest: +SKIP
 ```
 
 ### Sounds.play_notes
@@ -533,7 +598,8 @@ def play_notes(
 
 Play staff columns left to right, evenly spaced.
 
-The notes within a column sound together, a little quieter the more there are.
+The notes within a column sound together, a little quieter the
+more there are.
 
 **Parameters**
 
@@ -549,7 +615,15 @@ The notes within a column sound together, a little quieter the more there are.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> s = Sounds()
 >>> s.enabled = False
->>> s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
+>>> s.play_notes(
+...     [
+...         [
+...             Note.parse("C4"),
+...             Note.parse("E4"),
+...             Note.parse("G4"),
+...         ]
+...     ]
+... )  # muted: nothing sounds
 ```
 
 ### Sounds.stop_sample
@@ -584,7 +658,8 @@ def play_sample(
 ) -> None
 ```
 
-Play a displayed sample and report the sounding column until it ends or is interrupted.
+Play a displayed sample and report the sounding column until it
+ends or is interrupted.
 
 **Parameters**
 
@@ -600,7 +675,11 @@ Play a displayed sample and report the sounding column until it ends or is inter
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> player = Sounds()
 >>> player.enabled = False
->>> player.play_sample([[Note.parse("C4")]], gap_ms=300, on_step=print)
+>>> player.play_sample(
+...     [[Note.parse("C4")]],
+...     gap_ms=300,
+...     on_step=print,
+... )
 0
 >>> player.stop_sample(print)
 None
@@ -612,7 +691,8 @@ None
 def play_correct(streak: int) -> None
 ```
 
-Play a note that climbs the C major scale (C5 to C6) as the streak grows, then wraps.
+Play a note that climbs the C major scale (C5 to C6) as the
+streak grows, then wraps.
 
 **Parameters**
 

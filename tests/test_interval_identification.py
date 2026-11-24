@@ -1,4 +1,7 @@
-"""Staff interval selection, presentation, grading, and settings persistence."""
+"""
+Staff interval selection, presentation, grading, and settings
+persistence.
+"""
 
 import random
 from itertools import pairwise
@@ -6,7 +9,13 @@ from unittest.mock import patch
 
 import pytest
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QApplication, QPushButton, QRadioButton, QScrollArea, QToolButton
+from PySide6.QtWidgets import (
+    QApplication,
+    QPushButton,
+    QRadioButton,
+    QScrollArea,
+    QToolButton,
+)
 
 from alto import settings
 from alto.audio import sounds
@@ -26,9 +35,13 @@ from alto.ui.style import app_style
 
 @pytest.mark.parametrize("display", settings.INTERVAL_DISPLAYS)
 @pytest.mark.parametrize("direction", ["ascending", "descending"])
-def test_each_written_interval_matches_the_display_and_answer(display: str, direction: str) -> None:
+def test_each_written_interval_matches_the_display_and_answer(
+    display: str,
+    direction: str,
+) -> None:
     """
-    Read back every question from its written notes in all three answer formats.
+    Read back every question from its written notes in all three answer
+    formats.
 
     Parameters
     ----------
@@ -48,23 +61,39 @@ def test_each_written_interval_matches_the_display_and_answer(display: str, dire
     rng = random.Random(22)
     for name, iv in settings.WRITTEN_INTERVALS.items():
         cfg.intervals = {name}
-        labels = {"combined": name, "interval": str(iv.number), "quality": QUALITY_NAMES[iv.quality]}
+        labels = {
+            "combined": name,
+            "interval": str(iv.number),
+            "quality": QUALITY_NAMES[iv.quality],
+        }
         for mode, label in labels.items():
             cfg.quality_mode = mode
             q = exercise.generate(rng)
             assert (q.key, q.clef) == (-4, "alto")
-            assert [len(chord) for chord in q.staff] == ([2] if display == "Harmonic" else [1, 1])
+            assert [len(chord) for chord in q.staff] == (
+                [2] if display == "Harmonic" else [1, 1]
+            )
             notes = [note for chord in q.staff for note in chord]
-            low, high = reversed(notes) if display == "Melodic" and direction == "descending" else notes
+            low, high = (
+                reversed(notes)
+                if display == "Melodic" and direction == "descending"
+                else notes
+            )
             assert q.explanation.startswith(f"{notes[0]} to {notes[1]}:")
             assert 22 <= low.diatonic <= high.diatonic <= 36
             assert Interval.between(low, high=high) == iv
             assert q.choices == [q.answer] == [label]
-            assert all(q.check(candidate) == (candidate == label) for candidate in labels.values())
+            assert all(
+                q.check(candidate) == (candidate == label)
+                for candidate in labels.values()
+            )
 
 
 def test_only_possible_intervals_are_asked() -> None:
-    """Check empty selections, nonoverlapping ranges, and distinct number-only answer choices."""
+    """
+    Check empty selections, nonoverlapping ranges, and distinct
+    number-only answer choices.
+    """
     cfg = settings.intervals
     cfg.clefs = {"bass", "treble"}
     cfg.ranges = {"treble": (28, 30), "bass": (21, 21)}
@@ -87,11 +116,19 @@ def test_only_possible_intervals_are_asked() -> None:
 
 @pytest.mark.parametrize(
     ("display", "direction"),
-    [("Harmonic", "ascending"), ("Melodic", "ascending"), ("Melodic", "descending")],
+    [
+        ("Harmonic", "ascending"),
+        ("Melodic", "ascending"),
+        ("Melodic", "descending"),
+    ],
 )
-def test_inverted_answers_follow_the_written_spelling(display: str, direction: str) -> None:
+def test_inverted_answers_follow_the_written_spelling(
+    display: str,
+    direction: str,
+) -> None:
     """
-    Grade the inversion while keeping the selected interval on the staff.
+    Grade the inversion while keeping the selected interval on the
+    staff.
 
     Parameters
     ----------
@@ -105,7 +142,15 @@ def test_inverted_answers_follow_the_written_spelling(display: str, direction: s
     cfg.displays, cfg.directions = {display}, {direction}
     cfg.clefs, cfg.ranges = {"treble"}, {"treble": (28, 42)}
     cfg.accidentals = set(settings.INTERVAL_ACCIDENTALS)
-    spellings = {"M3": "m6", "m3": "M6", "A4": "d5", "d5": "A4", "P8": "P1", "M10": "m6", "P15": "P1"}
+    spellings = {
+        "M3": "m6",
+        "m3": "M6",
+        "A4": "d5",
+        "d5": "A4",
+        "P8": "P1",
+        "M10": "m6",
+        "P15": "P1",
+    }
     cfg.intervals = set(spellings)
     exercise = IntervalNames()
     rng = random.Random(4)
@@ -114,20 +159,34 @@ def test_inverted_answers_follow_the_written_spelling(display: str, direction: s
         seen = set()
         for _ in range(90):
             q = exercise.generate(rng)
-            low, high = sorted((note for chord in q.staff for note in chord), key=lambda note: note.diatonic)
+            low, high = sorted(
+                (note for chord in q.staff for note in chord),
+                key=lambda note: note.diatonic,
+            )
             written = Interval.between(low, high=high).short
             seen.add(written)
             inverse = spellings[written]
-            expected = {"combined": inverse, "interval": inverse[1:], "quality": QUALITY_NAMES[inverse[0]]}[mode]
-            assert q.check(expected) and ("invert" in q.prompt or "inversion" in q.prompt)
-            assert q.explanation.endswith(f"The inversion of {written} is {inverse}.")
-            assert len(q.choices) == len(set(q.choices)) and expected in q.choices
+            expected = {
+                "combined": inverse,
+                "interval": inverse[1:],
+                "quality": QUALITY_NAMES[inverse[0]],
+            }[mode]
+            assert q.check(expected) and (
+                "invert" in q.prompt or "inversion" in q.prompt
+            )
+            assert q.explanation.endswith(
+                f"The inversion of {written} is {inverse}.",
+            )
+            assert (
+                len(q.choices) == len(set(q.choices)) and expected in q.choices
+            )
         assert seen == cfg.intervals
 
 
 def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
     """
-    Toggle the setting from the gear, answer the new question, and restore the original review pool.
+    Toggle the setting from the gear, answer the new question, and
+    restore the original review pool.
 
     Parameters
     ----------
@@ -149,13 +208,21 @@ def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
     for width, height in ((900, 480), (1300, 900)):
         view.resize(width, height)
         app.processEvents()
-        assert row.isVisible() and row.switch.isVisibleTo(panel) and row.width() >= row.minimumSizeHint().width()
+        assert (
+            row.isVisible()
+            and row.switch.isVisibleTo(panel)
+            and row.width() >= row.minimumSizeHint().width()
+        )
     original = view.exercise.settings_signature()
     assert "inversions" not in original
     row.click()
     assert cfg.inversions and view.exercise.settings_signature() != original
     q = view.question
-    assert q is not None and len(q.choices) == 2 and set(q.choices) <= {"m6", "P4", "d5"}
+    assert (
+        q is not None
+        and len(q.choices) == 2
+        and set(q.choices) <= {"m6", "P4", "d5"}
+    )
     assert view.prompt.text() == q.prompt
     view.buttons[q.choices.index(q.answer)].click()
     assert view.answered
@@ -163,16 +230,27 @@ def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
     load_intervals()
     assert cfg.inversions and Question.from_dict(q.to_dict()).check(q.answer)
     row.click()
-    assert not cfg.inversions and view.exercise.settings_signature() == original
+    assert (
+        not cfg.inversions and view.exercise.settings_signature() == original
+    )
     assert set(view.question.choices) <= cfg.intervals
     view.close()
 
 
 @pytest.mark.parametrize("inversions", [False, True])
-@pytest.mark.parametrize(("display", "gap_ms"), [("Melodic", 500), ("Harmonic", 450)])
-def test_interval_playback_spacing(app: QApplication, display: str, gap_ms: int, inversions: bool) -> None:
+@pytest.mark.parametrize(
+    ("display", "gap_ms"),
+    [("Melodic", 500), ("Harmonic", 450)],
+)
+def test_interval_playback_spacing(
+    app: QApplication,
+    display: str,
+    gap_ms: int,
+    inversions: bool,
+) -> None:
     """
-    Check note onsets for the correct answer and the saved question's Play button.
+    Check note onsets for the correct answer and the saved question's
+    Play button.
 
     Parameters
     ----------
@@ -194,33 +272,61 @@ def test_interval_playback_spacing(app: QApplication, display: str, gap_ms: int,
     assert q is not None
     feedback = q.staff
     if inversions:
-        high = max((note for column in q.staff for note in column), key=lambda note: note.midi)
+        high = max(
+            (note for column in q.staff for note in column),
+            key=lambda note: note.midi,
+        )
         raised = high.transpose(Interval.parse("m6"))
-        feedback = [[high, raised]] if display == "Harmonic" else [[raised], [high]]
+        feedback = (
+            [[high, raised]] if display == "Harmonic" else [[raised], [high]]
+        )
     assert view.staff.columns == q.staff
-    preview = QuestionPreview(IntervalNames.name, question=Question.from_dict(q.to_dict()))
+    preview = QuestionPreview(
+        IntervalNames.name,
+        question=Question.from_dict(q.to_dict()),
+    )
     with patch.object(sounds, "_play_sequence") as play:
-        next(button for button in view.buttons if button.text() == q.answer).click()
+        next(
+            button for button in view.buttons if button.text() == q.answer
+        ).click()
         on_step = play.call_args.kwargs["on_step"]
         assert not view.staff.column_colors and not view._advance.isActive()
         for index, notes in enumerate(feedback):
             on_step(index)
-            assert view.staff.column_colors == {index: QColor("#2e7d32")} and view.staff.columns[index] == notes
-            assert view.staff.note_color is None and not view._advance.isActive()
+            assert (
+                view.staff.column_colors == {index: QColor("#2e7d32")}
+                and view.staff.columns[index] == notes
+            )
+            assert (
+                view.staff.note_color is None and not view._advance.isActive()
+            )
         on_step(None)
         assert not view.staff.column_colors and view._advance.isActive()
-        next(button for button in preview.findChildren(QPushButton) if button.text() == "Play").click()
+        next(
+            button
+            for button in preview.findChildren(QPushButton)
+            if button.text() == "Play"
+        ).click()
     assert play.call_count == 2
-    for call, columns in zip(play.call_args_list, (feedback, q.staff), strict=True):
+    for call, columns in zip(
+        play.call_args_list,
+        (feedback, q.staff),
+        strict=True,
+    ):
         assert call.kwargs["gap_ms"] == gap_ms
-        assert [midis for midis, _ in call.kwargs["steps"]] == [[note.midi for note in column] for column in columns]
+        assert [midis for midis, _ in call.kwargs["steps"]] == [
+            [note.midi for note in column] for column in columns
+        ]
     view.close()
     preview.close()
 
 
-def test_new_interval_question_stops_previous_highlight(app: QApplication) -> None:
+def test_new_interval_question_stops_previous_highlight(
+    app: QApplication,
+) -> None:
     """
-    End active interval playback when the learner changes the exercise settings.
+    End active interval playback when the learner changes the exercise
+    settings.
 
     Parameters
     ----------
@@ -231,7 +337,9 @@ def test_new_interval_question_stops_previous_highlight(app: QApplication) -> No
     q = view.question
     assert q is not None
     with patch.object(sounds, "_play_sequence") as play:
-        next(button for button in view.buttons if button.text() == q.answer).click()
+        next(
+            button for button in view.buttons if button.text() == q.answer
+        ).click()
         play.call_args.kwargs["on_step"](0)
         assert view.staff.column_colors == {0: QColor("#2e7d32")}
         panel = view.settings_panel
@@ -242,9 +350,12 @@ def test_new_interval_question_stops_previous_highlight(app: QApplication) -> No
     view.close()
 
 
-def test_display_choices_stay_together_as_the_exercise_grows(app: QApplication) -> None:
+def test_display_choices_stay_together_as_the_exercise_grows(
+    app: QApplication,
+) -> None:
     """
-    Open Display Mode and verify its rows stay at the top of the pane after resizing.
+    Open Display Mode and verify its rows stay at the top of the pane
+    after resizing.
 
     Parameters
     ----------
@@ -264,8 +375,14 @@ def test_display_choices_stay_together_as_the_exercise_grows(app: QApplication) 
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
     scroll = panel.display.parentWidget()
     assert scroll is not None
-    melodic, harmonic = (panel.display.boxes[name] for name in ("Melodic", "Harmonic"))
-    assert harmonic.isChecked() and not melodic.isChecked() and panel.direction_choices.isHidden()
+    melodic, harmonic = (
+        panel.display.boxes[name] for name in ("Melodic", "Harmonic")
+    )
+    assert (
+        harmonic.isChecked()
+        and not melodic.isChecked()
+        and panel.direction_choices.isHidden()
+    )
     melodic.click()
     assert panel.display_row.value.text() == "Harmonic, Melodic"
     for width, height in ((900, 480), (1300, 900), (900, 480)):
@@ -278,16 +395,23 @@ def test_display_choices_stay_together_as_the_exercise_grows(app: QApplication) 
         assert melodic.y() - harmonic.y() - harmonic.height() == spacing
         assert direction.y() - melodic.y() - melodic.height() == spacing
 
-    # A longer list in the same panel must still scroll to its final choice.
+    # A longer list in the same panel must still scroll to its final
+    # choice.
     page = panel.stack.currentWidget()
     assert page is not None
-    next(button for button in page.findChildren(QToolButton) if "Back" in button.text()).click()
+    next(
+        button
+        for button in page.findChildren(QToolButton)
+        if "Back" in button.text()
+    ).click()
     assert panel.stack._slide is not None
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
     panel.intervals_row.click()
     assert panel.stack._slide is not None
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
-    app.processEvents()  # lay out the page that slid in, so its scroll bar knows how far the list goes
+    # lay out the page that slid in, so its scroll bar knows how far the
+    # list goes
+    app.processEvents()
     page = panel.stack.currentWidget()
     assert page is not None
     area = page.findChild(QScrollArea)
@@ -299,18 +423,26 @@ def test_display_choices_stay_together_as_the_exercise_grows(app: QApplication) 
     for name, iv in settings.WRITTEN_INTERVALS.items():
         box = boxes[name]
         assert box.y() == boxes[f"A{iv.number}"].y()
-        assert box.x() == columns[{"A": 0, "P": 1, "M": 1, "m": 2, "d": 3}[iv.quality]]
+        assert (
+            box.x()
+            == columns[{"A": 0, "P": 1, "M": 1, "m": 2, "d": 3}[iv.quality]]
+        )
         assert box.width() >= box.minimumSizeHint().width()
     assert area.horizontalScrollBar().maximum() == 0
     last = boxes["d15"]
     area.ensureWidgetVisible(last)
-    assert area.viewport().rect().contains(last.mapTo(area.viewport(), last.rect().center()))
+    assert (
+        area.viewport()
+        .rect()
+        .contains(last.mapTo(area.viewport(), last.rect().center()))
+    )
 
 
 @pytest.mark.parametrize("sign", settings.INTERVAL_ACCIDENTALS)
 def test_written_accidentals_on_both_notes(sign: int) -> None:
     """
-    Draw only the selected marking, taking the staff signature into account.
+    Draw only the selected marking, taking the staff signature into
+    account.
 
     Parameters
     ----------
@@ -336,9 +468,12 @@ def test_written_accidentals_on_both_notes(sign: int) -> None:
     assert keys == ({0} if sign == 1 else {0, 1})
 
 
-def test_accidental_picker_persistence_and_impossible_interval(app: QApplication) -> None:
+def test_accidental_picker_persistence_and_impossible_interval(
+    app: QApplication,
+) -> None:
     """
-    Toggle markings in the submenu and recover when no selected spelling fits.
+    Toggle markings in the submenu and recover when no selected spelling
+    fits.
 
     Parameters
     ----------
@@ -364,8 +499,20 @@ def test_accidental_picker_persistence_and_impossible_interval(app: QApplication
     for width, height in ((900, 480), (1300, 900)):
         view.resize(width, height)
         app.processEvents()
-        assert boxes[0].y() < boxes[-1].y() == boxes[1].y() < boxes[-2].y() == boxes[2].y()
-        assert boxes[0].x() == boxes[-1].x() == boxes[-2].x() < boxes[1].x() == boxes[2].x()
+        assert (
+            boxes[0].y()
+            < boxes[-1].y()
+            == boxes[1].y()
+            < boxes[-2].y()
+            == boxes[2].y()
+        )
+        assert (
+            boxes[0].x()
+            == boxes[-1].x()
+            == boxes[-2].x()
+            < boxes[1].x()
+            == boxes[2].x()
+        )
         for box in boxes.values():
             assert box.font().pointSizeF() == 22
             assert box.size().expandedTo(box.minimumSizeHint()) == box.size()
@@ -381,17 +528,25 @@ def test_accidental_picker_persistence_and_impossible_interval(app: QApplication
     assert panel.accidentals_row.value.text() == "♮ ♭ 𝄫"
     cfg.accidentals.clear()
     load_intervals()
-    assert cfg.accidentals == {0, -1, -2} and "accidentals" in view.exercise.settings_signature()
+    assert (
+        cfg.accidentals == {0, -1, -2}
+        and "accidentals" in view.exercise.settings_signature()
+    )
     page = panel.stack.currentWidget()
-    next(b for b in page.findChildren(QToolButton) if "Back" in b.text()).click()
+    next(
+        b for b in page.findChildren(QToolButton) if "Back" in b.text()
+    ).click()
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
     assert panel.stack.currentIndex() == 0
     view.close()
 
 
-def test_inline_melodic_direction_and_review_history(app: QApplication) -> None:
+def test_inline_melodic_direction_and_review_history(
+    app: QApplication,
+) -> None:
     """
-    Choose a direction on Display Mode and retain it while practicing harmonic intervals.
+    Choose a direction on Display Mode and retain it while practicing
+    harmonic intervals.
 
     Parameters
     ----------
@@ -409,7 +564,11 @@ def test_inline_melodic_direction_and_review_history(app: QApplication) -> None:
     descending = panel.direction_choices.boxes["descending"]
     panel.display.boxes["Melodic"].click()
     panel.display.boxes["Harmonic"].click()
-    assert ascending.isChecked() and not ascending.isEnabled() and view.exercise.settings_signature() == ""
+    assert (
+        ascending.isChecked()
+        and not ascending.isEnabled()
+        and view.exercise.settings_signature() == ""
+    )
     descending.click()
     mixed = view.exercise.settings_signature()
     assert ascending.isChecked() and descending.isChecked() and mixed
@@ -417,11 +576,20 @@ def test_inline_melodic_direction_and_review_history(app: QApplication) -> None:
     assert settings.intervals.directions == {"ascending", "descending"}
     rng = random.Random(8)
     questions = [view.exercise.generate(rng) for _ in range(20)]
-    assert {q.staff[0][0].diatonic < q.staff[1][0].diatonic for q in questions} == {False, True}
+    assert {
+        q.staff[0][0].diatonic < q.staff[1][0].diatonic for q in questions
+    } == {False, True}
     ascending.click()
-    assert not ascending.isChecked() and descending.isChecked() and not descending.isEnabled()
+    assert (
+        not ascending.isChecked()
+        and descending.isChecked()
+        and not descending.isEnabled()
+    )
     descending_history = view.exercise.settings_signature()
-    assert '"motion": "descending"' in descending_history and descending_history != mixed
+    assert (
+        '"motion": "descending"' in descending_history
+        and descending_history != mixed
+    )
     assert panel.stack.currentWidget() is display_page
     panel.display.boxes["Harmonic"].click()
     panel.display.boxes["Melodic"].click()
@@ -438,7 +606,8 @@ def test_inline_melodic_direction_and_review_history(app: QApplication) -> None:
 
 def test_settings_menu_and_saved_interval_question(app: QApplication) -> None:
     """
-    Edit the exercise settings through the exercise, reload them, and reset the edited range.
+    Edit the exercise settings through the exercise, reload them, and
+    reset the edited range.
 
     Parameters
     ----------
@@ -466,7 +635,17 @@ def test_settings_menu_and_saved_interval_question(app: QApplication) -> None:
     )
     assert [r.title.text() for r in rows] == [
         f"<b>{s}</b>"
-        for s in ("Clefs", "Range", "Staff Key", "Display Mode", "Quality", "Intervals", "Accidentals", "Note Value", "Buttons")
+        for s in (
+            "Clefs",
+            "Range",
+            "Staff Key",
+            "Display Mode",
+            "Quality",
+            "Intervals",
+            "Accidentals",
+            "Note Value",
+            "Buttons",
+        )
     ]
     assert [r.y() for r in rows] == sorted(r.y() for r in rows)
     question = view.question
@@ -478,7 +657,9 @@ def test_settings_menu_and_saved_interval_question(app: QApplication) -> None:
     assert view.question.clef == "bass" and not panel.boxes["bass"].isEnabled()
     page = panel.stack.currentWidget()
     assert page is not None
-    next(b for b in page.findChildren(QToolButton) if "Back" in b.text()).click()
+    next(
+        b for b in page.findChildren(QToolButton) if "Back" in b.text()
+    ).click()
     motion.settle()
     panel.range_row.click()
     motion.settle()
@@ -501,16 +682,30 @@ def test_settings_menu_and_saved_interval_question(app: QApplication) -> None:
     panel.select_all.click()
     assert panel.interval_list.selected() == previous_selection
     panel.slider.move_endpoint("low", delta=1)
-    assert panel.interval_list.selected() == {name for name, iv in settings.WRITTEN_INTERVALS.items() if 3 <= iv.number <= 8}
+    assert panel.interval_list.selected() == {
+        name
+        for name, iv in settings.WRITTEN_INTERVALS.items()
+        if 3 <= iv.number <= 8
+    }
     panel.interval_list.boxes["M9"].click()
     cfg = settings.intervals
-    assert cfg.quality_mode == "interval" and cfg.ranges["bass"] == (editor.low, editor.high)
-    assert cfg.displays == {"Harmonic"} and cfg.staff_keys == {-2} and "M9" in cfg.intervals
+    assert cfg.quality_mode == "interval" and cfg.ranges["bass"] == (
+        editor.low,
+        editor.high,
+    )
+    assert (
+        cfg.displays == {"Harmonic"}
+        and cfg.staff_keys == {-2}
+        and "M9" in cfg.intervals
+    )
     assert view.question.key == -2 and view.question.answer.isdigit()
     assert panel.display_row.value.text() == "Harmonic"
     customized = exercise.settings_signature()
     assert customized != original
-    assert settings.note_names.clefs == {"treble", "bass"} and not settings.note_names.ranges
+    assert (
+        settings.note_names.clefs == {"treble", "bass"}
+        and not settings.note_names.ranges
+    )
     cfg.__init__()
     load_intervals()
     assert exercise.settings_signature() == customized
@@ -522,7 +717,8 @@ def test_settings_menu_and_saved_interval_question(app: QApplication) -> None:
 
 def test_quality_submenu_and_saved_switch(app: QApplication) -> None:
     """
-    Restore old Quality switch settings and grade quality-only answers from the submenu.
+    Restore old Quality switch settings and grade quality-only answers
+    from the submenu.
 
     Parameters
     ----------
@@ -546,32 +742,59 @@ def test_quality_submenu_and_saved_switch(app: QApplication) -> None:
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
     page = panel.stack.currentWidget()
     radios = page.findChildren(QRadioButton)
-    assert [radio.text() for radio in radios] == ["Interval Only", "Interval and Quality", "Quality Only"]
+    assert [radio.text() for radio in radios] == [
+        "Interval Only",
+        "Interval and Quality",
+        "Quality Only",
+    ]
     assert radios[0].isChecked() and view.question is original
     radios[2].click()
     assert [radio.isChecked() for radio in radios] == [False, False, True]
     assert view.question.prompt == "What is the interval quality?"
     assert [b.text() for b in view.buttons] == ["A", "M", "P", "m", "d"]
-    assert all(b.accessibleName() == QUALITY_NAMES[b.text()] for b in view.buttons)
-    next(b for b in view.buttons if QUALITY_NAMES[b.text()] == view.question.answer).click()
+    assert all(
+        b.accessibleName() == QUALITY_NAMES[b.text()] for b in view.buttons
+    )
+    next(
+        b
+        for b in view.buttons
+        if QUALITY_NAMES[b.text()] == view.question.answer
+    ).click()
     assert view.answered
-    next(b for b in page.findChildren(QToolButton) if "Back" in b.text()).click()
+    next(
+        b for b in page.findChildren(QToolButton) if "Back" in b.text()
+    ).click()
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
-    assert panel.stack.currentIndex() == 0 and panel.quality_row.value.text() == "Quality Only"
+    assert (
+        panel.stack.currentIndex() == 0
+        and panel.quality_row.value.text() == "Quality Only"
+    )
     cfg.quality_mode = "combined"
     load_intervals()
-    assert cfg.quality_mode == "quality" and '"quality_mode": "quality"' in view.exercise.settings_signature()
+    assert (
+        cfg.quality_mode == "quality"
+        and '"quality_mode": "quality"' in view.exercise.settings_signature()
+    )
     cfg.button_mode, cfg.button_count = "limited", 2
     view.next_question()
     assert len(view.buttons) == 2
-    assert [QUALITY_NAMES[b.text()] for b in view.buttons] == view.question.choices
-    next(b for b in view.buttons if QUALITY_NAMES[b.text()] == view.question.answer).click()
+    assert [
+        QUALITY_NAMES[b.text()] for b in view.buttons
+    ] == view.question.choices
+    next(
+        b
+        for b in view.buttons
+        if QUALITY_NAMES[b.text()] == view.question.answer
+    ).click()
     assert view.answered
     view.close()
 
 
 def test_saved_empty_selection_and_invalid_range() -> None:
-    """Keep an intentional empty interval checklist and ignore malformed or out-of-bounds ranges."""
+    """
+    Keep an intentional empty interval checklist and ignore malformed or
+    out-of-bounds ranges.
+    """
     saved = store()
     saved.setValue("intervals/buttonCount", "invalid")
     saved.setValue("intervals/intervals", "")
@@ -586,7 +809,10 @@ def test_saved_empty_selection_and_invalid_range() -> None:
 
 
 def test_display_defaults_to_harmonic_and_restores_saved_modes() -> None:
-    """Start with simultaneous notes and honor an existing display preference on reload."""
+    """
+    Start with simultaneous notes and honor an existing display
+    preference on reload.
+    """
     saved = store()
     load_intervals()
     assert settings.intervals.displays == {"Harmonic"}
@@ -600,7 +826,8 @@ def test_display_defaults_to_harmonic_and_restores_saved_modes() -> None:
 
 def test_interval_picker_tracks_active_staff_ranges(app: QApplication) -> None:
     """
-    Keep the picker, bulk controls, and question choices within the selected clefs' ranges.
+    Keep the picker, bulk controls, and question choices within the
+    selected clefs' ranges.
 
     Parameters
     ----------
@@ -616,17 +843,25 @@ def test_interval_picker_tracks_active_staff_ranges(app: QApplication) -> None:
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
     boxes = panel.interval_list.boxes
-    assert panel.slider.maximum == 9 and not boxes["M9"].isHidden() and boxes["M10"].isHidden()
+    assert (
+        panel.slider.maximum == 9
+        and not boxes["M9"].isHidden()
+        and boxes["M10"].isHidden()
+    )
     panel.boxes["bass"].click()
     assert panel.slider.maximum == panel.slider.high == 3
     assert panel.intervals_row.value.text() == "1 selected"
     assert panel.interval_list.headings["Compound intervals"].isHidden()
     assert {name for name, box in boxes.items() if box.isEnabled()} == {
-        name for name, iv in settings.WRITTEN_INTERVALS.items() if iv.number <= 3
+        name
+        for name, iv in settings.WRITTEN_INTERVALS.items()
+        if iv.number <= 3
     }
     assert view.question.choices == ["M3"]
     panel.select_all.click()
-    assert set(view.question.choices) == {name for name, box in boxes.items() if not box.isHidden()}
+    assert set(view.question.choices) == {
+        name for name, box in boxes.items() if not box.isHidden()
+    }
     assert cfg.intervals == set(view.question.choices) | {"M9", "P15"}
     panel.select_all.click()
     panel.slider.move_endpoint("low", delta=-1)
@@ -634,10 +869,16 @@ def test_interval_picker_tracks_active_staff_ranges(app: QApplication) -> None:
     panel._range_edited("treble", 28, 28)
     assert all(box.isHidden() for box in boxes.values())
     assert panel.slider.isHidden() and not panel.select_all.isEnabled()
-    assert panel.intervals_row.value.text() == "None" and not view.question.choices
+    assert (
+        panel.intervals_row.value.text() == "None"
+        and not view.question.choices
+    )
     panel._range_edited("treble", 28, 29)
     assert panel.slider.maximum == 2 and not panel.slider.isHidden()
-    assert all(settings.WRITTEN_INTERVALS[name].number == 2 for name in view.question.choices)
+    assert all(
+        settings.WRITTEN_INTERVALS[name].number == 2
+        for name in view.question.choices
+    )
     load_intervals()
     assert {"M9", "P15"} <= cfg.intervals
     panel._reset_ranges()
@@ -647,7 +888,8 @@ def test_interval_picker_tracks_active_staff_ranges(app: QApplication) -> None:
 
 def test_limited_interval_buttons_use_quality_rows(app: QApplication) -> None:
     """
-    Place spellings of the same interval number in one column of the limited grid.
+    Place spellings of the same interval number in one column of the
+    limited grid.
 
     Parameters
     ----------
@@ -658,7 +900,9 @@ def test_limited_interval_buttons_use_quality_rows(app: QApplication) -> None:
     view = ExerciseView(IntervalNames(), rng=random.Random(6))
     view.show()
     app.processEvents()
-    positions = {button.text(): (button.y(), button.x()) for button in view.buttons}
+    positions = {
+        button.text(): (button.y(), button.x()) for button in view.buttons
+    }
     assert list(positions) == ["A3", "M3", "P4", "m3", "d3"]
     assert list(positions.values()) == sorted(positions.values())
     assert positions["M3"][0] == positions["P4"][0]
@@ -666,9 +910,12 @@ def test_limited_interval_buttons_use_quality_rows(app: QApplication) -> None:
     view.close()
 
 
-def test_buttons_switch_between_a_limit_and_all_eligible_answers(app: QApplication) -> None:
+def test_buttons_switch_between_a_limit_and_all_eligible_answers(
+    app: QApplication,
+) -> None:
     """
-    Change the answer layout through the submenu and restore the limited count.
+    Change the answer layout through the submenu and restore the limited
+    count.
 
     Parameters
     ----------
@@ -693,9 +940,16 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(app: QApplicati
     assert page is not None
     modes = {b.text(): b for b in page.findChildren(QRadioButton)}
     count = page.findChild(FieldComboBox)
-    assert count is not None and count.isVisible() and modes["Limited"].isChecked()
+    assert (
+        count is not None
+        and count.isVisible()
+        and modes["Limited"].isChecked()
+    )
     count.setCurrentIndex(count.findData(3))
-    assert len(view.buttons) == 3 and view.question.answer in view.question.choices
+    assert (
+        len(view.buttons) == 3
+        and view.question.answer in view.question.choices
+    )
     modes["All"].click()
     assert panel.buttons_row.value.text() == "All" and not count.isVisible()
     groups = [
@@ -705,13 +959,18 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(app: QApplicati
         ["d2", "d3", "d4", "d5", "d6", "d7", "d8"],
     ]
     bank = view.interval_answers
-    assert bank.isVisible() and [b.text() for b in bank.buttons] == [name for group in groups for name in group]
+    assert bank.isVisible() and [b.text() for b in bank.buttons] == [
+        name for group in groups for name in group
+    ]
     for width in (1250, 520):
         view.resize(width, 650)
         app.processEvents()
         positions = {b.text(): (b.y(), b.x()) for b in bank.buttons}
         assert list(positions.values()) == sorted(positions.values())
-        assert all(positions[upper[-1]][0] < positions[lower[0]][0] for upper, lower in pairwise(groups))
+        assert all(
+            positions[upper[-1]][0] < positions[lower[0]][0]
+            for upper, lower in pairwise(groups)
+        )
         assert bank.horizontalScrollBar().maximum() == 0
     view.buttons[view.question.choices.index(view.question.answer)].click()
     assert view.answered
@@ -722,15 +981,23 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(app: QApplicati
     panel.quality_modes["interval"].click()
     assert view.question.choices == [str(n) for n in range(2, 9)]
     modes["Limited"].click()
-    assert count.isVisible() and count.currentData() == 3 and len(view.buttons) == 3
+    assert (
+        count.isVisible()
+        and count.currentData() == 3
+        and len(view.buttons) == 3
+    )
     assert view.exercise.settings_signature() != all_signature
     view.close()
 
 
 @pytest.mark.parametrize("display", settings.INTERVAL_DISPLAYS)
-def test_note_value_picker_and_saved_interval_staff(app: QApplication, display: str) -> None:
+def test_note_value_picker_and_saved_interval_staff(
+    app: QApplication,
+    display: str,
+) -> None:
     """
-    Apply the same selected note value in practice and on the saved question's staff.
+    Apply the same selected note value in practice and on the saved
+    question's staff.
 
     Parameters
     ----------
@@ -754,9 +1021,14 @@ def test_note_value_picker_and_saved_interval_staff(app: QApplication, display: 
     assert cfg.active_values() == ["whole", "eighth"]
     assert panel.value_pictures.values == cfg.active_values()
     rng = random.Random(3)
-    assert {view.exercise.generate(rng).value for _ in range(24)} == {"whole", "eighth"}
+    assert {view.exercise.generate(rng).value for _ in range(24)} == {
+        "whole",
+        "eighth",
+    }
     boxes["whole"].click()
-    assert not boxes["eighth"].isEnabled() and cfg.active_values() == ["eighth"]
+    assert not boxes["eighth"].isEnabled() and cfg.active_values() == [
+        "eighth",
+    ]
     q = view.question
     assert q is not None and q.value == view.staff.value == "eighth"
     saved = Question.from_dict(q.to_dict())
@@ -766,16 +1038,26 @@ def test_note_value_picker_and_saved_interval_staff(app: QApplication, display: 
     staff.resize(view.staff.size())
     expected = view.staff.grab().toImage()
     assert staff.grab().toImage() == expected
-    staff.show_notes(saved.staff, clef=saved.clef, key=saved.key, value="whole")
+    staff.show_notes(
+        saved.staff,
+        clef=saved.clef,
+        key=saved.key,
+        value="whole",
+    )
     assert staff.grab().toImage() != expected
     cfg.note_values.clear()
     load_intervals()
-    assert cfg.note_values == {"eighth"} and settings.note_names.note_values == {"whole"}
+    assert cfg.note_values == {
+        "eighth",
+    } and settings.note_names.note_values == {"whole"}
 
 
-def test_consonance_switch_grades_both_choices_and_saves(app: QApplication) -> None:
+def test_consonance_switch_grades_both_choices_and_saves(
+    app: QApplication,
+) -> None:
     """
-    Classify written intervals with the Consonance switch and restore the mode from storage.
+    Classify written intervals with the Consonance switch and restore
+    the mode from storage.
 
     Parameters
     ----------
@@ -796,7 +1078,11 @@ def test_consonance_switch_grades_both_choices_and_saves(app: QApplication) -> N
     for _ in range(20):
         q = view.exercise.generate(rng)
         low, high = q.staff[0]
-        expected = "Consonant" if Interval.between(low, high=high).short == "M3" else "Dissonant"
+        expected = (
+            "Consonant"
+            if Interval.between(low, high=high).short == "M3"
+            else "Dissonant"
+        )
         assert q.choices == ["Consonant", "Dissonant"] and q.check(expected)
         seen.add(expected)
     assert seen == {"Consonant", "Dissonant"}

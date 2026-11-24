@@ -17,10 +17,13 @@ def key_signature_positions(
 ) -> list[str]
 ```
 
-Return the notes the sharps or flats of a key signature are written on, in a clef.
+Return the notes the sharps or flats of a key signature are written
+on, in a clef.
 
-Each accidental is a fourth up or a fifth down from the one before (sharps: F C G D A E B, flats: B E A D G C F), and the
-pattern is chosen so that all seven stay on the staff, or one step above or below it. This gives the usual signatures for
+Each accidental is a fourth up or a fifth down from the one before
+(sharps: F C G D A E B, flats: B E A D G C F), and the
+pattern is chosen so that all seven stay on the staff, or one step
+above or below it. This gives the usual signatures for
 the treble, bass, alto and tenor clefs, and works out the rest.
 
 **Parameters**
@@ -55,7 +58,8 @@ def written_signature(
 ) -> list[Note]
 ```
 
-Spell a key signature at its conventional staff positions, from left to right.
+Spell a key signature at its conventional staff positions, from left
+to right.
 
 **Parameters**
 
@@ -69,7 +73,12 @@ Spell a key signature at its conventional staff positions, from left to right.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> [str(note) for note in written_signature("bass", key=-2)]
+>>> [
+...     str(note)
+...     for note in written_signature(
+...         "bass", key=-2
+...     )
+... ]
 ['B♭2', 'E♭3']
 ```
 {% endraw %}

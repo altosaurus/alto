@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.score_excerpt/
 ---
 {% raw %}
-Paint the engraved score and locate symbols from a pixel map made from the same SVG.
+Paint the engraved score and locate symbols from a pixel map made from
+the same SVG.
 
 ## ScoreExcerpt
 
@@ -13,7 +14,8 @@ Paint the engraved score and locate symbols from a pixel map made from the same 
 ScoreExcerpt(excerpt: Excerpt)
 ```
 
-The score artwork and its per-pixel index into the excerpt's target list.
+The score artwork and its per-pixel index into the excerpt's target
+list.
 
 **Constructor**
 
@@ -25,7 +27,8 @@ Read the SVG and its aligned 16-bit hit map.
 def music_rect(paper: QRectF) -> QRectF
 ```
 
-Fit the music inside its paper, leaving one line for the source credit.
+Fit the music inside its paper, leaving one line for the source
+credit.
 
 **Returns**
 

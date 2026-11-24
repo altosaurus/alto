@@ -1,5 +1,6 @@
 """
-Scale-degree carets are visibly centered above their numbers rather than beside them.
+Scale-degree carets are visibly centered above their numbers rather than
+beside them.
 """
 
 from __future__ import annotations
@@ -36,7 +37,8 @@ def test_caret_ink_is_centered_above_digit(
     family: str,
 ) -> None:
     """
-    Compare the rendered caret and digit bounds in fonts that misplace combining accents.
+    Compare the rendered caret and digit bounds in fonts that misplace
+    combining accents.
 
     Parameters
     ----------
@@ -56,19 +58,49 @@ def test_caret_ink_is_centered_above_digit(
     painter.setPen(QColor("black"))
     draw_degree_text(painter, rect=QRectF(0, 0, 100, 90), text=f"{digit}̂")
     painter.end()
-    rows = [y for y in range(image.height()) if any(image.pixelColor(x, y).lightness() < 128 for x in range(image.width()))]
-    gaps = [index for index in range(1, len(rows)) if rows[index] > rows[index - 1] + 1]
-    assert len(gaps) == 1, "the caret must be separated from the digit by clear space"
+    rows = [
+        y
+        for y in range(image.height())
+        if any(
+            image.pixelColor(x, y).lightness() < 128
+            for x in range(image.width())
+        )
+    ]
+    gaps = [
+        index
+        for index in range(1, len(rows))
+        if rows[index] > rows[index - 1] + 1
+    ]
+    assert len(gaps) == 1, (
+        "the caret must be separated from the digit by clear space"
+    )
     caret_rows, digit_rows = rows[: gaps[0]], rows[gaps[0] :]
-    caret_x = [x for y in caret_rows for x in range(image.width()) if image.pixelColor(x, y).lightness() < 128]
-    digit_x = [x for y in digit_rows for x in range(image.width()) if image.pixelColor(x, y).lightness() < 128]
-    assert abs((min(caret_x) + max(caret_x)) / 2 - (min(digit_x) + max(digit_x)) / 2) <= 1
+    caret_x = [
+        x
+        for y in caret_rows
+        for x in range(image.width())
+        if image.pixelColor(x, y).lightness() < 128
+    ]
+    digit_x = [
+        x
+        for y in digit_rows
+        for x in range(image.width())
+        if image.pixelColor(x, y).lightness() < 128
+    ]
+    assert (
+        abs(
+            (min(caret_x) + max(caret_x)) / 2
+            - (min(digit_x) + max(digit_x)) / 2,
+        )
+        <= 1
+    )
     assert max(caret_rows) < min(digit_rows)
 
 
 def test_caret_tooltips_use_the_explicit_renderer(app: QApplication) -> None:
     """
-    Use rendered caret examples for both the option and its summary picture.
+    Use rendered caret examples for both the option and its summary
+    picture.
 
     Parameters
     ----------

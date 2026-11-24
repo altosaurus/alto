@@ -5,12 +5,17 @@ package: alto.ui
 permalink: /api/alto.ui.colors/
 ---
 {% raw %}
-Mixing colors. The interface blends palette colors to get its soft tints and highlights.
+Mixing colors. The interface blends palette colors to get its soft tints
+and highlights.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> blend_name(QColor("#000000"), b=QColor("#ffffff"), t=0.5)
+>>> blend_name(
+...     QColor("#000000"),
+...     b=QColor("#ffffff"),
+...     t=0.5,
+... )
 '#808080'
 ```
 
@@ -25,7 +30,8 @@ def blend(
 ) -> QColor
 ```
 
-Return the color a given fraction of the way from one color to another.
+Return the color a given fraction of the way from one color to
+another.
 
 **Parameters**
 
@@ -40,9 +46,17 @@ Return the color a given fraction of the way from one color to another.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> blend(QColor("#000000"), b=QColor("#ffffff"), t=0.0).name()
+>>> blend(
+...     QColor("#000000"),
+...     b=QColor("#ffffff"),
+...     t=0.0,
+... ).name()
 '#000000'
->>> blend(QColor("#ff0000"), b=QColor("#0000ff"), t=1.0).name()
+>>> blend(
+...     QColor("#ff0000"),
+...     b=QColor("#0000ff"),
+...     t=1.0,
+... ).name()
 '#0000ff'
 ```
 
@@ -72,7 +86,11 @@ Return the hex name of a blended color, for use in a stylesheet.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> blend_name(QColor("#000000"), b=QColor("#ffffff"), t=1.0)
+>>> blend_name(
+...     QColor("#000000"),
+...     b=QColor("#ffffff"),
+...     t=1.0,
+... )
 '#ffffff'
 ```
 {% endraw %}

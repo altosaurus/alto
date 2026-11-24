@@ -1,5 +1,6 @@
 """
-Check benchmark workflow setup on detached release tags and ordinary branch checkouts.
+Check benchmark workflow setup on detached release tags and ordinary
+branch checkouts.
 """
 
 from __future__ import annotations
@@ -20,20 +21,28 @@ def test_benchmark_setup_resolves_main_without_moving_the_measured_commit(
     ref: str,
 ) -> None:
     """
-    Check the real workflow setup in a fresh clone, with a release tag behind main, and on a normal main checkout.
+    Check the real workflow setup in a fresh clone, with a release tag
+    behind main, and on a normal main checkout.
 
     Parameters
     ----------
     tmp_path : Path
-        Temporary Git repositories with no network or user configuration.
+        Temporary Git repositories with no network or user
+        configuration.
     ref : str
         The branch or release tag checked out as GitHub Actions would.
     """
     yaml = pytest.importorskip("yaml")
-    workflow = yaml.safe_load((ROOT / ".github/workflows/performance.yml").read_text())
+    workflow = yaml.safe_load(
+        (ROOT / ".github/workflows/performance.yml").read_text(),
+    )
     steps = workflow["jobs"]["benchmark"]["steps"]
-    setup = next(step for step in steps if step.get("id") == "benchmark-branch")
-    measure = next(step for step in steps if step.get("name") == "Measure this version")
+    setup = next(
+        step for step in steps if step.get("id") == "benchmark-branch"
+    )
+    measure = next(
+        step for step in steps if step.get("name") == "Measure this version"
+    )
     assert steps.index(setup) < steps.index(measure)
     branch = json.loads((ROOT / "asv.conf.json").read_text())["branches"][0]
     environment = dict(os.environ)
@@ -64,7 +73,8 @@ def test_benchmark_setup_resolves_main_without_moving_the_measured_commit(
         Returns
         -------
         str
-            The command's standard output, without surrounding whitespace.
+            The command's standard output, without surrounding
+            whitespace.
         """
         return subprocess.run(
             ["git", *args],
@@ -122,7 +132,9 @@ def test_benchmark_setup_resolves_main_without_moving_the_measured_commit(
     if ref != "main":
         assert git(["branch", "--list", branch], cwd=checkout) == ""
         assert measured != main
-    for _ in range(2):  # rerunning the setup must be harmless on an existing local main
+    for _ in range(
+        2,
+    ):  # rerunning the setup must be harmless on an existing local main
         subprocess.run(
             [
                 "sh",

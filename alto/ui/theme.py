@@ -1,7 +1,9 @@
 """
-The color theme: follow the system, force light or dark, or use a theme with colors of its own.
+The color theme: follow the system, force light or dark, or use a theme
+with colors of its own.
 
-A theme with colors of its own is a `CustomTheme`: a fixed palette that is light or dark whatever the desktop is set to.
+A theme with colors of its own is a `CustomTheme`: a fixed palette that
+is light or dark whatever the desktop is set to.
 
 Examples
 --------
@@ -44,13 +46,15 @@ class CustomTheme:
     key : str
         What it is saved as.
     family : str
-        The key of the light version of the theme, which its dark version shares.
+        The key of the light version of the theme, which its dark
+        version shares.
     label : str
         What the settings call it.
     note : str
         A short line about it, shown under its picture.
     dark : bool
-        True if it is a dark theme, so that Qt draws its own parts (such as the title bar) to match.
+        True if it is a dark theme, so that Qt draws its own parts (such
+        as the title bar) to match.
     window : str
         The color of the window.
     panel : str
@@ -64,11 +68,16 @@ class CustomTheme:
     accent : str
         The color of what is chosen, and of links.
     track : str
-        The color of the track behind a switch or a slider, a little off the window's own.
+        The color of the track behind a switch or a slider, a little off
+        the window's own.
 
     Examples
     --------
-    >>> CUSTOM_THEMES[0].key, CUSTOM_THEMES[0].dark, len(CUSTOM_THEMES)
+    >>> (
+    ...     CUSTOM_THEMES[0].key,
+    ...     CUSTOM_THEMES[0].dark,
+    ...     len(CUSTOM_THEMES),
+    ... )
     ('studio', False, 50)
     """
 
@@ -87,31 +96,106 @@ class CustomTheme:
 
 
 SEEDS: tuple[tuple[str, str, str, float, float, float, float], ...] = (
-    ("parchment", "Parchment", "Warm paper with a terracotta accent.", 40, 24, 12, 62),
-    ("slate_blue", "Slate Blue", "Blue-gray, calm and serious.", 215, 14, 212, 68),
+    (
+        "parchment",
+        "Parchment",
+        "Warm paper with a terracotta accent.",
+        40,
+        24,
+        12,
+        62,
+    ),
+    (
+        "slate_blue",
+        "Slate Blue",
+        "Blue-gray, calm and serious.",
+        215,
+        14,
+        212,
+        68,
+    ),
     ("sage", "Sage", "Soft greens with a leafy accent.", 100, 12, 140, 38),
-    ("harbour", "Harbor", "Cool sea-grays, bright cyan accent.", 200, 18, 190, 78),
+    (
+        "harbour",
+        "Harbor",
+        "Cool sea-grays, bright cyan accent.",
+        200,
+        18,
+        190,
+        78,
+    ),
     ("lavender", "Lavender Hush", "Pale violet neutrals.", 260, 18, 265, 52),
-    ("rosewater", "Rosewater", "Blush neutrals, rose accent.", 345, 22, 338, 58),
-    ("marigold", "Marigold", "Buttery neutrals, golden accent.", 45, 22, 38, 88),
+    (
+        "rosewater",
+        "Rosewater",
+        "Blush neutrals, rose accent.",
+        345,
+        22,
+        338,
+        58,
+    ),
+    (
+        "marigold",
+        "Marigold",
+        "Buttery neutrals, golden accent.",
+        45,
+        22,
+        38,
+        88,
+    ),
     ("pine", "Pine", "Deep forest, quiet green.", 150, 14, 155, 56),
-    ("indigo", "Indigo Ink", "Blue-black neutrals, indigo accent.", 235, 20, 232, 62),
-    ("graphite", "Graphite", "Almost colorless, a hint of steel.", 220, 4, 210, 32),
-    ("terracotta", "Terracotta", "Clay neutrals, hot red-orange accent.", 20, 18, 12, 70),
+    (
+        "indigo",
+        "Indigo Ink",
+        "Blue-black neutrals, indigo accent.",
+        235,
+        20,
+        232,
+        62,
+    ),
+    (
+        "graphite",
+        "Graphite",
+        "Almost colorless, a hint of steel.",
+        220,
+        4,
+        210,
+        32,
+    ),
+    (
+        "terracotta",
+        "Terracotta",
+        "Clay neutrals, hot red-orange accent.",
+        20,
+        18,
+        12,
+        70,
+    ),
     ("mint", "Mint", "Fresh mint neutrals.", 160, 16, 165, 62),
     ("sky", "Sky", "Light airy blues.", 205, 26, 205, 82),
     ("plum", "Plum", "Dusty purple-grays.", 305, 14, 300, 44),
     ("sand", "Sand", "Beach neutrals, soft brown accent.", 38, 18, 28, 52),
     ("teal", "Teal", "Blue-green throughout.", 180, 14, 176, 72),
     ("copper", "Copper", "Warm metal, burnt orange.", 30, 10, 26, 78),
-    ("gold", "Charcoal and Gold", "Neutral grays, a gold accent.", 40, 6, 46, 82),
+    (
+        "gold",
+        "Charcoal and Gold",
+        "Neutral grays, a gold accent.",
+        40,
+        6,
+        46,
+        82,
+    ),
     ("cherry", "Cherry", "Rosy grays, deep cherry accent.", 355, 10, 352, 68),
     ("moss", "Moss", "Olive neutrals, moss accent.", 85, 14, 95, 48),
     ("arctic", "Arctic", "Icy neutrals, glacier blue.", 195, 12, 200, 56),
     ("dusk", "Dusk", "Purple twilight with a pink accent.", 275, 16, 330, 56),
     ("lime", "Lime Shock", "Neutral grays, one loud lime.", 120, 6, 88, 72),
     ("ember", "Ember", "Warm grays, glowing orange.", 10, 10, 24, 86),
-)  # key, name, note, neutral hue, neutral saturation, accent hue, accent saturation: each becomes a light and a dark theme
+    # key, name, note, neutral hue, neutral saturation, accent hue,
+    # accent
+    # saturation: each becomes a light and a dark theme
+)
 
 
 def hsl_hex(
@@ -139,7 +223,14 @@ def hsl_hex(
 
     Examples
     --------
-    >>> hsl_hex(0, saturation=100, lightness=50), hsl_hex(210, saturation=0, lightness=100)
+    >>> (
+    ...     hsl_hex(
+    ...         0, saturation=100, lightness=50
+    ...     ),
+    ...     hsl_hex(
+    ...         210, saturation=0, lightness=100
+    ...     ),
+    ... )
     ('#ff0000', '#ffffff')
     """
     saturation, lightness = saturation / 100.0, lightness / 100.0
@@ -170,14 +261,18 @@ def hsl_hex(
     return f"#{channel(0)}{channel(8)}{channel(4)}"
 
 
-def seeded_themes(seed: tuple[str, str, str, float, float, float, float]) -> tuple[CustomTheme, CustomTheme]:
+def seeded_themes(
+    seed: tuple[str, str, str, float, float, float, float],
+) -> tuple[CustomTheme, CustomTheme]:
     """
-    Make the light and the dark theme of a seed: neutrals tinted by one hue, and an accent of another.
+    Make the light and the dark theme of a seed: neutrals tinted by one
+    hue, and an accent of another.
 
     Parameters
     ----------
     seed : tuple
-        The key, name and note, then the neutral hue and saturation and the accent hue and saturation.
+        The key, name and note, then the neutral hue and saturation and
+        the accent hue and saturation.
 
     Returns
     -------
@@ -252,27 +347,46 @@ STUDIO = (
         track="#2c3037",
     ),
 )
-CUSTOM_THEMES: tuple[CustomTheme, ...] = (*STUDIO, *(theme for seed in SEEDS for theme in seeded_themes(seed)))
+CUSTOM_THEMES: tuple[CustomTheme, ...] = (
+    *STUDIO,
+    *(theme for seed in SEEDS for theme in seeded_themes(seed)),
+)
 DEFAULT_LIGHT_WINDOW = "#efefef"
-AUTO = "_auto"  # added to a theme's key for its System version, which is light or dark as the desktop is
+# added to a theme's key for its System version, which is light or dark
+# as the desktop is
+AUTO = "_auto"
 FAMILIES: tuple[tuple[str, str, str], ...] = (
     ("default", "Default", "The desktop's own colors."),
     ("studio", "Studio", "Cool grays with a clear blue."),
     *((seed[0], seed[1], seed[2]) for seed in SEEDS),
-)  # every card in the gallery of themes: the key of its family, its name and a line about it
+    # every card in the gallery of themes: the key of its family, its
+    # name
+    # and a line about it
+)
 THEMES = (
     ("system", "System"),
     ("light", "Light"),
     ("dark", "Dark"),
     *((theme.key, theme.label) for theme in CUSTOM_THEMES),
-    *((f"{theme.key}{AUTO}", f"{theme.label} (system)") for theme in CUSTOM_THEMES if not theme.dark),
+    *(
+        (f"{theme.key}{AUTO}", f"{theme.label} (system)")
+        for theme in CUSTOM_THEMES
+        if not theme.dark
+    ),
 )
 _SCHEMES = {
     "system": Qt.ColorScheme.Unknown,
     "light": Qt.ColorScheme.Light,
     "dark": Qt.ColorScheme.Dark,
-    **{theme.key: Qt.ColorScheme.Dark if theme.dark else Qt.ColorScheme.Light for theme in CUSTOM_THEMES},
-    **{f"{theme.key}{AUTO}": Qt.ColorScheme.Unknown for theme in CUSTOM_THEMES if not theme.dark},
+    **{
+        theme.key: Qt.ColorScheme.Dark if theme.dark else Qt.ColorScheme.Light
+        for theme in CUSTOM_THEMES
+    },
+    **{
+        f"{theme.key}{AUTO}": Qt.ColorScheme.Unknown
+        for theme in CUSTOM_THEMES
+        if not theme.dark
+    },
 }
 
 
@@ -288,19 +402,31 @@ def family_of(key: str) -> tuple[str, str]:
     Returns
     -------
     tuple of (str, str)
-        The family's key and "light", "dark" or "system". "system", "light" and "dark" belong to the family "default".
+        The family's key and "light", "dark" or "system". "system",
+        "light" and "dark" belong to the family "default".
 
     Examples
     --------
-    >>> family_of("sage_dark"), family_of("sage"), family_of("sage_auto"), family_of("dark"), family_of("system")
-    (('sage', 'dark'), ('sage', 'light'), ('sage', 'system'), ('default', 'dark'), ('default', 'system'))
+    >>> (
+    ...     family_of("sage_dark"),
+    ...     family_of("sage"),
+    ...     family_of("sage_auto"),
+    ...     family_of("dark"),
+    ...     family_of("system"),
+    ... )
+    (('sage', 'dark'), ('sage', 'light'), ('sage', 'system'),
+    ('default', 'dark'), ('default', 'system'))
     """
     if key in {"system", "light", "dark"}:
         return "default", key
     if key.endswith(AUTO) and custom_theme(key[: -len(AUTO)]) is not None:
         return key[: -len(AUTO)], "system"
     theme = custom_theme(key)
-    return (theme.family, "dark" if theme.dark else "light") if theme is not None else ("default", "system")
+    return (
+        (theme.family, "dark" if theme.dark else "light")
+        if theme is not None
+        else ("default", "system")
+    )
 
 
 def variant_key(
@@ -325,12 +451,20 @@ def variant_key(
 
     Examples
     --------
-    >>> variant_key("sage", version="dark"), variant_key("sage", version="system"), variant_key("default", version="dark")
+    >>> (
+    ...     variant_key("sage", version="dark"),
+    ...     variant_key("sage", version="system"),
+    ...     variant_key("default", version="dark"),
+    ... )
     ('sage_dark', 'sage_auto', 'dark')
     """
     if family == "default":
         return version
-    return {"light": family, "dark": f"{family}_dark", "system": f"{family}{AUTO}"}[version]
+    return {
+        "light": family,
+        "dark": f"{family}_dark",
+        "system": f"{family}{AUTO}",
+    }[version]
 
 
 PARTS = (
@@ -361,11 +495,17 @@ _user_cache: tuple[str, tuple[CustomTheme, ...]] = (
 
 class ThemeRecord(TypedDict):
     """
-    A theme the user made, as it is saved: its key, its name, and the colors of its light and dark versions.
+    A theme the user made, as it is saved: its key, its name, and the
+    colors of its light and dark versions.
 
     Examples
     --------
-    >>> ThemeRecord(id="my_1", name="Mine", light={}, dark={})["name"]
+    >>> ThemeRecord(
+    ...     id="my_1",
+    ...     name="Mine",
+    ...     light={},
+    ...     dark={},
+    ... )["name"]
     'Mine'
     """
 
@@ -379,7 +519,8 @@ def _record(raw: object) -> ThemeRecord | None:
     """
     Make a record from what was saved, if what was saved can be used.
 
-    It can be if it has a key of the right kind, a name, and a valid color for every part of both versions.
+    It can be if it has a key of the right kind, a name, and a valid
+    color for every part of both versions.
 
     Parameters
     ----------
@@ -394,21 +535,42 @@ def _record(raw: object) -> ThemeRecord | None:
     Examples
     --------
     >>> gray = {part: "#112233" for part in PARTS}
-    >>> made = _record({"id": "my_1", "name": "Mine", "light": gray, "dark": gray})
+    >>> made = _record(
+    ...     {
+    ...         "id": "my_1",
+    ...         "name": "Mine",
+    ...         "light": gray,
+    ...         "dark": gray,
+    ...     }
+    ... )
     >>> made is not None and made["name"]
     'Mine'
-    >>> _record({"id": "x"}) is None, _record(3) is None
+    >>> (
+    ...     _record({"id": "x"}) is None,
+    ...     _record(3) is None,
+    ... )
     (True, True)
     """
-    if not isinstance(raw, dict) or not str(raw.get("id", "")).startswith(USER_PREFIX) or not isinstance(raw.get("name"), str):
+    if (
+        not isinstance(raw, dict)
+        or not str(raw.get("id", "")).startswith(USER_PREFIX)
+        or not isinstance(raw.get("name"), str)
+    ):
         return None
     versions: dict[str, dict[str, str]] = {}
     for version in ("light", "dark"):
         colors = raw.get(version)
-        if not isinstance(colors, dict) or not all(QColor(str(colors.get(part, ""))).isValid() for part in PARTS):
+        if not isinstance(colors, dict) or not all(
+            QColor(str(colors.get(part, ""))).isValid() for part in PARTS
+        ):
             return None
         versions[version] = {part: str(colors[part]) for part in PARTS}
-    return ThemeRecord(id=str(raw["id"]), name=str(raw["name"]), light=versions["light"], dark=versions["dark"])
+    return ThemeRecord(
+        id=str(raw["id"]),
+        name=str(raw["name"]),
+        light=versions["light"],
+        dark=versions["dark"],
+    )
 
 
 def user_records() -> list[ThemeRecord]:
@@ -418,8 +580,10 @@ def user_records() -> list[ThemeRecord]:
     Returns
     -------
     list of ThemeRecord
-        One record for each theme: its "id", its "name", and its "light" and "dark" colors. A saved list that cannot be read, or
-        has something else in it, gives only the records that can be used.
+        One record for each theme: its "id", its "name", and its "light"
+        and "dark" colors. A saved list that cannot be read, or
+        has something else in it, gives only the records that can be
+        used.
 
     Examples
     --------
@@ -432,7 +596,11 @@ def user_records() -> list[ThemeRecord]:
         found = json.loads(raw)
     except ValueError:
         return []
-    return [record for record in map(_record, found if isinstance(found, list) else []) if record is not None]
+    return [
+        record
+        for record in map(_record, found if isinstance(found, list) else [])
+        if record is not None
+    ]
 
 
 def save_user_records(records: list[ThemeRecord]) -> None:
@@ -476,7 +644,8 @@ def new_family_id() -> str:
 
 def upsert_user_theme(record: ThemeRecord) -> None:
     """
-    Save a theme the user made, replacing the one with the same key if there is one.
+    Save a theme the user made, replacing the one with the same key if
+    there is one.
 
     Parameters
     ----------
@@ -487,16 +656,40 @@ def upsert_user_theme(record: ThemeRecord) -> None:
     --------
     >>> store().remove("ui/userThemes")
     >>> colors = {part: "#112233" for part in PARTS}
-    >>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colors, dark=colors))
-    >>> upsert_user_theme(ThemeRecord(id="my_a", name="Renamed", light=colors, dark=colors))
-    >>> [(r["id"], r["name"]) for r in user_records()]
+    >>> upsert_user_theme(
+    ...     ThemeRecord(
+    ...         id="my_a",
+    ...         name="Mine",
+    ...         light=colors,
+    ...         dark=colors,
+    ...     )
+    ... )
+    >>> upsert_user_theme(
+    ...     ThemeRecord(
+    ...         id="my_a",
+    ...         name="Renamed",
+    ...         light=colors,
+    ...         dark=colors,
+    ...     )
+    ... )
+    >>> [
+    ...     (r["id"], r["name"])
+    ...     for r in user_records()
+    ... ]
     [('my_a', 'Renamed')]
     >>> store().remove("ui/userThemes")
     """
-    records = [existing for existing in user_records() if existing["id"] != record["id"]]
+    records = [
+        existing
+        for existing in user_records()
+        if existing["id"] != record["id"]
+    ]
     ahead = [existing["id"] for existing in user_records()]
     if record["id"] in ahead:  # keep its place in the list
-        records = [record if existing["id"] == record["id"] else existing for existing in user_records()]
+        records = [
+            record if existing["id"] == record["id"] else existing
+            for existing in user_records()
+        ]
     else:
         records.append(record)
     save_user_records(records)
@@ -515,12 +708,77 @@ def delete_user_theme(family: str) -> None:
     --------
     >>> store().remove("ui/userThemes")
     >>> colors = {part: "#112233" for part in PARTS}
-    >>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colors, dark=colors))
+    >>> upsert_user_theme(
+    ...     ThemeRecord(
+    ...         id="my_a",
+    ...         name="Mine",
+    ...         light=colors,
+    ...         dark=colors,
+    ...     )
+    ... )
     >>> delete_user_theme("my_a")
     >>> user_records()
     []
     """
-    save_user_records([record for record in user_records() if record["id"] != family])
+    save_user_records(
+        [record for record in user_records() if record["id"] != family],
+    )
+
+
+def theme_of(
+    colors: dict[str, str],
+    *,
+    dark: bool,
+    key: str = "",
+    family: str = "",
+    label: str = "",
+    note: str = "",
+) -> CustomTheme:
+    """
+    Build a custom theme from its saved or preview colors.
+
+    Parameters
+    ----------
+    colors : dict of str to str
+        A color for every part, as "#rrggbb".
+    dark : bool
+        True if it is the dark version. Keyword-only.
+    key : str
+        Saved theme identifier, or empty for a preview.
+    family : str
+        Identifier shared by the light and dark versions.
+    label : str
+        Name displayed in settings.
+    note : str
+        Description displayed with the theme.
+
+    Returns
+    -------
+    CustomTheme
+        The theme with the supplied colors and identifiers.
+
+    Examples
+    --------
+    >>> theme_of(
+    ...     {part: "#102030" for part in PARTS},
+    ...     dark=True,
+    ... ).window
+    '#102030'
+    """
+    return CustomTheme(
+        key=key,
+        family=family,
+        label=label,
+        note=note,
+        dark=dark,
+        window=colors["window"],
+        panel=colors["panel"],
+        ink=colors["ink"],
+        muted=colors["muted"],
+        line=colors["line"],
+        accent=colors["accent"],
+        track=colors["track"],
+    )
 
 
 def user_themes() -> tuple[CustomTheme, ...]:
@@ -546,19 +804,15 @@ def user_themes() -> tuple[CustomTheme, ...]:
             for dark in (False, True):
                 colors = record["dark" if dark else "light"]
                 made.append(
-                    CustomTheme(
+                    theme_of(
+                        colors,
                         key=f"{record['id']}_dark" if dark else record["id"],
                         family=record["id"],
-                        label=f"{record['name']} (dark)" if dark else record["name"],
+                        label=f"{record['name']} (dark)"
+                        if dark
+                        else record["name"],
                         note=_USER_NOTE,
                         dark=dark,
-                        window=colors["window"],
-                        panel=colors["panel"],
-                        ink=colors["ink"],
-                        muted=colors["muted"],
-                        line=colors["line"],
-                        accent=colors["accent"],
-                        track=colors["track"],
                     ),
                 )
         _user_cache = (raw, tuple(made))
@@ -580,13 +834,18 @@ def families() -> tuple[tuple[str, str, str], ...]:
     >>> families() == FAMILIES
     True
     """
-    own = tuple((theme.family, theme.label, theme.note) for theme in user_themes() if not theme.dark)
+    own = tuple(
+        (theme.family, theme.label, theme.note)
+        for theme in user_themes()
+        if not theme.dark
+    )
     return *own, *FAMILIES
 
 
 def custom_theme(key: str) -> CustomTheme | None:
     """
-    Find a theme with colors of its own, one of the built-in ones or one the user made.
+    Find a theme with colors of its own, one of the built-in ones or one
+    the user made.
 
     Parameters
     ----------
@@ -596,19 +855,32 @@ def custom_theme(key: str) -> CustomTheme | None:
     Returns
     -------
     CustomTheme or None
-        The theme, or None for "system", "light", "dark" or anything that is not one.
+        The theme, or None for "system", "light", "dark" or anything
+        that is not one.
 
     Examples
     --------
-    >>> custom_theme("studio_dark") is CUSTOM_THEMES[1], custom_theme("dark")
+    >>> (
+    ...     custom_theme("studio_dark")
+    ...     is CUSTOM_THEMES[1],
+    ...     custom_theme("dark"),
+    ... )
     (True, None)
     """
-    return next((theme for theme in (*CUSTOM_THEMES, *user_themes()) if theme.key == key), None)
+    return next(
+        (
+            theme
+            for theme in (*CUSTOM_THEMES, *user_themes())
+            if theme.key == key
+        ),
+        None,
+    )
 
 
 def scheme_of(key: str) -> Qt.ColorScheme | None:
     """
-    Say which color scheme a theme uses: light, dark, or the desktop's own.
+    Say which color scheme a theme uses: light, dark, or the desktop's
+    own.
 
     Parameters
     ----------
@@ -622,7 +894,13 @@ def scheme_of(key: str) -> Qt.ColorScheme | None:
 
     Examples
     --------
-    >>> scheme_of("dark") == Qt.ColorScheme.Dark, scheme_of("sage_auto") == Qt.ColorScheme.Unknown, scheme_of("nonsense")
+    >>> (
+    ...     scheme_of("dark")
+    ...     == Qt.ColorScheme.Dark,
+    ...     scheme_of("sage_auto")
+    ...     == Qt.ColorScheme.Unknown,
+    ...     scheme_of("nonsense"),
+    ... )
     (True, True, None)
     """
     fixed = _SCHEMES.get(key)
@@ -648,11 +926,19 @@ def preview_colors(theme: CustomTheme) -> dict[str, str]:
     Returns
     -------
     dict of str to str
-        The window, panel, outline, text, faint and chosen colors, and a tint for the chosen row.
+        The window, panel, outline, text, faint and chosen colors, and a
+        tint for the chosen row.
 
     Examples
     --------
-    >>> preview_colors(CUSTOM_THEMES[0])["window"], sorted(preview_colors(CUSTOM_THEMES[0]))[:3]
+    >>> (
+    ...     preview_colors(CUSTOM_THEMES[0])[
+    ...         "window"
+    ...     ],
+    ...     sorted(
+    ...         preview_colors(CUSTOM_THEMES[0])
+    ...     )[:3],
+    ... )
     ('#eceef1', ['accent', 'faint', 'ink'])
     """
     window, accent = QColor(theme.window), QColor(theme.accent)
@@ -679,18 +965,37 @@ def theme_palette(theme: CustomTheme) -> QPalette:
     Returns
     -------
     QPalette
-        The palette: the window, lists and buttons, text, the chosen row and links in the theme's colors, with quiet text for
+        The palette: the window, lists and buttons, text, the chosen row
+        and links in the theme's colors, with quiet text for
         what is switched off.
 
     Examples
     --------
     >>> colors = theme_palette(CUSTOM_THEMES[0])
-    >>> colors.color(QPalette.ColorRole.Window).name(), colors.color(QPalette.ColorRole.Highlight).name()
+    >>> (
+    ...     colors.color(
+    ...         QPalette.ColorRole.Window
+    ...     ).name(),
+    ...     colors.color(
+    ...         QPalette.ColorRole.Highlight
+    ...     ).name(),
+    ... )
     ('#eceef1', '#2f7fc1')
     """
-    window, panel, ink, muted = QColor(theme.window), QColor(theme.panel), QColor(theme.ink), QColor(theme.muted)
-    line, accent, track = QColor(theme.line), QColor(theme.accent), QColor(theme.track)
-    on_accent = QColor("#ffffff") if accent.lightnessF() < 0.6 else QColor("#101820")
+    window, panel, ink, muted = (
+        QColor(theme.window),
+        QColor(theme.panel),
+        QColor(theme.ink),
+        QColor(theme.muted),
+    )
+    line, accent, track = (
+        QColor(theme.line),
+        QColor(theme.accent),
+        QColor(theme.track),
+    )
+    on_accent = (
+        QColor("#ffffff") if accent.lightnessF() < 0.6 else QColor("#101820")
+    )
     palette = QPalette()
     roles = QPalette.ColorRole
     for role, color in (
@@ -728,7 +1033,8 @@ def saved_theme() -> str:
     Returns
     -------
     str
-        The key of the theme: "system", "light", "dark" or one of the themes with colors of its own; "system" if nothing valid is
+        The key of the theme: "system", "light", "dark" or one of the
+        themes with colors of its own; "system" if nothing valid is
         saved.
 
     Examples
@@ -749,7 +1055,8 @@ def save_theme(key: str) -> None:
     Parameters
     ----------
     key : str
-        "system", "light", "dark" or the key of a theme with colors of its own.
+        "system", "light", "dark" or the key of a theme with colors of
+        its own.
 
     Examples
     --------
@@ -762,17 +1069,27 @@ def save_theme(key: str) -> None:
 
 
 _applying = False  # True while a theme is being applied
-_desktop_theme: str | None = None  # the theme to refresh when Qt reports a new desktop scheme
-_watching = False  # True once the app is listening for the desktop changing between light and dark
-_custom_palette = False  # True while the application is using the palette of a theme with colors of its own
-_override_window = ""  # window color of the last palette Alto supplied explicitly
+_desktop_theme: str | None = (
+    None  # the theme to refresh when Qt reports a new desktop scheme
+)
+# True once the app is listening for the desktop changing between light
+# and dark
+_watching = False
+# True while the application is using the palette of a theme with colors
+# of its own
+_custom_palette = False
+_override_window = (
+    ""  # window color of the last palette Alto supplied explicitly
+)
 
 
 def system_is_dark() -> bool:
     """
-    Say whether the desktop is set to dark, as long as the app is not forcing a color scheme of its own.
+    Say whether the desktop is set to dark, as long as the app is not
+    forcing a color scheme of its own.
 
-    A theme that follows the desktop does not force one, so this is what it asks.
+    A theme that follows the desktop does not force one, so this is what
+    it asks.
 
     Returns
     -------
@@ -789,7 +1106,8 @@ def system_is_dark() -> bool:
 
 def _watch_the_desktop() -> None:
     """
-    Start listening for the desktop changing between light and dark, once, so a theme that follows it can follow it.
+    Start listening for the desktop changing between light and dark,
+    once, so a theme that follows it can follow it.
 
     Examples
     --------
@@ -798,8 +1116,12 @@ def _watch_the_desktop() -> None:
     global _watching
     if not _watching:
         _watching = True
-        # Qt announces the scheme before updating the palette used to build the stylesheet.
-        QGuiApplication.styleHints().colorSchemeChanged.connect(_desktop_changed, Qt.ConnectionType.QueuedConnection)
+        # Qt announces the scheme before updating the palette used to
+        # build the stylesheet.
+        QGuiApplication.styleHints().colorSchemeChanged.connect(
+            _desktop_changed,
+            Qt.ConnectionType.QueuedConnection,
+        )
 
 
 def _desktop_changed() -> None:
@@ -816,7 +1138,8 @@ def _desktop_changed() -> None:
 
 def _has_custom_palette() -> bool:
     """
-    Say whether the application is still using the palette of a theme with colors of its own.
+    Say whether the application is still using the palette of a theme
+    with colors of its own.
 
     Returns
     -------
@@ -837,12 +1160,14 @@ def _has_custom_palette() -> bool:
 
 def apply_theme(key: str) -> None:
     """
-    Switch the application's color scheme and rebuild the stylesheet from the new palette.
+    Switch the application's color scheme and rebuild the stylesheet
+    from the new palette.
 
     Parameters
     ----------
     key : str
-        "system" to follow the desktop, "light" or "dark", or the key of a theme with colors of its own. Anything else
+        "system" to follow the desktop, "light" or "dark", or the key of
+        a theme with colors of its own. Anything else
         follows the system.
 
     Examples
@@ -852,18 +1177,26 @@ def apply_theme(key: str) -> None:
     >>> app.styleSheet() != ""
     True
     >>> apply_theme("studio")
-    >>> QApplication.palette().color(QPalette.ColorRole.Window).name()
+    >>> QApplication.palette().color(
+    ...     QPalette.ColorRole.Window
+    ... ).name()
     '#eceef1'
     >>> apply_theme("system")
-    >>> QApplication.palette().color(QPalette.ColorRole.Window).name() != "#eceef1"
+    >>> QApplication.palette().color(
+    ...     QPalette.ColorRole.Window
+    ... ).name() != "#eceef1"
     True
     """
     global _applying, _custom_palette, _desktop_theme, _override_window
-    if _applying:  # changing the color scheme announces itself, which must not start the change over
+    # changing the color scheme announces itself, which must not start
+    # the change over
+    if _applying:
         return
     _applying = True
     collecting = gc.isenabled()
-    gc.disable()  # Qt tells every widget about a new palette or style, and a widget freed while it does so would crash it
+    # Qt tells every widget about a new palette or style, and a widget
+    # freed while it does so would crash it
+    gc.disable()
     try:
         scheme = scheme_of(key) or Qt.ColorScheme.Unknown
         QGuiApplication.styleHints().setColorScheme(scheme)
@@ -875,8 +1208,14 @@ def apply_theme(key: str) -> None:
         app = QApplication.instance()
         assert isinstance(app, QApplication)
         theme = custom_theme(key)
-        if key.endswith(AUTO):  # a theme that follows the desktop: its light or its dark version, as the desktop is now
-            theme = custom_theme(key[: -len(AUTO)] + ("_dark" if system_is_dark() else ""))
+        if key.endswith(
+            AUTO,
+            # a theme that follows the desktop: its light or its dark
+            # version, as the desktop is now
+        ):
+            theme = custom_theme(
+                key[: -len(AUTO)] + ("_dark" if system_is_dark() else ""),
+            )
         if theme is not None:
             app.setPalette(theme_palette(theme))
             _custom_palette, _override_window = True, theme.window
@@ -884,30 +1223,59 @@ def apply_theme(key: str) -> None:
             if app.palette().window().color().name() == _override_window:
                 app.setPalette(QPalette())
             native = app.palette()
-            active_scheme = app.styleHints().colorScheme() if scheme == Qt.ColorScheme.Unknown else scheme
+            active_scheme = (
+                app.styleHints().colorScheme()
+                if scheme == Qt.ColorScheme.Unknown
+                else scheme
+            )
             dark_surface = native.base().color().lightness() < 128
-            # On GNOME the desktop scheme and the Qt style can change while the platform palette keeps its old colors.
+            # On GNOME the desktop scheme and the Qt style can change
+            # while the platform palette keeps its old colors.
             if native.window().color().name() == _override_window or (
-                active_scheme != Qt.ColorScheme.Unknown and dark_surface != (active_scheme == Qt.ColorScheme.Dark)
+                active_scheme != Qt.ColorScheme.Unknown
+                and dark_surface != (active_scheme == Qt.ColorScheme.Dark)
             ):
                 native = app.style().standardPalette()
             if active_scheme == Qt.ColorScheme.Light or (
-                active_scheme == Qt.ColorScheme.Unknown and native.base().color().lightness() >= 128
+                active_scheme == Qt.ColorScheme.Unknown
+                and native.base().color().lightness() >= 128
             ):
-                # Keep the release's gray window and white cards while retaining the desktop's accent and selection colors.
-                native.setColor(QPalette.ColorRole.Window, QColor(DEFAULT_LIGHT_WINDOW))
-                for group in (QPalette.ColorGroup.Active, QPalette.ColorGroup.Inactive):
-                    native.setColor(group, QPalette.ColorRole.Base, Qt.GlobalColor.white)
-                    native.setColor(group, QPalette.ColorRole.Text, Qt.GlobalColor.black)
+                # Keep the release's gray window and white cards while
+                # retaining the desktop's accent and selection colors.
+                native.setColor(
+                    QPalette.ColorRole.Window,
+                    QColor(DEFAULT_LIGHT_WINDOW),
+                )
+                for group in (
+                    QPalette.ColorGroup.Active,
+                    QPalette.ColorGroup.Inactive,
+                ):
+                    native.setColor(
+                        group,
+                        QPalette.ColorRole.Base,
+                        Qt.GlobalColor.white,
+                    )
+                    native.setColor(
+                        group,
+                        QPalette.ColorRole.Text,
+                        Qt.GlobalColor.black,
+                    )
             _override_window = ""
             if native != app.palette():
                 app.setPalette(native)
                 _override_window = native.window().color().name()
             _custom_palette = False
         light = custom_theme(theme.family) if theme and theme.dark else None
-        stylesheet = app_style(app.palette(), paper_palette=theme_palette(light) if light else None)
+        stylesheet = app_style(
+            app.palette(),
+            paper_palette=theme_palette(light) if light else None,
+        )
         if app.styleSheet():
-            app.setStyleSheet("")  # replacing a live sheet recursively repolishes its descendants many times
+            app.setStyleSheet(
+                "",
+                # replacing a live sheet recursively repolishes its
+                # descendants many times
+            )
         app.setStyleSheet(zoom.css(stylesheet))
     finally:
         if collecting:

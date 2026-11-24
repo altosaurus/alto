@@ -5,15 +5,19 @@ package: alto.ui
 permalink: /api/alto.ui.icons/
 ---
 {% raw %}
-Small monochrome icons drawn from SVG, tinted with the current theme's text color.
+Small monochrome icons drawn from SVG, tinted with the current theme's
+text color.
 
-Each icon is the inside of a 24 by 24 SVG, written with the word COLOR where the theme color goes. `svg_icon` turns one
+Each icon is the inside of a 24 by 24 SVG, written with the word COLOR
+where the theme color goes. `svg_icon` turns one
 into a `QIcon`.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> svg_icon(HELP, color=QColor("black")).isNull()
+>>> svg_icon(
+...     HELP, color=QColor("black")
+... ).isNull()
 False
 ```
 
@@ -26,7 +30,8 @@ def set_palette_icon(
 ) -> None
 ```
 
-Assign a native Qt icon and refresh it whenever the application palette changes.
+Assign a native Qt icon and refresh it whenever the application
+palette changes.
 
 **Parameters**
 
@@ -38,7 +43,12 @@ Assign a native Qt icon and refresh it whenever the application palette changes.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtWidgets import QPushButton
 >>> button = QPushButton()
->>> set_palette_icon(button, lambda palette: svg_icon(HELP, color=palette.text().color()))
+>>> set_palette_icon(
+...     button,
+...     lambda palette: svg_icon(
+...         HELP, color=palette.text().color()
+...     ),
+... )
 >>> button.icon().isNull()
 False
 ```
@@ -55,7 +65,8 @@ def set_svg_icon(
 ) -> None
 ```
 
-Tint an SVG icon with the control's current foreground or accent color.
+Tint an SVG icon with the control's current foreground or accent
+color.
 
 **Parameters**
 
@@ -83,7 +94,8 @@ def set_item_icons(
 ) -> None
 ```
 
-Recolor the current rows of a navigation list or tree without rebuilding it.
+Recolor the current rows of a navigation list or tree without
+rebuilding it.
 
 **Parameters**
 
@@ -93,7 +105,8 @@ Recolor the current rows of a navigation list or tree without rebuilding it.
 **Examples**
 
 ```text
-A category tree keeps its checked and expanded items when the theme changes.
+A category tree keeps its checked and expanded items when the theme
+changes.
 ```
 
 ## svg_icon
@@ -124,7 +137,9 @@ Render 24 by 24 SVG shapes into a crisp icon.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> icon = svg_icon(PLAY, color=QColor("#336699"), size=16)
+>>> icon = svg_icon(
+...     PLAY, color=QColor("#336699"), size=16
+... )
 >>> icon.isNull()
 False
 ```

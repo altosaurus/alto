@@ -1,12 +1,18 @@
 """
-The operations whose speed Alto watches: opening pages, asking and answering questions, painting, and reading and writing data.
+The operations whose speed Alto watches: opening pages, asking and
+answering questions, painting, and reading and writing data.
 
-Each operation is a `setup` that puts the app in a known state, which is not timed, and a `run` that is. The same list is used by
-the budget tests in `tests/test_performance.py` (which fail when an operation is far slower than it should be), by the ASV
-benchmarks in `benchmarks/suite.py` (which keep the history from release to release), and by `python -m benchmarks.survey`.
+Each operation is a `setup` that puts the app in a known state, which is
+not timed, and a `run` that is. The same list is used by
+the budget tests in `tests/test_performance.py` (which fail when an
+operation is far slower than it should be), by the ASV
+benchmarks in `benchmarks/suite.py` (which keep the history from release
+to release), and by `python -m benchmarks.survey`.
 
-The app runs offscreen, with a profile with a long history, so the data operations are measured on the
-amount of practice a person has after a year or two rather than on an empty database.
+The app runs offscreen, with a profile with a long history, so the data
+operations are measured on the
+amount of practice a person has after a year or two rather than on an
+empty database.
 """
 
 from __future__ import annotations
@@ -51,14 +57,17 @@ ATTEMPTS = 20_000  # about a year of daily practice
 
 def isolate() -> str:
     """
-    Give the app settings and data folders of its own, so that measuring never touches a person's real ones.
+    Give the app settings and data folders of its own, so that measuring
+    never touches a person's real ones.
 
-    The tests do not call this: their own set-up has already done the same.
+    The tests do not call this: their own set-up has already done the
+    same.
 
     Returns
     -------
     str
-        The folder that holds them, which is removed when the program ends.
+        The folder that holds them, which is removed when the program
+        ends.
     """
     home = tempfile.mkdtemp(prefix="alto-perf-")
     os.environ["XDG_CONFIG_HOME"] = f"{home}/config"
@@ -78,9 +87,11 @@ class Operation:
     name : str
         What it is, such as "page:KeySignatures".
     setup : Callable
-        Puts the app in the state the operation starts from. It is not timed.
+        Puts the app in the state the operation starts from. It is not
+        timed.
     run : Callable
-        The operation. It is timed, and it includes the events Qt handles afterwards (layout and painting).
+        The operation. It is timed, and it includes the events Qt
+        handles afterwards (layout and painting).
     """
 
     name: str
@@ -90,7 +101,8 @@ class Operation:
 
 class Workbench:
     """
-    The app, built once, with a profile that has a long history, and every operation that is timed on it.
+    The app, built once, with a profile that has a long history, and
+    every operation that is timed on it.
 
     Attributes
     ----------
@@ -121,7 +133,8 @@ class Workbench:
         Parameters
         ----------
         show : bool, default True
-            Whether to open the window now. A measurement of the start-up opens it itself. Keyword-only.
+            Whether to open the window now. A measurement of the
+            start-up opens it itself. Keyword-only.
         """
         sounds.enabled = False
         self.app = QApplication.instance() or QApplication([])
@@ -137,17 +150,25 @@ class Workbench:
         self._turn = 0
         if show:
             self.start()
-            self.operations = {operation.name: operation for operation in self._build()}
+            self.operations = {
+                operation.name: operation for operation in self._build()
+            }
 
     def start(self) -> None:
-        """Open the main window, the way starting the app does, and let Qt finish drawing it."""
+        """
+        Open the main window, the way starting the app does, and let Qt
+        finish drawing it.
+        """
         self.window = MainWindow(self.learner)
         self.window.resize(1100, 820)
         self.window.show()
         self.settle()
 
     def settle(self) -> None:
-        """Let Qt finish layout, painting and deferred widget deletion, as its event loop normally would."""
+        """
+        Let Qt finish layout, painting and deferred widget deletion, as
+        its event loop normally would.
+        """
         self.app.processEvents()
         self.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
@@ -156,7 +177,8 @@ class Workbench:
         profile_id: int,
     ) -> None:
         """
-        Give a profile `ATTEMPTS` answers spread over a year, with what is known about the questions they were for.
+        Give a profile `ATTEMPTS` answers spread over a year, with what
+        is known about the questions they were for.
 
         Parameters
         ----------
@@ -178,7 +200,8 @@ class Workbench:
                     answer="x",
                     correct=rng.random() < 0.8,
                     duration_ms=rng.randint(600, 6000),
-                    answered_at=now - (ATTEMPTS - number) * DAY * 365 / ATTEMPTS,
+                    answered_at=now
+                    - (ATTEMPTS - number) * DAY * 365 / ATTEMPTS,
                 )
         for exercise in names:
             for number in range(400):
@@ -216,7 +239,8 @@ class Workbench:
         action: Callable[[], object],
     ) -> Callable[[], object]:
         """
-        Wrap an action so that the events it causes are handled inside the timing.
+        Wrap an action so that the events it causes are handled inside
+        the timing.
 
         Parameters
         ----------
@@ -257,7 +281,12 @@ class Workbench:
         window, db, profile = self.window, self.db, self.profile_id
         operations: list[Operation] = []
 
-        def add(name: str, *, setup: Callable[[], object], run: Callable[[], object]) -> None:
+        def add(
+            name: str,
+            *,
+            setup: Callable[[], object],
+            run: Callable[[], object],
+        ) -> None:
             """
             Add an operation.
 
@@ -272,12 +301,32 @@ class Workbench:
             """
             operations.append(Operation(name, setup=setup, run=run))
 
-        add("page:home", setup=lambda: window.open_exercise(self.exercises[0]), run=self._open(window.show_home))
+        add(
+            "page:home",
+            setup=lambda: window.open_exercise(self.exercises[0]),
+            run=self._open(window.show_home),
+        )
         for cls in self.exercises:
-            add(f"page:{cls.__name__}", setup=self._home, run=self._open(partial(window.open_exercise, cls)))
-            add(f"paint:{cls.__name__}", setup=partial(window.open_exercise, cls), run=window.grab)
-            add(f"question:{cls.__name__}", setup=partial(window.open_exercise, cls), run=self._open(self._next_question))
-        add("page:lesson", setup=self._home, run=self._open(lambda: window.open_lessons("circle-of-fifths")))
+            add(
+                f"page:{cls.__name__}",
+                setup=self._home,
+                run=self._open(partial(window.open_exercise, cls)),
+            )
+            add(
+                f"paint:{cls.__name__}",
+                setup=partial(window.open_exercise, cls),
+                run=window.grab,
+            )
+            add(
+                f"question:{cls.__name__}",
+                setup=partial(window.open_exercise, cls),
+                run=self._open(self._next_question),
+            )
+        add(
+            "page:lesson",
+            setup=self._home,
+            run=self._open(lambda: window.open_lessons("circle-of-fifths")),
+        )
         add(
             "page:lesson-step",
             setup=lambda: window.open_lessons("circle-of-fifths"),
@@ -294,15 +343,54 @@ class Workbench:
             run=self._open(lambda: window.open_lessons("circle-of-fifths")),
         )
         add("resize:circle", setup=lambda: None, run=self._resize_circle)
-        add("page:statistics", setup=self._home, run=self._open(window.open_stats))
-        add("page:settings", setup=self._home, run=self._open(window.open_settings))
-        add("answer:right", setup=self._first_buttons_exercise, run=self._open(self._answer_right))
-        add("answer:wrong", setup=self._first_buttons_exercise, run=self._open(self._answer_wrong))
-        add("data:count", setup=lambda: None, run=lambda: db.count_attempts(profile))
-        add("data:attempt-rows", setup=lambda: None, run=lambda: db.attempt_rows(profile))
-        add("data:item-rows", setup=lambda: None, run=lambda: db.item_rows(profile))
-        add("data:attempts-in", setup=lambda: None, run=lambda: db.attempts_in([profile], since=time.time() - 30 * DAY))
-        add("data:strained", setup=lambda: None, run=lambda: db.strained_items([profile], limit=10))
+        add(
+            "page:statistics",
+            setup=self._home,
+            run=self._open(window.open_stats),
+        )
+        add(
+            "page:settings",
+            setup=self._home,
+            run=self._open(window.open_settings),
+        )
+        add(
+            "answer:right",
+            setup=self._first_buttons_exercise,
+            run=self._open(self._answer_right),
+        )
+        add(
+            "answer:wrong",
+            setup=self._first_buttons_exercise,
+            run=self._open(self._answer_wrong),
+        )
+        add(
+            "data:count",
+            setup=lambda: None,
+            run=lambda: db.count_attempts(profile),
+        )
+        add(
+            "data:attempt-rows",
+            setup=lambda: None,
+            run=lambda: db.attempt_rows(profile),
+        )
+        add(
+            "data:item-rows",
+            setup=lambda: None,
+            run=lambda: db.item_rows(profile),
+        )
+        add(
+            "data:attempts-in",
+            setup=lambda: None,
+            run=lambda: db.attempts_in(
+                [profile],
+                since=time.time() - 30 * DAY,
+            ),
+        )
+        add(
+            "data:strained",
+            setup=lambda: None,
+            run=lambda: db.strained_items([profile], limit=10),
+        )
         add("data:snapshot", setup=lambda: None, run=db.snapshot)
         add("learner:pick", setup=lambda: None, run=self._pick)
         add("learner:record", setup=lambda: None, run=self._record)
@@ -310,10 +398,13 @@ class Workbench:
 
     def _resize_circle(self) -> None:
         """
-        Draw the circle of fifths, with every name on it, at ten sizes it has not been drawn at, as when its window is stretched.
+        Draw the circle of fifths, with every name on it, at ten sizes
+        it has not been drawn at, as when its window is stretched.
 
-        Text of a size that has not been used before has to be set up by Qt, which is slow if it is done for the wrong things, so
-        what matters is how long it takes the first time. Each run uses new sizes, until they begin to repeat.
+        Text of a size that has not been used before has to be set up by
+        Qt, which is slow if it is done for the wrong things, so
+        what matters is how long it takes the first time. Each run uses
+        new sizes, until they begin to repeat.
         """
         circle = self._circle
         if circle is None:
@@ -337,7 +428,10 @@ class Workbench:
         self._view().next_question()
 
     def _first_buttons_exercise(self) -> None:
-        """Open an exercise that is answered with buttons, ready to be answered."""
+        """
+        Open an exercise that is answered with buttons, ready to be
+        answered.
+        """
         for cls in self.exercises:
             self.window.open_exercise(cls)
             view = self._view()
@@ -372,7 +466,14 @@ class Workbench:
         """Log one answer."""
         exercise = self.exercises[0]()
         question = self.learner.pick(exercise, rng=random.Random(3))
-        self.learner.record(exercise, question=question, answer=question.answer, correct=True, attempt_no=1, seconds=1.5)
+        self.learner.record(
+            exercise,
+            question=question,
+            answer=question.answer,
+            correct=True,
+            attempt_no=1,
+            seconds=1.5,
+        )
 
     def close(self) -> None:
         """Close the window and the database, and remove the files."""
@@ -439,14 +540,19 @@ FIXED = (
 
 def operation_names() -> list[str]:
     """
-    Give the names of the operations without building the app, so a benchmark can list them before it runs.
+    Give the names of the operations without building the app, so a
+    benchmark can list them before it runs.
 
     Returns
     -------
     list of str
         The same names as `Workbench.operations`.
     """
-    per_exercise = [f"{kind}:{cls.__name__}" for cls in REGISTRY for kind in ("page", "paint", "question")]
+    per_exercise = [
+        f"{kind}:{cls.__name__}"
+        for cls in REGISTRY
+        for kind in ("page", "paint", "question")
+    ]
     return [*FIXED, *per_exercise]
 
 
@@ -463,9 +569,11 @@ COLD = (
 
 def measure_cold(name: str) -> float:
     """
-    Time an operation the first time it is done in a new process, which is what a person meets after starting the app.
+    Time an operation the first time it is done in a new process, which
+    is what a person meets after starting the app.
 
-    Fonts, glyphs and layouts that are made on first use are not yet cached, so this is slower than `measure`, and is where a
+    Fonts, glyphs and layouts that are made on first use are not yet
+    cached, so this is slower than `measure`, and is where a
     slow first look at a page shows up.
 
     Parameters
@@ -499,7 +607,8 @@ def measure_cold_in_new_process(
     repeats: int = 3,
 ) -> float:
     """
-    Run `measure_cold` in a new Python process each time, and give the middle of several runs, in seconds.
+    Run `measure_cold` in a new Python process each time, and give the
+    middle of several runs, in seconds.
 
     Parameters
     ----------
@@ -532,14 +641,17 @@ def profile_cold(
     lines: int = 25,
 ) -> None:
     """
-    Print where the time goes the first time an operation is done in a new process, leaving out the building of the app.
+    Print where the time goes the first time an operation is done in a
+    new process, leaving out the building of the app.
 
     Parameters
     ----------
     name : str
-        The operation's name; not "startup", which is the building of the window itself.
+        The operation's name; not "startup", which is the building of
+        the window itself.
     lines : int, default 25
-        How many functions to show, the ones that took longest themselves. Keyword-only.
+        How many functions to show, the ones that took longest
+        themselves. Keyword-only.
     """
     bench = Workbench()
     operation = bench.operations[name]

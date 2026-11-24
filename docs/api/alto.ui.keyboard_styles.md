@@ -5,9 +5,11 @@ package: alto.ui
 permalink: /api/alto.ui.keyboard_styles/
 ---
 {% raw %}
-Keyboard styles: the colors and materials the on-screen piano keys are drawn in.
+Keyboard styles: the colors and materials the on-screen piano keys are
+drawn in.
 
-There are ready-made styles (`STYLES`) and a custom one built from colors chosen part by part.
+There are ready-made styles (`STYLES`) and a custom one built from
+colors chosen part by part.
 
 **Examples**
 
@@ -47,7 +49,8 @@ KeyboardStyle(
 )
 ```
 
-How a keyboard looks: the colors of the keys and the case, and a few details of the drawing.
+How a keyboard looks: the colors of the keys and the case, and a few
+details of the drawing.
 
 **Attributes**
 
@@ -171,7 +174,8 @@ True
 def load_style() -> None
 ```
 
-Apply the saved style (Classic if none is saved or it is unknown), and the saved custom colors.
+Apply the saved style (Classic if none is saved or it is unknown),
+and the saved custom colors.
 
 **Examples**
 
@@ -189,7 +193,8 @@ Apply the saved style (Classic if none is saved or it is unknown), and the saved
 def set_style(key: str) -> None
 ```
 
-Choose and save a style, and redraw every keyboard already on screen.
+Choose and save a style, and redraw every keyboard already on
+screen.
 
 **Parameters**
 
@@ -214,7 +219,8 @@ def set_custom_color(
 ) -> None
 ```
 
-Color one part of the custom keyboard and switch to the custom style.
+Color one part of the custom keyboard and switch to the custom
+style.
 
 **Parameters**
 
@@ -224,10 +230,15 @@ Color one part of the custom keyboard and switch to the custom style.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> set_custom_color("naturals", color="#ffffff")
+>>> set_custom_color(
+...     "naturals", color="#ffffff"
+... )
 >>> current().key, custom_colors()["naturals"]
 ('custom', '#ffffff')
->>> set_custom_color("naturals", color=DEFAULT_CUSTOM["naturals"])
+>>> set_custom_color(
+...     "naturals",
+...     color=DEFAULT_CUSTOM["naturals"],
+... )
 >>> set_style(DEFAULT)
 ```
 
@@ -239,7 +250,8 @@ def on_redraw(hook: Callable[[], None]) -> None
 
 Register a function to call whenever the keyboard style changes.
 
-The keyboard widgets live in a module that imports this one, so they register themselves here instead of being found by
+The keyboard widgets live in a module that imports this one, so they
+register themselves here instead of being found by
 this module.
 
 **Parameters**
@@ -269,7 +281,8 @@ def reversed_key(
 ) -> bool
 ```
 
-Report whether a key has swapped colors, as the low preset keys of an organ do.
+Report whether a key has swapped colors, as the low preset keys of
+an organ do.
 
 **Parameters**
 
@@ -286,7 +299,12 @@ Report whether a key has swapped colors, as the low preset keys of an organ do.
 >>> from dataclasses import replace
 >>> reversed_key(BY_KEY["classic"], midi=40)
 False
->>> reversed_key(replace(BY_KEY["classic"], reverse_below=50), midi=40)
+>>> reversed_key(
+...     replace(
+...         BY_KEY["classic"], reverse_below=50
+...     ),
+...     midi=40,
+... )
 True
 ```
 
@@ -320,9 +338,21 @@ Return the fill for a key.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> key_brush(BY_KEY["classic"], midi=60, black=False, y=0, height=100).color().name()
+>>> key_brush(
+...     BY_KEY["classic"],
+...     midi=60,
+...     black=False,
+...     y=0,
+...     height=100,
+... ).color().name()
 '#fbfbfc'
->>> key_brush(BY_KEY["modern"], midi=60, black=False, y=0, height=100).gradient() is not None
+>>> key_brush(
+...     BY_KEY["modern"],
+...     midi=60,
+...     black=False,
+...     y=0,
+...     height=100,
+... ).gradient() is not None
 True
 ```
 
@@ -352,9 +382,13 @@ Return the outline color for a key.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> edge_color(BY_KEY["classic"], midi=60, black=False).name()
+>>> edge_color(
+...     BY_KEY["classic"], midi=60, black=False
+... ).name()
 '#9a9a9f'
->>> edge_color(BY_KEY["classic"], midi=61, black=True).name()
+>>> edge_color(
+...     BY_KEY["classic"], midi=61, black=True
+... ).name()
 '#111114'
 ```
 {% endraw %}

@@ -5,20 +5,28 @@ package: alto.ui
 permalink: /api/alto.ui.notes/
 ---
 {% raw %}
-Engraved notes built from the Noto Music font's glyphs, the way notation software draws them.
+Engraved notes built from the Noto Music font's glyphs, the way notation
+software draws them.
 
-The font only has stem-up notes. A stem-down note is made from the same glyph turned half a turn (which puts the stem on
-the left of the head and keeps the head's tilt), with the flags cut from the stem-up glyph and mirrored so they sweep up
+The font only has stem-up notes. A stem-down note is made from the same
+glyph turned half a turn (which puts the stem on
+the left of the head and keeps the head's tilt), with the flags cut from
+the stem-up glyph and mirrored so they sweep up
 from the stem's end, as an engraver would write them.
 
-All numbers are in glyph units at a font size of 100, where one staff space is `STAFF_SPACE` units.
+All numbers are in glyph units at a font size of 100, where one staff
+space is `STAFF_SPACE` units.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> note_shape("quarter").isEmpty()
 False
->>> note_shape("whole", stem_down=True) is note_shape("whole")  # a whole note has no stem to turn
+>>> note_shape(
+...     "whole", stem_down=True
+... ) is note_shape(
+...     "whole"
+... )  # a whole note has no stem to turn
 True
 ```
 
@@ -34,7 +42,8 @@ def note_shape(
 
 Return the outline of a note of a value, with the stem up or down.
 
-Half notes and shorter values have stems, so a double whole note or whole note looks the same either way.
+Half notes and shorter values have stems, so a double whole note or
+whole note looks the same either way.
 Shapes are cached after their first use.
 
 **Parameters**
@@ -49,7 +58,10 @@ Shapes are cached after their first use.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> up, down = note_shape("quarter"), note_shape("quarter", stem_down=True)
+>>> up, down = (
+...     note_shape("quarter"),
+...     note_shape("quarter", stem_down=True),
+... )
 >>> up == down
 False
 ```
@@ -71,8 +83,10 @@ def draw_note(
 
 Draw a note with its head centered on a point, in Noto Music.
 
-The note is drawn from the Noto Music font, so it is only drawn as it should be where that font is installed. The staff
-draws with Bravura, which comes with Alto, wherever Noto Music is missing.
+The note is drawn from the Noto Music font, so it is only drawn as
+it should be where that font is installed. The staff
+draws with Bravura, which comes with Alto, wherever Noto Music is
+missing.
 
 **Parameters**
 
@@ -88,14 +102,27 @@ draws with Bravura, which comes with Alto, wherever Noto Music is missing.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
->>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
+>>> image = QImage(
+...     100, 100, QImage.Format.Format_ARGB32
+... )
 >>> image.fill(QColor("white"))
 >>> painter = QPainter(image)
->>> draw_note(painter, value="quarter", x=50, y=50, gap=16, color=QColor("black"))
+>>> draw_note(
+...     painter,
+...     value="quarter",
+...     x=50,
+...     y=50,
+...     gap=16,
+...     color=QColor("black"),
+... )
 >>> painter.end()
 True
 >>> from PySide6.QtGui import QFontDatabase
->>> not QFontDatabase.hasFamily("Noto Music") or image.pixelColor(50, 50).lightness() < 128  # the head is at the point
+>>> not QFontDatabase.hasFamily(
+...     "Noto Music"
+... ) or image.pixelColor(
+...     50, 50
+... ).lightness() < 128  # the head is at the point
 True
 ```
 {% endraw %}

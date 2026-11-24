@@ -1,9 +1,11 @@
 """
 The application-wide settings dialog.
 
-It holds the color theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.
+It holds the color theme, the notation font, the keyboard style, the
+transitions, the instrument and what updates follow.
 
-Changes apply as soon as they are made. Each style is a card that previews it.
+Changes apply as soon as they are made. Each style is a card that
+previews it.
 
 Examples
 --------
@@ -95,12 +97,14 @@ from alto.ui.update_flow import (
 )
 from alto.ui.zoom import css, px
 
-NEW_THEME = "__new__"  # what the row that makes a new theme holds in place of a theme's key
+# what the row that makes a new theme holds in place of a theme's key
+NEW_THEME = "__new__"
 
 
 class _LazyPages(QStackedWidget):
     """
-    A settings stack that builds each page once, when it is first selected.
+    A settings stack that builds each page once, when it is first
+    selected.
 
     Examples
     --------
@@ -129,7 +133,8 @@ class _LazyPages(QStackedWidget):
 
     def add_page(self, factory: Callable[[], QWidget]) -> int:
         """
-        Reserve a page, building it immediately only if it becomes the selected page.
+        Reserve a page, building it immediately only if it becomes the
+        selected page.
 
         Parameters
         ----------
@@ -152,7 +157,8 @@ class _LazyPages(QStackedWidget):
 
     def _ensure_page(self, index: int) -> None:
         """
-        Replace a selected placeholder with its page, keeping every page index unchanged.
+        Replace a selected placeholder with its page, keeping every page
+        index unchanged.
 
         Parameters
         ----------
@@ -187,7 +193,8 @@ class _LazyPages(QStackedWidget):
 
 class PreviewCard(QPushButton):
     """
-    A selectable tile that previews a style: a picture drawn in it, with its name and a few words about it underneath.
+    A selectable tile that previews a style: a picture drawn in it, with
+    its name and a few words about it underneath.
 
     Attributes
     ----------
@@ -196,8 +203,18 @@ class PreviewCard(QPushButton):
 
     Examples
     --------
-    >>> card = PreviewCard(QLabel("♪"), key="demo", title="Demo", blurb="A short note.", height=120)
-    >>> card.style_key, card.isCheckable(), card.height()
+    >>> card = PreviewCard(
+    ...     QLabel("♪"),
+    ...     key="demo",
+    ...     title="Demo",
+    ...     blurb="A short note.",
+    ...     height=120,
+    ... )
+    >>> (
+    ...     card.style_key,
+    ...     card.isCheckable(),
+    ...     card.height(),
+    ... )
     ('demo', True, 120)
     """
 
@@ -217,23 +234,34 @@ class PreviewCard(QPushButton):
         Parameters
         ----------
         preview : QWidget
-            The picture of the style. Clicks pass through it to the card.
+            The picture of the style. Clicks pass through it to the
+            card.
         key : str
             The key of the style. Keyword-only.
         title : str
             The style's name, shown in bold. Keyword-only.
         blurb : str
-            A few words about the style, shown in small gray type. Keyword-only.
+            A few words about the style, shown in small gray type.
+            Keyword-only.
         height : int
-            The card's height before zooming; every card is 232 wide. Keyword-only.
+            The card's height before zooming; every card is 232 wide.
+            Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the card. Keyword-only.
 
         Examples
         --------
         >>> label = QLabel("♪")
-        >>> card = PreviewCard(label, key="demo", title="Demo", blurb="", height=120)
-        >>> label.testAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        >>> card = PreviewCard(
+        ...     label,
+        ...     key="demo",
+        ...     title="Demo",
+        ...     blurb="",
+        ...     height=120,
+        ... )
+        >>> label.testAttribute(
+        ...     Qt.WidgetAttribute.WA_TransparentForMouseEvents
+        ... )
         True
         """
         super().__init__(parent)
@@ -254,13 +282,16 @@ class PreviewCard(QPushButton):
         about.setStyleSheet(css("color: gray; font-size: 9pt;"))
         about.setWordWrap(True)
         for widget in (preview, name, about):
-            widget.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+            widget.setAttribute(
+                Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+            )
             lay.addWidget(widget)
 
 
 class StyleCard(PreviewCard):
     """
-    A selectable tile that previews a notation style: a short phrase on a staff, drawn in that style.
+    A selectable tile that previews a notation style: a short phrase on
+    a staff, drawn in that style.
 
     Attributes
     ----------
@@ -288,13 +319,16 @@ class StyleCard(PreviewCard):
         Parameters
         ----------
         style : NotationStyle
-            The style to preview; its label and a few words about it are shown under the staff.
+            The style to preview; its label and a few words about it are
+            shown under the staff.
         parent : QWidget or None, default None
             The widget that owns the card. Keyword-only.
 
         Examples
         --------
-        >>> StyleCard(notation.BY_KEY["bravura"]).width()
+        >>> StyleCard(
+        ...     notation.BY_KEY["bravura"]
+        ... ).width()
         232
         """
         staff = StaffWidget(
@@ -317,16 +351,25 @@ class StyleCard(PreviewCard):
             key=0,
             value="quarter",
         )
-        super().__init__(staff, key=style.key, title=style.label, blurb=style.note, height=150, parent=parent)
+        super().__init__(
+            staff,
+            key=style.key,
+            title=style.label,
+            blurb=style.note,
+            height=150,
+            parent=parent,
+        )
         self.staff = staff
 
 
-RIM = "rgba(136, 136, 136, 0.5)"  # the faint outline of the builder's swatches and chips
+# the faint outline of the builder's swatches and chips
+RIM = "rgba(136, 136, 136, 0.5)"
 
 
 class KeyboardCard(PreviewCard):
     """
-    A selectable tile that previews a keyboard style: a short stretch of keys drawn in that style.
+    A selectable tile that previews a keyboard style: a short stretch of
+    keys drawn in that style.
 
     Attributes
     ----------
@@ -337,7 +380,9 @@ class KeyboardCard(PreviewCard):
 
     Examples
     --------
-    >>> card = KeyboardCard(keyboard_styles.BY_KEY["modern"])
+    >>> card = KeyboardCard(
+    ...     keyboard_styles.BY_KEY["modern"]
+    ... )
     >>> card.style_key
     'modern'
     """
@@ -354,14 +399,17 @@ class KeyboardCard(PreviewCard):
         Parameters
         ----------
         style : KeyboardStyle
-            The style to preview; its label and a few words about it are shown under the keys.
+            The style to preview; its label and a few words about it are
+            shown under the keys.
         parent : QWidget or None, default None
             The widget that owns the card. Keyword-only.
 
         Examples
         --------
         >>> # noinspection PyUnresolvedReferences
-        >>> KeyboardCard(keyboard_styles.BY_KEY["classic"]).keys.style_override.key
+        >>> KeyboardCard(
+        ...     keyboard_styles.BY_KEY["classic"]
+        ... ).keys.style_override.key
         'classic'
         """
         keys = KeyboardWidget()
@@ -372,20 +420,30 @@ class KeyboardCard(PreviewCard):
         keys.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         keys.show_key(None, span=(60, 76))
         holder = QWidget()
-        holder.setFixedHeight(px(int(2 * 6 + 30 + 16 * 6.2)))  # room for the tallest strip above the keys
+        holder.setFixedHeight(
+            px(int(2 * 6 + 30 + 16 * 6.2)),
+        )  # room for the tallest strip above the keys
         holder_lay = QVBoxLayout(holder)
-        holder_lay.setContentsMargins(
+        holder_lay.setContentsMargins(0, 0, 0, 0)
+        holder_lay.addWidget(
+            keys,
             0,
-            0,
-            0,
-            0,
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter,
         )
-        holder_lay.addWidget(keys, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
-        super().__init__(holder, key=style.key, title=style.label, blurb=style.note, height=222, parent=parent)
+        super().__init__(
+            holder,
+            key=style.key,
+            title=style.label,
+            blurb=style.note,
+            height=222,
+            parent=parent,
+        )
         self.keys = keys
         layout = self.layout()
         if isinstance(layout, QVBoxLayout):
-            layout.addStretch(1)  # the text sits under the keys, with the room to spare below it
+            layout.addStretch(
+                1,
+            )  # the text sits under the keys, with the room to spare below it
 
     def show_style(self, style: keyboard_styles.KeyboardStyle) -> None:
         """
@@ -400,8 +458,12 @@ class KeyboardCard(PreviewCard):
 
         Examples
         --------
-        >>> card = KeyboardCard(keyboard_styles.BY_KEY["classic"])
-        >>> card.show_style(keyboard_styles.BY_KEY["modern"])
+        >>> card = KeyboardCard(
+        ...     keyboard_styles.BY_KEY["classic"]
+        ... )
+        >>> card.show_style(
+        ...     keyboard_styles.BY_KEY["modern"]
+        ... )
         >>> # noinspection PyUnresolvedReferences
         >>> card.keys.style_override.key
         'modern'
@@ -414,7 +476,8 @@ class KeyboardBuilder(QFrame):
     """
     Rows for coloring each part of a keyboard.
 
-    Each has a swatch that opens the color picker, and chips for colors named after materials. Changing anything selects
+    Each has a swatch that opens the color picker, and chips for colors
+    named after materials. Changing anything selects
     the Custom style.
 
     Attributes
@@ -422,7 +485,8 @@ class KeyboardBuilder(QFrame):
     changed : Signal
         Emitted after a part is recolored.
     swatches : dict of str to QPushButton
-        The swatch of each part ("naturals", "sharps", "case", "felt" and "caps").
+        The swatch of each part ("naturals", "sharps", "case", "felt"
+        and "caps").
 
     Examples
     --------
@@ -444,21 +508,19 @@ class KeyboardBuilder(QFrame):
 
         Examples
         --------
-        >>> KeyboardBuilder().swatches["naturals"].width()
+        >>> KeyboardBuilder().swatches[
+        ...     "naturals"
+        ... ].width()
         46
         """
         super().__init__(parent)
         lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            0,
-            8,
-            0,
-            0,
-        )
+        lay.setContentsMargins(0, 8, 0, 0)
         lay.setSpacing(6)
         lay.addWidget(QLabel("<b>Build your own</b>"))
         about = QLabel(
-            "Choose a color for each part, from a material or with the color picker. "
+            "Choose a color for each part, from a material or with the "
+            "color picker. "
             "Changing any part switches to the Custom style.",
         )
         about.setWordWrap(True)
@@ -475,20 +537,28 @@ class KeyboardBuilder(QFrame):
             swatch.setFixedSize(px(46), px(24))
             swatch.setCursor(Qt.CursorShape.PointingHandCursor)
             swatch.setToolTip(f"Pick a color for the {label.lower()}")
-            swatch.clicked.connect(lambda _=False, p=part, t=label: self._pick(p, title=t))
+            swatch.clicked.connect(
+                lambda _=False, p=part, t=label: self._pick(p, title=t),
+            )
             row.addWidget(swatch)
             row.addSpacing(6)
             self.swatches[part] = swatch
             if optional:
                 none = self._chip("None", color=None)
                 none.setText("✕")
-                none.clicked.connect(lambda _=False, p=part: self._set(p, color=None))
+                none.clicked.connect(
+                    lambda _=False, p=part: self._set(p, color=None),
+                )
                 row.addWidget(none)
             else:
-                row.addSpacing(24)  # line the chips up with the rows that have a None chip
+                row.addSpacing(
+                    24,
+                )  # line the chips up with the rows that have a None chip
             for material, color in keyboard_styles.MATERIALS:
                 chip = self._chip(f"{material}  {color}", color=color)
-                chip.clicked.connect(lambda _=False, p=part, c=color: self._set(p, color=c))
+                chip.clicked.connect(
+                    lambda _=False, p=part, c=color: self._set(p, color=c),
+                )
                 row.addWidget(chip)
             row.addStretch(1)
             lay.addLayout(row)
@@ -508,7 +578,8 @@ class KeyboardBuilder(QFrame):
         tip : str
             The tooltip, such as the material's name and color.
         color : str or None
-            The chip's color, or None for the "leave this part out" chip.
+            The chip's color, or None for the "leave this part out"
+            chip.
 
         Returns
         -------
@@ -517,7 +588,9 @@ class KeyboardBuilder(QFrame):
 
         Examples
         --------
-        >>> chip_ = KeyboardBuilder._chip("Ivory  #f1e5c6", color="#f1e5c6")
+        >>> chip_ = KeyboardBuilder._chip(
+        ...     "Ivory  #f1e5c6", color="#f1e5c6"
+        ... )
         >>> chip_.toolTip()
         'Ivory  #f1e5c6'
         """
@@ -526,9 +599,23 @@ class KeyboardBuilder(QFrame):
         chip.setToolTip(tip)
         chip.setCursor(Qt.CursorShape.PointingHandCursor)
         if color:
-            chip.setStyleSheet(css(f"QToolButton {{ background: {color}; border: 1px solid {RIM}; border-radius: 10px; }}"))
+            chip.setStyleSheet(
+                css(
+                    "QToolButton { background: "
+                    f"{color}"
+                    "; border: 1px solid "
+                    f"{RIM}"
+                    "; border-radius: 10px; }",
+                ),
+            )
         else:
-            chip.setStyleSheet(css(f"QToolButton {{ border: 1px solid {RIM}; border-radius: 10px; color: gray; }}"))
+            chip.setStyleSheet(
+                css(
+                    "QToolButton { border: 1px solid "
+                    f"{RIM}"
+                    "; border-radius: 10px; color: gray; }",
+                ),
+            )
         return chip
 
     def refresh(self) -> None:
@@ -539,7 +626,10 @@ class KeyboardBuilder(QFrame):
         --------
         >>> builder = KeyboardBuilder()
         >>> builder.refresh()
-        >>> builder.swatches["naturals"].text()  # a color is set, so the swatch shows it, not "none"
+        >>> builder.swatches[
+        ...     "naturals"
+        ... # a color is set, so the swatch shows it, not "none"
+        ... ].text()
         ''
         """
         for part, color in keyboard_styles.custom_colors().items():
@@ -547,9 +637,17 @@ class KeyboardBuilder(QFrame):
             swatch.setText("" if color else "none")
             swatch.setStyleSheet(
                 css(
-                    f"QPushButton {{ background: {color}; border: 1px solid {RIM}; border-radius: 6px; }}"
+                    "QPushButton { background: "
+                    f"{color}"
+                    "; border: 1px solid "
+                    f"{RIM}"
+                    "; border-radius: 6px; }"
                     if color
-                    else f"QPushButton {{ border: 1px dashed {RIM}; border-radius: 6px; color: gray; }}",
+                    else (
+                        "QPushButton { border: 1px dashed "
+                        f"{RIM}"
+                        "; border-radius: 6px; color: gray; }"
+                    ),
                 ),
             )
 
@@ -567,18 +665,33 @@ class KeyboardBuilder(QFrame):
         part : str
             "naturals", "sharps", "case", "felt" or "caps".
         color : str or None
-            The new color, or None to leave an optional part out. Keyword-only.
+            The new color, or None to leave an optional part out.
+            Keyword-only.
 
         Examples
         --------
         >>> builder = KeyboardBuilder()
         >>> changes = []
-        >>> _ = builder.changed.connect(lambda: changes.append(1))
+        >>> _ = builder.changed.connect(
+        ...     lambda: changes.append(1)
+        ... )
         >>> builder._set("naturals", color="#ffffff")
-        >>> keyboard_styles.custom_colors()["naturals"], changes
+        >>> (
+        ...     keyboard_styles.custom_colors()[
+        ...         "naturals"
+        ...     ],
+        ...     changes,
+        ... )
         ('#ffffff', [1])
-        >>> builder._set("naturals", color=keyboard_styles.DEFAULT_CUSTOM["naturals"])
-        >>> keyboard_styles.set_style(keyboard_styles.DEFAULT)
+        >>> builder._set(
+        ...     "naturals",
+        ...     color=keyboard_styles.DEFAULT_CUSTOM[
+        ...         "naturals"
+        ...     ],
+        ... )
+        >>> keyboard_styles.set_style(
+        ...     keyboard_styles.DEFAULT
+        ... )
         """
         keyboard_styles.set_custom_color(part, color=color)
         self.refresh()
@@ -602,30 +715,41 @@ class KeyboardBuilder(QFrame):
 
         Examples
         --------
-        >>> KeyboardBuilder()._pick("case", title="Case")  # doctest: +SKIP
+        >>> KeyboardBuilder()._pick(
+        ...     "case", title="Case"
+        ... )  # doctest: +SKIP
         """
         current = keyboard_styles.custom_colors()[part] or "#ffffff"
-        color = QColorDialog.getColor(QColor(current), self, f"Color for the {title.lower()}")
+        color = QColorDialog.getColor(
+            QColor(current),
+            self,
+            f"Color for the {title.lower()}",
+        )
         if color.isValid():
             self._set(part, color=color.name())
 
 
 class AppSettingsDialog(QDialog):
     """
-    Application-wide settings. Changes apply immediately, and the main window can be used while the dialog is open.
+    Application-wide settings. Changes apply immediately, and the main
+    window can be used while the dialog is open.
 
-    Pages are built when first selected, so hidden previews do not slow down opening Settings or changing themes.
+    Pages are built when first selected, so hidden previews do not slow
+    down opening Settings or changing themes.
 
     Attributes
     ----------
     theme_changed : bool
-        True once the theme has been changed, so the window can be rebuilt in it.
+        True once the theme has been changed, so the window can be
+        rebuilt in it.
     categories : QListWidget
-        The list of pages on the left: Appearance sections, Sound and Updates.
+        The list of pages on the left: Appearance sections, Sound and
+        Updates.
     pages : QStackedWidget
         The page for the chosen category.
     instruments : InstrumentPicker
-        The instrument chooser, available after the Sound page is first selected.
+        The instrument chooser, available after the Sound page is first
+        selected.
     theme_list : QListWidget
         The themes, on the Theme section, with the one in use in bold.
     theme_items : dict of str to QListWidgetItem
@@ -637,20 +761,25 @@ class AppSettingsDialog(QDialog):
     new_theme_item : QListWidgetItem
         The row of the list that makes a new theme.
     theme_cards : dict of str to ThemeCard
-        The cards built so far, by the key of the theme's family. A card is built when its row is first chosen, because every
+        The cards built so far, by the key of the theme's family. A card
+        is built when its row is first chosen, because every
         widget makes a change of theme slower; use `card` to get one.
     theme_scrolls : dict of str to QScrollArea
-        The scroll area each built card is in, which is what the stack shows; use `scroll` to get one.
+        The scroll area each built card is in, which is what the stack
+        shows; use `scroll` to get one.
     theme_thumbs : dict of str to ThemeThumb
-        The clickable pictures of every built card, by the key of the theme each chooses; use `thumb` to get one.
+        The clickable pictures of every built card, by the key of the
+        theme each chooses; use `thumb` to get one.
     transition_list : QListWidget
-        The choice of transition, available after the Transitions section is first selected.
+        The choice of transition, available after the Transitions
+        section is first selected.
     transition_items : dict of str to QListWidgetItem
         The rows of that list, by the transition's key.
     transition_preview : TransitionPreview
         Plays the transition that is chosen, beside the choices.
     scheduler_list : QListWidget
-        The algorithms on the Practice page, with the current profile's choice selected.
+        The algorithms on the Practice page, with the current profile's
+        choice selected.
     scheduler_description : QLabel
         Explanation of the selected algorithm beside the list.
 
@@ -665,7 +794,12 @@ class AppSettingsDialog(QDialog):
     theme_selected = Signal(str)
     scheduler_changed = Signal()
 
-    def __init__(self, parent: QWidget | None = None, *, learner: Learner | None = None) -> None:
+    def __init__(
+        self,
+        parent: QWidget | None = None,
+        *,
+        learner: Learner | None = None,
+    ) -> None:
         """
         Build the dialog with the Appearance page showing.
 
@@ -686,12 +820,15 @@ class AppSettingsDialog(QDialog):
         super().__init__(parent)
         self.learner = learner
         self.setWindowTitle("Settings")
-        self.setModal(False)  # the window stays usable while the settings are open
+        self.setModal(
+            False,
+        )  # the window stays usable while the settings are open
         self.resize(1000, 640)
         self.theme_changed = False
         lay = QVBoxLayout(self)
         lay.setSpacing(10)
-        # The categories sit in a list on the left; choosing one shows its settings on the right.
+        # The categories sit in a list on the left; choosing one shows
+        # its settings on the right.
         self.categories = QListWidget()
         self.categories.setObjectName("categories")  # styled in style.py
         self.categories.setFixedWidth(px(170))
@@ -706,21 +843,32 @@ class AppSettingsDialog(QDialog):
         parent_layout = QHBoxLayout(parent_row)
         parent_layout.setContentsMargins(10, 0, 8, 0)
         parent_label = QLabel("Appearance")
-        parent_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        parent_label.setAttribute(
+            Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+        )
         parent_layout.addWidget(parent_label, 1)
         self.appearance_toggle = QToolButton()
-        self.appearance_toggle.setStyleSheet("QToolButton { border: none; background: transparent; }")
-        self.appearance_toggle.clicked.connect(lambda: self._toggle_category(appearance))
+        self.appearance_toggle.setStyleSheet(
+            "QToolButton { border: none; background: transparent; }",
+        )
+        self.appearance_toggle.clicked.connect(
+            lambda: self._toggle_category(appearance),
+        )
         parent_layout.addWidget(self.appearance_toggle)
         self.categories.setItemWidget(appearance, parent_row)
         self._update_appearance_parent()
-        for index, name in enumerate(("Theme", "Notation style", "Keyboard style", "Transitions")):
+        for index, name in enumerate(
+            ("Theme", "Notation style", "Keyboard style", "Transitions"),
+        ):
             item = QListWidgetItem(f"\u2003{name}")
             item.setData(Qt.ItemDataRole.UserRole, ("appearance", index))
             item.setSizeHint(QSize(0, px(32)))
             self.categories.addItem(item)
         self.pages.add_page(self._appearance_page)
-        sections = [("Sound", self._sound_page, 1), ("Updates", self._updates_page, 2)]
+        sections = [
+            ("Sound", self._sound_page, 1),
+            ("Updates", self._updates_page, 2),
+        ]
         if learner is not None:
             sections.append(("Practice", self._practice_page, 3))
         for name, factory, index in sections:
@@ -738,14 +886,18 @@ class AppSettingsDialog(QDialog):
         lay.addLayout(body, 1)
 
         buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
-        restore = buttons.addButton("Restore defaults…", QDialogButtonBox.ButtonRole.ResetRole)
+        restore = buttons.addButton(
+            "Restore defaults…",
+            QDialogButtonBox.ButtonRole.ResetRole,
+        )
         restore.clicked.connect(self._restore_defaults)
         buttons.rejected.connect(self.accept)
         lay.addWidget(buttons)
 
     def _restore_defaults(self) -> None:
         """
-        Confirm restoring application and exercise preferences, then request the reset.
+        Confirm restoring application and exercise preferences, then
+        request the reset.
 
         Examples
         --------
@@ -754,9 +906,11 @@ class AppSettingsDialog(QDialog):
         answer = QMessageBox.question(
             self,
             "Restore defaults",
-            "Restore all app and exercise settings to their defaults? Custom themes and keyboard colors will be removed. "
+            "Restore all app and exercise settings to their defaults? "
+            "Custom themes and keyboard colors will be removed. "
             "Profiles and practice history will be kept.",
-            QMessageBox.StandardButton.RestoreDefaults | QMessageBox.StandardButton.Cancel,
+            QMessageBox.StandardButton.RestoreDefaults
+            | QMessageBox.StandardButton.Cancel,
             QMessageBox.StandardButton.Cancel,
         )
         if answer == QMessageBox.StandardButton.RestoreDefaults:
@@ -813,7 +967,11 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> layout = QVBoxLayout()
-        >>> AppSettingsDialog._heading(layout, title="Instrument", about="The sound used for notes.")
+        >>> AppSettingsDialog._heading(
+        ...     layout,
+        ...     title="Instrument",
+        ...     about="The sound used for notes.",
+        ... )
         >>> layout.count()
         2
         """
@@ -840,7 +998,9 @@ class AppSettingsDialog(QDialog):
 
         Examples
         --------
-        >>> AppSettingsDialog._about("The music font.").text()
+        >>> AppSettingsDialog._about(
+        ...     "The music font."
+        ... ).text()
         'The music font.'
         """
         label = QLabel(text)
@@ -851,7 +1011,8 @@ class AppSettingsDialog(QDialog):
     @staticmethod
     def _scrolling(page: QWidget) -> QScrollArea:
         """
-        Wrap a page so that it scrolls when it is taller than the dialog.
+        Wrap a page so that it scrolls when it is taller than the
+        dialog.
 
         Parameters
         ----------
@@ -861,18 +1022,23 @@ class AppSettingsDialog(QDialog):
         Returns
         -------
         QScrollArea
-            A scroll area holding the page, with no horizontal scroll bar.
+            A scroll area holding the page, with no horizontal scroll
+            bar.
 
         Examples
         --------
         >>> page_ = QWidget()
-        >>> AppSettingsDialog._scrolling(page_).widget() is page_
+        >>> AppSettingsDialog._scrolling(
+        ...     page_
+        ... ).widget() is page_
         True
         """
         area = QScrollArea()
         area.setWidgetResizable(True)
         area.setFrameShape(QScrollArea.Shape.NoFrame)
-        area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        area.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff,
+        )
         area.setWidget(page)
         return area
 
@@ -880,7 +1046,8 @@ class AppSettingsDialog(QDialog):
         """
         Build the Appearance page.
 
-        It has four sections, selected in the left pane: the color theme, the notation style, the keyboard style and the
+        It has four sections, selected in the left pane: the color
+        theme, the notation style, the keyboard style and the
         transitions.
 
         Returns
@@ -896,11 +1063,21 @@ class AppSettingsDialog(QDialog):
         """
         page, lay = self._page()
         self.appearance_pages = _LazyPages()
-        self.appearance_pages.add_page(self._theme_tab)  # its cards and its editor scroll by themselves, not the page
-        self.appearance_pages.add_page(lambda: self._scrolling(self._notation_tab()))
-        self.appearance_pages.add_page(lambda: self._scrolling(self._keyboard_tab()))
-        self.appearance_pages.add_page(lambda: self._scrolling(self._transitions_tab()))
-        self.appearance_pages.add_page(lambda: self._scrolling(self._appearance_summary()))
+        self.appearance_pages.add_page(
+            self._theme_tab,
+        )  # its cards and its editor scroll by themselves, not the page
+        self.appearance_pages.add_page(
+            lambda: self._scrolling(self._notation_tab()),
+        )
+        self.appearance_pages.add_page(
+            lambda: self._scrolling(self._keyboard_tab()),
+        )
+        self.appearance_pages.add_page(
+            lambda: self._scrolling(self._transitions_tab()),
+        )
+        self.appearance_pages.add_page(
+            lambda: self._scrolling(self._appearance_summary()),
+        )
         self.appearance_pages.setCurrentIndex(4)
         lay.addWidget(self.appearance_pages, 1)
         return page
@@ -919,7 +1096,11 @@ class AppSettingsDialog(QDialog):
         >>> _appearance_summary()  # doctest: +SKIP
         """
         page, lay = self._page()
-        self._heading(lay, title="Appearance", about="Customize how Alto looks and moves.")
+        self._heading(
+            lay,
+            title="Appearance",
+            about="Customize how Alto looks and moves.",
+        )
         for heading, children in (
             (
                 "Colors & symbols",
@@ -937,7 +1118,14 @@ class AppSettingsDialog(QDialog):
             ),
         ):
             section = QLabel(heading.upper())
-            section.setStyleSheet(css("color: palette(placeholder-text); font-size: 9pt; padding-top: 14px;"))
+            section.setStyleSheet(
+                css(
+                    (
+                        "color: palette(placeholder-text); font-size: 9pt;"
+                        " padding-top: 14px;"
+                    ),
+                ),
+            )
             lay.addWidget(section)
             for row, title, description in children:
                 button = QPushButton()
@@ -946,10 +1134,13 @@ class AppSettingsDialog(QDialog):
                 button.setCursor(Qt.CursorShape.PointingHandCursor)
                 button.setStyleSheet(
                     css(
-                        "QPushButton { text-align: left; border: none; border-bottom: 1px solid palette(mid); "
-                        "border-radius: 0; background: transparent; padding: 0; }"
+                        "QPushButton { text-align: left; border: none; "
+                        "border-bottom: 1px solid palette(mid); "
+                        "border-radius: 0; background: transparent; "
+                        "padding: 0; }"
                         "QPushButton:hover { background: palette(midlight); }"
-                        "QPushButton:focus { border: 1px solid palette(highlight); }",
+                        "QPushButton:focus { border: 1px solid "
+                        "palette(highlight); }",
                     ),
                 )
                 contents = QHBoxLayout(button)
@@ -966,8 +1157,14 @@ class AppSettingsDialog(QDialog):
                 contents.addWidget(QLabel("›"))
                 button.setMinimumHeight(contents.minimumSize().height())
                 for widget in button.findChildren(QWidget):
-                    widget.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-                button.clicked.connect(lambda _checked=False, child=row: self._open_appearance_child(child))
+                    widget.setAttribute(
+                        Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+                    )
+                button.clicked.connect(
+                    lambda _checked=False, child=row: (
+                        self._open_appearance_child(child)
+                    ),
+                )
                 lay.addWidget(button)
         lay.addStretch()
         return page
@@ -992,7 +1189,8 @@ class AppSettingsDialog(QDialog):
 
     def _select_category(self, row: int) -> None:
         """
-        Show the selected settings page and, for Appearance, its selected section.
+        Show the selected settings page and, for Appearance, its
+        selected section.
 
         Parameters
         ----------
@@ -1005,7 +1203,9 @@ class AppSettingsDialog(QDialog):
         >>> _select_category()  # doctest: +SKIP
         """
         item = self.categories.item(row)
-        selection = item.data(Qt.ItemDataRole.UserRole) if item is not None else None
+        selection = (
+            item.data(Qt.ItemDataRole.UserRole) if item is not None else None
+        )
         if not isinstance(selection, tuple):
             return
         kind, index = selection
@@ -1035,7 +1235,10 @@ class AppSettingsDialog(QDialog):
         if item.data(Qt.ItemDataRole.UserRole) != ("group", 0):
             return
         self._appearance_expanded = not self._appearance_expanded
-        if not self._appearance_expanded and 1 <= self.categories.currentRow() <= 4:
+        if (
+            not self._appearance_expanded
+            and 1 <= self.categories.currentRow() <= 4
+        ):
             self.categories.setCurrentItem(item)
         for row in range(1, 5):
             child = self.categories.item(row)
@@ -1054,16 +1257,26 @@ class AppSettingsDialog(QDialog):
         item = self.categories.item(0)
         if item is None:
             return
-        self.appearance_toggle.setText("⌄" if self._appearance_expanded else ">")
-        self.appearance_toggle.setAccessibleName("Collapse Appearance" if self._appearance_expanded else "Expand Appearance")
+        self.appearance_toggle.setText(
+            "⌄" if self._appearance_expanded else ">",
+        )
+        self.appearance_toggle.setAccessibleName(
+            "Collapse Appearance"
+            if self._appearance_expanded
+            else "Expand Appearance",
+        )
 
     def _theme_tab(self) -> QWidget:
         """
-        Build the theme section: the themes in a list on the left, and the one chosen in the list on the right.
+        Build the theme section: the themes in a list on the left, and
+        the one chosen in the list on the right.
 
-        The right side is the theme's card, with three pictures one above another to click: the theme light, dark, and System,
-        which is light or dark as the desktop is and is cut through on a slant to show it. Choosing a row uses that theme, in
-        whichever of light, dark and System was chosen last. The themes the user made are at the top of the list, with a row that
+        The right side is the theme's card, with three pictures one
+        above another to click: the theme light, dark, and System,
+        which is light or dark as the desktop is and is cut through on a
+        slant to show it. Choosing a row uses that theme, in
+        whichever of light, dark and System was chosen last. The themes
+        the user made are at the top of the list, with a row that
         makes a new one; the editor for them is on the right.
 
         Returns
@@ -1074,14 +1287,20 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> len(dialog.theme_items) == len(families()), len(dialog.theme_cards)  # only the card in view is built
+        >>> (
+        ...     len(dialog.theme_items)
+        ...     == len(families()),
+        ...     len(dialog.theme_cards),
+        ... )  # only the card in view is built
         (True, 1)
         """
         page, lay = self._page()
         body = QHBoxLayout()
         body.setSpacing(18)
         self.theme_list = QListWidget()
-        self.theme_list.setObjectName("categories")  # styled as the list of settings pages is
+        self.theme_list.setObjectName(
+            "categories",
+        )  # styled as the list of settings pages is
         self.theme_list.setFixedWidth(px(220))
         self.theme_list.setAccessibleName("Themes")
         self.theme_pages = QStackedWidget()
@@ -1094,8 +1313,12 @@ class AppSettingsDialog(QDialog):
         self.theme_thumbs = {}
         self.theme_items = {}
         self.theme_scrolls = {}
-        self._version = family_of(saved_theme())[1]  # the version last chosen, which stays as the list is moved
-        self.theme_list.currentItemChanged.connect(lambda now, _before: self._choose_family(now))
+        self._version = family_of(saved_theme())[
+            1
+        ]  # the version last chosen, which stays as the list is moved
+        self.theme_list.currentItemChanged.connect(
+            lambda now, _before: self._choose_family(now),
+        )
         self._fill_themes()
         body.addWidget(self.theme_list)
         side = QVBoxLayout()
@@ -1107,12 +1330,14 @@ class AppSettingsDialog(QDialog):
 
     def _fill_themes(self, select: str | None = None) -> None:
         """
-        Fill the list and the cards: the themes the user made and a row to make one, then the built-in themes.
+        Fill the list and the cards: the themes the user made and a row
+        to make one, then the built-in themes.
 
         Parameters
         ----------
         select : str or None, default None
-            The key of the theme whose row to choose; None for the theme in use.
+            The key of the theme whose row to choose; None for the theme
+            in use.
 
         Examples
         --------
@@ -1126,11 +1351,29 @@ class AppSettingsDialog(QDialog):
         for scroll in self.theme_scrolls.values():
             self.theme_pages.removeWidget(scroll)
             scroll.deleteLater()
-        self.theme_cards, self.theme_thumbs, self.theme_items, self.theme_scrolls = {}, {}, {}, {}
-        own = [(key, label) for key, label, _note in families() if key.startswith(USER_PREFIX)]
-        sections = (("My themes", own, True), ("Themes", [(key, label) for key, label, _note in FAMILIES], False))
+        (
+            self.theme_cards,
+            self.theme_thumbs,
+            self.theme_items,
+            self.theme_scrolls,
+        ) = {}, {}, {}, {}
+        own = [
+            (key, label)
+            for key, label, _note in families()
+            if key.startswith(USER_PREFIX)
+        ]
+        sections = (
+            ("My themes", own, True),
+            (
+                "Themes",
+                [(key, label) for key, label, _note in FAMILIES],
+                False,
+            ),
+        )
         for title, rows, mine in sections:
-            self.theme_list.addItem(section_item(title, palette=self.palette()))
+            self.theme_list.addItem(
+                section_item(title, palette=self.palette()),
+            )
             for family, label in rows:
                 row = QListWidgetItem(label)
                 row.setData(Qt.ItemDataRole.UserRole, family)
@@ -1139,21 +1382,30 @@ class AppSettingsDialog(QDialog):
                 self.theme_items[family] = row
             if mine:
                 self.new_theme_item = QListWidgetItem("＋  New theme…")
-                self.new_theme_item.setData(Qt.ItemDataRole.UserRole, NEW_THEME)
+                self.new_theme_item.setData(
+                    Qt.ItemDataRole.UserRole,
+                    NEW_THEME,
+                )
                 self.new_theme_item.setSizeHint(QSize(0, px(34)))
                 self.theme_list.addItem(self.new_theme_item)
         self.theme_list.blockSignals(False)
         in_use = saved_theme()
         self._show_theme(in_use)
-        family = select if select is not None and select in self.theme_items else family_of(in_use)[0]
+        family = (
+            select
+            if select is not None and select in self.theme_items
+            else family_of(in_use)[0]
+        )
         self.theme_list.setCurrentItem(self.theme_items[family])
         self.theme_pages.setCurrentWidget(self.card_page(family))
 
     def card(self, family: str) -> ThemeCard:
         """
-        Give the card of a theme, building it the first time it is asked for.
+        Give the card of a theme, building it the first time it is asked
+        for.
 
-        Every card is a few dozen widgets, and Qt styles every widget again when the theme changes, so only the cards that have
+        Every card is a few dozen widgets, and Qt styles every widget
+        again when the theme changes, so only the cards that have
         been looked at exist.
 
         Parameters
@@ -1171,7 +1423,11 @@ class AppSettingsDialog(QDialog):
         >>> dialog = AppSettingsDialog()
         >>> "sage" in dialog.theme_cards
         False
-        >>> dialog.card("sage") is dialog.card("sage"), "sage" in dialog.theme_cards
+        >>> (
+        ...     dialog.card("sage")
+        ...     is dialog.card("sage"),
+        ...     "sage" in dialog.theme_cards,
+        ... )
         (True, True)
         """
         card = self.theme_cards.get(family)
@@ -1179,7 +1435,12 @@ class AppSettingsDialog(QDialog):
             card = ThemeCard(family, scale=1.45)
             card.chosen.connect(self._pick_theme)
             card.edit_requested.connect(self._edit_theme)
-            scroll = self._scrolling(card)  # a card that does not fit the dialog scrolls, and the list does not
+            scroll = self._scrolling(
+                card,
+                # a card that does not fit the dialog scrolls, and the
+                # list
+                # does not
+            )
             self.theme_pages.addWidget(scroll)
             self.theme_scrolls[family] = scroll
             self.theme_cards[family] = card
@@ -1189,7 +1450,8 @@ class AppSettingsDialog(QDialog):
 
     def card_page(self, family: str) -> QScrollArea:
         """
-        Give the scroll area that holds a theme's card, which is the page the stack shows for it.
+        Give the scroll area that holds a theme's card, which is the
+        page the stack shows for it.
 
         Parameters
         ----------
@@ -1204,7 +1466,9 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.card_page("sage").widget() is dialog.card("sage")
+        >>> dialog.card_page(
+        ...     "sage"
+        ... ).widget() is dialog.card("sage")
         True
         """
         self.card(family)
@@ -1212,7 +1476,8 @@ class AppSettingsDialog(QDialog):
 
     def thumb(self, key: str) -> ThemeThumb:
         """
-        Give the clickable picture that chooses a theme, with the card it is on built if it was not yet.
+        Give the clickable picture that chooses a theme, with the card
+        it is on built if it was not yet.
 
         Parameters
         ----------
@@ -1234,9 +1499,11 @@ class AppSettingsDialog(QDialog):
 
     def _choose_family(self, row: QListWidgetItem | None) -> None:
         """
-        Show the card of the theme whose row was chosen in the list, and use the theme, in the version that was last chosen.
+        Show the card of the theme whose row was chosen in the list, and
+        use the theme, in the version that was last chosen.
 
-        The row that makes a new theme opens the editor instead, and uses nothing.
+        The row that makes a new theme opens the editor instead, and
+        uses nothing.
 
         Parameters
         ----------
@@ -1247,8 +1514,14 @@ class AppSettingsDialog(QDialog):
         --------
         >>> dialog = AppSettingsDialog()
         >>> dialog.thumb("dark").click()
-        >>> dialog.theme_list.setCurrentItem(dialog.theme_items["sage"])
-        >>> dialog.theme_pages.currentWidget() is dialog.card_page("sage"), saved_theme()
+        >>> dialog.theme_list.setCurrentItem(
+        ...     dialog.theme_items["sage"]
+        ... )
+        >>> (
+        ...     dialog.theme_pages.currentWidget()
+        ...     is dialog.card_page("sage"),
+        ...     saved_theme(),
+        ... )
         (True, 'sage_dark')
         >>> dialog._pick_theme("system")
         """
@@ -1277,18 +1550,24 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog._edit_theme("my_nothing")  # no such theme: nothing opens
+        >>> dialog._edit_theme(
+        ...     "my_nothing"
+        ... )  # no such theme: nothing opens
         >>> dialog.theme_pages.currentWidget() is dialog.theme_editor
         False
         """
-        record = next((made for made in user_records() if made["id"] == family), None)
+        record = next(
+            (made for made in user_records() if made["id"] == family),
+            None,
+        )
         if record is not None:
             self.theme_editor.load(record)
             self.theme_pages.setCurrentWidget(self.theme_editor)
 
     def _save_theme(self, family: str) -> None:
         """
-        Save the theme in the editor, and use it, in the version that was last chosen.
+        Save the theme in the editor, and use it, in the version that
+        was last chosen.
 
         Parameters
         ----------
@@ -1307,7 +1586,8 @@ class AppSettingsDialog(QDialog):
 
     def _delete_theme(self, family: str) -> None:
         """
-        Delete a theme the user made, after asking. If it was in use, the desktop's own colors are used instead.
+        Delete a theme the user made, after asking. If it was in use,
+        the desktop's own colors are used instead.
 
         Parameters
         ----------
@@ -1317,21 +1597,29 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog._delete_theme("my_nothing")  # no such theme: nothing to ask
+        >>> dialog._delete_theme(
+        ...     "my_nothing"
+        ... )  # no such theme: nothing to ask
         """
-        record = next((made for made in user_records() if made["id"] == family), None)
+        record = next(
+            (made for made in user_records() if made["id"] == family),
+            None,
+        )
         if record is None:
             return
         asked = QMessageBox.question(
             self,
             "Delete theme",
-            f"Delete the theme \u201c{record['name']}\u201d? This cannot be undone.",
+            f"Delete the theme “{record['name']}”? This cannot be undone.",
         )
         if asked != QMessageBox.StandardButton.Yes:
             return
         if (
             family_of(saved_theme())[0] == family
-        ):  # in use: the desktop's own colors first, while the theme can still be let go of
+            # in use: the desktop's own colors first, while the theme
+            # can
+            # still be let go of
+        ):
             self._version = "system"
             self.choose_theme("system")
         delete_user_theme(family)
@@ -1351,19 +1639,25 @@ class AppSettingsDialog(QDialog):
         >>> dialog = AppSettingsDialog()
         >>> sage = dialog.card("sage")
         >>> dialog._show_theme("sage_auto")
-        >>> dialog.thumb("sage_auto").isChecked(), dialog.thumb("sage").isChecked()
+        >>> (
+        ...     dialog.thumb("sage_auto").isChecked(),
+        ...     dialog.thumb("sage").isChecked(),
+        ... )
         (True, False)
         """
         for card in self.theme_cards.values():
             card.show_current(key)
         for family, row in self.theme_items.items():
             font = row.font()
-            font.setBold(family == family_of(key)[0])  # the row of the theme in use is bold
+            font.setBold(
+                family == family_of(key)[0],
+            )  # the row of the theme in use is bold
             row.setFont(font)
 
     def _pick_theme(self, key: str) -> None:
         """
-        Choose the theme whose picture was clicked, and mark it in the gallery.
+        Choose the theme whose picture was clicked, and mark it in the
+        gallery.
 
         Parameters
         ----------
@@ -1374,18 +1668,24 @@ class AppSettingsDialog(QDialog):
         --------
         >>> dialog = AppSettingsDialog()
         >>> dialog._pick_theme("light")
-        >>> saved_theme(), dialog.thumb("light").isChecked()
+        >>> (
+        ...     saved_theme(),
+        ...     dialog.thumb("light").isChecked(),
+        ... )
         ('light', True)
         >>> dialog._pick_theme("system")
         """
-        self._version = family_of(key)[1]  # moving to another theme keeps to this version
+        self._version = family_of(key)[
+            1
+        ]  # moving to another theme keeps to this version
         if key != saved_theme():
             self.choose_theme(key)
         self._show_theme(key)
 
     def _notation_tab(self) -> QWidget:
         """
-        Build the notation section: a card for each music font, and the choice of how the baritone clef is written.
+        Build the notation section: a card for each music font, and the
+        choice of how the baritone clef is written.
 
         Returns
         -------
@@ -1400,7 +1700,11 @@ class AppSettingsDialog(QDialog):
         ['c', 'f']
         """
         page, lay = self._page()
-        lay.addWidget(self._about("The music font used to draw clefs, notes and accidentals."))
+        lay.addWidget(
+            self._about(
+                "The music font used to draw clefs, notes and accidentals.",
+            ),
+        )
         grid = QGridLayout()
         grid.setSpacing(10)
         group = QButtonGroup(self)
@@ -1409,21 +1713,32 @@ class AppSettingsDialog(QDialog):
             card = StyleCard(st)
             card.setChecked(st.key == notation.current().key)
             group.addButton(card)
-            card.clicked.connect(lambda _=False, k=st.key: self._choose_notation(k))
+            card.clicked.connect(
+                lambda _=False, k=st.key: self._choose_notation(k),
+            )
             grid.addWidget(card, i // 3, i % 3)
         grid.setColumnStretch(3, 1)  # keep the cards at the left edge
         lay.addLayout(grid)
 
         lay.addSpacing(8)
         lay.addWidget(QLabel("<h3>Baritone clef</h3>"))
-        lay.addWidget(self._about("The baritone clef can be written two ways. The staff and the notes on it are the same."))
+        lay.addWidget(
+            self._about(
+                (
+                    "The baritone clef can be written two ways. The staff "
+                    "and the notes on it are the same."
+                ),
+            ),
+        )
         self.baritone_buttons = {}
         baritone_group = QButtonGroup(self)
         for kind, label in notation.BARITONE_CLEFS.items():
             radio = QRadioButton(label)
             radio.setChecked(kind == notation.baritone_clef())
             baritone_group.addButton(radio)
-            radio.clicked.connect(lambda _=False, k=kind: notation.set_baritone_clef(k))
+            radio.clicked.connect(
+                lambda _=False, k=kind: notation.set_baritone_clef(k),
+            )
             self.baritone_buttons[kind] = radio
             lay.addWidget(radio)
         self._draw_baritone_icons()
@@ -1432,9 +1747,11 @@ class AppSettingsDialog(QDialog):
 
     def _transitions_tab(self) -> QWidget:
         """
-        Build the transitions section: the choices in a list on the left, and a preview of the one chosen on the right.
+        Build the transitions section: the choices in a list on the
+        left, and a preview of the one chosen on the right.
 
-        The transitions are how the home page changes between the exercises and the lessons. The preview plays the one chosen
+        The transitions are how the home page changes between the
+        exercises and the lessons. The preview plays the one chosen
         once, and a Replay button plays it again.
 
         Returns
@@ -1446,13 +1763,25 @@ class AppSettingsDialog(QDialog):
         --------
         >>> dialog = AppSettingsDialog()
         >>> dialog.categories.setCurrentRow(4)
-        >>> dialog.transition_list.count() == len(TRANSITIONS)
+        >>> dialog.transition_list.count() == len(
+        ...     TRANSITIONS
+        ... )
         True
-        >>> dialog.transition_preview.transition.key == saved_transition()
+        >>> (
+        ...     dialog.transition_preview.transition.key
+        ...     == saved_transition()
+        ... )
         True
         """
         page, lay = self._page()
-        lay.addWidget(self._about("How the cards change when you switch between the exercises and the lessons on the home page."))
+        lay.addWidget(
+            self._about(
+                (
+                    "How the cards change when you switch between the "
+                    "exercises and the lessons on the home page."
+                ),
+            ),
+        )
         body = QHBoxLayout()
         body.setSpacing(18)
         self.transition_preview = TransitionPreview()
@@ -1460,7 +1789,9 @@ class AppSettingsDialog(QDialog):
         name.setStyleSheet(css("font-weight: bold; font-size: 12pt;"))
         about = self._about("")
         self.transition_list = QListWidget()
-        self.transition_list.setObjectName("categories")  # styled as the list of settings pages is
+        self.transition_list.setObjectName(
+            "categories",
+        )  # styled as the list of settings pages is
         self.transition_list.setFixedWidth(px(220))
         self.transition_list.setAccessibleName("Transitions")
         self.transition_items = {}
@@ -1475,7 +1806,8 @@ class AppSettingsDialog(QDialog):
 
         def choose(picked_row: QListWidgetItem | None) -> None:
             """
-            Remember the transition whose row is chosen, play it in the preview and say what it does.
+            Remember the transition whose row is chosen, play it in the
+            preview and say what it does.
 
             Parameters
             ----------
@@ -1488,13 +1820,17 @@ class AppSettingsDialog(QDialog):
             """
             if picked_row is None:
                 return
-            picked = transition_named(str(picked_row.data(Qt.ItemDataRole.UserRole)))
+            picked = transition_named(
+                str(picked_row.data(Qt.ItemDataRole.UserRole)),
+            )
             save_transition(picked.key)
             self.transition_preview.show_transition(picked.key)
             name.setText(picked.label)
             about.setText(picked.about)
 
-        self.transition_list.currentItemChanged.connect(lambda now, _previous: choose(now))
+        self.transition_list.currentItemChanged.connect(
+            lambda now, _previous: choose(now),
+        )
         replay = QPushButton("Replay")
         replay.setToolTip("Play the transition again")
         replay.clicked.connect(self.transition_preview.replay)
@@ -1533,11 +1869,13 @@ class AppSettingsDialog(QDialog):
         >>> dialog._choose_notation(notation.DEFAULT)
         """
         notation.set_style(key)
-        self._draw_baritone_icons()  # the two baritone clefs are pictured in the font just chosen
+        # the two baritone clefs are pictured in the font just chosen
+        self._draw_baritone_icons()
 
     def _draw_baritone_icons(self) -> None:
         """
-        Draw the two ways of writing the baritone clef on their buttons, in the notation font in use.
+        Draw the two ways of writing the baritone clef on their buttons,
+        in the notation font in use.
 
         Examples
         --------
@@ -1553,7 +1891,8 @@ class AppSettingsDialog(QDialog):
 
     def _keyboard_tab(self) -> QWidget:
         """
-        Build the keyboard section: a card for each style, and the builder for your own.
+        Build the keyboard section: a card for each style, and the
+        builder for your own.
 
         Returns
         -------
@@ -1568,7 +1907,14 @@ class AppSettingsDialog(QDialog):
         True
         """
         page, lay = self._page()
-        lay.addWidget(self._about("How the piano keyboard looks: the colors and materials of its keys."))
+        lay.addWidget(
+            self._about(
+                (
+                    "How the piano keyboard looks: the colors and "
+                    "materials of its keys."
+                ),
+            ),
+        )
         grid = QGridLayout()
         grid.setSpacing(10)
         group = QButtonGroup(self)
@@ -1579,7 +1925,9 @@ class AppSettingsDialog(QDialog):
             card = KeyboardCard(st)
             card.setChecked(st.key == keyboard_styles.current().key)
             group.addButton(card)
-            card.clicked.connect(lambda _=False, k=st.key: keyboard_styles.set_style(k))
+            card.clicked.connect(
+                lambda _=False, k=st.key: keyboard_styles.set_style(k),
+            )
             grid.addWidget(card, i // 3, i % 3)
             self.keyboard_cards[st.key] = card
         grid.setColumnStretch(3, 1)  # keep the cards at the left edge
@@ -1592,14 +1940,17 @@ class AppSettingsDialog(QDialog):
 
     def _custom_edited(self) -> None:
         """
-        Show the result of recoloring a part on the Custom card and make it the chosen one.
+        Show the result of recoloring a part on the Custom card and make
+        it the chosen one.
 
         Examples
         --------
         >>> dialog = AppSettingsDialog()
         >>> dialog.categories.setCurrentRow(3)
         >>> dialog._custom_edited()
-        >>> dialog.keyboard_cards[keyboard_styles.CUSTOM].isChecked()
+        >>> dialog.keyboard_cards[
+        ...     keyboard_styles.CUSTOM
+        ... ].isChecked()
         True
         """
         card = self.keyboard_cards[keyboard_styles.CUSTOM]
@@ -1619,7 +1970,11 @@ class AppSettingsDialog(QDialog):
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> dialog = AppSettingsDialog(learner=Learner(db, profile=db.add_profile("Ada")))
+        >>> dialog = AppSettingsDialog(
+        ...     learner=Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> dialog.categories.setCurrentRow(7)
         >>> dialog.scheduler_list.currentItem().text()
         'ASRS'
@@ -1629,38 +1984,58 @@ class AppSettingsDialog(QDialog):
         self._heading(
             layout,
             title="Question scheduling",
-            about=f"Choose how Alto schedules questions for {self.learner.profile.name}.",
+            about=(
+                "Choose how Alto schedules questions for "
+                f"{self.learner.profile.name}"
+                "."
+            ),
         )
         calendar_note = (
-            "<p>Exercise tiles show new cards in blue, missed cards awaiting a correct answer in red, and due reviews in green. "
+            "<p>Exercise tiles show new cards in blue, missed cards "
+            "awaiting a correct answer in red, and due reviews in "
+            "green. "
             "These daily limits apply to each exercise in both SM-2 and FSRS. "
             "You can change either limit in an exercise’s settings.</p>"
         )
         descriptions = {
             "ASRS": (
                 "<h3>Alto Spaced Repetition System (ASRS)</h3>"
-                "<p>Practice for as long as you like. Questions you miss or take longer to answer come up more often. "
-                "Questions you answer quickly and correctly appear less often.</p>"
+                "<p>Practice for as long as you like. Questions you "
+                "miss or take longer to answer come up more often. "
+                "Questions you answer quickly and correctly appear less"
+                " often.</p>"
             ),
             "ARTS": (
                 "<h3>Adaptive Response-Time-based Sequencing (ARTS)</h3>"
-                "<p>ARTS spaces repetitions by counting the questions you answer in between. "
-                "If you miss a question or take longer to answer it correctly, it comes back sooner. "
-                "A quick, correct answer leaves more room for other questions.</p>"
+                "<p>ARTS spaces repetitions by counting the questions "
+                "you answer in between. "
+                "If you miss a question or take longer to answer it "
+                "correctly, it comes back sooner. "
+                "A quick, correct answer leaves more room for other "
+                "questions.</p>"
             ),
             "SM-2": (
                 "<h3>SuperMemo 2 (SM-2)</h3>"
-                '<p>Algorithm SM-2, © <a href="https://www.supermemo.com/">SuperMemo World</a>, 1991.</p>'
-                "<p>Your first answer sets the next review date. During calibration, a new correct card returns in one day. "
-                "After 40 timed answers to an exercise, speed determines the grade. Speed and button grading use Anki’s "
-                "learning steps instead. Hard repeats the step, Good advances, and Easy skips to a day-based review.</p>"
+                "<p>Algorithm SM-2, © <a "
+                'href="https://www.supermemo.com/">SuperMemo World</a>,'
+                " 1991.</p>"
+                "<p>Your first answer sets the next review date. During"
+                " calibration, a new correct card returns in one day. "
+                "After 40 timed answers to an exercise, speed "
+                "determines the grade. Speed and button grading use "
+                "Anki’s "
+                "learning steps instead. Hard repeats the step, Good "
+                "advances, and Easy skips to a day-based review.</p>"
                 + calendar_note
             ),
             "FSRS": (
                 "<h3>Free Spaced Repetition Scheduler (FSRS)</h3>"
-                "<p>FSRS uses your review history to estimate how likely you are to remember each card. "
-                "Your first answer updates that estimate. New cards have short learning steps, and cards you "
-                "consistently recall can go longer between reviews.</p>" + calendar_note
+                "<p>FSRS uses your review history to estimate how "
+                "likely you are to remember each card. "
+                "Your first answer updates that estimate. New cards "
+                "have short learning steps, and cards you "
+                "consistently recall can go longer between reviews.</p>"
+                + calendar_note
             ),
         }
         self.scheduler_list = QListWidget()
@@ -1681,17 +2056,26 @@ class AppSettingsDialog(QDialog):
         self.scheduler_description.setWordWrap(True)
         self.scheduler_description.setOpenExternalLinks(True)
         detail_layout.addWidget(self.scheduler_description)
-        self.self_grading = QCheckBox("Grade correct answers with Hard, Good, or Easy")
+        self.self_grading = QCheckBox(
+            "Grade correct answers with Hard, Good, or Easy",
+        )
         self.self_grading.setToolTip(
-            "Choose the next interval after a correct answer. A miss schedules a retry and advances automatically.",
+            (
+                "Choose the next interval after a correct answer. A miss "
+                "schedules a retry and advances automatically."
+            ),
         )
         self.self_grading.setChecked(self.learner.self_grading)
         self.self_grading.setVisible(selected in CALENDAR_SCHEDULERS)
         self.self_grading.toggled.connect(self.learner.set_self_grading)
-        self.self_grading.toggled.connect(lambda: self.scheduler_changed.emit())
+        self.self_grading.toggled.connect(
+            lambda: self.scheduler_changed.emit(),
+        )
         detail_layout.addWidget(self.self_grading)
         self.response_times_button = QPushButton("Response-time grading…")
-        self.response_times_button.setToolTip("Adjust automatic grades and inspect response times by exercise")
+        self.response_times_button.setToolTip(
+            "Adjust automatic grades and inspect response times by exercise",
+        )
         self.response_times_button.clicked.connect(self._response_times)
         detail_layout.addWidget(self.response_times_button)
         self.daily_limits = DailyLimitsEditor(self.learner)
@@ -1705,20 +2089,36 @@ class AppSettingsDialog(QDialog):
         body.addWidget(self._scrolling(detail), 1)
         layout.addLayout(body, 1)
 
-        self.scheduler_list.currentTextChanged.connect(lambda mode: self.scheduler_description.setText(descriptions[mode]))
-        self.scheduler_list.currentTextChanged.connect(lambda mode: self.daily_limits.setVisible(mode in CALENDAR_SCHEDULERS))
-        self.scheduler_list.currentTextChanged.connect(lambda mode: self.self_grading.setVisible(mode in CALENDAR_SCHEDULERS))
+        self.scheduler_list.currentTextChanged.connect(
+            lambda mode: self.scheduler_description.setText(
+                descriptions[mode],
+            ),
+        )
+        self.scheduler_list.currentTextChanged.connect(
+            lambda mode: self.daily_limits.setVisible(
+                mode in CALENDAR_SCHEDULERS,
+            ),
+        )
+        self.scheduler_list.currentTextChanged.connect(
+            lambda mode: self.self_grading.setVisible(
+                mode in CALENDAR_SCHEDULERS,
+            ),
+        )
         self.scheduler_list.currentTextChanged.connect(self.learner.set_mode)
-        self.scheduler_list.currentTextChanged.connect(lambda: self.scheduler_changed.emit())
+        self.scheduler_list.currentTextChanged.connect(
+            lambda: self.scheduler_changed.emit(),
+        )
         return page
 
     def _response_times(self) -> None:
         """
-        Open the profile's response-time distribution and grading thresholds.
+        Open the profile's response-time distribution and grading
+        thresholds.
 
         Examples
         --------
-        The exercise picker shows separate samples for staff and keyboard note identification.
+        The exercise picker shows separate samples for staff and
+        keyboard note identification.
         """
         assert self.learner is not None
         ResponseTimeDialog(self.learner, parent=self).open()
@@ -1743,7 +2143,8 @@ class AppSettingsDialog(QDialog):
         self._heading(
             lay,
             title="Instrument",
-            about="The sound used for notes and for the correct-answer chime. Choose an instrument to see what it is "
+            about="The sound used for notes and for the correct-answer "
+            "chime. Choose an instrument to see what it is "
             "made from, and press Hear it to listen.",
         )
         self.instruments = InstrumentPicker()
@@ -1752,7 +2153,8 @@ class AppSettingsDialog(QDialog):
 
     def _updates_page(self) -> QWidget:
         """
-        Build the Updates page: the version that is running, and whether updates follow the main branch.
+        Build the Updates page: the version that is running, and whether
+        updates follow the main branch.
 
         Returns
         -------
@@ -1770,22 +2172,41 @@ class AppSettingsDialog(QDialog):
         self._heading(
             lay,
             title="Updates",
-            about="Choose Tools → Check for updates… to look for a newer version of Alto.",
+            about=(
+                "Choose Tools → Check for updates… to look for a newer "
+                "version of Alto."
+            ),
         )
         lay.addWidget(QLabel(f"You have Alto {updates.installed_version()}."))
-        self.auto_updates = QCheckBox("Automatically check for new releases daily")
-        self.auto_updates.setChecked(bool(store().value("updates/automatic", True, type=bool)))
-        self.auto_updates.toggled.connect(lambda on: store().setValue("updates/automatic", on))
+        self.auto_updates = QCheckBox(
+            "Automatically check for new releases daily",
+        )
+        self.auto_updates.setChecked(
+            bool(store().value("updates/automatic", True, type=bool)),
+        )
+        self.auto_updates.toggled.connect(
+            lambda on: store().setValue("updates/automatic", on),
+        )
         lay.addWidget(self.auto_updates)
-        self.main_channel = QCheckBox("Follow the main branch (the latest changes, which may be unstable)")
+        self.main_channel = QCheckBox(
+            (
+                "Follow the main branch (the latest changes, which may be "
+                "unstable)"
+            ),
+        )
         self.main_channel.setChecked(saved_channel() == updates.MAIN)
         self.main_channel.toggled.connect(self._choose_channel)
         lay.addWidget(self.main_channel)
         lay.addWidget(
             self._about(
-                "By default, updates follow releases: a version is offered once it has been published. With this on, updates "
-                "follow the main branch instead, so you get each change as soon as it is merged, before it has been released. "
-                "This works for a copy installed with the install script; a packaged copy always follows releases.",
+                "By default, updates follow releases: a version is "
+                "offered once it has been published. With this on, "
+                "updates "
+                "follow the main branch instead, so you get each change"
+                " as soon as it is merged, before it has been released."
+                " "
+                "This works for a copy installed with the install "
+                "script; a packaged copy always follows releases.",
             ),
         )
         lay.addStretch(1)
@@ -1816,12 +2237,14 @@ class AppSettingsDialog(QDialog):
 
     def choose_theme(self, key: str) -> None:
         """
-        Switch the color theme, remember it, and note that the window should be rebuilt in it.
+        Switch the color theme, remember it, and note that the window
+        should be rebuilt in it.
 
         Parameters
         ----------
         key : str
-            "system", "light" or "dark", or the key of a theme with colors of its own.
+            "system", "light" or "dark", or the key of a theme with
+            colors of its own.
 
         Examples
         --------

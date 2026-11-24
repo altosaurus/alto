@@ -55,7 +55,10 @@ def test_between(
     expected : str
         The expected result.
     """
-    assert str(Interval.between(Note.parse(low), high=Note.parse(high))) == expected
+    assert (
+        str(Interval.between(Note.parse(low), high=Note.parse(high)))
+        == expected
+    )
 
 
 def test_transpose_roundtrip() -> None:

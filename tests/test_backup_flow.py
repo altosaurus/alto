@@ -1,4 +1,7 @@
-"""Exporting and importing a backup from the menu: the questions asked, what is refused, and that nothing ends up different."""
+"""
+Exporting and importing a backup from the menu: the questions asked,
+what is refused, and that nothing ends up different.
+"""
 
 from __future__ import annotations
 
@@ -46,7 +49,8 @@ YES, NO = QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No
 
 class Dialogs:
     """
-    Stands in for the file dialogs and message boxes, answering as the test says and recording what was shown.
+    Stands in for the file dialogs and message boxes, answering as the
+    test says and recording what was shown.
 
     Attributes
     ----------
@@ -71,11 +75,33 @@ class Dialogs:
         """
         self.save_to, self.open_from, self.answer = "", "", NO
         self.shown: list[tuple[str, str]] = []
-        monkeypatch.setattr(QFileDialog, "getSaveFileName", lambda *args: (self.save_to, ""))
-        monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *args: (self.open_from, ""))
-        monkeypatch.setattr(QMessageBox, "warning", lambda parent, title, text: self.shown.append(("warning", text)))
-        monkeypatch.setattr(QMessageBox, "information", lambda parent, title, text: self.shown.append(("information", text)))
-        monkeypatch.setattr(QMessageBox, "question", lambda parent, title, text, buttons, default: self._ask(text))
+        monkeypatch.setattr(
+            QFileDialog,
+            "getSaveFileName",
+            lambda *args: (self.save_to, ""),
+        )
+        monkeypatch.setattr(
+            QFileDialog,
+            "getOpenFileName",
+            lambda *args: (self.open_from, ""),
+        )
+        monkeypatch.setattr(
+            QMessageBox,
+            "warning",
+            lambda parent, title, text: self.shown.append(("warning", text)),
+        )
+        monkeypatch.setattr(
+            QMessageBox,
+            "information",
+            lambda parent, title, text: self.shown.append(
+                ("information", text),
+            ),
+        )
+        monkeypatch.setattr(
+            QMessageBox,
+            "question",
+            lambda parent, title, text, buttons, default: self._ask(text),
+        )
 
     def _ask(self, text: str) -> QMessageBox.StandardButton:
         """
@@ -110,7 +136,11 @@ def rows(db: Database) -> dict[str, list[tuple]]:
         The rows of each table.
     """
     return {
-        t: [tuple(r) for r in db.conn.execute(f"SELECT * FROM {t} ORDER BY 1, 2, 3")] for t in ("profiles", "attempts", "items")
+        t: [
+            tuple(r)
+            for r in db.conn.execute(f"SELECT * FROM {t} ORDER BY 1, 2, 3")
+        ]
+        for t in ("profiles", "attempts", "items")
     }
 
 
@@ -134,10 +164,16 @@ def dialogs(monkeypatch: pytest.MonkeyPatch) -> Dialogs:
 
 def test_the_suggested_name_carries_the_date_and_the_extension() -> None:
     """
-    Check that the suggested file name has the date and the backup extension, and counts read naturally.
+    Check that the suggested file name has the date and the backup
+    extension, and counts read naturally.
     """
-    assert backup_flow.default_name(now=0.0).startswith("alto-backup-19") and backup_flow.default_name().endswith(".altobackup")
-    assert backup_flow.counted(1, noun="answer") == "1 answer" and backup_flow.counted(0, noun="profile") == "0 profiles"
+    assert backup_flow.default_name(now=0.0).startswith(
+        "alto-backup-19",
+    ) and backup_flow.default_name().endswith(".altobackup")
+    assert (
+        backup_flow.counted(1, noun="answer") == "1 answer"
+        and backup_flow.counted(0, noun="profile") == "0 profiles"
+    )
 
 
 def test_exporting_writes_one_file_with_the_extension_and_says_what_it_holds(
@@ -147,7 +183,8 @@ def test_exporting_writes_one_file_with_the_extension_and_says_what_it_holds(
     tmp_path: Path,
 ) -> None:
     """
-    Check that exporting writes a readable backup even if the name lacks the extension, and reports what went in it.
+    Check that exporting writes a readable backup even if the name lacks
+    the extension, and reports what went in it.
 
     Parameters
     ----------
@@ -162,13 +199,21 @@ def test_exporting_writes_one_file_with_the_extension_and_says_what_it_holds(
     """
     learner = practiced_learner(30)
     dialogs.save_to = str(tmp_path / "mine")
-    written = backup_flow.export_backup(QApplication.activeWindow() or MainWindow(), db=learner.db)
+    written = backup_flow.export_backup(
+        QApplication.activeWindow() or MainWindow(),
+        db=learner.db,
+    )
     assert written is not None
     # noinspection PyUnresolvedReferences
     assert written == tmp_path / "mine.altobackup" and written.exists()
     # noinspection PyTypeChecker
-    assert read_backup(written).info.attempts == learner.db.count_attempts(learner.profile.id)
-    assert dialogs.shown[-1][0] == "information" and str(written) in dialogs.shown[-1][1]
+    assert read_backup(written).info.attempts == learner.db.count_attempts(
+        learner.profile.id,
+    )
+    assert (
+        dialogs.shown[-1][0] == "information"
+        and str(written) in dialogs.shown[-1][1]
+    )
 
 
 def test_canceling_the_export_or_failing_to_write_changes_nothing_and_says_so(
@@ -177,7 +222,8 @@ def test_canceling_the_export_or_failing_to_write_changes_nothing_and_says_so(
     tmp_path: Path,
 ) -> None:
     """
-    Check that canceling writes nothing and shows nothing, and that a file that cannot be written is explained.
+    Check that canceling writes nothing and shows nothing, and that a
+    file that cannot be written is explained.
 
     Parameters
     ----------
@@ -191,10 +237,16 @@ def test_canceling_the_export_or_failing_to_write_changes_nothing_and_says_so(
     db = Database()
     db.add_profile("Ada")
     window = MainWindow()
-    assert backup_flow.export_backup(window, db=db) is None and dialogs.shown == []
+    assert (
+        backup_flow.export_backup(window, db=db) is None
+        and dialogs.shown == []
+    )
     dialogs.save_to = str(tmp_path / "no such folder" / "x.altobackup")
     assert backup_flow.export_backup(window, db=db) is None
-    assert dialogs.shown[-1][0] == "warning" and "could not be written" in dialogs.shown[-1][1]
+    assert (
+        dialogs.shown[-1][0] == "warning"
+        and "could not be written" in dialogs.shown[-1][1]
+    )
 
 
 def test_an_import_that_is_refused_or_declined_leaves_everything_as_it_was(
@@ -203,7 +255,8 @@ def test_an_import_that_is_refused_or_declined_leaves_everything_as_it_was(
     tmp_path: Path,
 ) -> None:
     """
-    Check that canceling, a file that is not a backup, a backup with nobody in it and answering No each change nothing.
+    Check that canceling, a file that is not a backup, a backup with
+    nobody in it and answering No each change nothing.
 
     Parameters
     ----------
@@ -219,21 +272,32 @@ def test_an_import_that_is_refused_or_declined_leaves_everything_as_it_was(
     store().setValue("ui/theme", "light")
     before, saved = rows(db), export_settings()
     window = MainWindow()
-    assert backup_flow.import_backup(window, db=db) is False  # canceled at the file dialog
+    assert (
+        backup_flow.import_backup(window, db=db) is False
+    )  # canceled at the file dialog
     junk = tmp_path / "junk.altobackup"
     junk.write_bytes(b"not a backup")
     dialogs.open_from = str(junk)
-    assert backup_flow.import_backup(window, db=db) is False and dialogs.shown[-1][0] == "warning"
+    assert (
+        backup_flow.import_backup(window, db=db) is False
+        and dialogs.shown[-1][0] == "warning"
+    )
     nobody = tmp_path / "nobody.altobackup"
     write_backup(Database(), settings={"ui/theme": "dark"}, path=nobody)
     dialogs.open_from = str(nobody)
-    assert backup_flow.import_backup(window, db=db) is False and "no profiles" in dialogs.shown[-1][1]
+    assert (
+        backup_flow.import_backup(window, db=db) is False
+        and "no profiles" in dialogs.shown[-1][1]
+    )
     other = Database()
     other.add_profile("Ben")
     good = tmp_path / "good.altobackup"
     write_backup(other, settings={"ui/theme": "dark"}, path=good)
     dialogs.open_from, dialogs.answer = str(good), NO
-    assert backup_flow.import_backup(window, db=db) is False and dialogs.shown[-1][0] == "question"
+    assert (
+        backup_flow.import_backup(window, db=db) is False
+        and dialogs.shown[-1][0] == "question"
+    )
     assert rows(db) == before and export_settings() == saved
 
 
@@ -243,7 +307,8 @@ def test_the_question_before_replacing_says_what_the_backup_holds(
     tmp_path: Path,
 ) -> None:
     """
-    Check that the question names the backup's version, date and contents and warns that everything is replaced.
+    Check that the question names the backup's version, date and
+    contents and warns that everything is replaced.
 
     Parameters
     ----------
@@ -260,7 +325,12 @@ def test_the_question_before_replacing_says_what_the_backup_holds(
     dialogs.open_from = str(tmp_path / "b.altobackup")
     backup_flow.import_backup(MainWindow(), db=Database(tmp_path / "here.db"))
     kind, text = dialogs.shown[-1]
-    assert kind == "question" and "1 profile and 0 answers" in text and "replaced" in text and "undone" in text
+    assert (
+        kind == "question"
+        and "1 profile and 0 answers" in text
+        and "replaced" in text
+        and "undone" in text
+    )
 
 
 def test_an_import_saves_a_copy_of_what_it_replaces_so_it_can_be_undone(
@@ -270,7 +340,8 @@ def test_an_import_saves_a_copy_of_what_it_replaces_so_it_can_be_undone(
     tmp_path: Path,
 ) -> None:
     """
-    Check that importing into a database file first saves a backup beside it, and that restoring that backup undoes the import.
+    Check that importing into a database file first saves a backup
+    beside it, and that restoring that backup undoes the import.
 
     Parameters
     ----------
@@ -297,7 +368,7 @@ def test_an_import_saves_a_copy_of_what_it_replaces_so_it_can_be_undone(
     assert rows(here) == original
 
 
-def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_changed(
+def test_importing_backup_into_clean_install_leaves_as_if(
     app: QApplication,
     practiced_learner: Callable[..., Learner],
     dialogs: Dialogs,
@@ -305,7 +376,8 @@ def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_cha
     tmp_path: Path,
 ) -> None:
     """
-    Check the whole promise: the profiles, answers, saved preferences, profile in use and loaded settings all match.
+    Check the whole promise: the profiles, answers, saved preferences,
+    profile in use and loaded settings all match.
 
     Parameters
     ----------
@@ -316,7 +388,8 @@ def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_cha
     dialogs : Dialogs
         Stands in for the dialogs.
     monkeypatch : pytest.MonkeyPatch
-        Replaces the theme change, which would alter the whole test run's palette.
+        Replaces the theme change, which would alter the whole test
+        run's palette.
     tmp_path : Path
         A scratch folder unique to this test.
     """
@@ -335,13 +408,17 @@ def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_cha
     MainWindow(learner).export_backup()
     original_rows, original_settings = rows(learner.db), export_settings()
 
-    store().clear()  # a clean install on a new computer: an empty database but for the profile it asked for, and default settings
+    # a clean install on a new computer: an empty database but for the
+    # profile it asked for, and default settings
+    store().clear()
     settings.note_names.__dict__.update(type(settings.note_names)().__dict__)
     sounds.instrument = "piano"
     clean = Database(tmp_path / "new" / "alto.db")
     fresh_start = Learner(clean, profile=clean.add_profile("Someone"))
     window = MainWindow(fresh_start)
-    assert export_settings() != original_settings and rows(clean) != original_rows
+    assert (
+        export_settings() != original_settings and rows(clean) != original_rows
+    )
 
     dialogs.open_from, dialogs.answer = dialogs.save_to, YES
     window.import_backup()
@@ -350,15 +427,26 @@ def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_cha
     assert export_settings() == original_settings
     now_learner = window.learner  # the window is rebuilt in place
     assert now_learner is not None
-    assert now_learner.profile.name == "Ada" and now_learner.profile.id == learner.profile.id
-    assert settings.note_names.active_clefs() == ["alto"] and sounds.instrument == "flute"
+    assert (
+        now_learner.profile.name == "Ada"
+        and now_learner.profile.id == learner.profile.id
+    )
+    assert (
+        settings.note_names.active_clefs() == ["alto"]
+        and sounds.instrument == "flute"
+    )
     assert applied == ["dark"]
-    assert now_learner.db.count_attempts(learner.profile.id) == learner.db.count_attempts(learner.profile.id)
+    assert now_learner.db.count_attempts(
+        learner.profile.id,
+    ) == learner.db.count_attempts(learner.profile.id)
 
 
-def test_the_backup_actions_are_offered_only_when_there_is_a_profile(app: QApplication) -> None:
+def test_the_backup_actions_are_offered_only_when_there_is_a_profile(
+    app: QApplication,
+) -> None:
     """
-    Check that export and import appear in the menu with a profile and are hidden without one.
+    Check that export and import appear in the menu with a profile and
+    are hidden without one.
 
     Parameters
     ----------
@@ -366,10 +454,19 @@ def test_the_backup_actions_are_offered_only_when_there_is_a_profile(app: QAppli
         The shared Qt application.
     """
     bare = MainWindow()
-    assert not bare.export_action.isVisible() and not bare.import_action.isVisible()
+    assert (
+        not bare.export_action.isVisible()
+        and not bare.import_action.isVisible()
+    )
     bare.export_backup()
-    bare.import_backup()  # nothing to back up or to restore into, so nothing happens
+    # nothing to back up or to restore into, so nothing happens
+    bare.import_backup()
     db = Database()
     with_profile = MainWindow(Learner(db, profile=db.add_profile("Ada")))
-    assert with_profile.export_action.text().startswith("Export") and with_profile.import_action.text().startswith("Import")
-    assert with_profile.export_action.isVisible() and with_profile.import_action.isVisible()
+    assert with_profile.export_action.text().startswith(
+        "Export",
+    ) and with_profile.import_action.text().startswith("Import")
+    assert (
+        with_profile.export_action.isVisible()
+        and with_profile.import_action.isVisible()
+    )

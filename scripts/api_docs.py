@@ -3,11 +3,15 @@
 Write the API reference pages in docs/api from the docstrings in alto/.
 
     python scripts/api_docs.py            # rewrite docs/api
-    python scripts/api_docs.py --check    # fail if docs/api is out of date, changing nothing
+    python scripts/api_docs.py --check    # fail if docs/api is out of
+    date, changing nothing
 
-Every public module gets a page with its public classes, methods and functions: the signature, then the NumPy-style
-docstring turned into Markdown. The source is read as text and never imported, so the script needs neither Qt nor a
-display. GitHub Pages cannot run this script, so the pages are committed, and `tests/test_api_docs.py` fails when they are
+Every public module gets a page with its public classes, methods and
+functions: the signature, then the NumPy-style
+docstring turned into Markdown. The source is read as text and never
+imported, so the script needs neither Qt nor a
+display. GitHub Pages cannot run this script, so the pages are
+committed, and `tests/test_api_docs.py` fails when they are
 out of date.
 """
 
@@ -29,7 +33,8 @@ LIST_SECTIONS = ("Parameters", "Attributes", "Returns", "Yields", "Raises")
 
 def module_files() -> list[Path]:
     """
-    List the modules that get a page: every file of the package except the `__init__` and `__main__` files.
+    List the modules that get a page: every file of the package except
+    the `__init__` and `__main__` files.
 
     Returns
     -------
@@ -38,12 +43,23 @@ def module_files() -> list[Path]:
 
     Examples
     --------
-    >>> top_level = [dotted(p) for p in module_files() if package_of(p) == "alto"]
+    >>> top_level = [
+    ...     dotted(p)
+    ...     for p in module_files()
+    ...     if package_of(p) == "alto"
+    ... ]
     >>> top_level == sorted(top_level)
     True
     """
-    files = [p for p in SOURCE.rglob("*.py") if p.name not in ("__init__.py", "__main__.py")]
-    return sorted(files, key=lambda p: (package_of(p) != "alto", package_of(p), p.name))
+    files = [
+        p
+        for p in SOURCE.rglob("*.py")
+        if p.name not in ("__init__.py", "__main__.py")
+    ]
+    return sorted(
+        files,
+        key=lambda p: (package_of(p) != "alto", package_of(p), p.name),
+    )
 
 
 def dotted(path: Path) -> str:
@@ -85,7 +101,8 @@ def package_of(path: Path) -> str:
     Returns
     -------
     str
-        The dotted name of the folder it is in, such as `alto.theory`, or `alto` for a module at the top.
+        The dotted name of the folder it is in, such as `alto.theory`,
+        or `alto` for a module at the top.
 
     Examples
     --------
@@ -109,11 +126,14 @@ def split_sections(doc: str) -> dict[str, str]:
     Returns
     -------
     dict of str to str
-        Section title to its text. The text before the first section is under the key "".
+        Section title to its text. The text before the first section is
+        under the key "".
 
     Examples
     --------
-    >>> split_sections("Summary.\n\nReturns\n-------\nint\n    A number.")
+    >>> split_sections(
+    ...     "Summary.\n\nReturns\n-------\nint\n    A number."
+    ... )
     {'': 'Summary.', 'Returns': 'int\n    A number.'}
     """
     found = list(SECTION.finditer(doc))
@@ -126,7 +146,8 @@ def split_sections(doc: str) -> dict[str, str]:
 
 def entries(text: str) -> list[tuple[str, str, str]]:
     r"""
-    Read the entries of a Parameters, Attributes, Returns or Raises section.
+    Read the entries of a Parameters, Attributes, Returns or Raises
+    section.
 
     Parameters
     ----------
@@ -136,12 +157,17 @@ def entries(text: str) -> list[tuple[str, str, str]]:
     Returns
     -------
     list of tuple of str
-        One `(name, type, description)` per entry. The name is empty for a Returns or Raises entry, which has only a type.
+        One `(name, type, description)` per entry. The name is empty for
+        a Returns or Raises entry, which has only a type.
 
     Examples
     --------
-    >>> entries("n : int\n    How many.\nflag : bool, default False\n    Whether.")
-    [('n', 'int', 'How many.'), ('flag', 'bool, default False', 'Whether.')]
+    >>> entries(
+    ...     "n : int\n    How many.\nflag : bool, default False\n    "
+    ...     "Whether."
+    ... )
+    [('n', 'int', 'How many.'), ('flag', 'bool, default False',
+    'Whether.')]
     >>> entries("int\n    A number.")
     [('', 'int', 'A number.')]
     """
@@ -168,11 +194,17 @@ def render_doc(doc: str | None) -> str:
     Returns
     -------
     str
-        The Markdown: the text, then each section. The examples go in a fenced block.
+        The Markdown: the text, then each section. The examples go in a
+        fenced block.
 
     Examples
     --------
-    >>> print(render_doc("Do it.\n\nParameters\n----------\nn : int\n    How many."))
+    >>> print(
+    ...     render_doc(
+    ...         "Do it.\n\nParameters\n----------\nn : int\n    How "
+    ...         "many."
+    ...     )
+    ... )
     Do it.
     <BLANKLINE>
     **Parameters**
@@ -187,13 +219,24 @@ def render_doc(doc: str | None) -> str:
         if not title:
             continue
         if title == "Examples":
-            # Rouge uses its console lexer for Python sessions, including continuation prompts.
-            lexer = "console?lang=python&prompt=%3E%3E%3E,..." if ">>> " in text else "text"
+            # Rouge uses its console lexer for Python sessions,
+            # including continuation prompts.
+            lexer = (
+                "console?lang=python&prompt=%3E%3E%3E,..."
+                if ">>> " in text
+                else "text"
+            )
             out.append(f"**Examples**\n\n```{lexer}\n{text}\n```")
         elif title in LIST_SECTIONS:
             lines = []
             for name, kind, desc in entries(text):
-                label = f"`{name}` (*{kind}*)" if name and kind else f"`{name}`" if name else f"*{kind}*"
+                label = (
+                    f"`{name}` (*{kind}*)"
+                    if name and kind
+                    else f"`{name}`"
+                    if name
+                    else f"*{kind}*"
+                )
                 lines.append(f"- {label}: {desc}" if desc else f"- {label}")
             out.append(f"**{title}**\n\n" + "\n".join(lines))
         else:
@@ -203,7 +246,8 @@ def render_doc(doc: str | None) -> str:
 
 def parameters(args: ast.arguments) -> list[str]:
     """
-    List the parameters of a function as they are written in its signature, without `self` or `cls`.
+    List the parameters of a function as they are written in its
+    signature, without `self` or `cls`.
 
     Parameters
     ----------
@@ -213,17 +257,26 @@ def parameters(args: ast.arguments) -> list[str]:
     Returns
     -------
     list of str
-        One string per parameter, such as `n: int = 3`, with `*` and `**` entries where they belong.
+        One string per parameter, such as `n: int = 3`, with `*` and
+        `**` entries where they belong.
 
     Examples
     --------
-    >>> parameters(ast.parse("def f(self, a: int, *, b: str = 'x', **rest: int): ...").body[0].args)
+    >>> parameters(
+    ...     ast.parse(
+    ...         "def f(self, a: int, *, b: str = 'x', **rest: int): ..."
+    ...     )
+    ...     .body[0]
+    ...     .args
+    ... )
     ['a: int', '*', "b: str = 'x'", '**rest: int']
     """
     positional = [*args.posonlyargs, *args.args]
     if positional and positional[0].arg in ("self", "cls"):
         positional = positional[1:]
-    defaults: list[ast.expr | None] = [None] * (len(args.posonlyargs) + len(args.args) - len(args.defaults)) + list(args.defaults)
+    defaults: list[ast.expr | None] = [None] * (
+        len(args.posonlyargs) + len(args.args) - len(args.defaults)
+    ) + list(args.defaults)
     defaults = defaults[len(defaults) - len(positional) :]
 
     def one(arg: ast.arg, *, default: ast.expr | None) -> str:
@@ -244,18 +297,33 @@ def parameters(args: ast.arguments) -> list[str]:
 
         Examples
         --------
-        >>> one(ast.arg(arg="n", annotation=ast.Name(id="int")), default=ast.Constant(value=3))
+        >>> one(
+        ...     ast.arg(
+        ...         arg="n",
+        ...         annotation=ast.Name(id="int"),
+        ...     ),
+        ...     default=ast.Constant(value=3),
+        ... )
         'n: int = 3'
         """
-        text = arg.arg + (f": {ast.unparse(arg.annotation)}" if arg.annotation else "")
-        return text + (f" = {ast.unparse(default)}" if default is not None else "")
+        text = arg.arg + (
+            f": {ast.unparse(arg.annotation)}" if arg.annotation else ""
+        )
+        return text + (
+            f" = {ast.unparse(default)}" if default is not None else ""
+        )
 
-    out = [one(a, default=d) for a, d in zip(positional, defaults, strict=True)]
+    out = [
+        one(a, default=d) for a, d in zip(positional, defaults, strict=True)
+    ]
     if args.vararg:
         out.append("*" + one(args.vararg, default=None))
     elif args.kwonlyargs:
         out.append("*")
-    out += [one(a, default=d) for a, d in zip(args.kwonlyargs, args.kw_defaults, strict=True)]
+    out += [
+        one(a, default=d)
+        for a, d in zip(args.kwonlyargs, args.kw_defaults, strict=True)
+    ]
     if args.kwarg:
         out.append("**" + one(args.kwarg, default=None))
     return out
@@ -268,14 +336,16 @@ def fence(
     returns: str = "",
 ) -> str:
     """
-    Write a signature as a Python code block, one parameter to a line when there are two or more.
+    Write a signature as a Python code block, one parameter to a line
+    when there are two or more.
 
     Parameters
     ----------
     head : str
         What comes before the parentheses, such as `def area` or `Note`.
     params : list of str or None
-        The parameters, or None for a name with no parentheses at all. Keyword-only.
+        The parameters, or None for a name with no parentheses at all.
+        Keyword-only.
     returns : str, default ""
         The return annotation, written after `->`. Keyword-only.
 
@@ -286,7 +356,13 @@ def fence(
 
     Examples
     --------
-    >>> print(fence("def f", params=["a: int"], returns="int"))
+    >>> print(
+    ...     fence(
+    ...         "def f",
+    ...         params=["a: int"],
+    ...         returns="int",
+    ...     )
+    ... )
     ```python
     def f(a: int) -> int
     ```
@@ -304,13 +380,16 @@ def fence(
     elif len(params) < 2:
         body = f"{head}({', '.join(params)}){tail}"
     else:
-        body = f"{head}(\n" + "".join(f"    {p},\n" for p in params) + f"){tail}"
+        body = (
+            f"{head}(\n" + "".join(f"    {p},\n" for p in params) + f"){tail}"
+        )
     return f"```python\n{body}\n```"
 
 
 def decorator_names(node: ast.FunctionDef | ast.ClassDef) -> list[str]:
     r"""
-    List the decorators of a function or class, written as in the source.
+    List the decorators of a function or class, written as in the
+    source.
 
     Parameters
     ----------
@@ -324,7 +403,11 @@ def decorator_names(node: ast.FunctionDef | ast.ClassDef) -> list[str]:
 
     Examples
     --------
-    >>> decorator_names(ast.parse("@property\ndef f(self): ...").body[0])
+    >>> decorator_names(
+    ...     ast.parse(
+    ...         "@property\ndef f(self): ..."
+    ...     ).body[0]
+    ... )
     ['property']
     """
     return [ast.unparse(d) for d in node.decorator_list]
@@ -344,7 +427,8 @@ def render_function(
     node : ast.FunctionDef
         The function.
     level : int
-        The heading level, 2 for a function and 3 for a method. Keyword-only.
+        The heading level, 2 for a function and 3 for a method.
+        Keyword-only.
     prefix : str, default ""
         The class name and a dot, for a method. Keyword-only.
 
@@ -355,8 +439,13 @@ def render_function(
 
     Examples
     --------
-    >>> tree = ast.parse("def f(n: int) -> int:\n    '''Double it.'''\n    return n * 2")
-    >>> print(render_function(tree.body[0], level=2))
+    >>> tree = ast.parse(
+    ...     "def f(n: int) -> int:\n    '''Double it.'''\n    return n"
+    ...     " * 2"
+    ... )
+    >>> print(
+    ...     render_function(tree.body[0], level=2)
+    ... )
     ## f
     <BLANKLINE>
     ```python
@@ -373,7 +462,11 @@ def render_function(
     )
     if head:
         sig = sig.replace("```python\n", f"```python\n{head}\n", 1)
-    parts = [f"{'#' * level} {prefix}{node.name}", sig, render_doc(ast.get_docstring(node, clean=False))]
+    parts = [
+        f"{'#' * level} {prefix}{node.name}",
+        sig,
+        render_doc(ast.get_docstring(node, clean=False)),
+    ]
     return "\n\n".join(p for p in parts if p)
 
 
@@ -389,29 +482,43 @@ def class_fields(node: ast.ClassDef) -> list[str]:
     Returns
     -------
     list of str
-        One string per field, with `*` where the keyword-only fields start (a `KW_ONLY` marker).
+        One string per field, with `*` where the keyword-only fields
+        start (a `KW_ONLY` marker).
 
     Examples
     --------
-    >>> tree = ast.parse("class C:\n    a: int\n    _: KW_ONLY\n    b: str = 'x'")
+    >>> tree = ast.parse(
+    ...     "class C:\n    a: int\n    _: KW_ONLY\n    b: str = 'x'"
+    ... )
     >>> class_fields(tree.body[0])
     ['a: int', '*', "b: str = 'x'"]
     """
     out = []
     for stmt in node.body:
-        if not isinstance(stmt, ast.AnnAssign) or not isinstance(stmt.target, ast.Name):
+        if not isinstance(stmt, ast.AnnAssign) or not isinstance(
+            stmt.target,
+            ast.Name,
+        ):
             continue
         annotation = ast.unparse(stmt.annotation)
         if annotation == "KW_ONLY":
             out.append("*")
         elif not annotation.startswith("ClassVar"):
-            out.append(f"{stmt.target.id}: {annotation}" + (f" = {ast.unparse(stmt.value)}" if stmt.value is not None else ""))
+            out.append(
+                f"{stmt.target.id}: {annotation}"
+                + (
+                    f" = {ast.unparse(stmt.value)}"
+                    if stmt.value is not None
+                    else ""
+                ),
+            )
     return out
 
 
 def render_class(node: ast.ClassDef) -> str:
     r"""
-    Write the section for one class: its constructor, its docstring and its public methods.
+    Write the section for one class: its constructor, its docstring and
+    its public methods.
 
     Parameters
     ----------
@@ -425,8 +532,15 @@ def render_class(node: ast.ClassDef) -> str:
 
     Examples
     --------
-    >>> tree = ast.parse("class C(Base):\n    '''A thing.'''\n    def go(self) -> None:\n        '''Go.'''")
-    >>> print(render_class(tree.body[0]).splitlines()[0])
+    >>> tree = ast.parse(
+    ...     "class C(Base):\n    '''A thing.'''\n    def go(self) -> "
+    ...     "None:\n        '''Go.'''"
+    ... )
+    >>> print(
+    ...     render_class(tree.body[0]).splitlines()[
+    ...         0
+    ...     ]
+    ... )
     ## C
     """
     init: ast.FunctionDef | None = None
@@ -434,25 +548,42 @@ def render_class(node: ast.ClassDef) -> str:
     for stmt in node.body:
         if isinstance(stmt, ast.FunctionDef) and stmt.name == "__init__":
             init = stmt
-        elif isinstance(stmt, ast.FunctionDef) and not stmt.name.startswith("_"):
+        elif isinstance(stmt, ast.FunctionDef) and not stmt.name.startswith(
+            "_",
+        ):
             methods.append(stmt)
     if init is not None:
         params: list[str] | None = parameters(init.args)
-    elif any(d.startswith("dataclass") or d.endswith(".dataclass") for d in decorator_names(node)):
+    elif any(
+        d.startswith("dataclass") or d.endswith(".dataclass")
+        for d in decorator_names(node)
+    ):
         params = class_fields(node)
     else:
         params = None
     bases = ", ".join(ast.unparse(b) for b in node.bases)
-    parts = [f"## {node.name}", fence(f"class {node.name}" + (f"({bases})" if bases else ""), params=None)]
+    parts = [
+        f"## {node.name}",
+        fence(
+            f"class {node.name}" + (f"({bases})" if bases else ""),
+            params=None,
+        ),
+    ]
     if params is not None:
         parts[1] = fence(node.name, params=params)
         if bases:
             parts.append(f"Bases: `{bases}`")
     parts.append(render_doc(ast.get_docstring(node, clean=False)))
     if init is not None and ast.get_docstring(init):
-        built = render_doc(ast.get_docstring(init, clean=False)).replace("**Examples**", "**Constructor examples**")
+        built = render_doc(ast.get_docstring(init, clean=False)).replace(
+            "**Examples**",
+            "**Constructor examples**",
+        )
         parts.append(f"**Constructor**\n\n{built}")
-    parts.extend(render_function(method, level=3, prefix=f"{node.name}.") for method in methods)
+    parts.extend(
+        render_function(method, level=3, prefix=f"{node.name}.")
+        for method in methods
+    )
     return "\n\n".join(p for p in parts if p)
 
 
@@ -468,14 +599,19 @@ def summary(doc: str | None) -> str:
     Returns
     -------
     str
-        The first paragraph, joined into a single line. Empty if there is no docstring.
+        The first paragraph, joined into a single line. Empty if there
+        is no docstring.
 
     Examples
     --------
-    >>> summary("First line\ncontinues here.\n\nSecond paragraph.")
+    >>> summary(
+    ...     "First line\ncontinues here.\n\nSecond paragraph."
+    ... )
     'First line continues here.'
     """
-    return " ".join(inspect.cleandoc(doc).split("\n\n")[0].split()) if doc else ""
+    return (
+        " ".join(inspect.cleandoc(doc).split("\n\n")[0].split()) if doc else ""
+    )
 
 
 def render_module(path: Path) -> str:
@@ -490,25 +626,40 @@ def render_module(path: Path) -> str:
     Returns
     -------
     str
-        The whole page: front matter and body. The body is wrapped in Liquid's `raw` tags so that braces in a docstring
+        The whole page: front matter and body. The body is wrapped in
+        Liquid's `raw` tags so that braces in a docstring
         cannot be taken for template code.
 
     Examples
     --------
-    >>> page = render_module(SOURCE / "theory" / "pitch.py")
-    >>> page.startswith("---\ntitle: alto.theory.pitch\n")
+    >>> page = render_module(
+    ...     SOURCE / "theory" / "pitch.py"
+    ... )
+    >>> page.startswith(
+    ...     "---\ntitle: alto.theory.pitch\n"
+    ... )
     True
     >>> "## Note" in page
     True
     """
     tree = ast.parse(path.read_text(encoding="utf-8"))
     name = dotted(path)
-    front = f"---\ntitle: {name}\nparent: api\npackage: {package_of(path)}\npermalink: /api/{name}/\n---\n"
+    front = (
+        "---\ntitle: "
+        f"{name}"
+        "\nparent: api\npackage: "
+        f"{package_of(path)}"
+        "\npermalink: /api/"
+        f"{name}"
+        "/\n---\n"
+    )
     parts = [render_doc(ast.get_docstring(tree, clean=False))]
     for node in tree.body:
         if isinstance(node, ast.ClassDef) and not node.name.startswith("_"):
             parts.append(render_class(node))
-        elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_"):
+        elif isinstance(node, ast.FunctionDef) and not node.name.startswith(
+            "_",
+        ):
             parts.append(render_function(node, level=2))
     body = "\n\n".join(p for p in parts if p)
     return f"{front}{{% raw %}}\n{body}\n{{% endraw %}}\n"
@@ -516,7 +667,8 @@ def render_module(path: Path) -> str:
 
 def render_index(files: list[Path]) -> str:
     """
-    Write the front page of the reference: what it covers and a list of every module.
+    Write the front page of the reference: what it covers and a list of
+    every module.
 
     Parameters
     ----------
@@ -535,10 +687,15 @@ def render_index(files: list[Path]) -> str:
     True
     """
     out = [
-        "---\ntitle: API reference\nnav_order: 11\nnav_group: For developers\nchildren: api\npermalink: /api/\n---\n",
         (
-            "Every public module, class and function in Alto, with its signature and docstring. Names that begin with an "
-            "underscore are internal and are left out. The pages are written from the docstrings by `scripts/api_docs.py`, so "
+            "---\ntitle: API reference\nnav_order: 11\nnav_group: For "
+            "developers\nchildren: api\npermalink: /api/\n---\n"
+        ),
+        (
+            "Every public module, class and function in Alto, with its "
+            "signature and docstring. Names that begin with an "
+            "underscore are internal and are left out. The pages are "
+            "written from the docstrings by `scripts/api_docs.py`, so "
             "they match the code.\n"
         ),
     ]
@@ -547,11 +704,33 @@ def render_index(files: list[Path]) -> str:
         pkg = package_of(path)
         if pkg != last:
             init = path.parent / "__init__.py"
-            blurb = summary(ast.get_docstring(ast.parse(init.read_text(encoding="utf-8")))) if init.exists() else ""
-            out.append(f"\n## {pkg}\n" + (f"\n{blurb}\n" if blurb else "") + "\n| Module | What it is |\n|---|---|")
+            blurb = (
+                summary(
+                    ast.get_docstring(
+                        ast.parse(init.read_text(encoding="utf-8")),
+                    ),
+                )
+                if init.exists()
+                else ""
+            )
+            out.append(
+                f"\n## {pkg}\n"
+                + (f"\n{blurb}\n" if blurb else "")
+                + "\n| Module | What it is |\n|---|---|",
+            )
             last = pkg
-        about = summary(ast.get_docstring(ast.parse(path.read_text(encoding="utf-8"))))
-        out.append(f"| [{dotted(path)}]({dotted(path)}/) | {about.replace('|', chr(92) + '|')} |")
+        about = summary(
+            ast.get_docstring(ast.parse(path.read_text(encoding="utf-8"))),
+        )
+        out.append(
+            "| ["
+            f"{dotted(path)}"
+            "]("
+            f"{dotted(path)}"
+            "/) | "
+            f"{about.replace('|', chr(92) + '|')}"
+            " |",
+        )
     return "\n".join(out) + "\n"
 
 
@@ -589,7 +768,8 @@ def problems(*, out: Path = OUT) -> list[str]:
     Returns
     -------
     list of str
-        One line for each page that is missing, out of date or no longer wanted. Empty when everything is current.
+        One line for each page that is missing, out of date or no longer
+        wanted. Empty when everything is current.
 
     Examples
     --------
@@ -599,7 +779,9 @@ def problems(*, out: Path = OUT) -> list[str]:
     wanted = build()
     found = {p.name for p in out.glob("*.md")} if out.is_dir() else set()
     out_of_date = [
-        f"out of date: {n}" for n, text in wanted.items() if n in found and (out / n).read_text(encoding="utf-8") != text
+        f"out of date: {n}"
+        for n, text in wanted.items()
+        if n in found and (out / n).read_text(encoding="utf-8") != text
     ]
     return (
         [f"missing: {n}" for n in wanted if n not in found]
@@ -610,7 +792,8 @@ def problems(*, out: Path = OUT) -> list[str]:
 
 def write(*, out: Path = OUT) -> int:
     """
-    Write the pages to disk and remove the ones that are no longer wanted.
+    Write the pages to disk and remove the ones that are no longer
+    wanted.
 
     Parameters
     ----------
@@ -624,7 +807,9 @@ def write(*, out: Path = OUT) -> int:
 
     Examples
     --------
-    >>> write(out=Path("/tmp/api-docs-example")) > 10  # doctest: +SKIP
+    >>> write(
+    ...     out=Path("/tmp/api-docs-example")
+    ... ) > 10  # doctest: +SKIP
     True
     """
     pages = build()
@@ -639,7 +824,8 @@ def write(*, out: Path = OUT) -> int:
 
 def main() -> int:
     """
-    Run the script: rewrite docs/api, or with `--check` only report what is out of date.
+    Run the script: rewrite docs/api, or with `--check` only report what
+    is out of date.
 
     Returns
     -------
@@ -652,8 +838,14 @@ def main() -> int:
     wrote 43 pages to docs/api
     0
     """
-    parser = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[1].strip())
-    parser.add_argument("--check", action="store_true", help="report out-of-date pages instead of writing them")
+    parser = argparse.ArgumentParser(
+        description=(__doc__ or "").split("\n")[1].strip(),
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="report out-of-date pages instead of writing them",
+    )
     args = parser.parse_args()
     if args.check:
         found = problems()

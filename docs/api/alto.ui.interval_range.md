@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.interval_range/
 ---
 {% raw %}
-A two-handle slider for selecting interval distances without changing the keyboard range.
+A two-handle slider for selecting interval distances without changing
+the keyboard range.
 
 **Examples**
 
@@ -24,7 +25,8 @@ IntervalRangeSlider(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-A draggable interval range with keyboard controls for either endpoint.
+A draggable interval range with keyboard controls for either
+endpoint.
 
 **Attributes**
 
@@ -205,7 +207,10 @@ Adjust the active endpoint with arrow keys, Home, or End.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> IntervalRangeSlider().focusPolicy() == Qt.FocusPolicy.StrongFocus
+>>> (
+...     IntervalRangeSlider().focusPolicy()
+...     == Qt.FocusPolicy.StrongFocus
+... )
 True
 ```
 {% endraw %}

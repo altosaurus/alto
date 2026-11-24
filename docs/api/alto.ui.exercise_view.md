@@ -5,18 +5,25 @@ package: alto.ui
 permalink: /api/alto.ui.exercise_view/
 ---
 {% raw %}
-The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right.
+The exercise screen: a question, its answer buttons, the score, and a
+pane of settings that slides in from the right.
 
-One `ExerciseView` works for every exercise. It asks the exercise (or, with a profile, the learner) for the next
-`Question`, shows it as a staff, a keyboard or text, offers the answer buttons, and records each answer.
+One `ExerciseView` works for every exercise. It asks the exercise (or,
+with a profile, the learner) for the next
+`Question`, shows it as a staff, a keyboard or text, offers the answer
+buttons, and records each answer.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
->>> view = ExerciseView(NoteNames(), rng=random.Random(1))
+>>> view = ExerciseView(
+...     NoteNames(), rng=random.Random(1)
+... )
 >>> # noinspection PyUnresolvedReferences
->>> view.question.answer in [button.text() for button in view.buttons]
+>>> view.question.answer in [
+...     button.text() for button in view.buttons
+... ]
 True
 ```
 
@@ -26,12 +33,17 @@ True
 def choice_keys(choices: list[str]) -> list[str]
 ```
 
-Choose a key for each answer button, so that every answer can be given from the keyboard.
+Choose a key for each answer button, so that every answer can be
+given from the keyboard.
 
-Nine answers or fewer take the digits 1 to 9. More than that, as on the piano keyboard, take the notes' own names: the
-letter for a natural, Shift and the letter for a sharp, Ctrl and the letter for a flat. A minor key, such as F♯m, is
-typed the same way as the major key of its name. Any other long list takes 1 to 9
-and then 0, and the rest can be reached with Tab. Scale-degree banks use the degree digit, with Shift for a sharp,
+Nine answers or fewer take the digits 1 to 9. More than that, as on
+the piano keyboard, take the notes' own names: the
+letter for a natural, Shift and the letter for a sharp, Ctrl and the
+letter for a flat. A minor key, such as F♯m, is
+typed the same way as the major key of its name. Any other long list
+takes 1 to 9
+and then 0, and the rest can be reached with Tab. Scale-degree banks
+use the degree digit, with Shift for a sharp,
 Ctrl for a flat, and Alt added for double alterations.
 
 **Parameters**
@@ -45,9 +57,13 @@ Ctrl for a flat, and Alt added for double alterations.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> choice_keys(["major", "minor", "diminished"])
+>>> choice_keys(
+...     ["major", "minor", "diminished"]
+... )
 ['1', '2', '3']
->>> choice_keys(list("CDEFGAB") + ["C♯", "B♭"] + ["F♯"])
+>>> choice_keys(
+...     list("CDEFGAB") + ["C♯", "B♭"] + ["F♯"]
+... )
 ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Shift+C', 'Ctrl+B', 'Shift+F']
 >>> choice_keys([str(n) for n in range(12)])[8:]
 ['9', '0', '', '']
@@ -63,10 +79,13 @@ def second_row_keys(
 ) -> list[str]
 ```
 
-Choose a key for each button of the second row of a two-part answer, such as the octave or the inversion.
+Choose a key for each button of the second row of a two-part answer,
+such as the octave or the inversion.
 
-They must not be keys that the first row has. When the first row uses the digits the second row takes the home row,
-A S D F and so on; when the first row uses letters (the notes' names) it takes the digits, and an octave that is a single
+They must not be keys that the first row has. When the first row
+uses the digits the second row takes the home row,
+A S D F and so on; when the first row uses letters (the notes'
+names) it takes the digits, and an octave that is a single
 digit takes that digit.
 
 **Parameters**
@@ -81,9 +100,17 @@ digit takes that digit.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> second_row_keys(["1", "2", "3"], labels=["root position", "1st inversion"])
+>>> second_row_keys(
+...     ["1", "2", "3"],
+...     labels=[
+...         "root position",
+...         "1st inversion",
+...     ],
+... )
 ['A', 'S']
->>> second_row_keys(["C", "Shift+C"], labels=["3", "4", "5"])
+>>> second_row_keys(
+...     ["C", "Shift+C"], labels=["3", "4", "5"]
+... )
 ['3', '4', '5']
 ```
 
@@ -143,7 +170,11 @@ Return a note's name in words, for a screen reader: "F sharp 4".
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> note_words(Note.parse("F#4")), note_words(Note.parse("Bb3")), note_words(Note.parse("C4"))
+>>> (
+...     note_words(Note.parse("F#4")),
+...     note_words(Note.parse("Bb3")),
+...     note_words(Note.parse("C4")),
+... )
 ('F sharp 4', 'B flat 3', 'C 4')
 ```
 
@@ -194,7 +225,9 @@ The screen for practicing one exercise.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
->>> view = ExerciseView(NoteNames(), rng=random.Random(1))
+>>> view = ExerciseView(
+...     NoteNames(), rng=random.Random(1)
+... )
 >>> view.score.text()
 '0/0 (–)   streak 0'
 ```
@@ -213,9 +246,14 @@ Build the screen and show the first question.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import KeySignatures
->>> view = ExerciseView(KeySignatures(), rng=random.Random(2))
->>> view.settings_panel is not None  # the exercise has settings behind the gear button
+>>> from alto.exercises.library import (
+...     KeySignatures,
+... )
+>>> view = ExerciseView(
+...     KeySignatures(), rng=random.Random(2)
+... )
+>>> # the exercise has settings behind the gear button
+>>> view.settings_panel is not None
 True
 ```
 
@@ -225,7 +263,8 @@ True
 def hideEvent(event: QHideEvent) -> None
 ```
 
-Pause automatic advancement and answer timing while browsing another page.
+Pause automatic advancement and answer timing while browsing
+another page.
 
 **Parameters**
 
@@ -248,7 +287,8 @@ False
 def showEvent(event: QShowEvent) -> None
 ```
 
-Resume the exercise's answer clock and pending advance when it reappears.
+Resume the exercise's answer clock and pending advance when it
+reappears.
 
 **Parameters**
 
@@ -272,7 +312,8 @@ True
 def settings_state() -> tuple[bool, int, int] | None
 ```
 
-Remember the exercise settings pane, selected page, and scroll position before a theme rebuild.
+Remember the exercise settings pane, selected page, and scroll
+position before a theme rebuild.
 
 **Returns**
 
@@ -282,7 +323,9 @@ Remember the exercise settings pane, selected page, and scroll position before a
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
->>> ExerciseView(NoteNames(), rng=random.Random(1)).settings_state()
+>>> ExerciseView(
+...     NoteNames(), rng=random.Random(1)
+... ).settings_state()
 (False, 0, 0)
 ```
 
@@ -292,7 +335,8 @@ Remember the exercise settings pane, selected page, and scroll position before a
 def restore_settings_state(state: tuple[bool, int, int]) -> None
 ```
 
-Restore exercise settings navigation immediately after rebuilding the view.
+Restore exercise settings navigation immediately after
+rebuilding the view.
 
 **Parameters**
 
@@ -302,7 +346,9 @@ Restore exercise settings navigation immediately after rebuilding the view.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
->>> view = ExerciseView(NoteNames(), rng=random.Random(1))
+>>> view = ExerciseView(
+...     NoteNames(), rng=random.Random(1)
+... )
 >>> view.restore_settings_state((True, 0, 0))
 >>> view.settings_state()
 (True, 0, 0)
@@ -314,12 +360,14 @@ Restore exercise settings navigation immediately after rebuilding the view.
 def scheduling_changed() -> None
 ```
 
-Refresh the visible exercise or invalidate its queue until it is reopened.
+Refresh the visible exercise or invalidate its queue until it is
+reopened.
 
 **Examples**
 
 ```text
-Lowering the daily allowance on the home page also applies to a previously opened exercise.
+Lowering the daily allowance on the home page also applies to a
+previously opened exercise.
 ```
 
 ### ExerciseView.next_question
@@ -328,16 +376,23 @@ Lowering the daily allowance on the home page also applies to a previously opene
 def next_question() -> None
 ```
 
-Show the next question: its staff, keyboard or text, and a fresh set of answer buttons.
+Show the next question: its staff, keyboard or text, and a fresh
+set of answer buttons.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
->>> view = ExerciseView(NoteNames(), rng=random.Random(1))
+>>> view = ExerciseView(
+...     NoteNames(), rng=random.Random(1)
+... )
 >>> view.next_question()
 >>> # noinspection PyUnresolvedReferences
->>> view.answered, len(view.buttons) == len(view.question.choices)
+>>> (
+...     view.answered,
+...     len(view.buttons)
+...     == len(view.question.choices),
+... )
 (False, True)
 ```
 
@@ -350,7 +405,8 @@ def eventFilter(
 ) -> bool
 ```
 
-Handle staff clicks in notation questions and forward wheel turns to the fork or clef staff.
+Handle staff clicks in notation questions and forward wheel
+turns to the fork or clef staff.
 
 **Parameters**
 
@@ -366,12 +422,25 @@ Handle staff clicks in notation questions and forward wheel turns to the fork or
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPoint, QPointF
 >>> from PySide6.QtGui import QWheelEvent
->>> from alto.exercises.library import KeySignatureConstruction
->>> view = ExerciseView(KeySignatureConstruction(), rng=random.Random(1))
+>>> from alto.exercises.library import (
+...     KeySignatureConstruction,
+... )
+>>> view = ExerciseView(
+...     KeySignatureConstruction(),
+...     rng=random.Random(1),
+... )
 >>> view.show()
 >>> here = QPointF(5, 5)
->>> turn = QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
-...                    Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
+>>> turn = QWheelEvent(
+...     here,
+...     here,
+...     QPoint(0, 0),
+...     QPoint(0, 120),
+...     Qt.MouseButton.NoButton,
+...     Qt.KeyboardModifier.NoModifier,
+...     Qt.ScrollPhase.NoScrollPhase,
+...     False,
+... )
 >>> view.eventFilter(view.answer_button, turn)
 True
 >>> view.fork.value
@@ -388,10 +457,13 @@ def submit(
 ) -> None
 ```
 
-Check an answer chosen with a button or by clicking the notation.
+Check an answer chosen with a button or by clicking the
+notation.
 
-A correct answer uses the selected Next Question setting. An incorrect button flashes red.
-In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS allow another answer on the same showing.
+A correct answer uses the selected Next Question setting. An
+incorrect button flashes red.
+In SM-2 and FSRS the card returns at its scheduled retry time.
+ASRS and ARTS allow another answer on the same showing.
 
 **Parameters**
 
@@ -403,15 +475,25 @@ In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS all
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> sounds.enabled = False
->>> view = ExerciseView(NoteNames(), rng=random.Random(1))
+>>> view = ExerciseView(
+...     NoteNames(), rng=random.Random(1)
+... )
 >>> question = view.question
 >>> # noinspection PyUnresolvedReferences
->>> wrong = next(b for b in view.buttons if b.text() != question.answer)
+>>> wrong = next(
+...     b
+...     for b in view.buttons
+...     if b.text() != question.answer
+... )
 >>> view.submit(wrong.text(), button=wrong)
 >>> view.missed, wrong.isEnabled()
 (True, False)
 >>> # noinspection PyUnresolvedReferences
->>> right = next(b for b in view.buttons if b.text() == question.answer)
+>>> right = next(
+...     b
+...     for b in view.buttons
+...     if b.text() == question.answer
+... )
 >>> # noinspection PyUnresolvedReferences
 >>> view.submit(question.answer, button=right)
 >>> view.answered

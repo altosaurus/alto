@@ -5,7 +5,8 @@ package: alto
 permalink: /api/alto.anki_export/
 ---
 {% raw %}
-Write portable Anki decks from Alto questions and optional calendar review dates.
+Write portable Anki decks from Alto questions and optional calendar
+review dates.
 
 ## Review
 
@@ -21,7 +22,8 @@ Review(
 )
 ```
 
-One practiced example and its calendar schedule in the exporting profile.
+One practiced example and its calendar schedule in the exporting
+profile.
 
 ## profile_reviews
 
@@ -45,7 +47,8 @@ def deck_candidates(
 ) -> Iterator[tuple[Question, Review | None]]
 ```
 
-Visit eligible scheduled examples before generating additional questions.
+Visit eligible scheduled examples before generating additional
+questions.
 
 **Yields**
 
@@ -63,7 +66,8 @@ def export_deck(
 ) -> int
 ```
 
-Write a deck and replace the destination only after the package is complete.
+Write a deck and replace the destination only after the package is
+complete.
 
 **Parameters**
 
@@ -96,7 +100,8 @@ PlannedDeck(
 )
 ```
 
-Distinct questions and their stable export identities for one exercise.
+Distinct questions and their stable export identities for one
+exercise.
 
 ## plan_deck
 
@@ -104,7 +109,8 @@ Distinct questions and their stable export identities for one exercise.
 def plan_deck(selection: DeckSelection) -> PlannedDeck
 ```
 
-Select the exact cards to count in the summary and write to the package.
+Select the exact cards to count in the summary and write to the
+package.
 
 **Returns**
 
@@ -141,7 +147,8 @@ Save the selected exercise decks together in one Anki package.
 ExportControl()
 ```
 
-Coordinate a cancellation decision with the final replacement of the destination.
+Coordinate a cancellation decision with the final replacement of the
+destination.
 
 **Constructor**
 
@@ -153,7 +160,8 @@ Start with a pending export and an untouched destination.
 def confirm_cancel(confirm: Callable[[], bool]) -> bool
 ```
 
-Reserve the destination until the user decides whether to cancel.
+Reserve the destination until the user decides whether to
+cancel.
 
 **Returns**
 
@@ -165,7 +173,8 @@ Reserve the destination until the user decides whether to cancel.
 def check() -> None
 ```
 
-Stop work and unwind temporary files after confirmed cancellation.
+Stop work and unwind temporary files after confirmed
+cancellation.
 
 **Raises**
 

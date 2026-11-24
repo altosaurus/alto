@@ -26,7 +26,8 @@ AnswerBank(
 
 Bases: `QScrollArea`
 
-Wrap existing answer buttons to fit the available width and scroll long lists.
+Wrap existing answer buttons to fit the available width and scroll
+long lists.
 
 **Attributes**
 
@@ -53,7 +54,10 @@ Create a bank that can show all rows or scroll longer lists.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> AnswerBank().horizontalScrollBarPolicy() == Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+>>> (
+...     AnswerBank().horizontalScrollBarPolicy()
+...     == Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+... )
 True
 ```
 
@@ -79,7 +83,9 @@ Display answer buttons in a stable order.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtWidgets import QPushButton
 >>> bank = AnswerBank()
->>> bank.set_buttons([QPushButton("m3"), QPushButton("P5")])
+>>> bank.set_buttons(
+...     [QPushButton("m3"), QPushButton("P5")]
+... )
 >>> len(bank.buttons)
 2
 ```
@@ -90,7 +96,8 @@ Display answer buttons in a stable order.
 def resizeEvent(event: QResizeEvent) -> None
 ```
 
-Rewrap the buttons when the exercise or settings pane changes width.
+Rewrap the buttons when the exercise or settings pane changes
+width.
 
 **Parameters**
 

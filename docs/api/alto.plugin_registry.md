@@ -5,7 +5,8 @@ package: alto
 permalink: /api/alto.plugin_registry/
 ---
 {% raw %}
-Install registered instrument packs from the latest release in their public GitHub repositories.
+Install registered instrument packs from the latest release in their
+public GitHub repositories.
 
 ## install_registered
 
@@ -18,7 +19,8 @@ def install_registered(
 ) -> str | None
 ```
 
-Install by registration code, or update a selected ZIP from its registered repository.
+Install by registration code, or update a selected ZIP from its
+registered repository.
 
 **Parameters**
 

@@ -1,12 +1,15 @@
 """
-Choosing who is practicing. There is no password: a profile is just a name that keeps its own history.
+Choosing who is practicing. There is no password: a profile is just a
+name that keeps its own history.
 
 Examples
 --------
 >>> db = Database()
 >>> remember_profile(db.add_profile("Ada"))
 >>> # noinspection PyUnresolvedReferences
->>> startup_profile(db).name  # the one used last time, with no dialog
+>>> startup_profile(
+...     db
+... ).name  # the one used last time, with no dialog
 'Ada'
 """
 
@@ -39,9 +42,11 @@ from alto.ui.zoom import px
 
 class ProfileDialog(QDialog):
     """
-    Ask who is practicing: a first name on launch, then a list to switch between.
+    Ask who is practicing: a first name on launch, then a list to switch
+    between.
 
-    On first launch (no profiles yet) it asks for a name. Afterwards it lists the profiles to switch between and lets you add
+    On first launch (no profiles yet) it asks for a name. Afterwards it
+    lists the profiles to switch between and lets you add
     another.
 
     Attributes
@@ -49,7 +54,8 @@ class ProfileDialog(QDialog):
     db : Database
         Where the profiles are kept.
     chosen : Profile or None
-        The profile that was picked or created, once the dialog is accepted.
+        The profile that was picked or created, once the dialog is
+        accepted.
     list : QListWidget
         The existing profiles.
     name : QLineEdit
@@ -103,8 +109,10 @@ class ProfileDialog(QDialog):
         if first_run:
             lay.addWidget(QLabel("<h2>Welcome to Alto</h2>"))
             about = QLabel(
-                "Create a profile so your progress is remembered. Questions you find hard come back more "
-                "often, and ones you answer quickly and correctly fade away. There is no password.",
+                "Create a profile so your progress is remembered. Questions"
+                " you find hard come back more "
+                "often, and ones you answer quickly and correctly fade "
+                "away. There is no password.",
             )
         else:
             lay.addWidget(QLabel("<h3>Who is practicing?</h3>"))
@@ -114,7 +122,9 @@ class ProfileDialog(QDialog):
         lay.addWidget(about)
 
         self.list = QListWidget()
-        self.list.setObjectName("categories")  # the rounded list style used in the settings dialog
+        self.list.setObjectName(
+            "categories",
+        )  # the rounded list style used in the settings dialog
         self.list.setVisible(not first_run)
         if not first_run:
             for p in db.profiles():
@@ -134,7 +144,9 @@ class ProfileDialog(QDialog):
         self.name.setPlaceholderText("Your name")
         self.name.setMaxLength(40)
         self.name.returnPressed.connect(self._create)
-        self.create_button = QPushButton("Create profile" if first_run else "Add")
+        self.create_button = QPushButton(
+            "Create profile" if first_run else "Add",
+        )
         self.create_button.clicked.connect(self._create)
         row.addWidget(self.name, 1)
         row.addWidget(self.create_button)
@@ -146,16 +158,24 @@ class ProfileDialog(QDialog):
 
         buttons = QDialogButtonBox()
         if not first_run:
-            use = buttons.addButton("Use selected profile", QDialogButtonBox.ButtonRole.AcceptRole)
+            use = buttons.addButton(
+                "Use selected profile",
+                QDialogButtonBox.ButtonRole.AcceptRole,
+            )
             use.clicked.connect(self._use_selected)
-        buttons.addButton(QDialogButtonBox.StandardButton.Cancel if not first_run else QDialogButtonBox.StandardButton.Close)
+        buttons.addButton(
+            QDialogButtonBox.StandardButton.Cancel
+            if not first_run
+            else QDialogButtonBox.StandardButton.Close,
+        )
         buttons.rejected.connect(self.reject)
         lay.addWidget(buttons)
         self.name.setFocus()
 
     def _create(self) -> None:
         """
-        Create the profile named in the box and close, or say why it cannot be made.
+        Create the profile named in the box and close, or say why it
+        cannot be made.
 
         Examples
         --------
@@ -199,7 +219,8 @@ class ProfileDialog(QDialog):
 
 def remember_profile(profile: Profile) -> None:
     """
-    Remember which profile was used, so the next launch can open with it.
+    Remember which profile was used, so the next launch can open with
+    it.
 
     Parameters
     ----------
@@ -209,7 +230,9 @@ def remember_profile(profile: Profile) -> None:
     Examples
     --------
     >>> remember_profile(Profile(7, name="Ada"))
-    >>> int_value(store(), key="profile/last", default=-1)
+    >>> int_value(
+    ...     store(), key="profile/last", default=-1
+    ... )
     7
     """
     store().setValue("profile/last", profile.id)
@@ -227,7 +250,8 @@ def startup_profile(db: Database) -> Profile | None:
     Returns
     -------
     Profile or None
-        The profile, or None if the person closed the dialog without choosing one.
+        The profile, or None if the person closed the dialog without
+        choosing one.
 
     Examples
     --------
@@ -238,6 +262,7 @@ def startup_profile(db: Database) -> Profile | None:
     >>> startup_profile(database).name
     'Ada'
     """
+    # Look up the available profiles.
     profiles = db.profiles()
     if profiles:
         last = db.profile(int_value(store(), key="profile/last", default=-1))
@@ -245,6 +270,8 @@ def startup_profile(db: Database) -> Profile | None:
             return last
         if len(profiles) == 1:
             return profiles[0]
+    # If No profiles are available, launch dialog to create first
+    # profile.
     dialog = ProfileDialog(db)
     if dialog.exec() != QDialog.DialogCode.Accepted or dialog.chosen is None:
         return None

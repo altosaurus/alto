@@ -130,7 +130,9 @@ as NumPy would be. The clip is kept under a name made of everything it depends o
 def shift_pitch(samples, *, semitones):
     ratio = 2 ** (semitones / 12)
     count = math.ceil((len(samples) - 1) / ratio)
-    return _interpolate(samples, step=ratio, count=count)  # the value at 0, ratio, 2 * ratio, ...
+    return _interpolate(
+        samples, step=ratio, count=count
+    )  # the value at 0, ratio, 2 * ratio, ...
 ```
 
 `_interpolate` takes each position `x`, the sample `a` just before it and the one after, and returns `a + (after - a) * (x - i)`,
@@ -158,16 +160,27 @@ waves, one per partial. The code has several pieces of real physics, each one li
 ```python
 f0 = 440.0 * 2 ** ((midi - 69) / 12)
 for n in range(1, 17):  # the first 16 partials
-    f = n * f0 * math.sqrt(1 + inharm * n * n)  # stiff strings: partials sit slightly sharp
+    f = (
+        n * f0 * math.sqrt(1 + inharm * n * n)
+    )  # stiff strings: partials sit slightly sharp
     amp = 1.0 / n**1.15  # higher partials are quieter
     if n % 7 == 0:
         amp *= 0.3  # the hammer strikes ~1/7 along the string, which suppresses these
-    decay = 2.2 + 1.1 * n + (midi - 60) * 0.03  # higher partials, and higher notes, die faster
-    phase = rng.uniform(0, 2 * math.pi)  # one hammer strikes both strings, so they start together
-    for detune in (-0.0008, 0.0008):  # two strings per note, slightly apart: the shimmer
+    decay = (
+        2.2 + 1.1 * n + (midi - 60) * 0.03
+    )  # higher partials, and higher notes, die faster
+    phase = rng.uniform(
+        0, 2 * math.pi
+    )  # one hammer strikes both strings, so they start together
+    for detune in (
+        -0.0008,
+        0.0008,
+    ):  # two strings per note, slightly apart: the shimmer
         # amp * 0.5 * sin(2π f (1 + detune) t + phase) * exp(-decay t), made one sample at a time
         step = 2 * math.pi * f * (1 + detune) / SAMPLE_RATE
-        turn = complex(math.cos(step), math.sin(step)) * math.exp(-decay / SAMPLE_RATE)
+        turn = complex(math.cos(step), math.sin(step)) * math.exp(
+            -decay / SAMPLE_RATE
+        )
         z = amp * 0.5 * complex(math.cos(phase), math.sin(phase))
         for k in range(count):
             out[k] += z.imag
@@ -196,7 +209,9 @@ import numpy as np
 from alto.audio import synth_piano, SAMPLE_RATE
 
 x = synth_piano(60)
-spectrum = np.abs(np.fft.rfft(x * np.hanning(len(x))))  # a window function reduces leakage
+spectrum = np.abs(
+    np.fft.rfft(x * np.hanning(len(x)))
+)  # a window function reduces leakage
 freqs = np.fft.rfftfreq(len(x), 1 / SAMPLE_RATE)
 print(freqs[spectrum.argmax()])
 ```

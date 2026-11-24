@@ -5,16 +5,24 @@ package: alto.ui
 permalink: /api/alto.ui.motion/
 ---
 {% raw %}
-Animations and feedback delays, run in one place so that tests decide when they happen.
+Animations and feedback delays, run in one place so that tests decide
+when they happen.
 
-The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
-through this module: `play` starts an animation, `later` runs a step after a delay and `start_timer` starts a timer that
-does. In the app they take their real time. A button is given its key with `set_shortcut`.
+The interface moves: pages slide, feedback stays on screen for a moment
+and the next question follows. Each of those goes
+through this module: `play` starts an animation, `later` runs a step
+after a delay and `start_timer` starts a timer that
+does. In the app they take their real time. A button is given its key
+with `set_shortcut`.
 
-Tests switch to instant motion with `set_instant`. Then nothing moves on by itself: animations hold still and delayed steps
-and timers wait in a queue, however long the test takes, until it calls `settle`. That runs everything waiting, in the order
-it was asked for, at once. So a test can look at the state just after an action (the feedback showing, a page about to
-slide), and the motion happens only when the test says so, never during some other wait. A button's key clicks it at once,
+Tests switch to instant motion with `set_instant`. Then nothing moves on
+by itself: animations hold still and delayed steps
+and timers wait in a queue, however long the test takes, until it calls
+`settle`. That runs everything waiting, in the order
+it was asked for, at once. So a test can look at the state just after an
+action (the feedback showing, a page about to
+slide), and the motion happens only when the test says so, never during
+some other wait. A button's key clicks it at once,
 since its pressed look is all there is to see in the meantime.
 
 **Examples**
@@ -23,7 +31,11 @@ since its pressed look is all there is to see in the meantime.
 >>> set_instant(True)
 >>> owner = QObject()
 >>> done = []
->>> later(900, owner=owner, step=lambda: done.append("cleared"))
+>>> later(
+...     900,
+...     owner=owner,
+...     step=lambda: done.append("cleared"),
+... )
 >>> QCoreApplication.processEvents()  # nothing happens by itself
 >>> done, busy()
 ([], True)
@@ -58,7 +70,8 @@ False
 def set_instant(on: bool) -> None
 ```
 
-Make motion wait for `settle`, for tests, or give it back its real time.
+Make motion wait for `settle`, for tests, or give it back its real
+time.
 
 **Parameters**
 
@@ -84,7 +97,8 @@ def later(
 ) -> None
 ```
 
-Run a step after a delay, such as clearing wrong-answer feedback so the learner can try again.
+Run a step after a delay, such as clearing wrong-answer feedback so
+the learner can try again.
 
 **Parameters**
 
@@ -98,7 +112,11 @@ Run a step after a delay, such as clearing wrong-answer feedback so the learner 
 >>> set_instant(True)
 >>> owner = QObject()
 >>> done = []
->>> later(450, owner=owner, step=lambda: done.append("retry"))
+>>> later(
+...     450,
+...     owner=owner,
+...     step=lambda: done.append("retry"),
+... )
 >>> settle()
 >>> done
 ['retry']
@@ -115,7 +133,8 @@ def start_timer(
 ) -> None
 ```
 
-Start a single-shot timer whose timeout is part of the interface's motion, such as moving on to the next question.
+Start a single-shot timer whose timeout is part of the interface's
+motion, such as moving on to the next question.
 
 The timer can be stopped as usual, and then it does not fire.
 
@@ -131,7 +150,9 @@ The timer can be stopped as usual, and then it does not fire.
 >>> timer = QTimer()
 >>> timer.setSingleShot(True)
 >>> fired = []
->>> _ = timer.timeout.connect(lambda: fired.append(1))
+>>> _ = timer.timeout.connect(
+...     lambda: fired.append(1)
+... )
 >>> start_timer(timer, delay=1200)
 >>> timer.isActive(), busy()
 (True, True)
@@ -152,7 +173,8 @@ The timer can be stopped as usual, and then it does not fire.
 def play(animation: QAbstractAnimation) -> None
 ```
 
-Start an animation. With instant motion it holds still at its start until `settle` moves it to its end.
+Start an animation. With instant motion it holds still at its start
+until `settle` moves it to its end.
 
 **Parameters**
 
@@ -168,10 +190,18 @@ Start an animation. With instant motion it holds still at its start until `settl
 >>> animation.setStartValue(0.0)
 >>> animation.setEndValue(1.0)
 >>> play(animation)
->>> animation.state() == QAbstractAnimation.State.Stopped, busy()
+>>> (
+...     animation.state()
+...     == QAbstractAnimation.State.Stopped,
+...     busy(),
+... )
 (False, True)
 >>> settle()
->>> animation.currentValue(), animation.state() == QAbstractAnimation.State.Stopped
+>>> (
+...     animation.currentValue(),
+...     animation.state()
+...     == QAbstractAnimation.State.Stopped,
+... )
 (1.0, True)
 >>> set_instant(False)
 ```
@@ -182,7 +212,8 @@ Start an animation. With instant motion it holds still at its start until `settl
 def busy() -> bool
 ```
 
-Say whether any motion is still to come: a delayed step, an active timer or a running animation.
+Say whether any motion is still to come: a delayed step, an active
+timer or a running animation.
 
 **Returns**
 
@@ -204,10 +235,13 @@ def settle(
 ) -> None
 ```
 
-Let every piece of motion happen: delayed steps run, timers fire and animations reach their end.
+Let every piece of motion happen: delayed steps run, timers fire and
+animations reach their end.
 
-With instant motion they happen at once, in the order they were asked for, and motion they start (feedback that leads to
-the next question, which slides in) happens too. In the app's real time this waits for them instead.
+With instant motion they happen at once, in the order they were
+asked for, and motion they start (feedback that leads to
+the next question, which slides in) happens too. In the app's real
+time this waits for them instead.
 
 **Parameters**
 
@@ -248,7 +282,8 @@ def set_shortcut(
 ) -> None
 ```
 
-Give a button a key that presses it. In the app Qt handles the key; with instant motion it clicks the button at once.
+Give a button a key that presses it. In the app Qt handles the key;
+with instant motion it clicks the button at once.
 
 **Parameters**
 
@@ -265,7 +300,9 @@ Give a button a key that presses it. In the app Qt handles the key; with instant
 'Backspace'
 >>> set_instant(True)
 >>> held = QPushButton("Answer")
->>> set_shortcut(held, key="Return")  # in a test: the key clicks it at once
+>>> set_shortcut(
+...     held, key="Return"
+... )  # in a test: the key clicks it at once
 >>> set_instant(False)
 ```
 {% endraw %}

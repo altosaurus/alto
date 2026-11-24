@@ -1,4 +1,7 @@
-"""The exercise screen: the sound and settings buttons, placing notes on the staff, and what is ignored."""
+"""
+The exercise screen: the sound and settings buttons, placing notes on
+the staff, and what is ignored.
+"""
 
 from __future__ import annotations
 
@@ -100,14 +103,19 @@ def test_the_speaker_button_mutes_and_unmutes(app: QApplication) -> None:
     view = view_of(KeySignatures())
     sounds.enabled = True
     view._show_sound_state()
-    assert "mute)" in view.sound_btn.toolTip() and view.sound_btn.toolTip().startswith("Sound on")
+    assert (
+        "mute)" in view.sound_btn.toolTip()
+        and view.sound_btn.toolTip().startswith("Sound on")
+    )
     view.sound_btn.click()
     assert not sounds.enabled and view.sound_btn.toolTip().startswith("Muted")
     view.sound_btn.click()
     assert sounds.enabled
 
 
-def test_chord_quality_has_buttons_and_next_question_settings(app: QApplication) -> None:
+def test_chord_quality_has_buttons_and_next_question_settings(
+    app: QApplication,
+) -> None:
     """
     Check that chord quality offers its answer-button setting.
 
@@ -117,14 +125,21 @@ def test_chord_quality_has_buttons_and_next_question_settings(app: QApplication)
         The shared Qt application.
     """
     view = view_of(ChordQualities())
-    assert view.settings_panel is not None and view.settings_panel.choice_buttons_row is not None
+    assert (
+        view.settings_panel is not None
+        and view.settings_panel.choice_buttons_row is not None
+    )
     assert view.settings_panel.stack.count() == 3
 
 
 @pytest.mark.parametrize("mode", ["Immediately", "Wait", "After Animation"])
-def test_next_question_paces_interval_feedback(app: QApplication, mode: str) -> None:
+def test_next_question_paces_interval_feedback(
+    app: QApplication,
+    mode: str,
+) -> None:
     """
-    Set the pace from the menu and verify the answer, animation and next question.
+    Set the pace from the menu and verify the answer, animation and next
+    question.
 
     Parameters
     ----------
@@ -141,14 +156,27 @@ def test_next_question_paces_interval_feedback(app: QApplication, mode: str) -> 
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
     page = panel.stack.currentWidget()
     radios = page.findChildren(QRadioButton)
-    assert [radio.text() for radio in radios] == ["Immediately", "Wait", "After Animation"]
+    assert [radio.text() for radio in radios] == [
+        "Immediately",
+        "Wait",
+        "After Animation",
+    ]
     next(radio for radio in radios if radio.text() == mode).click()
-    next(button for button in page.findChildren(QToolButton) if "Back" in button.text()).click()
+    next(
+        button
+        for button in page.findChildren(QToolButton)
+        if "Back" in button.text()
+    ).click()
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
     assert panel.stack.currentIndex() == 0
-    assert asked(view) is before and panel.next_question_row.value.text() == mode
+    assert (
+        asked(view) is before and panel.next_question_row.value.text() == mode
+    )
     assert view_of(IntervalNames()).settings_panel.next_question_mode == mode
-    assert view_of(NoteNames()).settings_panel.next_question_mode == "After Animation"
+    assert (
+        view_of(NoteNames()).settings_panel.next_question_mode
+        == "After Animation"
+    )
     wrong = next(b for b in view.buttons if b.text() != before.answer)
     right = next(b for b in view.buttons if b.text() == before.answer)
     wrong.click()
@@ -159,7 +187,10 @@ def test_next_question_paces_interval_feedback(app: QApplication, mode: str) -> 
         on_step = play.call_args.kwargs["on_step"]
         on_step(0)
         if mode == "Immediately":
-            assert not view.staff.column_colors and CORRECT_ANSWER_COLOR in right.styleSheet()
+            assert (
+                not view.staff.column_colors
+                and CORRECT_ANSWER_COLOR in right.styleSheet()
+            )
         else:
             assert view.staff.column_colors[0].name() == CORRECT_ANSWER_COLOR
             assert not view._advance.isActive()
@@ -169,17 +200,27 @@ def test_next_question_paces_interval_feedback(app: QApplication, mode: str) -> 
         for animation in view._anims:
             animation.setCurrentTime(animation.duration())
         assert view.next_button.isVisible() and not view._advance.isActive()
-        assert asked(view) is before and CORRECT_ANSWER_COLOR in right.styleSheet()
+        assert (
+            asked(view) is before
+            and CORRECT_ANSWER_COLOR in right.styleSheet()
+        )
         view.next_button.click()
     else:
         assert view.next_button.isHidden() and view._advance.isActive()
         motion.settle()  # the next question comes
-    assert asked(view) is not before and view.next_button.isHidden() and not view.answered
+    assert (
+        asked(view) is not before
+        and view.next_button.isHidden()
+        and not view.answered
+    )
 
 
-def test_immediate_melody_continues_across_questions(app: QApplication) -> None:
+def test_immediate_melody_continues_across_questions(
+    app: QApplication,
+) -> None:
     """
-    Sound the second interval note after the next question appears, with no staff highlights.
+    Sound the second interval note after the next question appears, with
+    no staff highlights.
 
     Parameters
     ----------
@@ -192,21 +233,30 @@ def test_immediate_melody_continues_across_questions(app: QApplication) -> None:
     view.show()
     sounds.enabled = True
     question = asked(view)
-    with patch.object(sounds, "_effect", return_value=object()), patch.object(sounds, "_play_column") as play:
+    with (
+        patch.object(sounds, "_effect", return_value=object()),
+        patch.object(sounds, "_play_column") as play,
+    ):
         view.buttons[question.choices.index(question.answer)].click()
         assert play.call_count == 1 and not view.staff.column_colors
         motion.settle()  # the next question comes
         assert asked(view) is not question
         assert QSignalSpy(view._immediate_playback.step).wait(2000)
-        assert [call.args[0] for call in play.call_args_list] == [[n.midi for n in column] for column in question.staff]
+        assert [call.args[0] for call in play.call_args_list] == [
+            [n.midi for n in column] for column in question.staff
+        ]
         assert not view.staff.column_colors and not view._advance.isActive()
         view.hide()
 
 
 @pytest.mark.parametrize("mode", ["Immediately", "Wait"])
-def test_next_question_on_construction_and_staff_clicks(app: QApplication, mode: str) -> None:
+def test_next_question_on_construction_and_staff_clicks(
+    app: QApplication,
+    mode: str,
+) -> None:
     """
-    Apply the selected pace to a construction and a button-free notation answer.
+    Apply the selected pace to a construction and a button-free notation
+    answer.
 
     Parameters
     ----------
@@ -229,7 +279,10 @@ def test_next_question_on_construction_and_staff_clicks(app: QApplication, mode:
         view.next_button.click()
         assert not view.answer_button.styleSheet()
     else:
-        assert not view._anims and CORRECT_ANSWER_COLOR in view.answer_button.styleSheet()
+        assert (
+            not view._anims
+            and CORRECT_ANSWER_COLOR in view.answer_button.styleSheet()
+        )
 
     settings.notation.question_type = "staff"
     store().setValue("nextQuestion/NotationIdentification", mode)
@@ -254,32 +307,49 @@ def test_the_settings_pane_slides_open_and_shut(app: QApplication) -> None:
     assert not view.pane.isVisible() and view.pane.maximumWidth() == 0
     view.gear.setChecked(True)
     QTest.qWait(320)
-    assert view.pane.isVisible() and view.pane.maximumWidth() == view.PANE_WIDTH
+    assert (
+        view.pane.isVisible() and view.pane.maximumWidth() == view.PANE_WIDTH
+    )
     view.gear.setChecked(False)
     QTest.qWait(320)
     assert view.pane.maximumWidth() == 0 and not view.pane.isVisible()
 
 
-def test_only_an_exercise_with_a_reference_has_a_book_button(app: QApplication) -> None:
+def test_only_an_exercise_with_a_reference_has_a_book_button(
+    app: QApplication,
+) -> None:
     """
-    Check that the book button is there for the circle of fifths and not for an exercise with nothing to look up.
+    Check that the book button is there for the circle of fifths and not
+    for an exercise with nothing to look up.
 
     Parameters
     ----------
     app : QApplication
         The shared Qt application.
     """
-    assert view_of(ArpeggioNames()).book_btn is None and view_of(ArpeggioNames()).reference_pane is None
+    assert (
+        view_of(ArpeggioNames()).book_btn is None
+        and view_of(ArpeggioNames()).reference_pane is None
+    )
     view = view_of(CircleOfFifths())
-    assert view.book_btn is not None and view.book_btn.toolTip().startswith("Reference")
+    assert view.book_btn is not None and view.book_btn.toolTip().startswith(
+        "Reference",
+    )
     view.resize(900, 700)
     view.show()
-    assert view.help_btn.geometry().right() < view.book_btn.geometry().left() < view.sound_btn.geometry().left()
+    assert (
+        view.help_btn.geometry().right()
+        < view.book_btn.geometry().left()
+        < view.sound_btn.geometry().left()
+    )
 
 
-def test_the_reference_pane_slides_open_beside_the_settings_and_shuts_them(app: QApplication) -> None:
+def test_the_reference_pane_slides_open_beside_the_settings_and_shuts_them(
+    app: QApplication,
+) -> None:
     """
-    Check that the reference pane slides open and shut, and that it and the settings pane never show together.
+    Check that the reference pane slides open and shut, and that it and
+    the settings pane never show together.
 
     Parameters
     ----------
@@ -305,7 +375,9 @@ def test_the_reference_pane_slides_open_beside_the_settings_and_shuts_them(app: 
     view.gear.setChecked(False)
 
 
-def test_a_change_in_the_settings_asks_a_new_question_straight_away(app: QApplication) -> None:
+def test_a_change_in_the_settings_asks_a_new_question_straight_away(
+    app: QApplication,
+) -> None:
     """
     Check that a change in the settings asks a new question right away.
 
@@ -326,7 +398,8 @@ def test_the_choices_have_number_key_shortcuts_when_there_are_few_enough(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that the choices have number key shortcuts when there are few enough, and that a two-part answer has keys too.
+    Check that the choices have number key shortcuts when there are few
+    enough, and that a two-part answer has keys too.
 
     Parameters
     ----------
@@ -337,16 +410,24 @@ def test_the_choices_have_number_key_shortcuts_when_there_are_few_enough(
     """
     monkeypatch.setattr(settings.key_signatures, "keys", {0, 1})
     view = view_of(KeySignatures())
-    assert [b.toolTip() for b in view.buttons] == [f"Key {i + 1}" for i in range(len(view.buttons))]
+    assert [b.toolTip() for b in view.buttons] == [
+        f"Key {i + 1}" for i in range(len(view.buttons))
+    ]
     arpeggio = view_of(ArpeggioNames())
     q = arpeggio.question
     assert q is not None and q.octaves is not None
-    first = [f"Key {i + 1}" for i in range(len(q.choices))]  # the type is on the number keys
-    second = [f"Key {key}" for key in "ASDFGHJKL"[: len(q.octaves)]]  # and the inversion on the home row
+    first = [
+        f"Key {i + 1}" for i in range(len(q.choices))
+    ]  # the type is on the number keys
+    second = [
+        f"Key {key}" for key in "ASDFGHJKL"[: len(q.octaves)]
+    ]  # and the inversion on the home row
     assert [b.toolTip() for b in arpeggio.buttons] == first + second
 
 
-def test_the_score_starts_empty_and_counts_only_first_answers(app: QApplication) -> None:
+def test_the_score_starts_empty_and_counts_only_first_answers(
+    app: QApplication,
+) -> None:
     """
     Check that the score starts empty and counts only first answers.
 
@@ -362,19 +443,23 @@ def test_the_score_starts_empty_and_counts_only_first_answers(app: QApplication)
     right = next(b for b in view.buttons if b.text() == q.answer)
     wrong.click()
     right.click()
-    assert view.score.text() == "0/1 (0%)   streak 0"  # the miss counted, the later right answer did not
+    assert (
+        view.score.text() == "0/1 (0%)   streak 0"
+    )  # the miss counted, the later right answer did not
     right.click()  # answered already: ignored
     assert (view.correct, view.total) == (0, 1)
     view._advance.stop()
 
 
-# -- placing a note on the staff ------------------------------------------------------------------------------------
+# -- placing a note on the staff
+# ----------------------------------------------------------------------
 
 
 @pytest.fixture
 def construction(app: QApplication) -> ExerciseView:
     """
-    Build a note construction view with accidentals on and no key signature.
+    Build a note construction view with accidentals on and no key
+    signature.
 
     Parameters
     ----------
@@ -391,9 +476,12 @@ def construction(app: QApplication) -> ExerciseView:
     return view_of(NoteConstruction(), seed=4)
 
 
-def test_a_construction_question_shows_the_staff_to_click_and_the_sign_buttons(construction: ExerciseView) -> None:
+def test_a_construction_question_shows_the_staff_to_click_and_the_sign_buttons(
+    construction: ExerciseView,
+) -> None:
     """
-    Check that a construction question shows the staff to click and the sign buttons.
+    Check that a construction question shows the staff to click and the
+    sign buttons.
 
     Parameters
     ----------
@@ -401,30 +489,46 @@ def test_a_construction_question_shows_the_staff_to_click_and_the_sign_buttons(c
         The note construction view or panel under test.
     """
     q = asked(construction)
-    assert q.construct is not None and not construction.staff.isVisibleTo(construction)
-    assert construction.input_staff.isVisibleTo(construction) and construction.accidental_row.isVisibleTo(construction)
+    assert q.construct is not None and not construction.staff.isVisibleTo(
+        construction,
+    )
+    assert construction.input_staff.isVisibleTo(
+        construction,
+    ) and construction.accidental_row.isVisibleTo(construction)
     assert construction.accidental_buttons.keys() == {-1, 0, 1}
 
 
-def test_the_sign_buttons_act_like_a_radio_group_that_can_be_cleared(construction: ExerciseView) -> None:
+def test_the_sign_buttons_act_like_a_radio_group_that_can_be_cleared(
+    construction: ExerciseView,
+) -> None:
     """
-    Check that the sign buttons act like a radio group that can be cleared.
+    Check that the sign buttons act like a radio group that can be
+    cleared.
 
     Parameters
     ----------
     construction : ExerciseView
         The note construction view or panel under test.
     """
-    sharp, flat = construction.accidental_buttons[1], construction.accidental_buttons[-1]
+    sharp, flat = (
+        construction.accidental_buttons[1],
+        construction.accidental_buttons[-1],
+    )
     sharp.click()
     assert sharp.isChecked() and construction.input_staff.accidental == 1
     flat.click()
-    assert flat.isChecked() and not sharp.isChecked() and construction.input_staff.accidental == -1
+    assert (
+        flat.isChecked()
+        and not sharp.isChecked()
+        and construction.input_staff.accidental == -1
+    )
     flat.click()  # the lit one again: no sign
     assert not flat.isChecked() and construction.input_staff.accidental is None
 
 
-def test_right_click_steps_through_the_signs(construction: ExerciseView) -> None:
+def test_right_click_steps_through_the_signs(
+    construction: ExerciseView,
+) -> None:
     """
     Check that right click steps through the signs.
 
@@ -446,11 +550,15 @@ def test_right_click_steps_through_the_signs(construction: ExerciseView) -> None
     construction.question.key = 2
     construction.input_staff.accidental = -1
     construction.input_staff.accidental_cycled.emit()
-    assert construction.input_staff.accidental == 0  # under a key signature there is a natural too
+    assert (
+        construction.input_staff.accidental == 0
+    )  # under a key signature there is a natural too
     construction.input_staff.accidental_cycled.emit()
     assert construction.input_staff.accidental is None
     # noinspection PyUnreachableCode
-    construction.input_staff.accidental = 99  # something outside the cycle starts it again
+    construction.input_staff.accidental = (
+        99  # something outside the cycle starts it again
+    )
     # noinspection PyUnreachableCode
     construction.input_staff.accidental_cycled.emit()
     # noinspection PyUnreachableCode
@@ -475,9 +583,13 @@ def test_right_click_cycles_note_construction_signs(app: QApplication) -> None:
 
 
 @pytest.mark.parametrize("has_sound", [True, False])
-def test_placing_the_right_note_scores_locks_the_staff_and_moves_on(construction: ExerciseView, has_sound: bool) -> None:
+def test_placing_the_right_note_scores_locks_the_staff_and_moves_on(
+    construction: ExerciseView,
+    has_sound: bool,
+) -> None:
     """
-    Check that placing the right note scores locks the staff and moves on.
+    Check that placing the right note scores locks the staff and moves
+    on.
 
     Parameters
     ----------
@@ -493,20 +605,30 @@ def test_placing_the_right_note_scores_locks_the_staff_and_moves_on(construction
     construction.input_staff.caret = q.construct.diatonic
     construction.input_staff.accidental = q.construct.accidental
     construction.input_staff.place_caret()
-    assert construction.answered and (construction.correct, construction.total) == (1, 1)
+    assert construction.answered and (
+        construction.correct,
+        construction.total,
+    ) == (1, 1)
     assert construction.input_staff.locked
     assert construction._advance.isActive() == (not has_sound)
     if has_sound:
         assert construction.input_staff.columns == [[q.construct]]
         assert construction.input_staff.column_colors[0].name() == "#2e7d32"
-    construction._place(q.construct)  # a second click on the same question is ignored
+    construction._place(
+        q.construct,
+    )  # a second click on the same question is ignored
     assert construction.total == 1
     construction._advance.stop()
     construction.next_question()
-    assert construction.question is not first and not construction.input_staff.locked
+    assert (
+        construction.question is not first
+        and not construction.input_staff.locked
+    )
 
 
-def test_a_wrong_note_is_shown_then_cleared_for_another_try(construction: ExerciseView) -> None:
+def test_a_wrong_note_is_shown_then_cleared_for_another_try(
+    construction: ExerciseView,
+) -> None:
     """
     Check that a wrong note is shown then cleared for another try.
 
@@ -519,17 +641,33 @@ def test_a_wrong_note_is_shown_then_cleared_for_another_try(construction: Exerci
     assert q.construct is not None
     wrong = Note(q.construct.octave, letter=(q.construct.letter + 1) % 7)
     construction._place(wrong)
-    assert construction.missed and not construction.answered and construction._busy and construction.total == 1
-    construction._place(q.construct)  # while the miss is showing, clicks are ignored
+    assert (
+        construction.missed
+        and not construction.answered
+        and construction._busy
+        and construction.total == 1
+    )
+    construction._place(
+        q.construct,
+    )  # while the miss is showing, clicks are ignored
     assert not construction.answered
     motion.settle()
-    assert not construction._busy and not construction.input_staff.locked and construction.input_staff.columns == []
+    assert (
+        not construction._busy
+        and not construction.input_staff.locked
+        and construction.input_staff.columns == []
+    )
     construction._place(q.construct)
-    assert construction.answered and (construction.correct, construction.total) == (0, 1)  # still a miss overall
+    assert construction.answered and (
+        construction.correct,
+        construction.total,
+    ) == (0, 1)  # still a miss overall
     construction._advance.stop()
 
 
-def test_a_new_question_cancels_the_clearing_of_the_old_one(construction: ExerciseView) -> None:
+def test_a_new_question_cancels_the_clearing_of_the_old_one(
+    construction: ExerciseView,
+) -> None:
     """
     Check that a new question cancels the clearing of the old one.
 
@@ -540,16 +678,23 @@ def test_a_new_question_cancels_the_clearing_of_the_old_one(construction: Exerci
     """
     q = asked(construction)
     # noinspection PyUnresolvedReferences
-    construction._place(Note(q.construct.octave, letter=(q.construct.letter + 2) % 7))
+    construction._place(
+        Note(q.construct.octave, letter=(q.construct.letter + 2) % 7),
+    )
     construction.next_question()  # before the 900 ms are up
     assert not construction._busy
-    QTest.qWait(1000)  # the old timer fires and must leave the new question alone
+    QTest.qWait(
+        1000,
+    )  # the old timer fires and must leave the new question alone
     assert not construction.input_staff.locked and not construction._busy
 
 
-def test_clicks_on_a_question_that_is_not_construction_are_ignored(app: QApplication) -> None:
+def test_clicks_on_a_question_that_is_not_construction_are_ignored(
+    app: QApplication,
+) -> None:
     """
-    Check that clicks on a question that is not construction are ignored.
+    Check that clicks on a question that is not construction are
+    ignored.
 
     Parameters
     ----------
@@ -561,12 +706,16 @@ def test_clicks_on_a_question_that_is_not_construction_are_ignored(app: QApplica
     assert view.total == 0
 
 
-# -- two-part answers: what is ignored ------------------------------------------------------------------------------
+# -- two-part answers: what is ignored
+# ----------------------------------------------------------------------
 
 
-def test_choices_are_ignored_once_the_question_is_answered_or_while_a_miss_shows(app: QApplication) -> None:
+def test_choices_ignored_once_question_answered_or_while_miss(
+    app: QApplication,
+) -> None:
     """
-    Check that choices are ignored once the question is answered or while a miss shows.
+    Check that choices are ignored once the question is answered or
+    while a miss shows.
 
     Parameters
     ----------
@@ -582,7 +731,10 @@ def test_choices_are_ignored_once_the_question_is_answered_or_while_a_miss_shows
     names[inversion].click()  # a wrong pair: a miss is showing
     assert view._busy
     names[kind].click()
-    assert view._pending.get("name") is not None and view._pending["name"][0] == wrong  # ignored while busy
+    assert (
+        view._pending.get("name") is not None
+        and view._pending["name"][0] == wrong
+    )  # ignored while busy
     motion.settle()
     names[kind].click()
     names[inversion].click()
@@ -593,7 +745,9 @@ def test_choices_are_ignored_once_the_question_is_answered_or_while_a_miss_shows
     view._advance.stop()
 
 
-def test_choosing_a_different_type_unlights_the_one_before(app: QApplication) -> None:
+def test_choosing_a_different_type_unlights_the_one_before(
+    app: QApplication,
+) -> None:
     """
     Check that choosing a different type unlights the one before.
 
@@ -611,11 +765,15 @@ def test_choosing_a_different_type_unlights_the_one_before(app: QApplication) ->
     view._advance.stop()
 
 
-# -- feedback and the less common orderings -------------------------------------------------------------------------
+# -- feedback and the less common orderings
+# ----------------------------------------------------------------------
 
 
 @pytest.mark.parametrize("keyboard", [False, True], ids=["mouse", "space"])
-def test_wrong_answer_does_not_focus_another_button(app: QApplication, keyboard: bool) -> None:
+def test_wrong_answer_does_not_focus_another_button(
+    app: QApplication,
+    keyboard: bool,
+) -> None:
     """
     Let the learner choose the next answer after a miss.
 
@@ -624,7 +782,8 @@ def test_wrong_answer_does_not_focus_another_button(app: QApplication, keyboard:
     app : QApplication
         The shared Qt application.
     keyboard : bool
-        Activate the focused answer with Space or click it with the mouse.
+        Activate the focused answer with Space or click it with the
+        mouse.
     """
     view = view_of(IntervalNames())
     view.show()
@@ -647,7 +806,9 @@ def test_wrong_answer_does_not_focus_another_button(app: QApplication, keyboard:
     view.close()
 
 
-def test_a_right_answer_fades_the_staff_notes_to_green(app: QApplication) -> None:
+def test_a_right_answer_fades_the_staff_notes_to_green(
+    app: QApplication,
+) -> None:
     """
     Check that a right answer fades the staff notes to green.
 
@@ -668,9 +829,13 @@ def test_a_right_answer_fades_the_staff_notes_to_green(app: QApplication) -> Non
 
 
 @pytest.mark.parametrize("exercise", [ArpeggioNames, ChordQualities])
-def test_staff_feedback_follows_the_played_notes(app: QApplication, exercise: type[Exercise]) -> None:
+def test_staff_feedback_follows_the_played_notes(
+    app: QApplication,
+    exercise: type[Exercise],
+) -> None:
     """
-    Highlight only the sounding column of an arpeggio or chord, including after a delayed start.
+    Highlight only the sounding column of an arpeggio or chord,
+    including after a delayed start.
 
     Parameters
     ----------
@@ -683,12 +848,17 @@ def test_staff_feedback_follows_the_played_notes(app: QApplication, exercise: ty
     q = asked(view)
     with patch.object(sounds, "_play_sequence") as play:
         view.submit(q.answer, button=None)
-        assert [midis for midis, _ in play.call_args.kwargs["steps"]] == [[n.midi for n in col] for col in q.staff]
+        assert [midis for midis, _ in play.call_args.kwargs["steps"]] == [
+            [n.midi for n in col] for col in q.staff
+        ]
         on_step = play.call_args.kwargs["on_step"]
         assert not view.staff.column_colors and view.staff.note_color is None
         for index in range(len(q.staff)):
             on_step(index)
-            assert list(view.staff.column_colors) == [index] and view.staff.column_colors[index].name() == "#2e7d32"
+            assert (
+                list(view.staff.column_colors) == [index]
+                and view.staff.column_colors[index].name() == "#2e7d32"
+            )
             assert not view._advance.isActive()
         on_step(None)
         assert not view.staff.column_colors and view._advance.isActive()
@@ -697,7 +867,8 @@ def test_staff_feedback_follows_the_played_notes(app: QApplication, exercise: ty
 
 def test_a_right_answer_lights_the_sounding_key(app: QApplication) -> None:
     """
-    Highlight the identified key between its playback onset and completion.
+    Highlight the identified key between its playback onset and
+    completion.
 
     Parameters
     ----------
@@ -714,16 +885,26 @@ def test_a_right_answer_lights_the_sounding_key(app: QApplication) -> None:
         on_step = play.call_args.kwargs["on_step"]
         assert view.keyboard.highlight_color == original
         on_step(0)
-        assert view.keyboard.highlight == q.keyboard.midi and view.keyboard.highlight_color.name() == "#2e7d32"
+        assert (
+            view.keyboard.highlight == q.keyboard.midi
+            and view.keyboard.highlight_color.name() == "#2e7d32"
+        )
         on_step(None)
-        assert view.keyboard.highlight_color == original and view._advance.isActive()
+        assert (
+            view.keyboard.highlight_color == original
+            and view._advance.isActive()
+        )
     view.close()
 
 
 @pytest.mark.parametrize("mode", ["Immediately", "After Animation"])
-def test_correct_cue_without_playable_notes(app: QApplication, mode: str) -> None:
+def test_correct_cue_without_playable_notes(
+    app: QApplication,
+    mode: str,
+) -> None:
     """
-    Keep the ordinary correct-answer cue when a sound-enabled question has no pitches.
+    Keep the ordinary correct-answer cue when a sound-enabled question
+    has no pitches.
 
     Parameters
     ----------
@@ -742,9 +923,12 @@ def test_correct_cue_without_playable_notes(app: QApplication, mode: str) -> Non
     view.close()
 
 
-def test_a_second_submit_after_the_question_is_answered_is_ignored(app: QApplication) -> None:
+def test_a_second_submit_after_the_question_is_answered_is_ignored(
+    app: QApplication,
+) -> None:
     """
-    Check that a second submit after the question is answered is ignored.
+    Check that a second submit after the question is answered is
+    ignored.
 
     Parameters
     ----------
@@ -755,14 +939,20 @@ def test_a_second_submit_after_the_question_is_answered_is_ignored(app: QApplica
     q = asked(view)
     right = next(b for b in view.buttons if b.text() == q.answer)
     right.click()
-    view.submit(q.answer, button=right)  # the button is disabled and the question answered
+    view.submit(
+        q.answer,
+        button=right,
+    )  # the button is disabled and the question answered
     assert (view.correct, view.total) == (1, 1)
     view._advance.stop()
 
 
-def test_a_wrong_pair_clears_itself_unless_a_new_question_has_come(app: QApplication) -> None:
+def test_a_wrong_pair_clears_itself_unless_a_new_question_has_come(
+    app: QApplication,
+) -> None:
     """
-    Check that a wrong pair clears itself unless a new question has come.
+    Check that a wrong pair clears itself unless a new question has
+    come.
 
     Parameters
     ----------
@@ -783,10 +973,13 @@ def test_a_wrong_pair_clears_itself_unless_a_new_question_has_come(app: QApplica
     view._advance.stop()
 
 
-# -- the music stays a readable size in a wide window -----------------------------------------------------------------
+# -- the music stays a readable size in a wide window
+# -----------------------------------------------------------------
 
 
-def test_in_a_wide_window_the_staff_is_capped_and_centered(app: QApplication) -> None:
+def test_in_a_wide_window_the_staff_is_capped_and_centered(
+    app: QApplication,
+) -> None:
     """
     Check that in a wide window the staff is capped and centered.
 
@@ -800,7 +993,9 @@ def test_in_a_wide_window_the_staff_is_capped_and_centered(app: QApplication) ->
     view.show()
     QTest.qWait(50)
     staff = view.staff
-    assert staff.width() == staff.maximumWidth() < 1000  # a single note is not spread over the whole window
+    assert (
+        staff.width() == staff.maximumWidth() < 1000
+    )  # a single note is not spread over the whole window
     parent = staff.parentWidget()
     assert parent is not None
     left, right = staff.x(), parent.width() - staff.x() - staff.width()
@@ -835,7 +1030,8 @@ def test_rythmic_equations_show_and_fill_the_missing_note(
     ties: bool,
 ) -> None:
     """
-    Check the equation arithmetic and fill the visual blank through an answer button.
+    Check the equation arithmetic and fill the visual blank through an
+    answer button.
 
     Parameters
     ----------
@@ -855,10 +1051,17 @@ def test_rythmic_equations_show_and_fill_the_missing_note(
     factors, tie_states = set(), set()
     for _ in range(60):
         question = exercise.generate(rng)
-        left, shown_operator, right, _, result = question.prompt.replace("_", question.answer).split()
+        left, shown_operator, right, _, result = question.prompt.replace(
+            "_",
+            question.answer,
+        ).split()
         assert shown_operator == operator
         a, b, c = (
-            int(term) if term.isdecimal() else sum(settings.RHYTHM_DURATIONS[value] for value in term.split("~"))
+            int(term)
+            if term.isdecimal()
+            else sum(
+                settings.RHYTHM_DURATIONS[value] for value in term.split("~")
+            )
             for term in (left, right, result)
         )
         assert {"+": a + b, "−": a - b, "×": a * b, "÷": a / b}[operator] == c
@@ -877,7 +1080,11 @@ def test_rythmic_equations_show_and_fill_the_missing_note(
     view.show()
     app.processEvents()
     question = view.question
-    assert question is not None and view.rhythm_equation.isVisible() and view.prompt.isHidden()
+    assert (
+        question is not None
+        and view.rhythm_equation.isVisible()
+        and view.prompt.isHidden()
+    )
     assert view.rhythm_terms.count() == 5
     assert all(not button.icon().isNull() for button in view.buttons)
     view.buttons[question.choices.index(question.answer)].click()
@@ -886,9 +1093,13 @@ def test_rythmic_equations_show_and_fill_the_missing_note(
     view.close()
 
 
-def test_rhythm_settings_apply_symbols_and_grouped_notes(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_rhythm_settings_apply_symbols_and_grouped_notes(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Exercise the saved controls and render questions with a tie or a beam.
+    Exercise the saved controls and render questions with a tie or a
+    beam.
 
     Parameters
     ----------
@@ -897,8 +1108,16 @@ def test_rhythm_settings_apply_symbols_and_grouped_notes(app: QApplication, monk
     monkeypatch : pytest.MonkeyPatch
         Keep exercise settings local to this test.
     """
-    monkeypatch.setattr(settings, "rhythm_operators", settings.DEFAULT_RHYTHM_OPERATORS.copy())
-    monkeypatch.setattr(settings, "rhythm_symbols", settings.DEFAULT_RHYTHM_SYMBOLS.copy())
+    monkeypatch.setattr(
+        settings,
+        "rhythm_operators",
+        settings.DEFAULT_RHYTHM_OPERATORS.copy(),
+    )
+    monkeypatch.setattr(
+        settings,
+        "rhythm_symbols",
+        settings.DEFAULT_RHYTHM_SYMBOLS.copy(),
+    )
     monkeypatch.setattr(settings, "rhythm_ties", False)
     monkeypatch.setattr(settings, "rhythm_beams", False)
     exercise = RythmicEquations()
@@ -907,13 +1126,17 @@ def test_rhythm_settings_apply_symbols_and_grouped_notes(app: QApplication, monk
     panel = view.settings_panel
     checklists = panel.findChildren(ChoiceChecklist)
     operators = next(listing for listing in checklists if "+" in listing.boxes)
-    symbols = next(listing for listing in checklists if "dotted-quarter" in listing.boxes)
+    symbols = next(
+        listing for listing in checklists if "dotted-quarter" in listing.boxes
+    )
     operators.boxes["−"].click()
     symbols.boxes["dotted-quarter"].click()
     assert exercise.settings_signature()
     assert store().value("rythmicEquations/operators") == "+"
     assert "dotted-quarter" in str(store().value("rythmicEquations/symbols"))
-    switches = {control.toolTip(): control for control in panel.findChildren(ToggleRow)}
+    switches = {
+        control.toolTip(): control for control in panel.findChildren(ToggleRow)
+    }
     for kind, marker in (("tied", "~"), ("beamed", "|")):
         switch = switches[f"Show two {kind} notes as one duration"]
         switch.click()
@@ -923,11 +1146,18 @@ def test_rhythm_settings_apply_symbols_and_grouped_notes(app: QApplication, monk
             question = view.question
             assert question is not None
             if marker in question.prompt:
-                index = next(index for index, term in enumerate(question.prompt.split()) if marker in term)
+                index = next(
+                    index
+                    for index, term in enumerate(question.prompt.split())
+                    if marker in term
+                )
                 item = view.rhythm_terms.itemAt(index)
                 assert item is not None
                 picture = item.widget()
-                assert isinstance(picture, ValuePictures) and not picture.grab().isNull()
+                assert (
+                    isinstance(picture, ValuePictures)
+                    and not picture.grab().isNull()
+                )
                 break
         else:
             pytest.fail(f"No {kind} question")

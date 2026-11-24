@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.lesson_nav/
 ---
 {% raw %}
-The list on the left in lesson mode: the lessons, and the steps of the one that is open.
+The list on the left in lesson mode: the lessons, and the steps of the
+one that is open.
 
 It is the lessons' counterpart of the exercise list, and looks the same.
 
@@ -28,7 +29,8 @@ def section_item(
 ) -> QListWidgetItem
 ```
 
-Make a section label for a list: small, gray capitals that cannot be selected.
+Make a section label for a list: small, gray capitals that cannot be
+selected.
 
 **Parameters**
 
@@ -42,7 +44,9 @@ Make a section label for a list: small, gray capitals that cannot be selected.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> section_item("Scales & Keys", palette=QPalette()).text()
+>>> section_item(
+...     "Scales & Keys", palette=QPalette()
+... ).text()
 'SCALES & KEYS'
 ```
 
@@ -54,7 +58,8 @@ LessonNav(parent: QWidget | None = None)
 
 Bases: `QListWidget`
 
-A flat list of the lessons by category, with the steps of the open lesson listed under it.
+A flat list of the lessons by category, with the steps of the open
+lesson listed under it.
 
 **Attributes**
 

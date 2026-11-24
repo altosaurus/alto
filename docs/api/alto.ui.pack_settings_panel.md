@@ -7,8 +7,10 @@ permalink: /api/alto.ui.pack_settings_panel/
 {% raw %}
 The settings panels of exercises that plugins add.
 
-A plugin exercise declares the controls it wants (a range, a sound, accidentals ...) and gets a panel built from them, like
-the built-in exercises' panels. Its options are saved under the exercise's name.
+A plugin exercise declares the controls it wants (a range, a sound,
+accidentals ...) and gets a panel built from them, like
+the built-in exercises' panels. Its options are saved under the
+exercise's name.
 
 **Examples**
 
@@ -27,12 +29,15 @@ PackSettingsPanel(
 )
 ```
 
-Bases: `StaffRangePanel`
+Bases: `NoteAnswerSettingsPanel`
 
-The settings a plugin declared for one of its note exercises, drawn from a fixed set of controls.
+The settings a plugin declared for one of its note exercises, drawn
+from a fixed set of controls.
 
-The plugin picks which controls appear: a switch for its own sound, a range selector on one clef, and switches for
-accidentals and for the octave. Edits are live: each changes the options, saves them and emits `changed`.
+The plugin picks which controls appear: a switch for its own sound,
+a range selector on one clef, and switches for
+accidentals and for the octave. Edits are live: each changes the
+options, saves them and emits `changed`.
 
 **Attributes**
 
@@ -49,7 +54,9 @@ accidentals and for the octave. Edits are live: each changes the options, saves 
 >>> class Demo(PackExercise):
 ...     controls = {"octave": True}
 >>> panel = PackSettingsPanel(Demo)
->>> panel.octave_row is not None and not hasattr(panel, "range_row")
+>>> panel.octave_row is not None and not hasattr(
+...     panel, "range_row"
+... )
 True
 >>> _ = settings.pack_exercises.pop("Demo")
 ```
@@ -84,11 +91,13 @@ PackKeyboardSettingsPanel(
 )
 ```
 
-Bases: `ExerciseSettingsPanel`
+Bases: `KeyboardRangePanel`
 
-The settings a plugin declared for a keyboard interval exercise: its sound, the range of keys, and the intervals.
+The settings a plugin declared for a keyboard interval exercise: its
+sound, the range of keys, and the intervals.
 
-The plugin picks which controls appear. Edits are live: each changes the options, saves them and emits `changed`.
+The plugin picks which controls appear. Edits are live: each changes
+the options, saves them and emits `changed`.
 
 **Attributes**
 
@@ -105,13 +114,27 @@ The plugin picks which controls appear. Edits are live: each changes the options
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
-...     controls = {"range": True, "intervals": True, "manuals": True}
+...     controls = {
+...         "range": True,
+...         "intervals": True,
+...         "manuals": True,
+...     }
 ...     spec = {"type": "keyboard-intervals"}
-...     key_span, key_default = (28, 89), (48, 72)
+...     key_span, key_default = (
+...         (28, 89),
+...         (48, 72),
+...     )
 ...     interval_names = ("m2", "M2", "m3")
-...     manual_names = ("Upper manual", "Lower manual")
+...     manual_names = (
+...         "Upper manual",
+...         "Lower manual",
+...     )
 >>> panel = PackKeyboardSettingsPanel(Demo)
->>> panel.stack.count(), panel.low_label.text(), panel.high_label.text()
+>>> (
+...     panel.stack.count(),
+...     panel.low_label.text(),
+...     panel.high_label.text(),
+... )
 (4, 'C3', 'C5')
 >>> _ = settings.pack_exercises.pop("Demo")
 ```
@@ -143,7 +166,8 @@ Build the menu and the pages the plugin offers.
 def flush() -> None
 ```
 
-Save the options and ask a new question now, if an edit is waiting.
+Save the options and ask a new question now, if an edit is
+waiting.
 
 **Examples**
 

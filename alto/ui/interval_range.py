@@ -1,5 +1,6 @@
 """
-A two-handle slider for selecting interval distances without changing the keyboard range.
+A two-handle slider for selecting interval distances without changing
+the keyboard range.
 
 Examples
 --------
@@ -34,7 +35,8 @@ from alto.ui.zoom import px
 
 class IntervalRangeSlider(QWidget):
     """
-    A draggable interval range with keyboard controls for either endpoint.
+    A draggable interval range with keyboard controls for either
+    endpoint.
 
     Attributes
     ----------
@@ -79,12 +81,28 @@ class IntervalRangeSlider(QWidget):
         self._dragging = False
         self.setFixedHeight(px(36))
         self.setMinimumWidth(px(120))
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed,
+        )
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setAccessibleName("Interval range")
-        self.setToolTip("Drag either handle. Left and Right adjust it; Down selects the lower handle and Up the upper handle.")
+        self.setToolTip(
+            (
+                "Drag either handle. Left and Right adjust it; Down "
+                "selects the lower handle and Up the upper handle."
+            ),
+        )
 
-    def set_range(self, low: int, *, high: int, maximum: int, minimum: int = 1, active: bool = True) -> None:
+    def set_range(
+        self,
+        low: int,
+        *,
+        high: int,
+        maximum: int,
+        minimum: int = 1,
+        active: bool = True,
+    ) -> None:
         """
         Synchronize the slider without emitting an edit.
 
@@ -113,7 +131,11 @@ class IntervalRangeSlider(QWidget):
         self.low = min(max(minimum, low), self.maximum)
         self.high = min(max(self.low, high), self.maximum)
         self.active = active
-        self.setAccessibleDescription(f"Intervals {self.low} through {self.high}" if active else "No intervals selected")
+        self.setAccessibleDescription(
+            f"Intervals {self.low} through {self.high}"
+            if active
+            else "No intervals selected",
+        )
         self.update()
 
     def move_endpoint(self, which: str, *, delta: int) -> None:
@@ -160,7 +182,10 @@ class IntervalRangeSlider(QWidget):
         fraction = (value - self.minimum) / max(1, self.maximum - self.minimum)
         if self.layoutDirection() == Qt.LayoutDirection.RightToLeft:
             fraction = 1.0 - fraction
-        return self.PADDING + fraction * max(1.0, self.width() - 2 * self.PADDING)
+        return self.PADDING + fraction * max(
+            1.0,
+            self.width() - 2 * self.PADDING,
+        )
 
     def _commit(self, value: int) -> None:
         """
@@ -208,16 +233,41 @@ class IntervalRangeSlider(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         y = self.height() / 2
-        painter.setPen(QPen(self.palette().color(QPalette.ColorRole.Mid), 4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
-        painter.drawLine(QPointF(self.PADDING, y), QPointF(self.width() - self.PADDING, y))
-        color = self.palette().color(QPalette.ColorRole.Highlight if self.active else QPalette.ColorRole.Mid)
-        painter.setPen(QPen(color, 4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+        painter.setPen(
+            QPen(
+                self.palette().color(QPalette.ColorRole.Mid),
+                4,
+                Qt.PenStyle.SolidLine,
+                Qt.PenCapStyle.RoundCap,
+            ),
+        )
+        painter.drawLine(
+            QPointF(self.PADDING, y),
+            QPointF(self.width() - self.PADDING, y),
+        )
+        color = self.palette().color(
+            QPalette.ColorRole.Highlight
+            if self.active
+            else QPalette.ColorRole.Mid,
+        )
+        painter.setPen(
+            QPen(color, 4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap),
+        )
         if self.active:
-            painter.drawLine(QPointF(self._position(self.low), y), QPointF(self._position(self.high), y))
-        endpoints = ("high", "low") if self._endpoint == "low" else ("low", "high")
+            painter.drawLine(
+                QPointF(self._position(self.low), y),
+                QPointF(self._position(self.high), y),
+            )
+        endpoints = (
+            ("high", "low") if self._endpoint == "low" else ("low", "high")
+        )
         for endpoint in endpoints:
             value = self.low if endpoint == "low" else self.high
-            border = self.palette().color(QPalette.ColorRole.Text) if self.hasFocus() and endpoint == self._endpoint else color
+            border = (
+                self.palette().color(QPalette.ColorRole.Text)
+                if self.hasFocus() and endpoint == self._endpoint
+                else color
+            )
             painter.setPen(QPen(border, 2))
             painter.setBrush(self.palette().color(QPalette.ColorRole.Window))
             painter.drawEllipse(QPointF(self._position(value), y), 7, 7)
@@ -268,10 +318,15 @@ class IntervalRangeSlider(QWidget):
         if not self._dragging:
             super().mouseMoveEvent(event)
             return
-        fraction = (event.position().x() - self.PADDING) / max(1.0, self.width() - 2 * self.PADDING)
+        fraction = (event.position().x() - self.PADDING) / max(
+            1.0,
+            self.width() - 2 * self.PADDING,
+        )
         if self.layoutDirection() == Qt.LayoutDirection.RightToLeft:
             fraction = 1.0 - fraction
-        self._commit(self.minimum + round(fraction * (self.maximum - self.minimum)))
+        self._commit(
+            self.minimum + round(fraction * (self.maximum - self.minimum)),
+        )
         event.accept()
 
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
@@ -301,11 +356,15 @@ class IntervalRangeSlider(QWidget):
         Parameters
         ----------
         event : QKeyEvent
-            The keyboard input. Up selects the upper handle and Down the lower handle.
+            The keyboard input. Up selects the upper handle and Down the
+            lower handle.
 
         Examples
         --------
-        >>> IntervalRangeSlider().focusPolicy() == Qt.FocusPolicy.StrongFocus
+        >>> (
+        ...     IntervalRangeSlider().focusPolicy()
+        ...     == Qt.FocusPolicy.StrongFocus
+        ... )
         True
         """
         key = event.key()
@@ -318,7 +377,9 @@ class IntervalRangeSlider(QWidget):
                 delta = -delta
             self.move_endpoint(self._endpoint, delta=delta)
         elif key in (Qt.Key.Key_Home, Qt.Key.Key_End):
-            self._commit(self.minimum if key == Qt.Key.Key_Home else self.maximum)
+            self._commit(
+                self.minimum if key == Qt.Key.Key_Home else self.maximum,
+            )
         else:
             super().keyPressEvent(event)
             return

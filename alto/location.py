@@ -1,12 +1,17 @@
 """
-Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`.
+Where Alto keeps its practice history and its settings, and how to keep
+them somewhere else with `ALTO_HOME`.
 
-Without `ALTO_HOME` they are in the usual places for the system. With it, both are in that folder instead, so a copy of Alto
-that is being worked on can have its own history and settings, apart from the copy that is used for practicing.
+Without `ALTO_HOME` they are in the usual places for the system. With
+it, both are in that folder instead, so a copy of Alto
+that is being worked on can have its own history and settings, apart
+from the copy that is used for practicing.
 
 Examples
 --------
->>> database_path(environ={"ALTO_HOME": "/tmp/alto-dev"}).as_posix()
+>>> database_path(
+...     environ={"ALTO_HOME": "/tmp/alto-dev"}
+... ).as_posix()
 '/tmp/alto-dev/data/alto.db'
 """
 
@@ -33,7 +38,8 @@ def alto_home(*, environ: Mapping[str, str] = os.environ) -> Path | None:
     Returns
     -------
     Path or None
-        The folder, with `~` expanded and made absolute, or None if `ALTO_HOME` is not set or is empty.
+        The folder, with `~` expanded and made absolute, or None if
+        `ALTO_HOME` is not set or is empty.
 
     Examples
     --------
@@ -41,9 +47,17 @@ def alto_home(*, environ: Mapping[str, str] = os.environ) -> Path | None:
     True
     >>> alto_home(environ={"ALTO_HOME": ""}) is None
     True
-    >>> str(alto_home(environ={"ALTO_HOME": "/tmp/alto-dev"}))
+    >>> str(
+    ...     alto_home(
+    ...         environ={
+    ...             "ALTO_HOME": "/tmp/alto-dev"
+    ...         }
+    ...     )
+    ... )
     '/tmp/alto-dev'
-    >>> alto_home(environ={"ALTO_HOME": "~/alto-dev"}) == Path.home() / "alto-dev"
+    >>> alto_home(
+    ...     environ={"ALTO_HOME": "~/alto-dev"}
+    ... ) == Path.home() / "alto-dev"
     True
     """
     named = environ.get(HOME_VARIABLE, "").strip()
@@ -62,12 +76,15 @@ def database_path(*, environ: Mapping[str, str] = os.environ) -> Path:
     Returns
     -------
     Path
-        `data/alto.db` in the `ALTO_HOME` folder if there is one, otherwise `alto.db` in the system's data folder for Alto. The
+        `data/alto.db` in the `ALTO_HOME` folder if there is one,
+        otherwise `alto.db` in the system's data folder for Alto. The
         folder need not exist yet.
 
     Examples
     --------
-    >>> database_path(environ={"ALTO_HOME": "/tmp/alto-dev"}).as_posix()
+    >>> database_path(
+    ...     environ={"ALTO_HOME": "/tmp/alto-dev"}
+    ... ).as_posix()
     '/tmp/alto-dev/data/alto.db'
     >>> database_path(environ={}).name
     'alto.db'
@@ -75,7 +92,14 @@ def database_path(*, environ: Mapping[str, str] = os.environ) -> Path:
     home = alto_home(environ=environ)
     if home is not None:
         return home / "data" / "alto.db"
-    return Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "alto.db"
+    return (
+        Path(
+            QStandardPaths.writableLocation(
+                QStandardPaths.StandardLocation.AppDataLocation,
+            ),
+        )
+        / "alto.db"
+    )
 
 
 def settings_folder(*, environ: Mapping[str, str] = os.environ) -> Path | None:
@@ -90,13 +114,20 @@ def settings_folder(*, environ: Mapping[str, str] = os.environ) -> Path | None:
     Returns
     -------
     Path or None
-        `config` in the `ALTO_HOME` folder, or None if the settings are in the system's usual place.
+        `config` in the `ALTO_HOME` folder, or None if the settings are
+        in the system's usual place.
 
     Examples
     --------
     >>> settings_folder(environ={}) is None
     True
-    >>> str(settings_folder(environ={"ALTO_HOME": "/tmp/alto-dev"}))
+    >>> str(
+    ...     settings_folder(
+    ...         environ={
+    ...             "ALTO_HOME": "/tmp/alto-dev"
+    ...         }
+    ...     )
+    ... )
     '/tmp/alto-dev/config'
     """
     home = alto_home(environ=environ)
@@ -105,7 +136,8 @@ def settings_folder(*, environ: Mapping[str, str] = os.environ) -> Path | None:
 
 def desktop_name(*, environ: Mapping[str, str] = os.environ) -> str:
     """
-    Give the name the desktop uses to match Alto's window to its menu entry, and so to its icon in the dock.
+    Give the name the desktop uses to match Alto's window to its menu
+    entry, and so to its icon in the dock.
 
     Parameters
     ----------
@@ -115,11 +147,19 @@ def desktop_name(*, environ: Mapping[str, str] = os.environ) -> str:
     Returns
     -------
     str
-        "alto", or "alto-dev" when `ALTO_HOME` keeps a second copy apart, so that the two copies are separate in the dock.
+        "alto", or "alto-dev" when `ALTO_HOME` keeps a second copy
+        apart, so that the two copies are separate in the dock.
 
     Examples
     --------
-    >>> desktop_name(environ={}), desktop_name(environ={"ALTO_HOME": "/tmp/alto-dev"})
+    >>> (
+    ...     desktop_name(environ={}),
+    ...     desktop_name(
+    ...         environ={
+    ...             "ALTO_HOME": "/tmp/alto-dev"
+    ...         }
+    ...     ),
+    ... )
     ('alto', 'alto-dev')
     """
     return "alto" if alto_home(environ=environ) is None else "alto-dev"

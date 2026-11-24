@@ -1,5 +1,6 @@
 """
-Draw scale-degree carets above their digits without relying on font-specific combining accents.
+Draw scale-degree carets above their digits without relying on
+font-specific combining accents.
 
 Examples
 --------
@@ -48,7 +49,8 @@ def draw_degree_text(
     alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter,
 ) -> None:
     """
-    Draw text with each combining circumflex centered above its preceding digit.
+    Draw text with each combining circumflex centered above its
+    preceding digit.
 
     Parameters
     ----------
@@ -57,7 +59,8 @@ def draw_degree_text(
     rect : QRectF
         The rectangle in which to align the text. Keyword-only.
     text : str
-        The text, retaining combining circumflexes for copying and accessibility. Keyword-only.
+        The text, retaining combining circumflexes for copying and
+        accessibility. Keyword-only.
     alignment : Qt.AlignmentFlag, default AlignCenter
         Horizontal and vertical alignment. Keyword-only.
 
@@ -66,7 +69,11 @@ def draw_degree_text(
     >>> from PySide6.QtGui import QPixmap
     >>> pixmap = QPixmap(100, 40)
     >>> painter_ = QPainter(pixmap)
-    >>> draw_degree_text(painter_, rect=QRectF(0, 0, 100, 40), text="3̂")
+    >>> draw_degree_text(
+    ...     painter_,
+    ...     rect=QRectF(0, 0, 100, 40),
+    ...     text="3̂",
+    ... )
     >>> painter_.end()
     True
     """
@@ -120,7 +127,8 @@ def degree_tooltip(text: str) -> str:
     Parameters
     ----------
     text : str
-        The tooltip text. Text without combining carets is returned unchanged.
+        The tooltip text. Text without combining carets is returned
+        unchanged.
 
     Returns
     -------
@@ -131,7 +139,9 @@ def degree_tooltip(text: str) -> str:
     --------
     >>> degree_tooltip("Letters")
     'Letters'
-    >>> "data:image/png;base64," in degree_tooltip("Caret (1̂ 2̂ 3̂)")
+    >>> "data:image/png;base64," in degree_tooltip(
+    ...     "Caret (1̂ 2̂ 3̂)"
+    ... )
     True
     """
     if "̂" not in text:
@@ -140,7 +150,11 @@ def degree_tooltip(text: str) -> str:
     metrics = QFontMetricsF(font)
     width = ceil(metrics.horizontalAdvance(text.replace("̂", ""))) + 8
     height = ceil(metrics.height()) + 8
-    image = QImage(width * 2, height * 2, QImage.Format.Format_ARGB32_Premultiplied)
+    image = QImage(
+        width * 2,
+        height * 2,
+        QImage.Format.Format_ARGB32_Premultiplied,
+    )
     image.setDevicePixelRatio(2)
     image.fill(Qt.GlobalColor.transparent)
     painter = QPainter(image)
@@ -152,12 +166,23 @@ def degree_tooltip(text: str) -> str:
     buffer.open(QIODevice.OpenModeFlag.WriteOnly)
     QImageWriter(buffer, b"PNG").write(image)
     encoded = bytes(buffer.data().toBase64().data()).decode("ascii")
-    return f'<img src="data:image/png;base64,{encoded}" width="{width}" height="{height}" alt="{escape(text, quote=True)}">'
+    return (
+        '<img src="data:image/png;base64,'
+        f"{encoded}"
+        '" width="'
+        f"{width}"
+        '" height="'
+        f"{height}"
+        '" alt="'
+        f"{escape(text, quote=True)}"
+        '">'
+    )
 
 
 class DegreeButton(QPushButton):
     """
-    An answer button that draws scale-degree carets directly above the digits.
+    An answer button that draws scale-degree carets directly above the
+    digits.
 
     Examples
     --------
@@ -167,7 +192,8 @@ class DegreeButton(QPushButton):
 
     def paintEvent(self, event: QPaintEvent) -> None:
         """
-        Keep the native button appearance and position degree accents explicitly.
+        Keep the native button appearance and position degree accents
+        explicitly.
 
         Parameters
         ----------
@@ -186,33 +212,58 @@ class DegreeButton(QPushButton):
         self.initStyleOption(option)
         option.text = ""
         painter = QPainter(self)
-        self.style().drawControl(QStyle.ControlElement.CE_PushButton, option, painter, self)
+        self.style().drawControl(
+            QStyle.ControlElement.CE_PushButton,
+            option,
+            painter,
+            self,
+        )
         painter.setPen(self.palette().color(QPalette.ColorRole.ButtonText))
-        rect = self.style().subElementRect(QStyle.SubElement.SE_PushButtonContents, option, self)
+        rect = self.style().subElementRect(
+            QStyle.SubElement.SE_PushButtonContents,
+            option,
+            self,
+        )
         draw_degree_text(painter, rect=QRectF(rect), text=self.text())
 
 
 class DegreeCheckBox(QCheckBox):
-    """Draw the scale degree caret centered above the checkbox label's digit."""
+    """
+    Draw the scale degree caret centered above the checkbox label's
+    digit.
+    """
 
     def paintEvent(self, event: QPaintEvent) -> None:
-        """Paint the native checkbox and use the shared scale degree renderer for its label."""
+        """
+        Paint the native checkbox and use the shared scale degree
+        renderer for its label.
+        """
         if "̂" not in self.text():
             super().paintEvent(event)
             return
         option = QStyleOptionButton()
         self.initStyleOption(option)
         style = self.style()
-        rect = style.subElementRect(QStyle.SubElement.SE_CheckBoxContents, option, self)
+        rect = style.subElementRect(
+            QStyle.SubElement.SE_CheckBoxContents,
+            option,
+            self,
+        )
         option.text = ""
         painter = QPainter(self)
-        style.drawControl(QStyle.ControlElement.CE_CheckBox, option, painter, self)
+        style.drawControl(
+            QStyle.ControlElement.CE_CheckBox,
+            option,
+            painter,
+            self,
+        )
         painter.setPen(self.palette().color(QPalette.ColorRole.WindowText))
         draw_degree_text(
             painter,
             rect=QRectF(rect),
             text=self.text(),
-            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+            alignment=Qt.AlignmentFlag.AlignLeft
+            | Qt.AlignmentFlag.AlignVCenter,
         )
 
 
@@ -245,4 +296,9 @@ class DegreeLabel(QLabel):
             return
         painter = QPainter(self)
         painter.setPen(self.palette().color(QPalette.ColorRole.WindowText))
-        draw_degree_text(painter, rect=QRectF(self.contentsRect()), text=self.text(), alignment=self.alignment())
+        draw_degree_text(
+            painter,
+            rect=QRectF(self.contentsRect()),
+            text=self.text(),
+            alignment=self.alignment(),
+        )

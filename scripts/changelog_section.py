@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 """
-Print one version's section of CHANGELOG.md, to be used as the notes of a GitHub release.
+Print one version's section of CHANGELOG.md, to be used as the notes of
+a GitHub release.
 
-    python scripts/changelog_section.py 0.0.0         # the notes of version 0.0.0 (a leading "v", as in a tag, is fine)
-    python scripts/changelog_section.py Unreleased    # what is waiting for the next release
+    python scripts/changelog_section.py 0.0.0         # the notes of
+    version 0.0.0 (a leading "v", as in a tag, is fine)
+    python scripts/changelog_section.py Unreleased    # what is waiting
+    for the next release
 
-It prints the notes without their heading and exits with 0. If there is no such section, or it is empty, it prints nothing to
-standard output, says why on standard error and exits with 1, so a release cannot go out with no notes.
+It prints the notes without their heading and exits with 0. If there is
+no such section, or it is empty, it prints nothing to
+standard output, says why on standard error and exits with 1, so a
+release cannot go out with no notes.
 """
 
 from __future__ import annotations
@@ -29,7 +34,8 @@ def section(
     r"""
     Cut one version's notes out of a changelog.
 
-    A section starts at its `## [version]` heading and ends at the next `## [` heading or at the link definitions that close the
+    A section starts at its `## [version]` heading and ends at the next
+    `## [` heading or at the link definitions that close the
     file. The heading itself is not part of it.
 
     Parameters
@@ -42,11 +48,15 @@ def section(
     Returns
     -------
     str or None
-        The notes, without the blank lines around them; empty if the section has nothing in it; None if there is no such section.
+        The notes, without the blank lines around them; empty if the
+        section has nothing in it; None if there is no such section.
 
     Examples
     --------
-    >>> log = "# Changelog\n\n## [Unreleased]\n\n## [0.1.0] - 2026-12-01\n\nNotes.\n\n- One.\n\n[0.1.0]: https://example.org\n"
+    >>> log = (
+    ...     "# Changelog\n\n## [Unreleased]\n\n## [0.1.0] - 2026-12-01"
+    ...     "\n\nNotes.\n\n- One.\n\n[0.1.0]: https://example.org\n"
+    ... )
     >>> section(log, version="0.1.0")
     'Notes.\n\n- One.'
     >>> section(log, version="Unreleased")
@@ -74,34 +84,55 @@ def main(argv: list[str] | None = None) -> int:
     Parameters
     ----------
     argv : list of str or None, default None
-        The arguments after the program's name; those the program was started with if None.
+        The arguments after the program's name; those the program was
+        started with if None.
 
     Returns
     -------
     int
-        0 if the notes were printed, 1 if there is no such section or it is empty.
+        0 if the notes were printed, 1 if there is no such section or it
+        is empty.
 
     Examples
     --------
     >>> main(["--file", "/no/such/file", "0.0.0"])
     1
     """
-    parser = argparse.ArgumentParser(description="Print one version's section of the changelog.")
-    parser.add_argument("version", help='a version such as 0.0.0 or v0.0.0, or "Unreleased"')
-    parser.add_argument("--file", type=Path, default=CHANGELOG, help="the changelog to read (default: CHANGELOG.md)")
+    parser = argparse.ArgumentParser(
+        description="Print one version's section of the changelog.",
+    )
+    parser.add_argument(
+        "version",
+        help='a version such as 0.0.0 or v0.0.0, or "Unreleased"',
+    )
+    parser.add_argument(
+        "--file",
+        type=Path,
+        default=CHANGELOG,
+        help="the changelog to read (default: CHANGELOG.md)",
+    )
     arguments = parser.parse_args(argv)
     try:
         text = arguments.file.read_text(encoding="utf-8")
     except OSError as error:
-        print(f"Could not read {arguments.file}: {error.strerror or error}", file=sys.stderr)
+        print(
+            f"Could not read {arguments.file}: {error.strerror or error}",
+            file=sys.stderr,
+        )
         return 1
     version = arguments.version.removeprefix("v")
     notes = section(text, version=version)
     if notes is None:
-        print(f"{arguments.file} has no section for {version}.", file=sys.stderr)
+        print(
+            f"{arguments.file} has no section for {version}.",
+            file=sys.stderr,
+        )
         return 1
     if not notes:
-        print(f"The section for {version} in {arguments.file} is empty.", file=sys.stderr)
+        print(
+            f"The section for {version} in {arguments.file} is empty.",
+            file=sys.stderr,
+        )
         return 1
     print(notes)
     return 0

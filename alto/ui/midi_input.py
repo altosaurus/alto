@@ -9,11 +9,16 @@ from PySide6.QtCore import QProcess, Signal
 from PySide6.QtWidgets import QMenu, QToolButton
 
 _PORT = re.compile(r"\s*(\d+:\d+)\s+(.+)")
-_NOTE_ON = re.compile(rb"\s*\d+:\d+\s+Note on\s+\d+, note (\d+), velocity (\d+)\s*")
+_NOTE_ON = re.compile(
+    rb"\s*\d+:\d+\s+Note on\s+\d+, note (\d+), velocity (\d+)\s*",
+)
 
 
 class MidiInput(QToolButton):
-    """Select one ALSA sequencer source and forward its key presses on the Qt event loop."""
+    """
+    Select one ALSA sequencer source and forward its key presses on the
+    Qt event loop.
+    """
 
     note_pressed = Signal(int)
 
@@ -36,7 +41,10 @@ class MidiInput(QToolButton):
         self._process.finished.connect(self._ended)
 
     def _refresh(self) -> None:
-        """List current sources each time the menu opens so newly connected keyboards appear."""
+        """
+        List current sources each time the menu opens so newly connected
+        keyboards appear.
+        """
         menu = self._sources
         menu.clear()
         off = menu.addAction("Off")
@@ -46,9 +54,16 @@ class MidiInput(QToolButton):
         if self._message:
             menu.addAction(self._message).setEnabled(False)
         try:
-            result = subprocess.run(["aseqdump", "-l"], capture_output=True, timeout=1, check=True)
+            result = subprocess.run(
+                ["aseqdump", "-l"],
+                capture_output=True,
+                timeout=1,
+                check=True,
+            )
         except FileNotFoundError:
-            menu.addAction("Install alsa-utils to enable MIDI").setEnabled(False)
+            menu.addAction("Install alsa-utils to enable MIDI").setEnabled(
+                False,
+            )
             return
         except (OSError, subprocess.SubprocessError):
             menu.addAction("Could not list ALSA MIDI inputs").setEnabled(False)
@@ -56,13 +71,17 @@ class MidiInput(QToolButton):
         found = False
         for line in result.stdout.decode(errors="replace").splitlines():
             match = _PORT.fullmatch(line)
-            if match is None or match[1].startswith("0:"):  # ALSA timer and announcement ports
+            if match is None or match[1].startswith(
+                "0:",
+            ):  # ALSA timer and announcement ports
                 continue
             port, name = match.groups()
             action = menu.addAction(f"{' '.join(name.split())} ({port})")
             action.setCheckable(True)
             action.setChecked(port == self._port)
-            action.triggered.connect(lambda checked=False, address=port: self._listen(address))
+            action.triggered.connect(
+                lambda checked=False, address=port: self._listen(address),
+            )
             found = True
         if not found:
             menu.addAction("No MIDI inputs found").setEnabled(False)
@@ -83,12 +102,17 @@ class MidiInput(QToolButton):
         self._process.start("aseqdump", ["-p", port])
 
     def _read(self) -> None:
-        """Deliver complete note-on messages and handle removal of the selected source."""
+        """
+        Deliver complete note-on messages and handle removal of the
+        selected source.
+        """
         while self._port and self._process.canReadLine():
             line = self._process.readLine().data()
             if b"Port unsubscribed" in line:
                 self.disconnect_port()
-                self._message = "Keyboard disconnected. Choose an input to reconnect."
+                self._message = (
+                    "Keyboard disconnected. Choose an input to reconnect."
+                )
                 self.setToolTip(self._message)
                 return
             match = _NOTE_ON.fullmatch(line)
@@ -96,15 +120,23 @@ class MidiInput(QToolButton):
                 self.note_pressed.emit(int(match[1]))
 
     def _ended(self) -> None:
-        """Show an interrupted connection on the button and allow another selection."""
+        """
+        Show an interrupted connection on the button and allow another
+        selection.
+        """
         if self._port:
             self._port = ""
-            self._message = "MIDI input unavailable. Choose an input to reconnect."
+            self._message = (
+                "MIDI input unavailable. Choose an input to reconnect."
+            )
             self.setText("MIDI")
             self.setToolTip(self._message)
 
     def disconnect_port(self) -> None:
-        """Release the input when the learner turns it off or leaves the exercise."""
+        """
+        Release the input when the learner turns it off or leaves the
+        exercise.
+        """
         self._port = ""
         self._message = ""
         self.setText("MIDI")

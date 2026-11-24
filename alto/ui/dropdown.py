@@ -30,7 +30,8 @@ from alto.ui.style import RADIUS
 
 class FieldComboBox(QComboBox):
     """
-    A shared dropdown whose field and popup both use Alto's rounded styling.
+    A shared dropdown whose field and popup both use Alto's rounded
+    styling.
 
     Examples
     --------
@@ -60,7 +61,8 @@ class FieldComboBox(QComboBox):
 
     def showPopup(self) -> None:
         """
-        Open the dropdown with a rounded outer window, including its native container.
+        Open the dropdown with a rounded outer window, including its
+        native container.
 
         Examples
         --------
@@ -77,12 +79,14 @@ class FieldComboBox(QComboBox):
 
 def style_combo_popup(combo: QComboBox) -> None:
     """
-    Apply the shared field and popup styling to a dropdown, including one created by Qt.
+    Apply the shared field and popup styling to a dropdown, including
+    one created by Qt.
 
     Parameters
     ----------
     combo : QComboBox
-        Field whose item view and outer popup should follow the application theme.
+        Field whose item view and outer popup should follow the
+        application theme.
     """
     if not combo.property("field"):
         combo.setProperty("field", True)
@@ -100,7 +104,9 @@ def style_combo_popup(combo: QComboBox) -> None:
 
 
 class _PopupCorners(QObject):
-    """Keep the outer dropdown window clipped when Qt opens or resizes it."""
+    """
+    Keep the outer dropdown window clipped when Qt opens or resizes it.
+    """
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: PLR0917 (Qt passes both arguments positionally)
         """
@@ -111,7 +117,10 @@ class _PopupCorners(QObject):
         bool
             Whether the superclass consumes the event.
         """
-        if isinstance(watched, QWidget) and event.type() in (QEvent.Type.Show, QEvent.Type.Resize):
+        if isinstance(watched, QWidget) and event.type() in (
+            QEvent.Type.Show,
+            QEvent.Type.Resize,
+        ):
 
             def round_corners() -> None:
                 """Clip the popup at its current size."""

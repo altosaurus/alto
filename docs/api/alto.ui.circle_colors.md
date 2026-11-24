@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.circle_colors/
 ---
 {% raw %}
-The pages of the circle of fifths settings that choose its colors: a grid of schemes to pick from, and an editor to make one.
+The pages of the circle of fifths settings that choose its colors: a
+grid of schemes to pick from, and an editor to make one.
 
 **Examples**
 
@@ -21,7 +22,8 @@ The pages of the circle of fifths settings that choose its colors: a grid of sch
 def blank(key: str) -> CustomRecord
 ```
 
-Make the scheme a new one starts as: colors by key signature, from cyan through blue to indigo, on dark wedges.
+Make the scheme a new one starts as: colors by key signature, from
+cyan through blue to indigo, on dark wedges.
 
 **Parameters**
 
@@ -34,7 +36,10 @@ Make the scheme a new one starts as: colors by key signature, from cyan through 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> blank("custom-3")["id"], blank("custom-3")["mode"]
+>>> (
+...     blank("custom-3")["id"],
+...     blank("custom-3")["mode"],
+... )
 ('custom-3', 'signature')
 ```
 
@@ -51,7 +56,8 @@ SchemeThumb(
 
 Bases: `QPushButton`
 
-A small picture of the circle in a color scheme, to click to choose the scheme.
+A small picture of the circle in a color scheme, to click to choose
+the scheme.
 
 **Attributes**
 
@@ -63,7 +69,8 @@ A small picture of the circle in a color scheme, to click to choose the scheme.
 >>> from alto.circle_schemes import preset
 >>> thumb = SchemeThumb(preset("paper"))
 >>> thumb.isCheckable(), thumb.toolTip()
-(True, 'Pastel wedges of every hue with dark names, which deepen when lit.')
+(True, 'Pastel wedges of every hue with dark names, which deepen
+when lit.')
 ```
 
 **Constructor**
@@ -80,7 +87,9 @@ Build the picture.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
->>> SchemeThumb(preset("paper"), size=80).width()
+>>> SchemeThumb(
+...     preset("paper"), size=80
+... ).width()
 80
 ```
 
@@ -100,7 +109,9 @@ Return the size it asks for.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
->>> SchemeThumb(preset("paper"), size=90).sizeHint().width()
+>>> SchemeThumb(
+...     preset("paper"), size=90
+... ).sizeHint().width()
 90
 ```
 
@@ -110,7 +121,8 @@ Return the size it asks for.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the circle, with one cell asked and its relative lit, and a ring around it when it is the chosen scheme.
+Draw the circle, with one cell asked and its relative lit, and a
+ring around it when it is the chosen scheme.
 
 **Parameters**
 
@@ -120,7 +132,9 @@ Draw the circle, with one cell asked and its relative lit, and a ring around it 
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
->>> SchemeThumb(preset("midnight")).grab().isNull()
+>>> SchemeThumb(
+...     preset("midnight")
+... ).grab().isNull()
 False
 ```
 
@@ -132,7 +146,8 @@ SchemePage(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-The page that lists the color schemes: the presets, the user's own, and a button to make another.
+The page that lists the color schemes: the presets, the user's own,
+and a button to make another.
 
 **Attributes**
 
@@ -146,7 +161,10 @@ The page that lists the color schemes: the presets, the user's own, and a button
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = SchemePage()
 >>> page.load(current="midnight", customs=[])
->>> page.thumbs["midnight"].isChecked(), len(page.thumbs)
+>>> (
+...     page.thumbs["midnight"].isChecked(),
+...     len(page.thumbs),
+... )
 (True, 14)
 ```
 
@@ -175,7 +193,8 @@ def load(
 ) -> None
 ```
 
-Fill the page: a picture and a name for each scheme, with the current one marked.
+Fill the page: a picture and a name for each scheme, with the
+current one marked.
 
 **Parameters**
 
@@ -187,9 +206,19 @@ Fill the page: a picture and a name for each scheme, with the current one marked
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = SchemePage()
 >>> from alto.circle_schemes import record_of
->>> mine = record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])
->>> page.load(current="custom-1", customs=[mine])
->>> page.thumbs["custom-1"].isChecked(), page.thumbs["midnight"].isChecked()
+>>> mine = record_of(
+...     "custom-1",
+...     name="Mine",
+...     mode="single",
+...     colors=["#2f6bd0"],
+... )
+>>> page.load(
+...     current="custom-1", customs=[mine]
+... )
+>>> (
+...     page.thumbs["custom-1"].isChecked(),
+...     page.thumbs["midnight"].isChecked(),
+... )
 (True, False)
 ```
 
@@ -201,9 +230,11 @@ SchemeEditor(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-The editor for a color scheme of the user's own: a name, how its colors are made, and the colors.
+The editor for a color scheme of the user's own: a name, how its
+colors are made, and the colors.
 
-The colors are what a cell looks like when lit; the quiet cells are made from them. A picture shows the result as it is
+The colors are what a cell looks like when lit; the quiet cells are
+made from them. A picture shows the result as it is
 edited.
 
 **Attributes**
@@ -222,7 +253,10 @@ edited.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
->>> editor.record()["mode"], editor.record()["id"]
+>>> (
+...     editor.record()["mode"],
+...     editor.record()["id"],
+... )
 ('signature', 'custom-1')
 ```
 
@@ -263,7 +297,10 @@ Start editing a scheme, or a new one.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
->>> editor.name.text(), editor.delete_button.isHidden()
+>>> (
+...     editor.name.text(),
+...     editor.delete_button.isHidden(),
+... )
 ('My colors', True)
 ```
 

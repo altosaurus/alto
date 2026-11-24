@@ -1,14 +1,22 @@
 """
-Animations and feedback delays, run in one place so that tests decide when they happen.
+Animations and feedback delays, run in one place so that tests decide
+when they happen.
 
-The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
-through this module: `play` starts an animation, `later` runs a step after a delay and `start_timer` starts a timer that
-does. In the app they take their real time. A button is given its key with `set_shortcut`.
+The interface moves: pages slide, feedback stays on screen for a moment
+and the next question follows. Each of those goes
+through this module: `play` starts an animation, `later` runs a step
+after a delay and `start_timer` starts a timer that
+does. In the app they take their real time. A button is given its key
+with `set_shortcut`.
 
-Tests switch to instant motion with `set_instant`. Then nothing moves on by itself: animations hold still and delayed steps
-and timers wait in a queue, however long the test takes, until it calls `settle`. That runs everything waiting, in the order
-it was asked for, at once. So a test can look at the state just after an action (the feedback showing, a page about to
-slide), and the motion happens only when the test says so, never during some other wait. A button's key clicks it at once,
+Tests switch to instant motion with `set_instant`. Then nothing moves on
+by itself: animations hold still and delayed steps
+and timers wait in a queue, however long the test takes, until it calls
+`settle`. That runs everything waiting, in the order
+it was asked for, at once. So a test can look at the state just after an
+action (the feedback showing, a page about to
+slide), and the motion happens only when the test says so, never during
+some other wait. A button's key clicks it at once,
 since its pressed look is all there is to see in the meantime.
 
 Examples
@@ -16,7 +24,11 @@ Examples
 >>> set_instant(True)
 >>> owner = QObject()
 >>> done = []
->>> later(900, owner=owner, step=lambda: done.append("cleared"))
+>>> later(
+...     900,
+...     owner=owner,
+...     step=lambda: done.append("cleared"),
+... )
 >>> QCoreApplication.processEvents()  # nothing happens by itself
 >>> done, busy()
 ([], True)
@@ -51,12 +63,16 @@ _instant = False
 
 class _Pending:
     """
-    Motion that has been asked for and has not happened yet: a delayed step, a timer or an animation.
+    Motion that has been asked for and has not happened yet: a delayed
+    step, a timer or an animation.
 
     Examples
     --------
     >>> done = []
-    >>> pending = _Pending(alive=lambda: not done, run=lambda: done.append(1))
+    >>> pending = _Pending(
+    ...     alive=lambda: not done,
+    ...     run=lambda: done.append(1),
+    ... )
     >>> pending.waiting()
     True
     >>> pending.run()
@@ -76,7 +92,8 @@ class _Pending:
         Parameters
         ----------
         alive : callable
-            Says whether the motion is still to come. It is not if it has happened, or was stopped, or what it belonged to
+            Says whether the motion is still to come. It is not if it
+            has happened, or was stopped, or what it belonged to
             was deleted. Keyword-only.
         run : callable
             Makes it happen at once. Keyword-only.
@@ -97,11 +114,14 @@ class _Pending:
         Returns
         -------
         bool
-            True if it has not happened and has not been stopped or deleted.
+            True if it has not happened and has not been stopped or
+            deleted.
 
         Examples
         --------
-        >>> _Pending(alive=lambda: False, run=print).waiting()
+        >>> _Pending(
+        ...     alive=lambda: False, run=print
+        ... ).waiting()
         False
         """
         return not self.ran and self._alive()
@@ -113,7 +133,10 @@ class _Pending:
         Examples
         --------
         >>> done = []
-        >>> pending = _Pending(alive=lambda: True, run=lambda: done.append(1))
+        >>> pending = _Pending(
+        ...     alive=lambda: True,
+        ...     run=lambda: done.append(1),
+        ... )
         >>> pending.run()
         >>> pending.run()
         >>> done
@@ -124,12 +147,17 @@ class _Pending:
             self._run()
 
 
-_queue: list[_Pending] = []  # every piece of motion asked for, oldest first; finished ones are dropped as it grows
+_queue: list[
+    _Pending
+    # every piece of motion asked for, oldest first; finished ones are
+    # dropped as it grows
+] = []
 
 
 def _add(pending: _Pending) -> None:
     """
-    Remember a piece of motion, dropping the ones that are over so the list stays short.
+    Remember a piece of motion, dropping the ones that are over so the
+    list stays short.
 
     Parameters
     ----------
@@ -138,11 +166,21 @@ def _add(pending: _Pending) -> None:
 
     Examples
     --------
-    >>> _add(_Pending(alive=lambda: False, run=print))
+    >>> _add(
+    ...     _Pending(alive=lambda: False, run=print)
+    ... )
     >>> busy()
     False
-    >>> for _ in range(40):  # motion that is over is dropped, so the list does not grow without end
-    ...     _add(_Pending(alive=lambda: False, run=print))
+    >>> for _ in range(
+    ...     40
+    ... # motion that is over is dropped, so the list does not grow
+    ... # without end
+    ... ):
+    ...     _add(
+    ...         _Pending(
+    ...             alive=lambda: False, run=print
+    ...         )
+    ...     )
     >>> len(_queue) <= 33
     True
     """
@@ -170,7 +208,8 @@ def instant() -> bool:
 
 def set_instant(on: bool) -> None:
     """
-    Make motion wait for `settle`, for tests, or give it back its real time.
+    Make motion wait for `settle`, for tests, or give it back its real
+    time.
 
     Parameters
     ----------
@@ -218,14 +257,17 @@ def later(
     step: Callable[[], object],
 ) -> None:
     """
-    Run a step after a delay, such as clearing wrong-answer feedback so the learner can try again.
+    Run a step after a delay, such as clearing wrong-answer feedback so
+    the learner can try again.
 
     Parameters
     ----------
     delay : int
-        How long to wait, in milliseconds. With instant motion the step waits for `settle` instead.
+        How long to wait, in milliseconds. With instant motion the step
+        waits for `settle` instead.
     owner : QObject
-        The object the step belongs to. If it is deleted first, the step does not run. Keyword-only.
+        The object the step belongs to. If it is deleted first, the step
+        does not run. Keyword-only.
     step : callable
         What to run. Keyword-only.
 
@@ -234,7 +276,11 @@ def later(
     >>> set_instant(True)
     >>> owner = QObject()
     >>> done = []
-    >>> later(450, owner=owner, step=lambda: done.append("retry"))
+    >>> later(
+    ...     450,
+    ...     owner=owner,
+    ...     step=lambda: done.append("retry"),
+    ... )
     >>> settle()
     >>> done
     ['retry']
@@ -252,7 +298,8 @@ def start_timer(
     delay: int,
 ) -> None:
     """
-    Start a single-shot timer whose timeout is part of the interface's motion, such as moving on to the next question.
+    Start a single-shot timer whose timeout is part of the interface's
+    motion, such as moving on to the next question.
 
     The timer can be stopped as usual, and then it does not fire.
 
@@ -261,7 +308,8 @@ def start_timer(
     timer : QTimer
         The timer, which fires once.
     delay : int
-        Its interval, in milliseconds. With instant motion it waits for `settle` instead. Keyword-only.
+        Its interval, in milliseconds. With instant motion it waits for
+        `settle` instead. Keyword-only.
 
     Examples
     --------
@@ -269,7 +317,9 @@ def start_timer(
     >>> timer = QTimer()
     >>> timer.setSingleShot(True)
     >>> fired = []
-    >>> _ = timer.timeout.connect(lambda: fired.append(1))
+    >>> _ = timer.timeout.connect(
+    ...     lambda: fired.append(1)
+    ... )
     >>> start_timer(timer, delay=1200)
     >>> timer.isActive(), busy()
     (True, True)
@@ -299,17 +349,21 @@ def start_timer(
     timer.start(_HELD_MS if _instant else delay)
 
 
-_HELD_MS = 86_400_000  # a timer held for a test is started for a day, so it shows as active and can be stopped, but never fires
+# a timer held for a test is started for a day, so it shows as active
+# and can be stopped, but never fires
+_HELD_MS = 86_400_000
 
 
 def play(animation: QAbstractAnimation) -> None:
     """
-    Start an animation. With instant motion it holds still at its start until `settle` moves it to its end.
+    Start an animation. With instant motion it holds still at its start
+    until `settle` moves it to its end.
 
     Parameters
     ----------
     animation : QAbstractAnimation
-        The animation, or a group of them. It finishes as usual, with its `finished` signal.
+        The animation, or a group of them. It finishes as usual, with
+        its `finished` signal.
 
     Examples
     --------
@@ -320,10 +374,18 @@ def play(animation: QAbstractAnimation) -> None:
     >>> animation.setStartValue(0.0)
     >>> animation.setEndValue(1.0)
     >>> play(animation)
-    >>> animation.state() == QAbstractAnimation.State.Stopped, busy()
+    >>> (
+    ...     animation.state()
+    ...     == QAbstractAnimation.State.Stopped,
+    ...     busy(),
+    ... )
     (False, True)
     >>> settle()
-    >>> animation.currentValue(), animation.state() == QAbstractAnimation.State.Stopped
+    >>> (
+    ...     animation.currentValue(),
+    ...     animation.state()
+    ...     == QAbstractAnimation.State.Stopped,
+    ... )
     (1.0, True)
     >>> set_instant(False)
     """
@@ -340,7 +402,8 @@ def play(animation: QAbstractAnimation) -> None:
 
 def busy() -> bool:
     """
-    Say whether any motion is still to come: a delayed step, an active timer or a running animation.
+    Say whether any motion is still to come: a delayed step, an active
+    timer or a running animation.
 
     Returns
     -------
@@ -357,20 +420,25 @@ def busy() -> bool:
 
 def settle(*, rounds: int = 1000) -> None:
     """
-    Let every piece of motion happen: delayed steps run, timers fire and animations reach their end.
+    Let every piece of motion happen: delayed steps run, timers fire and
+    animations reach their end.
 
-    With instant motion they happen at once, in the order they were asked for, and motion they start (feedback that leads to
-    the next question, which slides in) happens too. In the app's real time this waits for them instead.
+    With instant motion they happen at once, in the order they were
+    asked for, and motion they start (feedback that leads to
+    the next question, which slides in) happens too. In the app's real
+    time this waits for them instead.
 
     Parameters
     ----------
     rounds : int, default 1000
-        The most pieces of motion to go through or, in real time, about how many milliseconds to wait. Keyword-only.
+        The most pieces of motion to go through or, in real time, about
+        how many milliseconds to wait. Keyword-only.
 
     Raises
     ------
     RuntimeError
-        If motion is still going after that many, such as a step that keeps asking for itself again.
+        If motion is still going after that many, such as a step that
+        keeps asking for itself again.
 
     Examples
     --------
@@ -393,13 +461,18 @@ def settle(*, rounds: int = 1000) -> None:
     """
     for _ in range(rounds):
         QCoreApplication.processEvents()
-        waiting = next((pending for pending in _queue if pending.waiting()), None)
+        waiting = next(
+            (pending for pending in _queue if pending.waiting()),
+            None,
+        )
         if waiting is None:
             return
         if _instant:
             waiting.run()
         else:
-            time.sleep(0.001)  # real motion takes its time: a round is about a millisecond
+            time.sleep(
+                0.001,
+            )  # real motion takes its time: a round is about a millisecond
     if busy():
         raise RuntimeError(f"Motion is still going after {rounds} rounds.")
 
@@ -408,17 +481,27 @@ class _KeyPress(QObject):
     """
     With instant motion, click a button at once when its key is pressed.
 
-    Qt shows a button that a key presses as pressed for a moment, then clicks it, on a timer of its own that tests cannot hold
-    or settle. This filter takes its place, but only in tests: a filter runs for every event that reaches the button (paints,
-    hovers, layout), and in the app Qt's own handling is what should happen anyway.
+    Qt shows a button that a key presses as pressed for a moment, then
+    clicks it, on a timer of its own that tests cannot hold
+    or settle. This filter takes its place, but only in tests: a filter
+    runs for every event that reaches the button (paints,
+    hovers, layout), and in the app Qt's own handling is what should
+    happen anyway.
 
     Examples
     --------
     >>> from PySide6.QtWidgets import QPushButton
     >>> button = QPushButton("Answer")
     >>> clicks = []
-    >>> _ = button.clicked.connect(lambda: clicks.append(1))
-    >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, False))
+    >>> _ = button.clicked.connect(
+    ...     lambda: clicks.append(1)
+    ... )
+    >>> _KeyPress().eventFilter(
+    ...     button,
+    ...     QShortcutEvent(
+    ...         QKeySequence("Return"), None, False
+    ...     ),
+    ... )
     True
     >>> clicks
     [1]
@@ -426,7 +509,8 @@ class _KeyPress(QObject):
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: N802, PLR0917 (Qt passes both arguments positionally)
         """
-        Click the button whose key it is, unless the key is shared and Qt only moves the focus.
+        Click the button whose key it is, unless the key is shared and
+        Qt only moves the focus.
 
         Parameters
         ----------
@@ -438,26 +522,45 @@ class _KeyPress(QObject):
         Returns
         -------
         bool
-            True when the event was the button's key, which is handled here.
+            True when the event was the button's key, which is handled
+            here.
 
         Examples
         --------
         >>> from PySide6.QtWidgets import QPushButton
         >>> button = QPushButton("Answer")
-        >>> _KeyPress().eventFilter(button, QEvent(QEvent.Type.Enter))
+        >>> _KeyPress().eventFilter(
+        ...     button, QEvent(QEvent.Type.Enter)
+        ... )
         False
-        >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, True))  # shared: Qt moves the focus
+        >>> _KeyPress().eventFilter(
+        ...     button,
+        ...     QShortcutEvent(
+        ...         QKeySequence("Return"), None, True
+        ...     ),
+        ... )  # shared: Qt moves the focus
         False
         >>> button.setEnabled(False)
-        >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, False))  # taken, but nothing happens
+        >>> _KeyPress().eventFilter(
+        ...     button,
+        ...     QShortcutEvent(
+        ...         QKeySequence("Return"), None, False
+        ...     ),
+        ... )  # taken, but nothing happens
         True
         """
-        if event.type() != QEvent.Type.Shortcut or not isinstance(watched, QAbstractButton):
+        if event.type() != QEvent.Type.Shortcut or not isinstance(
+            watched,
+            QAbstractButton,
+        ):
             return False
         if not isinstance(event, QShortcutEvent) or event.isAmbiguous():
             return False
         if watched.isEnabled():
-            if watched.isCheckable() and watched.focusPolicy() & Qt.FocusPolicy.ClickFocus:
+            if (
+                watched.isCheckable()
+                and watched.focusPolicy() & Qt.FocusPolicy.ClickFocus
+            ):
                 watched.setFocus(Qt.FocusReason.ShortcutFocusReason)
             watched.click()
         return True
@@ -472,7 +575,8 @@ def set_shortcut(
     key: QKeySequence | str,
 ) -> None:
     """
-    Give a button a key that presses it. In the app Qt handles the key; with instant motion it clicks the button at once.
+    Give a button a key that presses it. In the app Qt handles the key;
+    with instant motion it clicks the button at once.
 
     Parameters
     ----------
@@ -490,9 +594,15 @@ def set_shortcut(
     'Backspace'
     >>> set_instant(True)
     >>> held = QPushButton("Answer")
-    >>> set_shortcut(held, key="Return")  # in a test: the key clicks it at once
+    >>> set_shortcut(
+    ...     held, key="Return"
+    ... )  # in a test: the key clicks it at once
     >>> set_instant(False)
     """
     button.setShortcut(key)
-    if _instant:  # only tests need it, and it would cost the app a call for every event the button gets
-        button.installEventFilter(_key_press)  # installing it again only moves it to the front
+    # only tests need it, and it would cost the app a call for every
+    # event the button gets
+    if _instant:
+        button.installEventFilter(
+            _key_press,
+        )  # installing it again only moves it to the front

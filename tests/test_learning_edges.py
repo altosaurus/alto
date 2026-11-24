@@ -17,7 +17,10 @@ from alto.theory.pitch import Note
 
 
 class Fixed(Exercise):
-    """Always the same question, so that the only other candidates are stored ones."""
+    """
+    Always the same question, so that the only other candidates are
+    stored ones.
+    """
 
     name, par_seconds = "Fixed", 4.0
 
@@ -84,18 +87,30 @@ def test_a_stored_question_that_cannot_be_read_is_skipped() -> None:
         item_key="wrong-shape",
         item=wrong_shape,
     )
-    assert learner.pick(ex, rng=random.Random(1)).answer == "A"  # the bad ones are ignored, a fresh question is asked
+    assert (
+        learner.pick(ex, rng=random.Random(1)).answer == "A"
+    )  # the bad ones are ignored, a fresh question is asked
 
 
-def test_when_the_only_question_is_the_one_to_avoid_a_new_one_is_made() -> None:
+def test_when_the_only_question_is_the_one_to_avoid_a_new_one_is_made() -> (
+    None
+):
     """
-    Check that when the only question is the one to avoid a new one is made.
+    Check that when the only question is the one to avoid a new one is
+    made.
     """
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     ex = Fixed()
     only = ex.generate(random.Random(0))
-    assert learner.pick(ex, rng=random.Random(1), avoid=only.item_key()).item_key() == only.item_key()
+    assert (
+        learner.pick(
+            ex,
+            rng=random.Random(1),
+            avoid=only.item_key(),
+        ).item_key()
+        == only.item_key()
+    )
 
 
 def test_no_questions_means_no_accuracy_and_no_median() -> None:
@@ -149,13 +164,19 @@ def test_a_question_is_described_whatever_it_shows() -> None:
         )
         == "Key C4 in 1 flats → A"
     )
-    assert stats.describe(Question("Which?", choices=["A", "B"], answer="B")) == "Which? → B"
-    assert stats.describe(Question("", choices=["A"], answer="A")) == "A"  # nothing is drawn, so the answer is all there is
+    assert (
+        stats.describe(Question("Which?", choices=["A", "B"], answer="B"))
+        == "Which? → B"
+    )
+    assert (
+        stats.describe(Question("", choices=["A"], answer="A")) == "A"
+    )  # nothing is drawn, so the answer is all there is
 
 
 def test_the_hardest_questions_skip_stored_ones_that_cannot_be_read() -> None:
     """
-    Check that the hardest questions skip stored ones that cannot be read.
+    Check that the hardest questions skip stored ones that cannot be
+    read.
     """
     db = Database()
     ada = db.add_profile("Ada")

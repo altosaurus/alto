@@ -33,9 +33,15 @@ from alto.ui.style import app_style
         ("treble", 2, ["D4", "E4", "F#4", "G4"]),
     ],
 )
-def test_excerpt_ink_stays_put(app: QApplication, clef: str, key: int, notes: list[str]) -> None:
+def test_excerpt_ink_stays_put(
+    app: QApplication,
+    clef: str,
+    key: int,
+    notes: list[str],
+) -> None:
     """
-    Compare actual staff pixels at two pane widths for the three house-style examples.
+    Compare actual staff pixels at two pane widths for the three
+    house-style examples.
 
     Parameters
     ----------
@@ -49,7 +55,12 @@ def test_excerpt_ink_stays_put(app: QApplication, clef: str, key: int, notes: li
         Notes of the example.
     """
     staff = StaffWidget(gap=8, lesson_layout=True)
-    staff.show_notes([[Note.parse(name)] for name in notes], clef=clef, key=key, value="quarter")
+    staff.show_notes(
+        [[Note.parse(name)] for name in notes],
+        clef=clef,
+        key=key,
+        value="quarter",
+    )
     staff.resize(280, staff.height())
     staff.show()
     narrow = staff.grab().toImage()
@@ -60,16 +71,30 @@ def test_excerpt_ink_stays_put(app: QApplication, clef: str, key: int, notes: li
     assert narrow == wide
     assert row.right + staff.side <= wide.width() < row.right + staff.side + 1
     bottom = round(row.bottoms[clef])
-    assert min(wide.pixelColor(26, y).lightness() for y in (bottom - 1, bottom)) < 190
-    assert min(wide.pixelColor(wide.width() - 4, y).lightness() for y in (bottom - 1, bottom)) == 255
+    assert (
+        min(wide.pixelColor(26, y).lightness() for y in (bottom - 1, bottom))
+        < 190
+    )
+    assert (
+        min(
+            wide.pixelColor(wide.width() - 4, y).lightness()
+            for y in (bottom - 1, bottom)
+        )
+        == 255
+    )
     if len(notes) == 4:
-        assert [b - a for a, b in zip(row.centers, row.centers[1:])] == pytest.approx([28] * 3)
+        assert [
+            b - a for a, b in zip(row.centers, row.centers[1:])
+        ] == pytest.approx([28] * 3)
     staff.close()
 
 
-def test_local_accidentals_clear_chords_and_captions(app: QApplication) -> None:
+def test_local_accidentals_clear_chords_and_captions(
+    app: QApplication,
+) -> None:
     """
-    Check chord signs, low ledger lines, and caption room across notation fonts.
+    Check chord signs, low ledger lines, and caption room across
+    notation fonts.
 
     Parameters
     ----------
@@ -77,7 +102,11 @@ def test_local_accidentals_clear_chords_and_captions(app: QApplication) -> None:
         Shared Qt application.
     """
     staff = StaffWidget(gap=8, lesson_layout=True)
-    staff.show_notes([[Note.parse("F#1"), Note.parse("Gb1")]], clef="grand", caption="Two pitches on the lower staff")
+    staff.show_notes(
+        [[Note.parse("F#1"), Note.parse("Gb1")]],
+        clef="grand",
+        caption="Two pitches on the lower staff",
+    )
     staff.resize(180, staff.height())
     staff.show()
     for style in BY_KEY.values():
@@ -94,7 +123,8 @@ def test_local_accidentals_clear_chords_and_captions(app: QApplication) -> None:
 
 def test_lesson_scale_wrap_keeps_each_labeled_step(app: QApplication) -> None:
     """
-    Follow the scale lesson into the explorer and resize the staff with its highlights active.
+    Follow the scale lesson into the explorer and resize the staff with
+    its highlights active.
 
     Parameters
     ----------
@@ -113,8 +143,14 @@ def test_lesson_scale_wrap_keeps_each_labeled_step(app: QApplication) -> None:
     staff.show()
     wrapped = staff._lesson_systems(staff.width())
     assert len(wrapped) > 1
-    assert all(row.right + staff.side <= staff.width() and row.key_x == wrapped[0].key_x for row in wrapped)
-    pitches = [row.first + i for row in wrapped for i in range(len(row.centers))]
+    assert all(
+        row.right + staff.side <= staff.width()
+        and row.key_x == wrapped[0].key_x
+        for row in wrapped
+    )
+    pitches = [
+        row.first + i for row in wrapped for i in range(len(row.centers))
+    ]
     assert pitches == list(range(8))
     assert len(staff.wedges) == len(pitches) - 1
     narrow_height = staff.height()
@@ -127,7 +163,8 @@ def test_lesson_scale_wrap_keeps_each_labeled_step(app: QApplication) -> None:
 
 def test_lesson_engraving_entry_points(app: QApplication) -> None:
     """
-    Check that illustrated examples and refreshed staff questions use the same geometry.
+    Check that illustrated examples and refreshed staff questions use
+    the same geometry.
 
     Parameters
     ----------
@@ -137,16 +174,25 @@ def test_lesson_engraving_entry_points(app: QApplication) -> None:
     first = StepView(KEY_SIGNATURES.steps[0])
     assert all(staff.lesson_layout for staff in first.staves)
     upper, lower = first.staves
-    assert upper._lesson_systems(300)[0].centers == lower._lesson_systems(300)[0].centers
-    question = StepView(next(step for step in KEY_SIGNATURES.steps if step.task_staff))
+    assert (
+        upper._lesson_systems(300)[0].centers
+        == lower._lesson_systems(300)[0].centers
+    )
+    question = StepView(
+        next(step for step in KEY_SIGNATURES.steps if step.task_staff),
+    )
     question.ask()
     assert question.task is not None
-    assert question.staves[0].lesson_layout and question.staves[0].key == question.task.key
+    assert (
+        question.staves[0].lesson_layout
+        and question.staves[0].key == question.task.key
+    )
 
 
 def test_signature_and_local_natural_gaps(app: QApplication) -> None:
     """
-    Measure the positions passed to the engraver for a natural following a two-sharp signature.
+    Measure the positions passed to the engraver for a natural following
+    a two-sharp signature.
 
     Parameters
     ----------
@@ -156,7 +202,11 @@ def test_signature_and_local_natural_gaps(app: QApplication) -> None:
     staff = StaffWidget(gap=8, lesson_layout=True)
     staff.notation_style = BY_KEY["bravura"]
     staff.show_notes([[Note.parse("F4")]], key=2)
-    with patch.object(engraving, "draw_accidental", wraps=engraving.draw_accidental) as draw_sign:
+    with patch.object(
+        engraving,
+        "draw_accidental",
+        wraps=engraving.draw_accidental,
+    ) as draw_sign:
         staff.grab()
     first, second, natural = [call.kwargs for call in draw_sign.call_args_list]
     assert [first["sign"], second["sign"], natural["sign"]] == [1, 1, 0]
@@ -165,15 +215,19 @@ def test_signature_and_local_natural_gaps(app: QApplication) -> None:
     assert second["x"] - (first["x"] + sharp_width) == pytest.approx(2)
     assert natural["x"] - (second["x"] + sharp_width) == pytest.approx(12)
     (row,) = staff._lesson_systems(staff.width())
-    # Whole noteheads are centered on their column. Their left and right clearances determine the staff end.
+    # Whole noteheads are centered on their column. Their left and right
+    # clearances determine the staff end.
     left_edge = natural["x"] + natural_width + 2
     right_edge = 2 * row.centers[0] - left_edge
     assert row.right - right_edge == pytest.approx(16, abs=1)
 
 
-def test_caption_fits_the_lesson_paper_at_each_width(app: QApplication) -> None:
+def test_caption_fits_the_lesson_paper_at_each_width(
+    app: QApplication,
+) -> None:
     """
-    A long caption can set the width of the paper and wrap when the pane is narrowed.
+    A long caption can set the width of the paper and wrap when the pane
+    is narrowed.
 
     Parameters
     ----------
@@ -181,7 +235,12 @@ def test_caption_fits_the_lesson_paper_at_each_width(app: QApplication) -> None:
         Shared Qt application.
     """
     staff = StaffWidget(gap=8, side=8, lesson_layout=True)
-    staff.show_notes([], clef="bass", key=-3, caption="Three flats after the bass clef")
+    staff.show_notes(
+        [],
+        clef="bass",
+        key=-3,
+        caption="Three flats after the bass clef",
+    )
     staff.show()
     staff.resize(520, staff.height())
     (wide,) = staff._lesson_systems(staff.width())
@@ -195,9 +254,13 @@ def test_caption_fits_the_lesson_paper_at_each_width(app: QApplication) -> None:
     staff.close()
 
 
-def test_key_signatures_opening_matches_the_responsive_example(app: QApplication, request: pytest.FixtureRequest) -> None:
+def test_key_signatures_opening_matches_the_responsive_example(
+    app: QApplication,
+    request: pytest.FixtureRequest,
+) -> None:
     """
-    Resize the first page and check the actual edges of both examples, divider, text, and playback.
+    Resize the first page and check the actual edges of both examples,
+    divider, text, and playback.
 
     Parameters
     ----------
@@ -224,31 +287,66 @@ def test_key_signatures_opening_matches_the_responsive_example(app: QApplication
         view.resize(width, 520)
         app.processEvents()
         panel_pos = panel.mapTo(illustration, QPoint())
-        assert panel.isAncestorOf(view.hear_button) and panel.isAncestorOf(first) and panel.isAncestorOf(second)
-        assert second.geometry().bottom() < view.hear_button.y() < panel.height()
+        assert (
+            panel.isAncestorOf(view.hear_button)
+            and panel.isAncestorOf(first)
+            and panel.isAncestorOf(second)
+        )
+        assert (
+            second.geometry().bottom() < view.hear_button.y() < panel.height()
+        )
         image = panel.grab().toImage()
         white = QColor("white")
         y = first.geometry().center().y()
         assert image.pixelColor(0, y) == palette.mid().color()
         assert image.pixelColor(1, y) == white
-        assert image.pixelColor(panel.width() // 2, view.hear_button.y() - 1) == white
-        assert image.pixelColor(view.hear_button.x() + 6, view.hear_button.geometry().center().y()) == white
+        assert (
+            image.pixelColor(panel.width() // 2, view.hear_button.y() - 1)
+            == white
+        )
+        assert (
+            image.pixelColor(
+                view.hear_button.x() + 6,
+                view.hear_button.geometry().center().y(),
+            )
+            == white
+        )
         if width > 245:
             assert first.y() == second.y()
-            assert divider.isVisible() and first.geometry().right() < divider.x() < second.x()
-            assert image.pixelColor(divider.x() - 1, y) == image.pixelColor(divider.x() + 1, y) == white
+            assert (
+                divider.isVisible()
+                and first.geometry().right() < divider.x() < second.x()
+            )
+            assert (
+                image.pixelColor(divider.x() - 1, y)
+                == image.pixelColor(divider.x() + 1, y)
+                == white
+            )
             assert image.pixelColor(divider.x(), y) == palette.mid().color()
         else:
-            assert first.geometry().bottom() < second.y() and not divider.isVisible()
-            assert image.pixelColor(first.geometry().center().x(), second.y() - 1) == white
+            assert (
+                first.geometry().bottom() < second.y()
+                and not divider.isVisible()
+            )
+            assert (
+                image.pixelColor(first.geometry().center().x(), second.y() - 1)
+                == white
+            )
         if width == 1100:
             assert panel_pos.y() == illustration.prose.y()
             assert panel_pos.x() > illustration.prose.geometry().right()
-            assert illustration.prose.text() == view.step.text and not illustration.rest.isVisible()
+            assert (
+                illustration.prose.text() == view.step.text
+                and not illustration.rest.isVisible()
+            )
         else:
             assert illustration.prose.geometry().bottom() < panel_pos.y()
             assert panel_pos.y() + panel.height() <= illustration.rest.y()
-            assert illustration.rest.isVisible() and illustration.prose.text() + illustration.rest.text() == view.step.text
+            assert (
+                illustration.rest.isVisible()
+                and illustration.prose.text() + illustration.rest.text()
+                == view.step.text
+            )
     view.close()
 
 
@@ -260,9 +358,11 @@ def point_at(
     over: bool,
 ) -> None:
     """
-    Move the pointer to a place and wait until the button knows whether the pointer is over it.
+    Move the pointer to a place and wait until the button knows whether
+    the pointer is over it.
 
-    The move reaches the widgets through the event loop, so on a busy machine a picture taken at once can show the button as it
+    The move reaches the widgets through the event loop, so on a busy
+    machine a picture taken at once can show the button as it
     was before the move.
 
     Parameters
@@ -281,12 +381,17 @@ def point_at(
     while button.underMouse() != over and time.monotonic() < deadline:
         QApplication.processEvents()
     assert button.underMouse() == over
-    QApplication.processEvents()  # and let the style repaint it for its new state
+    # and let the style repaint it for its new state
+    QApplication.processEvents()
 
 
-def test_paper_playback_uses_light_variant_in_dark_theme(app: QApplication, request: pytest.FixtureRequest) -> None:
+def test_paper_playback_uses_light_variant_in_dark_theme(
+    app: QApplication,
+    request: pytest.FixtureRequest,
+) -> None:
     """
-    Compare the rendered playback button before and after switching a live lesson to Studio Dark.
+    Compare the rendered playback button before and after switching a
+    live lesson to Studio Dark.
 
     Parameters
     ----------
@@ -309,7 +414,10 @@ def test_paper_playback_uses_light_variant_in_dark_theme(app: QApplication, requ
         button.clearFocus()
         rest = button.grab().toImage()
         assert button.palette().buttonText().color() == QColor("#545a65")
-        assert view.again.palette().buttonText().color() == app.palette().buttonText().color()
+        assert (
+            view.again.palette().buttonText().color()
+            == app.palette().buttonText().color()
+        )
         point_at(button, button.rect().center(), button=button, over=True)
         hover = button.grab().toImage()
         point_at(view, QPoint(1, 1), button=button, over=False)
@@ -321,15 +429,20 @@ def test_paper_playback_uses_light_variant_in_dark_theme(app: QApplication, requ
         button.setDisabled(True)
         disabled = button.grab().toImage()
         button.setEnabled(True)
-        assert all(state != rest for state in (hover, focus, pressed, disabled))
+        assert all(
+            state != rest for state in (hover, focus, pressed, disabled)
+        )
         images.append((rest, hover, focus, pressed, disabled))
     assert images[0] == images[1]
     view.close()
 
 
-def test_knowledge_check_wraps_answers_and_keeps_feedback_together(app: QApplication) -> None:
+def test_knowledge_check_wraps_answers_and_keeps_feedback_together(
+    app: QApplication,
+) -> None:
     """
-    Resize a five-choice question while a hint is visible, answer it, and retry.
+    Resize a five-choice question while a hint is visible, answer it,
+    and retry.
 
     Parameters
     ----------
@@ -337,13 +450,23 @@ def test_knowledge_check_wraps_answers_and_keeps_feedback_together(app: QApplica
         Shared Qt application.
     """
     assert StepView(KEY_SIGNATURES.steps[0]).task_box.isHidden()
-    view = StepView(next(step for step in CLEF_BASICS.steps if step.title == "The clef’s line"))
+    view = StepView(
+        next(
+            step
+            for step in CLEF_BASICS.steps
+            if step.title == "The clef’s line"
+        ),
+    )
     view.show()
     callout = view.task_box
     assert callout.accessibleName() == "Knowledge check"
     assert view.feedback.isHidden() and view.again.isHidden()
     assert view.task is not None
-    wrong = next(button for button in view.choice_buttons if button.text() != view.task.correct)
+    wrong = next(
+        button
+        for button in view.choice_buttons
+        if button.text() != view.task.correct
+    )
     wrong.click()
     for width in (1040, 310, 1040):
         view.resize(width, 620)
@@ -352,9 +475,15 @@ def test_knowledge_check_wraps_answers_and_keeps_feedback_together(app: QApplica
         assert (len(rows) == 1) == (width == 1040)
         for widget in [view.prompt, *view.choice_buttons, view.feedback]:
             assert callout.isAncestorOf(widget) and widget.isVisible()
-            assert callout.rect().contains(widget.mapTo(callout, widget.rect().bottomRight()))
+            assert callout.rect().contains(
+                widget.mapTo(callout, widget.rect().bottomRight()),
+            )
         assert not wrong.isEnabled() and view.task.hint in view.feedback.text()
-    next(button for button in view.choice_buttons if button.text() == view.task.correct).click()
+    next(
+        button
+        for button in view.choice_buttons
+        if button.text() == view.task.correct
+    ).click()
     assert view.task.explanation in view.feedback.text()
     assert callout.isAncestorOf(view.again) and view.again.isVisible()
     view.again.click()

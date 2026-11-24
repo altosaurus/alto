@@ -38,7 +38,9 @@ then builds the style sheet from the new palette:
 
 ```python
 def apply_theme(key: str) -> None:
-    QGuiApplication.styleHints().setColorScheme(_SCHEMES.get(key, Qt.ColorScheme.Unknown))
+    QGuiApplication.styleHints().setColorScheme(
+        _SCHEMES.get(key, Qt.ColorScheme.Unknown)
+    )
     app = QApplication.instance()
     app.setStyleSheet(app_style(app.palette()))
 ```

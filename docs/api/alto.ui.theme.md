@@ -5,9 +5,11 @@ package: alto.ui
 permalink: /api/alto.ui.theme/
 ---
 {% raw %}
-The color theme: follow the system, force light or dark, or use a theme with colors of its own.
+The color theme: follow the system, force light or dark, or use a theme
+with colors of its own.
 
-A theme with colors of its own is a `CustomTheme`: a fixed palette that is light or dark whatever the desktop is set to.
+A theme with colors of its own is a `CustomTheme`: a fixed palette that
+is light or dark whatever the desktop is set to.
 
 **Examples**
 
@@ -55,7 +57,11 @@ A theme with colors of its own.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> CUSTOM_THEMES[0].key, CUSTOM_THEMES[0].dark, len(CUSTOM_THEMES)
+>>> (
+...     CUSTOM_THEMES[0].key,
+...     CUSTOM_THEMES[0].dark,
+...     len(CUSTOM_THEMES),
+... )
 ('studio', False, 50)
 ```
 
@@ -85,7 +91,14 @@ Turn a color given as hue, saturation and lightness into "#rrggbb".
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> hsl_hex(0, saturation=100, lightness=50), hsl_hex(210, saturation=0, lightness=100)
+>>> (
+...     hsl_hex(
+...         0, saturation=100, lightness=50
+...     ),
+...     hsl_hex(
+...         210, saturation=0, lightness=100
+...     ),
+... )
 ('#ff0000', '#ffffff')
 ```
 
@@ -95,7 +108,8 @@ Turn a color given as hue, saturation and lightness into "#rrggbb".
 def seeded_themes(seed: tuple[str, str, str, float, float, float, float]) -> tuple[CustomTheme, CustomTheme]
 ```
 
-Make the light and the dark theme of a seed: neutrals tinted by one hue, and an accent of another.
+Make the light and the dark theme of a seed: neutrals tinted by one
+hue, and an accent of another.
 
 **Parameters**
 
@@ -132,8 +146,15 @@ Split a theme's key into its family and which version of it that is.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> family_of("sage_dark"), family_of("sage"), family_of("sage_auto"), family_of("dark"), family_of("system")
-(('sage', 'dark'), ('sage', 'light'), ('sage', 'system'), ('default', 'dark'), ('default', 'system'))
+>>> (
+...     family_of("sage_dark"),
+...     family_of("sage"),
+...     family_of("sage_auto"),
+...     family_of("dark"),
+...     family_of("system"),
+... )
+(('sage', 'dark'), ('sage', 'light'), ('sage', 'system'),
+('default', 'dark'), ('default', 'system'))
 ```
 
 ## variant_key
@@ -160,7 +181,11 @@ Give the key of one version of a family.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> variant_key("sage", version="dark"), variant_key("sage", version="system"), variant_key("default", version="dark")
+>>> (
+...     variant_key("sage", version="dark"),
+...     variant_key("sage", version="system"),
+...     variant_key("default", version="dark"),
+... )
 ('sage_dark', 'sage_auto', 'dark')
 ```
 
@@ -170,12 +195,18 @@ Give the key of one version of a family.
 class ThemeRecord(TypedDict)
 ```
 
-A theme the user made, as it is saved: its key, its name, and the colors of its light and dark versions.
+A theme the user made, as it is saved: its key, its name, and the
+colors of its light and dark versions.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ThemeRecord(id="my_1", name="Mine", light={}, dark={})["name"]
+>>> ThemeRecord(
+...     id="my_1",
+...     name="Mine",
+...     light={},
+...     dark={},
+... )["name"]
 'Mine'
 ```
 
@@ -244,7 +275,8 @@ True
 def upsert_user_theme(record: ThemeRecord) -> None
 ```
 
-Save a theme the user made, replacing the one with the same key if there is one.
+Save a theme the user made, replacing the one with the same key if
+there is one.
 
 **Parameters**
 
@@ -255,9 +287,26 @@ Save a theme the user made, replacing the one with the same key if there is one.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().remove("ui/userThemes")
 >>> colors = {part: "#112233" for part in PARTS}
->>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colors, dark=colors))
->>> upsert_user_theme(ThemeRecord(id="my_a", name="Renamed", light=colors, dark=colors))
->>> [(r["id"], r["name"]) for r in user_records()]
+>>> upsert_user_theme(
+...     ThemeRecord(
+...         id="my_a",
+...         name="Mine",
+...         light=colors,
+...         dark=colors,
+...     )
+... )
+>>> upsert_user_theme(
+...     ThemeRecord(
+...         id="my_a",
+...         name="Renamed",
+...         light=colors,
+...         dark=colors,
+...     )
+... )
+>>> [
+...     (r["id"], r["name"])
+...     for r in user_records()
+... ]
 [('my_a', 'Renamed')]
 >>> store().remove("ui/userThemes")
 ```
@@ -279,10 +328,56 @@ Remove a theme the user made.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().remove("ui/userThemes")
 >>> colors = {part: "#112233" for part in PARTS}
->>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colors, dark=colors))
+>>> upsert_user_theme(
+...     ThemeRecord(
+...         id="my_a",
+...         name="Mine",
+...         light=colors,
+...         dark=colors,
+...     )
+... )
 >>> delete_user_theme("my_a")
 >>> user_records()
 []
+```
+
+## theme_of
+
+```python
+def theme_of(
+    colors: dict[str, str],
+    *,
+    dark: bool,
+    key: str = '',
+    family: str = '',
+    label: str = '',
+    note: str = '',
+) -> CustomTheme
+```
+
+Build a custom theme from its saved or preview colors.
+
+**Parameters**
+
+- `colors` (*dict of str to str*): A color for every part, as "#rrggbb".
+- `dark` (*bool*): True if it is the dark version. Keyword-only.
+- `key` (*str*): Saved theme identifier, or empty for a preview.
+- `family` (*str*): Identifier shared by the light and dark versions.
+- `label` (*str*): Name displayed in settings.
+- `note` (*str*): Description displayed with the theme.
+
+**Returns**
+
+- *CustomTheme*: The theme with the supplied colors and identifiers.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> theme_of(
+...     {part: "#102030" for part in PARTS},
+...     dark=True,
+... ).window
+'#102030'
 ```
 
 ## user_themes
@@ -331,7 +426,8 @@ True
 def custom_theme(key: str) -> CustomTheme | None
 ```
 
-Find a theme with colors of its own, one of the built-in ones or one the user made.
+Find a theme with colors of its own, one of the built-in ones or one
+the user made.
 
 **Parameters**
 
@@ -344,7 +440,11 @@ Find a theme with colors of its own, one of the built-in ones or one the user ma
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> custom_theme("studio_dark") is CUSTOM_THEMES[1], custom_theme("dark")
+>>> (
+...     custom_theme("studio_dark")
+...     is CUSTOM_THEMES[1],
+...     custom_theme("dark"),
+... )
 (True, None)
 ```
 
@@ -354,7 +454,8 @@ Find a theme with colors of its own, one of the built-in ones or one the user ma
 def scheme_of(key: str) -> Qt.ColorScheme | None
 ```
 
-Say which color scheme a theme uses: light, dark, or the desktop's own.
+Say which color scheme a theme uses: light, dark, or the desktop's
+own.
 
 **Parameters**
 
@@ -367,7 +468,13 @@ Say which color scheme a theme uses: light, dark, or the desktop's own.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> scheme_of("dark") == Qt.ColorScheme.Dark, scheme_of("sage_auto") == Qt.ColorScheme.Unknown, scheme_of("nonsense")
+>>> (
+...     scheme_of("dark")
+...     == Qt.ColorScheme.Dark,
+...     scheme_of("sage_auto")
+...     == Qt.ColorScheme.Unknown,
+...     scheme_of("nonsense"),
+... )
 (True, True, None)
 ```
 
@@ -390,7 +497,14 @@ Pick the colors for the small picture of a theme in the settings.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> preview_colors(CUSTOM_THEMES[0])["window"], sorted(preview_colors(CUSTOM_THEMES[0]))[:3]
+>>> (
+...     preview_colors(CUSTOM_THEMES[0])[
+...         "window"
+...     ],
+...     sorted(
+...         preview_colors(CUSTOM_THEMES[0])
+...     )[:3],
+... )
 ('#eceef1', ['accent', 'faint', 'ink'])
 ```
 
@@ -414,7 +528,14 @@ Build the Qt palette of a theme with colors of its own.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> colors = theme_palette(CUSTOM_THEMES[0])
->>> colors.color(QPalette.ColorRole.Window).name(), colors.color(QPalette.ColorRole.Highlight).name()
+>>> (
+...     colors.color(
+...         QPalette.ColorRole.Window
+...     ).name(),
+...     colors.color(
+...         QPalette.ColorRole.Highlight
+...     ).name(),
+... )
 ('#eceef1', '#2f7fc1')
 ```
 
@@ -466,9 +587,11 @@ Remember the theme the user chose.
 def system_is_dark() -> bool
 ```
 
-Say whether the desktop is set to dark, as long as the app is not forcing a color scheme of its own.
+Say whether the desktop is set to dark, as long as the app is not
+forcing a color scheme of its own.
 
-A theme that follows the desktop does not force one, so this is what it asks.
+A theme that follows the desktop does not force one, so this is what
+it asks.
 
 **Returns**
 
@@ -487,7 +610,8 @@ True
 def apply_theme(key: str) -> None
 ```
 
-Switch the application's color scheme and rebuild the stylesheet from the new palette.
+Switch the application's color scheme and rebuild the stylesheet
+from the new palette.
 
 **Parameters**
 
@@ -501,10 +625,14 @@ Switch the application's color scheme and rebuild the stylesheet from the new pa
 >>> app.styleSheet() != ""
 True
 >>> apply_theme("studio")
->>> QApplication.palette().color(QPalette.ColorRole.Window).name()
+>>> QApplication.palette().color(
+...     QPalette.ColorRole.Window
+... ).name()
 '#eceef1'
 >>> apply_theme("system")
->>> QApplication.palette().color(QPalette.ColorRole.Window).name() != "#eceef1"
+>>> QApplication.palette().color(
+...     QPalette.ColorRole.Window
+... ).name() != "#eceef1"
 True
 ```
 {% endraw %}

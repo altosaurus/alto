@@ -1,12 +1,16 @@
 """
-Small monochrome icons drawn from SVG, tinted with the current theme's text color.
+Small monochrome icons drawn from SVG, tinted with the current theme's
+text color.
 
-Each icon is the inside of a 24 by 24 SVG, written with the word COLOR where the theme color goes. `svg_icon` turns one
+Each icon is the inside of a 24 by 24 SVG, written with the word COLOR
+where the theme color goes. `svg_icon` turns one
 into a `QIcon`.
 
 Examples
 --------
->>> svg_icon(HELP, color=QColor("black")).isNull()
+>>> svg_icon(
+...     HELP, color=QColor("black")
+... ).isNull()
 False
 """
 
@@ -48,7 +52,10 @@ GLOSSARY = '<g fill="none" stroke="COLOR" stroke-width="1.5" stroke-linecap="rou
 
 _BODY = '<path d="M3 9h4l5-4v14l-5-4H3z" fill="COLOR"/>'
 _STROKE = 'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round"'
-_SPEAKER_ON = _BODY + f'<path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" {_STROKE}/>'
+_SPEAKER_ON = (
+    _BODY
+    + f'<path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" {_STROKE}/>'
+)
 _SPEAKER_MUTED = _BODY + f'<path d="M16 9.5l5 5M21 9.5l-5 5" {_STROKE}/>'
 
 SPEAKER_ON, SPEAKER_MUTED = _SPEAKER_ON, _SPEAKER_MUTED
@@ -104,14 +111,19 @@ class _PaletteBinding(QObject):
 
         Examples
         --------
-        A toolbar button receives a fresh native icon when the desktop switches to light.
+        A toolbar button receives a fresh native icon when the desktop
+        switches to light.
         """
         self.refresh(self.parent(), palette)
 
 
-def _bind_palette(target: QObject, refresh: Callable[[QObject | None, QPalette], None]) -> None:  # noqa: PLR0917
+def _bind_palette(  # noqa: PLR0917
+    target: QObject,
+    refresh: Callable[[QObject | None, QPalette], None],
+) -> None:
     """
-    Draw now and replace the drawing callback for subsequent palette changes.
+    Draw now and replace the drawing callback for subsequent palette
+    changes.
 
     Parameters
     ----------
@@ -124,16 +136,24 @@ def _bind_palette(target: QObject, refresh: Callable[[QObject | None, QPalette],
     --------
     Changing a sound button from on to muted replaces its drawing.
     """
-    binding = target.findChild(_PaletteBinding, "altoIconPalette", Qt.FindChildOption.FindDirectChildrenOnly)
+    binding = target.findChild(
+        _PaletteBinding,
+        "altoIconPalette",
+        Qt.FindChildOption.FindDirectChildrenOnly,
+    )
     if binding is None:
         binding = _PaletteBinding(target)
     binding.refresh = refresh
     binding.redraw(QGuiApplication.palette())
 
 
-def set_palette_icon(target: QAbstractButton | QAction | QMenu, render: Callable[[QPalette], QIcon]) -> None:  # noqa: PLR0917
+def set_palette_icon(  # noqa: PLR0917
+    target: QAbstractButton | QAction | QMenu,
+    render: Callable[[QPalette], QIcon],
+) -> None:
     """
-    Assign a native Qt icon and refresh it whenever the application palette changes.
+    Assign a native Qt icon and refresh it whenever the application
+    palette changes.
 
     Parameters
     ----------
@@ -146,7 +166,12 @@ def set_palette_icon(target: QAbstractButton | QAction | QMenu, render: Callable
     --------
     >>> from PySide6.QtWidgets import QPushButton
     >>> button = QPushButton()
-    >>> set_palette_icon(button, lambda palette: svg_icon(HELP, color=palette.text().color()))
+    >>> set_palette_icon(
+    ...     button,
+    ...     lambda palette: svg_icon(
+    ...         HELP, color=palette.text().color()
+    ...     ),
+    ... )
     >>> button.icon().isNull()
     False
     """
@@ -180,7 +205,8 @@ def set_svg_icon(  # noqa: PLR0917 (target and drawing)
     size: int = 24,
 ) -> None:
     """
-    Tint an SVG icon with the control's current foreground or accent color.
+    Tint an SVG icon with the control's current foreground or accent
+    color.
 
     Parameters
     ----------
@@ -201,12 +227,19 @@ def set_svg_icon(  # noqa: PLR0917 (target and drawing)
     >>> button.icon().isNull()
     False
     """
-    set_palette_icon(target, lambda palette: svg_icon(inner, color=palette.color(role), size=size))
+    set_palette_icon(
+        target,
+        lambda palette: svg_icon(inner, color=palette.color(role), size=size),
+    )
 
 
-def set_item_icons(view: QAbstractItemView, items: list[tuple[str, Callable[[QIcon], None]]]) -> None:  # noqa: PLR0917
+def set_item_icons(  # noqa: PLR0917
+    view: QAbstractItemView,
+    items: list[tuple[str, Callable[[QIcon], None]]],
+) -> None:
     """
-    Recolor the current rows of a navigation list or tree without rebuilding it.
+    Recolor the current rows of a navigation list or tree without
+    rebuilding it.
 
     Parameters
     ----------
@@ -217,7 +250,8 @@ def set_item_icons(view: QAbstractItemView, items: list[tuple[str, Callable[[QIc
 
     Examples
     --------
-    A category tree keeps its checked and expanded items when the theme changes.
+    A category tree keeps its checked and expanded items when the theme
+    changes.
     """
 
     def refresh(control: QObject | None, palette: QPalette) -> None:  # noqa: PLR0917 (palette callback)
@@ -238,7 +272,13 @@ def set_item_icons(view: QAbstractItemView, items: list[tuple[str, Callable[[QIc
         assert isinstance(control, QAbstractItemView)
         with QSignalBlocker(control):
             for glyph, assign in items:
-                assign(svg_icon(glyph, color=palette.text().color(), size=control.iconSize().width()))
+                assign(
+                    svg_icon(
+                        glyph,
+                        color=palette.text().color(),
+                        size=control.iconSize().width(),
+                    ),
+                )
 
     _bind_palette(view, refresh)
 
@@ -262,7 +302,8 @@ def svg_icon(
     size : int, default 24
         The icon's size in logical pixels. Keyword-only.
     scale : float, default 2.0
-        How many device pixels to render per logical pixel, so it stays sharp on high-resolution screens. Keyword-only.
+        How many device pixels to render per logical pixel, so it stays
+        sharp on high-resolution screens. Keyword-only.
 
     Returns
     -------
@@ -271,7 +312,9 @@ def svg_icon(
 
     Examples
     --------
-    >>> icon = svg_icon(PLAY, color=QColor("#336699"), size=16)
+    >>> icon = svg_icon(
+    ...     PLAY, color=QColor("#336699"), size=16
+    ... )
     >>> icon.isNull()
     False
     """
@@ -293,13 +336,15 @@ def svg_icon(
     return QIcon(pixmap)
 
 
-# Sidebar toggle: an edge bar with a chevron pointing toward the edge while the list is shown
+# Sidebar toggle: an edge bar with a chevron pointing toward the edge
+# while the list is shown
 # (click to hide) and away from it while hidden (click to show).
 _SIDEBAR_STROKE = 'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
 SIDEBAR_OPEN = f'<path d="M5 4v16M15 7l-5 5 5 5" {_SIDEBAR_STROKE}/>'
 SIDEBAR_CLOSED = f'<path d="M5 4v16M10 7l5 5-5 5" {_SIDEBAR_STROKE}/>'
 
-# Exercise icons for the home screen (24x24, drawn with outlines like the controls above).
+# Exercise icons for the home screen (24x24, drawn with outlines like
+# the controls above).
 _LINE = 'fill="none" stroke="COLOR" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"'
 _STAFF = '<path d="M2 6H22M2 9.5H22M2 13H22M2 16.5H22M2 20H22" fill="none" stroke="COLOR" stroke-width="1.1" opacity=".5"/>'
 
@@ -332,13 +377,16 @@ def _ring(
 
     Examples
     --------
-    >>> _ring(13, y=18.5).startswith('<ellipse cx="13" cy="18.5"')
+    >>> _ring(13, y=18.5).startswith(
+    ...     '<ellipse cx="13" cy="18.5"'
+    ... )
     True
     """
     return f'<ellipse cx="{x}" cy="{y}" rx="{rx}" ry="{ry}" {_LINE}/>'
 
 
-# Note identification: a quarter note, in the Noto Music outline the app icon uses.
+# Note identification: a quarter note, in the Noto Music outline the app
+# icon uses.
 _NOTE_PATH = (
     "M14.55 3.50L14.55 17.74C14.55 18.23 14.39 18.68 14.06 19.10"
     "C13.74 19.52 13.32 19.86 12.81 20.12C12.30 20.37 11.76 20.50 11.19 20.50"
@@ -348,7 +396,8 @@ _NOTE_PATH = (
     "C13.33 16.24 13.75 16.38 14.10 16.67L14.10 3.50L14.55 3.50Z"
 )
 EXERCISE_NOTE_NAMES = f'<path d="{_NOTE_PATH}" fill="COLOR"/>'
-# Noto Music quarter note, Noto Sans plus, and Noto Sans Symbols 2 square.
+# Noto Music quarter note, Noto Sans plus, and Noto Sans Symbols 2
+# square.
 EXERCISE_RHYTHMIC_EQUATIONS = (
     '<path d="'
     "M350 1009 V173 Q350 130 321.5 93.0 Q293 56 248.0 33.5 Q203 11 153 11 Q107 11 79.0 34.5 Q51 58 51 98 "
@@ -363,8 +412,10 @@ EXERCISE_RHYTHMIC_EQUATIONS = (
     '" transform="translate(15.79713 15.21448) scale(0.008879781 -0.008879781)" fill="COLOR"/>'
 )
 EXERCISE_NOTATION_IDENTIFICATION = '<path d="M9.94 13.15 C8.15 12.27 6.78 11.29 5.85 10.24 C4.91 9.18 4.44 8.04 4.44 6.79 C4.44 5.98 4.64 5.22 5.05 4.49 C5.45 3.76 5.99 3.16 6.68 2.70 C7.36 2.23 8.11 2.00 8.94 2.00 C9.88 2.00 10.68 2.28 11.33 2.83 C11.99 3.38 12.31 4.09 12.31 4.96 C12.31 5.39 12.15 5.74 11.82 5.99 C11.50 6.25 11.14 6.38 10.74 6.38 C10.29 6.38 9.94 6.29 9.69 6.11 C9.45 5.93 9.27 5.70 9.17 5.40 L8.91 4.57 C8.81 4.26 8.68 4.00 8.52 3.80 C8.36 3.61 8.12 3.51 7.78 3.51 C7.35 3.51 6.98 3.72 6.69 4.14 C6.39 4.57 6.25 5.03 6.25 5.52 C6.25 6.35 6.61 7.12 7.34 7.83 C8.07 8.52 9.55 9.32 11.78 10.25 L17.16 2.18 L18.76 2.18 L13.05 10.85 C14.98 11.83 16.36 12.85 17.19 13.91 C18.02 14.96 18.44 16.08 18.44 17.27 C18.44 18.11 18.24 18.90 17.84 19.62 C17.45 20.34 16.90 20.91 16.21 21.35 C15.52 21.78 14.75 22.00 13.88 22.00 C12.87 22.00 12.08 21.72 11.50 21.16 C10.92 20.59 10.63 19.95 10.63 19.22 C10.63 18.76 10.76 18.40 11.04 18.12 C11.31 17.85 11.70 17.71 12.19 17.71 C12.77 17.71 13.16 17.85 13.39 18.14 C13.62 18.42 13.76 18.74 13.82 19.10 C13.88 19.45 13.99 19.78 14.14 20.06 C14.30 20.35 14.57 20.49 14.94 20.49 C15.48 20.49 15.90 20.30 16.21 19.93 C16.53 19.55 16.69 19.07 16.69 18.48 C16.69 17.23 15.88 16.19 14.26 15.34 C13.46 14.93 12.79 14.59 12.28 14.32 C11.77 14.06 11.40 13.86 11.18 13.74 L5.95 21.88 L4.38 21.88 L9.94 13.15 M18.17 8.01 C18.56 8.01 18.90 8.15 19.19 8.43 C19.47 8.72 19.62 9.06 19.62 9.46 C19.62 9.85 19.47 10.19 19.19 10.48 C18.90 10.76 18.56 10.91 18.17 10.91 C17.77 10.91 17.43 10.76 17.15 10.48 C16.86 10.19 16.72 9.85 16.72 9.46 C16.72 9.06 16.86 8.72 17.15 8.43 C17.43 8.15 17.77 8.01 18.17 8.01 M5.95 13.15 C6.34 13.15 6.68 13.30 6.97 13.58 C7.26 13.87 7.40 14.21 7.40 14.60 C7.40 15.00 7.26 15.34 6.97 15.62 C6.68 15.91 6.34 16.05 5.95 16.05 C5.55 16.05 5.21 15.91 4.93 15.62 C4.64 15.34 4.50 15.00 4.50 14.60 C4.50 14.21 4.64 13.87 4.93 13.58 C5.21 13.30 5.55 13.15 5.95 13.15" fill="COLOR" fill-rule="nonzero"/>'
-# Interval identification: two whole notes one above the other, in the Noto Music outline the app icon uses, with a thin
-# measuring bracket to their right. The upper note is the lower one moved up.
+# Interval identification: two whole notes one above the other, in the
+# Noto Music outline the app icon uses, with a thin
+# measuring bracket to their right. The upper note is the lower one
+# moved up.
 _INTERVAL_NOTE = (
     "M4.10 18.98C4.10 18.47 4.29 18.02 4.66 17.63C5.03 17.24 5.54 16.94 6.19 16.71"
     "C6.83 16.49 7.54 16.38 8.32 16.38C9.11 16.38 9.83 16.49 10.50 16.70"
@@ -390,7 +441,8 @@ EXERCISE_INTERVAL_CONSTRUCTION = (
     '<path d="M18 19V5m-3 3 3-3 3 3" fill="none" stroke="COLOR" stroke-width="1.4" stroke-linejoin="round"/>'
 )
 
-# Key signature identification: a sharp and a flat side by side, in the Noto Music outlines the app icon uses.
+# Key signature identification: a sharp and a flat side by side, in the
+# Noto Music outlines the app icon uses.
 _SHARP_PATH = (
     "M12.12 14.58L9.92 15.54L9.92 19.45L8.87 19.45L8.87 15.97L5.25 17.72L5.25 21.65"
     "L4.20 21.65L4.20 18.15L2.00 19.20L2.00 17.45L4.20 16.42L4.20 10.92L2.00 11.98L2.00 10.23"
@@ -410,12 +462,16 @@ _FLAT_PATH = (
     "C18.06 10.03 17.66 10.45 17.34 10.95Z"
 )
 EXERCISE_KEY_SIGNATURES = f'<path d="{_SHARP_PATH}" fill="COLOR"/><path d="{_FLAT_PATH}" fill="COLOR"/>'
-# The first three sharps of a treble signature, using the shared Noto Music outline.
+# The first three sharps of a treble signature, using the shared Noto
+# Music outline.
 EXERCISE_ORDER_OF_KEYS = "".join(
-    f'<path transform="translate({x} {y}) scale(.66)" d="{_SHARP_PATH}" fill="COLOR"/>' for x, y in ((0, 3), (7, 8), (14, 1))
+    f'<path transform="translate({x} {y}) scale(.66)" d="{_SHARP_PATH}" fill="COLOR"/>'
+    for x, y in ((0, 3), (7, 8), (14, 1))
 )
-# Key signature construction: a fork on its side, a stem and two tines, with a sharp at the end of the upper tine and a flat at
-# the end of the lower one, in the Noto Music outlines the app icon uses.
+# Key signature construction: a fork on its side, a stem and two tines,
+# with a sharp at the end of the upper tine and a flat at
+# the end of the lower one, in the Noto Music outlines the app icon
+# uses.
 _FORK_SHARP = (
     "M22.30 7.66L21.13 8.17L21.13 10.25L20.56 10.25L20.56 8.40L18.64 9.33L18.64 11.43"
     "L18.07 11.43L18.07 9.56L16.90 10.12L16.90 9.19L18.07 8.64L18.07 5.70L16.90 6.27"
@@ -439,7 +495,8 @@ EXERCISE_KEY_CONSTRUCTION = (
     f'<path d="{_FORK_SHARP}" fill="COLOR"/>'
     f'<path d="{_FORK_FLAT}" fill="COLOR" stroke="COLOR" stroke-width=".25" stroke-linejoin="round"/>'
 )
-# Scale construction: four whole notes climbing, in the Noto Music outline the app icon uses, with a thin arrow running up beside
+# Scale construction: four whole notes climbing, in the Noto Music
+# outline the app icon uses, with a thin arrow running up beside
 # them, for building a scale. Each note is the first moved.
 _BUILD_NOTE = (
     "M4.50 20.54C4.50 20.15 4.64 19.82 4.92 19.53C5.19 19.24 5.57 19.02 6.05 18.85"
@@ -471,14 +528,16 @@ def _cells(
     gap: float,
 ) -> str:
     """
-    Return the SVG for a ring cut into twelve cells, with the gap between cells centered at the top.
+    Return the SVG for a ring cut into twelve cells, with the gap
+    between cells centered at the top.
 
     Parameters
     ----------
     radius : float
         The ring's radius in the 24 by 24 drawing.
     gap : float
-        The length of the gap between neighboring cells, along the ring. Keyword-only.
+        The length of the gap between neighboring cells, along the ring.
+        Keyword-only.
 
     Returns
     -------
@@ -487,7 +546,9 @@ def _cells(
 
     Examples
     --------
-    >>> _cells(9, gap=1).startswith('<circle cx="12" cy="12" r="9"')
+    >>> _cells(9, gap=1).startswith(
+    ...     '<circle cx="12" cy="12" r="9"'
+    ... )
     True
     """
     per_cell = 2 * math.pi * radius / 12
@@ -500,7 +561,8 @@ def _cells(
 
 # Circle of fifths: two rings, each cut into twelve cells.
 EXERCISE_CIRCLE = _cells(9, gap=1.0) + _cells(5, gap=0.8)
-# Scale spelling: four whole notes climbing step by step, in the Noto Music outline the app icon uses. Each is the first moved.
+# Scale spelling: four whole notes climbing step by step, in the Noto
+# Music outline the app icon uses. Each is the first moved.
 _SCALE_NOTE = (
     "M1.00 20.85C1.00 20.43 1.15 20.07 1.46 19.75C1.76 19.44 2.17 19.19 2.70 19.01"
     "C3.22 18.83 3.80 18.74 4.43 18.74C5.08 18.74 5.67 18.83 6.21 19.00"
@@ -520,7 +582,8 @@ EXERCISE_SCALES = (
     f'<path d="{_SCALE_NOTE}" fill="COLOR" transform="translate(10 -11.83)"/>'
     f'<path d="{_SCALE_NOTE}" fill="COLOR" transform="translate(15 -17.74)"/>'
 )
-# Chord quality: three whole notes stacked in thirds, with room between them, in the Noto Music outline the app icon uses.
+# Chord quality: three whole notes stacked in thirds, with room between
+# them, in the Noto Music outline the app icon uses.
 _CHORD_NOTE = (
     "M7.89 19.48C7.89 18.99 8.07 18.56 8.43 18.19C8.79 17.82 9.27 17.53 9.89 17.32"
     "C10.50 17.11 11.18 17.00 11.92 17.00C12.67 17.00 13.37 17.10 14.00 17.31"
@@ -539,8 +602,10 @@ EXERCISE_CHORDS = (
     f'<path d="{_CHORD_NOTE}" fill="COLOR" transform="translate(0 -7.5)"/>'
     f'<path d="{_CHORD_NOTE}" fill="COLOR" transform="translate(0 -15)"/>'
 )
-# Arpeggio identification: three eighth notes rising under one heavy beam. The notes are the Noto Music quarter note the app icon
-# uses; the beam across their stems is a drawn bar, since the font has no three-note beam. Each note is the first moved.
+# Arpeggio identification: three eighth notes rising under one heavy
+# beam. The notes are the Noto Music quarter note the app icon
+# uses; the beam across their stems is a drawn bar, since the font has
+# no three-note beam. Each note is the first moved.
 _ARPEGGIO_NOTE = (
     "M6.43 9.28L6.43 19.94C6.43 20.30 6.31 20.64 6.07 20.95C5.83 21.27 5.51 21.52 5.13 21.71"
     "C4.75 21.90 4.35 22.00 3.92 22.00C3.53 22.00 3.22 21.90 2.98 21.70"
@@ -558,14 +623,20 @@ EXERCISE_ARPEGGIOS = (
 # A play triangle, for the "hear it" buttons.
 PLAY = '<path d="M8 5.5v13l11-6.5z" fill="COLOR" stroke="COLOR" stroke-width="1.6" stroke-linejoin="round"/>'
 
-# Keyboard: seven white keys (C through B) with the two-and-three black-key pattern. Retain the real key proportions:
-# white keys are 6.2 times as long as they are wide; black keys are 0.58 as wide and 0.63 as long.
-# Black-key centers match KeyboardWidget: slightly offset from the white-key boundaries within each group.
-# Leave room above the shared keyboard artwork for the interval icon's bracket.
-# Keep the key fills and dividers fixed so they read as piano keys in every theme.
+# Keyboard: seven white keys (C through B) with the two-and-three
+# black-key pattern. Retain the real key proportions:
+# white keys are 6.2 times as long as they are wide; black keys are 0.58
+# as wide and 0.63 as long.
+# Black-key centers match KeyboardWidget: slightly offset from the
+# white-key boundaries within each group.
+# Leave room above the shared keyboard artwork for the interval icon's
+# bracket.
+# Keep the key fills and dividers fixed so they read as piano keys in
+# every theme.
 _WHITE_KEY = 'y="5.56" width="2.7" height="16.74" rx="0.35" fill="#ffffff" stroke="#202020" stroke-width="0.65"'
 EXERCISE_KEYBOARD = "".join(
-    f'<rect x="{x:.2f}" {_WHITE_KEY}/>' for x in (2.55, 5.25, 7.95, 10.65, 13.35, 16.05, 18.75)
+    f'<rect x="{x:.2f}" {_WHITE_KEY}/>'
+    for x in (2.55, 5.25, 7.95, 10.65, 13.35, 16.05, 18.75)
 ) + "".join(
     f'<rect x="{x:.3f}" y="5.56" width="1.566" height="10.5462" rx="0.2" fill="#202020"/>'
     for x in (4.278, 7.356, 12.189, 15.267, 18.345)
@@ -612,7 +683,8 @@ NAVIGATION_PANE = (
     '<path d="M9 3v18" fill="none" stroke="COLOR" stroke-width="2"/>'
 )
 
-# Framed sidebar actions: the arrow points toward the destination of the pane.
+# Framed sidebar actions: the arrow points toward the destination of the
+# pane.
 NAVIGATION_OPEN = (
     NAVIGATION_PANE
     + '<path d="m14 9 3 3-3 3" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
@@ -622,13 +694,15 @@ NAVIGATION_CLOSE = (
     + '<path d="m17 9-3 3 3 3" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
-# Keyboard intervals: the shared keyboard with a span bracket above the keys.
+# Keyboard intervals: the shared keyboard with a span bracket above the
+# keys.
 EXERCISE_KEYBOARD_INTERVALS = (
     EXERCISE_KEYBOARD
     + '<path d="M3.9 3.6V1.5H20.1V3.6" fill="none" stroke="COLOR" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
-# Exercises: Iconoir music-double-note with filled note heads (MIT; see THIRD_PARTY_NOTICES.md).
+# Exercises: Iconoir music-double-note with filled note heads (MIT; see
+# THIRD_PARTY_NOTICES.md).
 EXERCISES = (
     '<g stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
     '<path d="M20 14V3L9 5V16" fill="none"/>'
@@ -643,7 +717,8 @@ LESSONS = (
     'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
-# Note construction: a quarter note, in the Noto Music outline the app icon uses, with a thin up arrow high and a thin
+# Note construction: a quarter note, in the Noto Music outline the app
+# icon uses, with a thin up arrow high and a thin
 # down arrow low beside it, for moving a note up and down the staff.
 _CONSTRUCTION_NOTE = (
     "M7.75 3.50L7.75 17.74C7.75 18.23 7.59 18.68 7.26 19.10C6.94 19.52 6.52 19.86 6.01 20.12"
@@ -659,7 +734,8 @@ EXERCISE_CONSTRUCTION = (
     f'<path d="M20.5 3.2L22.8 6.4H20.95V14.6H20.05V6.4H18.2Z" fill="COLOR" {_ARROW_STROKE}/>'
 )
 
-# Clef basics: the alto clef, in the outline the app icon uses (Noto Music), scaled to fit 24 by 24.
+# Clef basics: the alto clef, in the outline the app icon uses (Noto
+# Music), scaled to fit 24 by 24.
 _CLEF_PATH = (
     "M17.2 99.0L17.2 1.2L20.8 1.2L20.8 49.1C22.0 48.5 23.3 47.4 24.6 45.6"
     "C25.9 43.8 27.1 41.8 28.3 39.5C29.4 37.2 30.5 34.8 31.3 32.5"
@@ -694,17 +770,15 @@ _CLEF_PATH = (
 )
 EXERCISE_CLEFS = f'<path transform="translate(6.07 3.00) scale(0.18)" d="{_CLEF_PATH}" fill="COLOR"/>'
 
-# Menu icons (24x24, outlined like the others): restart and the application's settings.
+# Menu icons (24x24, outlined like the others): restart and the
+# application's settings.
 _MENU = 'fill="none" stroke="COLOR" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'
-TOOLS = (
-    f'<path d="M20.5 3.8 17 7.3l-2.4-2.4 3.5-3.5a6 6 0 0 0-7.3 7.8l-8 8a2.5 2.5 0 0 0 3.5 3.5l8-8a6 6 0 0 0 6.2-8.9Z" {_MENU}/>'
-)
+TOOLS = f'<path d="M20.5 3.8 17 7.3l-2.4-2.4 3.5-3.5a6 6 0 0 0-7.3 7.8l-8 8a2.5 2.5 0 0 0 3.5 3.5l8-8a6 6 0 0 0 6.2-8.9Z" {_MENU}/>'
 CODE = f'<path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16" {_MENU}/>'
 # Two flashcards, with the back card visible above the front one.
-FLASHCARDS = (
-    f'<rect x="3" y="8" width="16" height="12" rx="2" {_MENU}/><path d="M6 5.5A2 2 0 0 1 8 4h11a2 2 0 0 1 2 2v9" {_MENU}/>'
-)
-# Iconoir GitHub icon; MIT license and attribution in THIRD_PARTY_NOTICES.md.
+FLASHCARDS = f'<rect x="3" y="8" width="16" height="12" rx="2" {_MENU}/><path d="M6 5.5A2 2 0 0 1 8 4h11a2 2 0 0 1 2 2v9" {_MENU}/>'
+# Iconoir GitHub icon; MIT license and attribution in
+# THIRD_PARTY_NOTICES.md.
 GITHUB = (
     '<g fill="none" stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
     '<path d="M16 22.0268V19.1568C16.0375 18.68 15.9731 18.2006 15.811 17.7506C15.6489 17.3006 15.3929 16.8902 15.06 16.5468C18.2 16.1968 21.5 15.0068 21.5 9.54679C21.4997 8.15062 20.9627 6.80799 20 5.79679C20.4558 4.5753 20.4236 3.22514 19.91 2.02679C19.91 2.02679 18.73 1.67679 16 3.50679C13.708 2.88561 11.292 2.88561 8.99999 3.50679C6.26999 1.67679 5.08999 2.02679 5.08999 2.02679C4.57636 3.22514 4.54413 4.5753 4.99999 5.79679C4.03011 6.81549 3.49251 8.17026 3.49999 9.57679C3.49999 14.9968 6.79998 16.1868 9.93998 16.5768C9.61098 16.9168 9.35725 17.3222 9.19529 17.7667C9.03334 18.2112 8.96679 18.6849 8.99999 19.1568V22.0268"/>'
@@ -724,13 +798,15 @@ QUIT = f'<path d="M12 3.5v8M7.2 6.6a7.2 7.2 0 1 0 9.6 0" {_MENU}/>'
 _TRAY = f'<path d="M4.5 15v4.5h15V15" {_MENU}/>'
 EXPORT = _TRAY + f'<path d="M12 15V4.2M7.8 8.2L12 4l4.2 4.2" {_MENU}/>'
 IMPORT = _TRAY + f'<path d="M12 4v10.8M7.8 10.8L12 15l4.2-4.2" {_MENU}/>'
-# Plugins: an electrical plug, two prongs over a rounded body with its cord.
+# Plugins: an electrical plug, two prongs over a rounded body with its
+# cord.
 PLUGIN = f'<path d="M9 3v4M15 3v4M6 7h12v3a6 6 0 0 1-12 0zM12 16v5" {_MENU}/>'
 # Check for updates: an arrow going up inside a circle.
 UPDATE = f'<circle cx="12" cy="12" r="8.2" {_MENU}/><path d="M12 16.2V8M8.6 11.4L12 8l3.4 3.4" {_MENU}/>'
 # Profile: a head and shoulders.
 PROFILE = f'<circle cx="12" cy="8.2" r="3.6" {_MENU}/><path d="M4.6 20c.7-4 3.7-6 7.4-6s6.7 2 7.4 6" {_MENU}/>'
-# Statistics: a line graph, a rising line with its points over a pair of axes.
+# Statistics: a line graph, a rising line with its points over a pair of
+# axes.
 CHART = (
     f'<path d="M4 4v16h16" {_MENU}/><path d="M8 15l3.6-4.4 3 2.6 4.4-6" {_MENU}/>'
     '<circle cx="8" cy="15" r="1.2" fill="COLOR"/><circle cx="11.6" cy="10.6" r="1.2" fill="COLOR"/>'

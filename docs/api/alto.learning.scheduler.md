@@ -5,24 +5,43 @@ package: alto.learning
 permalink: /api/alto.learning.scheduler/
 ---
 {% raw %}
-How a question's history turns into how soon it comes back. Pure Python, no database and no Qt.
+How a question's history turns into how soon it comes back. Pure Python,
+no database and no Qt.
 
-Every question carries a *strain*: how much practice it needs. A new question starts at NEW_STRAIN. Each answer moves
-it, and the chance of being asked is exp(WEIGHT_SLOPE * strain), so strained questions come back sooner and more
+Every question carries a *strain*: how much practice it needs. A new
+question starts at NEW_STRAIN. Each answer moves
+it, and the chance of being asked is exp(WEIGHT_SLOPE * strain), so
+strained questions come back sooner and more
 often while well-known ones fade into the background.
 
-* A wrong answer adds WRONG_PENALTY, so every extra attempt pushes the question further up.
-* A right answer on the first try takes CORRECT_REWARD off. A right answer after misses earns only RETRY_REWARD.
-* The first answer's speed, against the exercise's `par_seconds`, adds or removes strain on top: very quick
-  answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.
+* A wrong answer adds WRONG_PENALTY, so every extra attempt pushes the
+question further up.
+* A right answer on the first try takes CORRECT_REWARD off. A right
+answer after misses earns only RETRY_REWARD.
+* The first answer's speed, against the exercise's `par_seconds`, adds
+or removes strain on top: very quick
+  answers take off up to FAST_BONUS, and slow ones add up to
+  SLOW_PENALTY.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> strain = update_strain(NEW_STRAIN, correct=False, attempt_no=1, seconds=4.0, par_seconds=4.0)
+>>> strain = update_strain(
+...     NEW_STRAIN,
+...     correct=False,
+...     attempt_no=1,
+...     seconds=4.0,
+...     par_seconds=4.0,
+... )
 >>> strain  # a miss pushes the question up
 3.0
->>> update_strain(strain, correct=True, attempt_no=2, seconds=2.0, par_seconds=4.0)  # a retry earns little
+>>> update_strain(
+...     strain,
+...     correct=True,
+...     attempt_no=2,
+...     seconds=2.0,
+...     par_seconds=4.0,
+... )  # a retry earns little
 2.8
 ```
 
@@ -37,7 +56,8 @@ def arts_priority(
 ) -> float
 ```
 
-Score a previously answered item for Adaptive Response-Time-based Sequencing.
+Score a previously answered item for Adaptive Response-Time-based
+Sequencing.
 
 **Parameters**
 
@@ -52,9 +72,13 @@ Score a previously answered item for Adaptive Response-Time-based Sequencing.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> arts_priority(1, correct=False, duration_ms=200)
+>>> arts_priority(
+...     1, correct=False, duration_ms=200
+... )
 2.0
->>> arts_priority(0, correct=True, duration_ms=3000)
+>>> arts_priority(
+...     0, correct=True, duration_ms=3000
+... )
 0.0
 ```
 
@@ -82,13 +106,17 @@ Return the strain change for how long the first answer took.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> speed_term(1.0, par_seconds=10.0)  # at or under half of par: the full bonus
+>>> speed_term(
+...     1.0, par_seconds=10.0
+... )  # at or under half of par: the full bonus
 -0.6
 >>> round(speed_term(7.5, par_seconds=10.0), 2)
 -0.3
 >>> round(speed_term(25.0, par_seconds=10.0), 2)
 0.5
->>> speed_term(100.0, par_seconds=10.0)  # four times par or more: the full penalty
+>>> speed_term(
+...     100.0, par_seconds=10.0
+... )  # four times par or more: the full penalty
 1.0
 ```
 
@@ -122,11 +150,32 @@ Return the question's strain after one more answer.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> update_strain(1.5, correct=False, attempt_no=1, seconds=5.0, par_seconds=5.0)
+>>> update_strain(
+...     1.5,
+...     correct=False,
+...     attempt_no=1,
+...     seconds=5.0,
+...     par_seconds=5.0,
+... )
 3.0
->>> round(update_strain(1.5, correct=True, attempt_no=1, seconds=1.0, par_seconds=5.0), 2)  # right, and quick
+>>> round(
+...     update_strain(
+...         1.5,
+...         correct=True,
+...         attempt_no=1,
+...         seconds=1.0,
+...         par_seconds=5.0,
+...     ),
+...     2,
+... )  # right, and quick
 0.4
->>> update_strain(5.9, correct=False, attempt_no=1, seconds=5.0, par_seconds=5.0)  # capped
+>>> update_strain(
+...     5.9,
+...     correct=False,
+...     attempt_no=1,
+...     seconds=5.0,
+...     par_seconds=5.0,
+... )  # capped
 6.0
 ```
 
@@ -141,10 +190,13 @@ def weight(
 ) -> float
 ```
 
-Return how likely a question is to be picked, relative to the others.
+Return how likely a question is to be picked, relative to the
+others.
 
-A question just seen is held back for a while, long for an easy one and short for a hard one, so what you have
-learned is not repeated right away but what you struggle with returns within the minute.
+A question just seen is held back for a while, long for an easy one
+and short for a hard one, so what you have
+learned is not repeated right away but what you struggle with
+returns within the minute.
 
 **Parameters**
 
@@ -159,11 +211,18 @@ learned is not repeated right away but what you struggle with returns within the
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> round(weight(None, last_seen=None, now=0.0), 2)  # a new question
+>>> round(
+...     weight(None, last_seen=None, now=0.0), 2
+... )  # a new question
 2.46
->>> round(weight(3.0, last_seen=0.0, now=1e9), 2)  # a hard question, long unseen
+>>> round(
+...     weight(3.0, last_seen=0.0, now=1e9), 2
+... )  # a hard question, long unseen
 6.05
->>> round(weight(3.0, last_seen=100.0, now=100.0), 3)  # the same, just seen: held back
+>>> round(
+...     weight(3.0, last_seen=100.0, now=100.0),
+...     3,
+... )  # the same, just seen: held back
 0.121
 ```
 
@@ -193,7 +252,11 @@ Pick one option at random, in proportion to its weight.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> choose(["a", "b"], weights=[1.0, 0.0], rng=random.Random(0))
+>>> choose(
+...     ["a", "b"],
+...     weights=[1.0, 0.0],
+...     rng=random.Random(0),
+... )
 'a'
 ```
 {% endraw %}

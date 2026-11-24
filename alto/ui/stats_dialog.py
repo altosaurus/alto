@@ -1,11 +1,15 @@
 """
-The statistics screen: a few numbers and charts about how practice is going.
+The statistics screen: a few numbers and charts about how practice is
+going.
 
-It shows the active profile's own answers, filterable by exercise and by timeframe.
+It shows the active profile's own answers, filterable by exercise and by
+timeframe.
 
 Examples
 --------
->>> since_for(None, now=1000.0) is None  # all time: from the start
+>>> since_for(
+...     None, now=1000.0
+... ) is None  # all time: from the start
 True
 >>> format_duration(3600)
 '1 h 00 min'
@@ -63,8 +67,12 @@ from alto.ui.response_times import ResponseTimeDialog
 from alto.ui.zoom import css, px
 
 DAY = 86400.0
-DETAIL_LIMIT = 500  # the most answers the drilldown lists; the note above it says when there are more
-VOLUME_WINDOW = 48  # keep individual bars selectable when a fine interval spans a long history
+# the most answers the drilldown lists; the note above it says when
+# there are more
+DETAIL_LIMIT = 500
+# keep individual bars selectable when a fine interval spans a long
+# history
+VOLUME_WINDOW = 48
 TIMEFRAMES = (
     ("Today", "today"),
     ("Last 7 days", 7),
@@ -93,7 +101,8 @@ def since_for(
     Returns
     -------
     float or None
-        Midnight for "today", `now` less that many days for a number, and None for all time.
+        Midnight for "today", `now` less that many days for a number,
+        and None for all time.
 
     Examples
     --------
@@ -101,7 +110,9 @@ def since_for(
     259200.0
     >>> since_for(None, now=864000.0) is None
     True
-    >>> 0 <= 864000.0 - since_for("today", now=864000.0) < 90000  # within a day of now
+    >>> 0 <= 864000.0 - since_for(
+    ...     "today", now=864000.0
+    ... ) < 90000  # within a day of now
     True
     """
     if span == "today":
@@ -130,11 +141,16 @@ def format_duration(seconds: float) -> str:
     Returns
     -------
     str
-        Seconds under half a minute, then minutes, then hours and minutes.
+        Seconds under half a minute, then minutes, then hours and
+        minutes.
 
     Examples
     --------
-    >>> format_duration(5), format_duration(90), format_duration(3000)
+    >>> (
+    ...     format_duration(5),
+    ...     format_duration(90),
+    ...     format_duration(3000),
+    ... )
     ('5 s', '2 min', '50 min')
     >>> format_duration(3 * 3600 + 7 * 60)
     '3 h 07 min'
@@ -142,7 +158,11 @@ def format_duration(seconds: float) -> str:
     minutes = round(seconds / 60)
     if minutes < 1:
         return f"{round(seconds)} s"
-    return f"{minutes} min" if minutes < 60 else f"{minutes // 60} h {minutes % 60:02d} min"
+    return (
+        f"{minutes} min"
+        if minutes < 60
+        else f"{minutes // 60} h {minutes % 60:02d} min"
+    )
 
 
 def period_title(
@@ -151,32 +171,53 @@ def period_title(
     granularity: str,
 ) -> str:
     """
-    Name a chart period in words, for the heading of its list of answers.
+    Name a chart period in words, for the heading of its list of
+    answers.
 
     Parameters
     ----------
     start : datetime
         The start of the period.
     granularity : str
-        "hour", "day", "week" or "month", as `Stats.granularity` says. Keyword-only.
+        "hour", "day", "week" or "month", as `Stats.granularity` says.
+        Keyword-only.
 
     Returns
     -------
     str
-        For example "Mon 5 Jan 2026", "Week of Mon 5 Jan 2026" or "January 2026".
+        For example "Mon 5 Jan 2026", "Week of Mon 5 Jan 2026" or
+        "January 2026".
 
     Examples
     --------
-    >>> period_title(datetime(2026, 1, 5, 14), granularity="hour")
+    >>> period_title(
+    ...     datetime(2026, 1, 5, 14),
+    ...     granularity="hour",
+    ... )
     'Mon 5 Jan 2026, 14:00'
-    >>> period_title(datetime(2026, 1, 5), granularity="day")
+    >>> period_title(
+    ...     datetime(2026, 1, 5), granularity="day"
+    ... )
     'Mon 5 Jan 2026'
-    >>> period_title(datetime(2026, 1, 5), granularity="week")
+    >>> period_title(
+    ...     datetime(2026, 1, 5), granularity="week"
+    ... )
     'Week of Mon 5 Jan 2026'
-    >>> period_title(datetime(2026, 1, 1), granularity="month")
+    >>> period_title(
+    ...     datetime(2026, 1, 1),
+    ...     granularity="month",
+    ... )
     'January 2026'
     """
-    day = f"{start.strftime('%a')} {start.day} {start.strftime('%b')} {start.year}"
+    day = (
+        f"{start.strftime('%a')}"
+        " "
+        f"{start.day}"
+        " "
+        f"{start.strftime('%b')}"
+        " "
+        f"{start.year}"
+    )
     return {
         "hour": f"{day}, {start.strftime('%H')}:00",
         "day": day,
@@ -229,7 +270,9 @@ class Tile(QFrame):
         'Days practiced'
         """
         super().__init__(parent)
-        self.setObjectName("keyGroup")  # the same bordered box used elsewhere in the settings
+        self.setObjectName(
+            "keyGroup",
+        )  # the same bordered box used elsewhere in the settings
         lay = QVBoxLayout(self)
         lay.setSpacing(0)
         self.value = QLabel("–")
@@ -265,7 +308,8 @@ class StatsPage(QWidget):
     Attributes
     ----------
     back : Signal
-        Emitted by Escape; the main window provides the shared Back button.
+        Emitted by Escape; the main window provides the shared Back
+        button.
     learner : Learner
         Whose answers are shown; only the active profile's own.
     exercise : FieldComboBox
@@ -275,7 +319,8 @@ class StatsPage(QWidget):
     tiles : dict of str to Tile
         The headline numbers, by name.
     detail : QFrame
-        The panel under the charts that lists the answers behind a clicked bar, point, row or day. Hidden until one is clicked.
+        The panel under the charts that lists the answers behind a
+        clicked bar, point, row or day. Hidden until one is clicked.
     answers : AnswerList
         The table in the detail panel.
 
@@ -283,8 +328,14 @@ class StatsPage(QWidget):
     --------
     >>> from alto.learning import Database
     >>> db = Database()
-    >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
-    >>> page.note.text().startswith("No answers recorded for Ada")
+    >>> page = StatsPage(
+    ...     Learner(
+    ...         db, profile=db.add_profile("Ada")
+    ...     )
+    ... )
+    >>> page.note.text().startswith(
+    ...     "No answers recorded for Ada"
+    ... )
     True
     """
 
@@ -310,19 +361,27 @@ class StatsPage(QWidget):
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
-        >>> page.timeframe.currentText()  # the last 30 days, until another is chosen
+        >>> page = StatsPage(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
+        >>> # the last 30 days, until another is chosen
+        >>> page.timeframe.currentText()
         'Last 30 days'
         """
         super().__init__(parent)
         self.learner = learner
         outer = QVBoxLayout(self)
 
-        # The main window provides Back beside the navigation search field; this row holds the filters.
+        # The main window provides Back beside the navigation search
+        # field; this row holds the filters.
         bar = QHBoxLayout()
         bar.setSpacing(10)
         QShortcut(QKeySequence(Qt.Key.Key_Escape), self, self.back.emit)
-        who = QLabel(f"<b>{learner.profile.name}</b>")  # these are always the active profile's own numbers
+        who = QLabel(
+            f"<b>{learner.profile.name}</b>",
+        )  # these are always the active profile's own numbers
         who.setToolTip("Statistics for the active profile")
         bar.addWidget(who)
         self.exercise = FieldComboBox()
@@ -373,7 +432,9 @@ class StatsPage(QWidget):
         self.granularity.addItem("Auto", None)
         for period in ("hour", "day", "week", "month"):
             self.granularity.addItem(period.title(), period)
-        self.granularity.setAccessibleName("Questions answered chart granularity")
+        self.granularity.setAccessibleName(
+            "Questions answered chart granularity",
+        )
         label = QLabel("Granularity")
         label.setBuddy(self.granularity)
         volume_filter = QWidget()
@@ -381,34 +442,60 @@ class StatsPage(QWidget):
         volume_controls.setContentsMargins(0, 0, 0, 0)
         volume_controls.addWidget(label)
         volume_controls.addWidget(self.granularity)
-        self.volume = StackedBarChart("Questions answered", header_control=volume_filter)
-        self.accuracy = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
-        self.speed = LineChart("Typical time to first answer", fmt=lambda v: f"{v:.1f} s")
+        self.volume = StackedBarChart(
+            "Questions answered",
+            header_control=volume_filter,
+        )
+        self.accuracy = LineChart(
+            "Right on the first try",
+            fmt=lambda v: f"{v:.0f}%",
+            fixed_top=100,
+        )
+        self.speed = LineChart(
+            "Typical time to first answer",
+            fmt=lambda v: f"{v:.1f} s",
+        )
         self.by_exercise = HBarChart("Right on the first try, by exercise")
         charts = QGridLayout()
         charts.setSpacing(14)
         charts.addWidget(self.volume, 0, 0)
         charts.addWidget(self.accuracy, 0, 1)
         self.volume_scroll = QScrollBar(Qt.Orientation.Horizontal)
-        self.volume_scroll.setAccessibleName("Questions answered chart periods")
+        self.volume_scroll.setAccessibleName(
+            "Questions answered chart periods",
+        )
         self.volume_scroll.setPageStep(VOLUME_WINDOW)
         charts.addWidget(self.volume_scroll, 1, 0)
         charts.addWidget(self.speed, 2, 0)
         charts.addWidget(self.by_exercise, 2, 1)
         self.response_times_button = QPushButton("Response-time distribution…")
         self.response_times_button.clicked.connect(
-            lambda: ResponseTimeDialog(learner, parent=self, exercise=self.exercise.currentData()).open(),
+            lambda: ResponseTimeDialog(
+                learner,
+                parent=self,
+                exercise=self.exercise.currentData(),
+            ).open(),
         )
-        charts.addWidget(self.response_times_button, 3, 0, Qt.AlignmentFlag.AlignLeft)
+        charts.addWidget(
+            self.response_times_button,
+            3,
+            0,
+            Qt.AlignmentFlag.AlignLeft,
+        )
         lay.addLayout(charts)
 
-        # The calendar always looks back about a year, whatever the timeframe, so it follows only the exercise filter.
+        # The calendar always looks back about a year, whatever the
+        # timeframe, so it follows only the exercise filter.
         self.heatmap = HeatmapChart("Reviews, last 12 months")
-        self.heatmap.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.heatmap.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed,
+        )
         self.heatmap.setFixedHeight(px(190))
         lay.addWidget(self.heatmap)
 
-        # Clicking a bar, a point, a row or a day lists the answers behind it here.
+        # Clicking a bar, a point, a row or a day lists the answers
+        # behind it here.
         self.detail = QFrame()
         self.detail.setObjectName("detailPane")
         detail_lay = QVBoxLayout(self.detail)
@@ -442,12 +529,23 @@ class StatsPage(QWidget):
             ],
         )
         self.table.verticalHeader().hide()
-        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
-        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.table.setEditTriggers(
+            QAbstractItemView.EditTrigger.NoEditTriggers,
+        )
+        self.table.setSelectionMode(
+            QAbstractItemView.SelectionMode.SingleSelection,
+        )
+        self.table.setSelectionBehavior(
+            QAbstractItemView.SelectionBehavior.SelectRows,
+        )
         self.table.setToolTip("Double-click a row to view the saved question.")
         self.table.doubleClicked.connect(
-            lambda index: open_preview(index.siblingAtColumn(0), names=self._names(), parent=self, learner=self.learner),
+            lambda index: open_preview(
+                index.siblingAtColumn(0),
+                names=self._names(),
+                parent=self,
+                learner=self.learner,
+            ),
         )
         self.table.setShowGrid(False)
         head = self.table.horizontalHeader()
@@ -460,15 +558,27 @@ class StatsPage(QWidget):
         self.scroller = QScrollArea()
         self.scroller.setWidgetResizable(True)
         self.scroller.setFrameShape(QScrollArea.Shape.NoFrame)
-        self.scroller.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scroller.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff,
+        )
         self.scroller.setWidget(body)
         outer.addWidget(self.scroller, 1)
-        self._reveal = QTimer(self)  # owned by the page, so it cannot fire after the page has gone
+        self._reveal = QTimer(
+            self,
+        )  # owned by the page, so it cannot fire after the page has gone
         self._reveal.setSingleShot(True)
-        self._reveal.timeout.connect(lambda: self.scroller.ensureWidgetVisible(self.detail))
-        self._stats: stats.Stats | None = None  # what the charts show now, so a click can be turned into a period
+        self._reveal.timeout.connect(
+            lambda: self.scroller.ensureWidgetVisible(self.detail),
+        )
+        self._stats: stats.Stats | None = (
+            # what the charts show now, so a click can be turned into a
+            # period
+            None
+        )
         self._since: float | None = None
-        self.volume.clicked.connect(lambda index: self._drill_period(index, volume=True))
+        self.volume.clicked.connect(
+            lambda index: self._drill_period(index, volume=True),
+        )
         self.volume_scroll.valueChanged.connect(self._show_volume)
         for chart in (self.accuracy, self.speed):
             chart.clicked.connect(self._drill_period)
@@ -497,7 +607,11 @@ class StatsPage(QWidget):
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
+        >>> page = StatsPage(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> page._names()["NoteNames"]
         'Note Identification'
         """
@@ -505,19 +619,28 @@ class StatsPage(QWidget):
 
     def refresh(self) -> None:
         """
-        Recalculate everything for the chosen exercise and timeframe and show it.
+        Recalculate everything for the chosen exercise and timeframe and
+        show it.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
+        >>> page = StatsPage(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> page.refresh()
-        >>> page.tiles["questions"].value.text()  # nothing answered yet
+        >>> page.tiles[
+        ...     "questions"
+        ... ].value.text()  # nothing answered yet
         '0'
         """
         now = time.time()
-        profiles = [self.learner.profile.id]  # only the active profile's answers
+        profiles = [
+            self.learner.profile.id,
+        ]  # only the active profile's answers
         since = since_for(self.timeframe.currentData(), now=now)
         s = stats.collect(
             self.learner.db,
@@ -532,21 +655,39 @@ class StatsPage(QWidget):
 
         who = self.learner.profile.name
         self.note.setText(
-            f"Showing {who}. A question counts as right only if the first answer was right."
+            "Showing "
+            f"{who}"
+            ". A question counts as right only if the first answer was "
+            "right."
             if s.questions
-            else f"No answers recorded for {who} in this selection yet. Practice an exercise, then come back.",
+            else (
+                "No answers recorded for "
+                f"{who}"
+                " in this selection yet. Practice an exercise, then come "
+                "back."
+            ),
         )
         self.tiles["questions"].show_value(str(s.questions))
         accuracy, tries = s.accuracy, s.attempts_per_question
-        self.tiles["accuracy"].show_value("–" if accuracy is None else f"{accuracy:.0f}%")
-        self.tiles["speed"].show_value("–" if s.median_seconds is None else f"{s.median_seconds:.1f} s")
-        self.tiles["tries"].show_value("–" if tries is None else f"{tries:.2f}")
+        self.tiles["accuracy"].show_value(
+            "–" if accuracy is None else f"{accuracy:.0f}%",
+        )
+        self.tiles["speed"].show_value(
+            "–" if s.median_seconds is None else f"{s.median_seconds:.1f} s",
+        )
+        self.tiles["tries"].show_value(
+            "–" if tries is None else f"{tries:.2f}",
+        )
         self.tiles["days"].show_value(str(s.days_practiced))
         self.tiles["time"].show_value(format_duration(s.practice_seconds))
 
         labels = [b.label for b in s.buckets]
         per = s.granularity
-        last = max(0, len(s.volume_buckets) - VOLUME_WINDOW) if self.granularity.currentData() else 0
+        last = (
+            max(0, len(s.volume_buckets) - VOLUME_WINDOW)
+            if self.granularity.currentData()
+            else 0
+        )
         self.volume_scroll.blockSignals(True)
         self.volume_scroll.setRange(0, last)
         self.volume_scroll.setValue(last)
@@ -556,13 +697,23 @@ class StatsPage(QWidget):
         self.accuracy.title = f"Right on the first try, per {per}"
         self.accuracy.set_data(labels, values=[b.accuracy for b in s.buckets])
         self.speed.title = f"Typical time to first answer, per {per}"
-        self.speed.set_data(labels, values=[b.median_seconds for b in s.buckets])
+        self.speed.set_data(
+            labels,
+            values=[b.median_seconds for b in s.buckets],
+        )
         self.by_exercise.set_data(
             [
                 (
                     names.get(e.exercise, e.exercise),
                     e.accuracy,
-                    f"{e.accuracy:.0f}%  ·  {e.questions} q  ·  {e.median_seconds:.1f} s",
+                    (
+                        f"{e.accuracy:.0f}"
+                        "%  ·  "
+                        f"{e.questions}"
+                        " q  ·  "
+                        f"{e.median_seconds:.1f}"
+                        " s"
+                    ),
                 )
                 for e in s.by_exercise
             ],
@@ -588,11 +739,22 @@ class StatsPage(QWidget):
             ):
                 item = QTableWidgetItem(text)
                 if col == 0:
-                    item.setData(ROW_ROLE, {"exercise": h.exercise, "item_key": h.item_key, "payload": h.payload})
+                    item.setData(
+                        ROW_ROLE,
+                        {
+                            "exercise": h.exercise,
+                            "item_key": h.item_key,
+                            "payload": h.payload,
+                        },
+                    )
                 if col >= 2:
                     item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.table.setItem(row, col, item)
-        self.table.setFixedHeight(self.table.horizontalHeader().height() + px(30) * max(len(s.hardest), 1) + px(6))
+        self.table.setFixedHeight(
+            self.table.horizontalHeader().height()
+            + px(30) * max(len(s.hardest), 1)
+            + px(6),
+        )
 
     def _show_volume(self) -> None:
         """
@@ -602,7 +764,11 @@ class StatsPage(QWidget):
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
+        >>> page = StatsPage(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> page._show_volume()
         >>> page.volume.labels
         []
@@ -615,7 +781,11 @@ class StatsPage(QWidget):
             start = self.volume_scroll.value()
             buckets = buckets[start : start + VOLUME_WINDOW]
         labels = [b.label for b in buckets]
-        if per == "hour" and buckets and buckets[0].start.date() != buckets[-1].start.date():
+        if (
+            per == "hour"
+            and buckets
+            and buckets[0].start.date() != buckets[-1].start.date()
+        ):
             labels = [b.start.strftime("%b %d %H:%M") for b in buckets]
         self.volume.title = f"Questions answered per {per}"
         self.volume.set_data(
@@ -626,30 +796,46 @@ class StatsPage(QWidget):
 
     def _clear_selection(self) -> None:
         """
-        Remove the highlight that marks the clicked element in every chart.
+        Remove the highlight that marks the clicked element in every
+        chart.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
+        >>> page = StatsPage(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> page.volume.set_selected(2)
         >>> page._clear_selection()
         >>> page.volume.selected is None
         True
         """
-        for chart in (self.volume, self.accuracy, self.speed, self.by_exercise, self.heatmap):
+        for chart in (
+            self.volume,
+            self.accuracy,
+            self.speed,
+            self.by_exercise,
+            self.heatmap,
+        ):
             chart.set_selected(None)
 
     def _close_detail(self) -> None:
         """
-        Hide the list of answers and the highlight of the element it was opened from.
+        Hide the list of answers and the highlight of the element it was
+        opened from.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
-        >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
+        >>> page = StatsPage(
+        ...     Learner(
+        ...         db, profile=db.add_profile("Ada")
+        ...     )
+        ... )
         >>> page._close_detail()
         >>> page.detail.isHidden()
         True
@@ -666,29 +852,51 @@ class StatsPage(QWidget):
         until: float | None,
     ) -> None:
         """
-        List the answers within a scope under the charts, and scroll to them.
+        List the answers within a scope under the charts, and scroll to
+        them.
 
         Parameters
         ----------
         title : str
             The heading of the list.
         exercise : str or None
-            The exercise to list (a class name), or None for all of them. Keyword-only.
+            The exercise to list (a class name), or None for all of
+            them. Keyword-only.
         since : float or None
-            The earliest answer to list (a timestamp), or None for no limit. Keyword-only.
+            The earliest answer to list (a timestamp), or None for no
+            limit. Keyword-only.
         until : float or None
-            The time before which answers are listed, or None for no limit. Keyword-only.
+            The time before which answers are listed, or None for no
+            limit. Keyword-only.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> store = Database()
         >>> ada = store.add_profile("Ada")
-        >>> store.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-        ...                   duration_ms=2000, answered_at=1000.0)
-        >>> page = StatsPage(Learner(store, profile=ada))
-        >>> page._open_detail("A day", exercise=None, since=0.0, until=2000.0)
-        >>> page.detail.isHidden(), page.answers.proxy.rowCount()
+        >>> store.add_attempt(
+        ...     ada.id,
+        ...     exercise="NoteNames",
+        ...     item_key="k",
+        ...     attempt_no=1,
+        ...     answer="C",
+        ...     correct=True,
+        ...     duration_ms=2000,
+        ...     answered_at=1000.0,
+        ... )
+        >>> page = StatsPage(
+        ...     Learner(store, profile=ada)
+        ... )
+        >>> page._open_detail(
+        ...     "A day",
+        ...     exercise=None,
+        ...     since=0.0,
+        ...     until=2000.0,
+        ... )
+        >>> (
+        ...     page.detail.isHidden(),
+        ...     page.answers.proxy.rowCount(),
+        ... )
         (False, 1)
         >>> page.detail_note.text()
         '1 answer, to 1 question, 1 right on the first try.'
@@ -714,59 +922,101 @@ class StatsPage(QWidget):
             firsts = [r for r in rows if r["attempt_no"] == 1]
             right = sum(1 for r in firsts if r["correct"])
             asked = f"{len(firsts)} question{'s' if len(firsts) != 1 else ''}"
-            note = f"{total:,} answer{plural}, to {asked}, {right} right on the first try."
+            note = (
+                f"{total:,}"
+                " answer"
+                f"{plural}"
+                ", to "
+                f"{asked}"
+                ", "
+                f"{right}"
+                " right on the first try."
+            )
         self.detail_title.setText(f"<b>{title}</b>")
         self.detail_note.setText(note)
         self.answers.show_answers(rows)
         self.detail.show()
-        self._reveal.start(0)  # scroll to it once the layout has made room for it
+        self._reveal.start(
+            0,
+        )  # scroll to it once the layout has made room for it
 
     def _drill_period(self, index: object, *, volume: bool = False) -> None:
         """
-        List the answers given in the period of a clicked bar or point, or close the list if that period is already open.
+        List the answers given in the period of a clicked bar or point,
+        or close the list if that period is already open.
 
         Parameters
         ----------
         index : object
-            The index of the period, as the chart that was clicked emits it.
+            The index of the period, as the chart that was clicked emits
+            it.
         volume : bool, default False
-            Whether the click came from the questions answered chart. Keyword-only.
+            Whether the click came from the questions answered chart.
+            Keyword-only.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
         >>> ada = db.add_profile("Ada")
-        >>> db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-        ...                duration_ms=2000, answered_at=time.time())
+        >>> db.add_attempt(
+        ...     ada.id,
+        ...     exercise="NoteNames",
+        ...     item_key="k",
+        ...     attempt_no=1,
+        ...     answer="C",
+        ...     correct=True,
+        ...     duration_ms=2000,
+        ...     answered_at=time.time(),
+        ... )
         >>> page = StatsPage(Learner(db, profile=ada))
-        >>> page._drill_period(len(page.volume.labels) - 1)  # the last period is today
-        >>> page.answers.proxy.rowCount(), page.volume.selected == page.accuracy.selected
+        >>> page._drill_period(
+        ...     len(page.volume.labels) - 1
+        ... )  # the last period is today
+        >>> (
+        ...     page.answers.proxy.rowCount(),
+        ...     page.volume.selected
+        ...     == page.accuracy.selected,
+        ... )
         (1, True)
-        >>> page._drill_period(len(page.volume.labels) - 1)  # clicking it again closes the list
+        >>> page._drill_period(
+        ...     len(page.volume.labels) - 1
+        ... )  # clicking it again closes the list
         >>> page.detail.isHidden()
         True
         """
         s = self._stats
         chart = self.volume if volume else self.accuracy
-        if s is None or not isinstance(index, int) or not 0 <= index < len(chart.labels):
+        if (
+            s is None
+            or not isinstance(index, int)
+            or not 0 <= index < len(chart.labels)
+        ):
             return
         if chart.selected == index:
             self._close_detail()
             return
         offset = self.volume_scroll.value()
-        bucket = s.volume_buckets[index + offset] if volume else s.buckets[index]
+        bucket = (
+            s.volume_buckets[index + offset] if volume else s.buckets[index]
+        )
         volume_period = self.granularity.currentData() or s.granularity
         period = volume_period if volume else s.granularity
         begin = bucket.start.timestamp()
         if self._since is not None:
-            begin = max(begin, self._since)  # the first period may begin before the timeframe does
+            begin = max(
+                begin,
+                self._since,
+            )  # the first period may begin before the timeframe does
         self._clear_selection()
         self._open_detail(
             period_title(bucket.start, granularity=period),
             exercise=self.exercise.currentData(),
             since=begin,
-            until=stats.period_end(bucket.start, granularity=period).timestamp(),
+            until=stats.period_end(
+                bucket.start,
+                granularity=period,
+            ).timestamp(),
         )
         if period == s.granularity:
             trend_index = index + offset if volume else index
@@ -779,27 +1029,41 @@ class StatsPage(QWidget):
 
     def _drill_exercise(self, index: object) -> None:
         """
-        List the answers to a clicked exercise within the timeframe, or close the list if it is already open.
+        List the answers to a clicked exercise within the timeframe, or
+        close the list if it is already open.
 
         Parameters
         ----------
         index : object
-            The index of the row, as the chart that was clicked emits it.
+            The index of the row, as the chart that was clicked emits
+            it.
 
         Examples
         --------
         >>> from alto.learning import Database
         >>> db = Database()
         >>> ada = db.add_profile("Ada")
-        >>> db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-        ...                duration_ms=2000, answered_at=time.time())
+        >>> db.add_attempt(
+        ...     ada.id,
+        ...     exercise="NoteNames",
+        ...     item_key="k",
+        ...     attempt_no=1,
+        ...     answer="C",
+        ...     correct=True,
+        ...     duration_ms=2000,
+        ...     answered_at=time.time(),
+        ... )
         >>> page = StatsPage(Learner(db, profile=ada))
         >>> page._drill_exercise(0)
         >>> page.detail_title.text()
         '<b>Answers to Note Identification</b>'
         """
         s = self._stats
-        if s is None or not isinstance(index, int) or not 0 <= index < len(s.by_exercise):
+        if (
+            s is None
+            or not isinstance(index, int)
+            or not 0 <= index < len(s.by_exercise)
+        ):
             return
         if self.by_exercise.selected == index:
             self._close_detail()
@@ -816,9 +1080,11 @@ class StatsPage(QWidget):
 
     def _drill_day(self, day: object) -> None:
         """
-        List the answers given on a clicked day of the calendar, or close the list if that day is already open.
+        List the answers given on a clicked day of the calendar, or
+        close the list if that day is already open.
 
-        The calendar always looks back about a year, so this ignores the timeframe and follows only the exercise filter.
+        The calendar always looks back about a year, so this ignores the
+        timeframe and follows only the exercise filter.
 
         Parameters
         ----------
@@ -830,8 +1096,16 @@ class StatsPage(QWidget):
         >>> from alto.learning import Database
         >>> db = Database()
         >>> ada = db.add_profile("Ada")
-        >>> db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-        ...                duration_ms=2000, answered_at=time.time())
+        >>> db.add_attempt(
+        ...     ada.id,
+        ...     exercise="NoteNames",
+        ...     item_key="k",
+        ...     attempt_no=1,
+        ...     answer="C",
+        ...     correct=True,
+        ...     duration_ms=2000,
+        ...     answered_at=time.time(),
+        ... )
         >>> page = StatsPage(Learner(db, profile=ada))
         >>> page._drill_day(date.today())
         >>> page.answers.proxy.rowCount()

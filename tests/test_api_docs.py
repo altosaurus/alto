@@ -1,4 +1,7 @@
-"""The API reference in docs/api stays in step with the docstrings it is written from."""
+"""
+The API reference in docs/api stays in step with the docstrings it is
+written from.
+"""
 
 from __future__ import annotations
 
@@ -24,28 +27,41 @@ def api_docs() -> ModuleType:
     ModuleType
         The loaded module.
     """
-    spec = importlib.util.spec_from_file_location("api_docs", ROOT / "scripts" / "api_docs.py")
+    spec = importlib.util.spec_from_file_location(
+        "api_docs",
+        ROOT / "scripts" / "api_docs.py",
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)  # only defines things; the work happens under __main__
+    spec.loader.exec_module(
+        module,
+    )  # only defines things; the work happens under __main__
     return module
 
 
-def test_the_committed_pages_match_the_docstrings(api_docs: ModuleType) -> None:
+def test_the_committed_pages_match_the_docstrings(
+    api_docs: ModuleType,
+) -> None:
     """
-    Check that the committed pages match the docstrings; if not, run `python scripts/api_docs.py`.
+    Check that the committed pages match the docstrings; if not, run
+    `python scripts/api_docs.py`.
 
     Parameters
     ----------
     api_docs : ModuleType
         The script that writes the pages.
     """
-    assert api_docs.problems() == [], "docs/api is out of date: run `python scripts/api_docs.py`"
+    assert api_docs.problems() == [], (
+        "docs/api is out of date: run `python scripts/api_docs.py`"
+    )
 
 
-def test_every_module_has_a_page_with_its_public_names(api_docs: ModuleType) -> None:
+def test_every_module_has_a_page_with_its_public_names(
+    api_docs: ModuleType,
+) -> None:
     """
-    Check that every module has a page, listed on the index, that names its public classes and leaves out private ones.
+    Check that every module has a page, listed on the index, that names
+    its public classes and leaves out private ones.
 
     Parameters
     ----------
@@ -61,9 +77,12 @@ def test_every_module_has_a_page_with_its_public_names(api_docs: ModuleType) -> 
     assert "## StackedBarChart" in pages["alto.ui.charts.md"]
 
 
-def test_a_page_has_the_front_matter_the_site_needs(api_docs: ModuleType) -> None:
+def test_a_page_has_the_front_matter_the_site_needs(
+    api_docs: ModuleType,
+) -> None:
     """
-    Check that a page carries the front matter the docs layout reads, and wraps its text in Liquid's raw tags.
+    Check that a page carries the front matter the docs layout reads,
+    and wraps its text in Liquid's raw tags.
 
     Parameters
     ----------
@@ -72,14 +91,27 @@ def test_a_page_has_the_front_matter_the_site_needs(api_docs: ModuleType) -> Non
     """
     page = api_docs.build()["alto.theory.pitch.md"]
     head, _, body = page.removeprefix("---\n").partition("---\n")
-    assert "title: alto.theory.pitch" in head and "parent: api" in head and "permalink: /api/alto.theory.pitch/" in head
-    assert body.startswith("{% raw %}") and body.rstrip().endswith("{% endraw %}")
-    assert "{%" not in body.replace("{% raw %}", "").replace("{% endraw %}", "")
+    assert (
+        "title: alto.theory.pitch" in head
+        and "parent: api" in head
+        and "permalink: /api/alto.theory.pitch/" in head
+    )
+    assert body.startswith("{% raw %}") and body.rstrip().endswith(
+        "{% endraw %}",
+    )
+    assert "{%" not in body.replace("{% raw %}", "").replace(
+        "{% endraw %}",
+        "",
+    )
 
 
-def test_adding_a_module_leaves_existing_pages_identical(api_docs: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_adding_a_module_leaves_existing_pages_identical(
+    api_docs: ModuleType,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Insert a module earlier in the API index and compare the existing page byte for byte.
+    Insert a module earlier in the API index and compare the existing
+    page byte for byte.
 
     Parameters
     ----------
@@ -102,7 +134,8 @@ def test_the_check_reports_what_is_missing_or_stale(
     tmp_path: Path,
 ) -> None:
     """
-    Check that a folder with a missing, a stale and an unwanted page is reported, and a freshly written one is clean.
+    Check that a folder with a missing, a stale and an unwanted page is
+    reported, and a freshly written one is clean.
 
     Parameters
     ----------

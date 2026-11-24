@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.anki_exporter/
 ---
 {% raw %}
-Modeless Anki deck exporter using Alto's exercise controls and music engraving.
+Modeless Anki deck exporter using Alto's exercise controls and music
+engraving.
 
 ## card_fields
 
@@ -42,7 +43,8 @@ Select exercise decks, preview cards, and export an Anki package.
 
 **Constructor**
 
-Build the deck navigation, card preview, and private exercise settings.
+Build the deck navigation, card preview, and private exercise
+settings.
 
 ### AnkiExporter.changeEvent
 
@@ -58,7 +60,8 @@ Refresh palette-dependent artwork when Qt applies a new theme.
 def reject() -> None
 ```
 
-Keep the export process alive until the destination dialog can close.
+Keep the export process alive until the destination dialog can
+close.
 
 ## ExporterSession
 
@@ -66,7 +69,8 @@ Keep the export process alive until the destination dialog can close.
 ExporterSession()
 ```
 
-Manage a modeless Qt window with its own exercise settings and Qt settings store.
+Manage a modeless Qt window with its own exercise settings and Qt
+settings store.
 
 **Constructor**
 
@@ -82,7 +86,8 @@ def open(
 ) -> None
 ```
 
-Raise the existing exporter or spawn a window for the active profile.
+Raise the existing exporter or spawn a window for the active
+profile.
 
 **Parameters**
 
@@ -99,7 +104,8 @@ Raise the existing exporter or spawn a window for the active profile.
 def sync_theme(key: str) -> None
 ```
 
-Forward the selected palette and any custom colors to an open exporter.
+Forward the selected palette and any custom colors to an open
+exporter.
 
 ### ExporterSession.close
 
@@ -107,5 +113,6 @@ Forward the selected palette and any custom colors to an open exporter.
 def close() -> None
 ```
 
-Close the command pipe so the exporter can finish its current write and exit normally.
+Close the command pipe so the exporter can finish its current
+write and exit normally.
 {% endraw %}

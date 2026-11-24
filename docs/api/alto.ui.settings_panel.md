@@ -5,12 +5,17 @@ package: alto.ui
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
-The settings panels of the built-in exercises, and `settings_panel_for`, which picks the panel for any exercise.
+The settings panels of the built-in exercises, and `settings_panel_for`,
+which picks the panel for any exercise.
 
-Each exercise with settings has a panel: a menu of rows (Clefs, Range, Key signatures ...) that each lead to a page. Edits
-are live: they change the shared settings object, are saved, and a `changed` signal tells the exercise to ask a new
-question. The widgets the panels are built from are in `alto.ui.settings_menu`, plugin exercises' panels are in
-`alto.ui.pack_settings_panel`, and loading and saving the settings is in `alto.ui.exercise_settings`.
+Each exercise with settings has a panel: a menu of rows (Clefs, Range,
+Key signatures ...) that each lead to a page. Edits
+are live: they change the shared settings object, are saved, and a
+`changed` signal tells the exercise to ask a new
+question. The widgets the panels are built from are in
+`alto.ui.settings_menu`, plugin exercises' panels are in
+`alto.ui.pack_settings_panel`, and loading and saving the settings is in
+`alto.ui.exercise_settings`.
 
 **Examples**
 
@@ -30,12 +35,15 @@ NoteNameSettingsPanel(
 )
 ```
 
-Bases: `StaffRangePanel`
+Bases: `NoteAnswerSettingsPanel`
 
-The settings of the note identification exercise: a menu leading to a page for each group of settings.
+The settings of the note identification exercise: a menu leading to
+a page for each group of settings.
 
-Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names, Accidentals and Octave) and a page for
-each. Edits are live: each changes the settings, saves them and emits `changed`.
+Two layers: the menu (Clefs, Range, Key signatures, Note values,
+Note names, Accidentals and Octave) and a page for
+each. Edits are live: each changes the settings, saves them and
+emits `changed`.
 
 **Attributes**
 
@@ -51,7 +59,9 @@ each. Edits are live: each changes the settings, saves them and emits `changed`.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = NoteNameSettingsPanel(NoteNameSettings())
+>>> panel = NoteNameSettingsPanel(
+...     NoteNameSettings()
+... )
 >>> panel.cfg.active_clefs()
 ['treble', 'bass']
 ```
@@ -68,7 +78,9 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = NoteNameSettingsPanel(NoteNameSettings())
+>>> panel = NoteNameSettingsPanel(
+...     NoteNameSettings()
+... )
 >>> panel.stack.count()  # the menu and five pages
 6
 ```
@@ -83,11 +95,13 @@ KeyboardSettingsPanel(
 )
 ```
 
-Bases: `ExerciseSettingsPanel`
+Bases: `KeyboardRangePanel`
 
-The settings of the keyboard exercise: a menu with a page for the range of keys.
+The settings of the keyboard exercise: a menu with a page for the
+range of keys.
 
-The menu has Range, Black keys, Octave number and Key signatures. Edits are live: each changes the settings, saves them
+The menu has Range, Black keys, Octave number and Key signatures.
+Edits are live: each changes the settings, saves them
 and emits `changed`.
 
 **Attributes**
@@ -101,8 +115,13 @@ and emits `changed`.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = KeyboardSettingsPanel(settings.KeyboardSettings())
->>> panel.low_label.text(), panel.high_label.text()
+>>> panel = KeyboardSettingsPanel(
+...     settings.KeyboardSettings()
+... )
+>>> (
+...     panel.low_label.text(),
+...     panel.high_label.text(),
+... )
 ('C3', 'C5')
 ```
 
@@ -118,7 +137,9 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> KeyboardSettingsPanel(settings.KeyboardSettings()).stack.count()  # the menu, the range and the keys
+>>> KeyboardSettingsPanel(
+...     settings.KeyboardSettings()
+... ).stack.count()  # the menu, the range and the keys
 3
 ```
 
@@ -134,9 +155,11 @@ NoteConstructionSettingsPanel(
 
 Bases: `ClefsPanel`
 
-The settings of the note construction exercise: a menu with a page for the staff and one for the keys.
+The settings of the note construction exercise: a menu with a page
+for the staff and one for the keys.
 
-The menu has Clefs, Staff Key, Question Type, and Octave. Edits are live: each changes the settings, saves them and
+The menu has Clefs, Staff Key, Question Type, and Octave. Edits are
+live: each changes the settings, saves them and
 emits `changed`.
 
 **Attributes**
@@ -149,7 +172,9 @@ emits `changed`.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+>>> panel = NoteConstructionSettingsPanel(
+...     settings.ConstructionSettings()
+... )
 >>> sorted(panel.boxes)[:3]
 ['alto', 'baritone', 'bass']
 ```
@@ -166,7 +191,9 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
+>>> NoteConstructionSettingsPanel(
+...     settings.ConstructionSettings()
+... ).stack.count()
 4
 ```
 
@@ -187,13 +214,16 @@ Choose the notation and answer format for written intervals.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
+>>> IntervalSettingsPanel(
+...     settings.IntervalSettings()
+... ).stack.count()
 10
 ```
 
 **Constructor**
 
-Build the interval settings menu with direction choices under Melodic.
+Build the interval settings menu with direction choices under
+Melodic.
 
 **Parameters**
 
@@ -203,7 +233,9 @@ Build the interval settings menu with direction choices under Melodic.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> IntervalSettingsPanel(settings.IntervalSettings()).quality_row.value.text()
+>>> IntervalSettingsPanel(
+...     settings.IntervalSettings()
+... ).quality_row.value.text()
 'Interval and Quality'
 ```
 
@@ -217,9 +249,10 @@ KeyboardIntervalSettingsPanel(
 )
 ```
 
-Bases: `ExerciseSettingsPanel`
+Bases: `KeyboardRangePanel`
 
-Range and interval selection pages for keyboard interval identification.
+Range and interval selection pages for keyboard interval
+identification.
 
 **Attributes**
 
@@ -234,7 +267,9 @@ Range and interval selection pages for keyboard interval identification.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+>>> panel = KeyboardIntervalSettingsPanel(
+...     settings.KeyboardIntervalSettings()
+... )
 >>> panel.stack.count()
 4
 ```
@@ -251,8 +286,13 @@ Build the range selector and interval checklist.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
->>> panel.low_label.text(), panel.high_label.text()
+>>> panel = KeyboardIntervalSettingsPanel(
+...     settings.KeyboardIntervalSettings()
+... )
+>>> (
+...     panel.low_label.text(),
+...     panel.high_label.text(),
+... )
 ('C3', 'C5')
 ```
 
@@ -268,9 +308,11 @@ ArpeggioSettingsPanel(
 
 Bases: `ClefsPanel`
 
-The settings of the arpeggio exercise: a menu with a page for each group of settings.
+The settings of the arpeggio exercise: a menu with a page for each
+group of settings.
 
-The menu has Clefs, Arpeggio types, Inversions and Key signatures. Edits are live: each changes the settings, saves them
+The menu has Clefs, Arpeggio types, Inversions and Key signatures.
+Edits are live: each changes the settings, saves them
 and emits `changed`.
 
 **Attributes**
@@ -285,7 +327,9 @@ and emits `changed`.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = ArpeggioSettingsPanel(settings.ArpeggioSettings())
+>>> panel = ArpeggioSettingsPanel(
+...     settings.ArpeggioSettings()
+... )
 >>> panel.types_row.value.text()
 '4 of 9'
 ```
@@ -302,7 +346,9 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ArpeggioSettingsPanel(settings.ArpeggioSettings()).stack.count()  # the menu and four pages
+>>> ArpeggioSettingsPanel(
+...     settings.ArpeggioSettings()
+... ).stack.count()  # the menu and four pages
 5
 ```
 
@@ -320,13 +366,17 @@ KeySignatureSettingsPanel(
 
 Bases: `ClefsPanel`
 
-The settings of a key signature exercise: a menu with a page for each group of settings.
+The settings of a key signature exercise: a menu with a page for
+each group of settings.
 
-The same panel serves key signature identification, key signature construction and both scale exercises, each saving
+The same panel serves key signature identification, key signature
+construction and both scale exercises, each saving
 under its own name.
 
-The menu has Clefs, Scales and Key signatures. Both scale exercises have independent staff and scale key choices;
-construction also has Octave and Steps switches. Edits are live: each changes the settings, saves them and emits `changed`.
+The menu has Clefs, Scales and Key signatures. Both scale exercises
+have independent staff and scale key choices;
+construction also has Octave and Steps switches. Edits are live:
+each changes the settings, saves them and emits `changed`.
 
 **Attributes**
 
@@ -341,7 +391,9 @@ construction also has Octave and Steps switches. Edits are live: each changes th
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = KeySignatureSettingsPanel(settings.KeySignatureSettings())
+>>> panel = KeySignatureSettingsPanel(
+...     settings.KeySignatureSettings()
+... )
 >>> panel.modes_row.value.text()
 '2 of 7'
 ```
@@ -360,7 +412,9 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and three pages
+>>> KeySignatureSettingsPanel(
+...     settings.KeySignatureSettings()
+... ).stack.count()  # the menu and three pages
 4
 ```
 
@@ -388,7 +442,9 @@ Build the settings menu and its Question Type and Terms pages.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> len(NotationSettingsPanel().terms.boxes) == len(settings.NOTATION_TERMS)
+>>> len(
+...     NotationSettingsPanel().terms.boxes
+... ) == len(settings.NOTATION_TERMS)
 True
 ```
 
@@ -404,11 +460,15 @@ ClefBasicsSettingsPanel(
 
 Bases: `ClefsPanel`
 
-The settings of the clef basics exercise: a menu with two pages, Question Type and Clefs.
+The settings of the clef basics exercise: a menu with two pages,
+Question Type and Clefs.
 
-Question Type chooses between Clef Construction (put a named clef on a blank staff) and Clef Identification (name the clef on
-a staff). Clefs lists the clefs in the same groups as the other exercises, with the French violin and subbass clefs, which
-only this exercise has, at the bottom. Edits are live: each changes the settings, saves them and emits `changed`.
+Question Type chooses between Clef Construction (put a named clef on
+a blank staff) and Clef Identification (name the clef on
+a staff). Clefs lists the clefs in the same groups as the other
+exercises, with the French violin and subbass clefs, which
+only this exercise has, at the bottom. Edits are live: each changes
+the settings, saves them and emits `changed`.
 
 **Attributes**
 
@@ -420,7 +480,9 @@ only this exercise has, at the bottom. Edits are live: each changes the settings
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
+>>> panel = ClefBasicsSettingsPanel(
+...     settings.ClefBasicsSettings()
+... )
 >>> panel.stack.count()  # the menu and two pages
 3
 ```
@@ -437,8 +499,15 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings(clefs={"subbass"}))
->>> panel.boxes["subbass"].isChecked(), list(panel.boxes)[-2:]
+>>> panel = ClefBasicsSettingsPanel(
+...     settings.ClefBasicsSettings(
+...         clefs={"subbass"}
+...     )
+... )
+>>> (
+...     panel.boxes["subbass"].isChecked(),
+...     list(panel.boxes)[-2:],
+... )
 (True, ['french', 'subbass'])
 ```
 
@@ -473,11 +542,15 @@ CircleSettingsPanel(
 
 Bases: `ExerciseSettingsPanel`
 
-The settings of the circle of fifths exercise: which kinds of question to ask, and the colors of the circle.
+The settings of the circle of fifths exercise: which kinds of
+question to ask, and the colors of the circle.
 
-The menu has two rows. Questions opens a page of switches. Colors opens a page of color schemes to choose from, with a
-button to make one of your own, which opens an editor. Edits are live: each changes the settings and saves them. A new kind
-of question emits `changed`, and a new color scheme emits `restyled`, which keeps the question.
+The menu has two rows. Questions opens a page of switches. Colors
+opens a page of color schemes to choose from, with a
+button to make one of your own, which opens an editor. Edits are
+live: each changes the settings and saves them. A new kind
+of question emits `changed`, and a new color scheme emits
+`restyled`, which keeps the question.
 
 **Attributes**
 
@@ -492,8 +565,13 @@ of question emits `changed`, and a new color scheme emits `restyled`, which keep
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> panel = CircleSettingsPanel(settings.CircleSettings())
->>> panel.questions_row.value.text(), panel.colors_row.value.text()
+>>> panel = CircleSettingsPanel(
+...     settings.CircleSettings()
+... )
+>>> (
+...     panel.questions_row.value.text(),
+...     panel.colors_row.value.text(),
+... )
 ('3 of 3', 'Cyan to indigo')
 ```
 
@@ -509,7 +587,10 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
+>>> CircleSettingsPanel(
+...     settings.CircleSettings()
+... # the menu, the questions, the colors and the editor
+... ).stack.count()
 4
 ```
 
@@ -537,10 +618,17 @@ Return the settings panel for an exercise.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.exercises.library import IntervalNames, NoteNames
->>> type(settings_panel_for(NoteNames())).__name__
+>>> from alto.exercises.library import (
+...     IntervalNames,
+...     NoteNames,
+... )
+>>> type(
+...     settings_panel_for(NoteNames())
+... ).__name__
 'NoteNameSettingsPanel'
->>> type(settings_panel_for(IntervalNames())).__name__
+>>> type(
+...     settings_panel_for(IntervalNames())
+... ).__name__
 'IntervalSettingsPanel'
 ```
 {% endraw %}

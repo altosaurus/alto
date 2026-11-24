@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 """
-Write the notices for the system libraries in the Linux download, and collect the sources of the copyleft ones.
+Write the notices for the system libraries in the Linux download, and
+collect the sources of the copyleft ones.
 
-PyInstaller copies the system libraries that Python and Qt link to from the machine that builds the download, so the
-download contains Ubuntu's builds of them. For each library this script finds the Debian package it came from, checks that
-the copy is the package's file unchanged, and installs the package's copyright file under ``licenses/Linux``. For the
-packages in ``SOURCE_PACKAGES`` it downloads Ubuntu's source package of the exact version (the upstream source and Ubuntu's
-changes) from Launchpad and packs them in one archive, published beside the download. A library whose source package is in
+PyInstaller copies the system libraries that Python and Qt link to from
+the machine that builds the download, so the
+download contains Ubuntu's builds of them. For each library this script
+finds the Debian package it came from, checks that
+the copy is the package's file unchanged, and installs the package's
+copyright file under ``licenses/Linux``. For the
+packages in ``SOURCE_PACKAGES`` it downloads Ubuntu's source package of
+the exact version (the upstream source and Ubuntu's
+changes) from Launchpad and packs them in one archive, published beside
+the download. A library whose source package is in
 neither list stops the build, so a new one is looked at before it ships.
 
 Run on the build machine, after PyInstaller:
 
-    python packaging/linux_libraries.py <frozen folder> <library list> <sources archive>
+    python packaging/linux_libraries.py <frozen folder> <library list>
+    <sources archive>
 """
 
 import hashlib
@@ -30,8 +37,10 @@ from dataclasses import (
 from importlib.metadata import version
 from pathlib import Path
 
-# Source packages under the LGPL or GPL (in whole, in part, or as one choice the copyright file gives), whose source is
-# published with the download. GCC's runtime libraries are GPL-3 with the GCC Runtime Library Exception.
+# Source packages under the LGPL or GPL (in whole, in part, or as one
+# choice the copyright file gives), whose source is
+# published with the download. GCC's runtime libraries are GPL-3 with
+# the GCC Runtime Library Exception.
 SOURCE_PACKAGES = frozenset(
     {
         "apparmor",
@@ -50,7 +59,8 @@ SOURCE_PACKAGES = frozenset(
         "util-linux",
     },
 )
-# Source packages under permissive licenses (MIT, BSD, zlib, Apache, public domain, or one of these as a choice), whose
+# Source packages under permissive licenses (MIT, BSD, zlib, Apache,
+# public domain, or one of these as a choice), whose
 # copyright file is installed.
 NOTICE_PACKAGES = frozenset(
     {
@@ -107,12 +117,14 @@ CURL = [
 @dataclass(frozen=True)
 class Library:
     """
-    One system library in the download and the Debian package it came from.
+    One system library in the download and the Debian package it came
+    from.
 
     Parameters
     ----------
     name : str
-        The file name in the download's ``_internal`` folder, such as ``libglib-2.0.so.0``.
+        The file name in the download's ``_internal`` folder, such as
+        ``libglib-2.0.so.0``.
     package : str
         The binary package that installed it, such as ``libglib2.0-0``.
     version : str
@@ -151,7 +163,9 @@ def sha256(path: Path) -> str:
     Examples
     --------
     >>> import tempfile
-    >>> with tempfile.TemporaryDirectory() as folder:
+    >>> with (
+    ...     tempfile.TemporaryDirectory() as folder
+    ... ):
     ...     file = Path(folder) / "a"
     ...     _ = file.write_bytes(b"abc")
     ...     sha256(file)[:16]
@@ -163,9 +177,11 @@ def sha256(path: Path) -> str:
 
 def owner(path: Path) -> str:
     """
-    Return the binary package that installed a file, with its architecture.
+    Return the binary package that installed a file, with its
+    architecture.
 
-    Ubuntu keeps libraries in ``/usr/lib``, with ``/lib`` a link to it, and a package may have recorded either path, so both
+    Ubuntu keeps libraries in ``/usr/lib``, with ``/lib`` a link to it,
+    and a package may have recorded either path, so both
     are tried.
 
     Parameters
@@ -184,17 +200,29 @@ def owner(path: Path) -> str:
         If no package installed the file.
     """
     text = str(path)
-    alternatives = [text, text.removeprefix("/usr")] if text.startswith("/usr/") else [text, "/usr" + text]
+    alternatives = (
+        [text, text.removeprefix("/usr")]
+        if text.startswith("/usr/")
+        else [text, "/usr" + text]
+    )
     for candidate in alternatives:
-        found = subprocess.run(["dpkg", "-S", candidate], capture_output=True, text=True, check=False)
+        found = subprocess.run(
+            ["dpkg", "-S", candidate],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
         if found.returncode == 0:
             return found.stdout.splitlines()[0].split(": ", 1)[0]
-    raise SystemExit(f"No package installed {path}, so its license cannot be checked")
+    raise SystemExit(
+        f"No package installed {path}, so its license cannot be checked",
+    )
 
 
 def unchanged(path: Path, *, package: str) -> bool:
     """
-    Tell whether a file is the one its package installed, by the checksum the package recorded.
+    Tell whether a file is the one its package installed, by the
+    checksum the package recorded.
 
     Parameters
     ----------
@@ -209,8 +237,15 @@ def unchanged(path: Path, *, package: str) -> bool:
         True if the package lists the file and its MD5 checksum matches.
     """
     name = package.split(":", 1)[0]
-    lists = [Path(f"/var/lib/dpkg/info/{package}.md5sums"), Path(f"/var/lib/dpkg/info/{name}.md5sums")]
-    relative = {str(path).lstrip("/"), str(path).removeprefix("/usr").lstrip("/"), "usr" + str(path)}
+    lists = [
+        Path(f"/var/lib/dpkg/info/{package}.md5sums"),
+        Path(f"/var/lib/dpkg/info/{name}.md5sums"),
+    ]
+    relative = {
+        str(path).lstrip("/"),
+        str(path).removeprefix("/usr").lstrip("/"),
+        "usr" + str(path),
+    }
     digest = hashlib.md5(path.read_bytes(), usedforsecurity=False).hexdigest()
     for listing in (entry for entry in lists if entry.is_file()):
         for line in listing.read_text(encoding="utf-8").splitlines():
@@ -222,14 +257,16 @@ def unchanged(path: Path, *, package: str) -> bool:
 
 def identify(bundle: Path, *, entries: list[dict[str, str]]) -> list[Library]:
     """
-    Find the package of each system library the build copied, and check that the copy is unchanged.
+    Find the package of each system library the build copied, and check
+    that the copy is unchanged.
 
     Parameters
     ----------
     bundle : Path
         The frozen program's ``_internal`` folder.
     entries : list of dict of str to str
-        The libraries the build listed, each with its ``name`` in the bundle and the ``source`` it was copied from.
+        The libraries the build listed, each with its ``name`` in the
+        bundle and the ``source`` it was copied from.
 
     Returns
     -------
@@ -239,7 +276,8 @@ def identify(bundle: Path, *, entries: list[dict[str, str]]) -> list[Library]:
     Raises
     ------
     SystemExit
-        If a library is missing, differs from its package's file, or comes from a source package in neither list.
+        If a library is missing, differs from its package's file, or
+        comes from a source package in neither list.
     """
     libraries = []
     for entry in entries:
@@ -249,7 +287,9 @@ def identify(bundle: Path, *, entries: list[dict[str, str]]) -> list[Library]:
             raise SystemExit(f"{copy} is missing or differs from {real}")
         package = owner(real)
         if not unchanged(real, package=package):
-            raise SystemExit(f"{real} differs from the file {package} installed")
+            raise SystemExit(
+                f"{real} differs from the file {package} installed",
+            )
         fields = subprocess.check_output(
             [
                 "dpkg-query",
@@ -270,8 +310,12 @@ def identify(bundle: Path, *, entries: list[dict[str, str]]) -> list[Library]:
         )
         if library.source not in SOURCE_PACKAGES | NOTICE_PACKAGES:
             raise SystemExit(
-                f"{library.name} comes from {library.source}, which is not in packaging/linux_libraries.py: "
-                "check its license and add it to SOURCE_PACKAGES or NOTICE_PACKAGES, or keep it out of the build",
+                f"{library.name}"
+                " comes from "
+                f"{library.source}"
+                ", which is not in packaging/linux_libraries.py: "
+                "check its license and add it to SOURCE_PACKAGES or "
+                "NOTICE_PACKAGES, or keep it out of the build",
             )
         libraries.append(library)
     return sorted(libraries, key=lambda found: found.name)
@@ -279,7 +323,8 @@ def identify(bundle: Path, *, entries: list[dict[str, str]]) -> list[Library]:
 
 def common_licenses(text: str) -> set[str]:
     """
-    Return the license texts in ``/usr/share/common-licenses`` that a copyright file refers to.
+    Return the license texts in ``/usr/share/common-licenses`` that a
+    copyright file refers to.
 
     Parameters
     ----------
@@ -293,15 +338,32 @@ def common_licenses(text: str) -> set[str]:
 
     Examples
     --------
-    >>> sorted(common_licenses("see /usr/share/common-licenses/LGPL-2.1 and `/usr/share/common-licenses/GPL-2'."))
+    >>> sorted(
+    ...     common_licenses(
+    ...         "see /usr/share/common-licenses/LGPL-2.1 and "
+    ...         "`/usr/share/common-licenses/GPL-2'."
+    ...     )
+    ... )
     ['GPL-2', 'LGPL-2.1']
     """
-    return {name.rstrip(".") for name in re.findall(r"/usr/share/common-licenses/([A-Za-z0-9.+-]+)", text)}
+    return {
+        name.rstrip(".")
+        for name in re.findall(
+            r"/usr/share/common-licenses/([A-Za-z0-9.+-]+)",
+            text,
+        )
+    }
 
 
-def install_notices(frozen: Path, *, libraries: list[Library], archive: str) -> None:
+def install_notices(
+    frozen: Path,
+    *,
+    libraries: list[Library],
+    archive: str,
+) -> None:
     """
-    Install each package's copyright file, the license texts they refer to, and a README listing the libraries.
+    Install each package's copyright file, the license texts they refer
+    to, and a README listing the libraries.
 
     Parameters
     ----------
@@ -310,12 +372,14 @@ def install_notices(frozen: Path, *, libraries: list[Library], archive: str) -> 
     libraries : list of Library
         The system libraries in it.
     archive : str
-        The file name of the sources archive published beside the download.
+        The file name of the sources archive published beside the
+        download.
 
     Raises
     ------
     SystemExit
-        If a package has no copyright file, or one refers to a license text this system lacks.
+        If a package has no copyright file, or one refers to a license
+        text this system lacks.
     """
     destination = frozen / "licenses" / "Linux"
     shutil.rmtree(destination, ignore_errors=True)
@@ -324,38 +388,68 @@ def install_notices(frozen: Path, *, libraries: list[Library], archive: str) -> 
     for package in sorted({library.package for library in libraries}):
         copyright_file = Path("/usr/share/doc") / package / "copyright"
         if not copyright_file.is_file():
-            raise SystemExit(f"{package} has no copyright file at {copyright_file}")
+            raise SystemExit(
+                f"{package} has no copyright file at {copyright_file}",
+            )
         text = copyright_file.read_text(encoding="utf-8", errors="replace")
         referred |= common_licenses(text)
         (destination / package).mkdir()
-        (destination / package / "copyright").write_text(text, encoding="utf-8")
+        (destination / package / "copyright").write_text(
+            text,
+            encoding="utf-8",
+        )
     for name in sorted(referred):
         text_file = Path("/usr/share/common-licenses") / name
         if not text_file.is_file():
-            raise SystemExit(f"A copyright file refers to {text_file}, which this system does not have")
+            raise SystemExit(
+                "A copyright file refers to "
+                f"{text_file}"
+                ", which this system does not have",
+            )
         shutil.copyfile(text_file, destination / "common-licenses" / name)
     rows = [
-        f"{library.name}  {library.package} {library.version}  (source {library.source} {library.source_version})"
-        f"{'  [source published]' if library.source in SOURCE_PACKAGES else ''}\n    SHA-256 {library.sha256}"
-        for library in libraries
+        f"{lib.name}"
+        "  "
+        f"{lib.package}"
+        " "
+        f"{lib.version}"
+        "  (source "
+        f"{lib.source}"
+        " "
+        f"{lib.source_version}"
+        ")"
+        f"{('  [source published]' if lib.source in SOURCE_PACKAGES else '')}"
+        "\n    SHA-256 "
+        f"{lib.sha256}"
+        for lib in libraries
     ]
     readme = f"""System libraries in Alto's Linux download
 
-Alto's Linux download contains these libraries from Ubuntu {ubuntu_release()}, copied unchanged from the packages named
-below. Each package's copyright and license terms are in the folder named after it, and the license texts they refer to
-are in common-licenses. Alto's own code is under the MIT license; these libraries keep their own licenses.
+Alto's Linux download contains these libraries from Ubuntu {ubuntu_release()},
+copied unchanged from the packages named
+below. Each package's copyright and license terms are in the folder named after
+it, and the license texts they refer to
+are in common-licenses. Alto's own code is under the MIT license; these
+libraries keep their own licenses.
 
-The libraries marked [source published] are under the GNU LGPL or GPL, in whole or in part. Their corresponding source,
-Ubuntu's source package of the exact version listed (the upstream source with Ubuntu's changes, and the .dsc file that
+The libraries marked [source published] are under the GNU LGPL or GPL, in whole
+or in part. Their corresponding source,
+Ubuntu's source package of the exact version listed (the upstream source with
+Ubuntu's changes, and the .dsc file that
 describes them), is in {archive} on Alto's GitHub release page:
 https://github.com/altosaurus/alto/releases/tag/v{version("alto")}
-The same source packages are also kept by Ubuntu at https://launchpad.net/ubuntu/+source/<source package>.
+The same source packages are also kept by Ubuntu at
+https://launchpad.net/ubuntu/+source/<source package>.
 
-You may replace any of these libraries with a compatible build of your own, for example one you have modified: close Alto,
+You may replace any of these libraries with a compatible build of your own, for
+example one you have modified: close Alto,
 and put your build in the _internal folder under the same file name.
 
 """
-    (destination / "README.txt").write_text(readme + "\n".join(rows) + "\n", encoding="utf-8")
+    (destination / "README.txt").write_text(
+        readme + "\n".join(rows) + "\n",
+        encoding="utf-8",
+    )
 
 
 def ubuntu_release() -> str:
@@ -365,7 +459,8 @@ def ubuntu_release() -> str:
     Returns
     -------
     str
-        The version and code name, such as ``22.04 (jammy)``, or ``unknown`` if the system does not say.
+        The version and code name, such as ``22.04 (jammy)``, or
+        ``unknown`` if the system does not say.
     """
     fields = {}
     release = Path("/etc/os-release")
@@ -392,12 +487,18 @@ def launchpad(url: str) -> object:
     object
         Its JSON.
     """
-    return json.loads(subprocess.check_output([*CURL, "--header", "Accept: application/json", url], text=True))
+    return json.loads(
+        subprocess.check_output(
+            [*CURL, "--header", "Accept: application/json", url],
+            text=True,
+        ),
+    )
 
 
 def source_files(source: str, *, source_version: str) -> list[str]:
     """
-    Return the download addresses of the files of one Ubuntu source package version.
+    Return the download addresses of the files of one Ubuntu source
+    package version.
 
     Parameters
     ----------
@@ -427,17 +528,25 @@ def source_files(source: str, *, source_version: str) -> list[str]:
     found = launchpad(f"{LAUNCHPAD}?{query}")
     entries = found.get("entries") if isinstance(found, dict) else None
     first = entries[0] if isinstance(entries, list) and entries else None
-    if not isinstance(first, dict) or not isinstance(first.get("self_link"), str):
-        raise SystemExit(f"Launchpad has no source package {source} {source_version}")
+    if not isinstance(first, dict) or not isinstance(
+        first.get("self_link"),
+        str,
+    ):
+        raise SystemExit(
+            f"Launchpad has no source package {source} {source_version}",
+        )
     urls = launchpad(f"{first['self_link']}?ws.op=sourceFileUrls")
     if not isinstance(urls, list) or not urls:
-        raise SystemExit(f"Launchpad lists no files for {source} {source_version}")
+        raise SystemExit(
+            f"Launchpad lists no files for {source} {source_version}",
+        )
     return [str(url) for url in urls]
 
 
 def check_dsc(folder: Path, *, dsc: Path) -> None:
     """
-    Check the archives a source package's .dsc file lists against the checksums it gives.
+    Check the archives a source package's .dsc file lists against the
+    checksums it gives.
 
     Parameters
     ----------
@@ -458,14 +567,20 @@ def check_dsc(folder: Path, *, dsc: Path) -> None:
     for line in block.group(1).splitlines():
         digest, _size, name = line.split()
         if not (folder / name).is_file() or sha256(folder / name) != digest:
-            raise SystemExit(f"{name} is missing or differs from the checksum in {dsc.name}")
+            raise SystemExit(
+                f"{name}"
+                " is missing or differs from the checksum in "
+                f"{dsc.name}",
+            )
 
 
 def collect_sources(libraries: list[Library], *, archive: Path) -> None:
     """
-    Download the source packages of the copyleft libraries and pack them in one uncompressed tar archive.
+    Download the source packages of the copyleft libraries and pack them
+    in one uncompressed tar archive.
 
-    Each source package is in a folder named after it and its version. The archives in it are compressed already.
+    Each source package is in a folder named after it and its version.
+    The archives in it are compressed already.
 
     Parameters
     ----------
@@ -479,22 +594,47 @@ def collect_sources(libraries: list[Library], *, archive: Path) -> None:
     SystemExit
         If a source package has no .dsc file or a file differs from it.
     """
-    wanted = sorted({(library.source, library.source_version) for library in libraries if library.source in SOURCE_PACKAGES})
+    wanted = sorted(
+        {
+            (library.source, library.source_version)
+            for library in libraries
+            if library.source in SOURCE_PACKAGES
+        },
+    )
     archive.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as work, tarfile.open(archive, "w") as tar:
+    with (
+        tempfile.TemporaryDirectory() as work,
+        tarfile.open(archive, "w") as tar,
+    ):
         listing = []
         for source, source_version in wanted:
-            # Debian's file names leave out the version's epoch, the number before a colon.
-            folder = Path(work) / f"{source}_{source_version.split(':', 1)[-1]}"
+            # Debian's file names leave out the version's epoch, the
+            # number before a colon.
+            folder = (
+                Path(work) / f"{source}_{source_version.split(':', 1)[-1]}"
+            )
             folder.mkdir()
             for url in source_files(source, source_version=source_version):
                 name = urllib.parse.unquote(url.rsplit("/", 1)[1])
-                subprocess.run([*CURL, "--output", str(folder / name), url], check=True)
+                subprocess.run(
+                    [*CURL, "--output", str(folder / name), url],
+                    check=True,
+                )
             dscs = list(folder.glob("*.dsc"))
             if len(dscs) != 1:
-                raise SystemExit(f"Expected one .dsc file for {source} {source_version}, found {len(dscs)}")
+                raise SystemExit(
+                    "Expected one .dsc file for "
+                    f"{source}"
+                    " "
+                    f"{source_version}"
+                    ", found "
+                    f"{len(dscs)}",
+                )
             check_dsc(folder, dsc=dscs[0])
-            listing += [f"{sha256(file)}  {folder.name}/{file.name}" for file in sorted(folder.iterdir())]
+            listing += [
+                f"{sha256(file)}  {folder.name}/{file.name}"
+                for file in sorted(folder.iterdir())
+            ]
             tar.add(folder, arcname=folder.name)
         sums = Path(work) / "SHA256SUMS"
         sums.write_text("\n".join(listing) + "\n", encoding="utf-8")
@@ -503,20 +643,34 @@ def collect_sources(libraries: list[Library], *, archive: Path) -> None:
 
 def main(arguments: list[str]) -> None:
     """
-    Install the notices in the frozen program and write the sources archive.
+    Install the notices in the frozen program and write the sources
+    archive.
 
     Parameters
     ----------
     arguments : list of str
-        The frozen program's folder, the library list the build wrote, and the sources archive to write.
+        The frozen program's folder, the library list the build wrote,
+        and the sources archive to write.
     """
     frozen, listing, archive = (Path(argument) for argument in arguments)
     entries = json.loads(listing.read_text(encoding="utf-8"))
     libraries = identify(frozen / "_internal", entries=entries)
     install_notices(frozen, libraries=libraries, archive=archive.name)
     collect_sources(libraries, archive=archive)
-    sources = sorted({library.source for library in libraries if library.source in SOURCE_PACKAGES})
-    print(f"{len(libraries)} system libraries; sources of {', '.join(sources)} in {archive}")
+    sources = sorted(
+        {
+            library.source
+            for library in libraries
+            if library.source in SOURCE_PACKAGES
+        },
+    )
+    print(
+        f"{len(libraries)}"
+        " system libraries; sources of "
+        f"{', '.join(sources)}"
+        " in "
+        f"{archive}",
+    )
 
 
 if __name__ == "__main__":

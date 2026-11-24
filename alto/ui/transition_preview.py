@@ -1,7 +1,8 @@
 """
 A preview of a transition for the settings.
 
-It is a mock of the home page, with the app's own cards, that switches from the exercises to the lessons once.
+It is a mock of the home page, with the app's own cards, that switches
+from the exercises to the lessons once.
 
 Examples
 --------
@@ -51,21 +52,37 @@ from alto.ui.transitions import (
 from alto.ui.widgets import SegmentedControl
 from alto.ui.zoom import px
 
-PAUSE_MS = 600  # how long the exercises rest before the preview switches to the lessons
+# how long the exercises rest before the preview switches to the lessons
+PAUSE_MS = 600
 COLUMNS = 3  # how many cards are in a row on the preview's page
 MARGIN = 14  # the space around the cards, before they are scaled down to fit
 EXAMPLES = (
     ("Notation", "Reading the staff", "Where each note lives.", "NoteNames"),
-    ("Intervals", "Counting intervals", "From seconds to octaves.", "IntervalNames"),
-    ("Chords", "Building triads", "Stack thirds into chords.", "ChordQualities"),
-)  # lessons that do not exist yet, to give the lessons side more than one card; they say so
+    (
+        "Intervals",
+        "Counting intervals",
+        "From seconds to octaves.",
+        "IntervalNames",
+    ),
+    (
+        "Chords",
+        "Building triads",
+        "Stack thirds into chords.",
+        "ChordQualities",
+    ),
+    # lessons that do not exist yet, to give the lessons side more than
+    # one
+    # card; they say so
+)
 
 
 def make_sides() -> tuple[list[TileCard], list[TileCard]]:
     """
-    Make the cards for the two sides of the preview: the app's own exercise cards, and its lesson cards.
+    Make the cards for the two sides of the preview: the app's own
+    exercise cards, and its lesson cards.
 
-    The lessons side has the real lesson, and a few examples that are marked as such, so that a transition has more than one
+    The lessons side has the real lesson, and a few examples that are
+    marked as such, so that a transition has more than one
     card to move.
 
     Returns
@@ -95,7 +112,8 @@ def make_sides() -> tuple[list[TileCard], list[TileCard]]:
 
 class Stage(QWidget):
     """
-    The page of the mock window: it draws the cards that are resting, and the transition plays on a canvas over it.
+    The page of the mock window: it draws the cards that are resting,
+    and the transition plays on a canvas over it.
 
     Attributes
     ----------
@@ -140,7 +158,9 @@ class Stage(QWidget):
         Examples
         --------
         >>> stage = Stage()
-        >>> stage.show()  # a hidden widget is only told about its size once it is shown
+        >>> # a hidden widget is only told about its size once it is
+        >>> # shown
+        >>> stage.show()
         >>> stage.resize(300, 200)
         >>> stage.canvas.geometry() == stage.rect()
         True
@@ -173,17 +193,21 @@ class Stage(QWidget):
 
 class TransitionPreview(QFrame):
     """
-    A mock home page that plays a transition between two sets of the app's cards, once.
+    A mock home page that plays a transition between two sets of the
+    app's cards, once.
 
-    It has a bar with the same Exercises and Lessons switch as the real window. It follows the side that is showing, and pressing
-    it plays the transition to the other side, so the learner can try it as often as they like.
+    It has a bar with the same Exercises and Lessons switch as the real
+    window. It follows the side that is showing, and pressing
+    it plays the transition to the other side, so the learner can try it
+    as often as they like.
 
     Attributes
     ----------
     transition : Transition
         The transition being shown.
     side : int
-        Which set of cards is showing: 0 for the exercises, 1 for the lessons.
+        Which set of cards is showing: 0 for the exercises, 1 for the
+        lessons.
     stage : Stage
         The page the cards are on.
     switch : SegmentedControl
@@ -216,8 +240,13 @@ class TransitionPreview(QFrame):
         self.transition = transition_named(DEFAULT_TRANSITION)
         self.side = 0
         self._sides = make_sides()
-        self.switch = SegmentedControl(["Exercises", "Lessons"], icons=[icons.EXERCISES, icons.LESSONS])
-        self.switch.chosen.connect(self.go_to)  # it works: pressing a side plays the transition to it
+        self.switch = SegmentedControl(
+            ["Exercises", "Lessons"],
+            icons=[icons.EXERCISES, icons.LESSONS],
+        )
+        self.switch.chosen.connect(
+            self.go_to,
+        )  # it works: pressing a side plays the transition to it
         bar = QHBoxLayout()
         bar.setContentsMargins(
             14,
@@ -233,12 +262,7 @@ class TransitionPreview(QFrame):
         self.stage = Stage()
         self.stage.setMinimumSize(px(280), px(220))
         lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(0)
         lay.addLayout(bar)
         lay.addWidget(rule)
@@ -251,7 +275,8 @@ class TransitionPreview(QFrame):
 
     def _sprites(self, side: int) -> list[Sprite]:
         """
-        Photograph the cards of one side, laid out in rows and scaled down to fit the stage.
+        Photograph the cards of one side, laid out in rows and scaled
+        down to fit the stage.
 
         Parameters
         ----------
@@ -266,33 +291,50 @@ class TransitionPreview(QFrame):
         Examples
         --------
         >>> preview = TransitionPreview()
-        >>> len(preview._sprites(0)), len(preview._sprites(1)) > 1
+        >>> (
+        ...     len(preview._sprites(0)),
+        ...     len(preview._sprites(1)) > 1,
+        ... )
         (6, True)
         """
         cards = self._sides[side]
-        most = max(len(self._sides[0]), len(self._sides[1]))  # both sides are scaled alike, so they sit on the same grid
+        most = max(
+            len(self._sides[0]),
+            len(self._sides[1]),
+        )  # both sides are scaled alike, so they sit on the same grid
         rows = -(-most // COLUMNS)
         wide = COLUMNS * CARD_W + (COLUMNS - 1) * GAP + 2 * MARGIN
         high = rows * CARD_H + (rows - 1) * GAP + 2 * MARGIN
-        scale = max(min(self.stage.width() / wide, self.stage.height() / high, 1.0), 0.2)
+        scale = max(
+            min(self.stage.width() / wide, self.stage.height() / high, 1.0),
+            0.2,
+        )
         top = (self.stage.height() - high * scale) / 2 + MARGIN * scale
         sprites = []
         for number, card in enumerate(cards):
             row, column = divmod(number, COLUMNS)
             in_row = min(COLUMNS, len(cards) - row * COLUMNS)
             row_wide = in_row * CARD_W + (in_row - 1) * GAP
-            left = (self.stage.width() - row_wide * scale) / 2 + column * (CARD_W + GAP) * scale
+            left = (self.stage.width() - row_wide * scale) / 2 + column * (
+                CARD_W + GAP
+            ) * scale
             sprites.append(
                 Sprite(
                     pixmap=card.grab(),
-                    rect=QRectF(left, top + row * (CARD_H + GAP) * scale, CARD_W * scale, CARD_H * scale),
+                    rect=QRectF(
+                        left,
+                        top + row * (CARD_H + GAP) * scale,
+                        CARD_W * scale,
+                        CARD_H * scale,
+                    ),
                 ),
             )
         return sprites
 
     def show_transition(self, key: str) -> None:
         """
-        Show a transition: the exercises appear, and after a moment they change to the lessons, once.
+        Show a transition: the exercises appear, and after a moment they
+        change to the lessons, once.
 
         Parameters
         ----------
@@ -330,7 +372,8 @@ class TransitionPreview(QFrame):
 
     def _next(self) -> None:
         """
-        Switch to the lessons, with the transition, as the preview does by itself after it is shown.
+        Switch to the lessons, with the transition, as the preview does
+        by itself after it is shown.
 
         Examples
         --------
@@ -343,9 +386,11 @@ class TransitionPreview(QFrame):
 
     def go_to(self, side: int) -> None:
         """
-        Switch to one side with the transition, as the switch does in the real window.
+        Switch to one side with the transition, as the switch does in
+        the real window.
 
-        A transition that is still playing ends first. Nothing happens if that side is already showing.
+        A transition that is still playing ends first. Nothing happens
+        if that side is already showing.
 
         Parameters
         ----------
@@ -362,7 +407,9 @@ class TransitionPreview(QFrame):
         >>> preview.side
         0
         """
-        self._pause.stop()  # the preview no longer switches by itself: the learner is in charge
+        # the preview no longer switches by itself: the learner is in
+        # charge
+        self._pause.stop()
         self.stage.canvas.stop()
         self.switch.set_current(self.side)
         if side == self.side:
@@ -376,11 +423,16 @@ class TransitionPreview(QFrame):
             self.stage.update()
             return
         self.stage.canvas.cover(leaving)
-        self.stage.canvas.play(self.transition, new=arriving, direction=1 if side == 1 else -1)
+        self.stage.canvas.play(
+            self.transition,
+            new=arriving,
+            direction=1 if side == 1 else -1,
+        )
 
     def _rest(self) -> None:
         """
-        Draw the new cards as they rest once the transition has finished. Nothing follows: it plays once.
+        Draw the new cards as they rest once the transition has
+        finished. Nothing follows: it plays once.
 
         Examples
         --------
@@ -391,7 +443,8 @@ class TransitionPreview(QFrame):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """
-        Lay the cards out again for the new size, unless a transition is playing.
+        Lay the cards out again for the new size, unless a transition is
+        playing.
 
         Parameters
         ----------
@@ -402,7 +455,9 @@ class TransitionPreview(QFrame):
         --------
         >>> preview = TransitionPreview()
         >>> preview.resize(700, 500)
-        >>> preview.stage.resting[0].rect.width() <= CARD_W
+        >>> preview.stage.resting[
+        ...     0
+        ... ].rect.width() <= CARD_W
         True
         """
         super().resizeEvent(event)

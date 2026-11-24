@@ -1,14 +1,23 @@
 """
-Run slow work, such as a download, on another thread, and hear how it went on the window's thread.
+Run slow work, such as a download, on another thread, and hear how it
+went on the window's thread.
 
 Examples
 --------
 >>> import time
 >>> heard = []
 >>> owner = QObject()
->>> _ = run_in_background(lambda: 6 * 7, owner=owner, done=heard.append, failed=heard.append)
+>>> _ = run_in_background(
+...     lambda: 6 * 7,
+...     owner=owner,
+...     done=heard.append,
+...     failed=heard.append,
+... )
 >>> deadline = time.monotonic() + 5
->>> while not heard and time.monotonic() < deadline:
+>>> while (
+...     not heard
+...     and time.monotonic() < deadline
+... ):
 ...     app.processEvents()
 >>> heard
 [42]
@@ -33,17 +42,24 @@ from PySide6.QtCore import (
 T = TypeVar("T")
 
 
-_relays: set[_Relay] = set()  # relays whose work is still running, kept here so that nothing deletes them
+_relays: set[_Relay] = (
+    set()
+)  # relays whose work is still running, kept here so that nothing deletes them
 
 
 class _Relay(QObject):
     """
-    Carry the outcome of background work back to the thread the relay was made on, where its callbacks run.
+    Carry the outcome of background work back to the thread the relay
+    was made on, where its callbacks run.
 
-    The worker emits on the relay, so nothing else may delete the relay while the work runs: it has no parent, and it is kept
-    in `_relays` until its outcome arrives. Emitting from another thread on an object that is being deleted can crash the
-    program. Whether the object the work is for still exists (a window closed while a download was still going) is checked
-    when the outcome arrives, on that object's thread, and if it is gone the outcome is dropped.
+    The worker emits on the relay, so nothing else may delete the relay
+    while the work runs: it has no parent, and it is kept
+    in `_relays` until its outcome arrives. Emitting from another thread
+    on an object that is being deleted can crash the
+    program. Whether the object the work is for still exists (a window
+    closed while a download was still going) is checked
+    when the outcome arrives, on that object's thread, and if it is gone
+    the outcome is dropped.
 
     Attributes
     ----------
@@ -56,13 +72,23 @@ class _Relay(QObject):
     --------
     >>> heard = []
     >>> owner = QObject()
-    >>> relay = _Relay(owner, done=heard.append, failed=heard.append)
+    >>> relay = _Relay(
+    ...     owner,
+    ...     done=heard.append,
+    ...     failed=heard.append,
+    ... )
     >>> relay._finish("ok")
     >>> heard
     ['ok']
     >>> gone = QObject()
-    >>> late = _Relay(gone, done=heard.append, failed=heard.append)
-    >>> shiboken6.delete(gone)  # the window closed while the work ran
+    >>> late = _Relay(
+    ...     gone,
+    ...     done=heard.append,
+    ...     failed=heard.append,
+    ... )
+    >>> shiboken6.delete(
+    ...     gone
+    ... )  # the window closed while the work ran
     >>> late._finish("too late")
     >>> heard
     ['ok']
@@ -84,7 +110,8 @@ class _Relay(QObject):
         Parameters
         ----------
         owner : QObject
-            The object the work is for. The relay is made on its thread but does not belong to it.
+            The object the work is for. The relay is made on its thread
+            but does not belong to it.
         done : callable
             Called with what the work returned. Keyword-only.
         failed : callable
@@ -93,7 +120,9 @@ class _Relay(QObject):
         Examples
         --------
         >>> owner = QObject()
-        >>> _Relay(owner, done=print, failed=print).parent() is None
+        >>> _Relay(
+        ...     owner, done=print, failed=print
+        ... ).parent() is None
         True
         """
         super().__init__()
@@ -115,7 +144,9 @@ class _Relay(QObject):
         Examples
         --------
         >>> owner = QObject()
-        >>> _Relay(owner, done=print, failed=print)._owner_exists()
+        >>> _Relay(
+        ...     owner, done=print, failed=print
+        ... )._owner_exists()
         True
         """
         owner = self._owner()
@@ -134,7 +165,9 @@ class _Relay(QObject):
         --------
         >>> heard = []
         >>> owner = QObject()
-        >>> _Relay(owner, done=heard.append, failed=print)._finish(3)
+        >>> _Relay(
+        ...     owner, done=heard.append, failed=print
+        ... )._finish(3)
         >>> heard
         [3]
         """
@@ -156,7 +189,9 @@ class _Relay(QObject):
         --------
         >>> heard = []
         >>> owner = QObject()
-        >>> _Relay(owner, done=print, failed=heard.append)._crash(ValueError("no"))
+        >>> _Relay(
+        ...     owner, done=print, failed=heard.append
+        ... )._crash(ValueError("no"))
         >>> heard
         [ValueError('no')]
         """
@@ -174,9 +209,11 @@ def run_in_background(
     failed: Callable[[Exception], None],
 ) -> threading.Thread:
     """
-    Run work on another thread, then call `done` with its result, or `failed` with its exception, on the owner's thread.
+    Run work on another thread, then call `done` with its result, or
+    `failed` with its exception, on the owner's thread.
 
-    The window stays responsive while the work runs. If the owner is deleted before the work ends, neither is called. The thread
+    The window stays responsive while the work runs. If the owner is
+    deleted before the work ends, neither is called. The thread
     does not keep Alto from quitting.
 
     Parameters
@@ -184,7 +221,8 @@ def run_in_background(
     work : callable
         The slow part. It must not touch widgets.
     owner : QObject
-        The object the work is for, such as the dialog that started it. Keyword-only.
+        The object the work is for, such as the dialog that started it.
+        Keyword-only.
     done : callable
         Called with what `work` returned. Keyword-only.
     failed : callable
@@ -193,7 +231,8 @@ def run_in_background(
     Returns
     -------
     threading.Thread
-        The thread doing the work, already started. Callers need not keep it.
+        The thread doing the work, already started. Callers need not
+        keep it.
 
     Examples
     --------
@@ -202,19 +241,38 @@ def run_in_background(
     >>> owner = QObject()
     >>> def broken():
     ...     raise OSError("offline")
-    >>> _ = run_in_background(broken, owner=owner, done=heard.append, failed=lambda error: heard.append(str(error)))
+    >>> _ = run_in_background(
+    ...     broken,
+    ...     owner=owner,
+    ...     done=heard.append,
+    ...     failed=lambda error: heard.append(
+    ...         str(error)
+    ...     ),
+    ... )
     >>> deadline = time.monotonic() + 5
-    >>> while not heard and time.monotonic() < deadline:
+    >>> while (
+    ...     not heard
+    ...     and time.monotonic() < deadline
+    ... ):
     ...     app.processEvents()
     >>> heard
     ['offline']
     """
-    relay = _Relay(owner, done=lambda result: done(cast("T", result)), failed=failed)  # the result comes back as it went
-    _relays.add(relay)  # kept until its outcome arrives, so the worker never emits on a deleted object
+    relay = _Relay(
+        owner,
+        done=lambda result: done(cast("T", result)),
+        failed=failed,
+    )  # the result comes back as it went
+    _relays.add(
+        relay,
+        # kept until its outcome arrives, so the worker never emits on a
+        # deleted object
+    )
 
     def run() -> None:
         """
-        Do the work and send its outcome to the relay, which hands it on from the owner's thread.
+        Do the work and send its outcome to the relay, which hands it on
+        from the owner's thread.
 
         Examples
         --------
@@ -222,7 +280,9 @@ def run_in_background(
         """
         try:
             outcome = (relay.finished, work())
-        except Exception as error:  # every failure is reported, not lost on the thread
+        except (
+            Exception
+        ) as error:  # every failure is reported, not lost on the thread
             outcome = (relay.crashed, error)
         signal, value = outcome
         signal.emit(value)

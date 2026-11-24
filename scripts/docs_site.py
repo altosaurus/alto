@@ -1,16 +1,23 @@
 #!/usr/bin/env python
 """
-Put together the published docs: one folder for each release, one for the development version, and the files that belong to none.
+Put together the published docs: one folder for each release, one for
+the development version, and the files that belong to none.
 
-The Docs workflow builds each version with Jekyll into its own folder of a checkout of the `gh-pages` branch, and then runs this
+The Docs workflow builds each version with Jekyll into its own folder of
+a checkout of the `gh-pages` branch, and then runs this
 to write what sits around them:
 
-    python scripts/docs_site.py finish SITE --root-files docs/site-root --site-url https://altosaurus.github.io/alto
-    python scripts/docs_site.py latest v0.0.0 v0.1.0 v0.1.1-rc1     # prints v0.1.0, the newest release that is not a pre-release
+    python scripts/docs_site.py finish SITE --root-files docs/site-root
+    --site-url https://altosaurus.github.io/alto
+    python scripts/docs_site.py latest v0.0.0 v0.1.0 v0.1.1-rc1     #
+    prints v0.1.0, the newest release that is not a pre-release
 
-`finish` writes `versions.json` (which the version dropdown reads in every page, old ones included), the home page that sends a
-visitor to the latest release (or to the development docs until there is one), the sitemap of the latest release, and copies the
-files in `--root-files` (`robots.txt`, the dropdown's script and so on) with their `@SITE@` and `@SITE_PATH@` filled in.
+`finish` writes `versions.json` (which the version dropdown reads in
+every page, old ones included), the home page that sends a
+visitor to the latest release (or to the development docs until there is
+one), the sitemap of the latest release, and copies the
+files in `--root-files` (`robots.txt`, the dropdown's script and so on)
+with their `@SITE@` and `@SITE_PATH@` filled in.
 """
 
 from __future__ import annotations
@@ -54,7 +61,8 @@ def parse_version(tag: str) -> tuple[tuple[int, int, int], str | None] | None:
     Returns
     -------
     tuple of (tuple of int, str or None) or None
-        The major, minor and patch numbers, and the label after the hyphen (None for a release); None if it is not a version tag.
+        The major, minor and patch numbers, and the label after the
+        hyphen (None for a release); None if it is not a version tag.
 
     Examples
     --------
@@ -74,9 +82,11 @@ def parse_version(tag: str) -> tuple[tuple[int, int, int], str | None] | None:
 
 def sort_versions(tags: list[str]) -> list[str]:
     """
-    Put version tags in order, newest first, and leave out anything that is not a version tag.
+    Put version tags in order, newest first, and leave out anything that
+    is not a version tag.
 
-    A pre-release comes before the release it leads to, so "v1.0.0-rc1" is older than "v1.0.0".
+    A pre-release comes before the release it leads to, so "v1.0.0-rc1"
+    is older than "v1.0.0".
 
     Parameters
     ----------
@@ -90,7 +100,16 @@ def sort_versions(tags: list[str]) -> list[str]:
 
     Examples
     --------
-    >>> sort_versions(["v0.9.0", "v0.10.0", "v1.0.0-rc1", "v1.0.0", "notes", "v0.2.1"])
+    >>> sort_versions(
+    ...     [
+    ...         "v0.9.0",
+    ...         "v0.10.0",
+    ...         "v1.0.0-rc1",
+    ...         "v1.0.0",
+    ...         "notes",
+    ...         "v0.2.1",
+    ...     ]
+    ... )
     ['v1.0.0', 'v1.0.0-rc1', 'v0.10.0', 'v0.9.0', 'v0.2.1']
     """
     keyed = []
@@ -118,7 +137,9 @@ def latest_release(tags: list[str]) -> str | None:
 
     Examples
     --------
-    >>> latest_release(["v0.0.0", "v0.1.0", "v0.2.0-beta1"])
+    >>> latest_release(
+    ...     ["v0.0.0", "v0.1.0", "v0.2.0-beta1"]
+    ... )
     'v0.1.0'
     >>> latest_release(["v0.2.0-beta1"]) is None
     True
@@ -147,13 +168,26 @@ def versions_in(site: Path) -> list[str]:
     Examples
     --------
     >>> import tempfile
-    >>> with tempfile.TemporaryDirectory() as folder:
-    ...     for name in ("v0.1.0", "v0.0.0", "dev", "latest"):
+    >>> with (
+    ...     tempfile.TemporaryDirectory() as folder
+    ... ):
+    ...     for name in (
+    ...         "v0.1.0",
+    ...         "v0.0.0",
+    ...         "dev",
+    ...         "latest",
+    ...     ):
     ...         (Path(folder) / name).mkdir()
     ...     versions_in(Path(folder))
     ['v0.1.0', 'v0.0.0']
     """
-    return sort_versions([entry.name for entry in site.iterdir() if entry.is_dir()]) if site.is_dir() else []
+    return (
+        sort_versions(
+            [entry.name for entry in site.iterdir() if entry.is_dir()],
+        )
+        if site.is_dir()
+        else []
+    )
 
 
 def redirect_page(
@@ -181,7 +215,11 @@ def redirect_page(
 
     Examples
     --------
-    >>> "url=latest/" in redirect_page(target="latest/", canonical="https://example.org/alto/latest/", what="latest docs")
+    >>> "url=latest/" in redirect_page(
+    ...     target="latest/",
+    ...     canonical="https://example.org/alto/latest/",
+    ...     what="latest docs",
+    ... )
     True
     """
     return REDIRECT.format(target=target, canonical=canonical, what=what)
@@ -194,17 +232,22 @@ def finish(
     site_url: str,
 ) -> dict[str, object]:
     """
-    Write everything around the versions in a site: their list, the home page, the sitemap and the shared files.
+    Write everything around the versions in a site: their list, the home
+    page, the sitemap and the shared files.
 
     Parameters
     ----------
     site : Path
-        The site's folder, with a folder for each version and perhaps `dev` and `latest`.
+        The site's folder, with a folder for each version and perhaps
+        `dev` and `latest`.
     root_files : Path
-        A folder of files that belong to the whole site. They are copied to its root with `@SITE@` replaced by `site_url` and
+        A folder of files that belong to the whole site. They are copied
+        to its root with `@SITE@` replaced by `site_url` and
         `@SITE_PATH@` by its path. Keyword-only.
     site_url : str
-        The address of the site's root, such as "https://altosaurus.github.io/alto", without a slash at the end. Keyword-only.
+        The address of the site's root, such as
+        "https://altosaurus.github.io/alto", without a slash at the end.
+        Keyword-only.
 
     Returns
     -------
@@ -214,13 +257,33 @@ def finish(
     Examples
     --------
     >>> import tempfile
-    >>> with tempfile.TemporaryDirectory() as folder:
-    ...     built, shared = Path(folder, "site"), Path(folder, "shared")
-    ...     for name in ("v0.0.0", "v0.1.0", "dev", "latest"):
-    ...         built.joinpath(name).mkdir(parents=True)
+    >>> with (
+    ...     tempfile.TemporaryDirectory() as folder
+    ... ):
+    ...     built, shared = (
+    ...         Path(folder, "site"),
+    ...         Path(folder, "shared"),
+    ...     )
+    ...     for name in (
+    ...         "v0.0.0",
+    ...         "v0.1.0",
+    ...         "dev",
+    ...         "latest",
+    ...     ):
+    ...         built.joinpath(name).mkdir(
+    ...             parents=True
+    ...         )
     ...     shared.mkdir()
-    ...     _ = shared.joinpath("robots.txt").write_text("Sitemap: @SITE@/sitemap.xml")
-    ...     finish(built, root_files=shared, site_url="https://example.org/alto")
+    ...     _ = shared.joinpath(
+    ...         "robots.txt"
+    ...     ).write_text(
+    ...         "Sitemap: @SITE@/sitemap.xml"
+    ...     )
+    ...     finish(
+    ...         built,
+    ...         root_files=shared,
+    ...         site_url="https://example.org/alto",
+    ...     )
     ...     built.joinpath("robots.txt").read_text()
     {'latest': 'v0.1.0', 'versions': ['dev', 'v0.1.0', 'v0.0.0']}
     'Sitemap: https://example.org/alto/sitemap.xml'
@@ -234,11 +297,18 @@ def finish(
     commit_file = site / DEV / "commit.txt"
     if commit_file.is_file():
         listing["dev_commit"] = commit_file.read_text(encoding="utf-8").strip()
-    (site / "versions.json").write_text(json.dumps(listing, indent=2) + "\n", encoding="utf-8")
+    (site / "versions.json").write_text(
+        json.dumps(listing, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
     for source in sorted(root_files.iterdir()):
         if source.is_file() and not source.name.startswith("."):
-            text = source.read_text(encoding="utf-8").replace("@SITE_PATH@", site_path).replace("@SITE@", site_url)
+            text = (
+                source.read_text(encoding="utf-8")
+                .replace("@SITE_PATH@", site_path)
+                .replace("@SITE@", site_url)
+            )
             (site / source.name).write_text(text, encoding="utf-8")
 
     if (site / LATEST).is_dir():
@@ -249,7 +319,14 @@ def finish(
         target, what = "", ""
     home = site / "index.html"
     if target:
-        home.write_text(redirect_page(target=target, canonical=f"{site_url}/{target}", what=what), encoding="utf-8")
+        home.write_text(
+            redirect_page(
+                target=target,
+                canonical=f"{site_url}/{target}",
+                what=what,
+            ),
+            encoding="utf-8",
+        )
     else:
         home.unlink(missing_ok=True)
 
@@ -258,7 +335,10 @@ def finish(
         shutil.copyfile(sitemap, site / "sitemap.xml")
     else:
         (site / "sitemap.xml").unlink(missing_ok=True)
-    (site / ".nojekyll").write_text("", encoding="utf-8")  # the site is built already; Pages must not run Jekyll on it again
+    (site / ".nojekyll").write_text(
+        "",
+        encoding="utf-8",
+    )  # the site is built already; Pages must not run Jekyll on it again
     return listing
 
 
@@ -269,7 +349,8 @@ def main(argv: list[str] | None = None) -> int:
     Parameters
     ----------
     argv : list of str or None, default None
-        The arguments after the program's name; those the program was started with if None.
+        The arguments after the program's name; those the program was
+        started with if None.
 
     Returns
     -------
@@ -281,17 +362,46 @@ def main(argv: list[str] | None = None) -> int:
     >>> main(["latest", "v0.0.0", "v0.0.1"])
     v0.0.1
     0
-    >>> main(["finish", "/no/such/folder", "--root-files", "/no/such", "--site-url", "https://example.org"])
+    >>> main(
+    ...     [
+    ...         "finish",
+    ...         "/no/such/folder",
+    ...         "--root-files",
+    ...         "/no/such",
+    ...         "--site-url",
+    ...         "https://example.org",
+    ...     ]
+    ... )
     1
     """
-    parser = argparse.ArgumentParser(description="Put together the published docs.")
+    parser = argparse.ArgumentParser(
+        description="Put together the published docs.",
+    )
     commands = parser.add_subparsers(dest="command", required=True)
-    newest = commands.add_parser("latest", help="print the newest tag that is not a pre-release")
+    newest = commands.add_parser(
+        "latest",
+        help="print the newest tag that is not a pre-release",
+    )
     newest.add_argument("tags", nargs="*", help="version tags")
-    end = commands.add_parser("finish", help="write versions.json, the home page, the sitemap and the shared files")
+    end = commands.add_parser(
+        "finish",
+        help=(
+            "write versions.json, the home page, the sitemap and the "
+            "shared files"
+        ),
+    )
     end.add_argument("site", type=Path, help="the folder of the site")
-    end.add_argument("--root-files", type=Path, required=True, help="the folder of files that belong to the whole site")
-    end.add_argument("--site-url", required=True, help="the address of the site's root")
+    end.add_argument(
+        "--root-files",
+        type=Path,
+        required=True,
+        help="the folder of files that belong to the whole site",
+    )
+    end.add_argument(
+        "--site-url",
+        required=True,
+        help="the address of the site's root",
+    )
     arguments = parser.parse_args(argv)
     if arguments.command == "latest":
         print(latest_release(arguments.tags) or "")
@@ -299,7 +409,11 @@ def main(argv: list[str] | None = None) -> int:
     if not arguments.site.is_dir():
         print(f"{arguments.site} is not a folder.", file=sys.stderr)
         return 1
-    finish(arguments.site, root_files=arguments.root_files, site_url=arguments.site_url)
+    finish(
+        arguments.site,
+        root_files=arguments.root_files,
+        site_url=arguments.site_url,
+    )
     return 0
 
 

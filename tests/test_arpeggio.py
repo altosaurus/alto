@@ -1,4 +1,7 @@
-"""The arpeggio exercises: the notes they build, their settings and how the view lets the user answer."""
+"""
+The arpeggio exercises: the notes they build, their settings and how the
+view lets the user answer.
+"""
 
 from __future__ import annotations
 
@@ -54,7 +57,8 @@ def cfg() -> Iterator[ArpeggioSettings]:
     Yields
     ------
     ArpeggioSettings
-        The arpeggio settings; the original values are put back afterwards.
+        The arpeggio settings; the original values are put back
+        afterwards.
     """
     saved = copy.deepcopy(settings.arpeggio)
     yield settings.arpeggio
@@ -83,16 +87,29 @@ def test_an_arpeggio_rises_from_the_bass_note_to_its_octave() -> None:
     Check that an arpeggio rises from the bass note to its octave.
     """
     c = Note(4, letter=0)
-    assert names(arpeggio(c, intervals=CHORDS["major"], inversion=0)) == "C E G C"
-    assert names(arpeggio(c, intervals=CHORDS["major"], inversion=1)) == "E G C E"
-    assert names(arpeggio(c, intervals=CHORDS["major"], inversion=2)) == "G C E G"
-    assert names(arpeggio(c, intervals=CHORDS["dominant 7th"], inversion=3)) == "B♭ C E G B♭"
+    assert (
+        names(arpeggio(c, intervals=CHORDS["major"], inversion=0)) == "C E G C"
+    )
+    assert (
+        names(arpeggio(c, intervals=CHORDS["major"], inversion=1)) == "E G C E"
+    )
+    assert (
+        names(arpeggio(c, intervals=CHORDS["major"], inversion=2)) == "G C E G"
+    )
+    assert (
+        names(arpeggio(c, intervals=CHORDS["dominant 7th"], inversion=3))
+        == "B♭ C E G B♭"
+    )
     notes = arpeggio(c, intervals=CHORDS["diminished 7th"], inversion=2)
-    assert [n.midi for n in notes] == sorted(n.midi for n in notes)  # always rising
+    assert [n.midi for n in notes] == sorted(
+        n.midi for n in notes
+    )  # always rising
     assert notes[-1].midi - notes[0].midi == 12
 
 
-def test_the_question_names_the_type_and_the_inversion(cfg: ArpeggioSettings) -> None:
+def test_the_question_names_the_type_and_the_inversion(
+    cfg: ArpeggioSettings,
+) -> None:
     """
     Check that the question names the type and the inversion.
 
@@ -106,15 +123,24 @@ def test_the_question_names_the_type_and_the_inversion(cfg: ArpeggioSettings) ->
     assert q.answer == "minor · 1st inversion"
     assert q.choices == ["minor"] and q.octaves == ["1st inversion"]
     assert q.second_label == "Inversion" and q.joiner == " · "
-    assert q.check("minor · 1st inversion") and not q.check("minor · root position")
+    assert q.check("minor · 1st inversion") and not q.check(
+        "minor · root position",
+    )
     first = q.staff[0][0]
-    assert first.letter in range(7) and len(q.staff) == 4 and all(len(col) == 1 for col in q.staff)
-    # The lowest note of a minor chord in first inversion is its third: a minor third above the root.
+    assert (
+        first.letter in range(7)
+        and len(q.staff) == 4
+        and all(len(col) == 1 for col in q.staff)
+    )
+    # The lowest note of a minor chord in first inversion is its third:
+    # a minor third above the root.
     root_name = q.explanation.split()[0]
     assert q.explanation.startswith(f"{root_name} minor, 1st inversion")
 
 
-def test_every_answer_the_exercise_can_give_is_one_of_its_buttons(cfg: ArpeggioSettings) -> None:
+def test_every_answer_the_exercise_can_give_is_one_of_its_buttons(
+    cfg: ArpeggioSettings,
+) -> None:
     """
     Check that every answer the exercise can give is one of its buttons.
 
@@ -137,7 +163,9 @@ def test_every_answer_the_exercise_can_give_is_one_of_its_buttons(cfg: ArpeggioS
         assert q.octaves is not None
         assert kind in q.choices and inversion in q.octaves
         assert len(set(q.choices)) == len(q.choices)
-        assert [n.midi for n in (c[0] for c in q.staff)] == sorted(c[0].midi for c in q.staff)
+        assert [n.midi for n in (c[0] for c in q.staff)] == sorted(
+            c[0].midi for c in q.staff
+        )
 
 
 def test_a_triad_is_never_in_third_inversion(cfg: ArpeggioSettings) -> None:
@@ -149,14 +177,25 @@ def test_a_triad_is_never_in_third_inversion(cfg: ArpeggioSettings) -> None:
     cfg : ArpeggioSettings
         The settings under test.
     """
-    cfg.types, cfg.inversions = {"major", "minor"}, {3}  # the 3rd inversion does not exist for these
-    answers = {ArpeggioNames().generate(random.Random(i)).answer for i in range(60)}
-    assert {a.split(" · ")[1] for a in answers} == {"root position"}  # so root position is used instead
+    cfg.types, cfg.inversions = (
+        {"major", "minor"},
+        {3},
+    )  # the 3rd inversion does not exist for these
+    answers = {
+        ArpeggioNames().generate(random.Random(i)).answer for i in range(60)
+    }
+    assert {a.split(" · ")[1] for a in answers} == {
+        "root position",
+    }  # so root position is used instead
     cfg.types = {"dominant 7th"}
-    assert {ArpeggioNames().generate(random.Random(i)).answer for i in range(30)} == {"dominant 7th · 3rd inversion"}
+    assert {
+        ArpeggioNames().generate(random.Random(i)).answer for i in range(30)
+    } == {"dominant 7th · 3rd inversion"}
 
 
-def test_the_inversion_buttons_are_only_those_that_can_be_asked(cfg: ArpeggioSettings) -> None:
+def test_the_inversion_buttons_are_only_those_that_can_be_asked(
+    cfg: ArpeggioSettings,
+) -> None:
     """
     Check that the inversion buttons are only those that can be asked.
 
@@ -175,7 +214,9 @@ def test_the_inversion_buttons_are_only_those_that_can_be_asked(cfg: ArpeggioSet
         3,
     }
     cfg.types = {"major"}
-    assert ArpeggioNames().generate(random.Random(2)).octaves == list(INVERSION_NAMES[:3])  # a triad stops at the 2nd
+    assert ArpeggioNames().generate(random.Random(2)).octaves == list(
+        INVERSION_NAMES[:3],
+    )  # a triad stops at the 2nd
 
 
 def test_the_notes_sit_on_the_chosen_staff(cfg: ArpeggioSettings) -> None:
@@ -200,11 +241,18 @@ def test_the_notes_sit_on_the_chosen_staff(cfg: ArpeggioSettings) -> None:
         for _ in range(150):
             q = ArpeggioNames().generate(rng)
             assert q.clef == clef
-            assert low <= q.staff[0][0].diatonic and q.staff[-1][0].diatonic <= high
-            assert all(abs(c[0].accidental) <= 1 for c in q.staff)  # no double sharps or flats
+            assert (
+                low <= q.staff[0][0].diatonic
+                and q.staff[-1][0].diatonic <= high
+            )
+            assert all(
+                abs(c[0].accidental) <= 1 for c in q.staff
+            )  # no double sharps or flats
 
 
-def test_key_signatures_are_only_drawn_when_switched_on(cfg: ArpeggioSettings) -> None:
+def test_key_signatures_are_only_drawn_when_switched_on(
+    cfg: ArpeggioSettings,
+) -> None:
     """
     Check that key signatures are only drawn when switched on.
 
@@ -235,7 +283,9 @@ def test_many_types_are_laid_out_in_two_rows(cfg: ArpeggioSettings) -> None:
     assert ArpeggioNames().generate(random.Random(4)).grid is None
 
 
-def test_the_question_survives_being_stored_and_asked_again(cfg: ArpeggioSettings) -> None:
+def test_the_question_survives_being_stored_and_asked_again(
+    cfg: ArpeggioSettings,
+) -> None:
     """
     Check that the question survives being stored and asked again.
 
@@ -250,7 +300,9 @@ def test_the_question_survives_being_stored_and_asked_again(cfg: ArpeggioSetting
     assert again.second_label == "Inversion" and again.joiner == " · "
 
 
-def test_changing_the_settings_changes_the_settings_signature(cfg: ArpeggioSettings) -> None:
+def test_changing_the_settings_changes_the_settings_signature(
+    cfg: ArpeggioSettings,
+) -> None:
     """
     Check that changing the settings changes the settings signature.
 
@@ -264,12 +316,14 @@ def test_changing_the_settings_changes_the_settings_signature(cfg: ArpeggioSetti
     assert ArpeggioNames().settings_signature() != before
 
 
-# -- the exercise screen and its settings panel ---------------------------------------------------------------------
+# -- the exercise screen and its settings panel
+# ---------------------------------------------------------------------
 
 
 class FakeStore:
     """
-    A stand-in for the saved settings (QSettings) that keeps its values in a dict.
+    A stand-in for the saved settings (QSettings) that keeps its values
+    in a dict.
 
     Attributes
     ----------
@@ -332,7 +386,8 @@ def view(
     monkeypatch: pytest.MonkeyPatch,
 ) -> Iterator[ExerciseView]:
     """
-    Provide an arpeggio exercise view with the settings saved nowhere, and sounds off.
+    Provide an arpeggio exercise view with the settings saved nowhere,
+    and sounds off.
 
     Parameters
     ----------
@@ -352,15 +407,21 @@ def view(
     monkeypatch.setattr(exercise_settings, "store", lambda: FakeStore())
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(settings_panel, "store", lambda: FakeStore())
-    cfg.types, cfg.inversions, cfg.clefs = {"major", "minor"}, {0, 1}, {"treble"}
-    # Nothing is played: a note scheduled for later would sound (and load the audio system) during some other test.
+    cfg.types, cfg.inversions, cfg.clefs = (
+        {"major", "minor"},
+        {0, 1},
+        {"treble"},
+    )
+    # Nothing is played: a note scheduled for later would sound (and
+    # load the audio system) during some other test.
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(sounds, "play_notes", lambda *args, **kwargs: None)
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(sounds, "play_correct", lambda *args, **kwargs: None)
     v = ExerciseView(ArpeggioNames(), rng=random.Random(1))
     yield v
-    v.deleteLater()  # gone before the application, or Qt crashes when Python exits
+    # gone before the application, or Qt crashes when Python exits
+    v.deleteLater()
     QApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
 
@@ -382,7 +443,9 @@ def press(
     next(b for b in view.buttons if b.text() == text).click()
 
 
-def test_choosing_the_type_and_the_inversion_answers_the_question(view: ExerciseView) -> None:
+def test_choosing_the_type_and_the_inversion_answers_the_question(
+    view: ExerciseView,
+) -> None:
     """
     Check that choosing the type and the inversion answers the question.
 
@@ -400,7 +463,9 @@ def test_choosing_the_type_and_the_inversion_answers_the_question(view: Exercise
     assert view.answered and (view.correct, view.total) == (1, 1)
 
 
-def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(view: ExerciseView) -> None:
+def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(
+    view: ExerciseView,
+) -> None:
     """
     Check that a wrong pair is a miss and the buttons reset.
 
@@ -416,11 +481,19 @@ def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(view: ExerciseView) -> Non
     wrong = next(t for t in q.choices if t != kind)
     press(view, text=inversion)
     press(view, text=wrong)
-    assert view.missed and not view.answered and view.total == 1 and view.correct == 0
+    assert (
+        view.missed
+        and not view.answered
+        and view.total == 1
+        and view.correct == 0
+    )
     motion.settle()  # the wrong-answer feedback ends
     assert view._pending == {} and not view._busy
     press(view, text=kind)
-    press(view, text=inversion)  # trying again works, but it still counts as missed
+    press(
+        view,
+        text=inversion,
+    )  # trying again works, but it still counts as missed
     assert view.answered and view.correct == 0
 
 
@@ -437,10 +510,16 @@ def test_the_inversion_row_is_labeled_inversion(view: ExerciseView) -> None:
     QApplication.processEvents()
     assert view.interval_label.text() == "Inversion"
     assert view.interval_label.isVisible()
-    label_bottom = view.interval_label.mapTo(view, QPoint(0, view.interval_label.height())).y()
+    label_bottom = view.interval_label.mapTo(
+        view,
+        QPoint(0, view.interval_label.height()),
+    ).y()
     buttons_top = view.octave_row.mapTo(view, QPoint(0, 0)).y()
     assert label_bottom <= buttons_top
-    assert all(not isinstance(view.octave_box.itemAt(i).widget(), QLabel) for i in range(view.octave_box.count()))
+    assert all(
+        not isinstance(view.octave_box.itemAt(i).widget(), QLabel)
+        for i in range(view.octave_box.count())
+    )
 
 
 def test_the_settings_panel_edits_and_saves_the_settings(
@@ -458,7 +537,8 @@ def test_the_settings_panel_edits_and_saves_the_settings(
     cfg : ArpeggioSettings
         The settings under test.
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     saved = FakeStore()
     # noinspection PyUnresolvedReferences
@@ -474,7 +554,9 @@ def test_the_settings_panel_edits_and_saves_the_settings(
     panel.inversions.boxes[1].setChecked(False)
     assert cfg.inversions == {0}
     assert saved.values["arpeggio/inversions"] == "0"
-    assert not panel.inversions.boxes[0].isEnabled()  # the last inversion cannot be unchecked
+    assert not panel.inversions.boxes[
+        0
+    ].isEnabled()  # the last inversion cannot be unchecked
     panel._refresh_summaries()  # done when going back to the menu
     assert panel.types_row.value.text() == "3 of 9"
     assert panel.inversions_row.value.text() == "Root"
@@ -492,7 +574,8 @@ def test_the_saved_settings_are_read_back(
     cfg : ArpeggioSettings
         The settings under test.
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(
@@ -509,5 +592,10 @@ def test_the_saved_settings_are_read_back(
         ),
     )
     exercise_settings.load_arpeggio()
-    assert cfg.clefs == {"alto", "tenor"} and cfg.types == {"minor 7th", "half-diminished 7th"}
-    assert cfg.inversions == {2, 3} and cfg.key_signature and cfg.keys == {-1, 2}
+    assert cfg.clefs == {"alto", "tenor"} and cfg.types == {
+        "minor 7th",
+        "half-diminished 7th",
+    }
+    assert (
+        cfg.inversions == {2, 3} and cfg.key_signature and cfg.keys == {-1, 2}
+    )

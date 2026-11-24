@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.profile_dialog/
 ---
 {% raw %}
-Choosing who is practicing. There is no password: a profile is just a name that keeps its own history.
+Choosing who is practicing. There is no password: a profile is just a
+name that keeps its own history.
 
 **Examples**
 
@@ -13,7 +14,9 @@ Choosing who is practicing. There is no password: a profile is just a name that 
 >>> db = Database()
 >>> remember_profile(db.add_profile("Ada"))
 >>> # noinspection PyUnresolvedReferences
->>> startup_profile(db).name  # the one used last time, with no dialog
+>>> startup_profile(
+...     db
+... ).name  # the one used last time, with no dialog
 'Ada'
 ```
 
@@ -30,9 +33,11 @@ ProfileDialog(
 
 Bases: `QDialog`
 
-Ask who is practicing: a first name on launch, then a list to switch between.
+Ask who is practicing: a first name on launch, then a list to switch
+between.
 
-On first launch (no profiles yet) it asks for a name. Afterwards it lists the profiles to switch between and lets you add
+On first launch (no profiles yet) it asks for a name. Afterwards it
+lists the profiles to switch between and lets you add
 another.
 
 **Attributes**
@@ -77,7 +82,8 @@ Build the dialog for the profiles in a database.
 def remember_profile(profile: Profile) -> None
 ```
 
-Remember which profile was used, so the next launch can open with it.
+Remember which profile was used, so the next launch can open with
+it.
 
 **Parameters**
 
@@ -87,7 +93,9 @@ Remember which profile was used, so the next launch can open with it.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> remember_profile(Profile(7, name="Ada"))
->>> int_value(store(), key="profile/last", default=-1)
+>>> int_value(
+...     store(), key="profile/last", default=-1
+... )
 7
 ```
 

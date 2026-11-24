@@ -5,13 +5,16 @@ package: alto.ui
 permalink: /api/alto.ui.plugins_dialog/
 ---
 {% raw %}
-The Plugins dialog: the installed plugins on the left, and the buttons that add or remove one on the right.
+The Plugins dialog: the installed plugins on the left, and the buttons
+that add or remove one on the right.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
->>> PluginsDialog(Path("no-such-plugins-folder")).windowTitle()
+>>> PluginsDialog(
+...     Path("no-such-plugins-folder")
+... ).windowTitle()
 'Plugins'
 ```
 
@@ -27,9 +30,11 @@ PluginsDialog(
 
 Bases: `QDialog`
 
-List the installed plugins and offer to install one from a file or uninstall the selected one.
+List the installed plugins and offer to install one from a file or
+uninstall the selected one.
 
-Registered releases are downloaded in the background. The parent window handles local file installs, removal, and restarts.
+Registered releases are downloaded in the background. The parent
+window handles local file installs, removal, and restarts.
 
 **Attributes**
 
@@ -46,8 +51,13 @@ Registered releases are downloaded in the background. The parent window handles 
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
->>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
->>> dialog.list.count(), dialog.uninstall_button.isEnabled()
+>>> dialog = PluginsDialog(
+...     Path("no-such-plugins-folder")
+... )
+>>> (
+...     dialog.list.count(),
+...     dialog.uninstall_button.isEnabled(),
+... )
 (0, False)
 ```
 
@@ -64,7 +74,9 @@ Build the dialog for the plugins in a folder.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
->>> PluginsDialog(Path("no-such-plugins-folder")).minimumWidth() > 0
+>>> PluginsDialog(
+...     Path("no-such-plugins-folder")
+... ).minimumWidth() > 0
 True
 ```
 
@@ -84,7 +96,9 @@ Return the plugin selected in the list.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
->>> PluginsDialog(Path("no-such-plugins-folder")).selected() is None
+>>> PluginsDialog(
+...     Path("no-such-plugins-folder")
+... ).selected() is None
 True
 ```
 
@@ -94,13 +108,16 @@ True
 def refresh() -> None
 ```
 
-Read the plugins folder again and keep the same plugin selected if it is still there.
+Read the plugins folder again and keep the same plugin selected
+if it is still there.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
->>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
+>>> dialog = PluginsDialog(
+...     Path("no-such-plugins-folder")
+... )
 >>> dialog.refresh()
 >>> dialog.empty.isHidden()
 False
@@ -112,7 +129,8 @@ False
 def done(result: int) -> None
 ```
 
-Keep the dialog available until a requested install or update finishes.
+Keep the dialog available until a requested install or update
+finishes.
 
 **Parameters**
 

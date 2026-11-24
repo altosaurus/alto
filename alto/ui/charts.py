@@ -1,15 +1,22 @@
 """
 Small charts drawn with QPainter, in the application's theme colors.
 
-Stacked bars, a line, horizontal bars and a calendar heatmap. Each has a title, draws a message when there is nothing to
+Stacked bars, a line, horizontal bars and a calendar heatmap. Each has a
+title, draws a message when there is nothing to
 show, and explains the bar or square under the pointer in a tooltip.
 
 Examples
 --------
 >>> nice_ticks(13)
 [0, 5, 10, 15]
->>> chart = StackedBarChart("Questions answered")
->>> chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
+>>> chart = StackedBarChart(
+...     "Questions answered"
+... )
+>>> chart.set_data(
+...     ["Mon", "Tue"],
+...     right=[3, 1],
+...     wrong=[1, 0],
+... )
 >>> chart.right, chart.wrong
 ([3, 1], [1, 0])
 """
@@ -55,9 +62,16 @@ from PySide6.QtWidgets import (
 from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
 from alto.ui.zoom import px
 
-GOOD, BAD = QColor(CORRECT_ANSWER_COLOR), QColor("#c62828")  # the same greens and reds the exercise feedback uses
-FOCUS_LIGHTER = 125  # the element under the pointer is drawn this many percent as light (100 is unchanged)
-DIM_OPACITY = 0.45  # the others are drawn this opaque while one is under the pointer
+GOOD, BAD = (
+    QColor(CORRECT_ANSWER_COLOR),
+    QColor("#c62828"),
+)  # the same greens and reds the exercise feedback uses
+# the element under the pointer is drawn this many percent as light (100
+# is unchanged)
+FOCUS_LIGHTER = 125
+DIM_OPACITY = (
+    0.45  # the others are drawn this opaque while one is under the pointer
+)
 
 
 def nice_ticks(
@@ -78,7 +92,8 @@ def nice_ticks(
     Returns
     -------
     list of float
-        Ticks at round steps (1, 2, 2.5, 5 or 10 times a power of ten), starting at 0 and reaching at least `top`. Just
+        Ticks at round steps (1, 2, 2.5, 5 or 10 times a power of ten),
+        starting at 0 and reaching at least `top`. Just
         0 and 1 when `top` is not positive.
 
     Examples
@@ -111,9 +126,11 @@ def nice_ticks(
 
 class _Chart(QWidget):
     """
-    A titled plot area with a value axis on the left and labels along the bottom.
+    A titled plot area with a value axis on the left and labels along
+    the bottom.
 
-    The base of the other charts: it holds the title and labels, the plot area, the colors, and the shared drawing of the
+    The base of the other charts: it holds the title and labels, the
+    plot area, the colors, and the shared drawing of the
     title, the axes and the hover tooltip.
 
     Attributes
@@ -123,19 +140,25 @@ class _Chart(QWidget):
     title : str
         Drawn at the top left.
     empty : str
-        The message drawn instead of the plot when there is nothing to show.
+        The message drawn instead of the plot when there is nothing to
+        show.
     labels : list of str
         The labels along the bottom.
     clicked : Signal
-        Emitted with the item that was clicked: a period's index, a row's index, or a day. See `_item_at`.
+        Emitted with the item that was clicked: a period's index, a
+        row's index, or a day. See `_item_at`.
     hovered : object
-        The item under the pointer, or None. It is drawn brighter and the others fainter.
+        The item under the pointer, or None. It is drawn brighter and
+        the others fainter.
     selected : object
-        The item the page is showing more about, or None. It stays emphasized. Set with `set_selected`.
+        The item the page is showing more about, or None. It stays
+        emphasized. Set with `set_selected`.
 
     Examples
     --------
-    >>> chart = _Chart("Accuracy", empty="No answers yet.")
+    >>> chart = _Chart(
+    ...     "Accuracy", empty="No answers yet."
+    ... )
     >>> chart.title, chart.empty
     ('Accuracy', 'No answers yet.')
     """
@@ -159,7 +182,8 @@ class _Chart(QWidget):
         title : str
             Drawn at the top left.
         empty : str, default "Nothing to show for this selection."
-            The message drawn when there is nothing to show. Keyword-only.
+            The message drawn when there is nothing to show.
+            Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the chart. Keyword-only.
 
@@ -174,20 +198,31 @@ class _Chart(QWidget):
         self.hovered: object | None = None
         self.selected: object | None = None
         self._pressed: object | None = None
-        for name in ("LEFT", "RIGHT", "TOP", "BOTTOM", "ROW"):  # the margins and rows follow the zoom, as the text does
+        for name in (
+            "LEFT",
+            "RIGHT",
+            "TOP",
+            "BOTTOM",
+            "ROW",
+        ):  # the margins and rows follow the zoom, as the text does
             if hasattr(type(self), name):
                 setattr(self, name, px(getattr(type(self), name)))
         self.setMinimumSize(px(260), px(190))
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding,
+        )
         self.setMouseTracking(True)
 
-    # -- pointing and clicking -----------------------------------------------------------------------------------------
+    # -- pointing and clicking
+    # ------------------------------------------------------------------
 
     def _item_at(self, pos: QPointF) -> object | None:
         """
         Return the item that can be clicked at a point.
 
-        The base chart has none. Each chart says what its items are: a period (by index), a row (by index) or a day.
+        The base chart has none. Each chart says what its items are: a
+        period (by index), a row (by index) or a day.
 
         Parameters
         ----------
@@ -197,18 +232,22 @@ class _Chart(QWidget):
         Returns
         -------
         object or None
-            The item, or None if the point is not on one that has anything to show.
+            The item, or None if the point is not on one that has
+            anything to show.
 
         Examples
         --------
-        >>> _Chart("Speed")._item_at(QPointF(10, 10)) is None
+        >>> _Chart("Speed")._item_at(
+        ...     QPointF(10, 10)
+        ... ) is None
         True
         """
         return None
 
     def _set_hovered(self, item: object | None) -> None:
         """
-        Highlight an item as the one under the pointer, with a pointing hand over it, and repaint if that changed.
+        Highlight an item as the one under the pointer, with a pointing
+        hand over it, and repaint if that changed.
 
         Parameters
         ----------
@@ -219,20 +258,33 @@ class _Chart(QWidget):
         --------
         >>> chart = _Chart("Speed")
         >>> chart._set_hovered(2)
-        >>> chart.hovered, chart.cursor().shape() == Qt.CursorShape.PointingHandCursor
+        >>> (
+        ...     chart.hovered,
+        ...     chart.cursor().shape()
+        ...     == Qt.CursorShape.PointingHandCursor,
+        ... )
         (2, True)
         >>> chart._set_hovered(None)
-        >>> chart.hovered, chart.cursor().shape() == Qt.CursorShape.ArrowCursor
+        >>> (
+        ...     chart.hovered,
+        ...     chart.cursor().shape()
+        ...     == Qt.CursorShape.ArrowCursor,
+        ... )
         (None, True)
         """
         if item != self.hovered:
             self.hovered = item
             self.update()
-        self.setCursor(Qt.CursorShape.ArrowCursor if item is None else Qt.CursorShape.PointingHandCursor)
+        self.setCursor(
+            Qt.CursorShape.ArrowCursor
+            if item is None
+            else Qt.CursorShape.PointingHandCursor,
+        )
 
     def set_selected(self, item: object | None) -> None:
         """
-        Keep an item highlighted, as the one the page is showing more about.
+        Keep an item highlighted, as the one the page is showing more
+        about.
 
         Parameters
         ----------
@@ -257,16 +309,20 @@ class _Chart(QWidget):
         color: QColor,
     ) -> QColor:
         """
-        Return the color to draw an element in: brighter if it is under the pointer or selected, fainter if another is.
+        Return the color to draw an element in: brighter if it is under
+        the pointer or selected, fainter if another is.
 
-        With nothing under the pointer and nothing selected, every element is drawn in its own color.
+        With nothing under the pointer and nothing selected, every
+        element is drawn in its own color.
 
         Parameters
         ----------
         item : object
-            The element about to be drawn: a period or row by index, or a day.
+            The element about to be drawn: a period or row by index, or
+            a day.
         color : QColor
-            The color it is drawn in when nothing is emphasized. Keyword-only.
+            The color it is drawn in when nothing is emphasized.
+            Keyword-only.
 
         Returns
         -------
@@ -276,12 +332,20 @@ class _Chart(QWidget):
         Examples
         --------
         >>> chart = _Chart("Speed")
-        >>> chart._tone(0, color=QColor("#2e7d32")).name()  # nothing emphasized
+        >>> chart._tone(
+        ...     0, color=QColor("#2e7d32")
+        ... ).name()  # nothing emphasized
         '#2e7d32'
         >>> chart.hovered = 1
-        >>> chart._tone(1, color=QColor("#2e7d32")).lightness() > QColor("#2e7d32").lightness()
+        >>> chart._tone(
+        ...     1, color=QColor("#2e7d32")
+        ... ).lightness() > QColor(
+        ...     "#2e7d32"
+        ... ).lightness()
         True
-        >>> chart._tone(0, color=QColor("#2e7d32")).alphaF() < 1.0
+        >>> chart._tone(
+        ...     0, color=QColor("#2e7d32")
+        ... ).alphaF() < 1.0
         True
         """
         if self.hovered is None and self.selected is None:
@@ -294,7 +358,8 @@ class _Chart(QWidget):
 
     def _column_at(self, pos: QPointF) -> int | None:
         """
-        Return the period whose column of the plot a point is in, for the charts that have a column for each label.
+        Return the period whose column of the plot a point is in, for
+        the charts that have a column for each label.
 
         Parameters
         ----------
@@ -304,7 +369,8 @@ class _Chart(QWidget):
         Returns
         -------
         int or None
-            The index of the label, or None if there are none or the point is outside the plot.
+            The index of the label, or None if there are none or the
+            point is outside the plot.
 
         Examples
         --------
@@ -312,7 +378,15 @@ class _Chart(QWidget):
         >>> chart.resize(400, 300)
         >>> chart.labels = ["a", "b"]
         >>> area = chart._plot()
-        >>> chart._column_at(QPointF(area.left() + 5, area.center().y())), chart._column_at(QPointF(5, 5))
+        >>> (
+        ...     chart._column_at(
+        ...         QPointF(
+        ...             area.left() + 5,
+        ...             area.center().y(),
+        ...         )
+        ...     ),
+        ...     chart._column_at(QPointF(5, 5)),
+        ... )
         (0, None)
         """
         plot, n = self._plot(), len(self.labels)
@@ -334,8 +408,16 @@ class _Chart(QWidget):
         >>> from PySide6.QtCore import QEvent
         >>> chart = _Chart("Speed")
         >>> point = QPointF(5, 5)
-        >>> chart._track(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-        ...                          Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+        >>> chart._track(
+        ...     QMouseEvent(
+        ...         QEvent.Type.MouseMove,
+        ...         point,
+        ...         point,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.KeyboardModifier.NoModifier,
+        ...     )
+        ... )
         >>> chart.hovered is None
         True
         """
@@ -355,18 +437,32 @@ class _Chart(QWidget):
         >>> from PySide6.QtCore import QEvent
         >>> chart = _Chart("Speed")
         >>> point = QPointF(5, 5)
-        >>> chart.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-        ...                                   Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+        >>> chart.mousePressEvent(
+        ...     QMouseEvent(
+        ...         QEvent.Type.MouseButtonPress,
+        ...         point,
+        ...         point,
+        ...         Qt.MouseButton.LeftButton,
+        ...         Qt.MouseButton.LeftButton,
+        ...         Qt.KeyboardModifier.NoModifier,
+        ...     )
+        ... )
         >>> chart._pressed is None
         True
         """
-        self._pressed = self._item_at(event.position()) if event.button() == Qt.MouseButton.LeftButton else None
+        self._pressed = (
+            self._item_at(event.position())
+            if event.button() == Qt.MouseButton.LeftButton
+            else None
+        )
 
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         """
-        Announce the item that was clicked: the one the button went down on and came up on.
+        Announce the item that was clicked: the one the button went down
+        on and came up on.
 
-        Pressing on one item and releasing on another, or off the chart, is not a click.
+        Pressing on one item and releasing on another, or off the chart,
+        is not a click.
 
         Parameters
         ----------
@@ -376,29 +472,52 @@ class _Chart(QWidget):
         Examples
         --------
         >>> from PySide6.QtCore import QEvent
-        >>> class Everywhere(_Chart):  # a chart with an item under every point
+        >>> class Everywhere(
+        ...     _Chart
+        ... ):  # a chart with an item under every point
         ...     def _item_at(self, pos):
         ...         return 4
         >>> chart = Everywhere("Speed")
         >>> got = []
         >>> _ = chart.clicked.connect(got.append)
         >>> point = QPointF(5, 5)
-        >>> press = QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-        ...                     Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier)
-        >>> release = QMouseEvent(QEvent.Type.MouseButtonRelease, point, point, Qt.MouseButton.LeftButton,
-        ...                       Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier)
+        >>> press = QMouseEvent(
+        ...     QEvent.Type.MouseButtonPress,
+        ...     point,
+        ...     point,
+        ...     Qt.MouseButton.LeftButton,
+        ...     Qt.MouseButton.LeftButton,
+        ...     Qt.KeyboardModifier.NoModifier,
+        ... )
+        >>> release = QMouseEvent(
+        ...     QEvent.Type.MouseButtonRelease,
+        ...     point,
+        ...     point,
+        ...     Qt.MouseButton.LeftButton,
+        ...     Qt.MouseButton.NoButton,
+        ...     Qt.KeyboardModifier.NoModifier,
+        ... )
         >>> chart.mousePressEvent(press)
         >>> chart.mouseReleaseEvent(release)
         >>> got
         [4]
         """
-        item, pressed, self._pressed = self._item_at(event.position()), self._pressed, None
-        if event.button() == Qt.MouseButton.LeftButton and item is not None and item == pressed:
+        item, pressed, self._pressed = (
+            self._item_at(event.position()),
+            self._pressed,
+            None,
+        )
+        if (
+            event.button() == Qt.MouseButton.LeftButton
+            and item is not None
+            and item == pressed
+        ):
             self.clicked.emit(item)
 
     def leaveEvent(self, event: QEvent) -> None:
         """
-        Remove the highlight and the tooltip when the pointer leaves the chart.
+        Remove the highlight and the tooltip when the pointer leaves the
+        chart.
 
         Parameters
         ----------
@@ -418,7 +537,8 @@ class _Chart(QWidget):
         QToolTip.hideText()
         super().leaveEvent(event)
 
-    # -- colors -----------------------------------------------------------------------------------------------------
+    # -- colors
+    # ------------------------------------------------------------------
 
     def _ink(self) -> QColor:
         """
@@ -438,7 +558,8 @@ class _Chart(QWidget):
 
     def _soft(self) -> QColor:
         """
-        Return a muted color for axis labels, between the background and the text color.
+        Return a muted color for axis labels, between the background and
+        the text color.
 
         Returns
         -------
@@ -450,7 +571,11 @@ class _Chart(QWidget):
         >>> _Chart("Speed")._soft().isValid()
         True
         """
-        return blend(self.palette().color(QPalette.ColorRole.Base), b=self._ink(), t=0.55)
+        return blend(
+            self.palette().color(QPalette.ColorRole.Base),
+            b=self._ink(),
+            t=0.55,
+        )
 
     def _grid(self) -> QColor:
         """
@@ -466,7 +591,11 @@ class _Chart(QWidget):
         >>> _Chart("Speed")._grid().isValid()
         True
         """
-        return blend(self.palette().color(QPalette.ColorRole.Base), b=self._ink(), t=0.16)
+        return blend(
+            self.palette().color(QPalette.ColorRole.Base),
+            b=self._ink(),
+            t=0.16,
+        )
 
     def _plot(self) -> QRectF:
         """
@@ -475,14 +604,20 @@ class _Chart(QWidget):
         Returns
         -------
         QRectF
-            The widget less the margins for the title, the value axis and the labels, and never smaller than 10 by 10.
+            The widget less the margins for the title, the value axis
+            and the labels, and never smaller than 10 by 10.
 
         Examples
         --------
         >>> chart = _Chart("Speed")
         >>> chart.resize(400, 300)
         >>> area = chart._plot()
-        >>> (area.x(), area.y(), area.width(), area.height())
+        >>> (
+        ...     area.x(),
+        ...     area.y(),
+        ...     area.width(),
+        ...     area.height(),
+        ... )
         (40.0, 34.0, 348.0, 240.0)
         """
         return QRectF(
@@ -492,7 +627,8 @@ class _Chart(QWidget):
             max(self.height() - self.TOP - self.BOTTOM, 10),
         )
 
-    # -- shared drawing ---------------------------------------------------------------------------------------------------
+    # -- shared drawing
+    # ------------------------------------------------------------------
 
     def _frame(self, p: QPainter) -> None:
         """
@@ -501,14 +637,17 @@ class _Chart(QWidget):
         Parameters
         ----------
         p : QPainter
-            The painter, which is set to anti-alias and left with the normal font.
+            The painter, which is set to anti-alias and left with the
+            normal font.
 
         Examples
         --------
         >>> from PySide6.QtGui import QImage
         >>> chart = _Chart("Speed")
         >>> chart.resize(400, 300)
-        >>> image = QImage(400, 300, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     400, 300, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
         >>> chart._frame(painter)
@@ -553,15 +692,23 @@ class _Chart(QWidget):
         >>> from PySide6.QtGui import QImage
         >>> chart = _Chart("Speed")
         >>> chart.resize(400, 300)
-        >>> image = QImage(400, 300, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     400, 300, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
-        >>> chart._message(painter, text="Nothing to show.")
+        >>> chart._message(
+        ...     painter, text="Nothing to show."
+        ... )
         >>> painter.end()
         True
         """
         p.setPen(self._soft())
-        p.drawText(self._plot(), Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, text)
+        p.drawText(
+            self._plot(),
+            Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap,
+            text,
+        )
 
     def _value_axis(
         self,
@@ -572,7 +719,8 @@ class _Chart(QWidget):
         fmt: Callable[[float], str],
     ) -> None:
         """
-        Draw the horizontal grid lines and the value labels down the left.
+        Draw the horizontal grid lines and the value labels down the
+        left.
 
         Parameters
         ----------
@@ -590,10 +738,17 @@ class _Chart(QWidget):
         >>> from PySide6.QtGui import QImage
         >>> chart = _Chart("Speed")
         >>> chart.resize(400, 300)
-        >>> image = QImage(400, 300, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     400, 300, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
-        >>> chart._value_axis(painter, ticks=[0, 5, 10], top=10, fmt=lambda v: f"{v:g}")
+        >>> chart._value_axis(
+        ...     painter,
+        ...     ticks=[0, 5, 10],
+        ...     top=10,
+        ...     fmt=lambda v: f"{v:g}",
+        ... )
         >>> painter.end()
         True
         """
@@ -604,7 +759,10 @@ class _Chart(QWidget):
         for t in ticks:
             y = plot.bottom() - plot.height() * t / top
             p.setPen(QPen(self._grid(), 1))
-            p.drawLine(QPointF(plot.left(), round(y) + 0.5), QPointF(plot.right(), round(y) + 0.5))
+            p.drawLine(
+                QPointF(plot.left(), round(y) + 0.5),
+                QPointF(plot.right(), round(y) + 0.5),
+            )
             p.setPen(self._soft())
             p.drawText(
                 QRectF(
@@ -626,7 +784,8 @@ class _Chart(QWidget):
         labels: Sequence[str],
     ) -> None:
         """
-        Label some of the positions along the bottom, skipping as many as needed so none overlap.
+        Label some of the positions along the bottom, skipping as many
+        as needed so none overlap.
 
         Parameters
         ----------
@@ -642,10 +801,16 @@ class _Chart(QWidget):
         >>> from PySide6.QtGui import QImage
         >>> chart = _Chart("Speed")
         >>> chart.resize(400, 300)
-        >>> image = QImage(400, 300, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     400, 300, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
-        >>> chart._category_axis(painter, centers=[100.0, 200.0, 300.0], labels=["Mon", "Tue", "Wed"])
+        >>> chart._category_axis(
+        ...     painter,
+        ...     centers=[100.0, 200.0, 300.0],
+        ...     labels=["Mon", "Tue", "Wed"],
+        ... )
         >>> painter.end()
         True
         """
@@ -656,8 +821,15 @@ class _Chart(QWidget):
         p.setFont(small)
         p.setPen(self._soft())
         widest = max(p.fontMetrics().horizontalAdvance(s) for s in labels) + 10
-        every = max(1, math.ceil(widest / max(self._plot().width() / len(labels), 1)))
-        for i in range(len(labels) - 1, -1, -every):  # count back from the latest, so the newest label is always there
+        every = max(
+            1,
+            math.ceil(widest / max(self._plot().width() / len(labels), 1)),
+        )
+        for i in range(
+            len(labels) - 1,
+            -1,
+            -every,
+        ):  # count back from the latest, so the newest label is always there
             label_box = QRectF(
                 centers[i] - widest / 2,
                 self._plot().bottom() + 5,
@@ -675,7 +847,8 @@ class _Chart(QWidget):
         texts: Sequence[str],
     ) -> None:
         """
-        Show a tooltip for the position nearest the pointer, or hide it when the pointer is outside the plot.
+        Show a tooltip for the position nearest the pointer, or hide it
+        when the pointer is outside the plot.
 
         Parameters
         ----------
@@ -693,9 +866,19 @@ class _Chart(QWidget):
         >>> chart = _Chart("Speed")
         >>> chart.resize(400, 300)
         >>> point = QPointF(100, 100)
-        >>> event_ = QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-        ...                     Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier)
-        >>> chart._hover(event_, centers=[100.0, 200.0], texts=["First", "Second"])
+        >>> event_ = QMouseEvent(
+        ...     QEvent.Type.MouseMove,
+        ...     point,
+        ...     point,
+        ...     Qt.MouseButton.NoButton,
+        ...     Qt.MouseButton.NoButton,
+        ...     Qt.KeyboardModifier.NoModifier,
+        ... )
+        >>> chart._hover(
+        ...     event_,
+        ...     centers=[100.0, 200.0],
+        ...     texts=["First", "Second"],
+        ... )
         """
         if not centers:
             return
@@ -718,7 +901,8 @@ class _Chart(QWidget):
 
 class StackedBarChart(_Chart):
     """
-    Questions per period, the first-try right ones in green with the missed ones stacked above in red.
+    Questions per period, the first-try right ones in green with the
+    missed ones stacked above in red.
 
     Attributes
     ----------
@@ -729,8 +913,14 @@ class StackedBarChart(_Chart):
 
     Examples
     --------
-    >>> chart = StackedBarChart("Questions answered per day")
-    >>> chart.set_data(["Mon", "Tue", "Wed"], right=[3, 0, 5], wrong=[1, 2, 0])
+    >>> chart = StackedBarChart(
+    ...     "Questions answered per day"
+    ... )
+    >>> chart.set_data(
+    ...     ["Mon", "Tue", "Wed"],
+    ...     right=[3, 0, 5],
+    ...     wrong=[1, 2, 0],
+    ... )
     >>> chart.labels
     ['Mon', 'Tue', 'Wed']
     """
@@ -750,7 +940,8 @@ class StackedBarChart(_Chart):
         title : str
             Drawn at the top left.
         header_control : QWidget or None, default None
-            Optional control at the right edge of the chart title row. Keyword-only.
+            Optional control at the right edge of the chart title row.
+            Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the chart. Keyword-only.
 
@@ -769,7 +960,11 @@ class StackedBarChart(_Chart):
             self._heading.setFont(font)
             header = QHBoxLayout()
             header.addWidget(self._heading, 1)
-            header.addWidget(header_control, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
+            header.addWidget(
+                header_control,
+                0,
+                Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight,
+            )
             layout = QVBoxLayout(self)
             layout.setContentsMargins(0, 0, self.RIGHT, 0)
             layout.setSpacing(0)
@@ -793,30 +988,39 @@ class StackedBarChart(_Chart):
         labels : sequence of str
             The label of each period.
         right : sequence of int
-            Questions right on the first try in each period. Keyword-only.
+            Questions right on the first try in each period.
+            Keyword-only.
         wrong : sequence of int
             Questions missed in each period. Keyword-only.
 
         Examples
         --------
         >>> chart = StackedBarChart("Questions")
-        >>> chart.set_data(["a", "b"], right=[2, 0], wrong=[0, 4])
+        >>> chart.set_data(
+        ...     ["a", "b"], right=[2, 0], wrong=[0, 4]
+        ... )
         >>> chart.right, chart.wrong
         ([2, 0], [0, 4])
         """
         if self._heading is not None:
             self._heading.setText(self.title)
-        self.labels, self.right, self.wrong = list(labels), list(right), list(wrong)
+        self.labels, self.right, self.wrong = (
+            list(labels),
+            list(right),
+            list(wrong),
+        )
         self.update()
 
     def _plot(self) -> QRectF:
         """
-        Reserve space above the bars for the title and its optional control.
+        Reserve space above the bars for the title and its optional
+        control.
 
         Returns
         -------
         QRectF
-            The plot area below the header, including any wrapped title lines.
+            The plot area below the header, including any wrapped title
+            lines.
 
         Examples
         --------
@@ -841,16 +1045,22 @@ class StackedBarChart(_Chart):
         --------
         >>> chart = StackedBarChart("Questions")
         >>> chart.resize(400, 300)
-        >>> chart.set_data(["a", "b"], right=[1, 1], wrong=[0, 0])
+        >>> chart.set_data(
+        ...     ["a", "b"], right=[1, 1], wrong=[0, 0]
+        ... )
         >>> [round(x) for x in chart._centers()]
         [127, 301]
         """
         plot, n = self._plot(), max(len(self.labels), 1)
-        return [plot.left() + plot.width() * (i + 0.5) / n for i in range(len(self.labels))]
+        return [
+            plot.left() + plot.width() * (i + 0.5) / n
+            for i in range(len(self.labels))
+        ]
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """
-        Draw the axes and a bar for each period, or a message when no questions were answered.
+        Draw the axes and a bar for each period, or a message when no
+        questions were answered.
 
         Parameters
         ----------
@@ -861,7 +1071,9 @@ class StackedBarChart(_Chart):
         --------
         >>> chart = StackedBarChart("Questions")
         >>> chart.resize(400, 300)
-        >>> chart.set_data(["a", "b"], right=[3, 1], wrong=[1, 0])
+        >>> chart.set_data(
+        ...     ["a", "b"], right=[3, 1], wrong=[1, 0]
+        ... )
         >>> chart.grab().isNull()
         False
         """
@@ -917,7 +1129,8 @@ class StackedBarChart(_Chart):
 
     def _item_at(self, pos: QPointF) -> int | None:
         """
-        Return the period whose column the point is in, if anything was answered in it.
+        Return the period whose column the point is in, if anything was
+        answered in it.
 
         Parameters
         ----------
@@ -927,18 +1140,30 @@ class StackedBarChart(_Chart):
         Returns
         -------
         int or None
-            The period's index, or None if the point is outside the plot or the period is empty.
+            The period's index, or None if the point is outside the plot
+            or the period is empty.
 
         Examples
         --------
         >>> chart = StackedBarChart("Questions")
         >>> chart.resize(400, 300)
-        >>> chart.set_data(["a", "b"], right=[3, 0], wrong=[1, 0])
+        >>> chart.set_data(
+        ...     ["a", "b"], right=[3, 0], wrong=[1, 0]
+        ... )
         >>> area = chart._plot()
         >>> y = area.center().y()
-        >>> chart._item_at(QPointF(area.left() + 5, y)), chart._item_at(QPointF(area.right() - 5, y))
+        >>> (
+        ...     chart._item_at(
+        ...         QPointF(area.left() + 5, y)
+        ...     ),
+        ...     chart._item_at(
+        ...         QPointF(area.right() - 5, y)
+        ...     ),
+        ... )
         (0, None)
-        >>> chart._item_at(QPointF(5, 5)) is None  # outside the plot
+        >>> chart._item_at(
+        ...     QPointF(5, 5)
+        ... ) is None  # outside the plot
         True
         """
         i = self._column_at(pos)
@@ -959,17 +1184,41 @@ class StackedBarChart(_Chart):
         >>> from PySide6.QtGui import QMouseEvent
         >>> chart = StackedBarChart("Questions")
         >>> chart.resize(400, 300)
-        >>> chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
-        >>> point = QPointF(chart._centers()[0], chart._plot().center().y())
-        >>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-        ...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+        >>> chart.set_data(
+        ...     ["Mon", "Tue"],
+        ...     right=[3, 1],
+        ...     wrong=[1, 0],
+        ... )
+        >>> point = QPointF(
+        ...     chart._centers()[0],
+        ...     chart._plot().center().y(),
+        ... )
+        >>> chart.mouseMoveEvent(
+        ...     QMouseEvent(
+        ...         QEvent.Type.MouseMove,
+        ...         point,
+        ...         point,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.KeyboardModifier.NoModifier,
+        ...     )
+        ... )
         """
         self._track(event)
         self._hover(
             event,
             centers=self._centers(),
             texts=[
-                f"{lab}\n{r + w} question{'s' if r + w != 1 else ''}: {r} right on the first try, {w} missed"
+                f"{lab}"
+                "\n"
+                f"{r + w}"
+                " question"
+                f"{('s' if r + w != 1 else '')}"
+                ": "
+                f"{r}"
+                " right on the first try, "
+                f"{w}"
+                " missed"
                 for lab, r, w in zip(self.labels, self.right, self.wrong)
             ],
         )
@@ -986,14 +1235,22 @@ class LineChart(_Chart):
     fmt : callable
         Turns a value into its label, for the axis and the tooltip.
     fixed_top : float or None
-        The value at the top of the plot; the largest value, rounded up, if None.
+        The value at the top of the plot; the largest value, rounded up,
+        if None.
     values : list of float or None
         The value of each period, or None for a gap.
 
     Examples
     --------
-    >>> chart = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
-    >>> chart.set_data(["Mon", "Tue", "Wed"], values=[40.0, None, 80.0])
+    >>> chart = LineChart(
+    ...     "Right on the first try",
+    ...     fmt=lambda v: f"{v:.0f}%",
+    ...     fixed_top=100,
+    ... )
+    >>> chart.set_data(
+    ...     ["Mon", "Tue", "Wed"],
+    ...     values=[40.0, None, 80.0],
+    ... )
     >>> chart.values
     [40.0, None, 80.0]
     """
@@ -1016,13 +1273,17 @@ class LineChart(_Chart):
         fmt : callable
             Turns a value into its label. Keyword-only.
         fixed_top : float or None, default None
-            The value at the top of the plot (such as 100 for a percentage); the largest value, rounded up, if None. Keyword-only.
+            The value at the top of the plot (such as 100 for a
+            percentage); the largest value, rounded up, if None.
+            Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the chart. Keyword-only.
 
         Examples
         --------
-        >>> LineChart("Speed", fmt=lambda v: f"{v:.1f} s").fixed_top is None
+        >>> LineChart(
+        ...     "Speed", fmt=lambda v: f"{v:.1f} s"
+        ... ).fixed_top is None
         True
         """
         super().__init__(title, parent=parent)
@@ -1047,8 +1308,12 @@ class LineChart(_Chart):
 
         Examples
         --------
-        >>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
-        >>> chart.set_data(["a", "b"], values=[2.5, None])
+        >>> chart = LineChart(
+        ...     "Speed", fmt=lambda v: f"{v:.1f} s"
+        ... )
+        >>> chart.set_data(
+        ...     ["a", "b"], values=[2.5, None]
+        ... )
         >>> chart.labels
         ['a', 'b']
         """
@@ -1068,7 +1333,9 @@ class LineChart(_Chart):
         --------
         >>> chart = LineChart("Speed", fmt=str)
         >>> chart.resize(400, 300)
-        >>> chart.set_data(["a", "b"], values=[1.0, 2.0])
+        >>> chart.set_data(
+        ...     ["a", "b"], values=[1.0, 2.0]
+        ... )
         >>> [round(x) for x in chart._centers()]
         [127, 301]
         """
@@ -1082,11 +1349,16 @@ class LineChart(_Chart):
         Returns
         -------
         tuple of (float, list of float)
-            The fixed top with a tick every quarter of it, or the round tick just above the largest value.
+            The fixed top with a tick every quarter of it, or the round
+            tick just above the largest value.
 
         Examples
         --------
-        >>> chart = LineChart("Right on the first try", fmt=str, fixed_top=100)
+        >>> chart = LineChart(
+        ...     "Right on the first try",
+        ...     fmt=str,
+        ...     fixed_top=100,
+        ... )
         >>> chart._top_and_ticks()
         (100, [0.0, 25.0, 50.0, 75.0, 100.0])
         """
@@ -1098,7 +1370,8 @@ class LineChart(_Chart):
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """
-        Draw the axes, the line (one run at a time, so gaps show) and a dot for each value.
+        Draw the axes, the line (one run at a time, so gaps show) and a
+        dot for each value.
 
         Parameters
         ----------
@@ -1107,9 +1380,13 @@ class LineChart(_Chart):
 
         Examples
         --------
-        >>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
+        >>> chart = LineChart(
+        ...     "Speed", fmt=lambda v: f"{v:.1f} s"
+        ... )
         >>> chart.resize(400, 300)
-        >>> chart.set_data(["a", "b", "c"], values=[2.0, None, 3.0])
+        >>> chart.set_data(
+        ...     ["a", "b", "c"], values=[2.0, None, 3.0]
+        ... )
         >>> chart.grab().isNull()
         False
         """
@@ -1128,15 +1405,22 @@ class LineChart(_Chart):
         )
         plot, centers = self._plot(), self._centers()
         points = [
-            QPointF(cx, plot.bottom() - plot.height() * min(v, top) / top) if v is not None else None
+            QPointF(cx, plot.bottom() - plot.height() * min(v, top) / top)
+            if v is not None
+            else None
             for cx, v in zip(centers, self.values)
         ]
         accent = self.palette().color(QPalette.ColorRole.Highlight)
         faint = QColor(accent)
         if self.hovered is not None or self.selected is not None:
-            faint.setAlphaF(DIM_OPACITY)  # the line steps back so the point being pointed at stands out
+            faint.setAlphaF(
+                DIM_OPACITY,
+            )  # the line steps back so the point being pointed at stands out
         run: list[QPointF] = []
-        for pt in [*points, None]:  # draw each unbroken run of points as one line
+        for pt in [
+            *points,
+            None,
+        ]:  # draw each unbroken run of points as one line
             if pt is not None:
                 run.append(pt)
                 continue
@@ -1161,13 +1445,18 @@ class LineChart(_Chart):
         for i, pt in enumerate(points):
             if pt is not None:
                 p.setBrush(self._tone(i, color=accent))
-                grown = radius * 1.4 if i in (self.hovered, self.selected) else radius  # the point being pointed at is larger
+                grown = (
+                    radius * 1.4
+                    if i in (self.hovered, self.selected)
+                    else radius
+                )  # the point being pointed at is larger
                 p.drawEllipse(pt, grown, grown)
         self._category_axis(p, centers=centers, labels=self.labels)
 
     def _item_at(self, pos: QPointF) -> int | None:
         """
-        Return the period whose column the point is in, if anything was answered in it.
+        Return the period whose column the point is in, if anything was
+        answered in it.
 
         Parameters
         ----------
@@ -1177,18 +1466,30 @@ class LineChart(_Chart):
         Returns
         -------
         int or None
-            The period's index, or None if the point is outside the plot or the period is empty.
+            The period's index, or None if the point is outside the plot
+            or the period is empty.
 
         Examples
         --------
         >>> chart = LineChart("Speed", fmt=str)
         >>> chart.resize(400, 300)
-        >>> chart.set_data(["a", "b"], values=[3.0, None])
+        >>> chart.set_data(
+        ...     ["a", "b"], values=[3.0, None]
+        ... )
         >>> area = chart._plot()
         >>> y = area.center().y()
-        >>> chart._item_at(QPointF(area.left() + 5, y)), chart._item_at(QPointF(area.right() - 5, y))
+        >>> (
+        ...     chart._item_at(
+        ...         QPointF(area.left() + 5, y)
+        ...     ),
+        ...     chart._item_at(
+        ...         QPointF(area.right() - 5, y)
+        ...     ),
+        ... )
         (0, None)
-        >>> chart._item_at(QPointF(5, 5)) is None  # outside the plot
+        >>> chart._item_at(
+        ...     QPointF(5, 5)
+        ... ) is None  # outside the plot
         True
         """
         i = self._column_at(pos)
@@ -1207,36 +1508,63 @@ class LineChart(_Chart):
         --------
         >>> from PySide6.QtCore import QEvent
         >>> from PySide6.QtGui import QMouseEvent
-        >>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
+        >>> chart = LineChart(
+        ...     "Speed", fmt=lambda v: f"{v:.1f} s"
+        ... )
         >>> chart.resize(400, 300)
-        >>> chart.set_data(["a", "b"], values=[2.0, 3.0])
-        >>> point = QPointF(chart._centers()[0], chart._plot().center().y())
-        >>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-        ...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+        >>> chart.set_data(
+        ...     ["a", "b"], values=[2.0, 3.0]
+        ... )
+        >>> point = QPointF(
+        ...     chart._centers()[0],
+        ...     chart._plot().center().y(),
+        ... )
+        >>> chart.mouseMoveEvent(
+        ...     QMouseEvent(
+        ...         QEvent.Type.MouseMove,
+        ...         point,
+        ...         point,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.KeyboardModifier.NoModifier,
+        ...     )
+        ... )
         """
         self._track(event)
         self._hover(
             event,
             centers=self._centers(),
-            texts=[f"{lab}\n{self.fmt(v) if v is not None else 'no answers'}" for lab, v in zip(self.labels, self.values)],
+            texts=[
+                f"{lab}\n{self.fmt(v) if v is not None else 'no answers'}"
+                for lab, v in zip(self.labels, self.values)
+            ],
         )
 
 
 class HBarChart(_Chart):
     """
-    One bar per name, on a fixed 0-100 scale, each with its value at the end.
+    One bar per name, on a fixed 0-100 scale, each with its value at the
+    end.
 
     Attributes
     ----------
     ROW : int
         The height of each bar's row, in pixels.
     rows : list of tuple of (str, float, str)
-        For each bar, its name, its value from 0 to 100 and the text shown at its end.
+        For each bar, its name, its value from 0 to 100 and the text
+        shown at its end.
 
     Examples
     --------
-    >>> chart = HBarChart("Right on the first try, by exercise")
-    >>> chart.set_data([("Intervals", 77.0, "77%  ·  52 q"), ("Chords", 88.0, "88%  ·  48 q")])
+    >>> chart = HBarChart(
+    ...     "Right on the first try, by exercise"
+    ... )
+    >>> chart.set_data(
+    ...     [
+    ...         ("Intervals", 77.0, "77%  ·  52 q"),
+    ...         ("Chords", 88.0, "88%  ·  48 q"),
+    ...     ]
+    ... )
     >>> len(chart.rows)
     2
     """
@@ -1269,27 +1597,37 @@ class HBarChart(_Chart):
 
     def set_data(self, rows: Sequence[tuple[str, float, str]]) -> None:
         """
-        Show a bar for each name, and make the chart tall enough for them.
+        Show a bar for each name, and make the chart tall enough for
+        them.
 
         Parameters
         ----------
         rows : sequence of tuple of (str, float, str)
-            Each bar's name, its value from 0 to 100, and the text shown at the end of the bar.
+            Each bar's name, its value from 0 to 100, and the text shown
+            at the end of the bar.
 
         Examples
         --------
         >>> chart = HBarChart("By exercise")
-        >>> chart.set_data([(f"Exercise {i}", 50.0, "50%") for i in range(10)])
+        >>> chart.set_data(
+        ...     [
+        ...         (f"Exercise {i}", 50.0, "50%")
+        ...         for i in range(10)
+        ...     ]
+        ... )
         >>> chart.minimumHeight()
         306
         """
         self.rows = list(rows)
-        self.setMinimumHeight(max(px(190), self.TOP + px(12) + self.ROW * len(self.rows)))
+        self.setMinimumHeight(
+            max(px(190), self.TOP + px(12) + self.ROW * len(self.rows)),
+        )
         self.update()
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """
-        Draw a bar with its name and value for each row, or a message when there are none.
+        Draw a bar with its name and value for each row, or a message
+        when there are none.
 
         Parameters
         ----------
@@ -1309,8 +1647,15 @@ class HBarChart(_Chart):
         if not self.rows:
             self._message(p, text=self.empty)
             return
-        label_w = min(max(p.fontMetrics().horizontalAdvance(n) for n, _, _ in self.rows) + 12, self.width() * 0.45)
-        value_w = max(p.fontMetrics().horizontalAdvance(t) for _, _, t in self.rows) + 10
+        label_w = min(
+            max(p.fontMetrics().horizontalAdvance(n) for n, _, _ in self.rows)
+            + 12,
+            self.width() * 0.45,
+        )
+        value_w = (
+            max(p.fontMetrics().horizontalAdvance(t) for _, _, t in self.rows)
+            + 10
+        )
         x0, x1 = label_w, self.width() - value_w - 8
         for i, (name, value, text) in enumerate(self.rows):
             y = self.TOP + i * self.ROW
@@ -1323,7 +1668,11 @@ class HBarChart(_Chart):
                     self.ROW - 6,
                 ),
                 Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
-                p.fontMetrics().elidedText(name, Qt.TextElideMode.ElideRight, int(label_w - 8)),
+                p.fontMetrics().elidedText(
+                    name,
+                    Qt.TextElideMode.ElideRight,
+                    int(label_w - 8),
+                ),
             )
             p.setPen(Qt.PenStyle.NoPen)
             p.setBrush(self._grid())
@@ -1337,7 +1686,12 @@ class HBarChart(_Chart):
                 4,
                 4,
             )
-            p.setBrush(self._tone(i, color=self.palette().color(QPalette.ColorRole.Highlight)))
+            p.setBrush(
+                self._tone(
+                    i,
+                    color=self.palette().color(QPalette.ColorRole.Highlight),
+                ),
+            )
             p.drawRoundedRect(
                 QRectF(
                     x0,
@@ -1372,13 +1726,26 @@ class HBarChart(_Chart):
         Returns
         -------
         int or None
-            The row's index, or None if the point is above the first row or below the last.
+            The row's index, or None if the point is above the first row
+            or below the last.
 
         Examples
         --------
         >>> chart = HBarChart("By exercise")
-        >>> chart.set_data([("A", 50.0, "50%"), ("B", 80.0, "80%")])
-        >>> chart._item_at(QPointF(10, chart.TOP + chart.ROW * 1.5)), chart._item_at(QPointF(10, chart.TOP - 5)) is None
+        >>> chart.set_data(
+        ...     [("A", 50.0, "50%"), ("B", 80.0, "80%")]
+        ... )
+        >>> (
+        ...     chart._item_at(
+        ...         QPointF(
+        ...             10, chart.TOP + chart.ROW * 1.5
+        ...         )
+        ...     ),
+        ...     chart._item_at(
+        ...         QPointF(10, chart.TOP - 5)
+        ...     )
+        ...     is None,
+        ... )
         (1, True)
         """
         i = int((pos.y() - self.TOP) // self.ROW)
@@ -1398,9 +1765,19 @@ class HBarChart(_Chart):
         >>> from PySide6.QtCore import QEvent
         >>> chart = HBarChart("By exercise")
         >>> chart.set_data([("A", 50.0, "50%")])
-        >>> point = QPointF(10, chart.TOP + chart.ROW / 2)
-        >>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-        ...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+        >>> point = QPointF(
+        ...     10, chart.TOP + chart.ROW / 2
+        ... )
+        >>> chart.mouseMoveEvent(
+        ...     QMouseEvent(
+        ...         QEvent.Type.MouseMove,
+        ...         point,
+        ...         point,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.KeyboardModifier.NoModifier,
+        ...     )
+        ... )
         >>> chart.hovered
         0
         """
@@ -1409,7 +1786,8 @@ class HBarChart(_Chart):
 
 class HeatmapChart(_Chart):
     """
-    A calendar of reviews: a column per week (Monday to Sunday), a square per day, darker the more questions.
+    A calendar of reviews: a column per week (Monday to Sunday), a
+    square per day, darker the more questions.
 
     Attributes
     ----------
@@ -1425,7 +1803,10 @@ class HeatmapChart(_Chart):
     Examples
     --------
     >>> chart = HeatmapChart("Reviews")
-    >>> chart.set_data({date(2026, 11, 13): 12}, today=date(2026, 11, 13))
+    >>> chart.set_data(
+    ...     {date(2026, 11, 13): 12},
+    ...     today=date(2026, 11, 13),
+    ... )
     >>> chart.counts
     {datetime.date(2026, 11, 13): 12}
     """
@@ -1482,7 +1863,9 @@ class HeatmapChart(_Chart):
         Examples
         --------
         >>> chart = HeatmapChart("Reviews")
-        >>> chart.set_data({}, today=date(2026, 11, 13), weeks=26)
+        >>> chart.set_data(
+        ...     {}, today=date(2026, 11, 13), weeks=26
+        ... )
         >>> chart.weeks
         26
         """
@@ -1491,7 +1874,8 @@ class HeatmapChart(_Chart):
 
     def first_day(self) -> date:
         """
-        Return the first day shown: the Monday that starts the first week.
+        Return the first day shown: the Monday that starts the first
+        week.
 
         Returns
         -------
@@ -1502,10 +1886,15 @@ class HeatmapChart(_Chart):
         --------
         >>> chart = HeatmapChart("Reviews")
         >>> chart.set_data({}, today=date(2026, 11, 13))
-        >>> chart.first_day(), chart.first_day().weekday()
+        >>> (
+        ...     chart.first_day(),
+        ...     chart.first_day().weekday(),
+        ... )
         (datetime.date(2025, 11, 10), 0)
         """
-        return self.today - timedelta(days=self.today.weekday() + 7 * (self.weeks - 1))
+        return self.today - timedelta(
+            days=self.today.weekday() + 7 * (self.weeks - 1),
+        )
 
     def level(self, count: int) -> int:
         """
@@ -1519,14 +1908,27 @@ class HeatmapChart(_Chart):
         Returns
         -------
         int
-            0 for no questions, otherwise 1 to `LEVELS` by how the day compares with the busiest. The scale is in quarters of the
-            90th-percentile day, so one huge day does not flatten everything else.
+            0 for no questions, otherwise 1 to `LEVELS` by how the day
+            compares with the busiest. The scale is in quarters of the
+            90th-percentile day, so one huge day does not flatten
+            everything else.
 
         Examples
         --------
         >>> chart = HeatmapChart("Reviews")
-        >>> chart.set_data({date(2026, 11, 13): 40, date(2026, 11, 12): 20, date(2026, 11, 11): 1}, today=date(2026, 11, 13))
-        >>> chart.level(0), chart.level(1), chart.level(40)
+        >>> chart.set_data(
+        ...     {
+        ...         date(2026, 11, 13): 40,
+        ...         date(2026, 11, 12): 20,
+        ...         date(2026, 11, 11): 1,
+        ...     },
+        ...     today=date(2026, 11, 13),
+        ... )
+        >>> (
+        ...     chart.level(0),
+        ...     chart.level(1),
+        ...     chart.level(40),
+        ... )
         (0, 1, 4)
         """
         if count <= 0:
@@ -1551,7 +1953,10 @@ class HeatmapChart(_Chart):
         >>> chart._cell()
         18.0
         """
-        return max(min((self.width() - self.LEFT - self.RIGHT) / self.weeks, 18.0), 4.0)
+        return max(
+            min((self.width() - self.LEFT - self.RIGHT) / self.weeks, 18.0),
+            4.0,
+        )
 
     def _origin(self) -> tuple[float, float]:
         """
@@ -1581,14 +1986,17 @@ class HeatmapChart(_Chart):
         Returns
         -------
         QColor
-            The grid color for 0, otherwise a green that deepens with the level.
+            The grid color for 0, otherwise a green that deepens with
+            the level.
 
         Examples
         --------
         >>> chart = HeatmapChart("Reviews")
         >>> chart._shade(0) == chart._grid()
         True
-        >>> chart._shade(4).lightness() < chart._shade(1).lightness()
+        >>> chart._shade(4).lightness() < chart._shade(
+        ...     1
+        ... ).lightness()
         True
         """
         base = self.palette().color(QPalette.ColorRole.Base)
@@ -1608,29 +2016,48 @@ class HeatmapChart(_Chart):
         Returns
         -------
         date or None
-            The day, or None if the point is outside the calendar or on a day that has not happened yet.
+            The day, or None if the point is outside the calendar or on
+            a day that has not happened yet.
 
         Examples
         --------
         >>> chart = HeatmapChart("Reviews")
         >>> chart.resize(760, 190)
         >>> chart.set_data({}, today=date(2026, 11, 13))
-        >>> cell_, (x0_, y0_) = chart._cell(), chart._origin()
-        >>> chart.day_at(QPointF(x0_ + 52.5 * cell_, y0_ + 4.5 * cell_))  # the last column, Friday
+        >>> cell_, (x0_, y0_) = (
+        ...     chart._cell(),
+        ...     chart._origin(),
+        ... )
+        >>> chart.day_at(
+        ...     QPointF(
+        ...         x0_ + 52.5 * cell_,
+        ...         y0_ + 4.5 * cell_,
+        ...     )
+        ... )  # the last column, Friday
         datetime.date(2026, 11, 13)
-        >>> chart.day_at(QPointF(x0_ + 52.5 * cell_, y0_ + 6.5 * cell_)) is None  # Sunday: not yet
+        >>> chart.day_at(
+        ...     QPointF(
+        ...         x0_ + 52.5 * cell_,
+        ...         y0_ + 6.5 * cell_,
+        ...     )
+        ... ) is None  # Sunday: not yet
         True
         """
         cell, (x0, y0) = self._cell(), self._origin()
         col, row = int((pos.x() - x0) // cell), int((pos.y() - y0) // cell)
-        if pos.x() < x0 or pos.y() < y0 or not (0 <= col < self.weeks and 0 <= row < 7):
+        if (
+            pos.x() < x0
+            or pos.y() < y0
+            or not (0 <= col < self.weeks and 0 <= row < 7)
+        ):
             return None
         day = self.first_day() + timedelta(days=7 * col + row)
         return day if day <= self.today else None
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """
-        Draw the month and weekday labels, a square for each day, and the Less-More legend.
+        Draw the month and weekday labels, a square for each day, and
+        the Less-More legend.
 
         Parameters
         ----------
@@ -1641,7 +2068,10 @@ class HeatmapChart(_Chart):
         --------
         >>> chart = HeatmapChart("Reviews")
         >>> chart.resize(760, 190)
-        >>> chart.set_data({date(2026, 11, 13): 5}, today=date(2026, 11, 13))
+        >>> chart.set_data(
+        ...     {date(2026, 11, 13): 5},
+        ...     today=date(2026, 11, 13),
+        ... )
         >>> chart.grab().isNull()
         False
         """
@@ -1661,7 +2091,11 @@ class HeatmapChart(_Chart):
                 self.LEFT - 6,
                 cell,
             )
-            p.drawText(label_box, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter, name)
+            p.drawText(
+                label_box,
+                Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
+                name,
+            )
         last_month_label = -99.0
         p.setPen(Qt.PenStyle.NoPen)
         for col in range(self.weeks):
@@ -1669,7 +2103,9 @@ class HeatmapChart(_Chart):
             if monday > self.today:
                 break
             x = x0 + col * cell
-            if (monday.day <= 7 or col == 0) and x - last_month_label >= 30:  # label the week a month starts in
+            if (
+                (monday.day <= 7 or col == 0) and x - last_month_label >= 30
+            ):  # label the week a month starts in
                 p.setPen(self._soft())
                 month_box = QRectF(
                     x,
@@ -1677,7 +2113,11 @@ class HeatmapChart(_Chart):
                     40,
                     16,
                 )
-                p.drawText(month_box, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, monday.strftime("%b"))
+                p.drawText(
+                    month_box,
+                    Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                    monday.strftime("%b"),
+                )
                 p.setPen(Qt.PenStyle.NoPen)
                 last_month_label = x
             for row in range(7):
@@ -1690,7 +2130,12 @@ class HeatmapChart(_Chart):
                     cell - gap,
                     cell - gap,
                 )
-                p.setBrush(self._tone(day, color=self._shade(self.level(self.counts.get(day, 0)))))
+                p.setBrush(
+                    self._tone(
+                        day,
+                        color=self._shade(self.level(self.counts.get(day, 0))),
+                    ),
+                )
                 p.drawRoundedRect(square, 2, 2)
         # the legend, bottom right: Less [squares] More
         y = y0 + 7 * cell + 8
@@ -1748,7 +2193,8 @@ class HeatmapChart(_Chart):
 
     def _item_at(self, pos: QPointF) -> date | None:
         """
-        Return the day under a point, if any questions were answered on it.
+        Return the day under a point, if any questions were answered on
+        it.
 
         Parameters
         ----------
@@ -1764,11 +2210,25 @@ class HeatmapChart(_Chart):
         --------
         >>> chart = HeatmapChart("Reviews")
         >>> chart.resize(760, 190)
-        >>> chart.set_data({date(2026, 11, 13): 3}, today=date(2026, 11, 13))
-        >>> cell, (x0, y0) = chart._cell(), chart._origin()
-        >>> chart._item_at(QPointF(x0 + 52.5 * cell, y0 + 4.5 * cell))  # the 13th, a Friday, has answers
+        >>> chart.set_data(
+        ...     {date(2026, 11, 13): 3},
+        ...     today=date(2026, 11, 13),
+        ... )
+        >>> cell, (x0, y0) = (
+        ...     chart._cell(),
+        ...     chart._origin(),
+        ... )
+        >>> chart._item_at(
+        ...     QPointF(
+        ...         x0 + 52.5 * cell, y0 + 4.5 * cell
+        ...     )
+        ... )  # the 13th, a Friday, has answers
         datetime.date(2026, 11, 13)
-        >>> chart._item_at(QPointF(x0 + 52.5 * cell, y0 + 3.5 * cell)) is None  # the 12th has none
+        >>> chart._item_at(
+        ...     QPointF(
+        ...         x0 + 52.5 * cell, y0 + 3.5 * cell
+        ...     )
+        ... ) is None  # the 12th has none
         True
         """
         day = self.day_at(pos)
@@ -1776,7 +2236,8 @@ class HeatmapChart(_Chart):
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         """
-        Say how many questions were answered on the day under the pointer, in a tooltip.
+        Say how many questions were answered on the day under the
+        pointer, in a tooltip.
 
         Parameters
         ----------
@@ -1789,11 +2250,27 @@ class HeatmapChart(_Chart):
         >>> from PySide6.QtGui import QMouseEvent
         >>> chart = HeatmapChart("Reviews")
         >>> chart.resize(760, 190)
-        >>> chart.set_data({date(2026, 11, 13): 3}, today=date(2026, 11, 13))
-        >>> cell, (x0, y0) = chart._cell(), chart._origin()
-        >>> point = QPointF(x0 + 52.5 * cell, y0 + 4.5 * cell)
-        >>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-        ...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+        >>> chart.set_data(
+        ...     {date(2026, 11, 13): 3},
+        ...     today=date(2026, 11, 13),
+        ... )
+        >>> cell, (x0, y0) = (
+        ...     chart._cell(),
+        ...     chart._origin(),
+        ... )
+        >>> point = QPointF(
+        ...     x0 + 52.5 * cell, y0 + 4.5 * cell
+        ... )
+        >>> chart.mouseMoveEvent(
+        ...     QMouseEvent(
+        ...         QEvent.Type.MouseMove,
+        ...         point,
+        ...         point,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.MouseButton.NoButton,
+        ...         Qt.KeyboardModifier.NoModifier,
+        ...     )
+        ... )
         """
         self._track(event)
         day = self.day_at(event.position())
@@ -1801,7 +2278,15 @@ class HeatmapChart(_Chart):
             QToolTip.hideText()
             return
         n = self.counts.get(day, 0)
-        text = f"{day.strftime('%a')} {day.strftime('%b')} {day.day}, {day.year}\n" + (
-            f"{n} question{'s' if n != 1 else ''}" if n else "no questions"
+        text = (
+            f"{day.strftime('%a')}"
+            " "
+            f"{day.strftime('%b')}"
+            " "
+            f"{day.day}"
+            ", "
+            f"{day.year}"
+            "\n"
+            + (f"{n} question{'s' if n != 1 else ''}" if n else "no questions")
         )
         QToolTip.showText(event.globalPosition().toPoint(), text, self)

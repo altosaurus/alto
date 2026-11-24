@@ -7,10 +7,14 @@ permalink: /api/alto.ui.zoom/
 {% raw %}
 Zoom: make everything in Alto larger or smaller together.
 
-The zoom is a percentage, 100 by default, that moves through a list of steps. It scales the application font, every pixel
-and point length in the stylesheet, and the sizes the interface fixes in pixels, which are written with `px` here so that
-they follow it. The notation that is drawn by hand takes its size from the same percentage. Pressing Ctrl and Plus or Ctrl and
-Minus, or turning the mouse wheel with Ctrl held, moves one step, and Ctrl and 0 goes back to 100%. The choice is saved.
+The zoom is a percentage, 100 by default, that moves through a list of
+steps. It scales the application font, every pixel
+and point length in the stylesheet, and the sizes the interface fixes in
+pixels, which are written with `px` here so that
+they follow it. The notation that is drawn by hand takes its size from
+the same percentage. Pressing Ctrl and Plus or Ctrl and
+Minus, or turning the mouse wheel with Ctrl held, moves one step, and
+Ctrl and 0 goes back to 100%. The choice is saved.
 
 **Examples**
 
@@ -19,7 +23,9 @@ Minus, or turning the mouse wheel with Ctrl held, moves one step, and Ctrl and 0
 False
 >>> px(20), px(0)
 (20, 0)
->>> css("QLabel { font-size: 14pt; border: 1px solid; }")
+>>> css(
+...     "QLabel { font-size: 14pt; border: 1px solid; }"
+... )
 'QLabel { font-size: 14pt; border: 1px solid; }'
 ```
 
@@ -103,7 +109,10 @@ Scale every pixel and point length in a stylesheet by the zoom.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> css("QLabel { padding: 8px 12px; font-size: 14pt; margin: 0px; }")
+>>> css(
+...     "QLabel { padding: 8px 12px; font-size: 14pt; margin: 0px;"
+...     " }"
+... )
 'QLabel { padding: 8px 12px; font-size: 14pt; margin: 0px; }'
 ```
 
@@ -113,7 +122,8 @@ Scale every pixel and point length in a stylesheet by the zoom.
 def apply_font() -> None
 ```
 
-Make the application font as large as the zoom says, from the size it had at 100%.
+Make the application font as large as the zoom says, from the size
+it had at 100%.
 
 **Examples**
 
@@ -206,7 +216,8 @@ False
 def load() -> None
 ```
 
-Take the saved zoom into force, without announcing it, ignoring anything that is not a step.
+Take the saved zoom into force, without announcing it, ignoring
+anything that is not a step.
 
 **Examples**
 
@@ -229,14 +240,18 @@ WheelZoom(parent: QObject | None = None)
 
 Bases: `QObject`
 
-Zoom when the mouse wheel turns with Ctrl held, wherever the pointer is.
+Zoom when the mouse wheel turns with Ctrl held, wherever the pointer
+is.
 
-A touchpad that sends small steps is added up, so that a whole notch is needed to move one step.
+A touchpad that sends small steps is added up, so that a whole notch
+is needed to move one step.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> WheelZoom().eventFilter(QObject(), QEvent(QEvent.Type.None_))
+>>> WheelZoom().eventFilter(
+...     QObject(), QEvent(QEvent.Type.None_)
+... )
 False
 ```
 
@@ -261,11 +276,15 @@ Start with no wheel turned.
 def follow(app: QGuiApplication) -> None
 ```
 
-Watch the window that has the focus, and each window that gains it later, such as a dialog that opens.
+Watch the window that has the focus, and each window that gains
+it later, such as a dialog that opens.
 
-The filter goes on the windows, not on the application. A window is handed each wheel turn before the widget under the
-pointer is, so a turn anywhere in it is seen, while the many events that pass between the widgets inside it are not:
-a filter on the application runs for every one of those, which made building a page half as slow again.
+The filter goes on the windows, not on the application. A window
+is handed each wheel turn before the widget under the
+pointer is, so a turn anywhere in it is seen, while the many
+events that pass between the widgets inside it are not:
+a filter on the application runs for every one of those, which
+made building a page half as slow again.
 
 **Parameters**
 
@@ -310,7 +329,8 @@ def eventFilter(
 ) -> bool
 ```
 
-Take a wheel event with Ctrl held as a zoom, and let every other event through.
+Take a wheel event with Ctrl held as a zoom, and let every other
+event through.
 
 **Parameters**
 
@@ -324,7 +344,9 @@ Take a wheel event with Ctrl held as a zoom, and let every other event through.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> WheelZoom().eventFilter(QObject(), QEvent(QEvent.Type.None_))
+>>> WheelZoom().eventFilter(
+...     QObject(), QEvent(QEvent.Type.None_)
+... )
 False
 ```
 {% endraw %}

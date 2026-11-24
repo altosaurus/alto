@@ -1,10 +1,14 @@
 """
 Zoom: make everything in Alto larger or smaller together.
 
-The zoom is a percentage, 100 by default, that moves through a list of steps. It scales the application font, every pixel
-and point length in the stylesheet, and the sizes the interface fixes in pixels, which are written with `px` here so that
-they follow it. The notation that is drawn by hand takes its size from the same percentage. Pressing Ctrl and Plus or Ctrl and
-Minus, or turning the mouse wheel with Ctrl held, moves one step, and Ctrl and 0 goes back to 100%. The choice is saved.
+The zoom is a percentage, 100 by default, that moves through a list of
+steps. It scales the application font, every pixel
+and point length in the stylesheet, and the sizes the interface fixes in
+pixels, which are written with `px` here so that
+they follow it. The notation that is drawn by hand takes its size from
+the same percentage. Pressing Ctrl and Plus or Ctrl and
+Minus, or turning the mouse wheel with Ctrl held, moves one step, and
+Ctrl and 0 goes back to 100%. The choice is saved.
 
 Examples
 --------
@@ -12,7 +16,9 @@ Examples
 False
 >>> px(20), px(0)
 (20, 0)
->>> css("QLabel { font-size: 14pt; border: 1px solid; }")
+>>> css(
+...     "QLabel { font-size: 14pt; border: 1px solid; }"
+... )
 'QLabel { font-size: 14pt; border: 1px solid; }'
 """
 
@@ -39,13 +45,31 @@ from alto.ui.store import (
     store,
 )
 
-STEPS = (50, 67, 75, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300)  # the zoom levels, as percentages
+STEPS = (
+    50,
+    67,
+    75,
+    80,
+    90,
+    100,
+    110,
+    125,
+    150,
+    175,
+    200,
+    250,
+    300,
+)  # the zoom levels, as percentages
 DEFAULT = 100
 SETTING = "ui/zoom"
 WHEEL_NOTCH = 120  # the wheel turns by this much for each click
 
 _percent = DEFAULT
-_base_font: QFont | None = None  # the application font at 100%, kept so that zooming does not compound
+_base_font: QFont | None = (
+    # the application font at 100%, kept so that zooming does not
+    # compound
+    None
+)
 _LENGTH = re.compile(r"(?<![\w#.-])(\d+(?:\.\d+)?)(px|pt)\b")
 
 
@@ -119,7 +143,8 @@ def px(value: float) -> int:
     Returns
     -------
     int
-        The length now, rounded, and never less than one pixel unless it was zero.
+        The length now, rounded, and never less than one pixel unless it
+        was zero.
 
     Examples
     --------
@@ -144,11 +169,15 @@ def css(text: str) -> str:
     Returns
     -------
     str
-        The same stylesheet with each length such as ``12px`` or ``14pt`` multiplied. A length of zero stays zero.
+        The same stylesheet with each length such as ``12px`` or
+        ``14pt`` multiplied. A length of zero stays zero.
 
     Examples
     --------
-    >>> css("QLabel { padding: 8px 12px; font-size: 14pt; margin: 0px; }")
+    >>> css(
+    ...     "QLabel { padding: 8px 12px; font-size: 14pt; margin: 0px;"
+    ...     " }"
+    ... )
     'QLabel { padding: 8px 12px; font-size: 14pt; margin: 0px; }'
     """
     if _percent == DEFAULT:
@@ -201,7 +230,8 @@ def _nearest(value: int) -> int:
 
 def apply_font() -> None:
     """
-    Make the application font as large as the zoom says, from the size it had at 100%.
+    Make the application font as large as the zoom says, from the size
+    it had at 100%.
 
     Examples
     --------
@@ -309,7 +339,8 @@ def reset() -> bool:
 
 def load() -> None:
     """
-    Take the saved zoom into force, without announcing it, ignoring anything that is not a step.
+    Take the saved zoom into force, without announcing it, ignoring
+    anything that is not a step.
 
     Examples
     --------
@@ -333,13 +364,17 @@ def load() -> None:
 
 class WheelZoom(QObject):
     """
-    Zoom when the mouse wheel turns with Ctrl held, wherever the pointer is.
+    Zoom when the mouse wheel turns with Ctrl held, wherever the pointer
+    is.
 
-    A touchpad that sends small steps is added up, so that a whole notch is needed to move one step.
+    A touchpad that sends small steps is added up, so that a whole notch
+    is needed to move one step.
 
     Examples
     --------
-    >>> WheelZoom().eventFilter(QObject(), QEvent(QEvent.Type.None_))
+    >>> WheelZoom().eventFilter(
+    ...     QObject(), QEvent(QEvent.Type.None_)
+    ... )
     False
     """
 
@@ -362,11 +397,15 @@ class WheelZoom(QObject):
 
     def follow(self, app: QGuiApplication) -> None:
         """
-        Watch the window that has the focus, and each window that gains it later, such as a dialog that opens.
+        Watch the window that has the focus, and each window that gains
+        it later, such as a dialog that opens.
 
-        The filter goes on the windows, not on the application. A window is handed each wheel turn before the widget under the
-        pointer is, so a turn anywhere in it is seen, while the many events that pass between the widgets inside it are not:
-        a filter on the application runs for every one of those, which made building a page half as slow again.
+        The filter goes on the windows, not on the application. A window
+        is handed each wheel turn before the widget under the
+        pointer is, so a turn anywhere in it is seen, while the many
+        events that pass between the widgets inside it are not:
+        a filter on the application runs for every one of those, which
+        made building a page half as slow again.
 
         Parameters
         ----------
@@ -388,7 +427,8 @@ class WheelZoom(QObject):
         Parameters
         ----------
         window : QWindow or None
-            The window. None, which is what Qt passes when no window has the focus, does nothing.
+            The window. None, which is what Qt passes when no window has
+            the focus, does nothing.
 
         Examples
         --------
@@ -400,12 +440,15 @@ class WheelZoom(QObject):
         >>> handler.watch(None)
         """
         if window is not None:
-            window.removeEventFilter(self)  # so a window that gains the focus again is not watched twice
+            window.removeEventFilter(
+                self,
+            )  # so a window that gains the focus again is not watched twice
             window.installEventFilter(self)
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: N802, PLR0917 (Qt passes both arguments positionally)
         """
-        Take a wheel event with Ctrl held as a zoom, and let every other event through.
+        Take a wheel event with Ctrl held as a zoom, and let every other
+        event through.
 
         Parameters
         ----------
@@ -417,27 +460,37 @@ class WheelZoom(QObject):
         Returns
         -------
         bool
-            True when the event was a zoom, so that nothing under the pointer scrolls.
+            True when the event was a zoom, so that nothing under the
+            pointer scrolls.
 
         Examples
         --------
-        >>> WheelZoom().eventFilter(QObject(), QEvent(QEvent.Type.None_))
+        >>> WheelZoom().eventFilter(
+        ...     QObject(), QEvent(QEvent.Type.None_)
+        ... )
         False
         """
         del watched
-        if event.type() != QEvent.Type.Wheel or not isinstance(event, QWheelEvent):
+        if event.type() != QEvent.Type.Wheel or not isinstance(
+            event,
+            QWheelEvent,
+        ):
             return False
         if not event.modifiers() & Qt.KeyboardModifier.ControlModifier:
             self._turned = 0
             return False
         delta = event.angleDelta().y()
         if not delta:
-            # Some touchpads supply only pixel deltas. Forty pixels gives one zoom step.
+            # Some touchpads supply only pixel deltas. Forty pixels
+            # gives one zoom step.
             delta = event.pixelDelta().y() * (WHEEL_NOTCH // 40)
         self._turned += delta
         notches = int(self._turned / WHEEL_NOTCH)
         if notches:
             self._turned -= notches * WHEEL_NOTCH
-            index = max(0, min(len(STEPS) - 1, STEPS.index(_percent) + notches))
+            index = max(
+                0,
+                min(len(STEPS) - 1, STEPS.index(_percent) + notches),
+            )
             set_percent(STEPS[index])
         return True

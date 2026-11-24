@@ -5,15 +5,24 @@ package: alto.learning
 permalink: /api/alto.learning.database/
 ---
 {% raw %}
-The SQLite store: profiles, every answer given, and what is known about each question. Pure Python (no Qt).
+The SQLite store: profiles, every answer given, and what is known about
+each question. Pure Python (no Qt).
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                duration_ms=2000, answered_at=100.0)
+>>> db.add_attempt(
+...     ada.id,
+...     exercise="NoteNames",
+...     item_key="k",
+...     attempt_no=1,
+...     answer="C",
+...     correct=True,
+...     duration_ms=2000,
+...     answered_at=100.0,
+... )
 >>> db.count_attempts(ada.id)
 1
 ```
@@ -24,7 +33,8 @@ The SQLite store: profiles, every answer given, and what is known about each que
 def check_snapshot(data: bytes) -> tuple[int, int, int]
 ```
 
-Check that bytes are an intact Alto database that this version can read, and say what is in it.
+Check that bytes are an intact Alto database that this version can
+read, and say what is in it.
 
 **Parameters**
 
@@ -41,7 +51,11 @@ Check that bytes are an intact Alto database that this version can read, and say
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> check_snapshot(Database().snapshot()) == (SCHEMA_VERSION, 0, 0)
+>>> check_snapshot(Database().snapshot()) == (
+...     SCHEMA_VERSION,
+...     0,
+...     0,
+... )
 True
 >>> check_snapshot(b"not a database")
 Traceback (most recent call last):
@@ -59,7 +73,8 @@ Profile(
 )
 ```
 
-A person who practices: their answers are kept apart from everyone else's.
+A person who practices: their answers are kept apart from everyone
+else's.
 
 **Attributes**
 
@@ -107,8 +122,16 @@ What a profile's history says about one question.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> record = ItemRecord(2.0, seen=3, first_try_right=1, wrong_attempts=2, total_first_ms=9000,
-...                     last_seen=100.0, signature="s", payload="{}")
+>>> record = ItemRecord(
+...     2.0,
+...     seen=3,
+...     first_try_right=1,
+...     wrong_attempts=2,
+...     total_first_ms=9000,
+...     last_seen=100.0,
+...     signature="s",
+...     payload="{}",
+... )
 >>> record.seen
 3
 ```
@@ -119,7 +142,8 @@ What a profile's history says about one question.
 Database(path: str | Path = ':memory:')
 ```
 
-The SQLite database behind profiles, answers and per-question history.
+The SQLite database behind profiles, answers and per-question
+history.
 
 **Attributes**
 
@@ -137,7 +161,8 @@ Profile(id=1, name='Ada')
 
 **Constructor**
 
-Open the database, creating it and its tables if they do not exist.
+Open the database, creating it and its tables if they do not
+exist.
 
 **Parameters**
 
@@ -147,7 +172,9 @@ Open the database, creating it and its tables if they do not exist.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
->>> db.conn.execute("PRAGMA user_version").fetchone()[0] == SCHEMA_VERSION
+>>> db.conn.execute(
+...     "PRAGMA user_version"
+... ).fetchone()[0] == SCHEMA_VERSION
 True
 ```
 
@@ -158,7 +185,8 @@ True
 def write_transaction() -> Iterator[None]
 ```
 
-Share the caller's write transaction or begin one before reading the state to be updated.
+Share the caller's write transaction or begin one before reading
+the state to be updated.
 
 **Yields**
 
@@ -196,7 +224,8 @@ Close the connection.
 def snapshot() -> bytes
 ```
 
-Return the whole database as bytes: every profile, answer and question record, exactly as they are now.
+Return the whole database as bytes: every profile, answer and
+question record, exactly as they are now.
 
 **Returns**
 
@@ -207,7 +236,11 @@ Return the whole database as bytes: every profile, answer and question record, e
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> check_snapshot(db.snapshot()) == (SCHEMA_VERSION, 1, 0)
+>>> check_snapshot(db.snapshot()) == (
+...     SCHEMA_VERSION,
+...     1,
+...     0,
+... )
 True
 ```
 
@@ -217,10 +250,13 @@ True
 def restore(data: bytes) -> None
 ```
 
-Replace everything in the database with a snapshot, so it is exactly as it was when the snapshot was taken.
+Replace everything in the database with a snapshot, so it is
+exactly as it was when the snapshot was taken.
 
-Profiles, answers and question records that are here now are gone afterwards, and the ones in the snapshot take their
-place with the same ids. A snapshot made by an older version of Alto is brought up to date.
+Profiles, answers and question records that are here now are
+gone afterwards, and the ones in the snapshot take their
+place with the same ids. A snapshot made by an older version of
+Alto is brought up to date.
 
 **Parameters**
 
@@ -330,7 +366,8 @@ ValueError: There is already a profile called ada lovelace.
 def delete_profile(profile_id: int) -> None
 ```
 
-Delete a profile together with all of its answers and question history.
+Delete a profile together with all of its answers and question
+history.
 
 **Parameters**
 
@@ -374,7 +411,11 @@ Return what is known about one question for a profile.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> db.get_item(ada.id, exercise="NoteNames", item_key="k") is None
+>>> db.get_item(
+...     ada.id,
+...     exercise="NoteNames",
+...     item_key="k",
+... ) is None
 True
 ```
 
@@ -390,7 +431,8 @@ def save_item(
 ) -> None
 ```
 
-Store what is known about a question, replacing any earlier record of it.
+Store what is known about a question, replacing any earlier
+record of it.
 
 **Parameters**
 
@@ -404,11 +446,28 @@ Store what is known about a question, replacing any earlier record of it.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> record = ItemRecord(2.0, seen=1, first_try_right=0, wrong_attempts=1, total_first_ms=3000,
-...                     last_seen=100.0, signature="s", payload="{}")
->>> db.save_item(ada.id, exercise="NoteNames", item_key="k", item=record)
+>>> record = ItemRecord(
+...     2.0,
+...     seen=1,
+...     first_try_right=0,
+...     wrong_attempts=1,
+...     total_first_ms=3000,
+...     last_seen=100.0,
+...     signature="s",
+...     payload="{}",
+... )
+>>> db.save_item(
+...     ada.id,
+...     exercise="NoteNames",
+...     item_key="k",
+...     item=record,
+... )
 >>> # noinspection PyUnresolvedReferences
->>> db.get_item(ada.id, exercise="NoteNames", item_key="k").strain
+>>> db.get_item(
+...     ada.id,
+...     exercise="NoteNames",
+...     item_key="k",
+... ).strain
 2.0
 ```
 
@@ -448,9 +507,20 @@ Log one answer, right or wrong.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=False,
-...                duration_ms=1500, answered_at=50.0)
->>> [(r["answer"], r["correct"]) for r in db.attempts(ada.id)]
+>>> db.add_attempt(
+...     ada.id,
+...     exercise="NoteNames",
+...     item_key="k",
+...     attempt_no=1,
+...     answer="C",
+...     correct=False,
+...     duration_ms=1500,
+...     answered_at=50.0,
+... )
+>>> [
+...     (r["answer"], r["correct"])
+...     for r in db.attempts(ada.id)
+... ]
 [('C', 0)]
 ```
 
@@ -480,12 +550,27 @@ Return all of a profile's answers in the order they were given.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> for i, name in enumerate(["NoteNames", "IntervalNames"]):
-...     db.add_attempt(ada.id, exercise=name, item_key="k", attempt_no=1, answer="x", correct=True,
-...                    duration_ms=1000, answered_at=float(i))
+>>> for i, name in enumerate(
+...     ["NoteNames", "IntervalNames"]
+... ):
+...     db.add_attempt(
+...         ada.id,
+...         exercise=name,
+...         item_key="k",
+...         attempt_no=1,
+...         answer="x",
+...         correct=True,
+...         duration_ms=1000,
+...         answered_at=float(i),
+...     )
 >>> [r["exercise"] for r in db.attempts(ada.id)]
 ['NoteNames', 'IntervalNames']
->>> [r["exercise"] for r in db.attempts(ada.id, exercise="IntervalNames")]
+>>> [
+...     r["exercise"]
+...     for r in db.attempts(
+...         ada.id, exercise="IntervalNames"
+...     )
+... ]
 ['IntervalNames']
 ```
 
@@ -501,7 +586,8 @@ def attempts_in(
 ) -> list[sqlite3.Row]
 ```
 
-Return answers given, oldest first, for some profiles, an exercise and a period.
+Return answers given, oldest first, for some profiles, an
+exercise and a period.
 
 **Parameters**
 
@@ -520,9 +606,22 @@ Return answers given, oldest first, for some profiles, an exercise and a period.
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for t in (10.0, 20.0, 30.0):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                    duration_ms=1000, answered_at=t)
->>> [r["answered_at"] for r in db.attempts_in([ada.id], since=15.0)]
+...     db.add_attempt(
+...         ada.id,
+...         exercise="NoteNames",
+...         item_key="k",
+...         attempt_no=1,
+...         answer="C",
+...         correct=True,
+...         duration_ms=1000,
+...         answered_at=t,
+...     )
+>>> [
+...     r["answered_at"]
+...     for r in db.attempts_in(
+...         [ada.id], since=15.0
+...     )
+... ]
 [20.0, 30.0]
 ```
 
@@ -537,7 +636,8 @@ def first_attempts_per_day(
 ) -> dict[str, int]
 ```
 
-Count the questions first answered on each day, in local time, counting the days in the database.
+Count the questions first answered on each day, in local time,
+counting the days in the database.
 
 **Parameters**
 
@@ -555,9 +655,21 @@ Count the questions first answered on each day, in local time, counting the days
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for attempt_no in (1, 2, 1):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=attempt_no, answer="C", correct=True,
-...                    duration_ms=900, answered_at=86_400.0 * 100 + 43_200)
->>> list(db.first_attempts_per_day([ada.id]).values())  # the second try of a question is not counted
+...     db.add_attempt(
+...         ada.id,
+...         exercise="NoteNames",
+...         item_key="k",
+...         attempt_no=attempt_no,
+...         answer="C",
+...         correct=True,
+...         duration_ms=900,
+...         answered_at=86_400.0 * 100 + 43_200,
+...     )
+>>> list(
+...     db.first_attempts_per_day(
+...         [ada.id]
+...     ).values()
+... )  # the second try of a question is not counted
 [2]
 ```
 
@@ -574,7 +686,8 @@ def strained_items(
 ) -> list[sqlite3.Row]
 ```
 
-Return the questions that need most practice, the same question from different profiles counted together.
+Return the questions that need most practice, the same question
+from different profiles counted together.
 
 **Parameters**
 
@@ -593,11 +706,32 @@ Return the questions that need most practice, the same question from different p
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> for key, strain in (("easy", 0.5), ("hard", 4.0)):
-...     item = ItemRecord(strain, seen=1, first_try_right=0, wrong_attempts=1, total_first_ms=1000,
-...                       last_seen=1.0, signature="s", payload="{}")
-...     db.save_item(ada.id, exercise="NoteNames", item_key=key, item=item)
->>> [r["item_key"] for r in db.strained_items([ada.id], min_strain=1.0)]
+>>> for key, strain in (
+...     ("easy", 0.5),
+...     ("hard", 4.0),
+... ):
+...     item = ItemRecord(
+...         strain,
+...         seen=1,
+...         first_try_right=0,
+...         wrong_attempts=1,
+...         total_first_ms=1000,
+...         last_seen=1.0,
+...         signature="s",
+...         payload="{}",
+...     )
+...     db.save_item(
+...         ada.id,
+...         exercise="NoteNames",
+...         item_key=key,
+...         item=item,
+...     )
+>>> [
+...     r["item_key"]
+...     for r in db.strained_items(
+...         [ada.id], min_strain=1.0
+...     )
+... ]
 ['hard']
 ```
 
@@ -613,7 +747,8 @@ def count_attempts(
 ) -> int
 ```
 
-Return how many answers a profile has given, optionally of one exercise and within a period.
+Return how many answers a profile has given, optionally of one
+exercise and within a period.
 
 **Parameters**
 
@@ -634,9 +769,20 @@ Return how many answers a profile has given, optionally of one exercise and with
 >>> db.count_attempts(ada.id)
 0
 >>> for t in (1.0, 5.0, 9.0):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                    duration_ms=1000, answered_at=t)
->>> db.count_attempts(ada.id, since=2.0, until=9.0)  # from the start of the period up to, not including, its end
+...     db.add_attempt(
+...         ada.id,
+...         exercise="NoteNames",
+...         item_key="k",
+...         attempt_no=1,
+...         answer="C",
+...         correct=True,
+...         duration_ms=1000,
+...         answered_at=t,
+...     )
+>>> db.count_attempts(
+...     ada.id, since=2.0, until=9.0
+... # from the start of the period up to, not including, its end
+... )
 1
 ```
 
@@ -653,7 +799,8 @@ def attempt_rows(
 ) -> list[sqlite3.Row]
 ```
 
-Return the newest answers first, each with the stored question it was an answer to (if that is still known).
+Return the newest answers first, each with the stored question
+it was an answer to (if that is still known).
 
 **Parameters**
 
@@ -673,11 +820,27 @@ Return the newest answers first, each with the stored question it was an answer 
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for t in (1.0, 2.0):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                    duration_ms=1000, answered_at=t)
->>> [r["answered_at"] for r in db.attempt_rows(ada.id)]
+...     db.add_attempt(
+...         ada.id,
+...         exercise="NoteNames",
+...         item_key="k",
+...         attempt_no=1,
+...         answer="C",
+...         correct=True,
+...         duration_ms=1000,
+...         answered_at=t,
+...     )
+>>> [
+...     r["answered_at"]
+...     for r in db.attempt_rows(ada.id)
+... ]
 [2.0, 1.0]
->>> [r["answered_at"] for r in db.attempt_rows(ada.id, since=1.5)]
+>>> [
+...     r["answered_at"]
+...     for r in db.attempt_rows(
+...         ada.id, since=1.5
+...     )
+... ]
 [2.0]
 ```
 
@@ -691,7 +854,8 @@ def item_rows(
 ) -> list[sqlite3.Row]
 ```
 
-Return what is known about each of a profile's questions, the most strained first.
+Return what is known about each of a profile's questions, the
+most strained first.
 
 **Parameters**
 
@@ -728,7 +892,14 @@ Return every profile with how many answers and questions it has.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> _ = db.add_profile("Ada")
->>> [(r["name"], r["attempts"], r["questions"]) for r in db.profile_rows()]
+>>> [
+...     (
+...         r["name"],
+...         r["attempts"],
+...         r["questions"],
+...     )
+...     for r in db.profile_rows()
+... ]
 [('Ada', 0, 0)]
 ```
 
@@ -745,7 +916,8 @@ def replay_candidates(
 ) -> list[ItemRecord]
 ```
 
-Return questions asked before under these same settings: the ones that need most practice, plus a few at random.
+Return questions asked before under these same settings: the
+ones that need most practice, plus a few at random.
 
 **Parameters**
 
@@ -764,12 +936,36 @@ Return questions asked before under these same settings: the ones that need most
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> item = ItemRecord(3.0, seen=1, first_try_right=0, wrong_attempts=1, total_first_ms=1000,
-...                   last_seen=1.0, signature="s1", payload="{}")
->>> db.save_item(ada.id, exercise="NoteNames", item_key="k", item=item)
->>> [row_.item_key for row_ in db.replay_candidates(ada.id, exercise="NoteNames", signature="s1")]
+>>> item = ItemRecord(
+...     3.0,
+...     seen=1,
+...     first_try_right=0,
+...     wrong_attempts=1,
+...     total_first_ms=1000,
+...     last_seen=1.0,
+...     signature="s1",
+...     payload="{}",
+... )
+>>> db.save_item(
+...     ada.id,
+...     exercise="NoteNames",
+...     item_key="k",
+...     item=item,
+... )
+>>> [
+...     row_.item_key
+...     for row_ in db.replay_candidates(
+...         ada.id,
+...         exercise="NoteNames",
+...         signature="s1",
+...     )
+... ]
 ['k']
->>> db.replay_candidates(ada.id, exercise="NoteNames", signature="other settings")
+>>> db.replay_candidates(
+...     ada.id,
+...     exercise="NoteNames",
+...     signature="other settings",
+... )
 []
 ```
 {% endraw %}

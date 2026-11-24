@@ -55,13 +55,16 @@ class ScaleExplorer(QWidget):
         tonic : str
             Initial tonic with octave.
         editable : bool
-            Allow changing the example; false keeps a lesson question fixed.
+            Allow changing the example; false keeps a lesson question
+            fixed.
         lesson_layout : bool
             Use content-sized staff lines in the lesson pane.
 
         Examples
         --------
-        >>> ScaleExplorer(scale="Dorian", tonic="D4").notes[0].name
+        >>> ScaleExplorer(
+        ...     scale="Dorian", tonic="D4"
+        ... ).notes[0].name
         'D'
         """
         super().__init__()
@@ -75,8 +78,24 @@ class ScaleExplorer(QWidget):
         self._selected_notes: list[int] = []
         layout = QVBoxLayout(self)
         self.tonic = _ScaleComboBox()
-        for name in ("C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"):
-            self.tonic.addItem(name, name.replace("♭", "b").replace("♯", "#") + "4")
+        for name in (
+            "C",
+            "D♭",
+            "D",
+            "E♭",
+            "E",
+            "F",
+            "F♯",
+            "G",
+            "A♭",
+            "A",
+            "B♭",
+            "B",
+        ):
+            self.tonic.addItem(
+                name,
+                name.replace("♭", "b").replace("♯", "#") + "4",
+            )
         self.tonic.setCurrentIndex(max(0, self.tonic.findData(tonic)))
         self.tonic.setAccessibleName("Example tonic")
         self.tonic.setProperty("field", True)
@@ -94,7 +113,14 @@ class ScaleExplorer(QWidget):
         controls_layout.addWidget(self.mode)
         controls.setVisible(editable)
         layout.addWidget(controls)
-        self.staff = StaffWidget(gap=9.0, margin=6.0, note_offset=55.0, side=12.0, compact=True, lesson_layout=lesson_layout)
+        self.staff = StaffWidget(
+            gap=9.0,
+            margin=6.0,
+            note_offset=55.0,
+            side=12.0,
+            compact=True,
+            lesson_layout=lesson_layout,
+        )
         self.staff.setMinimumWidth(0)
         if lesson_layout:
             layout.addWidget(self.staff, alignment=Qt.AlignmentFlag.AlignLeft)
@@ -102,13 +128,20 @@ class ScaleExplorer(QWidget):
             scroll = QScrollArea()
             scroll.setWidgetResizable(True)
             scroll.setFixedHeight(px(180))
-            scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            scroll.setHorizontalScrollBarPolicy(
+                Qt.ScrollBarPolicy.ScrollBarAlwaysOff,
+            )
             scroll.setWidget(self.staff)
             layout.addWidget(scroll)
         self.names = QLabel()
         self.names.setWordWrap(True)
         layout.addWidget(self.names)
-        hint = QLabel("Select a gap to highlight and hear its two notes. W = 2 semitones; H = 1; 3H = 3.")
+        hint = QLabel(
+            (
+                "Select a gap to highlight and hear its two notes. W = 2 "
+                "semitones; H = 1; 3H = 3."
+            ),
+        )
         hint.setWordWrap(True)
         layout.addWidget(hint)
         self.steps: list[QPushButton] = []
@@ -118,7 +151,9 @@ class ScaleExplorer(QWidget):
             button = QPushButton()
             button.setMinimumWidth(0)
             button.setStyleSheet(css("QPushButton { padding: 5px 2px; }"))
-            button.clicked.connect(lambda _checked=False, gap=index: self.select_gap(gap))
+            button.clicked.connect(
+                lambda _checked=False, gap=index: self.select_gap(gap),
+            )
             gaps.addWidget(button)
             self.steps.append(button)
         layout.addLayout(gaps)
@@ -139,7 +174,9 @@ class ScaleExplorer(QWidget):
         Examples
         --------
         >>> explorer = ScaleExplorer()
-        >>> explorer.mode.setCurrentText("Harmonic minor")
+        >>> explorer.mode.setCurrentText(
+        ...     "Harmonic minor"
+        ... )
         >>> explorer.steps[5].text()
         '3H'
         """
@@ -148,17 +185,27 @@ class ScaleExplorer(QWidget):
         self._selected_notes = []
         tonic = Note.parse(self.tonic.currentData())
         self.notes = build(tonic, intervals=SCALES[self.mode.currentText()])
-        self.notes.append(Note(tonic.octave + 1, letter=tonic.letter, accidental=tonic.accidental))
+        self.notes.append(
+            Note(
+                tonic.octave + 1,
+                letter=tonic.letter,
+                accidental=tonic.accidental,
+            ),
+        )
         self.staff.column_colors = {}
         self.staff.wedge_colors = {}
         self.names.setText(" → ".join(note.name for note in self.notes))
         for index, button in enumerate(self.steps):
             semitones = self.notes[index + 1].midi - self.notes[index].midi
             button.setText({1: "H", 2: "W", 3: "3H"}[semitones])
-            button.setAccessibleName(f"Degrees {index + 1} to {index + 2}: {semitones} semitones")
+            button.setAccessibleName(
+                f"Degrees {index + 1} to {index + 2}: {semitones} semitones",
+            )
         self.staff.wedges = [button.text() for button in self.steps]
         self.staff.show_notes([[note] for note in self.notes], clef="treble")
-        self.detail.setText("The first and last notes are the tonic, an octave apart.")
+        self.detail.setText(
+            "The first and last notes are the tonic, an octave apart.",
+        )
 
     def select_gap(self, index: int) -> None:
         """
@@ -184,7 +231,17 @@ class ScaleExplorer(QWidget):
         self.staff.wedge_colors[index] = color
         self.staff.update()
         self.detail.setText(
-            f"Degree {index + 1} → {index + 2}: {first.name} → {second.name}, {second.midi - first.midi} semitone(s).",
+            "Degree "
+            f"{index + 1}"
+            " → "
+            f"{index + 2}"
+            ": "
+            f"{first.name}"
+            " → "
+            f"{second.name}"
+            ", "
+            f"{second.midi - first.midi}"
+            " semitone(s).",
         )
         self._playback_notes = [index, index + 1]
         self.playback.play([[first], [second]], gap_ms=450, force=True)
@@ -196,7 +253,8 @@ class ScaleExplorer(QWidget):
         Parameters
         ----------
         force : bool
-            Audition the scale while muted. The lesson's main Hear button follows its sound setting.
+            Audition the scale while muted. The lesson's main Hear
+            button follows its sound setting.
 
         Examples
         --------
@@ -211,13 +269,19 @@ class ScaleExplorer(QWidget):
         self.playback.play(self.staff.columns, gap_ms=350, force=force)
 
     def _keep_wedges_unhighlighted(self) -> None:
-        """Keep the W/H labels and their brackets in the staff's normal text color."""
+        """
+        Keep the W/H labels and their brackets in the staff's normal
+        text color.
+        """
         color = QColor("black")
-        self.staff.wedge_colors = {index: color for index in range(len(self.steps))}
+        self.staff.wedge_colors = {
+            index: color for index in range(len(self.steps))
+        }
 
     def _highlight_playback(self, index: int | None) -> None:
         """
-        Flash the sounding note while retaining the selected scale or gap.
+        Flash the sounding note while retaining the selected scale or
+        gap.
 
         Parameters
         ----------
@@ -232,7 +296,10 @@ class ScaleExplorer(QWidget):
             sounding = self._playback_notes[index]
             if sounding not in self._selected_notes:
                 self._selected_notes.append(sounding)
-            self.staff.column_colors = dict.fromkeys(self._selected_notes, color)
+            self.staff.column_colors = dict.fromkeys(
+                self._selected_notes,
+                color,
+            )
             self.staff.column_colors[sounding] = color.lighter(160)
             self._flash_timer.start()
         self.staff.update()
@@ -245,7 +312,10 @@ class ScaleExplorer(QWidget):
 
 
 class _ScaleComboBox(QComboBox):
-    """A scale selector that lets its containing pane handle wheel scrolling."""
+    """
+    A scale selector that lets its containing pane handle wheel
+    scrolling.
+    """
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         """

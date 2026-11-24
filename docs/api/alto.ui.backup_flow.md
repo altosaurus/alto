@@ -5,16 +5,21 @@ package: alto.ui
 permalink: /api/alto.ui.backup_flow/
 ---
 {% raw %}
-Exporting a backup and importing one: the file dialogs, the questions asked, and the safety copy made before anything is replaced.
+Exporting a backup and importing one: the file dialogs, the questions
+asked, and the safety copy made before anything is replaced.
 
-Everything Alto keeps goes into a backup (the database and the saved preferences), and importing one replaces everything, so an
-import into a clean install leaves it as if nothing had changed. Before an import replaces what is there, a backup of that is
+Everything Alto keeps goes into a backup (the database and the saved
+preferences), and importing one replaces everything, so an
+import into a clean install leaves it as if nothing had changed. Before
+an import replaces what is there, a backup of that is
 saved next to the database, so a wrong choice can be undone.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> default_name(now=0.0).endswith(".altobackup")
+>>> default_name(now=0.0).endswith(
+...     ".altobackup"
+... )
 True
 ```
 
@@ -40,7 +45,11 @@ Suggest a file name for a backup made now.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> default_name(now=datetime(2026, 11, 13, 12).timestamp())
+>>> default_name(
+...     now=datetime(
+...         2026, 11, 13, 12
+...     ).timestamp()
+... )
 'alto-backup-2026-11-13.altobackup'
 ```
 
@@ -68,7 +77,10 @@ Write a count with its noun, in the plural unless there is one.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> counted(1, noun="profile"), counted(12345, noun="answer")
+>>> (
+...     counted(1, noun="profile"),
+...     counted(12345, noun="answer"),
+... )
 ('1 profile', '12,345 answers')
 ```
 
@@ -78,7 +90,8 @@ Write a count with its noun, in the plural unless there is one.
 def describe(info: BackupInfo) -> str
 ```
 
-Say what a backup holds and when it was made, for the question asked before importing it.
+Say what a backup holds and when it was made, for the question asked
+before importing it.
 
 **Parameters**
 
@@ -91,10 +104,20 @@ Say what a backup holds and when it was made, for the question asked before impo
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> text = describe(BackupInfo(datetime(2026, 11, 13, 9, 30).timestamp(), app_version="0.1.0", schema_version=1,
-...                            profiles=2, attempts=1500))
+>>> text = describe(
+...     BackupInfo(
+...         datetime(
+...             2026, 11, 13, 9, 30
+...         ).timestamp(),
+...         app_version="0.1.0",
+...         schema_version=1,
+...         profiles=2,
+...         attempts=1500,
+...     )
+... )
 >>> text
-'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles and 1,500 answers.'
+'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles
+and 1,500 answers.'
 ```
 
 ## export_backup
@@ -121,7 +144,9 @@ Ask where to save a backup, and write it.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> export_backup(QWidget(), db=Database())  # doctest: +SKIP
+>>> export_backup(
+...     QWidget(), db=Database()
+... )  # doctest: +SKIP
 PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
 ```
 
@@ -131,7 +156,8 @@ PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
 def safety_copy(db: Database) -> Path | None
 ```
 
-Save a backup of what the database holds now, beside it, before it is replaced.
+Save a backup of what the database holds now, beside it, before it
+is replaced.
 
 **Parameters**
 
@@ -162,10 +188,13 @@ def import_backup(
 ) -> bool
 ```
 
-Ask for a backup file and, once the user has agreed, replace everything with what it holds.
+Ask for a backup file and, once the user has agreed, replace
+everything with what it holds.
 
-The file is read and checked completely first, so a damaged or foreign file changes nothing. After the user agrees, a
-backup of the current data is saved beside the database, then the database and the saved preferences are replaced. The
+The file is read and checked completely first, so a damaged or
+foreign file changes nothing. After the user agrees, a
+backup of the current data is saved beside the database, then the
+database and the saved preferences are replaced. The
 caller has to reload what is on screen afterwards.
 
 **Parameters**
@@ -180,7 +209,9 @@ caller has to reload what is on screen afterwards.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> import_backup(QWidget(), db=Database())  # doctest: +SKIP
+>>> import_backup(
+...     QWidget(), db=Database()
+... )  # doctest: +SKIP
 True
 ```
 {% endraw %}

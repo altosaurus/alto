@@ -157,8 +157,10 @@ It then trims trailing whitespace, makes sure files end with a newline, checks Y
 files (the bundled recordings and fonts are exempt) and runs Ruff, applying its safe fixes. If a hook changes a file,
 the commit stops so you can review the change, then commit again.
 
-The test suite and Pyright run when you **push**, not on every commit, so commits stay quick. A failing test or a type
-error stops the push. Run the commit checks by hand with `pre-commit run --all-files`, the push checks with
+On **push**, the hooks run the test suite, Pyright, and Pylint’s duplicate-code check (`R0801`). Pylint compares all
+modules in `alto/` so it can find matches in unchanged files. A failure in any of these checks stops the push.
+Run the duplicate check alone with `pre-commit run pylint-duplicates --hook-stage pre-push --all-files`,
+the commit checks with `pre-commit run --all-files`, the push checks with
 `pre-commit run --all-files --hook-stage pre-push`, and update the pinned hook versions with `pre-commit autoupdate`.
 
 ### Merged local branches
@@ -183,8 +185,9 @@ references already in your clone and only deletes local branches.
 ## Linting
 
 Alto uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting. It is installed with the `dev` extra and
-configured in `pyproject.toml` (pycodestyle, pyflakes, import sorting, pyupgrade, bugbear and a few more rules, with a
-130-character line limit).
+configured in `pyproject.toml`. Ruff checks code at 79 characters and
+docstrings and standalone comments at 72 characters throughout the
+repository. Docstring summaries can wrap or start on their own line.
 
 ```bash
 ruff format alto tests scripts        # format the code
@@ -409,7 +412,13 @@ class MyExercise(ChoiceExercise):
 
     def make_question(self, rng):
         ...
-        return Question("What is this?", choices=choices, answer=answer, staff=[[note]], clef="treble")
+        return Question(
+            "What is this?",
+            choices=choices,
+            answer=answer,
+            staff=[[note]],
+            clef="treble",
+        )
 ```
 
 - `Question` describes everything the screen needs: a prompt, the answer buttons, the notes to draw, a key signature, a keyboard key to highlight, and so on.
@@ -690,7 +699,9 @@ fixed bug) adds a line under **Unreleased** in the same pull request. Internal t
    For screenshots using `component-shot.html`, check that the image dimensions match the captures and each clickable region covers its component.
    Run `sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py` and include the
    updated images and any caption or region corrections in the release PR.
-6. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
+6. Run the **Release** workflow manually on the versioned candidate. Complete the [license compliance check](#license-compliance)
+   on its Linux and Windows downloads and record the results in the release PR. Resolve any findings before tagging.
+7. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
    the tag starts the **Release** workflow (see below), which publishes the downloads.
 
 Publish a release as a normal release, not a pre-release: the update check asks GitHub for the latest release, which leaves
@@ -698,6 +709,27 @@ pre-releases out, and compares version numbers (`0.10.0` is newer than `0.9.0`),
 
 `python scripts/changelog_section.py 0.1.0` prints the notes of one version, which is what a GitHub release shows. `alto --version`
 prints the version of the copy you run.
+
+#### License compliance
+
+- **Bundled software and assets.** Unpack the Linux tarball and install the Windows candidate. On each platform, inventory
+  the interpreter, frozen Python packages, embedded native code, Qt plugins and system libraries. Compare the contents with
+  the exclusions in `packaging/alto.spec`. Check redistribution terms for each component and for the fonts, recordings,
+  score excerpts, icons and vendored documentation assets. Confirm that Alto's MIT license and the applicable third-party
+  licenses and credits accompany the copies users receive, including the versioned documentation.
+- **Installed notices.** Compare the inventory with `THIRD_PARTY_NOTICES.md` and the installed `licenses/README.txt`.
+  Check the notice texts against the exact upstream versions, including incorporated code such as CPython's HACL*.
+  Verify each SHA-256 in `licenses/notices.json` and resolve every license-file reference in `licenses/Qt/upstream-notices.zip`.
+- **Corresponding source.** Match the Qt and Qt for Python source downloads to the versions and hashes in each installation.
+  Verify that the Qt libraries and PySide6 and Shiboken bindings can be replaced and that Alto's self-test still passes.
+  Check the bundled Linux libraries against their package copyrights and verify the required Ubuntu source packages and file
+  hashes in the companion archive. Verify the certifi source download and compare its CA bundle with the installed copy.
+- **Windows upgrade terms.** Upgrade from the previous release with no recorded acceptance of the current Microsoft terms.
+  Exercise both choices through Alto's updater. Declining must preserve the old installation, and accepting must complete
+  the upgrade and record acceptance.
+- **Release evidence.** Record the workflow run, commit, artifact SHA-256s and results. The publishing tag triggers a fresh
+  build. Verify that the signed `SHA256SUMS` covers the exact desktop downloads and source companions, and repeat the
+  applicable checks on any files whose hashes differ from the reviewed copies.
 
 ## Building the Linux download
 

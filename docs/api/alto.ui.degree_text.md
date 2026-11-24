@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.degree_text/
 ---
 {% raw %}
-Draw scale-degree carets above their digits without relying on font-specific combining accents.
+Draw scale-degree carets above their digits without relying on
+font-specific combining accents.
 
 **Examples**
 
@@ -27,7 +28,8 @@ def draw_degree_text(
 ) -> None
 ```
 
-Draw text with each combining circumflex centered above its preceding digit.
+Draw text with each combining circumflex centered above its
+preceding digit.
 
 **Parameters**
 
@@ -42,7 +44,11 @@ Draw text with each combining circumflex centered above its preceding digit.
 >>> from PySide6.QtGui import QPixmap
 >>> pixmap = QPixmap(100, 40)
 >>> painter_ = QPainter(pixmap)
->>> draw_degree_text(painter_, rect=QRectF(0, 0, 100, 40), text="3̂")
+>>> draw_degree_text(
+...     painter_,
+...     rect=QRectF(0, 0, 100, 40),
+...     text="3̂",
+... )
 >>> painter_.end()
 True
 ```
@@ -68,7 +74,9 @@ Render caret examples as an inline image for Qt's rich-text tooltip.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> degree_tooltip("Letters")
 'Letters'
->>> "data:image/png;base64," in degree_tooltip("Caret (1̂ 2̂ 3̂)")
+>>> "data:image/png;base64," in degree_tooltip(
+...     "Caret (1̂ 2̂ 3̂)"
+... )
 True
 ```
 
@@ -78,7 +86,8 @@ True
 class DegreeButton(QPushButton)
 ```
 
-An answer button that draws scale-degree carets directly above the digits.
+An answer button that draws scale-degree carets directly above the
+digits.
 
 **Examples**
 
@@ -93,7 +102,8 @@ An answer button that draws scale-degree carets directly above the digits.
 def paintEvent(event: QPaintEvent) -> None
 ```
 
-Keep the native button appearance and position degree accents explicitly.
+Keep the native button appearance and position degree accents
+explicitly.
 
 **Parameters**
 
@@ -112,7 +122,8 @@ False
 class DegreeCheckBox(QCheckBox)
 ```
 
-Draw the scale degree caret centered above the checkbox label's digit.
+Draw the scale degree caret centered above the checkbox label's
+digit.
 
 ### DegreeCheckBox.paintEvent
 
@@ -120,7 +131,8 @@ Draw the scale degree caret centered above the checkbox label's digit.
 def paintEvent(event: QPaintEvent) -> None
 ```
 
-Paint the native checkbox and use the shared scale degree renderer for its label.
+Paint the native checkbox and use the shared scale degree
+renderer for its label.
 
 ## DegreeLabel
 

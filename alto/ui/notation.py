@@ -1,7 +1,9 @@
 """
-Notation styles: which music font the staff, clefs, notes and accidentals are engraved in.
+Notation styles: which music font the staff, clefs, notes and
+accidentals are engraved in.
 
-Also holds the choice of how the baritone clef is written (an F clef or a C clef).
+Also holds the choice of how the baritone clef is written (an F clef or
+a C clef).
 
 Examples
 --------
@@ -39,9 +41,11 @@ class NotationStyle:
     note : str
         A few words on where this look comes from. Keyword-only.
     font : str or None
-        A key in engraving.json, or None for the built-in Noto Music drawing. Keyword-only.
+        A key in engraving.json, or None for the built-in Noto Music
+        drawing. Keyword-only.
     line : float, default 1.4
-        The staff line weight in pixels, for the built-in drawing (the SMuFL fonts state their own). Keyword-only.
+        The staff line weight in pixels, for the built-in drawing (the
+        SMuFL fonts state their own). Keyword-only.
 
     Examples
     --------
@@ -54,8 +58,12 @@ class NotationStyle:
     _: KW_ONLY
     label: str
     note: str  # a few words on where this look comes from
-    font: str | None  # key in engraving.json, or None for the built-in Noto Music drawing
-    line: float = 1.4  # staff line weight in pixels, for the built-in drawing (the SMuFL fonts state their own)
+    font: (
+        str | None
+    )  # key in engraving.json, or None for the built-in Noto Music drawing
+    # staff line weight in pixels, for the built-in drawing (the SMuFL
+    # fonts state their own)
+    line: float = 1.4
 
 
 STYLES = (
@@ -130,9 +138,14 @@ DEFAULT = "finalemaestro"
 BY_KEY = {s.key: s for s in STYLES}
 _current = BY_KEY[DEFAULT]
 
-# The baritone clef is written two ways, on the same staff (the bottom line is B2 and the top line is C4): as an F clef on
-# the middle line, like a bass clef moved up, or as a C clef on the top line, like an alto clef moved up.
-BARITONE_CLEFS = {"f": "F clef, on the middle line", "c": "C clef, on the top line"}
+# The baritone clef is written two ways, on the same staff (the bottom
+# line is B2 and the top line is C4): as an F clef on
+# the middle line, like a bass clef moved up, or as a C clef on the top
+# line, like an alto clef moved up.
+BARITONE_CLEFS = {
+    "f": "F clef, on the middle line",
+    "c": "C clef, on the top line",
+}
 DEFAULT_BARITONE = "f"
 _baritone = DEFAULT_BARITONE
 
@@ -144,7 +157,8 @@ def baritone_clef() -> str:
     Returns
     -------
     str
-        "f" for an F clef on the middle line, or "c" for a C clef on the top line.
+        "f" for an F clef on the middle line, or "c" for a C clef on the
+        top line.
 
     Examples
     --------
@@ -166,7 +180,8 @@ def clef_shape(clef: str) -> str:
     Returns
     -------
     str
-        The same name, except that "baritone" becomes "baritone_f" or "baritone_c" by the chosen way of writing it.
+        The same name, except that "baritone" becomes "baritone_f" or
+        "baritone_c" by the chosen way of writing it.
 
     Examples
     --------
@@ -175,7 +190,9 @@ def clef_shape(clef: str) -> str:
     >>> set_baritone_clef("c")
     >>> clef_shape("baritone")
     'baritone_c'
-    >>> set_baritone_clef("f")  # back to the default
+    >>> set_baritone_clef(
+    ...     "f"
+    ... )  # back to the default
     >>> clef_shape("baritone")
     'baritone_f'
     """
@@ -184,7 +201,8 @@ def clef_shape(clef: str) -> str:
 
 def set_baritone_clef(kind: str) -> None:
     """
-    Choose and save how the baritone clef is written, and redraw every staff already on screen.
+    Choose and save how the baritone clef is written, and redraw every
+    staff already on screen.
 
     Parameters
     ----------
@@ -196,7 +214,9 @@ def set_baritone_clef(kind: str) -> None:
     >>> set_baritone_clef("c")
     >>> baritone_clef()
     'c'
-    >>> set_baritone_clef("sideways")  # not a choice: the default
+    >>> set_baritone_clef(
+    ...     "sideways"
+    ... )  # not a choice: the default
     >>> baritone_clef()
     'f'
     """
@@ -213,7 +233,8 @@ def current() -> NotationStyle:
     Returns
     -------
     NotationStyle
-        The style chosen in the settings (Finale Maestro until another is chosen).
+        The style chosen in the settings (Finale Maestro until another
+        is chosen).
 
     Examples
     --------
@@ -225,7 +246,8 @@ def current() -> NotationStyle:
 
 def load_style() -> None:
     """
-    Apply the saved choices: the style (Finale Maestro if none is saved or it is unknown) and the baritone clef.
+    Apply the saved choices: the style (Finale Maestro if none is saved
+    or it is unknown) and the baritone clef.
 
     Examples
     --------
@@ -237,8 +259,15 @@ def load_style() -> None:
     """
     global _current
     global _baritone
-    _current = BY_KEY.get(text_value(store(), key="ui/notation", default=DEFAULT), BY_KEY[DEFAULT])
-    saved = text_value(store(), key="ui/baritoneClef", default=DEFAULT_BARITONE)
+    _current = BY_KEY.get(
+        text_value(store(), key="ui/notation", default=DEFAULT),
+        BY_KEY[DEFAULT],
+    )
+    saved = text_value(
+        store(),
+        key="ui/baritoneClef",
+        default=DEFAULT_BARITONE,
+    )
     _baritone = saved if saved in BARITONE_CLEFS else DEFAULT_BARITONE
 
 
@@ -271,13 +300,15 @@ def on_redraw(hook: Callable[[], None]) -> None:
     """
     Register a function to call whenever the notation style changes.
 
-    The staff widgets live in a module that imports this one, so they register themselves here instead of being found by
+    The staff widgets live in a module that imports this one, so they
+    register themselves here instead of being found by
     this module.
 
     Parameters
     ----------
     hook : Callable
-        A function with no arguments that repaints what depends on the style.
+        A function with no arguments that repaints what depends on the
+        style.
 
     Examples
     --------
@@ -295,7 +326,8 @@ def on_redraw(hook: Callable[[], None]) -> None:
 
 def _redraw() -> None:
     """
-    Ask every staff on screen to paint itself again, through the registered hooks.
+    Ask every staff on screen to paint itself again, through the
+    registered hooks.
 
     Examples
     --------

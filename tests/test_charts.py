@@ -1,4 +1,7 @@
-"""The three charts: axes, bars and lines are drawn, empty data shows a message, and hovering explains a bar."""
+"""
+The three charts: axes, bars and lines are drawn, empty data shows a
+message, and hovering explains a bar.
+"""
 
 from __future__ import annotations
 
@@ -55,7 +58,10 @@ def ink(
     widget.resize(*size)
     image = widget.grab().toImage()
     return sum(
-        1 for y in range(0, image.height(), 3) for x in range(0, image.width(), 3) if image.pixelColor(x, y).lightness() < 140
+        1
+        for y in range(0, image.height(), 3)
+        for x in range(0, image.width(), 3)
+        if image.pixelColor(x, y).lightness() < 140
     )
 
 
@@ -69,8 +75,14 @@ def test_ticks_are_round_numbers_up_to_just_above_the_top() -> None:
         10,
         15,
     ]
-    assert charts.nice_ticks(0) == [0.0, 1.0] and charts.nice_ticks(-3) == [0.0, 1.0]
-    assert charts.nice_ticks(100)[-1] >= 100 and charts.nice_ticks(0.07)[-1] >= 0.07
+    assert charts.nice_ticks(0) == [0.0, 1.0] and charts.nice_ticks(-3) == [
+        0.0,
+        1.0,
+    ]
+    assert (
+        charts.nice_ticks(100)[-1] >= 100
+        and charts.nice_ticks(0.07)[-1] >= 0.07
+    )
     ticks = charts.nice_ticks(8)
     assert ticks[0] == 0 and ticks == sorted(ticks) and ticks[-1] >= 8
 
@@ -117,7 +129,11 @@ def test_the_stacked_bar_chart_draws_bars_and_axes(app: QApplication) -> None:
         ],
     )
     with_bars = ink(chart)
-    chart.set_data(["a"], right=[0], wrong=[0])  # nothing answered: only a message
+    chart.set_data(
+        ["a"],
+        right=[0],
+        wrong=[0],
+    )  # nothing answered: only a message
     assert ink(chart) < with_bars
     chart.set_data([], right=[], wrong=[])
     assert ink(chart) > 0  # the title and the message
@@ -135,10 +151,15 @@ def test_a_bar_names_itself_when_hovered(
     app : QApplication
         The shared Qt application.
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     shown = []
-    monkeypatch.setattr(charts.QToolTip, "showText", lambda pos, text, widget=None: shown.append(text))
+    monkeypatch.setattr(
+        charts.QToolTip,
+        "showText",
+        lambda pos, text, widget=None: shown.append(text),
+    )
     hidden = []
     monkeypatch.setattr(charts.QToolTip, "hideText", lambda: hidden.append(1))
     chart = charts.StackedBarChart("Questions")
@@ -203,7 +224,8 @@ def test_the_line_chart_breaks_the_line_where_there_are_no_answers(
     fixed: float | None,
 ) -> None:
     """
-    Check that the line chart breaks the line where there are no answers.
+    Check that the line chart breaks the line where there are no
+    answers.
 
     Parameters
     ----------
@@ -212,7 +234,11 @@ def test_the_line_chart_breaks_the_line_where_there_are_no_answers(
     fixed : float | None
         The fixed top of the chart, or None to scale to the data.
     """
-    chart = charts.LineChart("Accuracy", fmt=lambda v: f"{v:.0f}%", fixed_top=fixed)
+    chart = charts.LineChart(
+        "Accuracy",
+        fmt=lambda v: f"{v:.0f}%",
+        fixed_top=fixed,
+    )
     chart.set_data(["a", "b"], values=[None, None])
     message_only = ink(chart)  # nothing answered: only the title and a message
     chart.set_data(
@@ -229,7 +255,10 @@ def test_the_line_chart_breaks_the_line_where_there_are_no_answers(
         ],
     )
     assert ink(chart) > message_only
-    chart.set_data([f"d{i}" for i in range(60)], values=[float(i) for i in range(60)])  # many points: smaller dots
+    chart.set_data(
+        [f"d{i}" for i in range(60)],
+        values=[float(i) for i in range(60)],
+    )  # many points: smaller dots
     assert ink(chart) > message_only
 
 
@@ -245,15 +274,24 @@ def test_a_line_chart_point_names_itself_when_hovered(
     app : QApplication
         The shared Qt application.
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     shown = []
-    monkeypatch.setattr(charts.QToolTip, "showText", lambda pos, text, widget=None: shown.append(text))
+    monkeypatch.setattr(
+        charts.QToolTip,
+        "showText",
+        lambda pos, text, widget=None: shown.append(text),
+    )
     chart = charts.LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
     chart.resize(560, 260)
     chart.set_data(["Mon", "Tue", "Wed"], values=[2.0, None, 4.5])
     plot = chart._plot()
-    for i, expected in ((0, "Mon\n2.0 s"), (1, "Tue\nno answers"), (2, "Wed\n4.5 s")):
+    for i, expected in (
+        (0, "Mon\n2.0 s"),
+        (1, "Tue\nno answers"),
+        (2, "Wed\n4.5 s"),
+    ):
         # noinspection PyTypeChecker
         point = QPointF(chart._centers()[i], plot.center().y())
         chart.mouseMoveEvent(
@@ -282,7 +320,11 @@ def test_the_horizontal_bar_chart_lists_its_rows(app: QApplication) -> None:
     chart.set_data(
         [
             ("Note Identification", 92.0, "92%"),
-            ("A very long exercise name that has to be shortened", 40.0, "40%"),
+            (
+                "A very long exercise name that has to be shortened",
+                40.0,
+                "40%",
+            ),
             ("Zero", 0.0, "0%"),
         ],
     )
@@ -325,7 +367,9 @@ def test_an_axis_with_no_labels_draws_nothing(app: QApplication) -> None:
     assert image.pixelColor(100, 90).alpha() == 0
 
 
-def test_the_heatmap_shades_days_by_how_busy_they_were(app: QApplication) -> None:
+def test_the_heatmap_shades_days_by_how_busy_they_were(
+    app: QApplication,
+) -> None:
     """
     Check that the heatmap shades days by how busy they were.
 
@@ -336,18 +380,31 @@ def test_the_heatmap_shades_days_by_how_busy_they_were(app: QApplication) -> Non
     """
     today = date(2026, 11, 13)  # a Friday
     chart = charts.HeatmapChart("Reviews")
-    chart.set_data({today: 40, today - timedelta(days=1): 20, today - timedelta(days=2): 1}, today=today)
+    chart.set_data(
+        {
+            today: 40,
+            today - timedelta(days=1): 20,
+            today - timedelta(days=2): 1,
+        },
+        today=today,
+    )
     assert chart.level(0) == 0 and chart.level(1) >= 1
     assert chart.level(40) == chart.LEVELS and chart.level(1) < chart.level(40)
-    assert chart.first_day().weekday() == 0 and (today - chart.first_day()).days // 7 == 52
+    assert (
+        chart.first_day().weekday() == 0
+        and (today - chart.first_day()).days // 7 == 52
+    )
     busy = ink(chart, size=(760, 190))
     chart.set_data({}, today=today)
-    assert ink(chart, size=(760, 190)) > 0 and ink(chart, size=(760, 190)) != busy  # still drawn, with a message
+    assert (
+        ink(chart, size=(760, 190)) > 0 and ink(chart, size=(760, 190)) != busy
+    )  # still drawn, with a message
 
 
 def calendar(today: date) -> charts.HeatmapChart:
     """
-    Make a calendar chart, sized, with three questions answered on one day.
+    Make a calendar chart, sized, with three questions answered on one
+    day.
 
     Parameters
     ----------
@@ -377,10 +434,15 @@ def test_the_heatmap_names_the_day_under_the_pointer(
     app : QApplication
         The shared Qt application.
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
     """
     shown, hidden = [], []
-    monkeypatch.setattr(charts.QToolTip, "showText", lambda pos, text, widget=None: shown.append(text))
+    monkeypatch.setattr(
+        charts.QToolTip,
+        "showText",
+        lambda pos, text, widget=None: shown.append(text),
+    )
     monkeypatch.setattr(charts.QToolTip, "hideText", lambda: hidden.append(1))
     today = date(2026, 11, 13)
     chart = calendar(today)
@@ -414,11 +476,16 @@ def test_the_heatmap_names_the_day_under_the_pointer(
         )
 
     move(x0 + 52.5 * cell, y=y0 + 4.5 * cell)  # last column, Friday
-    assert shown[-1].startswith("Fri Nov 13, 2026") and "3 questions" in shown[-1]
+    assert (
+        shown[-1].startswith("Fri Nov 13, 2026") and "3 questions" in shown[-1]
+    )
     move(x0 + 52.5 * cell, y=y0 + 6.5 * cell)  # Sunday, in the future
     move(2, y=2)
     assert len(hidden) == 2
-    assert chart.day_at(QPointF(x0 + 0.5 * cell, y0 + 0.5 * cell)) == chart.first_day()
+    assert (
+        chart.day_at(QPointF(x0 + 0.5 * cell, y0 + 0.5 * cell))
+        == chart.first_day()
+    )
 
 
 def mouse(
@@ -440,11 +507,27 @@ def mouse(
     at : QPointF
         Where the pointer is. Keyword-only.
     button : Qt.MouseButton
-        The button that changed; it is held down for a move and a press. Keyword-only.
+        The button that changed; it is held down for a move and a press.
+        Keyword-only.
     """
-    changed = Qt.MouseButton.NoButton if kind == QMouseEvent.Type.MouseMove else button
-    held = button if kind == QMouseEvent.Type.MouseButtonPress else Qt.MouseButton.NoButton
-    event = QMouseEvent(kind, at, at, changed, held, Qt.KeyboardModifier.NoModifier)
+    changed = (
+        Qt.MouseButton.NoButton
+        if kind == QMouseEvent.Type.MouseMove
+        else button
+    )
+    held = (
+        button
+        if kind == QMouseEvent.Type.MouseButtonPress
+        else Qt.MouseButton.NoButton
+    )
+    event = QMouseEvent(
+        kind,
+        at,
+        at,
+        changed,
+        held,
+        Qt.KeyboardModifier.NoModifier,
+    )
     if kind == QMouseEvent.Type.MouseMove:
         chart.mouseMoveEvent(event)
     elif kind == QMouseEvent.Type.MouseButtonPress:
@@ -473,9 +556,12 @@ def click(
     mouse(chart, QMouseEvent.Type.MouseButtonRelease, at=at)
 
 
-def test_a_bar_chart_highlights_the_period_under_the_pointer_and_announces_a_click_on_it(app: QApplication) -> None:
+def test_bar_chart_highlights_period_under_pointer_and_announces(
+    app: QApplication,
+) -> None:
     """
-    Check that pointing at a period highlights it, a click on it is announced, and an empty period cannot be clicked.
+    Check that pointing at a period highlights it, a click on it is
+    announced, and an empty period cannot be clicked.
 
     Parameters
     ----------
@@ -490,12 +576,26 @@ def test_a_bar_chart_highlights_the_period_under_the_pointer_and_announces_a_cli
     plot = chart._plot()
     columns = [QPointF(c, plot.center().y()) for c in chart._centers()]
     mouse(chart, QMouseEvent.Type.MouseMove, at=columns[0])
-    assert chart.hovered == 0 and chart.cursor().shape() == Qt.CursorShape.PointingHandCursor
+    assert (
+        chart.hovered == 0
+        and chart.cursor().shape() == Qt.CursorShape.PointingHandCursor
+    )
     green = QColor("#2e7d32")
-    assert chart._tone(0, color=green).lightness() > green.lightness()  # the bar under the pointer is brighter
-    assert chart._tone(2, color=green).alphaF() < 1.0  # and the others are fainter
-    mouse(chart, QMouseEvent.Type.MouseMove, at=columns[1])  # nothing was answered in the middle period
-    assert chart.hovered is None and chart.cursor().shape() == Qt.CursorShape.ArrowCursor
+    assert (
+        chart._tone(0, color=green).lightness() > green.lightness()
+    )  # the bar under the pointer is brighter
+    assert (
+        chart._tone(2, color=green).alphaF() < 1.0
+    )  # and the others are fainter
+    mouse(
+        chart,
+        QMouseEvent.Type.MouseMove,
+        at=columns[1],
+    )  # nothing was answered in the middle period
+    assert (
+        chart.hovered is None
+        and chart.cursor().shape() == Qt.CursorShape.ArrowCursor
+    )
     click(chart, at=columns[1])
     assert got == []
     click(chart, at=columns[2])
@@ -504,10 +604,14 @@ def test_a_bar_chart_highlights_the_period_under_the_pointer_and_announces_a_cli
 
 
 def ink_image_without_highlight(
-    chart: charts.HeatmapChart | charts.LineChart | charts.HBarChart | charts.StackedBarChart,
+    chart: charts.HeatmapChart
+    | charts.LineChart
+    | charts.HBarChart
+    | charts.StackedBarChart,
 ) -> QImage:
     """
-    Draw a chart with nothing highlighted, to compare with how it looks when something is.
+    Draw a chart with nothing highlighted, to compare with how it looks
+    when something is.
 
     Parameters
     ----------
@@ -523,9 +627,12 @@ def ink_image_without_highlight(
     return chart.grab().toImage()
 
 
-def test_a_press_that_does_not_come_up_on_the_same_item_is_not_a_click(app: QApplication) -> None:
+def test_a_press_that_does_not_come_up_on_the_same_item_is_not_a_click(
+    app: QApplication,
+) -> None:
     """
-    Check that pressing on one period and releasing on another is not a click, and that leaving the chart clears the highlight.
+    Check that pressing on one period and releasing on another is not a
+    click, and that leaving the chart clears the highlight.
 
     Parameters
     ----------
@@ -537,20 +644,35 @@ def test_a_press_that_does_not_come_up_on_the_same_item_is_not_a_click(app: QApp
     chart.set_data(["a", "b"], right=[3, 3], wrong=[0, 0])
     got: list[object] = []
     chart.clicked.connect(got.append)
-    first, second = (QPointF(c, chart._plot().center().y()) for c in chart._centers())
+    first, second = (
+        QPointF(c, chart._plot().center().y()) for c in chart._centers()
+    )
     mouse(chart, QMouseEvent.Type.MouseButtonPress, at=first)
     mouse(chart, QMouseEvent.Type.MouseButtonRelease, at=second)
-    mouse(chart, QMouseEvent.Type.MouseButtonPress, at=first, button=Qt.MouseButton.RightButton)
-    mouse(chart, QMouseEvent.Type.MouseButtonRelease, at=first, button=Qt.MouseButton.RightButton)
+    mouse(
+        chart,
+        QMouseEvent.Type.MouseButtonPress,
+        at=first,
+        button=Qt.MouseButton.RightButton,
+    )
+    mouse(
+        chart,
+        QMouseEvent.Type.MouseButtonRelease,
+        at=first,
+        button=Qt.MouseButton.RightButton,
+    )
     assert got == []
     chart.hovered = 0
     chart.leaveEvent(QEvent(QEvent.Type.Leave))
     assert chart.hovered is None
 
 
-def test_a_line_chart_can_be_clicked_where_it_has_a_value(app: QApplication) -> None:
+def test_a_line_chart_can_be_clicked_where_it_has_a_value(
+    app: QApplication,
+) -> None:
     """
-    Check that a point of a line chart can be clicked, and a gap in the line cannot.
+    Check that a point of a line chart can be clicked, and a gap in the
+    line cannot.
 
     Parameters
     ----------
@@ -569,9 +691,12 @@ def test_a_line_chart_can_be_clicked_where_it_has_a_value(app: QApplication) -> 
     assert chart.grab().toImage() != ink_image_without_highlight(chart)
 
 
-def test_a_row_of_the_bar_list_highlights_and_announces_a_click(app: QApplication) -> None:
+def test_a_row_of_the_bar_list_highlights_and_announces_a_click(
+    app: QApplication,
+) -> None:
     """
-    Check that a row of the horizontal bar chart is highlighted under the pointer and announced when it is clicked.
+    Check that a row of the horizontal bar chart is highlighted under
+    the pointer and announced when it is clicked.
 
     Parameters
     ----------
@@ -588,15 +713,22 @@ def test_a_row_of_the_bar_list_highlights_and_announces_a_click(app: QApplicatio
     assert chart.hovered == 1
     click(chart, at=second)
     assert got == [1]
-    mouse(chart, QMouseEvent.Type.MouseMove, at=QPointF(100, chart.TOP + chart.ROW * 5))  # below the last row
+    mouse(
+        chart,
+        QMouseEvent.Type.MouseMove,
+        at=QPointF(100, chart.TOP + chart.ROW * 5),
+    )  # below the last row
     assert chart.hovered is None
     chart.set_selected(0)
     assert chart.grab().toImage() != ink_image_without_highlight(chart)
 
 
-def test_the_calendar_emphasizes_a_day_and_announces_a_click_only_on_days_with_answers(app: QApplication) -> None:
+def test_calendar_emphasizes_day_and_announces_click_only_on(
+    app: QApplication,
+) -> None:
     """
-    Check that a day of the calendar can be clicked only if questions were answered on it, and is emphasized when pointed at.
+    Check that a day of the calendar can be clicked only if questions
+    were answered on it, and is emphasized when pointed at.
 
     Parameters
     ----------
@@ -608,7 +740,10 @@ def test_the_calendar_emphasizes_a_day_and_announces_a_click_only_on_days_with_a
     cell, (x0, y0) = chart._cell(), chart._origin()
     got: list[object] = []
     chart.clicked.connect(got.append)
-    friday, thursday = QPointF(x0 + 52.5 * cell, y0 + 4.5 * cell), QPointF(x0 + 52.5 * cell, y0 + 3.5 * cell)
+    friday, thursday = (
+        QPointF(x0 + 52.5 * cell, y0 + 4.5 * cell),
+        QPointF(x0 + 52.5 * cell, y0 + 3.5 * cell),
+    )
     click(chart, at=thursday)  # the 12th had no answers
     assert got == [] and chart.hovered is None
     mouse(chart, QMouseEvent.Type.MouseMove, at=friday)
@@ -617,6 +752,11 @@ def test_the_calendar_emphasizes_a_day_and_announces_a_click_only_on_days_with_a
     assert got == [today]
     pointed_at = chart.grab().toImage()
     assert pointed_at != ink_image_without_highlight(chart)
-    chart.set_selected(today)  # the page is still showing that day, so it stays emphasized when the pointer moves away
+    chart.set_selected(
+        today,
+        # the page is still showing that day, so it stays emphasized
+        # when
+        # the pointer moves away
+    )
     mouse(chart, QMouseEvent.Type.MouseMove, at=thursday)
     assert chart.hovered is None and chart.grab().toImage() == pointed_at

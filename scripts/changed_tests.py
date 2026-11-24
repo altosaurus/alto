@@ -1,22 +1,35 @@
 #!/usr/bin/env python
 """
-Classify pull requests for CI and list pytest targets for a local change.
+Classify pull requests for CI and list pytest targets for a local
+change.
 
-    python scripts/changed_tests.py                    # what the working tree changed since it left origin/main
-    python scripts/changed_tests.py --kind             # "skip", "docs", or "code" for pull requests
-    python scripts/changed_tests.py --base A --head B  # changes introduced by B since it diverged from A
+    python scripts/changed_tests.py                    # what the
+    working tree changed since it left origin/main
+    python scripts/changed_tests.py --kind             # "skip", "docs",
+    or "code" for pull requests
+    python scripts/changed_tests.py --base A --head B  # changes
+    introduced by B since it diverged from A
 
-It prints `all`, or the paths to give to pytest (nothing at all when nothing changed). The rules are meant to be safe, so that a
-test is never skipped by mistake, and anything they do not know is a reason to run `all`:
+It prints `all`, or the paths to give to pytest (nothing at all when
+nothing changed). The rules are meant to be safe, so that a
+test is never skipped by mistake, and anything they do not know is a
+reason to run `all`:
 
-- Repository housekeeping (.gitignore, .git-blame-ignore-revs, and local previews under work/) needs no tests.
-- Only docs (anything under `docs/`, and the Markdown files at the top) run the tests that read the docs.
-- A change to a module of `alto` or to a test runs the tests that import it, directly or through other modules, and the
-  doctests of the modules that import it, plus the tests that read the whole code base or the docs.
-- Anything else (a script, a workflow, `pyproject.toml`, a `conftest.py`, the packaging files, a sound or a picture) runs `all`,
-  because several tests read those files, and not only through an import.
+- Repository housekeeping (.gitignore, .git-blame-ignore-revs, and local
+previews under work/) needs no tests.
+- Only docs (anything under `docs/`, and the Markdown files at the top)
+run the tests that read the docs.
+- A change to a module of `alto` or to a test runs the tests that import
+it, directly or through other modules, and the
+  doctests of the modules that import it, plus the tests that read the
+  whole code base or the docs.
+- Anything else (a script, a workflow, `pyproject.toml`, a
+`conftest.py`, the packaging files, a sound or a picture) runs `all`,
+  because several tests read those files, and not only through an
+  import.
 
-The script uses nothing but the standard library, so that a workflow can run it before anything is installed.
+The script uses nothing but the standard library, so that a workflow can
+run it before anything is installed.
 """
 
 from __future__ import annotations
@@ -58,15 +71,27 @@ def paths_affecting_tests(files: list[str]) -> list[str]:
 
     Examples
     --------
-    >>> paths_affecting_tests([".gitignore", "work/preview.html", "docs/index.md"])
+    >>> paths_affecting_tests(
+    ...     [
+    ...         ".gitignore",
+    ...         "work/preview.html",
+    ...         "docs/index.md",
+    ...     ]
+    ... )
     ['docs/index.md']
     """
-    return [path for path in files if path not in {".gitignore", ".git-blame-ignore-revs"} and not path.startswith("work/")]
+    return [
+        path
+        for path in files
+        if path not in {".gitignore", ".git-blame-ignore-revs"}
+        and not path.startswith("work/")
+    ]
 
 
 def is_docs(path: str) -> bool:
     """
-    Say whether a file is part of the docs: under `docs/`, or a Markdown file at the top of the repository.
+    Say whether a file is part of the docs: under `docs/`, or a Markdown
+    file at the top of the repository.
 
     Parameters
     ----------
@@ -80,15 +105,23 @@ def is_docs(path: str) -> bool:
 
     Examples
     --------
-    >>> is_docs("docs/index.md"), is_docs("CHANGELOG.md"), is_docs("alto/ui/home.py"), is_docs("alto/README.md")
+    >>> (
+    ...     is_docs("docs/index.md"),
+    ...     is_docs("CHANGELOG.md"),
+    ...     is_docs("alto/ui/home.py"),
+    ...     is_docs("alto/README.md"),
+    ... )
     (True, True, False, False)
     """
-    return path.startswith("docs/") or ("/" not in path and path.endswith(".md"))
+    return path.startswith("docs/") or (
+        "/" not in path and path.endswith(".md")
+    )
 
 
 def module_name(path: str) -> str | None:
     """
-    Name the module that a Python file under `alto/` or `tests/` is, as an import would write it.
+    Name the module that a Python file under `alto/` or `tests/` is, as
+    an import would write it.
 
     Parameters
     ----------
@@ -98,12 +131,19 @@ def module_name(path: str) -> str | None:
     Returns
     -------
     str or None
-        The dotted name (`alto/ui/home.py` is `alto.ui.home`, and a package's `__init__.py` is the package), or None for a file
+        The dotted name (`alto/ui/home.py` is `alto.ui.home`, and a
+        package's `__init__.py` is the package), or None for a file
         that is neither under `alto/` nor `tests/`.
 
     Examples
     --------
-    >>> module_name("alto/ui/home.py"), module_name("alto/exercises/__init__.py"), module_name("tests/keys.py")
+    >>> (
+    ...     module_name("alto/ui/home.py"),
+    ...     module_name(
+    ...         "alto/exercises/__init__.py"
+    ...     ),
+    ...     module_name("tests/keys.py"),
+    ... )
     ('alto.ui.home', 'alto.exercises', 'tests.keys')
     >>> module_name("scripts/docs_site.py") is None
     True
@@ -120,7 +160,8 @@ def imports_of(source: str, *, known: set[str]) -> set[str]:
     r"""
     List the modules of the project that a piece of code imports.
 
-    A module also needs the packages above it, so those are listed too, and `from a import b` counts as an import of `a.b` when
+    A module also needs the packages above it, so those are listed too,
+    and `from a import b` counts as an import of `a.b` when
     that is a module.
 
     Parameters
@@ -137,8 +178,18 @@ def imports_of(source: str, *, known: set[str]) -> set[str]:
 
     Examples
     --------
-    >>> modules = {"alto", "alto.ui", "alto.ui.home", "alto.theory"}
-    >>> sorted(imports_of("from alto.ui import home\nimport alto.theory", known=modules))
+    >>> modules = {
+    ...     "alto",
+    ...     "alto.ui",
+    ...     "alto.ui.home",
+    ...     "alto.theory",
+    ... }
+    >>> sorted(
+    ...     imports_of(
+    ...         "from alto.ui import home\nimport alto.theory",
+    ...         known=modules,
+    ...     )
+    ... )
     ['alto', 'alto.theory', 'alto.ui', 'alto.ui.home']
     """
     found: set[str] = set()
@@ -146,17 +197,29 @@ def imports_of(source: str, *, known: set[str]) -> set[str]:
         names: list[str] = []
         if isinstance(node, ast.Import):
             names = [alias.name for alias in node.names]
-        elif isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
-            names = [node.module, *(f"{node.module}.{alias.name}" for alias in node.names)]
+        elif (
+            isinstance(node, ast.ImportFrom)
+            and node.module
+            and node.level == 0
+        ):
+            names = [
+                node.module,
+                *(f"{node.module}.{alias.name}" for alias in node.names),
+            ]
         for name in names:
             parts = name.split(".")
-            found.update(".".join(parts[:count]) for count in range(1, len(parts) + 1) if ".".join(parts[:count]) in known)
+            found.update(
+                ".".join(parts[:count])
+                for count in range(1, len(parts) + 1)
+                if ".".join(parts[:count]) in known
+            )
     return found
 
 
 def dependents(changed: set[str], *, graph: dict[str, set[str]]) -> set[str]:
     """
-    Find the modules that depend, directly or through others, on the changed ones, and the changed ones themselves.
+    Find the modules that depend, directly or through others, on the
+    changed ones, and the changed ones themselves.
 
     Parameters
     ----------
@@ -168,11 +231,17 @@ def dependents(changed: set[str], *, graph: dict[str, set[str]]) -> set[str]:
     Returns
     -------
     set of str
-        The changed modules and every module that imports one of them, however indirectly.
+        The changed modules and every module that imports one of them,
+        however indirectly.
 
     Examples
     --------
-    >>> edges = {"c": {"b"}, "b": {"a"}, "a": set(), "d": set()}
+    >>> edges = {
+    ...     "c": {"b"},
+    ...     "b": {"a"},
+    ...     "a": set(),
+    ...     "d": set(),
+    ... }
     >>> sorted(dependents({"a"}, graph=edges))
     ['a', 'b', 'c']
     """
@@ -194,20 +263,24 @@ def choose(files: list[str], *, root: Path = ROOT) -> str | list[str]:
     Parameters
     ----------
     files : list of str
-        The changed paths from the top of the repository, with forward slashes.
+        The changed paths from the top of the repository, with forward
+        slashes.
     root : Path, default ROOT
         The repository.
 
     Returns
     -------
     str or list of str
-        "all" when the whole suite should run, otherwise the paths to give to pytest, which may be none.
+        "all" when the whole suite should run, otherwise the paths to
+        give to pytest, which may be none.
 
     Examples
     --------
     >>> choose([])
     []
-    >>> choose(["docs/index.md"]) == list(DOCS_TESTS)
+    >>> choose(["docs/index.md"]) == list(
+    ...     DOCS_TESTS
+    ... )
     True
     >>> choose(["pyproject.toml"])
     'all'
@@ -218,24 +291,36 @@ def choose(files: list[str], *, root: Path = ROOT) -> str | list[str]:
     if all(is_docs(path) for path in files):
         return list(DOCS_TESTS)
     code = [path for path in files if not is_docs(path)]
-    if any(module_name(path) is None or path.endswith("conftest.py") for path in code):
+    if any(
+        module_name(path) is None or path.endswith("conftest.py")
+        for path in code
+    ):
         return "all"
     paths: dict[str, Path] = {}
-    for path in sorted(root.glob("alto/**/*.py")) + sorted(root.glob("tests/**/*.py")):
+    for path in sorted(root.glob("alto/**/*.py")) + sorted(
+        root.glob("tests/**/*.py"),
+    ):
         name = module_name(path.relative_to(root).as_posix())
         if name:
             paths[name] = path
             if name.startswith("tests."):
                 paths[name.removeprefix("tests.")] = (
-                    path  # a test imports a helper next to it by its plain name, as `from keys import`
+                    # a test imports a helper next to it by its plain
+                    # name, as `from keys import`
+                    path
                 )
     known = set(paths)
-    graph = {name: imports_of(path.read_text(encoding="utf-8"), known=known) for name, path in paths.items()}
+    graph = {
+        name: imports_of(path.read_text(encoding="utf-8"), known=known)
+        for name, path in paths.items()
+    }
     seeds: set[str] = set()
     for path in code:
         name = module_name(path)
         if name:
-            seeds.update({name, name.removeprefix("tests.")})  # a helper is imported by its plain name as well
+            seeds.update(
+                {name, name.removeprefix("tests.")},
+            )  # a helper is imported by its plain name as well
     reached = dependents(seeds, graph=graph)
     chosen: set[str] = set(WHOLE_CODE_TESTS)
     for name in reached:
@@ -243,7 +328,9 @@ def choose(files: list[str], *, root: Path = ROOT) -> str | list[str]:
         if path is None:
             continue
         relative = path.relative_to(root).as_posix()
-        if relative.startswith("alto/") or Path(relative).name.startswith("test_"):
+        if relative.startswith("alto/") or Path(relative).name.startswith(
+            "test_",
+        ):
             chosen.add(relative)
     return sorted(chosen)
 
@@ -255,14 +342,17 @@ def changed_files(*, base: str | None, head: str | None) -> list[str]:
     Parameters
     ----------
     base : str or None
-        The commit to compare from; the point where the branch left `origin/main` if None.
+        The commit to compare from; the point where the branch left
+        `origin/main` if None.
     head : str or None
-        The commit to compare to; the working tree (what is committed, staged and not yet staged) if None.
+        The commit to compare to; the working tree (what is committed,
+        staged and not yet staged) if None.
 
     Returns
     -------
     list of str
-        The changed paths from the top of the repository, with forward slashes, and the files not yet tracked when `head` is None.
+        The changed paths from the top of the repository, with forward
+        slashes, and the files not yet tracked when `head` is None.
 
     Examples
     --------
@@ -280,10 +370,21 @@ def changed_files(*, base: str | None, head: str | None) -> list[str]:
             ).stdout.strip()
             or "HEAD"
         )
-    # A PR owns changes since its merge base. Inspect both sides of moves across scope boundaries.
+    # A PR owns changes since its merge base. Inspect both sides of
+    # moves across scope boundaries.
     compare = f"{base}...{head}" if head else base
-    command = ["git", "diff", "--no-renames", "--name-only", "-z", compare, "--"]
-    files = set(os.fsdecode(subprocess.check_output(command, cwd=ROOT)).split("\0"))
+    command = [
+        "git",
+        "diff",
+        "--no-renames",
+        "--name-only",
+        "-z",
+        compare,
+        "--",
+    ]
+    files = set(
+        os.fsdecode(subprocess.check_output(command, cwd=ROOT)).split("\0"),
+    )
     if head is None:
         untracked = subprocess.run(
             ["git", "ls-files", "--others", "--exclude-standard", "-z"],
@@ -303,7 +404,8 @@ def main(argv: list[str] | None = None) -> int:
     Parameters
     ----------
     argv : list of str or None, default None
-        The arguments after the program's name; those the program was started with if None.
+        The arguments after the program's name; those the program was
+        started with if None.
 
     Returns
     -------
@@ -315,21 +417,42 @@ def main(argv: list[str] | None = None) -> int:
     >>> main(["--files", "docs/index.md", "--kind"])
     docs
     0
-    >>> main(["--files", "alto/ui/home.py", "--kind"])
+    >>> main(
+    ...     ["--files", "alto/ui/home.py", "--kind"]
+    ... )
     code
     0
     """
-    parser = argparse.ArgumentParser(description="Choose the tests that a change could affect.")
-    parser.add_argument("--base", help="the commit to compare from (default: where the branch left origin/main)")
-    parser.add_argument("--head", help="the commit to compare to (default: the working tree)")
-    parser.add_argument("--files", nargs="*", help="the changed files, instead of asking Git")
+    parser = argparse.ArgumentParser(
+        description="Choose the tests that a change could affect.",
+    )
+    parser.add_argument(
+        "--base",
+        help=(
+            "the commit to compare from (default: where the branch left "
+            "origin/main)"
+        ),
+    )
+    parser.add_argument(
+        "--head",
+        help="the commit to compare to (default: the working tree)",
+    )
+    parser.add_argument(
+        "--files",
+        nargs="*",
+        help="the changed files, instead of asking Git",
+    )
     parser.add_argument(
         "--kind",
         action="store_true",
         help='print the pull request scope: "skip", "docs", or "code"',
     )
     arguments = parser.parse_args(argv)
-    files = arguments.files if arguments.files is not None else changed_files(base=arguments.base, head=arguments.head)
+    files = (
+        arguments.files
+        if arguments.files is not None
+        else changed_files(base=arguments.base, head=arguments.head)
+    )
     if arguments.kind:
         inputs = paths_affecting_tests(files)
         if not inputs:

@@ -1,4 +1,6 @@
-"""Connect a displayed music sample to the notes sounding on its staff."""
+"""
+Connect a displayed music sample to the notes sounding on its staff.
+"""
 
 from collections.abc import Callable, Sequence
 
@@ -10,11 +12,21 @@ from alto.theory.pitch import Note
 
 
 class StaffPlayback(QObject):
-    """Follow a sample's audio onsets and end playback when its view closes."""
+    """
+    Follow a sample's audio onsets and end playback when its view
+    closes.
+    """
 
-    step = Signal(object)  # a column index, or None when the highlight should clear
+    step = Signal(
+        object,
+    )  # a column index, or None when the highlight should clear
 
-    def __init__(self, parent: QWidget, *, highlight: Callable[[int | None], object] | None = None) -> None:
+    def __init__(
+        self,
+        parent: QWidget,
+        *,
+        highlight: Callable[[int | None], object] | None = None,
+    ) -> None:
         """
         Attach playback to its view.
 
@@ -23,7 +35,8 @@ class StaffPlayback(QObject):
         parent : QWidget
             The view containing the sample.
         highlight : callable or None
-            Draw the current step on the displayed staff or staves. Omit for audio-only playback.
+            Draw the current step on the displayed staff or staves. Omit
+            for audio-only playback.
         """
         super().__init__(parent)
         if highlight is not None:
@@ -51,16 +64,27 @@ class StaffPlayback(QObject):
         gap_ms : int
             Time between onsets in milliseconds.
         force : bool
-            Allow explicit auditions even when exercise sounds are muted.
+            Allow explicit auditions even when exercise sounds are
+            muted.
         instrument : str or None
-            Sound registered by the active pack, or the learner’s default.
+            Sound registered by the active pack, or the learner’s
+            default.
         warmup : bool
             Prepare the audio streams before the first note.
         """
-        sounds.play_sample(columns, gap_ms=gap_ms, force=force, on_step=self._notify, warmup=warmup, instrument=instrument)
+        sounds.play_sample(
+            columns,
+            gap_ms=gap_ms,
+            force=force,
+            on_step=self._notify,
+            warmup=warmup,
+            instrument=instrument,
+        )
 
     def stop(self) -> None:
-        """Clear this view's sounding note and cancel its pending audio."""
+        """
+        Clear this view's sounding note and cancel its pending audio.
+        """
         sounds.stop_sample(self._notify)
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: PLR0917 (Qt passes both arguments positionally)

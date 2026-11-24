@@ -5,9 +5,11 @@ package: alto.ui
 permalink: /api/alto.ui.reference/
 ---
 {% raw %}
-The reference pane: an interactive circle of fifths to look things up on, with an explanation under it.
+The reference pane: an interactive circle of fifths to look things up
+on, with an explanation under it.
 
-Click a key on either ring, or move with the arrow keys, and the circle lights that key's chords, shows its key signature in
+Click a key on either ring, or move with the arrow keys, and the circle
+lights that key's chords, shows its key signature in
 the middle, and the text underneath explains it.
 
 **Examples**
@@ -55,7 +57,9 @@ Build the circle with every key named and none picked.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ExplorableCircle().shown["inner"] == set(range(12))
+>>> ExplorableCircle().shown["inner"] == set(
+...     range(12)
+... )
 True
 ```
 
@@ -65,7 +69,8 @@ True
 def set_interactive(interactive: bool) -> None
 ```
 
-Let the circle be clicked and moved with the keys, or make it a picture.
+Let the circle be clicked and moved with the keys, or make it a
+picture.
 
 **Parameters**
 
@@ -76,7 +81,11 @@ Let the circle be clicked and moved with the keys, or make it a picture.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.set_interactive(False)
->>> circle.interactive, circle.focusPolicy() == Qt.FocusPolicy.NoFocus
+>>> (
+...     circle.interactive,
+...     circle.focusPolicy()
+...     == Qt.FocusPolicy.NoFocus,
+... )
 (False, True)
 ```
 
@@ -86,7 +95,8 @@ Let the circle be clicked and moved with the keys, or make it a picture.
 def clear() -> None
 ```
 
-Pick nothing: every key is named, none is lit and the middle says what to do.
+Pick nothing: every key is named, none is lit and the middle
+says what to do.
 
 **Examples**
 
@@ -108,9 +118,11 @@ def select(
 ) -> None
 ```
 
-Pick a cell: light the chords of its key, and show its name and key signature in the middle.
+Pick a cell: light the chords of its key, and show its name and
+key signature in the middle.
 
-A minor key has the key signature, and the chords, of its relative major.
+A minor key has the key signature, and the chords, of its
+relative major.
 
 **Parameters**
 
@@ -122,7 +134,12 @@ A minor key has the key signature, and the chords, of its relative major.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.select("inner", place=3)
->>> circle.title, circle.subtitle, sorted(circle.lit), circle.numerals[("outer", 4)]
+>>> (
+...     circle.title,
+...     circle.subtitle,
+...     sorted(circle.lit),
+...     circle.numerals[("outer", 4)],
+... )
 ('F♯ minor', '3 sharps', [2, 3, 4], 'V')
 ```
 
@@ -148,9 +165,17 @@ Return the cell under a point.
 >>> circle = ExplorableCircle()
 >>> circle.resize(400, 400)
 >>> middle, size = circle.geometry_of()
->>> circle.cell_at(QPointF(middle.x(), middle.y() - 0.9 * size))
+>>> circle.cell_at(
+...     QPointF(
+...         middle.x(), middle.y() - 0.9 * size
+...     )
+... )
 ('outer', 0)
->>> circle.cell_at(QPointF(middle.x() + 0.6 * size, middle.y()))
+>>> circle.cell_at(
+...     QPointF(
+...         middle.x() + 0.6 * size, middle.y()
+...     )
+... )
 ('inner', 3)
 >>> circle.cell_at(middle) is None
 True
@@ -166,7 +191,8 @@ def lift_of(
 ) -> float
 ```
 
-Return how bright a cell is drawn: as for any question, and a little brighter under the pointer.
+Return how bright a cell is drawn: as for any question, and a
+little brighter under the pointer.
 
 **Parameters**
 
@@ -182,7 +208,10 @@ Return how bright a cell is drawn: as for any question, and a little brighter un
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.hover = ("outer", 5)
->>> circle.lift_of("outer", place=5), circle.lift_of("outer", place=6)
+>>> (
+...     circle.lift_of("outer", place=5),
+...     circle.lift_of("outer", place=6),
+... )
 (0.2, 0.0)
 ```
 
@@ -192,7 +221,8 @@ Return how bright a cell is drawn: as for any question, and a little brighter un
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-Pick the cell that is clicked; a click in the middle clears the pick.
+Pick the cell that is clicked; a click in the middle clears the
+pick.
 
 **Parameters**
 
@@ -206,7 +236,14 @@ Pick the cell that is clicked; a click in the middle clears the pick.
 >>> circle = ExplorableCircle()
 >>> circle.resize(400, 400)
 >>> center, radius = circle.geometry_of()
->>> QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
+>>> QTest.mouseClick(
+...     circle,
+...     Qt.MouseButton.LeftButton,
+...     pos=QPoint(
+...         int(center.x()),
+...         int(center.y() - 0.9 * radius),
+...     ),
+... )
 >>> circle.cell
 ('outer', 0)
 ```
@@ -217,7 +254,8 @@ Pick the cell that is clicked; a click in the middle clears the pick.
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-Light the cell under the pointer, and show a hand over the ones that can be picked.
+Light the cell under the pointer, and show a hand over the ones
+that can be picked.
 
 **Parameters**
 
@@ -232,7 +270,13 @@ Light the cell under the pointer, and show a hand over the ones that can be pick
 >>> circle.resize(400, 400)
 >>> circle.show()
 >>> center, radius = circle.geometry_of()
->>> QTest.mouseMove(circle, QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
+>>> QTest.mouseMove(
+...     circle,
+...     QPoint(
+...         int(center.x()),
+...         int(center.y() - 0.9 * radius),
+...     ),
+... )
 >>> circle.hover
 ('outer', 0)
 ```
@@ -265,7 +309,8 @@ True
 def keyPressEvent(event: QKeyEvent) -> None
 ```
 
-Move the pick with the arrow keys: Left and Right around the circle, Up and Down between the rings.
+Move the pick with the arrow keys: Left and Right around the
+circle, Up and Down between the rings.
 
 Escape clears the pick, and Home picks C major.
 
@@ -277,7 +322,11 @@ Escape clears the pick, and Home picks C major.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
->>> press = QKeyEvent(QKeyEvent.Type.KeyPress, Qt.Key.Key_Right, Qt.KeyboardModifier.NoModifier)
+>>> press = QKeyEvent(
+...     QKeyEvent.Type.KeyPress,
+...     Qt.Key.Key_Right,
+...     Qt.KeyboardModifier.NoModifier,
+... )
 >>> circle.keyPressEvent(press)
 >>> circle.cell
 ('outer', 0)
@@ -294,7 +343,8 @@ ReferencePanel(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-The reference for the circle of fifths: a short description, the circle to explore, and what the picked key means.
+The reference for the circle of fifths: a short description, the
+circle to explore, and what the picked key means.
 
 **Attributes**
 
@@ -336,7 +386,8 @@ ClefReferencePanel(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-The reference for the clefs: how they are made, and a picture of each with where its symbol goes.
+The reference for the clefs: how they are made, and a picture of
+each with where its symbol goes.
 
 **Attributes**
 
@@ -348,13 +399,18 @@ The reference for the clefs: how they are made, and a picture of each with where
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ClefReferencePanel()
->>> "C clef" in panel.rows["mezzo"].text() and "bottom line" in panel.rows["french"].text()
+>>> "C clef" in panel.rows[
+...     "mezzo"
+... ].text() and "bottom line" in panel.rows[
+...     "french"
+... ].text()
 True
 ```
 
 **Constructor**
 
-Build the panel: the lesson button, a line of explanation and a row for each clef.
+Build the panel: the lesson button, a line of explanation and a
+row for each clef.
 
 **Parameters**
 
@@ -363,7 +419,9 @@ Build the panel: the lesson button, a line of explanation and a row for each cle
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> len(ClefReferencePanel().rows) == len(settings.CLEF_BASICS_CLEFS)
+>>> len(ClefReferencePanel().rows) == len(
+...     settings.CLEF_BASICS_CLEFS
+... )
 True
 ```
 
@@ -389,7 +447,8 @@ NoteReferencePanel(exercise: Exercise)
 
 Bases: `QWidget`
 
-Hints for reading notes or intervals and a link to the associated lesson.
+Hints for reading notes or intervals and a link to the associated
+lesson.
 
 **Constructor**
 
@@ -402,7 +461,9 @@ Show the hints for the current note exercise.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> NoteReferencePanel(KeyboardNotes()).lesson_button.text()
+>>> NoteReferencePanel(
+...     KeyboardNotes()
+... ).lesson_button.text()
 'New to this? Take the full lesson  →'
 ```
 
@@ -418,11 +479,13 @@ PluginReferencePanel(
 
 Bases: `QWidget`
 
-What a plugin's exercise offers to look up: what it asks, and a button for each lesson that teaches it.
+What a plugin's exercise offers to look up: what it asks, and a
+button for each lesson that teaches it.
 
 **Constructor**
 
-Show the exercise's description and a button for each lesson that goes with it.
+Show the exercise's description and a button for each lesson
+that goes with it.
 
 **Parameters**
 
@@ -432,8 +495,18 @@ Show the exercise's description and a button for each lesson that goes with it.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> demo = Lesson(key="pack.d.l", title="Parts", about="", summary="", category="D", steps=(), exercise="x")
->>> PluginReferencePanel(NoteNames(), lessons=[demo]).lesson_buttons[0].text()
+>>> demo = Lesson(
+...     key="pack.d.l",
+...     title="Parts",
+...     about="",
+...     summary="",
+...     category="D",
+...     steps=(),
+...     exercise="x",
+... )
+>>> PluginReferencePanel(
+...     NoteNames(), lessons=[demo]
+... ).lesson_buttons[0].text()
 'New to this? Take the lesson: Parts  →'
 ```
 
@@ -451,15 +524,25 @@ Return the reference pane for an exercise.
 
 **Returns**
 
-- *ReferencePanel or ClefReferencePanel or ScaleReferencePanel or NoteReferencePanel or None*: The panel, or None for an exercise with nothing to look up.
+- *ReferencePanel or ClefReferencePanel or ScaleReferencePanel or*
+- *NoteReferencePanel or None*: The panel, or None for an exercise with nothing to look up.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
->>> isinstance(reference_panel_for(NoteNames()), NoteReferencePanel), reference_panel_for(CircleOfFifths()) is not None
+>>> (
+...     isinstance(
+...         reference_panel_for(NoteNames()),
+...         NoteReferencePanel,
+...     ),
+...     reference_panel_for(CircleOfFifths())
+...     is not None,
+... )
 (True, True)
->>> type(reference_panel_for(ClefBasics())).__name__
+>>> type(
+...     reference_panel_for(ClefBasics())
+... ).__name__
 'ClefReferencePanel'
 ```
 {% endraw %}

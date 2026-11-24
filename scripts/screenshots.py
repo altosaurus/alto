@@ -1,19 +1,28 @@
 #!/usr/bin/env python
 """
-Regenerate the screenshots in docs/assets/img, in the light and the dark theme.
+Regenerate the screenshots in docs/assets/img, in the light and the dark
+theme.
 
-    .venv/bin/python scripts/screenshots.py              # every picture, both themes
+    .venv/bin/python scripts/screenshots.py              # every
+    picture, both themes
     .venv/bin/python scripts/screenshots.py --only home stats
-    .venv/bin/python scripts/screenshots.py --theme dark --out /tmp/shots
+    .venv/bin/python scripts/screenshots.py --theme dark --out
+    /tmp/shots
 
-Each picture is written as name.png (light) and name-dark.png. The docs page picks the right one with the theme
-toggle, so both must exist. The script runs against a throwaway profile with made-up answers, and a temporary
-settings and data folder, so it never reads or changes your own profile, history or settings.
+Each picture is written as name.png (light) and name-dark.png. The docs
+page picks the right one with the theme
+toggle, so both must exist. The script runs against a throwaway profile
+with made-up answers, and a temporary
+settings and data folder, so it never reads or changes your own profile,
+history or settings.
 
-It needs a display or Qt's offscreen platform (QT_QPA_PLATFORM=offscreen). Fonts are rendered a little differently
-on each machine, so regenerate on the machine you normally use and check the pictures before committing them.
+It needs a display or Qt's offscreen platform
+(QT_QPA_PLATFORM=offscreen). Fonts are rendered a little differently
+on each machine, so regenerate on the machine you normally use and check
+the pictures before committing them.
 
-Never add a picture of the exercise-level settings (the pane behind the sliders button) here. See CLAUDE.md.
+Never add a picture of the exercise-level settings (the pane behind the
+sliders button) here. See CLAUDE.md.
 """
 
 from __future__ import annotations
@@ -68,7 +77,8 @@ from alto.ui.theme import apply_theme
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "assets" / "img"
 THEMES = ("light", "dark")
-# The pictures this script makes. A docs page includes each of them with shot.html.
+# The pictures this script makes. A docs page includes each of them with
+# shot.html.
 SHOTS = (
     "profile-create",
     "profile-picker",
@@ -109,7 +119,8 @@ SHOTS = (
 
 def main() -> int:
     """
-    Parse the command line and make the pictures, one process for each theme.
+    Parse the command line and make the pictures, one process for each
+    theme.
 
     Returns
     -------
@@ -123,8 +134,16 @@ def main() -> int:
     0
     """
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
-    ap.add_argument("--theme", choices=THEMES, help="only this theme (default: both)")
-    ap.add_argument("--require-native-theme", action="store_true", help="stop if Qt cannot render the requested default theme")
+    ap.add_argument(
+        "--theme",
+        choices=THEMES,
+        help="only this theme (default: both)",
+    )
+    ap.add_argument(
+        "--require-native-theme",
+        action="store_true",
+        help="stop if Qt cannot render the requested default theme",
+    )
     ap.add_argument(
         "--only",
         nargs="+",
@@ -142,19 +161,36 @@ def main() -> int:
     names = tuple(args.only or SHOTS)
     args.out.mkdir(parents=True, exist_ok=True)
     if args.theme:
-        capture(args.theme, names=names, out=args.out, require_native_theme=args.require_native_theme)
+        capture(
+            args.theme,
+            names=names,
+            out=args.out,
+            require_native_theme=args.require_native_theme,
+        )
         return 0
-    # One process for each theme, each with its own throwaway settings and data folder.
+    # One process for each theme, each with its own throwaway settings
+    # and data folder.
     for theme in THEMES:
         with tempfile.TemporaryDirectory() as tmp:
-            env = dict(os.environ, XDG_CONFIG_HOME=f"{tmp}/config", XDG_DATA_HOME=f"{tmp}/data")
-            env.setdefault("QT_QPA_PLATFORM", "xcb" if os.environ.get("DISPLAY") else "offscreen")
+            env = dict(
+                os.environ,
+                XDG_CONFIG_HOME=f"{tmp}/config",
+                XDG_DATA_HOME=f"{tmp}/data",
+            )
+            env.setdefault(
+                "QT_QPA_PLATFORM",
+                "xcb" if os.environ.get("DISPLAY") else "offscreen",
+            )
             cmd = [
                 sys.executable,
                 str(Path(__file__).resolve()),
                 "--theme",
                 theme,
-                *(["--require-native-theme"] if args.require_native_theme else []),
+                *(
+                    ["--require-native-theme"]
+                    if args.require_native_theme
+                    else []
+                ),
                 "--out",
                 str(args.out),
                 "--only",
@@ -174,7 +210,8 @@ def capture(
     require_native_theme: bool = False,
 ) -> None:
     """
-    Take the pictures of one theme, in this process, using a made-up profile.
+    Take the pictures of one theme, in this process, using a made-up
+    profile.
 
     Parameters
     ----------
@@ -185,7 +222,8 @@ def capture(
     out : Path
         The folder to write them to.
     require_native_theme : bool, default False
-        Require the requested default palette for a UI style guide comparison.
+        Require the requested default palette for a UI style guide
+        comparison.
 
     Raises
     ------
@@ -194,7 +232,11 @@ def capture(
 
     Examples
     --------
-    >>> capture("dark", names=("home",), out=Path("/tmp/shots"))  # doctest: +SKIP
+    >>> capture(
+    ...     "dark",
+    ...     names=("home",),
+    ...     out=Path("/tmp/shots"),
+    ... )  # doctest: +SKIP
     """
     suffix = "" if theme == "light" else "-dark"
     app = QApplication([])
@@ -202,23 +244,35 @@ def capture(
     app.processEvents()
     if (app.palette().window().color().lightness() < 128) != (theme == "dark"):
         if require_native_theme:
-            raise RuntimeError(f"Qt's {app.platformName()} platform did not supply the default {theme} palette.")
-        # Some platform plugins, including offscreen, ignore Qt's native color-scheme request.
+            raise RuntimeError(
+                "Qt's "
+                f"{app.platformName()}"
+                " platform did not supply the default "
+                f"{theme}"
+                " palette.",
+            )
+        # Some platform plugins, including offscreen, ignore Qt's native
+        # color-scheme request.
         apply_theme("studio_dark" if theme == "dark" else "studio")
 
     original = ev.ExerciseView.__init__
     # noinspection PyShadowingNames
-    ev.ExerciseView.__init__ = lambda self, exercise, *, rng=None, parent=None, learner=None: original(
-        self,
-        exercise,
-        rng=random.Random(5),
-        parent=parent,
-        learner=learner,
+    ev.ExerciseView.__init__ = (
+        lambda self, exercise, *, rng=None, parent=None, learner=None: (
+            original(
+                self,
+                exercise,
+                rng=random.Random(5),
+                parent=parent,
+                learner=learner,
+            )
+        )
     )
 
     def wait(ms: int = 450) -> None:
         """
-        Keep the application busy for a while, so animations and layout settle.
+        Keep the application busy for a while, so animations and layout
+        settle.
 
         Parameters
         ----------
@@ -265,13 +319,25 @@ def capture(
             return
         wait(250)
         pixmap = widget.grab()
-        if (pixmap.toImage().pixelColor(10, 10).lightness() < 128) != (theme == "dark"):
-            raise RuntimeError(f"The {name} window did not render in the requested {theme} theme.")
+        if (pixmap.toImage().pixelColor(10, 10).lightness() < 128) != (
+            theme == "dark"
+        ):
+            raise RuntimeError(
+                "The "
+                f"{name}"
+                " window did not render in the requested "
+                f"{theme}"
+                " theme.",
+            )
         if pixmap.width() > width:
-            pixmap = pixmap.scaledToWidth(width, Qt.TransformationMode.SmoothTransformation)
+            pixmap = pixmap.scaledToWidth(
+                width,
+                Qt.TransformationMode.SmoothTransformation,
+            )
         pixmap.save(str(out / f"{name}{suffix}.png"), "PNG")
 
-    # A made-up profile: five weeks of answers that slowly get better, after about a year of lighter practice.
+    # A made-up profile: five weeks of answers that slowly get better,
+    # after about a year of lighter practice.
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     rng = random.Random(11)
@@ -284,7 +350,10 @@ def capture(
             q = ex.generate(rng)
             t, attempt = now - day * 86400 - rng.randint(0, 20000), 1
             accuracy = min(0.95, 0.55 + (34 - day) * 0.011)
-            seconds = max(0.7, rng.gauss(ex.par_seconds * (1.7 - (34 - day) * 0.018), 1))
+            seconds = max(
+                0.7,
+                rng.gauss(ex.par_seconds * (1.7 - (34 - day) * 0.018), 1),
+            )
             while True:
                 ok = rng.random() < accuracy if attempt == 1 else True
                 learner.record(
@@ -300,8 +369,10 @@ def capture(
                     break
                 attempt += 1
                 seconds = rng.uniform(1, 4)
-    # The year before that, from its own generator so the recent weeks above come out the same as ever: mostly short
-    # sessions on a few days a week, with a lull in the summer, which is what a real heatmap looks like.
+    # The year before that, from its own generator so the recent weeks
+    # above come out the same as ever: mostly short
+    # sessions on a few days a week, with a lull in the summer, which is
+    # what a real heatmap looks like.
     old = random.Random(12)
     for day in range(364, 34, -1):
         month = time.localtime(now - day * 86400).tm_mon
@@ -335,7 +406,13 @@ def capture(
                 now=t,
             )
 
-    store().setValue("ui/sidebarWidth", 330)  # wide enough for the longest exercise name, so that none is cut off in a picture
+    store().setValue(
+        "ui/sidebarWidth",
+        330,
+        # wide enough for the longest exercise name, so that none is cut
+        # off
+        # in a picture
+    )
     window = MainWindow(learner)
     window.resize(1100, 720)
     window.show()
@@ -357,16 +434,21 @@ def capture(
     ):
         if cls == "NotationIdentification":
             settings.notation.terms = {"Clef", "Notehead", "Stem", "Flag"}
-        if cls == "KeySignatures":  # show a signature on an alto clef staff, whatever the default is
+        if (
+            cls == "KeySignatures"
+        ):  # show a signature on an alto clef staff, whatever the default is
             settings.key_signatures.clefs = {"alto"}
             settings.key_signatures.modes = {"Major (Ionian)"}
-            settings.key_signatures.keys = {-3}  # three flats, so there is something to read
+            settings.key_signatures.keys = {
+                -3,
+            }  # three flats, so there is something to read
         window.open_exercise(by_class[cls])
         wait(500)
         save(window, name=name)
     window.show_home()
     wait()
-    # A few recent FSRS answers give the calendar controls actual new, missed, and due cards.
+    # A few recent FSRS answers give the calendar controls actual new,
+    # missed, and due cards.
     learner.set_mode("FSRS")
     for ex in (NoteNames(), KeyboardNotes()):
         for minutes_ago, correct in ((25, True), (15, False), (2, True)):
@@ -405,7 +487,12 @@ def capture(
     assert isinstance(stats_page, StatsPage)
     stats_page.granularity.setCurrentText("Week")
     save(window, name="stats", width=1500)
-    if "stats-heatmap" in names:  # scroll down to the calendar of reviews and show it with the table under it
+    if (
+        "stats-heatmap" in names
+        # scroll down to the calendar of reviews and show it with the
+        # table
+        # under it
+    ):
         # noinspection PyProtectedMember
         scroller = stats_page.findChild(QScrollArea)
         assert scroller is not None
@@ -420,11 +507,18 @@ def capture(
     save(window, name="database")
     if "database-questions" in names:
         page.tabs["questions"].click()
-        page.view.sortByColumn(page.model.headers.index("Last seen"), Qt.SortOrder.DescendingOrder)
+        page.view.sortByColumn(
+            page.model.headers.index("Last seen"),
+            Qt.SortOrder.DescendingOrder,
+        )
         save(window, name="database-questions")
     page.tabs["answers"].click()
     wait(200)
-    row = next(page.proxy.index(r, 0) for r in range(page.proxy.rowCount()) if "Chord" in page.proxy.index(r, 1).data())
+    row = next(
+        page.proxy.index(r, 0)
+        for r in range(page.proxy.rowCount())
+        if "Chord" in page.proxy.index(r, 1).data()
+    )
     answer = row.data(ROW_ROLE)
     # noinspection PyProtectedMember
     preview = QuestionPreview(
@@ -439,8 +533,17 @@ def capture(
     preview.close()
     window.show_home()
 
-    if {"filtered-practice", "filtered-exercise", "keyboard-review", "self-grading", "waiting-for-review"}.intersection(names):
-        window.home.restore_tile_filters({"exercises": frozenset({NoteNames.name, KeyboardNotes.name})}, expanded=True)
+    if {
+        "filtered-practice",
+        "filtered-exercise",
+        "keyboard-review",
+        "self-grading",
+        "waiting-for-review",
+    }.intersection(names):
+        window.home.restore_tile_filters(
+            {"exercises": frozenset({NoteNames.name, KeyboardNotes.name})},
+            expanded=True,
+        )
         window.shuffle_button.setChecked(True)
         window.home.refresh_counts()
         wait(1200)
@@ -455,9 +558,16 @@ def capture(
         window.open_exercise(KeyboardNotes)
         save(window, name="keyboard-review")
 
-        sounds.enabled = False  # capture answer feedback without opening an audio device
+        sounds.enabled = (
+            False  # capture answer feedback without opening an audio device
+        )
         learner.set_self_grading(True)
-        learner.calendar.set_limits(learner.profile.id, exercise="NoteNames", new_cards=None, reviews=0)
+        learner.calendar.set_limits(
+            learner.profile.id,
+            exercise="NoteNames",
+            new_cards=None,
+            reviews=0,
+        )
         window.open_exercise(NoteNames)
         view = window._exercise_page
         assert view is not None and view.question is not None
@@ -465,7 +575,12 @@ def capture(
         save(window, name="self-grading")
         if "waiting-for-review" in names:
             learner.set_self_grading(False)
-            learner.calendar.set_limits(learner.profile.id, exercise="ClefBasics", new_cards=1, reviews=None)
+            learner.calendar.set_limits(
+                learner.profile.id,
+                exercise="ClefBasics",
+                new_cards=1,
+                reviews=None,
+            )
             window.open_exercise(ClefBasics)
             view = window._exercise_page
             assert view is not None
@@ -475,7 +590,8 @@ def capture(
             save(window, name="waiting-for-review")
         window.show_home()
 
-    # The app-wide settings: the Notation style section, and the Sound page showing the viola.
+    # The app-wide settings: the Notation style section, and the Sound
+    # page showing the viola.
     dialog = AppSettingsDialog(window, learner=learner)
     dialog.resize(1000, 640)
     dialog.show()
@@ -487,15 +603,31 @@ def capture(
     wait(200)
     save(dialog, name="settings-sound", width=1000)
     if "settings-updates" in names:
-        dialog.categories.setCurrentItem(dialog.categories.findItems("Updates", Qt.MatchFlag.MatchExactly)[0])
+        dialog.categories.setCurrentItem(
+            dialog.categories.findItems("Updates", Qt.MatchFlag.MatchExactly)[
+                0
+            ],
+        )
         save(dialog, name="settings-updates")
     if "practice-settings" in names:
         learner.set_self_grading(True)
-        learner.calendar.set_limits(learner.profile.id, new_cards=10, reviews=UNLIMITED)
-        dialog.categories.setCurrentItem(dialog.categories.findItems("Practice", Qt.MatchFlag.MatchExactly)[0])
+        learner.calendar.set_limits(
+            learner.profile.id,
+            new_cards=10,
+            reviews=UNLIMITED,
+        )
+        dialog.categories.setCurrentItem(
+            dialog.categories.findItems("Practice", Qt.MatchFlag.MatchExactly)[
+                0
+            ],
+        )
         save(dialog, name="practice-settings")
     if "response-times" in names:
-        distribution = ResponseTimeDialog(learner, parent=window, exercise="NoteNames")
+        distribution = ResponseTimeDialog(
+            learner,
+            parent=window,
+            exercise="NoteNames",
+        )
         distribution.show()
         save(distribution, name="response-times")
         distribution.close()
@@ -504,7 +636,9 @@ def capture(
     if {"lesson-tiles", "lesson-workspace", "glossary"}.intersection(names):
         window.show_home()
         window.home.mode_control.buttons[1].click()
-        wait(1200)  # let the tile transition finish before capturing the catalog
+        wait(
+            1200,
+        )  # let the tile transition finish before capturing the catalog
         save(window, name="lesson-tiles")
         window.open_lessons("pitches-and-notes")
         save(window, name="lesson-workspace")
@@ -514,7 +648,12 @@ def capture(
         glossary = window._overlay
         assert isinstance(glossary, GlossaryPage)
         glossary.search.setText("minor")
-        glossary.terms.setCurrentItem(glossary.terms.findItems("harmonic minor scale", Qt.MatchFlag.MatchExactly)[0])
+        glossary.terms.setCurrentItem(
+            glossary.terms.findItems(
+                "harmonic minor scale",
+                Qt.MatchFlag.MatchExactly,
+            )[0],
+        )
         wait(500)
         save(window, name="glossary")
     if "profile-create" in names or "profile-picker" in names:

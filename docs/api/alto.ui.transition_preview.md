@@ -7,7 +7,8 @@ permalink: /api/alto.ui.transition_preview/
 {% raw %}
 A preview of a transition for the settings.
 
-It is a mock of the home page, with the app's own cards, that switches from the exercises to the lessons once.
+It is a mock of the home page, with the app's own cards, that switches
+from the exercises to the lessons once.
 
 **Examples**
 
@@ -24,9 +25,11 @@ It is a mock of the home page, with the app's own cards, that switches from the 
 def make_sides() -> tuple[list[TileCard], list[TileCard]]
 ```
 
-Make the cards for the two sides of the preview: the app's own exercise cards, and its lesson cards.
+Make the cards for the two sides of the preview: the app's own
+exercise cards, and its lesson cards.
 
-The lessons side has the real lesson, and a few examples that are marked as such, so that a transition has more than one
+The lessons side has the real lesson, and a few examples that are
+marked as such, so that a transition has more than one
 card to move.
 
 **Returns**
@@ -49,7 +52,8 @@ Stage(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-The page of the mock window: it draws the cards that are resting, and the transition plays on a canvas over it.
+The page of the mock window: it draws the cards that are resting,
+and the transition plays on a canvas over it.
 
 **Attributes**
 
@@ -94,7 +98,9 @@ Keep the canvas the size of the stage.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> stage = Stage()
->>> stage.show()  # a hidden widget is only told about its size once it is shown
+>>> # a hidden widget is only told about its size once it is
+>>> # shown
+>>> stage.show()
 >>> stage.resize(300, 200)
 >>> stage.canvas.geometry() == stage.rect()
 True
@@ -129,10 +135,13 @@ TransitionPreview(parent: QWidget | None = None)
 
 Bases: `QFrame`
 
-A mock home page that plays a transition between two sets of the app's cards, once.
+A mock home page that plays a transition between two sets of the
+app's cards, once.
 
-It has a bar with the same Exercises and Lessons switch as the real window. It follows the side that is showing, and pressing
-it plays the transition to the other side, so the learner can try it as often as they like.
+It has a bar with the same Exercises and Lessons switch as the real
+window. It follows the side that is showing, and pressing
+it plays the transition to the other side, so the learner can try it
+as often as they like.
 
 **Attributes**
 
@@ -170,7 +179,8 @@ Build the preview, showing the default transition.
 def show_transition(key: str) -> None
 ```
 
-Show a transition: the exercises appear, and after a moment they change to the lessons, once.
+Show a transition: the exercises appear, and after a moment they
+change to the lessons, once.
 
 **Parameters**
 
@@ -208,9 +218,11 @@ Play the transition that is showing again, from the exercises.
 def go_to(side: int) -> None
 ```
 
-Switch to one side with the transition, as the switch does in the real window.
+Switch to one side with the transition, as the switch does in
+the real window.
 
-A transition that is still playing ends first. Nothing happens if that side is already showing.
+A transition that is still playing ends first. Nothing happens
+if that side is already showing.
 
 **Parameters**
 
@@ -234,7 +246,8 @@ A transition that is still playing ends first. Nothing happens if that side is a
 def resizeEvent(event: QResizeEvent) -> None
 ```
 
-Lay the cards out again for the new size, unless a transition is playing.
+Lay the cards out again for the new size, unless a transition is
+playing.
 
 **Parameters**
 
@@ -245,7 +258,9 @@ Lay the cards out again for the new size, unless a transition is playing.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> preview = TransitionPreview()
 >>> preview.resize(700, 500)
->>> preview.stage.resting[0].rect.width() <= CARD_W
+>>> preview.stage.resting[
+...     0
+... ].rect.width() <= CARD_W
 True
 ```
 {% endraw %}

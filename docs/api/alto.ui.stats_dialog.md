@@ -5,14 +5,18 @@ package: alto.ui
 permalink: /api/alto.ui.stats_dialog/
 ---
 {% raw %}
-The statistics screen: a few numbers and charts about how practice is going.
+The statistics screen: a few numbers and charts about how practice is
+going.
 
-It shows the active profile's own answers, filterable by exercise and by timeframe.
+It shows the active profile's own answers, filterable by exercise and by
+timeframe.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> since_for(None, now=1000.0) is None  # all time: from the start
+>>> since_for(
+...     None, now=1000.0
+... ) is None  # all time: from the start
 True
 >>> format_duration(3600)
 '1 h 00 min'
@@ -46,7 +50,9 @@ Return the timestamp a timeframe starts from.
 259200.0
 >>> since_for(None, now=864000.0) is None
 True
->>> 0 <= 864000.0 - since_for("today", now=864000.0) < 90000  # within a day of now
+>>> 0 <= 864000.0 - since_for(
+...     "today", now=864000.0
+... ) < 90000  # within a day of now
 True
 ```
 
@@ -69,7 +75,11 @@ Write a length of time the way the statistics show it.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> format_duration(5), format_duration(90), format_duration(3000)
+>>> (
+...     format_duration(5),
+...     format_duration(90),
+...     format_duration(3000),
+... )
 ('5 s', '2 min', '50 min')
 >>> format_duration(3 * 3600 + 7 * 60)
 '3 h 07 min'
@@ -85,7 +95,8 @@ def period_title(
 ) -> str
 ```
 
-Name a chart period in words, for the heading of its list of answers.
+Name a chart period in words, for the heading of its list of
+answers.
 
 **Parameters**
 
@@ -99,13 +110,23 @@ Name a chart period in words, for the heading of its list of answers.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> period_title(datetime(2026, 1, 5, 14), granularity="hour")
+>>> period_title(
+...     datetime(2026, 1, 5, 14),
+...     granularity="hour",
+... )
 'Mon 5 Jan 2026, 14:00'
->>> period_title(datetime(2026, 1, 5), granularity="day")
+>>> period_title(
+...     datetime(2026, 1, 5), granularity="day"
+... )
 'Mon 5 Jan 2026'
->>> period_title(datetime(2026, 1, 5), granularity="week")
+>>> period_title(
+...     datetime(2026, 1, 5), granularity="week"
+... )
 'Week of Mon 5 Jan 2026'
->>> period_title(datetime(2026, 1, 1), granularity="month")
+>>> period_title(
+...     datetime(2026, 1, 1),
+...     granularity="month",
+... )
 'January 2026'
 ```
 
@@ -206,8 +227,14 @@ The statistics, as a page of the main window.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
->>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
->>> page.note.text().startswith("No answers recorded for Ada")
+>>> page = StatsPage(
+...     Learner(
+...         db, profile=db.add_profile("Ada")
+...     )
+... )
+>>> page.note.text().startswith(
+...     "No answers recorded for Ada"
+... )
 True
 ```
 
@@ -225,8 +252,13 @@ Build the page and fill it for the current filters.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
->>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
->>> page.timeframe.currentText()  # the last 30 days, until another is chosen
+>>> page = StatsPage(
+...     Learner(
+...         db, profile=db.add_profile("Ada")
+...     )
+... )
+>>> # the last 30 days, until another is chosen
+>>> page.timeframe.currentText()
 'Last 30 days'
 ```
 
@@ -236,16 +268,23 @@ Build the page and fill it for the current filters.
 def refresh() -> None
 ```
 
-Recalculate everything for the chosen exercise and timeframe and show it.
+Recalculate everything for the chosen exercise and timeframe and
+show it.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
->>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
+>>> page = StatsPage(
+...     Learner(
+...         db, profile=db.add_profile("Ada")
+...     )
+... )
 >>> page.refresh()
->>> page.tiles["questions"].value.text()  # nothing answered yet
+>>> page.tiles[
+...     "questions"
+... ].value.text()  # nothing answered yet
 '0'
 ```
 {% endraw %}

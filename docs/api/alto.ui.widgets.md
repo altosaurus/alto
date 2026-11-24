@@ -5,7 +5,8 @@ package: alto.ui
 permalink: /api/alto.ui.widgets/
 ---
 {% raw %}
-Small widgets shared by several screens: the sidebar toggle, the help button and a segmented control.
+Small widgets shared by several screens: the sidebar toggle, the help
+button and a segmented control.
 
 **Examples**
 
@@ -14,19 +15,73 @@ Small widgets shared by several screens: the sidebar toggle, the help button and
 'Hide exercise list'
 ```
 
+## vertical_scroll_area
+
+```python
+def vertical_scroll_area(body: QWidget) -> QScrollArea
+```
+
+Put a resizable widget in a frameless vertical scroll area.
+
+**Parameters**
+
+- `body` (*QWidget*): Contents of the viewport.
+
+**Returns**
+
+- *QScrollArea*: The scroll area containing the body.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> body = QWidget()
+>>> scroll = vertical_scroll_area(body)
+>>> scroll.widget() is body
+True
+```
+
+## busy_progress_bar
+
+```python
+def busy_progress_bar() -> QProgressBar
+```
+
+Create the indeterminate progress indicator used during updates.
+
+**Returns**
+
+- *QProgressBar*: A progress bar with no percentage label.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> bar = busy_progress_bar()
+>>> (
+...     bar.minimum(),
+...     bar.maximum(),
+...     bar.isTextVisible(),
+... )
+(0, 0, False)
+```
+
 ## PracticeCounts
 
 ```python
 class PracticeCounts(QLabel)
 ```
 
-Colored counts for calendar practice on tiles and in the exercise screen.
+Colored counts for calendar practice on tiles and in the exercise
+screen.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> label = PracticeCounts()
->>> label.set_counts((2, 3, 1), studying=True, current="incorrect")
+>>> label.set_counts(
+...     (2, 3, 1),
+...     studying=True,
+...     current="incorrect",
+... )
 >>> "1 incorrect card" in label.toolTip()
 True
 ```
@@ -43,7 +98,8 @@ def set_counts(
 ) -> None
 ```
 
-Show the counts in blue, red, green order and underline the active queue.
+Show the counts in blue, red, green order and underline the
+active queue.
 
 **Parameters**
 
@@ -57,7 +113,9 @@ Show the counts in blue, red, green order and underline the active queue.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> label = PracticeCounts()
 >>> label.set_counts((1, 2, 0))
->>> label.toolTip().startswith("Blue — 2 new cards available")
+>>> label.toolTip().startswith(
+...     "Blue — 2 new cards available"
+... )
 True
 ```
 
@@ -75,7 +133,8 @@ Bases: `QToolButton`
 
 A button that shows or hides the exercise list.
 
-Connect to `clicked`; the main window decides what to show and calls `set_open` to match.
+Connect to `clicked`; the main window decides what to show and calls
+`set_open` to match.
 
 **Examples**
 
@@ -146,7 +205,9 @@ Click anywhere else to close it.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> HelpButton(lambda: "<b>Press the right note.</b>").toolTip()
+>>> HelpButton(
+...     lambda: "<b>Press the right note.</b>"
+... ).toolTip()
 'How this exercise works'
 ```
 
@@ -163,8 +224,11 @@ Create the button.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> calls = []
->>> button = HelpButton(lambda: calls.append(1) or "help")
->>> calls  # the text is not asked for until the button is clicked
+>>> button = HelpButton(
+...     lambda: calls.append(1) or "help"
+... )
+>>> # the text is not asked for until the button is clicked
+>>> calls
 []
 ```
 
@@ -179,7 +243,9 @@ Open the popover under the button, right-aligned with it.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> HelpButton(lambda: "<b>Help</b>").show_help()  # doctest: +SKIP
+>>> HelpButton(
+...     lambda: "<b>Help</b>"
+... ).show_help()  # doctest: +SKIP
 ```
 
 ## SegmentedControl
@@ -195,7 +261,8 @@ SegmentedControl(
 
 Bases: `QFrame`
 
-A pill-shaped row of choices of which exactly one is chosen, like the switch between two views.
+A pill-shaped row of choices of which exactly one is chosen, like
+the switch between two views.
 
 **Attributes**
 
@@ -205,11 +272,16 @@ A pill-shaped row of choices of which exactly one is chosen, like the switch bet
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> control = SegmentedControl(["Exercises", "Lessons"])
+>>> control = SegmentedControl(
+...     ["Exercises", "Lessons"]
+... )
 >>> control.current()
 0
 >>> control.set_current(1)
->>> control.current(), control.buttons[1].isChecked()
+>>> (
+...     control.current(),
+...     control.buttons[1].isChecked(),
+... )
 (1, True)
 ```
 
@@ -226,9 +298,15 @@ Build the control with the first choice chosen.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> len(SegmentedControl(["A", "B", "C"]).buttons)
+>>> len(
+...     SegmentedControl(
+...         ["A", "B", "C"]
+...     ).buttons
+... )
 3
->>> SegmentedControl(["A"], icons=[HELP]).buttons[0].icon().isNull()
+>>> SegmentedControl(
+...     ["A"], icons=[HELP]
+... ).buttons[0].icon().isNull()
 False
 ```
 
@@ -249,9 +327,15 @@ The text is still the tooltip and the name a screen reader says.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> control = SegmentedControl(["Exercises", "Lessons"], icons=[HELP, HELP])
+>>> control = SegmentedControl(
+...     ["Exercises", "Lessons"],
+...     icons=[HELP, HELP],
+... )
 >>> control.set_compact(True)
->>> control.buttons[0].text(), control.buttons[0].toolTip()
+>>> (
+...     control.buttons[0].text(),
+...     control.buttons[0].toolTip(),
+... )
 ('', 'Exercises')
 >>> control.set_compact(False)
 >>> control.buttons[0].text()
@@ -304,15 +388,19 @@ Choose one, without announcing it.
 def restyle() -> None
 ```
 
-Style the control from the palette now in use: a rounded track with the chosen choice raised and tinted.
+Style the control from the palette now in use: a rounded track
+with the chosen choice raised and tinted.
 
-A change of theme rebuilds the main window, so the control there is drawn afresh in the new colors. One that stays, as in
+A change of theme rebuilds the main window, so the control there
+is drawn afresh in the new colors. One that stays, as in
 the settings, is restyled by calling this.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> "segments" in SegmentedControl(["A", "B"]).styleSheet()
+>>> "segments" in SegmentedControl(
+...     ["A", "B"]
+... ).styleSheet()
 True
 ```
 {% endraw %}

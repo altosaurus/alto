@@ -5,17 +5,22 @@ package: alto.ui
 permalink: /api/alto.ui.circle/
 ---
 {% raw %}
-The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside.
+The circle of fifths: twelve wedges, the major keys on the outside and
+their relative minors on the inside.
 
-C is at the top and each step clockwise is a fifth up, so the keys gather sharps on the right and flats on the left. The
-disc in the middle shows the staff and key signature of the key being talked about. In an exercise one wedge is the question
+C is at the top and each step clockwise is a fifth up, so the keys
+gather sharps on the right and flats on the left. The
+disc in the middle shows the staff and key signature of the key being
+talked about. In an exercise one wedge is the question
 and its name (or its Roman numeral) is blank until the answer is right.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
->>> circle.show_question("major", place=3, title="F♯ minor")
+>>> circle.show_question(
+...     "major", place=3, title="F♯ minor"
+... )
 >>> circle.target
 ('outer', 3)
 ```
@@ -48,8 +53,16 @@ Return the outline of one wedge of a ring.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> shape = wedge_path(center=QPointF(100, 100), inner=40, outer=90, index=0)
->>> shape.contains(QPointF(100, 30)), shape.contains(QPointF(100, 170))  # the top of the circle, and the bottom
+>>> shape = wedge_path(
+...     center=QPointF(100, 100),
+...     inner=40,
+...     outer=90,
+...     index=0,
+... )
+>>> (
+...     shape.contains(QPointF(100, 30)),
+...     shape.contains(QPointF(100, 170)),
+... )  # the top of the circle, and the bottom
 (True, False)
 ```
 
@@ -64,7 +77,8 @@ def wedge_middle(
 ) -> QPointF
 ```
 
-Return the point in the middle of a wedge, at a given distance from the center.
+Return the point in the middle of a wedge, at a given distance from
+the center.
 
 **Parameters**
 
@@ -79,9 +93,19 @@ Return the point in the middle of a wedge, at a given distance from the center.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> wedge_middle(center=QPointF(100, 100), radius=50, index=0).toTuple()  # straight up
+>>> wedge_middle(
+...     center=QPointF(100, 100),
+...     radius=50,
+...     index=0,
+... ).toTuple()  # straight up
 (100.0, 50.0)
->>> round(wedge_middle(center=QPointF(100, 100), radius=50, index=3).x())  # a quarter of the way around: to the right
+>>> round(
+...     wedge_middle(
+...         center=QPointF(100, 100),
+...         radius=50,
+...         index=3,
+...     ).x()
+... )  # a quarter of the way around: to the right
 150
 ```
 
@@ -97,7 +121,8 @@ def wedge_color(
 ) -> QColor
 ```
 
-Return the color of a wedge in a color scheme: quiet when it is not being talked about and bright when it is.
+Return the color of a wedge in a color scheme: quiet when it is not
+being talked about and bright when it is.
 
 **Parameters**
 
@@ -115,14 +140,46 @@ Return the color of a wedge in a color scheme: quiet when it is not being talked
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
 >>> spectrum = preset("spectrum")
->>> wedge_color(0, inner=False, lift=1.0, scheme=spectrum).hue(), wedge_color(6, inner=False, scheme=spectrum).hue()
+>>> (
+...     wedge_color(
+...         0,
+...         inner=False,
+...         lift=1.0,
+...         scheme=spectrum,
+...     ).hue(),
+...     wedge_color(
+...         6, inner=False, scheme=spectrum
+...     ).hue(),
+... )
 (0, 180)
->>> lit, quiet = (wedge_color(0, inner=False, lift=amount, scheme=spectrum) for amount in (1.0, 0.0))
+>>> lit, quiet = (
+...     wedge_color(
+...         0,
+...         inner=False,
+...         lift=amount,
+...         scheme=spectrum,
+...     )
+...     for amount in (1.0, 0.0)
+... )
 >>> lit.lightness() > quiet.lightness()
 True
 >>> # no wedge looks too bright for white names
->>> every = [wedge_color(i, inner=False, lift=1.0, scheme=spectrum) for i in range(12)]
->>> all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() <= 0.44 for c in every)
+>>> every = [
+...     wedge_color(
+...         i,
+...         inner=False,
+...         lift=1.0,
+...         scheme=spectrum,
+...     )
+...     for i in range(12)
+... ]
+>>> all(
+...     0.299 * c.redF()
+...     + 0.587 * c.greenF()
+...     + 0.114 * c.blueF()
+...     <= 0.44
+...     for c in every
+... )
 True
 ```
 
@@ -141,10 +198,13 @@ def write_text(
 ) -> None
 ```
 
-Write a line of text centered on a point, with its sharps and flats drawn as the notation font draws them.
+Write a line of text centered on a point, with its sharps and flats
+drawn as the notation font draws them.
 
-The letters are in the app's own font. Its ♭ is the shape of a small "b", though, and does not look like a flat sign, so
-the sharps, flats and naturals are the glyphs of the notation style that the staff is drawn in, sized to the letters.
+The letters are in the app's own font. Its ♭ is the shape of a small
+"b", though, and does not look like a flat sign, so
+the sharps, flats and naturals are the glyphs of the notation style
+that the staff is drawn in, sized to the letters.
 
 **Parameters**
 
@@ -160,13 +220,26 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
->>> image = QImage(120, 60, QImage.Format.Format_ARGB32)
+>>> image = QImage(
+...     120, 60, QImage.Format.Format_ARGB32
+... )
 >>> image.fill(QColor("black"))
 >>> painter = QPainter(image)
->>> write_text(painter, center=QPointF(60, 30), text="B♭m", pixels=24, weight=QFont.Weight.Bold, color=QColor("white"))
+>>> write_text(
+...     painter,
+...     center=QPointF(60, 30),
+...     text="B♭m",
+...     pixels=24,
+...     weight=QFont.Weight.Bold,
+...     color=QColor("white"),
+... )
 >>> painter.end()
 True
->>> any(image.pixelColor(x, 30).lightness() > 128 for x in range(20, 100))
+>>> any(
+...     image.pixelColor(x, 30).lightness()
+...     > 128
+...     for x in range(20, 100)
+... )
 True
 ```
 
@@ -195,7 +268,9 @@ The circle of fifths, drawn for an exercise.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
->>> circle.show_question("major", place=0, title="A minor")
+>>> circle.show_question(
+...     "major", place=0, title="A minor"
+... )
 >>> circle.reveal(animate=False)
 >>> circle.shown["outer"], circle.signature
 ({0}, 0)
@@ -235,6 +310,24 @@ Return the size it would like: a square, big enough to read.
 460
 ```
 
+### FifthsCircle.set_question
+
+```python
+def set_question(question: Question) -> None
+```
+
+Display a circle question using its caption and selected cell.
+
+**Parameters**
+
+- `question` (*Question*): The exercise question to display.
+
+**Examples**
+
+```text
+A numeral question highlights the selected chord's key.
+```
+
 ### FifthsCircle.show_question
 
 ```python
@@ -248,10 +341,13 @@ def show_question(
 ) -> None
 ```
 
-Ask about a cell, showing what the question needs and leaving the answer blank.
+Ask about a cell, showing what the question needs and leaving
+the answer blank.
 
-A "major" question shows the minor keys and asks for the major of one of them; a "minor" question shows the majors and
-asks for a minor; a "numeral" question shows every name, lights the six chords of a key with its staff in the middle, and
+A "major" question shows the minor keys and asks for the major
+of one of them; a "minor" question shows the majors and
+asks for a minor; a "numeral" question shows every name, lights
+the six chords of a key with its staff in the middle, and
 asks for the Roman numeral of one of them.
 
 **Parameters**
@@ -266,11 +362,28 @@ asks for the Roman numeral of one of them.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
->>> circle.show_question("minor", place=3, title="A major")
->>> circle.target, circle.shown["outer"] == set(range(12)), circle.shown["inner"], circle.signature
+>>> circle.show_question(
+...     "minor", place=3, title="A major"
+... )
+>>> (
+...     circle.target,
+...     circle.shown["outer"] == set(range(12)),
+...     circle.shown["inner"],
+...     circle.signature,
+... )
 (('inner', 3), True, set(), None)
->>> circle.show_question("numeral", place=11, ring="outer", key=0, title="C major")
->>> sorted(circle.lit), circle.signature, circle.numerals
+>>> circle.show_question(
+...     "numeral",
+...     place=11,
+...     ring="outer",
+...     key=0,
+...     title="C major",
+... )
+>>> (
+...     sorted(circle.lit),
+...     circle.signature,
+...     circle.numerals,
+... )
 ([0, 1, 11], 0, {})
 ```
 
@@ -280,15 +393,22 @@ asks for the Roman numeral of one of them.
 def reset() -> None
 ```
 
-Clear everything: no question, no names shown, no animation running.
+Clear everything: no question, no names shown, no animation
+running.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
->>> circle.show_question("major", place=2, title="B minor")
+>>> circle.show_question(
+...     "major", place=2, title="B minor"
+... )
 >>> circle.reset()
->>> circle.target is None and circle.title == "" and circle.lit == set()
+>>> (
+...     circle.target is None
+...     and circle.title == ""
+...     and circle.lit == set()
+... )
 True
 ```
 
@@ -301,9 +421,11 @@ def reveal(
 ) -> None
 ```
 
-Show the answer: the key's name in its cell, brightened, and its staff and key signature in the middle.
+Show the answer: the key's name in its cell, brightened, and its
+staff and key signature in the middle.
 
-For a Roman numeral question every chord of the key shows its numeral, as the circle in the reference does.
+For a Roman numeral question every chord of the key shows its
+numeral, as the circle in the reference does.
 
 **Parameters**
 
@@ -313,9 +435,18 @@ For a Roman numeral question every chord of the key shows its numeral, as the ci
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
->>> circle.show_question("minor", place=5, title="B major / C♭ major")
+>>> circle.show_question(
+...     "minor",
+...     place=5,
+...     title="B major / C♭ major",
+... )
 >>> circle.reveal(animate=False)
->>> circle.shown["inner"], circle.title, circle.subtitle, circle.signature
+>>> (
+...     circle.shown["inner"],
+...     circle.title,
+...     circle.subtitle,
+...     circle.signature,
+... )
 ({5}, 'G♯ minor', '5 sharps', 5)
 ```
 
@@ -325,7 +456,8 @@ For a Roman numeral question every chord of the key shows its numeral, as the ci
 def set_subtitle(text: str) -> None
 ```
 
-Change the small text in the middle, for example to say that a second answer is wanted.
+Change the small text in the middle, for example to say that a
+second answer is wanted.
 
 **Parameters**
 
@@ -346,13 +478,16 @@ Change the small text in the middle, for example to say that a second answer is 
 def flash_wrong() -> None
 ```
 
-Flash the cell asked about in the red of a wrong answer, striped as well so that it still shows on the red wedge.
+Flash the cell asked about in the red of a wrong answer, striped
+as well so that it still shows on the red wedge.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
->>> circle.show_question("major", place=0, title="A minor")
+>>> circle.show_question(
+...     "major", place=0, title="A minor"
+... )
 >>> circle.flash_wrong()
 >>> circle._warning is not None
 True
@@ -368,10 +503,13 @@ def lift_of(
 ) -> float
 ```
 
-Return how bright a cell is drawn, from 0 (quiet) to 1 (fully lit).
+Return how bright a cell is drawn, from 0 (quiet) to 1 (fully
+lit).
 
-The cell asked about is half lit, and brightens when it is answered. The cell beside it on the other ring is a little
-lit, to show the pair; in a Roman numeral question the six chords of the key are lit instead.
+The cell asked about is half lit, and brightens when it is
+answered. The cell beside it on the other ring is a little
+lit, to show the pair; in a Roman numeral question the six
+chords of the key are lit instead.
 
 **Parameters**
 
@@ -386,8 +524,14 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
->>> circle.show_question("major", place=0, title="A minor")
->>> circle.lift_of("outer", place=0), circle.lift_of("inner", place=0), circle.lift_of("outer", place=5)
+>>> circle.show_question(
+...     "major", place=0, title="A minor"
+... )
+>>> (
+...     circle.lift_of("outer", place=0),
+...     circle.lift_of("inner", place=0),
+...     circle.lift_of("outer", place=5),
+... )
 (0.5, 0.3, 0.0)
 >>> circle.reveal(animate=False)
 >>> circle.lift_of("outer", place=0)
@@ -402,7 +546,8 @@ def geometry_of() -> tuple[QPointF, float]
 
 Return where the circle is drawn: its middle and its radius.
 
-The circle fits the widget as a square in the middle of it, but no larger than `MAX_RADIUS`.
+The circle fits the widget as a square in the middle of it, but
+no larger than `MAX_RADIUS`.
 
 **Returns**
 
@@ -427,7 +572,8 @@ True
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the two rings, the names, the question and the disc in the middle.
+Draw the two rings, the names, the question and the disc in the
+middle.
 
 **Parameters**
 
@@ -438,8 +584,32 @@ Draw the two rings, the names, the question and the disc in the middle.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.resize(400, 400)
->>> circle.show_question("major", place=0, title="A minor")
+>>> circle.show_question(
+...     "major", place=0, title="A minor"
+... )
 >>> circle.grab().isNull()
 False
+```
+
+## question_circle
+
+```python
+def question_circle(question: Question) -> FifthsCircle
+```
+
+Build a fixed-size circle for a question preview or export.
+
+**Parameters**
+
+- `question` (*Question*): The exercise question to display.
+
+**Returns**
+
+- *FifthsCircle*: A circle showing the question before revealing its answer.
+
+**Examples**
+
+```text
+The Anki export reveals the answer after saving the front image.
 ```
 {% endraw %}

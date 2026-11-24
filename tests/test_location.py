@@ -1,5 +1,6 @@
 """
-Tests for where Alto keeps its history and settings, and for `ALTO_HOME` moving them.
+Tests for where Alto keeps its history and settings, and for `ALTO_HOME`
+moving them.
 """
 
 from __future__ import annotations
@@ -26,7 +27,8 @@ if TYPE_CHECKING:
 @pytest.fixture
 def home(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Path]:
     """
-    Set `ALTO_HOME` to a new folder for one test, and put the settings folder back afterwards.
+    Set `ALTO_HOME` to a new folder for one test, and put the settings
+    folder back afterwards.
 
     Parameters
     ----------
@@ -42,12 +44,19 @@ def home(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Path]:
     """
     monkeypatch.setenv("ALTO_HOME", str(tmp_path / "dev"))
     yield tmp_path / "dev"
-    QSettings.setPath(QSettings.Format.IniFormat, QSettings.Scope.UserScope, os.environ["XDG_CONFIG_HOME"])
+    QSettings.setPath(
+        QSettings.Format.IniFormat,
+        QSettings.Scope.UserScope,
+        os.environ["XDG_CONFIG_HOME"],
+    )
 
 
-def test_without_alto_home_everything_is_in_the_usual_places(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_without_alto_home_everything_is_in_the_usual_places(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that with no `ALTO_HOME` there is no folder of its own and the database is the system's `alto.db`.
+    Check that with no `ALTO_HOME` there is no folder of its own and the
+    database is the system's `alto.db`.
 
     Parameters
     ----------
@@ -61,7 +70,8 @@ def test_without_alto_home_everything_is_in_the_usual_places(monkeypatch: pytest
 
 def test_alto_home_holds_the_database_and_the_settings(home: Path) -> None:
     """
-    Check that `ALTO_HOME` gives a `data` folder for the database and a `config` folder for the settings.
+    Check that `ALTO_HOME` gives a `data` folder for the database and a
+    `config` folder for the settings.
 
     Parameters
     ----------
@@ -73,7 +83,9 @@ def test_alto_home_holds_the_database_and_the_settings(home: Path) -> None:
     assert settings_folder() == home / "config"
 
 
-def test_a_home_with_a_tilde_is_expanded(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_home_with_a_tilde_is_expanded(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that `~` in `ALTO_HOME` means the user's home folder.
 
@@ -86,9 +98,12 @@ def test_a_home_with_a_tilde_is_expanded(monkeypatch: pytest.MonkeyPatch) -> Non
     assert alto_home() == Path.home() / "alto-dev"
 
 
-def test_settings_saved_with_alto_home_go_there_and_not_to_the_usual_place(home: Path) -> None:
+def test_settings_saved_with_alto_home_go_there_and_not_to_the_usual_place(
+    home: Path,
+) -> None:
     """
-    Check that a setting saved while `ALTO_HOME` is set lands in its folder, and that the usual settings do not see it.
+    Check that a setting saved while `ALTO_HOME` is set lands in its
+    folder, and that the usual settings do not see it.
 
     Parameters
     ----------
@@ -98,13 +113,19 @@ def test_settings_saved_with_alto_home_go_there_and_not_to_the_usual_place(home:
     settings = store()
     settings.setValue("demo/where", "dev")
     settings.sync()
-    assert Path(settings.fileName()).is_relative_to(home / "config") and Path(settings.fileName()).is_file()
+    assert (
+        Path(settings.fileName()).is_relative_to(home / "config")
+        and Path(settings.fileName()).is_file()
+    )
     assert QSettings("alto", "alto").value("demo/where") is None
 
 
-def test_a_copy_kept_apart_has_its_own_name_for_the_desktop(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_copy_kept_apart_has_its_own_name_for_the_desktop(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
-    Check that the desktop name, which decides the icon and the grouping in the dock, differs when `ALTO_HOME` is set.
+    Check that the desktop name, which decides the icon and the grouping
+    in the dock, differs when `ALTO_HOME` is set.
 
     Parameters
     ----------

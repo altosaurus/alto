@@ -5,11 +5,15 @@ package: alto.ui
 permalink: /api/alto.ui.settings_menu/
 ---
 {% raw %}
-The building blocks of the settings panels that slide in beside an exercise.
+The building blocks of the settings panels that slide in beside an
+exercise.
 
-A panel is a menu of rows (Clefs, Range, Key signatures ...) that each lead to a page, in a `SlideStack`. This module has the
-rows, switches, checklists and editors those pages are made of, and the panels' shared base classes: `ExerciseSettingsPanel`
-(navigation and saving), `ClefsPanel` (a Clefs page) and `StaffRangePanel` (a Range page per clef). The panels themselves are
+A panel is a menu of rows (Clefs, Range, Key signatures ...) that each
+lead to a page, in a `SlideStack`. This module has the
+rows, switches, checklists and editors those pages are made of, and the
+panels' shared base classes: `ExerciseSettingsPanel`
+(navigation and saving), `ClefsPanel` (a Clefs page) and
+`StaffRangePanel` (a Range page per clef). The panels themselves are
 in `alto.ui.settings_panel` and `alto.ui.pack_settings_panel`.
 
 **Examples**
@@ -32,7 +36,8 @@ def guard_last(
 ) -> None
 ```
 
-Disable the only checked box, so that at least one choice always stays selected.
+Disable the only checked box, so that at least one choice always
+stays selected.
 
 **Parameters**
 
@@ -77,7 +82,10 @@ Make a small arrow button that repeats while it is held.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> button = arrow_button(Qt.ArrowType.UpArrow, tip="Raise the lowest note")
+>>> button = arrow_button(
+...     Qt.ArrowType.UpArrow,
+...     tip="Raise the lowest note",
+... )
 >>> button.toolTip(), button.autoRepeat()
 ('Raise the lowest note', True)
 ```
@@ -99,7 +107,8 @@ Bases: `QWidget`
 
 A staff showing the lowest and highest note asked for a clef.
 
-Arrows on the left move the lower bound, arrows on the right move the upper bound.
+Arrows on the left move the lower bound, arrows on the right move
+the upper bound.
 
 **Attributes**
 
@@ -113,7 +122,9 @@ Arrows on the left move the lower bound, arrows on the right move the upper boun
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> editor = RangeEditor("treble", low=28, high=34)
+>>> editor = RangeEditor(
+...     "treble", low=28, high=34
+... )
 >>> editor.caption_text.text()
 '<b>C4 – B4</b>'
 ```
@@ -133,9 +144,13 @@ Build the editor for a clef's range.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
+>>> RangeEditor(
+...     "bass", low=14, high=28
+... ).limits == settings.RANGE_LIMITS["bass"]
 True
->>> RangeEditor("alto", low=21, high=30, limits=(21, 30)).limits
+>>> RangeEditor(
+...     "alto", low=21, high=30, limits=(21, 30)
+... ).limits
 (21, 30)
 ```
 
@@ -153,7 +168,8 @@ Bases: `QWidget`
 
 A small fork showing which key signatures are selected.
 
-C major is on the left, then two rows of seven dots: 1 to 7 sharps on the top row and 1 to 7 flats on the bottom.
+C major is on the left, then two rows of seven dots: 1 to 7 sharps
+on the top row and 1 to 7 flats on the bottom.
 Selected keys are filled, the rest are hollow.
 
 **Attributes**
@@ -249,7 +265,11 @@ The name stays as the tooltip and the accessible name.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> box = QCheckBox()
->>> label_with_picture(box, picture=ClefPictures(["treble"]), name="Treble")
+>>> label_with_picture(
+...     box,
+...     picture=ClefPictures(["treble"]),
+...     name="Treble",
+... )
 >>> box.toolTip(), box.accessibleName()
 ('Treble', 'Treble')
 ```
@@ -268,7 +288,8 @@ def clef_choice_page(
 ) -> tuple[dict[str, QCheckBox], QWidget]
 ```
 
-Build the "Clefs" page that every exercise with a choice of clefs shares.
+Build the "Clefs" page that every exercise with a choice of clefs
+shares.
 
 **Parameters**
 
@@ -294,10 +315,19 @@ Build the "Clefs" page that every exercise with a choice of clefs shares.
 ...     edited=lambda: checked.append(1),
 ...     back=lambda: None,
 ... )
->>> boxes_["bass"].isEnabled()  # it is the only one checked, so it stays checked
+>>> boxes_[
+...     "bass"
+... ].isEnabled()  # it is the only one checked, so it stays checked
 False
 >>> boxes_["treble"].setChecked(True)
->>> sorted(c for c, ticked_box in boxes_.items() if ticked_box.isChecked()), checked
+>>> (
+...     sorted(
+...         c
+...         for c, ticked_box in boxes_.items()
+...         if ticked_box.isChecked()
+...     ),
+...     checked,
+... )
 (['bass', 'treble'], [1])
 ```
 
@@ -313,7 +343,8 @@ def show_keys(
 ) -> None
 ```
 
-Show the selected keys as a diagram in a menu row, or "Off" when key signatures are switched off.
+Show the selected keys as a diagram in a menu row, or "Off" when key
+signatures are switched off.
 
 **Parameters**
 
@@ -325,8 +356,16 @@ Show the selected keys as a diagram in a menu row, or "Off" when key signatures 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> row_, diagram_ = MenuRow("Key signatures"), KeyDiagram()
->>> show_keys(row_, diagram=diagram_, enabled=False, keys={0})
+>>> row_, diagram_ = (
+...     MenuRow("Key signatures"),
+...     KeyDiagram(),
+... )
+>>> show_keys(
+...     row_,
+...     diagram=diagram_,
+...     enabled=False,
+...     keys={0},
+... )
 >>> row_.value.text(), diagram_.isHidden()
 ('Off', True)
 ```
@@ -344,9 +383,11 @@ MenuRow(
 
 Bases: `QPushButton`
 
-A menu row: title on the left, current value and a chevron on the right.
+A menu row: title on the left, current value and a chevron on the
+right.
 
-A `tall` row puts a picture on a second line of its own, using the full width, for summaries that need room to be
+A `tall` row puts a picture on a second line of its own, using the
+full width, for summaries that need room to be
 readable.
 
 **Attributes**
@@ -388,7 +429,8 @@ def attach(widget: QWidget) -> None
 
 Put a widget in the row.
 
-Just after the value text, or (in a tall row) centered on its own line below.
+Just after the value text, or (in a tall row) centered on its
+own line below.
 
 **Parameters**
 
@@ -468,7 +510,8 @@ False
 def setChecked(on: bool) -> None
 ```
 
-Turn the switch on or off without animating, as when a setting is loaded.
+Turn the switch on or off without animating, as when a setting
+is loaded.
 
 **Parameters**
 
@@ -529,7 +572,8 @@ ToggleRow(title: str)
 
 Bases: `MenuRow`
 
-A menu row with a switch that changes a setting in place instead of opening a page.
+A menu row with a switch that changes a setting in place instead of
+opening a page.
 
 **Attributes**
 
@@ -587,7 +631,8 @@ False
 def setOn(on: bool) -> None
 ```
 
-Set the switch without announcing it, as when a setting is loaded.
+Set the switch without announcing it, as when a setting is
+loaded.
 
 **Parameters**
 
@@ -631,8 +676,16 @@ Build a second-layer page: a Back button and title above a body.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> calls = []
->>> page_ = subpage("Clefs", body=QWidget(), back=lambda: calls.append("back"))
->>> next(b for b in page_.findChildren(QToolButton) if b.text() == "‹ Back").click()
+>>> page_ = subpage(
+...     "Clefs",
+...     body=QWidget(),
+...     back=lambda: calls.append("back"),
+... )
+>>> next(
+...     b
+...     for b in page_.findChildren(QToolButton)
+...     if b.text() == "‹ Back"
+... ).click()
 >>> calls
 ['back']
 ```
@@ -645,7 +698,8 @@ SlideStack(parent: QWidget | None = None)
 
 Bases: `QStackedWidget`
 
-A stacked widget whose pages slide in from the right (going deeper) or the left (going back).
+A stacked widget whose pages slide in from the right (going deeper)
+or the left (going back).
 
 **Examples**
 
@@ -700,7 +754,8 @@ def slide_to(index: int) -> None
 
 Slide to another page.
 
-Going to a later page slides it in from the right and going back slides it in from the left. A request made during a
+Going to a later page slides it in from the right and going back
+slides it in from the left. A request made during a
 slide, or for the page already showing, is ignored.
 
 **Parameters**
@@ -724,7 +779,8 @@ True
 class ExerciseSettingsPanel(QWidget)
 ```
 
-What every exercise's settings pane has in common: it says when a setting has been edited.
+What every exercise's settings pane has in common: it says when a
+setting has been edited.
 
 **Attributes**
 
@@ -736,7 +792,9 @@ What every exercise's settings pane has in common: it says when a setting has be
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ExerciseSettingsPanel()
 >>> got = []
->>> _ = panel.changed.connect(lambda: got.append(1))
+>>> _ = panel.changed.connect(
+...     lambda: got.append(1)
+... )
 >>> panel.changed.emit()
 True
 >>> got
@@ -766,13 +824,29 @@ Update scheduling controls for the active scheduler and profile.
 Switching to ASRS hides the row and leaves its submenu.
 ```
 
+## KeyboardRangePanel
+
+```python
+class KeyboardRangePanel(ExerciseSettingsPanel)
+```
+
+Settings for selecting a practice range on a keyboard.
+
+**Examples**
+
+```text
+Keyboard note identification allows the lowest and highest keys to
+coincide.
+```
+
 ## ClefsPanel
 
 ```python
 class ClefsPanel(ExerciseSettingsPanel)
 ```
 
-A settings pane with a Clefs page, whose checkboxes choose the clefs that are asked about.
+A settings pane with a Clefs page, whose checkboxes choose the clefs
+that are asked about.
 
 **Attributes**
 
@@ -783,8 +857,15 @@ A settings pane with a Clefs page, whose checkboxes choose the clefs that are as
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.ui.settings_panel import ClefBasicsSettingsPanel
->>> isinstance(ClefBasicsSettingsPanel(settings.ClefBasicsSettings()), ClefsPanel)
+>>> from alto.ui.settings_panel import (
+...     ClefBasicsSettingsPanel,
+... )
+>>> isinstance(
+...     ClefBasicsSettingsPanel(
+...         settings.ClefBasicsSettings()
+...     ),
+...     ClefsPanel,
+... )
 True
 ```
 
@@ -802,6 +883,21 @@ Shared navigation and per-clef pitch range editors.
 Note and interval identification both open Range on page two.
 ```
 
+## NoteAnswerSettingsPanel
+
+```python
+class NoteAnswerSettingsPanel(StaffRangePanel)
+```
+
+Staff range settings for note names and optional octaves.
+
+**Examples**
+
+```text
+A plugin and the built-in note identification exercise can both
+require the octave in an answer.
+```
+
 ## KeyChecklist
 
 ```python
@@ -817,9 +913,11 @@ KeyChecklist(
 
 Bases: `QWidget`
 
-Checkboxes for the 15 major keys, flats on the left and sharps on the right.
+Checkboxes for the 15 major keys, flats on the left and sharps on
+the right.
 
-At least one stays checked. Each is labeled with a picture of its signature.
+At least one stays checked. Each is labeled with a picture of its
+signature.
 
 **Attributes**
 
@@ -886,7 +984,8 @@ KeySignaturePage(
 
 Bases: `QWidget`
 
-The key signature sub-page: a switch for using key signatures at all, and the keys to draw from.
+The key signature sub-page: a switch for using key signatures at
+all, and the keys to draw from.
 
 **Attributes**
 
@@ -897,7 +996,9 @@ The key signature sub-page: a switch for using key signatures at all, and the ke
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> page = KeySignaturePage(True, selected={0, 1})
+>>> page = KeySignaturePage(
+...     True, selected={0, 1}
+... )
 >>> page.enabled(), page.selected() == {0, 1}
 (True, True)
 ```
@@ -937,7 +1038,9 @@ Report whether key signatures are switched on.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> KeySignaturePage(True, selected={0}).enabled()
+>>> KeySignaturePage(
+...     True, selected={0}
+... ).enabled()
 True
 ```
 
@@ -956,7 +1059,9 @@ Return the checked key signatures.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> KeySignaturePage(True, selected={-2, 0}).selected() == {-2, 0}
+>>> KeySignaturePage(
+...     True, selected={-2, 0}
+... ).selected() == {-2, 0}
 True
 ```
 
@@ -977,7 +1082,9 @@ Select major and minor keys independently.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ScaleKeyPicker(major_keys={0}, minor_keys={-2}).count()
+>>> ScaleKeyPicker(
+...     major_keys={0}, minor_keys={-2}
+... ).count()
 2
 ```
 
@@ -993,7 +1100,9 @@ Build one checklist per mode.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ScaleKeyPicker(major_keys=set(), minor_keys={0}).currentIndex()
+>>> ScaleKeyPicker(
+...     major_keys=set(), minor_keys={0}
+... ).currentIndex()
 1
 ```
 
@@ -1012,7 +1121,8 @@ ChoiceChecklist(
 
 Bases: `QWidget`
 
-Checkboxes for a list of choices, optionally under headings and allowing an empty selection.
+Checkboxes for a list of choices, optionally under headings and
+allowing an empty selection.
 
 **Attributes**
 
@@ -1023,8 +1133,19 @@ Checkboxes for a list of choices, optionally under headings and allowing an empt
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> groups = [("Triads", [("major", "Major"), ("minor", "Minor")]), ("", [("x", "Other")])]
->>> checklist = ChoiceChecklist(groups, selected={"major"})
+>>> groups = [
+...     (
+...         "Triads",
+...         [
+...             ("major", "Major"),
+...             ("minor", "Minor"),
+...         ],
+...     ),
+...     ("", [("x", "Other")]),
+... ]
+>>> checklist = ChoiceChecklist(
+...     groups, selected={"major"}
+... )
 >>> checklist.selected()
 {'major'}
 ```
@@ -1044,7 +1165,10 @@ Build the checklist.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
+>>> checklist = ChoiceChecklist(
+...     [("", [(0, "Root"), (1, "1st")])],
+...     selected={0},
+... )
 >>> # noinspection PyTypeChecker
 >>> sorted(checklist.boxes)
 [0, 1]
@@ -1065,7 +1189,10 @@ Return the checked choices.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
+>>> ChoiceChecklist(
+...     [("", [(0, "Root"), (1, "1st")])],
+...     selected={0, 1},
+... ).selected()
 {0, 1}
 ```
 
@@ -1084,7 +1211,7 @@ Build the shared Limited and All answer-button submenu.
 
 **Parameters**
 
-- `cfg` (*ButtonSettings or IntervalSettings or ScaleIdentificationSettings*): The exercise that owns the button mode and count.
+- `cfg` (*ButtonSettings or IntervalSettings*): The exercise that owns the button mode and count.
 - `changed` (*callable*): Save and apply an edit.
 - `back` (*callable*): Return to the exercise settings menu.
 
@@ -1123,8 +1250,16 @@ Choose the direction of a scale.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = settings.ScaleIdentificationSettings()
->>> choices = direction_choices(cfg, edited=lambda: None)
->>> next(b for b in choices.findChildren(QRadioButton) if b.text() == "Descending").click()
+>>> choices = direction_choices(
+...     cfg, edited=lambda: None
+... )
+>>> next(
+...     b
+...     for b in choices.findChildren(
+...         QRadioButton
+...     )
+...     if b.text() == "Descending"
+... ).click()
 >>> cfg.motion
 'descending'
 ```
@@ -1135,7 +1270,8 @@ Choose the direction of a scale.
 def scrolling(body: QWidget) -> QScrollArea
 ```
 
-Put a page's body in a scroll area, so a long page scrolls inside the pane and never makes the window taller.
+Put a page's body in a scroll area, so a long page scrolls inside
+the pane and never makes the window taller.
 
 **Parameters**
 

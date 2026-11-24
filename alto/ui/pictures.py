@@ -1,12 +1,18 @@
 """
-Small pictures of musical things (clefs, note values, key signatures, note ranges ...) for the settings panes.
+Small pictures of musical things (clefs, note values, key signatures,
+note ranges ...) for the settings panes.
 
-Each picture is drawn in fixed units and then scaled, so the same picture serves as a summary in a menu row and, larger,
-as the label of a choice. Colors come from the palette, so they work in light and dark themes.
+Each picture is drawn in fixed units and then scaled, so the same
+picture serves as a summary in a menu row and, larger,
+as the label of a choice. Colors come from the palette, so they work in
+light and dark themes.
 
 Examples
 --------
->>> CLEF_NAMES["treble"], VALUE_NAMES["sixteenth"]
+>>> (
+...     CLEF_NAMES["treble"],
+...     VALUE_NAMES["sixteenth"],
+... )
 ('Treble', '16th')
 >>> ClefPictures(["treble", "bass"]).toolTip()
 'Treble, Bass'
@@ -75,12 +81,22 @@ VALUE_NAMES = {
 
 REST_GLYPHS = {
     f"{value}-rest": codepoint
-    for codepoint, value in enumerate(("breve", "whole", "half", "quarter", "eighth", "sixteenth", "thirty_second"), start=0xE4E2)
+    for codepoint, value in enumerate(settings.NOTE_VALUES, start=0xE4E2)
 }
 RHYTHM_SYMBOL_NAMES = {
-    **{value: label if value == "breve" else f"{label} note" for value, label in VALUE_NAMES.items()},
-    **{value: VALUE_NAMES[value.removesuffix("-rest")].replace(" note", "") + " rest" for value in REST_GLYPHS},
-    **{f"dotted-{value}": f"Dotted {label.lower().removesuffix(' note')} note" for value, label in VALUE_NAMES.items()},
+    **{
+        value: label if value == "breve" else f"{label} note"
+        for value, label in VALUE_NAMES.items()
+    },
+    **{
+        value: VALUE_NAMES[value.removesuffix("-rest")].replace(" note", "")
+        + " rest"
+        for value in REST_GLYPHS
+    },
+    **{
+        f"dotted-{value}": f"Dotted {label.lower().removesuffix(' note')} note"
+        for value, label in VALUE_NAMES.items()
+    },
 }
 
 
@@ -93,7 +109,8 @@ def symbol_icon(
     """
     Draw a clef symbol on its own, without a staff, as an icon.
 
-    The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centered.
+    The G, C and F clefs are drawn the same size as they are on a staff,
+    so the three look alike beside one another, and centered.
 
     Parameters
     ----------
@@ -102,7 +119,8 @@ def symbol_icon(
     color : QColor
         The color to draw it in. Keyword-only.
     height : int, default 56
-        The icon's height in pixels, which is also as wide as it is. Keyword-only.
+        The icon's height in pixels, which is also as wide as it is.
+        Keyword-only.
 
     Returns
     -------
@@ -111,7 +129,9 @@ def symbol_icon(
 
     Examples
     --------
-    >>> symbol_icon("F", color=QColor("black")).isNull()
+    >>> symbol_icon(
+    ...     "F", color=QColor("black")
+    ... ).isNull()
     False
     """
     ratio = 2.0
@@ -128,7 +148,10 @@ def symbol_icon(
         painter,
         clef=clef,
         x=(height - 3.2 * gap) / 2,
-        bottom=height / 2 + (top + bottom) / 2 * gap,  # the middle of the symbol on the middle of the icon
+        bottom=height / 2
+        + (top + bottom)
+        / 2
+        * gap,  # the middle of the symbol on the middle of the icon
         gap=gap,
         color=color,
         font=current_style().font,
@@ -139,7 +162,8 @@ def symbol_icon(
 
 class _Picture(QWidget):
     """
-    Base class: a widget drawn in its own units, enlarged by `scale`, that ignores the mouse.
+    Base class: a widget drawn in its own units, enlarged by `scale`,
+    that ignores the mouse.
 
     Attributes
     ----------
@@ -161,7 +185,8 @@ class _Picture(QWidget):
         parent: QWidget | None = None,
     ) -> None:
         """
-        Create a picture that lets mouse clicks through to what is underneath.
+        Create a picture that lets mouse clicks through to what is
+        underneath.
 
         Parameters
         ----------
@@ -176,8 +201,12 @@ class _Picture(QWidget):
         1.5
         """
         super().__init__(parent)
-        self.scale = scale * zoom.factor()  # a picture is as much larger as the zoom says
-        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # the row or checkbox underneath is the click target
+        self.scale = (
+            scale * zoom.factor()
+        )  # a picture is as much larger as the zoom says
+        self.setAttribute(
+            Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+        )  # the row or checkbox underneath is the click target
 
     def _fit(
         self,
@@ -199,10 +228,16 @@ class _Picture(QWidget):
         --------
         >>> picture = _Picture(2.0)
         >>> picture._fit(30, height=34)
-        >>> picture.size().width(), picture.size().height()
+        >>> (
+        ...     picture.size().width(),
+        ...     picture.size().height(),
+        ... )
         (60, 68)
         """
-        self.setFixedSize(round(width * self.scale), round(height * self.scale))
+        self.setFixedSize(
+            round(width * self.scale),
+            round(height * self.scale),
+        )
 
     def _colors(self) -> tuple[QColor, QColor]:
         """
@@ -211,7 +246,8 @@ class _Picture(QWidget):
         Returns
         -------
         tuple of (QColor, QColor)
-            The ink, and a softer ink for staff lines. Both are readable against the background in light and dark themes.
+            The ink, and a softer ink for staff lines. Both are readable
+            against the background in light and dark themes.
 
         Examples
         --------
@@ -220,15 +256,20 @@ class _Picture(QWidget):
         True
         """
         pal = self.palette()
-        text, base = pal.color(QPalette.ColorRole.Text), pal.color(QPalette.ColorRole.Base)
+        text, base = (
+            pal.color(QPalette.ColorRole.Text),
+            pal.color(QPalette.ColorRole.Base),
+        )
         line = blend(base, b=text, t=0.62)
         return text, line
 
     def _painter(self) -> QPainter:
         """
-        Start painting the picture: anti-aliased, scaled, and with the device scale noted.
+        Start painting the picture: anti-aliased, scaled, and with the
+        device scale noted.
 
-        Must be called while the widget is being painted (from `paintEvent`).
+        Must be called while the widget is being painted (from
+        `paintEvent`).
 
         Returns
         -------
@@ -238,13 +279,17 @@ class _Picture(QWidget):
         Examples
         --------
         >>> # noinspection PyProtectedMember
-        >>> p_ = NamePicture()._painter()  # doctest: +SKIP
+        >>> p_ = (
+        ...     NamePicture()._painter()
+        ... )  # doctest: +SKIP
         """
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         p.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
         p.scale(self.scale, self.scale)
-        self._dev = abs(p.deviceTransform().m11()) or 1.0  # device pixels per picture unit
+        self._dev = (
+            abs(p.deviceTransform().m11()) or 1.0
+        )  # device pixels per picture unit
         return p
 
     # noinspection DuplicatedCode
@@ -259,7 +304,8 @@ class _Picture(QWidget):
         width: float = 1.0,
     ) -> None:
         """
-        Draw a horizontal line a whole number of device pixels thick, placed on the pixel grid.
+        Draw a horizontal line a whole number of device pixels thick,
+        placed on the pixel grid.
 
         Staff lines then come out crisp and equally strong at any scale.
 
@@ -281,12 +327,22 @@ class _Picture(QWidget):
         Examples
         --------
         >>> from PySide6.QtGui import QImage
-        >>> image = QImage(20, 20, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     20, 20, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
         >>> picture = _Picture()
-        >>> picture._dev = 1.0  # one device pixel per picture unit
-        >>> picture._hline(painter, x0=0, x1=20, y=10, color=QColor("black"))
+        >>> picture._dev = (
+        ...     1.0  # one device pixel per picture unit
+        ... )
+        >>> picture._hline(
+        ...     painter,
+        ...     x0=0,
+        ...     x1=20,
+        ...     y=10,
+        ...     color=QColor("black"),
+        ... )
         >>> painter.end()
         True
         >>> image.pixelColor(10, 10).lightness() < 128
@@ -317,7 +373,8 @@ class _Picture(QWidget):
         width: float = 1.0,
     ) -> None:
         """
-        Draw a vertical line a whole number of device pixels thick, placed on the pixel grid.
+        Draw a vertical line a whole number of device pixels thick,
+        placed on the pixel grid.
 
         Parameters
         ----------
@@ -337,12 +394,20 @@ class _Picture(QWidget):
         Examples
         --------
         >>> from PySide6.QtGui import QImage
-        >>> image = QImage(20, 20, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     20, 20, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
         >>> picture = _Picture()
         >>> picture._dev = 1.0
-        >>> picture._vline(painter, x=10, y0=0, y1=20, color=QColor("black"))
+        >>> picture._vline(
+        ...     painter,
+        ...     x=10,
+        ...     y0=0,
+        ...     y1=20,
+        ...     color=QColor("black"),
+        ... )
         >>> painter.end()
         True
         >>> image.pixelColor(10, 10).lightness() < 128
@@ -363,7 +428,8 @@ class _Picture(QWidget):
 
     def label_button(self, button: QAbstractButton) -> None:
         """
-        Use this picture as a button icon that follows the button's palette.
+        Use this picture as a button icon that follows the button's
+        palette.
 
         Parameters
         ----------
@@ -462,12 +528,21 @@ class _Picture(QWidget):
         Examples
         --------
         >>> from PySide6.QtGui import QImage
-        >>> image = QImage(40, 40, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     40, 40, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
         >>> picture = _Picture()
         >>> picture._dev = 1.0
-        >>> picture._staff(painter, x0=0, x1=40, bottom=30, gap=5, color=QColor("black"))
+        >>> picture._staff(
+        ...     painter,
+        ...     x0=0,
+        ...     x1=40,
+        ...     bottom=30,
+        ...     gap=5,
+        ...     color=QColor("black"),
+        ... )
         >>> painter.end()
         True
         """
@@ -484,14 +559,17 @@ class _Picture(QWidget):
 
 class ClefPictures(_Picture):
     """
-    The selected clefs, each on its own five-line staff, and a two-stave picture with a brace for the grand staff.
+    The selected clefs, each on its own five-line staff, and a two-stave
+    picture with a brace for the grand staff.
 
-    Showing each clef on its own staff lets alto and tenor, which share a symbol, look different.
+    Showing each clef on its own staff lets alto and tenor, which share
+    a symbol, look different.
 
     Attributes
     ----------
     H, W, GAP, SPACING : float
-        The picture's height, the width of one clef, the distance between staff lines and the space between clefs.
+        The picture's height, the width of one clef, the distance
+        between staff lines and the space between clefs.
     NAMES : dict of str to str
         The name of each clef.
     clefs : list of str
@@ -547,7 +625,9 @@ class ClefPictures(_Picture):
         Examples
         --------
         >>> pictures = ClefPictures()
-        >>> pictures.set_clefs(["treble", "bass", "alto"])
+        >>> pictures.set_clefs(
+        ...     ["treble", "bass", "alto"]
+        ... )
         >>> pictures.width()  # three clefs and the space between them
         106
         >>> pictures.toolTip()
@@ -599,7 +679,9 @@ class ClefPictures(_Picture):
 
         Examples
         --------
-        >>> ClefPictures(["treble", "grand"]).grab().isNull()
+        >>> ClefPictures(
+        ...     ["treble", "grand"]
+        ... ).grab().isNull()
         False
         """
         p = self._painter()
@@ -658,12 +740,19 @@ class ClefPictures(_Picture):
         Examples
         --------
         >>> from PySide6.QtGui import QImage
-        >>> image = QImage(40, 40, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     40, 40, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
         >>> pictures = ClefPictures()
         >>> pictures._dev = 1.0
-        >>> pictures._grand(painter, x=0, text=QColor("black"), line=QColor("gray"))
+        >>> pictures._grand(
+        ...     painter,
+        ...     x=0,
+        ...     text=QColor("black"),
+        ...     line=QColor("gray"),
+        ... )
         >>> painter.end()
         True
         """
@@ -710,18 +799,22 @@ class ClefPictures(_Picture):
 
 class ValuePictures(_Picture):
     """
-    Note values as engraved symbols (no staff), each with its head on the same baseline so they line up.
+    Note values as engraved symbols (no staff), each with its head on
+    the same baseline so they line up.
 
     Attributes
     ----------
     values : list of str
         The note values shown, keys of `VALUE_NAMES`.
     center_stemless : bool
-        Whether the double whole note and whole note sit at the picture's vertical center.
+        Whether the double whole note and whole note sit at the
+        picture's vertical center.
 
     Examples
     --------
-    >>> pictures = ValuePictures(["whole", "quarter", "eighth"])
+    >>> pictures = ValuePictures(
+    ...     ["whole", "quarter", "eighth"]
+    ... )
     >>> pictures.values
     ['whole', 'quarter', 'eighth']
     """
@@ -729,7 +822,12 @@ class ValuePictures(_Picture):
     H, W, GAP, SPACING = 40, 18, 4.5, 4
     tied = False
     beam_count = 0
-    HEAD_X, HEAD_Y = 6.5, 25.0  # where each symbol's head sits in its box (about level with the text beside it)
+    HEAD_X, HEAD_Y = (
+        6.5,
+        25.0,
+        # where each symbol's head sits in its box (about level with the
+        # text beside it)
+    )
 
     def __init__(
         self,
@@ -749,14 +847,18 @@ class ValuePictures(_Picture):
         scale : float, default 1.0
             How much to enlarge it. Keyword-only.
         center_stemless : bool, default False
-            Center double whole notes and whole notes vertically so they align with the middle of adjacent text.
-            Other notes keep their heads low so their stems fit above. Keyword-only.
+            Center double whole notes and whole notes vertically so they
+            align with the middle of adjacent text.
+            Other notes keep their heads low so their stems fit above.
+            Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
         Examples
         --------
-        >>> ValuePictures(["half"], center_stemless=True).center_stemless
+        >>> ValuePictures(
+        ...     ["half"], center_stemless=True
+        ... ).center_stemless
         True
         """
         super().__init__(scale, parent=parent)
@@ -784,7 +886,12 @@ class ValuePictures(_Picture):
         self.values = list(values)
         count = max(len(self.values), 1)
         self._fit(count * self.W + (count - 1) * self.SPACING, height=self.H)
-        self.setToolTip(", ".join(VALUE_NAMES[v] if v in VALUE_NAMES else RHYTHM_SYMBOL_NAMES[v] for v in self.values))
+        self.setToolTip(
+            ", ".join(
+                VALUE_NAMES[v] if v in VALUE_NAMES else RHYTHM_SYMBOL_NAMES[v]
+                for v in self.values
+            ),
+        )
         self.update()
 
     @classmethod
@@ -827,7 +934,9 @@ class ValuePictures(_Picture):
 
         Examples
         --------
-        >>> ValuePictures(["whole", "half", "quarter"]).grab().isNull()
+        >>> ValuePictures(
+        ...     ["whole", "half", "quarter"]
+        ... ).grab().isNull()
         False
         """
         p = self._painter()
@@ -835,7 +944,10 @@ class ValuePictures(_Picture):
         for i, value in enumerate(self.values):
             x = i * (self.W + self.SPACING)
             if value in REST_GLYPHS:
-                path = engraving.notation_glyph(current_style().font or "bravura", codepoint=REST_GLYPHS[value])
+                path = engraving.notation_glyph(
+                    current_style().font or "bravura",
+                    codepoint=REST_GLYPHS[value],
+                )
                 center = path.boundingRect().center()
                 p.save()
                 p.translate(x + self.W / 2, self.H / 2)
@@ -844,15 +956,31 @@ class ValuePictures(_Picture):
                 p.fillPath(path, text)
                 if value in {"whole-rest", "half-rest"}:
                     bounds = path.boundingRect()
-                    baseline = bounds.top() if value == "whole-rest" else bounds.bottom()
-                    p.fillRect(QRectF(bounds.left() - 8, baseline - 2, bounds.width() + 16, 4), text)
+                    baseline = (
+                        bounds.top()
+                        if value == "whole-rest"
+                        else bounds.bottom()
+                    )
+                    p.fillRect(
+                        QRectF(
+                            bounds.left() - 8,
+                            baseline - 2,
+                            bounds.width() + 16,
+                            4,
+                        ),
+                        text,
+                    )
                 p.restore()
                 continue
             dotted = value.startswith("dotted-")
             value = value.removeprefix("dotted-")
-            wide = value in ("breve", "whole")  # the heads without stems are wider, so center them in the box
+            wide = value in (
+                "breve",
+                "whole",
+            )  # the heads without stems are wider, so center them in the box
             y = self.H / 2 if wide and self.center_stemless else self.HEAD_Y
-            # drawn by the same routine as the staff, so the symbol matches the one in the exercise
+            # drawn by the same routine as the staff, so the symbol
+            # matches the one in the exercise
             # noinspection PyProtectedMember
             StaffWidget._note(
                 p,
@@ -862,7 +990,9 @@ class ValuePictures(_Picture):
                 color=text,
                 value="quarter" if self.beam_count else value,
                 stem_down=False,
-                font=(current_style().font or "bravura") if self.beam_count else current_style().font,
+                font=(current_style().font or "bravura")
+                if self.beam_count
+                else current_style().font,
             )
 
             if dotted:
@@ -875,7 +1005,15 @@ class ValuePictures(_Picture):
             right = left + self.W + self.SPACING
             top = self.HEAD_Y - engraving.STEM_LENGTH["quarter"] * self.GAP
             for beam in range(self.beam_count):
-                p.fillRect(QRectF(left, top + beam * self.GAP * 0.8, right - left, self.GAP * 0.5), text)
+                p.fillRect(
+                    QRectF(
+                        left,
+                        top + beam * self.GAP * 0.8,
+                        right - left,
+                        self.GAP * 0.5,
+                    ),
+                    text,
+                )
 
         if self.tied and len(self.values) == 2:
             y = self.HEAD_Y + 3
@@ -888,12 +1026,14 @@ class ValuePictures(_Picture):
 
 def rhythm_picture(term: str) -> ValuePictures | None:
     """
-    Render a single note, rest, tied pair, or beamed pair from an equation term.
+    Render a single note, rest, tied pair, or beamed pair from an
+    equation term.
 
     Parameters
     ----------
     term : str
-        The stored term, with a tilde between tied notes or a bar between beamed notes.
+        The stored term, with a tilde between tied notes or a bar
+        between beamed notes.
 
     Returns
     -------
@@ -910,22 +1050,28 @@ def rhythm_picture(term: str) -> ValuePictures | None:
         return None
     picture = ValuePictures(values, scale=1.7)
     picture.tied = "~" in term
-    picture.beam_count = settings.RHYTHM_BEAM_COUNTS[values[0]] if "|" in term else 0
+    picture.beam_count = (
+        settings.RHYTHM_BEAM_COUNTS[values[0]] if "|" in term else 0
+    )
     return picture
 
 
 class KeySignaturePicture(_Picture):
     """
-    A key signature as a plain row of its sharps or flats, with no staff or clef.
+    A key signature as a plain row of its sharps or flats, with no staff
+    or clef.
 
-    Each sign sits at the height it has after a treble clef, and C major, which has none, shows a natural sign.
+    Each sign sits at the height it has after a treble clef, and C
+    major, which has none, shows a natural sign.
 
     Attributes
     ----------
     H, GAP, STEP : float
-        The picture's height, the distance between staff lines and the space between signs.
+        The picture's height, the distance between staff lines and the
+        space between signs.
     ORDER : dict of int to str
-        Where each sign is written, in order, for sharps (1) and flats (-1).
+        Where each sign is written, in order, for sharps (1) and flats
+        (-1).
     key : int
         The key signature: sharps if positive, flats if negative.
 
@@ -936,8 +1082,17 @@ class KeySignaturePicture(_Picture):
     """
 
     H, GAP, STEP = 40, 6.0, 8.0
-    ORDER = {1: "F5 C5 G5 D5 A4 E5 B4", -1: "B4 E5 A4 D5 G4 C5 F4"}  # where each sign is written, in order
-    CENTER = {1: 6, -1: 4}  # the height (half-gaps above the bottom line) drawn in the middle of the picture
+    ORDER = {
+        1: "F5 C5 G5 D5 A4 E5 B4",
+        -1: "B4 E5 A4 D5 G4 C5 F4",
+    }  # where each sign is written, in order
+    CENTER = {
+        1: 6,
+        -1: 4,
+        # the height (half-gaps above the bottom line) drawn in the
+        # middle
+        # of the picture
+    }
 
     def __init__(
         self,
@@ -952,7 +1107,8 @@ class KeySignaturePicture(_Picture):
         Parameters
         ----------
         key : int, default 0
-            The key signature: that many sharps if positive, flats if negative.
+            The key signature: that many sharps if positive, flats if
+            negative.
         scale : float, default 1.0
             How much to enlarge it. Keyword-only.
         parent : QWidget or None, default None
@@ -968,7 +1124,16 @@ class KeySignaturePicture(_Picture):
         super().__init__(scale, parent=parent)
         self.key = key
         self._fit(4 + max(abs(key), 1) * self.STEP, height=self.H)
-        names = "no sharps or flats" if key == 0 else f"{abs(key)} {'sharp' if key > 0 else 'flat'}{'s' if abs(key) > 1 else ''}"
+        names = (
+            "no sharps or flats"
+            if key == 0
+            else (
+                f"{abs(key)}"
+                " "
+                f"{('sharp' if key > 0 else 'flat')}"
+                f"{('s' if abs(key) > 1 else '')}"
+            )
+        )
         self.setToolTip(f"{MAJOR_KEYS[key]} major: {names}")
 
     @classmethod
@@ -1028,11 +1193,19 @@ class KeySignaturePicture(_Picture):
         Examples
         --------
         >>> from PySide6.QtGui import QImage
-        >>> image = QImage(40, 40, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     40, 40, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
         >>> picture = KeySignaturePicture(1)
-        >>> picture._sign(painter, sign=1, x=5, y=20, color=QColor("black"))
+        >>> picture._sign(
+        ...     painter,
+        ...     sign=1,
+        ...     x=5,
+        ...     y=20,
+        ...     color=QColor("black"),
+        ... )
         >>> painter.end()
         True
         """
@@ -1040,11 +1213,11 @@ class KeySignaturePicture(_Picture):
         if font:
             engraving.draw_accidental(
                 p,
-                font=font,
-                sign=sign,
-                x=x,
                 y=y + 0.2 * self.GAP,
                 gap=self.GAP,
+                sign=sign,
+                x=x,
+                font=font,
                 color=color,
                 fit=self.STEP - 0.8,
             )
@@ -1053,7 +1226,10 @@ class KeySignaturePicture(_Picture):
         f = QFont("DejaVu Sans")
         f.setPixelSize(int(self.GAP * 2.6))
         p.setFont(f)
-        p.drawText(QPointF(x, y + self.GAP * 0.9), {1: "♯", -1: "♭", 0: "♮"}[sign])
+        p.drawText(
+            QPointF(x, y + self.GAP * 0.9),
+            {1: "♯", -1: "♭", 0: "♮"}[sign],
+        )
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """
@@ -1095,22 +1271,27 @@ class KeySignaturePicture(_Picture):
 
 class RangePictures(_Picture):
     """
-    For each clef, a staff with its lowest and highest note, so the range can be read off at a glance.
+    For each clef, a staff with its lowest and highest note, so the
+    range can be read off at a glance.
 
     Attributes
     ----------
     H, W, SPACING : float
-        The picture's height, the width of one staff and the space between staves.
+        The picture's height, the width of one staff and the space
+        between staves.
     MAX_SCALE : float
         The most the picture is enlarged to fit `max_width`.
     max_width : float or None
         The width to enlarge the picture to, if any.
     items : list of tuple of (str, int, int)
-        Each clef with its lowest and highest note, as staff steps (`Note.diatonic`).
+        Each clef with its lowest and highest note, as staff steps
+        (`Note.diatonic`).
 
     Examples
     --------
-    >>> pictures = RangePictures([("treble", 22, 52)])
+    >>> pictures = RangePictures(
+    ...     [("treble", 22, 52)]
+    ... )
     >>> pictures.toolTip()
     'Treble: D3 to F7'
     """
@@ -1136,13 +1317,16 @@ class RangePictures(_Picture):
         scale : float, default 1.0
             How much to enlarge it. Keyword-only.
         max_width : float or None, default None
-            Enlarge the picture to use this width (up to `MAX_SCALE`) however many clefs there are. Keyword-only.
+            Enlarge the picture to use this width (up to `MAX_SCALE`)
+            however many clefs there are. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
         Examples
         --------
-        >>> RangePictures([("treble", 22, 52)], max_width=238).scale
+        >>> RangePictures(
+        ...     [("treble", 22, 52)], max_width=238
+        ... ).scale
         1.9
         """
         super().__init__(scale, parent=parent)
@@ -1157,12 +1341,15 @@ class RangePictures(_Picture):
         Parameters
         ----------
         items : list of tuple of (str, int, int)
-            Each clef with its lowest and highest note, as staff steps (`Note.diatonic`).
+            Each clef with its lowest and highest note, as staff steps
+            (`Note.diatonic`).
 
         Examples
         --------
         >>> pictures = RangePictures()
-        >>> pictures.set_items([("bass", 10, 40), ("alto", 21, 35)])
+        >>> pictures.set_items(
+        ...     [("bass", 10, 40), ("alto", 21, 35)]
+        ... )
         >>> pictures.toolTip().splitlines()
         ['Bass: F1 to A5', 'Alto: C3 to C5']
         """
@@ -1173,7 +1360,11 @@ class RangePictures(_Picture):
             self.scale = min(self.MAX_SCALE, self.max_width / natural)
         self._fit(natural, height=self.H)
         tip = [
-            f"{CLEF_NAMES[c]}: {Note.from_diatonic(lo).name}{Note.from_diatonic(lo).octave} to "
+            f"{CLEF_NAMES[c]}"
+            ": "
+            f"{Note.from_diatonic(lo).name}"
+            f"{Note.from_diatonic(lo).octave}"
+            " to "
             f"{Note.from_diatonic(hi).name}{Note.from_diatonic(hi).octave}"
             for c, lo, hi in self.items
         ]
@@ -1192,7 +1383,8 @@ class RangePictures(_Picture):
         steps: int,
     ) -> None:
         """
-        Draw a whole note, with ledger lines if it lies outside the staff.
+        Draw a whole note, with ledger lines if it lies outside the
+        staff.
 
         Parameters
         ----------
@@ -1209,17 +1401,28 @@ class RangePictures(_Picture):
         color : QColor
             The color. Keyword-only.
         steps : int
-            How many half-gaps the note is above the bottom line; negative below it. Keyword-only.
+            How many half-gaps the note is above the bottom line;
+            negative below it. Keyword-only.
 
         Examples
         --------
         >>> from PySide6.QtGui import QImage
-        >>> image = QImage(40, 40, QImage.Format.Format_ARGB32)
+        >>> image = QImage(
+        ...     40, 40, QImage.Format.Format_ARGB32
+        ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
         >>> pictures = RangePictures()
         >>> pictures._dev = 1.0
-        >>> pictures._note_head(painter, x=20, y=34, bottom=30, gap=4, color=QColor("black"), steps=-4)
+        >>> pictures._note_head(
+        ...     painter,
+        ...     x=20,
+        ...     y=34,
+        ...     bottom=30,
+        ...     gap=4,
+        ...     color=QColor("black"),
+        ...     steps=-4,
+        ... )
         >>> painter.end()
         True
         """
@@ -1262,7 +1465,9 @@ class RangePictures(_Picture):
 
         Examples
         --------
-        >>> RangePictures([("treble", 22, 52), ("bass", 10, 40)]).grab().isNull()
+        >>> RangePictures(
+        ...     [("treble", 22, 52), ("bass", 10, 40)]
+        ... ).grab().isNull()
         False
         """
         p = self._painter()
@@ -1340,7 +1545,13 @@ class RangePictures(_Picture):
                     font=current_style().font,
                 )
             for note_x, d in ((x + 30, lo), (x + 40, hi)):
-                staff = "treble" if clef == "grand" and d >= MIDDLE_C else "bass" if clef == "grand" else clef
+                staff = (
+                    "treble"
+                    if clef == "grand" and d >= MIDDLE_C
+                    else "bass"
+                    if clef == "grand"
+                    else clef
+                )
                 steps = d - BOTTOM_LINE[staff]
                 y = bottoms[staff] - steps * gap / 2
                 self._note_head(
@@ -1357,7 +1568,8 @@ class RangePictures(_Picture):
 
 class NamePicture(_Picture):
     """
-    How notes are named: C, D and E on a staff, labeled with letters, solfège syllables or scale degrees.
+    How notes are named: C, D and E on a staff, labeled with letters,
+    solfège syllables or scale degrees.
 
     Attributes
     ----------
@@ -1413,7 +1625,8 @@ class NamePicture(_Picture):
         Parameters
         ----------
         naming : str
-            "letters" for C D E, "solfege" for Do Re Mi, or "degrees" for 1̂ 2̂ 3̂, or "functions" for function names.
+            "letters" for C D E, "solfege" for Do Re Mi, or "degrees"
+            for 1̂ 2̂ 3̂, or "functions" for function names.
 
         Examples
         --------
@@ -1423,7 +1636,11 @@ class NamePicture(_Picture):
         'Solfège (Do Re Mi)'
         """
         self.naming = naming
-        self.setToolTip(degree_tooltip(settings.NAMINGS.get(naming, settings.NAMINGS["letters"])))
+        self.setToolTip(
+            degree_tooltip(
+                settings.NAMINGS.get(naming, settings.NAMINGS["letters"]),
+            ),
+        )
         self.update()
 
     @classmethod
@@ -1500,7 +1717,9 @@ class NamePicture(_Picture):
         font.setPixelSize(8)
         font.setBold(True)
         p.setFont(font)
-        for i, (name, steps) in enumerate(zip(names, (-2, -1, 0))):  # C4 sits on a ledger line below the staff
+        for i, (name, steps) in enumerate(
+            zip(names, (-2, -1, 0)),
+        ):  # C4 sits on a ledger line below the staff
             x = 24 + i * 12.5
             y = bottom - steps * gap / 2
             if steps == -2:

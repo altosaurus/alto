@@ -108,7 +108,9 @@ between 0 and `STRAIN_MAX = 6`. A new question starts at `NEW_STRAIN = 1.5`. Aft
 if not correct:
     strain += WRONG_PENALTY  # +1.5: every wrong attempt pushes it up
 elif attempt_no == 1:
-    strain += -CORRECT_REWARD + speed_term(seconds, par_seconds=par_seconds)  # -0.5, plus a speed adjustment
+    strain += -CORRECT_REWARD + speed_term(
+        seconds, par_seconds=par_seconds
+    )  # -0.5, plus a speed adjustment
 else:
     strain -= RETRY_REWARD  # -0.2: right, but only after misses
 strain = min(max(strain, 0.0), STRAIN_MAX)
@@ -138,7 +140,9 @@ unremarkable in about three confident answers, and a question you keep missing c
 def weight(strain, *, last_seen, now):
     if strain is None:  # never seen: a fixed middling weight
         return math.exp(WEIGHT_SLOPE * NEW_STRAIN)  # exp(0.6 * 1.5) = 2.46
-    cooldown = BASE_COOLDOWN * 2 ** (3.0 - strain)  # seconds a question is "resting"
+    cooldown = BASE_COOLDOWN * 2 ** (
+        3.0 - strain
+    )  # seconds a question is "resting"
     recency = 1.0 - math.exp(-max(now - (last_seen or 0.0), 0.0) / cooldown)
     return math.exp(WEIGHT_SLOPE * strain) * max(recency, MIN_RECENCY)
 ```
@@ -206,10 +210,14 @@ class Twenty(Exercise):
     par_seconds = 3.0
 
     def generate(self, rng: random.Random) -> Question:
-        return Question(f"q{rng.randrange(20)}", choices=["right", "wrong"], answer="right")
+        return Question(
+            f"q{rng.randrange(20)}", choices=["right", "wrong"], answer="right"
+        )
 
 
-skill = {f"q{n}": 0.95 - 0.04 * n for n in range(20)}  # chance of a right answer: q0 is easy, q19 is hard
+skill = {
+    f"q{n}": 0.95 - 0.04 * n for n in range(20)
+}  # chance of a right answer: q0 is easy, q19 is hard
 rng, now = random.Random(1), 1_000_000.0
 db = Database()  # in memory: nothing is saved
 learner = Learner(db, profile=db.add_profile("Sim"))
@@ -219,7 +227,13 @@ for _ in range(400):
     right = rng.random() < skill[q.prompt]
     seconds = rng.uniform(1.5, 3.0) if right else rng.uniform(3.0, 6.0)
     learner.record(
-        exercise, question=q, answer="right" if right else "wrong", correct=right, attempt_no=1, seconds=seconds, now=now
+        exercise,
+        question=q,
+        answer="right" if right else "wrong",
+        correct=right,
+        attempt_no=1,
+        seconds=seconds,
+        now=now,
     )
     asked[q.prompt] += 1
     now += seconds + 1.0  # the next question appears a second later

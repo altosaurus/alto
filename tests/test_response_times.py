@@ -1,4 +1,7 @@
-"""Speed-based grading, rolling exercise samples, and their Practice settings."""
+"""
+Speed-based grading, rolling exercise samples, and their Practice
+settings.
+"""
 
 import random
 import time
@@ -19,7 +22,12 @@ from alto.ui.response_times import ResponseTimeDialog
 from alto.ui.stats_dialog import StatsPage
 
 
-def seed_times(learner: Learner, count: int, *, exercise: str = "NoteNames") -> None:
+def seed_times(
+    learner: Learner,
+    count: int,
+    *,
+    exercise: str = "NoteNames",
+) -> None:
     """
     Add chronological correct first answers from one to count seconds.
 
@@ -48,7 +56,8 @@ def seed_times(learner: Learner, count: int, *, exercise: str = "NoteNames") -> 
 @pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
 def test_grades_use_previous_exercise_history(mode: str) -> None:
     """
-    Assign all three grades to the actual schedule and keep misses and self-grading independent.
+    Assign all three grades to the actual schedule and keep misses and
+    self-grading independent.
 
     Parameters
     ----------
@@ -62,7 +71,17 @@ def test_grades_use_previous_exercise_history(mode: str) -> None:
     ex = NoteNames()
     rng = random.Random(1)
     q = learner.pick(ex, rng=rng)
-    assert learner.record(ex, question=q, correct=True, answer=q.answer, attempt_no=1, seconds=40) is None
+    assert (
+        learner.record(
+            ex,
+            question=q,
+            correct=True,
+            answer=q.answer,
+            attempt_no=1,
+            seconds=40,
+        )
+        is None
+    )
     now = time.time()
     for seconds, valid, expected in (
         (2, True, Rating.Easy),
@@ -88,10 +107,27 @@ def test_grades_use_previous_exercise_history(mode: str) -> None:
         ).fetchone()
         assert rating == expected and due == now + assigned.seconds
     q = learner.pick(ex, rng=rng)
-    learner.record(ex, question=q, correct=False, answer="wrong", attempt_no=1, seconds=123)
-    learner.record(ex, question=q, correct=True, answer=q.answer, attempt_no=2, seconds=111)
+    learner.record(
+        ex,
+        question=q,
+        correct=False,
+        answer="wrong",
+        attempt_no=1,
+        seconds=123,
+    )
+    learner.record(
+        ex,
+        question=q,
+        correct=True,
+        answer=q.answer,
+        attempt_no=2,
+        seconds=111,
+    )
     assert (
-        db.conn.execute("SELECT last_rating FROM review_schedules WHERE item_key=?", (q.item_key(),)).fetchone()[0]
+        db.conn.execute(
+            "SELECT last_rating FROM review_schedules WHERE item_key=?",
+            (q.item_key(),),
+        ).fetchone()[0]
         == Rating.Again
     )
     assert len(learner.response_times("NoteNames").times) == 43
@@ -100,12 +136,26 @@ def test_grades_use_previous_exercise_history(mode: str) -> None:
     other = Learner(db, profile=db.add_profile("Ben"))
     assert not other.response_times("NoteNames").times
     q = learner.pick(ex, rng=rng)
-    learner.record(ex, question=q, correct=True, answer=q.answer, attempt_no=1, seconds=1, self_grading=True)
-    assert not db.conn.execute("SELECT 1 FROM review_schedules WHERE item_key=?", (q.item_key(),)).fetchone()
+    learner.record(
+        ex,
+        question=q,
+        correct=True,
+        answer=q.answer,
+        attempt_no=1,
+        seconds=1,
+        self_grading=True,
+    )
+    assert not db.conn.execute(
+        "SELECT 1 FROM review_schedules WHERE item_key=?",
+        (q.item_key(),),
+    ).fetchone()
 
 
 def test_rolling_window_and_adjustable_cutoffs() -> None:
-    """Keep the most recent observations and use inclusive percentile interpolation with neutral ties."""
+    """
+    Keep the most recent observations and use inclusive percentile
+    interpolation with neutral ties.
+    """
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     seed_times(learner, 110)
@@ -113,10 +163,16 @@ def test_rolling_window_and_adjustable_cutoffs() -> None:
     assert sample.times == tuple(range(11000, 110001, 1000))
     assert sample.percentile(15) == 25850
     assert sample.grade(25850) == sample.grade(95150) == Rating.Good
-    assert sample.grade(25849) == Rating.Easy and sample.grade(95151) == Rating.Hard
+    assert (
+        sample.grade(25849) == Rating.Easy
+        and sample.grade(95151) == Rating.Hard
+    )
     learner.set_speed_thresholds(easy=5, hard=25)
     sample = learner.response_times("NoteNames")
-    assert sample.grade(20000) == Rating.Good and sample.grade(90000) == Rating.Hard
+    assert (
+        sample.grade(20000) == Rating.Good
+        and sample.grade(90000) == Rating.Hard
+    )
     with pytest.raises(ValueError, match="percentages"):
         learner.set_speed_thresholds(easy=80, hard=30)
     assert ResponseTimes((1000,) * 40, 0, 0).grade(1) == Rating.Good
@@ -124,7 +180,8 @@ def test_rolling_window_and_adjustable_cutoffs() -> None:
 
 def test_distribution_tool_and_timed_feedback(app: QApplication) -> None:
     """
-    Edit the bands, inspect two exercises, and see the assigned interval on a graded question.
+    Edit the bands, inspect two exercises, and see the assigned interval
+    on a graded question.
 
     Parameters
     ----------
@@ -136,7 +193,11 @@ def test_distribution_tool_and_timed_feedback(app: QApplication) -> None:
     seed_times(learner, 100)
     learner.set_mode("SM-2")
     settings = AppSettingsDialog(learner=learner)
-    settings.categories.setCurrentItem(settings.categories.findItems("Practice", Qt.MatchFlag.MatchExactly)[0])
+    settings.categories.setCurrentItem(
+        settings.categories.findItems("Practice", Qt.MatchFlag.MatchExactly)[
+            0
+        ],
+    )
     settings.response_times_button.click()
     tool = settings.findChild(ResponseTimeDialog)
     assert tool is not None
@@ -151,7 +212,8 @@ def test_distribution_tool_and_timed_feedback(app: QApplication) -> None:
     assert "All correct answers earn Good" in tool.summary.text()
     tool.exercise.setCurrentText(KeyboardNotes.name)
     assert not tool.chart.rows and "40 more needed" in tool.summary.text()
-    # One very fast and one slow answer fall outside the tightly clustered central bins.
+    # One very fast and one slow answer fall outside the tightly
+    # clustered central bins.
     for i, ms in enumerate([100, *([10000] * 40), 80000]):
         db.add_attempt(
             learner.profile.id,
@@ -168,12 +230,20 @@ def test_distribution_tool_and_timed_feedback(app: QApplication) -> None:
     assert [row[2] for row in tool.chart.rows] == ["1", "40", "1"]
     tool.close()
     settings.close()
-    assert Learner(db, profile=learner.profile).response_times("NoteNames").easy_percent == 0
+    assert (
+        Learner(db, profile=learner.profile)
+        .response_times("NoteNames")
+        .easy_percent
+        == 0
+    )
     stats = StatsPage(learner)
     stats.exercise.setCurrentText(KeyboardNotes.name)
     stats.response_times_button.click()
     chart = stats.findChild(ResponseTimeDialog)
-    assert chart is not None and chart.exercise.currentText() == KeyboardNotes.name
+    assert (
+        chart is not None
+        and chart.exercise.currentText() == KeyboardNotes.name
+    )
     chart.close()
     stats.close()
     learner.set_speed_thresholds(easy=15, hard=15)
@@ -181,17 +251,28 @@ def test_distribution_tool_and_timed_feedback(app: QApplication) -> None:
     view.show()
     app.processEvents()
     view.settings_panel.next_question_mode = "Wait"
-    assert view.review_interval.isVisible() and view.review_interval.text().startswith("Easy:")
+    assert (
+        view.review_interval.isVisible()
+        and view.review_interval.text().startswith("Easy:")
+    )
     assert view.question is not None
     view._clock = time.monotonic() - 1
     view.submit(view.question.answer, button=None)
-    assert "Easy" in view.review_interval.text() and view.review_interval.isVisible()
+    assert (
+        "Easy" in view.review_interval.text()
+        and view.review_interval.isVisible()
+    )
     view.next_question()
     view._application_state_changed(Qt.ApplicationState.ApplicationInactive)
     assert view.question is not None
     view.submit(view.question.answer, button=None)
     assert "Good" in view.review_interval.text()
-    assert db.conn.execute("SELECT timing_valid FROM attempts ORDER BY id DESC LIMIT 1").fetchone()[0] == 0
+    assert (
+        db.conn.execute(
+            "SELECT timing_valid FROM attempts ORDER BY id DESC LIMIT 1",
+        ).fetchone()[0]
+        == 0
+    )
     view.close()
 
 
@@ -206,7 +287,10 @@ def test_distribution_tool_and_timed_feedback(app: QApplication) -> None:
         (KeyboardIntervals, "FSRS", "all"),
     ],
 )
-@pytest.mark.parametrize(("seconds", "grade"), [(1, Rating.Easy), (50, Rating.Good), (100, Rating.Hard)])
+@pytest.mark.parametrize(
+    ("seconds", "grade"),
+    [(1, Rating.Easy), (50, Rating.Good), (100, Rating.Hard)],
+)
 def test_passing_intervals_on_the_question(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
@@ -217,14 +301,16 @@ def test_passing_intervals_on_the_question(
     grade: Rating,
 ) -> None:
     """
-    Show the available intervals where the card is drawn and schedule the displayed outcome.
+    Show the available intervals where the card is drawn and schedule
+    the displayed outcome.
 
     Parameters
     ----------
     app : QApplication
         Runs the layout before its geometry is inspected.
     monkeypatch : pytest.MonkeyPatch
-        Fix the review timestamp and detect a second draw of the intervals.
+        Fix the review timestamp and detect a second draw of the
+        intervals.
     exercise : type
         Staff or keyboard exercise.
     mode : str
@@ -244,17 +330,36 @@ def test_passing_intervals_on_the_question(
     if exercise is KeyboardNotes:
         monkeypatch.setattr(exercise_settings.keyboard, "low", 60)
         monkeypatch.setattr(exercise_settings.keyboard, "high", 64)
-        monkeypatch.setattr(exercise_settings.keyboard, "key_signature", mode == "SM-2")
+        monkeypatch.setattr(
+            exercise_settings.keyboard,
+            "key_signature",
+            mode == "SM-2",
+        )
     elif exercise is KeyboardIntervals:
-        monkeypatch.setattr(exercise_settings.keyboard_intervals, "compact_buttons", buttons == "compact")
-        monkeypatch.setattr(exercise_settings.keyboard_intervals, "all_interval_buttons", buttons == "all")
+        monkeypatch.setattr(
+            exercise_settings.keyboard_intervals,
+            "compact_buttons",
+            buttons == "compact",
+        )
+        monkeypatch.setattr(
+            exercise_settings.keyboard_intervals,
+            "all_interval_buttons",
+            buttons == "all",
+        )
     seed_times(learner, 100, exercise=exercise.__name__)
     view = ExerciseView(exercise(), learner=learner)
     view.settings_panel.next_question_mode = "Wait"
     view.show()
     previews = view._speed_previews
-    assert previews is not None and list(previews) == [Rating.Hard, Rating.Good, Rating.Easy]
-    labels = [f"{rating.name}: {interval.duration}" for rating, interval in previews.items()]
+    assert previews is not None and list(previews) == [
+        Rating.Hard,
+        Rating.Good,
+        Rating.Easy,
+    ]
+    labels = [
+        f"{rating.name}: {interval.duration}"
+        for rating, interval in previews.items()
+    ]
     label = view.review_interval
     for width in (700, 1300, 700):
         view.resize(width, 700)
@@ -266,21 +371,42 @@ def test_passing_intervals_on_the_question(
             keyboard = view.keyboard
             bottom = keyboard.mapTo(view, keyboard.rect().bottomLeft())
             assert top.y() > bottom.y()
-            right = bottom.x() + (keyboard.width() + min(keyboard.full_width(), keyboard.width())) / 2
+            right = (
+                bottom.x()
+                + (
+                    keyboard.width()
+                    + min(keyboard.full_width(), keyboard.width())
+                )
+                / 2
+            )
             assert abs(top.x() + label.width() - right) <= 1
         else:
             assert label.text().splitlines() == list(reversed(labels))
-            assert label.accessibleName() == f"Next intervals: {', '.join(reversed(labels))}"
+            assert (
+                label.accessibleName()
+                == f"Next intervals: {', '.join(reversed(labels))}"
+            )
             corner = view.staff.mapTo(view, view.staff.rect().bottomRight())
-            assert 0 < top.x() - corner.x() <= 16 and top.y() + label.height() - 1 == corner.y()
+            assert (
+                0 < top.x() - corner.x() <= 16
+                and top.y() + label.height() - 1 == corner.y()
+            )
     assert view.question is not None
     key = view.question.item_key()
     now += seconds
     view._clock = time.monotonic() - seconds
     with monkeypatch.context() as check:
-        check.setattr("alto.learning.calendar.review_options", Mock(side_effect=AssertionError("Intervals recalculated")))
+        check.setattr(
+            "alto.learning.calendar.review_options",
+            Mock(side_effect=AssertionError("Intervals recalculated")),
+        )
         view.submit(view.question.answer, button=None)
-    assert tuple(db.conn.execute("SELECT last_rating, due FROM review_schedules WHERE item_key=?", (key,)).fetchone()) == (
+    assert tuple(
+        db.conn.execute(
+            "SELECT last_rating, due FROM review_schedules WHERE item_key=?",
+            (key,),
+        ).fetchone(),
+    ) == (
         grade,
         now + previews[grade].seconds,
     )

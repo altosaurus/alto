@@ -5,7 +5,8 @@ package: alto.exercises
 permalink: /api/alto.exercises.packs/
 ---
 {% raw %}
-Load third-party instrument packs from ZIP archives and authoring folders.
+Load third-party instrument packs from ZIP archives and authoring
+folders.
 
 ## PackExercise
 
@@ -13,12 +14,14 @@ Load third-party instrument packs from ZIP archives and authoring folders.
 class PackExercise(ChoiceExercise)
 ```
 
-A finite set of illustrated multiple-choice cards declared by an instrument pack.
+A finite set of illustrated multiple-choice cards declared by an
+instrument pack.
 
 **Examples**
 
 ```text
-The viola pack contributes one practice card for every eligible string and pitch.
+The viola pack contributes one practice card for every eligible
+string and pitch.
 ```
 
 ### PackExercise.options
@@ -28,7 +31,8 @@ The viola pack contributes one practice card for every eligible string and pitch
 def options() -> settings.PackExerciseSettings
 ```
 
-Return the learner's options for this exercise, creating the defaults the first time.
+Return the learner's options for this exercise, creating the
+defaults the first time.
 
 **Returns**
 
@@ -40,7 +44,10 @@ Return the learner's options for this exercise, creating the defaults the first 
 >>> class Demo(PackExercise):
 ...     span = (21, 30)
 ...     range_clef = "alto"
->>> Demo.options().range_for("alto"), Demo.options().sound
+>>> (
+...     Demo.options().range_for("alto"),
+...     Demo.options().sound,
+... )
 ((21, 30), None)
 >>> _ = settings.pack_exercises.pop("Demo")
 ```
@@ -84,7 +91,10 @@ Find the lowest and highest key a keyboard exercise asks.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
-...     key_span, key_default = (28, 89), (48, 72)
+...     key_span, key_default = (
+...         (28, 89),
+...         (48, 72),
+...     )
 >>> Demo.chosen_keys()
 (48, 72)
 ```
@@ -96,7 +106,8 @@ Find the lowest and highest key a keyboard exercise asks.
 def chosen_span() -> tuple[str, str]
 ```
 
-Name the lowest and highest key a keyboard exercise asks, for drawing the keyboards over that range.
+Name the lowest and highest key a keyboard exercise asks, for
+drawing the keyboards over that range.
 
 **Returns**
 
@@ -106,7 +117,10 @@ Name the lowest and highest key a keyboard exercise asks, for drawing the keyboa
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
-...     key_span, key_default = (28, 89), (48, 72)
+...     key_span, key_default = (
+...         (28, 89),
+...         (48, 72),
+...     )
 >>> Demo.chosen_span()
 ('C3', 'C5')
 ```
@@ -140,7 +154,8 @@ Find the intervals a keyboard exercise asks.
 def chosen_manuals() -> tuple[str, ...]
 ```
 
-Find the keyboards a keyboard exercise puts its highlighted keys on.
+Find the keyboards a keyboard exercise puts its highlighted keys
+on.
 
 **Returns**
 
@@ -150,7 +165,10 @@ Find the keyboards a keyboard exercise puts its highlighted keys on.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
-...     manual_names = ("Upper manual", "Lower manual")
+...     manual_names = (
+...         "Upper manual",
+...         "Lower manual",
+...     )
 >>> Demo.chosen_manuals()
 ('Upper manual', 'Lower manual')
 ```
@@ -161,7 +179,8 @@ Find the keyboards a keyboard exercise puts its highlighted keys on.
 def active_cards() -> tuple[Question, ...]
 ```
 
-Build the cards for the learner's settings: the sharps and flats, the octave, and the range they chose.
+Build the cards for the learner's settings: the sharps and
+flats, the octave, and the range they chose.
 
 **Returns**
 
@@ -170,7 +189,8 @@ Build the cards for the learner's settings: the sharps and flats, the octave, an
 **Examples**
 
 ```text
-An exercise whose pack declares no settings always asks every card.
+An exercise whose pack declares no settings always asks every
+card.
 ```
 
 ### PackExercise.sound_instrument
@@ -179,7 +199,8 @@ An exercise whose pack declares no settings always asks every card.
 def sound_instrument(key: str | None) -> str | None
 ```
 
-Play the pack's own sound unless the pack offers the choice and the learner chose another instrument.
+Play the pack's own sound unless the pack offers the choice and
+the learner chose another instrument.
 
 **Parameters**
 
@@ -192,7 +213,8 @@ Play the pack's own sound unless the pack offers the choice and the learner chos
 **Examples**
 
 ```text
-An exercise with no sound setting always plays the pack's instrument.
+An exercise with no sound setting always plays the pack's
+instrument.
 ```
 
 ### PackExercise.sound_options
@@ -202,10 +224,13 @@ An exercise with no sound setting always plays the pack's instrument.
 def sound_options() -> list[tuple[str, list[tuple[str, str]]]]
 ```
 
-List the instruments a learner can choose to sound in this exercise, in the order they are offered.
+List the instruments a learner can choose to sound in this
+exercise, in the order they are offered.
 
-The instruments that came with the plugin come first, then other instruments of the same kind (other harpsichords
-for a harpsichord), then every other installed instrument, whatever its kind. An instrument with no recordings on
+The instruments that came with the plugin come first, then other
+instruments of the same kind (other harpsichords
+for a harpsichord), then every other installed instrument,
+whatever its kind. An instrument with no recordings on
 disk is left out.
 
 **Returns**
@@ -219,7 +244,10 @@ disk is left out.
 >>> class Demo(PackExercise):
 ...     pack_name = "Demo pack"
 ...     instruments = {}
->>> [heading for heading, _ in Demo.sound_options()]
+>>> [
+...     heading
+...     for heading, _ in Demo.sound_options()
+... ]
 ['Other instruments']
 ```
 
@@ -238,7 +266,8 @@ Identify the pack settings used to generate this catalog.
 **Examples**
 
 ```text
-Adding an eligible pitch changes the signature, and so does asking sharps and flats or the octave.
+Adding an eligible pitch changes the signature, and so does
+asking sharps and flats or the octave.
 ```
 
 ### PackExercise.refresh
@@ -247,7 +276,8 @@ Adding an eligible pitch changes the signature, and so does asking sharps and fl
 def refresh(question: Question) -> Question
 ```
 
-Restore the instrument reference on cards saved by the single-instrument prototype.
+Restore the instrument reference on cards saved by the
+single-instrument prototype.
 
 **Parameters**
 
@@ -260,7 +290,8 @@ Restore the instrument reference on cards saved by the single-instrument prototy
 **Examples**
 
 ```text
-An existing D-string card keeps its original position when a pack is upgraded.
+An existing D-string card keeps its original position when a
+pack is upgraded.
 ```
 
 ### PackExercise.make_question
@@ -355,9 +386,16 @@ Validate the settings a pack offers for one of its exercises.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> read_controls({"range": "alto", "octave": True}, where="pack.v.notes")
+>>> read_controls(
+...     {"range": "alto", "octave": True},
+...     where="pack.v.notes",
+... )
 {'range': 'alto', 'octave': True}
->>> read_controls({"range": True, "intervals": True}, where="pack.v.keys", kinds=KEYBOARD_CONTROL_KINDS)
+>>> read_controls(
+...     {"range": True, "intervals": True},
+...     where="pack.v.keys",
+...     kinds=KEYBOARD_CONTROL_KINDS,
+... )
 {'range': True, 'intervals': True}
 >>> read_controls(None, where="pack.v.notes")
 {}
@@ -369,7 +407,8 @@ Validate the settings a pack offers for one of its exercises.
 def read_pack(path: Path) -> list[type[PackExercise]]
 ```
 
-Read and validate every exercise before making any of them available.
+Read and validate every exercise before making any of them
+available.
 
 **Parameters**
 
@@ -386,7 +425,8 @@ Read and validate every exercise before making any of them available.
 **Examples**
 
 ```text
-The viola example contributes note identification and instrument anatomy exercises.
+The viola example contributes note identification and instrument
+anatomy exercises.
 ```
 
 ## pack_manifests
@@ -395,7 +435,8 @@ The viola example contributes note identification and instrument anatomy exercis
 def pack_manifests(folder: Path) -> tuple[list[Path], list[str]]
 ```
 
-Find each installed ZIP or folder manifest, including packs that failed validation.
+Find each installed ZIP or folder manifest, including packs that
+failed validation.
 
 **Parameters**
 
@@ -417,7 +458,8 @@ An author can install either viola.zip or viola/pack.json.
 def installed_pack_info(path: Path) -> dict
 ```
 
-Read a pack's manifest for display or duplicate detection without loading its media.
+Read a pack's manifest for display or duplicate detection without
+loading its media.
 
 **Parameters**
 
@@ -458,7 +500,12 @@ One pack in the plugins folder, as listed for removal.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> import os
->>> plugin = InstalledPlugin(title="Viola", path=Path("viola.zip"), manifest=Path("viola.zip"), snapshot=os.stat("."))
+>>> plugin = InstalledPlugin(
+...     title="Viola",
+...     path=Path("viola.zip"),
+...     manifest=Path("viola.zip"),
+...     snapshot=os.stat("."),
+... )
 >>> plugin.title
 'Viola'
 ```
@@ -469,7 +516,8 @@ One pack in the plugins folder, as listed for removal.
 def installed_plugins(folder: Path) -> tuple[list[InstalledPlugin], list[str]]
 ```
 
-List the packs in the plugins folder, including damaged ones, so each can be removed.
+List the packs in the plugins folder, including damaged ones, so
+each can be removed.
 
 **Parameters**
 
@@ -483,7 +531,9 @@ List the packs in the plugins folder, including damaged ones, so each can be rem
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
->>> installed_plugins(Path("no-such-plugins-folder"))
+>>> installed_plugins(
+...     Path("no-such-plugins-folder")
+... )
 ([], [])
 ```
 
@@ -499,7 +549,8 @@ def install_pack(
 ) -> str
 ```
 
-Validate a copy of the selected ZIP and install it for the next startup.
+Validate a copy of the selected ZIP and install it for the next
+startup.
 
 **Parameters**
 
@@ -520,7 +571,8 @@ Validate a copy of the selected ZIP and install it for the next startup.
 **Examples**
 
 ```text
-Installing a downloaded viola.zip adds both of its exercises on the next launch.
+Installing a downloaded viola.zip adds both of its exercises on the
+next launch.
 ```
 
 ## load_packs
@@ -529,7 +581,8 @@ Installing a downloaded viola.zip adds both of its exercises on the next launch.
 def load_packs(folder: Path) -> list[str]
 ```
 
-Register valid packs and return readable errors for any packs that were skipped.
+Register valid packs and return readable errors for any packs that
+were skipped.
 
 **Parameters**
 

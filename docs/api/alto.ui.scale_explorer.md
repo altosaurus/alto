@@ -52,7 +52,9 @@ Build the scale diagram and its controls.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> ScaleExplorer(scale="Dorian", tonic="D4").notes[0].name
+>>> ScaleExplorer(
+...     scale="Dorian", tonic="D4"
+... ).notes[0].name
 'D'
 ```
 
@@ -68,7 +70,9 @@ Rebuild the notation and gap labels for the selected example.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> explorer = ScaleExplorer()
->>> explorer.mode.setCurrentText("Harmonic minor")
+>>> explorer.mode.setCurrentText(
+...     "Harmonic minor"
+... )
 >>> explorer.steps[5].text()
 '3H'
 ```

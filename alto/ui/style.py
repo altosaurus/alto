@@ -1,5 +1,6 @@
 """
-Application-wide stylesheet: rounded corners on buttons, panes, lists and scroll bars.
+Application-wide stylesheet: rounded corners on buttons, panes, lists
+and scroll bars.
 
 Colors come from the palette so it follows the system light/dark theme.
 
@@ -30,11 +31,14 @@ def navigation_heading_style(palette: QPalette) -> tuple[QFont, QColor]:
     Returns
     -------
     tuple of QFont and QColor
-        The small, spaced capitals and muted foreground used for section headings.
+        The small, spaced capitals and muted foreground used for section
+        headings.
 
     Examples
     --------
-    >>> navigation_heading_style(QPalette())[0].bold()
+    >>> navigation_heading_style(QPalette())[
+    ...     0
+    ... ].bold()
     True
     """
     font = QFont()
@@ -42,12 +46,17 @@ def navigation_heading_style(palette: QPalette) -> tuple[QFont, QColor]:
     font.setBold(True)
     font.setCapitalization(QFont.Capitalization.AllUppercase)
     font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 1.3)
-    return font, blend(palette.text().color(), b=palette.window().color(), t=0.5)
+    return font, blend(
+        palette.text().color(),
+        b=palette.window().color(),
+        t=0.5,
+    )
 
 
 def _button_colors(palette: QPalette) -> dict[str, str]:
     """
-    Mix the outline, hover, pressed, and disabled colors for rounded hairline buttons.
+    Mix the outline, hover, pressed, and disabled colors for rounded
+    hairline buttons.
 
     Parameters
     ----------
@@ -61,7 +70,9 @@ def _button_colors(palette: QPalette) -> dict[str, str]:
 
     Examples
     --------
-    >>> _button_colors(QPalette())["button_border"].startswith("#")
+    >>> _button_colors(QPalette())[
+    ...     "button_border"
+    ... ].startswith("#")
     True
     """
     base, text = palette.base().color(), palette.text().color()
@@ -70,23 +81,34 @@ def _button_colors(palette: QPalette) -> dict[str, str]:
         "button_border": blend_name(base, b=text, t=0.31),
         "button_hover": blend_name(base, b=accent, t=0.25),
         "button_pressed_border": blend_name(text, b=accent, t=0.35),
-        "button_disabled_text": blend_name(palette.window().color(), b=text, t=0.44),
+        "button_disabled_text": blend_name(
+            palette.window().color(),
+            b=text,
+            t=0.44,
+        ),
     }
 
 
-def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> str:
+def app_style(
+    palette: QPalette,
+    *,
+    paper_palette: QPalette | None = None,
+) -> str:
     """
     Build the stylesheet for a palette.
 
-    Push buttons use rounded hairline borders. In dark mode, exercise tiles have near-black outlines and
+    Push buttons use rounded hairline borders. In dark mode, exercise
+    tiles have near-black outlines and
     other standard buttons have graphite-gray outlines.
 
     Parameters
     ----------
     palette : QPalette
-        The palette to take colors from, so the style follows the light or dark theme.
+        The palette to take colors from, so the style follows the light
+        or dark theme.
     paper_palette : QPalette or None, default None
-        The theme's light variant for playback on white staff paper. Dark desktop themes use Qt light colors
+        The theme's light variant for playback on white staff paper.
+        Dark desktop themes use Qt light colors
         with the desktop accent when no light variant is supplied.
 
     Returns
@@ -102,7 +124,12 @@ def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> st
     True
     """
     base, dark, midlight = (
-        palette.color(r).name() for r in (QPalette.ColorRole.Base, QPalette.ColorRole.Dark, QPalette.ColorRole.Midlight)
+        palette.color(r).name()
+        for r in (
+            QPalette.ColorRole.Base,
+            QPalette.ColorRole.Dark,
+            QPalette.ColorRole.Midlight,
+        )
     )
     base_c, text_c, accent_c = (
         palette.color(QPalette.ColorRole.Base),
@@ -113,7 +140,10 @@ def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> st
     dark_surface = base_c.lightness() < 128
     dark_hairlines = ""
     if dark_surface:
-        for selector, border in (("QPushButton", QColor("#505050")), ("ExerciseCard", QColor("#181818"))):
+        for selector, border in (
+            ("QPushButton", QColor("#505050")),
+            ("ExerciseCard", QColor("#181818")),
+        ):
             dark_hairlines += _DARK_HAIRLINE.format(
                 button=selector,
                 border=border.name(),
@@ -153,11 +183,18 @@ def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> st
         if dark_surface:
             paper_palette = QPalette(QColor("#efefef"))
             paper_palette.setColor(QPalette.ColorRole.Highlight, accent_c)
-            paper_palette.setColor(QPalette.ColorRole.HighlightedText, palette.highlightedText().color())
+            paper_palette.setColor(
+                QPalette.ColorRole.HighlightedText,
+                palette.highlightedText().color(),
+            )
     return sheet + _PAPER_BUTTON.format(
         button='QFrame#lessonExample[staffPaper="true"] > QPushButton#lessonPlayback',
         base=paper_palette.base().color().name(),
-        ink=blend_name(paper_palette.buttonText().color(), b=paper_palette.mid().color(), t=0.32),
+        ink=blend_name(
+            paper_palette.buttonText().color(),
+            b=paper_palette.mid().color(),
+            t=0.32,
+        ),
         accent=paper_palette.highlight().color().name(),
         on_accent=paper_palette.highlightedText().color().name(),
         window=paper_palette.window().color().name(),

@@ -117,7 +117,8 @@ These are enforced by tools wherever a tool can do it. Where none can, they are 
 
 ### Layout
 
-- Lines are at most 130 characters. Strings use double quotes.
+- Wrap Python code at 79 characters and docstrings and standalone comments
+  at 72. Strings use double quotes.
 - Anything with several elements that does not fit on a line (a list, dictionary, tuple, call or signature) goes **one element
   per line with a trailing comma**. A trailing comma you write yourself keeps even a short list exploded; that is how you ask
   for one-per-line. Function definitions with two or more parameters, and calls, collections and tuples with four or more

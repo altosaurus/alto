@@ -1,4 +1,7 @@
-"""Shared test setup: one Qt application for the whole run, and settings and data kept away from the real ones."""
+"""
+Shared test setup: one Qt application for the whole run, and settings
+and data kept away from the real ones.
+"""
 
 from __future__ import annotations
 
@@ -21,7 +24,8 @@ import shutil
 import tempfile
 import time
 
-# Alto saves its settings (QSettings) and its database under the XDG folders. Point them at a throwaway folder before
+# Alto saves its settings (QSettings) and its database under the XDG
+# folders. Point them at a throwaway folder before
 # anything reads them, so no test can read or change the real ones.
 _HOME = tempfile.mkdtemp(prefix="alto-tests-")
 os.environ["XDG_CONFIG_HOME"] = f"{_HOME}/config"
@@ -29,9 +33,18 @@ os.environ["XDG_DATA_HOME"] = f"{_HOME}/data"
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 atexit.register(lambda: shutil.rmtree(_HOME, ignore_errors=True))
 
-# Git tells a hook which repository it runs for. A push from a worktree sets GIT_DIR, and the tests that make throwaway
-# repositories would then run their git commands on Alto's own. Tests never run inside a git command, so drop these.
-for _name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR", "GIT_OBJECT_DIRECTORY", "GIT_PREFIX"):
+# Git tells a hook which repository it runs for. A push from a worktree
+# sets GIT_DIR, and the tests that make throwaway
+# repositories would then run their git commands on Alto's own. Tests
+# never run inside a git command, so drop these.
+for _name in (
+    "GIT_DIR",
+    "GIT_WORK_TREE",
+    "GIT_INDEX_FILE",
+    "GIT_COMMON_DIR",
+    "GIT_OBJECT_DIRECTORY",
+    "GIT_PREFIX",
+):
     os.environ.pop(_name, None)
 
 import pytest  # noqa: E402
@@ -80,17 +93,24 @@ def app() -> QCoreApplication:
 
 def _let_go_of_the_mouse() -> None:
     """
-    Release any mouse button that Qt still thinks is held when a test ends.
+    Release any mouse button that Qt still thinks is held when a test
+    ends.
 
-    `QTest.mouseDClick` leaves the button held, and while one is, Qt sends no hover events, so a later test that points at a
-    button sees it never light up. A button is released over a spare window, which is closed again.
+    `QTest.mouseDClick` leaves the button held, and while one is, Qt
+    sends no hover events, so a later test that points at a
+    button sees it never light up. A button is released over a spare
+    window, which is closed again.
     """
     held = QApplication.mouseButtons()
     if held == Qt.MouseButton.NoButton:
         return
     spare = QWidget()
     spare.show()
-    for button in (Qt.MouseButton.LeftButton, Qt.MouseButton.RightButton, Qt.MouseButton.MiddleButton):
+    for button in (
+        Qt.MouseButton.LeftButton,
+        Qt.MouseButton.RightButton,
+        Qt.MouseButton.MiddleButton,
+    ):
         if held & button:
             QTest.mouseRelease(spare, button)
     spare.close()
@@ -98,7 +118,10 @@ def _let_go_of_the_mouse() -> None:
 
 
 def _close_every_window() -> None:
-    """Close and delete every window a test left open, so none is torn down by Qt after the application is gone."""
+    """
+    Close and delete every window a test left open, so none is torn down
+    by Qt after the application is gone.
+    """
     if QApplication.instance() is None:
         return
     for widget in QApplication.topLevelWidgets():
@@ -110,7 +133,8 @@ def _close_every_window() -> None:
 @pytest.fixture(autouse=True)
 def _zoom_at_100() -> Iterator[None]:
     """
-    Every test starts at a zoom of 100%, whatever an earlier test chose, and leaves the application font as it found it.
+    Every test starts at a zoom of 100%, whatever an earlier test chose,
+    and leaves the application font as it found it.
 
     Yields
     ------
@@ -126,13 +150,16 @@ def _zoom_at_100() -> Iterator[None]:
         app.setFont(font)
 
 
-TEST_TIME_LIMIT = 8.0  # seconds a test may take, unless it is marked slow; about three times the slowest ordinary test on CI
+# seconds a test may take, unless it is marked slow; about three times
+# the slowest ordinary test on CI
+TEST_TIME_LIMIT = 8.0
 
 
 @pytest.hookimpl(wrapper=True)
 def pytest_runtest_call(item: pytest.Item) -> Iterator[None]:
     """
-    Fail a test that takes longer than `TEST_TIME_LIMIT`, unless it is marked `slow` or `perf`, so the suite stays fast.
+    Fail a test that takes longer than `TEST_TIME_LIMIT`, unless it is
+    marked `slow` or `perf`, so the suite stays fast.
 
     Parameters
     ----------
@@ -150,8 +177,13 @@ def pytest_runtest_call(item: pytest.Item) -> Iterator[None]:
     exempt = any(item.iter_markers(name=name) for name in ("slow", "perf"))
     if took > TEST_TIME_LIMIT and not exempt:
         pytest.fail(
-            f"The test took {took:.1f} s, over the limit of {TEST_TIME_LIMIT:.0f} s. Let animations finish with "
-            "motion.settle() instead of waiting, test less at once, or mark it @pytest.mark.slow if it must be thorough.",
+            "The test took "
+            f"{took:.1f}"
+            " s, over the limit of "
+            f"{TEST_TIME_LIMIT:.0f}"
+            " s. Let animations finish with "
+            "motion.settle() instead of waiting, test less at once, or mark"
+            " it @pytest.mark.slow if it must be thorough.",
         )
     return result
 
@@ -159,9 +191,11 @@ def pytest_runtest_call(item: pytest.Item) -> Iterator[None]:
 @pytest.fixture(autouse=True)
 def _instant_motion(request: pytest.FixtureRequest) -> Iterator[None]:
     """
-    Run animations and feedback delays instantly, so a test checks what the interface does, not how long it takes.
+    Run animations and feedback delays instantly, so a test checks what
+    the interface does, not how long it takes.
 
-    A test marked `motion` keeps the real durations: it is about the animation or the timing itself.
+    A test marked `motion` keeps the real durations: it is about the
+    animation or the timing itself.
 
     Parameters
     ----------
@@ -199,9 +233,11 @@ SHARED_SETTINGS = (
 
 def _default_settings() -> None:
     """
-    Put every shared settings object back to its defaults, forget plugin exercises' options, and clear the saved settings.
+    Put every shared settings object back to its defaults, forget plugin
+    exercises' options, and clear the saved settings.
 
-    Each object is reset in place, because screens and panels keep references to it.
+    Each object is reset in place, because screens and panels keep
+    references to it.
     """
     for name in SHARED_SETTINGS:
         chosen = getattr(settings, name)
@@ -217,11 +253,15 @@ def _default_settings() -> None:
 @pytest.fixture(autouse=True)
 def _isolated_state() -> Iterator[None]:
     """
-    Every test starts with the default exercise settings and no saved settings, and sound off.
+    Every test starts with the default exercise settings and no saved
+    settings, and sound off.
 
-    The settings are reset before the test as well as after it, so a doctest or anything else that ran earlier in the session
-    and changed them cannot make a test depend on the order it runs in. After the test, the keyboard style, the notation font,
-    the baritone clef and the theme go back to how they were too, since tests that run in several processes meet each other's
+    The settings are reset before the test as well as after it, so a
+    doctest or anything else that ran earlier in the session
+    and changed them cannot make a test depend on the order it runs in.
+    After the test, the keyboard style, the notation font,
+    the baritone clef and the theme go back to how they were too, since
+    tests that run in several processes meet each other's
     leftovers in an order no one chose.
 
     Yields
@@ -233,14 +273,24 @@ def _isolated_state() -> Iterator[None]:
     muted = sounds.enabled
     sounds.enabled = False
     app = QApplication.instance()
-    look = (app.styleSheet(), QPalette(app.palette())) if isinstance(app, QApplication) else None
+    look = (
+        (app.styleSheet(), QPalette(app.palette()))
+        if isinstance(app, QApplication)
+        else None
+    )
     yield
     _close_every_window()
     if isinstance(app, QApplication):
         _let_go_of_the_mouse()
     sounds.enabled = muted
-    if isinstance(app, QApplication) and look is not None and app.styleSheet() != look[0]:
-        app.setStyleSheet(look[0])  # a test that applied a theme leaves the next one the look it found
+    if (
+        isinstance(app, QApplication)
+        and look is not None
+        and app.styleSheet() != look[0]
+    ):
+        app.setStyleSheet(
+            look[0],
+        )  # a test that applied a theme leaves the next one the look it found
         app.setPalette(look[1])
 
     # noinspection PyProtectedMember
@@ -259,7 +309,8 @@ def _isolated_state() -> Iterator[None]:
 @pytest.fixture
 def practiced_learner() -> Callable[..., Learner]:
     """
-    Provide a function that makes a profile with answers spread over the last `days` days, some wrong first and some slow.
+    Provide a function that makes a profile with answers spread over the
+    last `days` days, some wrong first and some slow.
 
     Returns
     -------
@@ -274,7 +325,8 @@ def practiced_learner() -> Callable[..., Learner]:
         db: Database | None = None,
     ) -> Learner:
         """
-        Build a learner with a history of answers spread over the past days.
+        Build a learner with a history of answers spread over the past
+        days.
 
         Parameters
         ----------
@@ -335,17 +387,20 @@ def practiced_learner() -> Callable[..., Learner]:
 @pytest.fixture(autouse=True)
 def _close_databases(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
     """
-    Close every database a test opened, so none is left for the garbage collector to report as unclosed.
+    Close every database a test opened, so none is left for the garbage
+    collector to report as unclosed.
 
     Parameters
     ----------
     monkeypatch : pytest.MonkeyPatch
-        Replaces settings, functions or attributes for the length of the test.
+        Replaces settings, functions or attributes for the length of the
+        test.
 
     Yields
     ------
     None
-        Control, while the test runs; every database opened meanwhile is closed afterwards.
+        Control, while the test runs; every database opened meanwhile is
+        closed afterwards.
     """
     opened = []
     original = Database.__init__
@@ -356,7 +411,8 @@ def _close_databases(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
         **kwargs: str | Path,
     ) -> None:
         """
-        Open a database as usual, and remember it so it can be closed after the test.
+        Open a database as usual, and remember it so it can be closed
+        after the test.
 
         Parameters
         ----------

@@ -16,9 +16,13 @@ from alto.ui.interval_range import IntervalRangeSlider
 
 
 @pytest.mark.parametrize("rtl", [False, True])
-def test_dragging_either_handle_changes_only_its_endpoint(app: QApplication, rtl: bool) -> None:
+def test_dragging_either_handle_changes_only_its_endpoint(
+    app: QApplication,
+    rtl: bool,
+) -> None:
     """
-    Drag each handle in both layout directions without crossing endpoints or changing on a right click.
+    Drag each handle in both layout directions without crossing
+    endpoints or changing on a right click.
 
     Parameters
     ----------
@@ -29,27 +33,54 @@ def test_dragging_either_handle_changes_only_its_endpoint(app: QApplication, rtl
     """
     slider = IntervalRangeSlider()
     slider.resize(300, 36)
-    slider.setLayoutDirection(Qt.LayoutDirection.RightToLeft if rtl else Qt.LayoutDirection.LeftToRight)
+    slider.setLayoutDirection(
+        Qt.LayoutDirection.RightToLeft
+        if rtl
+        else Qt.LayoutDirection.LeftToRight,
+    )
     slider.set_range(3, high=12, maximum=24)
     slider.show()
     app.processEvents()
-    QTest.mousePress(slider, Qt.MouseButton.LeftButton, pos=QPoint(round(slider._position(3)), 18))
+    QTest.mousePress(
+        slider,
+        Qt.MouseButton.LeftButton,
+        pos=QPoint(round(slider._position(3)), 18),
+    )
     QTest.mouseMove(slider, QPoint(round(slider._position(7)), 18))
-    QTest.mouseRelease(slider, Qt.MouseButton.LeftButton, pos=QPoint(round(slider._position(7)), 18))
+    QTest.mouseRelease(
+        slider,
+        Qt.MouseButton.LeftButton,
+        pos=QPoint(round(slider._position(7)), 18),
+    )
     assert (slider.low, slider.high) == (7, 12)
-    QTest.mousePress(slider, Qt.MouseButton.LeftButton, pos=QPoint(round(slider._position(12)), 18))
+    QTest.mousePress(
+        slider,
+        Qt.MouseButton.LeftButton,
+        pos=QPoint(round(slider._position(12)), 18),
+    )
     QTest.mouseMove(slider, QPoint(round(slider._position(24)), 18))
-    QTest.mouseRelease(slider, Qt.MouseButton.LeftButton, pos=QPoint(round(slider._position(24)), 18))
+    QTest.mouseRelease(
+        slider,
+        Qt.MouseButton.LeftButton,
+        pos=QPoint(round(slider._position(24)), 18),
+    )
     assert (slider.low, slider.high) == (7, 24)
-    QTest.mouseClick(slider, Qt.MouseButton.RightButton, pos=QPoint(round(slider._position(1)), 18))
+    QTest.mouseClick(
+        slider,
+        Qt.MouseButton.RightButton,
+        pos=QPoint(round(slider._position(1)), 18),
+    )
     assert (slider.low, slider.high) == (7, 24)
     assert not slider.grab().isNull()
     slider.close()
 
 
-def test_keyboard_adjustments_empty_selection_and_single_interval_limits(app: QApplication) -> None:
+def test_keyboard_adjustments_empty_selection_and_single_interval_limits(
+    app: QApplication,
+) -> None:
     """
-    Navigate both handles, recover an empty selection, and clamp movement to a single available interval.
+    Navigate both handles, recover an empty selection, and clamp
+    movement to a single available interval.
 
     Parameters
     ----------

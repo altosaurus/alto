@@ -1,9 +1,12 @@
 """
-What is known about each instrument's recordings, for the summary shown in the instrument settings.
+What is known about each instrument's recordings, for the summary shown
+in the instrument settings.
 
-The facts here come from the sources' own pages (the University of Iowa Musical Instrument Samples, and the Salamander
+The facts here come from the sources' own pages (the University of Iowa
+Musical Instrument Samples, and the Salamander
 Grand Piano). What is on disk
-(how many notes, their range, their size) is worked out when the page is shown, not stored here. Pure Python, no Qt.
+(how many notes, their range, their size) is worked out when the page is
+shown, not stored here. Pure Python, no Qt.
 
 Examples
 --------
@@ -21,10 +24,18 @@ from dataclasses import (
 
 from alto.settings import key_name
 
-IOWA = "University of Iowa Electronic Music Studios, Musical Instrument Samples"
-IOWA_TERMS = "Freely available, and may be downloaded and used for any projects, without restrictions (the studio's statement)."
+IOWA = (
+    "University of Iowa Electronic Music Studios, Musical Instrument Samples"
+)
+IOWA_TERMS = (
+    "Freely available, and may be downloaded and used for any projects, "
+    "without restrictions (the studio's statement)."
+)
 SALAMANDER = "Salamander Grand Piano V3, by Alexander Holm"
-SALAMANDER_TERMS = "Creative Commons Attribution 3.0 (CC BY 3.0): free to use with credit to the author."
+SALAMANDER_TERMS = (
+    "Creative Commons Attribution 3.0 (CC BY 3.0): free to use with credit"
+    " to the author."
+)
 SYNTH = "Notes outside the recorded range are synthesized."
 
 
@@ -50,11 +61,16 @@ class InstrumentInfo:
     terms : str
         The terms the recordings may be used under. Keyword-only.
     note : str, default ""
-        Anything a user should know about how Alto prepared the recordings. Keyword-only.
+        Anything a user should know about how Alto prepared the
+        recordings. Keyword-only.
 
     Examples
     --------
-    >>> info = InstrumentInfo("A flute.", source=IOWA, source_url="https://example.org/flute")
+    >>> info = InstrumentInfo(
+    ...     "A flute.",
+    ...     source=IOWA,
+    ...     source_url="https://example.org/flute",
+    ... )
     >>> info.terms == IOWA_TERMS
     True
     """
@@ -76,11 +92,19 @@ INFO: dict[str, InstrumentInfo] = {
         source=SALAMANDER,
         source_url="https://sfzinstruments.github.io/pianos/salamander",
         performer="Alexander Holm",
-        recorded="Two AKG C414 microphones in an AB position, about 12 cm above the strings",
-        includes="Medium dynamic (layer 8 of 16), a recording every minor third from A0 to C8",
+        recorded=(
+            "Two AKG C414 microphones in an AB position, about 12 cm above"
+            " the strings"
+        ),
+        includes=(
+            "Medium dynamic (layer 8 of 16), a recording every minor third"
+            " from A0 to C8"
+        ),
         terms=SALAMANDER_TERMS,
-        note="Each note is trimmed to 2.5 seconds with a fade-out. The notes between the recordings are shifted from a "
-        "neighbor by at most a semitone. The highest notes are a little sharp, up to about 60 cents at C8, as in a "
+        note="Each note is trimmed to 2.5 seconds with a fade-out. The "
+        "notes between the recordings are shifted from a "
+        "neighbor by at most a semitone. The highest notes are a little"
+        " sharp, up to about 60 cents at C8, as in a "
         "real piano's stretch tuning. Notes outside A0 to C8 are synthesized.",
     ),
     "flute": InstrumentInfo(
@@ -90,18 +114,25 @@ INFO: dict[str, InstrumentInfo] = {
         performer="Sonja Feig",
         recorded="April 2000, anechoic chamber, Neumann KM 84 microphone",
         includes="Without vibrato, fortissimo",
-        note="Every semitone from B3 to C♯7 is recorded, so Alto does not have to borrow a neighboring note. "
-        "The highest notes are played a little sharp, up to about 45 cents (nearly half a semitone), as recorded.",
+        note="Every semitone from B3 to C♯7 is recorded, so Alto does "
+        "not have to borrow a neighboring note. "
+        "The highest notes are played a little sharp, up to about 45 "
+        "cents (nearly half a semitone), as recorded.",
     ),
     "horn": InstrumentInfo(
         "A French horn.",
         source=IOWA,
         source_url="https://theremin.music.uiowa.edu/MIS-Pitches-2012/MISHorn2012.html",
         performer="Jessica Wiskus",
-        recorded="27 July 1997, anechoic chamber, Neumann KM 84 microphone, 5 feet away",
+        recorded=(
+            "27 July 1997, anechoic chamber, Neumann KM 84 microphone, 5 "
+            "feet away"
+        ),
         includes="Fortissimo",
-        note="Every semitone from A♯1 to F5 is recorded, so Alto does not have to borrow a neighboring note. "
-        "The lowest notes are played a little flat, up to about 45 cents, as recorded.",
+        note="Every semitone from A♯1 to F5 is recorded, so Alto does "
+        "not have to borrow a neighboring note. "
+        "The lowest notes are played a little flat, up to about 45 "
+        "cents, as recorded.",
     ),
     "viola_bowed": InstrumentInfo(
         "A viola, bowed (arco).",
@@ -110,8 +141,10 @@ INFO: dict[str, InstrumentInfo] = {
         performer="Manuel Tabora, on a viola by Anton Krutz (2001)",
         recorded="11 May 2012, anechoic chamber, Earthworks QTC40 microphones",
         includes="Bowed (arco), mezzo-forte, on the C, G, D and A strings",
-        note="Nearly every semitone is recorded, so Alto rarely has to borrow a neighboring note. "
-        "The source files declare 44.1 kHz but hold 96 kHz audio, so Alto reads them at 96 kHz.",
+        note="Nearly every semitone is recorded, so Alto rarely has to "
+        "borrow a neighboring note. "
+        "The source files declare 44.1 kHz but hold 96 kHz audio, so "
+        "Alto reads them at 96 kHz.",
     ),
     "viola_plucked": InstrumentInfo(
         "A viola, plucked (pizzicato).",
@@ -120,15 +153,19 @@ INFO: dict[str, InstrumentInfo] = {
         performer="Manuel Tabora, on a viola by Anton Krutz (2001)",
         recorded="11 May 2012, anechoic chamber, Earthworks QTC40 microphones",
         includes="Plucked (pizzicato), fortissimo, on the C, D and A strings",
-        note="The weakest and most ringing plucks were left out, so Alto shifts a neighboring note for those. "
-        "The source files declare 44.1 kHz but hold 96 kHz audio, so Alto reads them at 96 kHz.",
+        note="The weakest and most ringing plucks were left out, so Alto"
+        " shifts a neighboring note for those. "
+        "The source files declare 44.1 kHz but hold 96 kHz audio, so "
+        "Alto reads them at 96 kHz.",
     ),
     "marimba": InstrumentInfo(
         "A marimba, struck with yarn mallets.",
         source=IOWA,
         source_url="https://theremin.music.uiowa.edu/MIS-Pitches-2012/MISMarimba2012.html",
         performer="Andrew Thierauf",
-        recorded="20 March 2013, anechoic chamber, Earthworks QTC40 microphones",
+        recorded=(
+            "20 March 2013, anechoic chamber, Earthworks QTC40 microphones"
+        ),
         includes="Normal strokes with yarn mallets, fortissimo",
     ),
     "vibraphone": InstrumentInfo(
@@ -136,14 +173,19 @@ INFO: dict[str, InstrumentInfo] = {
         source=IOWA,
         source_url="https://theremin.music.uiowa.edu/MIS-Pitches-2012/MISVibraphone2012.html",
         performer="Andrew Thierauf",
-        recorded="10 June 2013, anechoic chamber, Earthworks QTC40 microphones",
+        recorded=(
+            "10 June 2013, anechoic chamber, Earthworks QTC40 microphones"
+        ),
         includes="Sustain, fortissimo",
     ),
 }
 
 
-# What to say about an entry that groups several ways of playing the same instrument.
-FAMILY_SUMMARY = {"Viola": "A viola, played bowed (arco) or plucked (pizzicato)."}
+# What to say about an entry that groups several ways of playing the
+# same instrument.
+FAMILY_SUMMARY = {
+    "Viola": "A viola, played bowed (arco) or plucked (pizzicato).",
+}
 
 
 @dataclass(frozen=True)
@@ -160,7 +202,8 @@ class Coverage:
     highest : int or None
         The highest recorded note, as a MIDI number. Keyword-only.
     gaps : int, default 0
-        How many semitones inside the range have no recording. Keyword-only.
+        How many semitones inside the range have no recording.
+        Keyword-only.
 
     Examples
     --------
@@ -186,7 +229,10 @@ class Coverage:
 
         Examples
         --------
-        >>> Coverage(0).installed, coverage([60]).installed
+        >>> (
+        ...     Coverage(0).installed,
+        ...     coverage([60]).installed,
+        ... )
         (False, True)
         """
         return self.count > 0
@@ -198,7 +244,8 @@ class Coverage:
         Returns
         -------
         str
-            The number of notes, the range, and how complete it is (the spacing, when the notes are well apart). Missing notes
+            The number of notes, the range, and how complete it is (the
+            spacing, when the notes are well apart). Missing notes
             are shifted from a neighbor.
 
         Examples
@@ -206,22 +253,40 @@ class Coverage:
         >>> coverage(range(60, 73)).describe()
         '13 notes, C4 to C5, every semitone'
         >>> coverage([60, 62, 64, 65]).describe()
-        '4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbor.'
+        '4 notes, C4 to F4, almost every semitone. The few missing notes
+        are shifted from a neighbor.'
         >>> coverage(range(48, 73, 2)).describe()
-        '13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbor.'
+        '13 notes, C3 to C5, about every second semitone. The other
+        notes are shifted from a neighbor.'
         >>> coverage(range(21, 109, 3)).describe()
-        '30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor.'
+        '30 notes, A0 to C8, about every third semitone. The other notes
+        are shifted from a neighbor.'
         """
         if self.lowest is None or self.highest is None:  # no notes installed
             return "None installed"
-        text = f"{self.count} notes, {key_name(self.lowest)} to {key_name(self.highest)}"
+        text = (
+            f"{self.count}"
+            " notes, "
+            f"{key_name(self.lowest)}"
+            " to "
+            f"{key_name(self.highest)}"
+        )
         if self.gaps == 0:
             return text + ", every semitone"
         if self.gaps <= max(2, (self.highest - self.lowest + 1) // 10):
-            return f"{text}, almost every semitone. The few missing notes are shifted from a neighbor."
+            return (
+                f"{text}"
+                ", almost every semitone. The few missing notes are "
+                "shifted from a neighbor."
+            )
         step = round((self.highest - self.lowest) / (self.count - 1))
         spacing = {2: "second", 3: "third", 4: "fourth"}.get(step, f"{step}th")
-        return f"{text}, about every {spacing} semitone. The other notes are shifted from a neighbor."
+        return (
+            f"{text}"
+            ", about every "
+            f"{spacing}"
+            " semitone. The other notes are shifted from a neighbor."
+        )
 
 
 def coverage(midis: Iterable[int]) -> Coverage:
@@ -231,7 +296,8 @@ def coverage(midis: Iterable[int]) -> Coverage:
     Parameters
     ----------
     midis : iterable of int
-        The MIDI numbers of the recorded notes, in any order and with repeats allowed.
+        The MIDI numbers of the recorded notes, in any order and with
+        repeats allowed.
 
     Returns
     -------

@@ -7,13 +7,16 @@ permalink: /api/alto.ui.lesson/
 {% raw %}
 The lesson pages: a page that walks through one lesson step by step.
 
-A step has some words, sometimes a sound to hear, sometimes the circle of fifths to explore, and sometimes a small task. The
+A step has some words, sometimes a sound to hear, sometimes the circle
+of fifths to explore, and sometimes a small task. The
 tasks cannot be failed and are not recorded.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> LessonsPage("circle-of-fifths", step=0).view.counter.text()
+>>> LessonsPage(
+...     "circle-of-fifths", step=0
+... ).view.counter.text()
 'Step 1 of 8'
 ```
 
@@ -36,7 +39,9 @@ Return the step a lesson was left at, from the saved settings.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> saved_step(LESSONS[0]) in range(len(LESSONS[0].steps))
+>>> saved_step(LESSONS[0]) in range(
+...     len(LESSONS[0].steps)
+... )
 True
 ```
 
@@ -78,7 +83,8 @@ StepView(
 
 Bases: `QWidget`
 
-One step of a lesson: its words, a sound to hear, the circle, and a task.
+One step of a lesson: its words, a sound to hear, the circle, and a
+task.
 
 **Attributes**
 
@@ -95,9 +101,16 @@ One step of a lesson: its words, a sound to hear, the circle, and a task.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
->>> view = StepView(CIRCLE_OF_FIFTHS.steps[1], rng=random.Random(1))
->>> view.task is not None and len(view.choice_buttons) == 4
+>>> from alto.lessons.circle_of_fifths import (
+...     CIRCLE_OF_FIFTHS,
+... )
+>>> view = StepView(
+...     CIRCLE_OF_FIFTHS.steps[1],
+...     rng=random.Random(1),
+... )
+>>> view.task is not None and len(
+...     view.choice_buttons
+... ) == 4
 True
 ```
 
@@ -114,8 +127,12 @@ Build the step and ask its first task.
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
->>> StepView(CIRCLE_OF_FIFTHS.steps[0]).circle is not None
+>>> from alto.lessons.circle_of_fifths import (
+...     CIRCLE_OF_FIFTHS,
+... )
+>>> StepView(
+...     CIRCLE_OF_FIFTHS.steps[0]
+... ).circle is not None
 True
 ```
 
@@ -130,10 +147,14 @@ Play the step's notes.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> from alto.lessons.circle_of_fifths import (
+...     CIRCLE_OF_FIFTHS,
+... )
 >>> from unittest.mock import patch
 >>> with patch.object(sounds, "enabled", False):
-...     StepView(CIRCLE_OF_FIFTHS.steps[1]).hear()
+...     StepView(
+...         CIRCLE_OF_FIFTHS.steps[1]
+...     ).hear()
 ```
 
 ### StepView.walk
@@ -151,7 +172,9 @@ Move the pick one fifth around the outer ring.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> from alto.lessons.circle_of_fifths import (
+...     CIRCLE_OF_FIFTHS,
+... )
 >>> view = StepView(CIRCLE_OF_FIFTHS.steps[2])
 >>> view.walk(1)
 >>> # noinspection PyUnresolvedReferences
@@ -175,8 +198,13 @@ Ask a new task, with a fresh circle and clean feedback.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
->>> view = StepView(CIRCLE_OF_FIFTHS.steps[3], rng=random.Random(1))
+>>> from alto.lessons.circle_of_fifths import (
+...     CIRCLE_OF_FIFTHS,
+... )
+>>> view = StepView(
+...     CIRCLE_OF_FIFTHS.steps[3],
+...     rng=random.Random(1),
+... )
 >>> first = view.task
 >>> view.ask()
 >>> view.task is not None and view.again.isHidden()
@@ -214,7 +242,9 @@ One lesson being taken: the step, a progress bar, and Back and Next.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> from alto.lessons.circle_of_fifths import (
+...     CIRCLE_OF_FIFTHS,
+... )
 >>> view = LessonView(CIRCLE_OF_FIFTHS)
 >>> view.counter.text()
 'Step 1 of 8'
@@ -249,7 +279,8 @@ def go(
 ) -> None
 ```
 
-Show a step. Going before the first leaves to the list, and going past the last finishes the lesson.
+Show a step. Going before the first leaves to the list, and
+going past the last finishes the lesson.
 
 **Parameters**
 
@@ -295,7 +326,8 @@ The page of an open lesson, with a button to leave it.
 
 **Constructor**
 
-Build the page for a lesson, at the step it was left at unless another is asked for.
+Build the page for a lesson, at the step it was left at unless
+another is asked for.
 
 **Parameters**
 
@@ -310,7 +342,9 @@ Build the page for a lesson, at the step it was left at unless another is asked 
 **Constructor examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> LessonsPage("circle-of-fifths", step=2).view.current
+>>> LessonsPage(
+...     "circle-of-fifths", step=2
+... ).view.current
 2
 ```
 {% endraw %}

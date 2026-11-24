@@ -7,7 +7,8 @@ permalink: /api/alto.lessons.clef_basics/
 {% raw %}
 The lesson on clefs, taught from nothing.
 
-It covers what a clef does, the three symbols (the G, C and F clef) and the line each clef puts them on, the way every C clef
+It covers what a clef does, the three symbols (the G, C and F clef) and
+the line each clef puts them on, the way every C clef
 points at middle C, and the rarer clefs.
 
 **Examples**
@@ -39,7 +40,9 @@ Ask which of the three symbols a clef is made with.
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = symbol_task(random.Random(2))
->>> task.correct == CLEF_SYMBOL_NAMES[SYMBOLS[task.clef]]
+>>> task.correct == CLEF_SYMBOL_NAMES[
+...     SYMBOLS[task.clef]
+... ]
 True
 ```
 

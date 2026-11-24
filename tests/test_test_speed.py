@@ -1,4 +1,7 @@
-"""Keep the test suite fast: no new fixed waits in tests, except in tests about timing (the time limit is in conftest.py)."""
+"""
+Keep the test suite fast: no new fixed waits in tests, except in tests
+about timing (the time limit is in conftest.py).
+"""
 
 from __future__ import annotations
 
@@ -9,8 +12,10 @@ TESTS = Path(__file__).resolve().parent
 WAITS = ("QTest.qWait", "time.sleep")
 ALLOWED_MARKS = ("mark.motion", "mark.slow")
 
-# The fixed waits each file has outside tests marked motion or slow, as they were when this check began. Most wait for real
-# audio, subprocesses or network timeouts. A file may have fewer; lower its number when one goes.
+# The fixed waits each file has outside tests marked motion or slow, as
+# they were when this check began. Most wait for real
+# audio, subprocesses or network timeouts. A file may have fewer; lower
+# its number when one goes.
 BASELINE = {
     "test_anki_exporter.py": 1,
     "test_app_settings.py": 1,
@@ -38,9 +43,11 @@ BASELINE = {
 
 def fixed_waits(path: Path) -> int:
     """
-    Count the fixed waits in a test file, leaving out those in tests marked motion or slow.
+    Count the fixed waits in a test file, leaving out those in tests
+    marked motion or slow.
 
-    Each call is counted once, by the function at the top of the file that holds it, so a helper defined inside a test is not
+    Each call is counted once, by the function at the top of the file
+    that holds it, so a helper defined inside a test is not
     counted twice.
 
     Parameters
@@ -51,23 +58,33 @@ def fixed_waits(path: Path) -> int:
     Returns
     -------
     int
-        How many `QTest.qWait` and `time.sleep` calls it makes outside tests about timing.
+        How many `QTest.qWait` and `time.sleep` calls it makes outside
+        tests about timing.
     """
     count = 0
     for node in ast.parse(path.read_text(encoding="utf-8")).body:
         if not isinstance(node, ast.FunctionDef):
             continue
-        if any(mark in ast.unparse(decorator) for decorator in node.decorator_list for mark in ALLOWED_MARKS):
+        if any(
+            mark in ast.unparse(decorator)
+            for decorator in node.decorator_list
+            for mark in ALLOWED_MARKS
+        ):
             continue
-        count += sum(isinstance(call, ast.Call) and ast.unparse(call.func) in WAITS for call in ast.walk(node))
+        count += sum(
+            isinstance(call, ast.Call) and ast.unparse(call.func) in WAITS
+            for call in ast.walk(node)
+        )
     return count
 
 
 def test_no_test_gains_a_fixed_wait() -> None:
     """
-    Fail when a file has more fixed waits than it had, so the suite does not slow down one wait at a time.
+    Fail when a file has more fixed waits than it had, so the suite does
+    not slow down one wait at a time.
 
-    A screen test lets animations and feedback finish with `motion.settle()`, which takes no time. A test about how long
+    A screen test lets animations and feedback finish with
+    `motion.settle()`, which takes no time. A test about how long
     something takes is marked `motion` and may wait.
     """
     grown = {}
@@ -76,15 +93,27 @@ def test_no_test_gains_a_fixed_wait() -> None:
         if count > BASELINE.get(path.name, 0):
             grown[path.name] = (BASELINE.get(path.name, 0), count)
     assert not grown, (
-        "These test files wait a fixed time more often than before (before, now): "
-        + ", ".join(f"{name} {before} -> {now}" for name, (before, now) in grown.items())
-        + ". Use motion.settle() to let animations and feedback finish, or mark a test about timing with @pytest.mark.motion."
+        (
+            "These test files wait a fixed time more often than before "
+            "(before, now): "
+        )
+        + ", ".join(
+            f"{name} {before} -> {now}"
+            for name, (before, now) in grown.items()
+        )
+        + (
+            ". Use motion.settle() to let animations and feedback finish, "
+            "or mark a test about timing with @pytest.mark.motion."
+        )
     )
 
 
-def test_the_count_of_fixed_waits_skips_tests_about_timing(tmp_path: Path) -> None:
+def test_the_count_of_fixed_waits_skips_tests_about_timing(
+    tmp_path: Path,
+) -> None:
     """
-    Count the waits in ordinary tests and helpers, once each, and not those in tests marked motion or slow.
+    Count the waits in ordinary tests and helpers, once each, and not
+    those in tests marked motion or slow.
 
     Parameters
     ----------

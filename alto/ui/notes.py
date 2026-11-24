@@ -1,17 +1,25 @@
 """
-Engraved notes built from the Noto Music font's glyphs, the way notation software draws them.
+Engraved notes built from the Noto Music font's glyphs, the way notation
+software draws them.
 
-The font only has stem-up notes. A stem-down note is made from the same glyph turned half a turn (which puts the stem on
-the left of the head and keeps the head's tilt), with the flags cut from the stem-up glyph and mirrored so they sweep up
+The font only has stem-up notes. A stem-down note is made from the same
+glyph turned half a turn (which puts the stem on
+the left of the head and keeps the head's tilt), with the flags cut from
+the stem-up glyph and mirrored so they sweep up
 from the stem's end, as an engraver would write them.
 
-All numbers are in glyph units at a font size of 100, where one staff space is `STAFF_SPACE` units.
+All numbers are in glyph units at a font size of 100, where one staff
+space is `STAFF_SPACE` units.
 
 Examples
 --------
 >>> note_shape("quarter").isEmpty()
 False
->>> note_shape("whole", stem_down=True) is note_shape("whole")  # a whole note has no stem to turn
+>>> note_shape(
+...     "whole", stem_down=True
+... ) is note_shape(
+...     "whole"
+... )  # a whole note has no stem to turn
 True
 """
 
@@ -30,7 +38,9 @@ from PySide6.QtGui import (
 )
 
 STAFF_SPACE = 33.5  # a note head is one staff space tall
-GLYPHS = {  # the double whole note is not here: its square form is drawn by _square_breve (the font only has the oval one)
+# the double whole note is not here: its square form is drawn by
+# _square_breve (the font only has the oval one)
+GLYPHS = {
     "whole": "\U0001d15d",
     "half": "\U0001d15e",
     "quarter": "\U0001d15f",
@@ -64,9 +74,11 @@ _shapes: dict[tuple[str, bool], QPainterPath] = {}
 
 def _square_breve() -> QPainterPath:
     """
-    Return the square form of the double whole note (stored as "breve"), centered on (0, 0).
+    Return the square form of the double whole note (stored as "breve"),
+    centered on (0, 0).
 
-    Two slender upright bars are joined by a heavy bar above and below a hollow slot, with the uprights standing a little
+    Two slender upright bars are joined by a heavy bar above and below a
+    hollow slot, with the uprights standing a little
     proud at the ends, so the sides read like the serifs of a capital I.
 
     Returns
@@ -77,7 +89,18 @@ def _square_breve() -> QPainterPath:
     Examples
     --------
     >>> shape_ = _square_breve()
-    >>> round(shape_.boundingRect().width() / STAFF_SPACE, 2), round(shape_.boundingRect().height() / STAFF_SPACE, 2)
+    >>> (
+    ...     round(
+    ...         shape_.boundingRect().width()
+    ...         / STAFF_SPACE,
+    ...         2,
+    ...     ),
+    ...     round(
+    ...         shape_.boundingRect().height()
+    ...         / STAFF_SPACE,
+    ...         2,
+    ...     ),
+    ... )
     (1.65, 1.45)
     """
     s = STAFF_SPACE
@@ -91,7 +114,8 @@ def _square_breve() -> QPainterPath:
         r: float = 0.0,
     ) -> QPainterPath:
         """
-        Return a rectangle, optionally with rounded corners, in staff spaces.
+        Return a rectangle, optionally with rounded corners, in staff
+        spaces.
 
         Parameters
         ----------
@@ -113,7 +137,9 @@ def _square_breve() -> QPainterPath:
 
         Examples
         --------
-        >>> rect(-1.0, y0=-1.0, x1=1.0, y1=1.0)  # doctest: +SKIP
+        >>> rect(
+        ...     -1.0, y0=-1.0, x1=1.0, y1=1.0
+        ... )  # doctest: +SKIP
         """
         path = QPainterPath()
         if r:
@@ -138,7 +164,10 @@ def _square_breve() -> QPainterPath:
             )
         return path
 
-    outer, inner = 0.825, 0.655  # the uprights run from `inner` to `outer`, either side of the middle
+    outer, inner = (
+        0.825,
+        0.655,
+    )  # the uprights run from `inner` to `outer`, either side of the middle
     shape = rect(
         -outer,
         y0=-0.62,
@@ -176,12 +205,14 @@ def _square_breve() -> QPainterPath:
 
 def _glyph(value: str) -> QPainterPath:
     """
-    Return the outline of a note value's glyph, made the first time it is asked for.
+    Return the outline of a note value's glyph, made the first time it
+    is asked for.
 
     Parameters
     ----------
     value : str
-        "breve", "whole", "half", "quarter", "eighth", "sixteenth" or "thirty_second".
+        "breve", "whole", "half", "quarter", "eighth", "sixteenth" or
+        "thirty_second".
 
     Returns
     -------
@@ -192,7 +223,9 @@ def _glyph(value: str) -> QPainterPath:
     --------
     >>> _glyph("half").isEmpty()
     False
-    >>> _glyph("half") is _glyph("half")  # kept after the first time
+    >>> _glyph("half") is _glyph(
+    ...     "half"
+    ... )  # kept after the first time
     True
     """
     path = _glyphs.get(value)
@@ -214,7 +247,8 @@ def _stem_down_shape(value: str) -> QPainterPath:
     """
     Make the stem-down form of a note from the stem-up glyph.
 
-    The glyph is turned half a turn about the center of its head, and a longer stem or flags are added where the value needs
+    The glyph is turned half a turn about the center of its head, and a
+    longer stem or flags are added where the value needs
     them.
 
     Parameters
@@ -237,10 +271,14 @@ def _stem_down_shape(value: str) -> QPainterPath:
     turn.translate(hx, hy)
     turn.rotate(180)
     turn.translate(-hx, -hy)
-    shape = turn.map(_glyph("half" if value == "half" else "quarter"))  # head and stem, stem now on the left
+    shape = turn.map(
+        _glyph("half" if value == "half" else "quarter"),
+    )  # head and stem, stem now on the left
     left, right = 2 * hx - STEM_RIGHT, 2 * hx - STEM_LEFT  # where that stem is
     if value in FLAGS:
-        extra = STEM_TOP["quarter"] - STEM_TOP[value]  # the 32nd note's stem is longer than the quarter's
+        extra = (
+            STEM_TOP["quarter"] - STEM_TOP[value]
+        )  # the 32nd note's stem is longer than the quarter's
         if extra:
             stem = QPainterPath()
             stem.addRect(
@@ -263,9 +301,15 @@ def _stem_down_shape(value: str) -> QPainterPath:
         )
         flags = _glyph(value).intersected(beside)
         move = QTransform()
-        move.translate(right - 0.3 - FLAG_CLIP, 0)  # the flag's root meets the new stem
+        move.translate(
+            right - 0.3 - FLAG_CLIP,
+            0,
+        )  # the flag's root meets the new stem
         move.translate(0, 2 * hy)
-        move.scale(1, -1)  # mirrored top to bottom: it now sweeps up from the stem's end
+        move.scale(
+            1,
+            -1,
+        )  # mirrored top to bottom: it now sweeps up from the stem's end
         shape = shape.united(move.map(flags))
     return shape
 
@@ -278,13 +322,15 @@ def note_shape(
     """
     Return the outline of a note of a value, with the stem up or down.
 
-    Half notes and shorter values have stems, so a double whole note or whole note looks the same either way.
+    Half notes and shorter values have stems, so a double whole note or
+    whole note looks the same either way.
     Shapes are cached after their first use.
 
     Parameters
     ----------
     value : str
-        "breve", "whole", "half", "quarter", "eighth", "sixteenth" or "thirty_second".
+        "breve", "whole", "half", "quarter", "eighth", "sixteenth" or
+        "thirty_second".
     stem_down : bool, default False
         Turn the stem down. Keyword-only.
 
@@ -295,7 +341,10 @@ def note_shape(
 
     Examples
     --------
-    >>> up, down = note_shape("quarter"), note_shape("quarter", stem_down=True)
+    >>> up, down = (
+    ...     note_shape("quarter"),
+    ...     note_shape("quarter", stem_down=True),
+    ... )
     >>> up == down
     False
     """
@@ -319,8 +368,10 @@ def draw_note(
     """
     Draw a note with its head centered on a point, in Noto Music.
 
-    The note is drawn from the Noto Music font, so it is only drawn as it should be where that font is installed. The staff
-    draws with Bravura, which comes with Alto, wherever Noto Music is missing.
+    The note is drawn from the Noto Music font, so it is only drawn as
+    it should be where that font is installed. The staff
+    draws with Bravura, which comes with Alto, wherever Noto Music is
+    missing.
 
     Parameters
     ----------
@@ -333,7 +384,8 @@ def draw_note(
     y : float
         The head's center, in pixels. Keyword-only.
     gap : float
-        The distance between staff lines, which is also the head's height. Keyword-only.
+        The distance between staff lines, which is also the head's
+        height. Keyword-only.
     color : QColor
         The color to draw in. Keyword-only.
     stem_down : bool, default False
@@ -342,14 +394,27 @@ def draw_note(
     Examples
     --------
     >>> from PySide6.QtGui import QImage
-    >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
+    >>> image = QImage(
+    ...     100, 100, QImage.Format.Format_ARGB32
+    ... )
     >>> image.fill(QColor("white"))
     >>> painter = QPainter(image)
-    >>> draw_note(painter, value="quarter", x=50, y=50, gap=16, color=QColor("black"))
+    >>> draw_note(
+    ...     painter,
+    ...     value="quarter",
+    ...     x=50,
+    ...     y=50,
+    ...     gap=16,
+    ...     color=QColor("black"),
+    ... )
     >>> painter.end()
     True
     >>> from PySide6.QtGui import QFontDatabase
-    >>> not QFontDatabase.hasFamily("Noto Music") or image.pixelColor(50, 50).lightness() < 128  # the head is at the point
+    >>> not QFontDatabase.hasFamily(
+    ...     "Noto Music"
+    ... ) or image.pixelColor(
+    ...     50, 50
+    ... ).lightness() < 128  # the head is at the point
     True
     """
     hx, hy = HEAD_CENTER[value]

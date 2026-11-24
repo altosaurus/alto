@@ -5,7 +5,9 @@ Examples
 --------
 >>> settings = store()
 >>> settings.setValue("demo/count", 3)
->>> int_value(settings, key="demo/count", default=0)
+>>> int_value(
+...     settings, key="demo/count", default=0
+... )
 3
 >>> settings.remove("demo")
 """
@@ -29,14 +31,17 @@ def store() -> QSettings:
     """
     Return the app's saved settings.
 
-    The first time it is opened under the name "alto" it brings across anything saved under the old name ("mtheory"), so a
-    rename does not reset anyone's preferences. If `ALTO_HOME` is set the settings are kept in a file in that folder instead,
+    The first time it is opened under the name "alto" it brings across
+    anything saved under the old name ("mtheory"), so a
+    rename does not reset anyone's preferences. If `ALTO_HOME` is set
+    the settings are kept in a file in that folder instead,
     and nothing is brought across from the system's own.
 
     Returns
     -------
     QSettings
-        The settings, kept in the user's configuration folder or in `ALTO_HOME`.
+        The settings, kept in the user's configuration folder or in
+        `ALTO_HOME`.
 
     Examples
     --------
@@ -48,8 +53,17 @@ def store() -> QSettings:
     """
     folder = settings_folder()
     if folder is not None:
-        QSettings.setPath(QSettings.Format.IniFormat, QSettings.Scope.UserScope, str(folder))
-        return QSettings(QSettings.Format.IniFormat, QSettings.Scope.UserScope, "alto", "alto")
+        QSettings.setPath(
+            QSettings.Format.IniFormat,
+            QSettings.Scope.UserScope,
+            str(folder),
+        )
+        return QSettings(
+            QSettings.Format.IniFormat,
+            QSettings.Scope.UserScope,
+            "alto",
+            "alto",
+        )
     s = QSettings("alto", "alto")
     if not s.contains("migratedFromMtheory"):
         old = QSettings("mtheory", "mtheory")
@@ -69,7 +83,8 @@ def int_value(
     """
     Read an integer setting.
 
-    `QSettings` hands back whatever was saved, which may be a number or its text.
+    `QSettings` hands back whatever was saved, which may be a number or
+    its text.
 
     Parameters
     ----------
@@ -83,7 +98,8 @@ def int_value(
     Returns
     -------
     int
-        The saved value, or `default` if there is none (or it is not a number, text or similar).
+        The saved value, or `default` if there is none (or it is not a
+        number, text or similar).
 
     Raises
     ------
@@ -94,12 +110,18 @@ def int_value(
     --------
     >>> settings_ = store()
     >>> settings_.setValue("demo/count", "42")
-    >>> int_value(settings_, key="demo/count", default=0)
+    >>> int_value(
+    ...     settings_, key="demo/count", default=0
+    ... )
     42
-    >>> int_value(settings_, key="demo/missing", default=7)
+    >>> int_value(
+    ...     settings_, key="demo/missing", default=7
+    ... )
     7
     >>> settings_.setValue("demo/count", "many")
-    >>> int_value(settings_, key="demo/count", default=0)
+    >>> int_value(
+    ...     settings_, key="demo/count", default=0
+    ... )
     Traceback (most recent call last):
         ...
     ValueError: invalid literal for int() with base 10: 'many'
@@ -130,15 +152,24 @@ def text_value(
     Returns
     -------
     str
-        The saved text, or `default` if there is none (or it is not text).
+        The saved text, or `default` if there is none (or it is not
+        text).
 
     Examples
     --------
     >>> settings_ = store()
     >>> settings_.setValue("demo/name", "viola")
-    >>> text_value(settings_, key="demo/name", default="piano")
+    >>> text_value(
+    ...     settings_,
+    ...     key="demo/name",
+    ...     default="piano",
+    ... )
     'viola'
-    >>> text_value(settings_, key="demo/missing", default="piano")
+    >>> text_value(
+    ...     settings_,
+    ...     key="demo/missing",
+    ...     default="piano",
+    ... )
     'piano'
     >>> settings_.remove("demo")
     """
@@ -162,7 +193,8 @@ def bool_value(
     key : str
         The setting's name. Keyword-only.
     default : bool
-        What to return if nothing is saved, or if the saved text is neither "true" nor "false". Keyword-only.
+        What to return if nothing is saved, or if the saved text is
+        neither "true" nor "false". Keyword-only.
 
     Returns
     -------
@@ -172,11 +204,26 @@ def bool_value(
     Examples
     --------
     >>> settings_ = store()
-    >>> save_bool(settings_, key="demo/on", value=True)
-    >>> bool_value(settings_, key="demo/on", default=False), bool_value(settings_, key="demo/missing", default=True)
+    >>> save_bool(
+    ...     settings_, key="demo/on", value=True
+    ... )
+    >>> (
+    ...     bool_value(
+    ...         settings_,
+    ...         key="demo/on",
+    ...         default=False,
+    ...     ),
+    ...     bool_value(
+    ...         settings_,
+    ...         key="demo/missing",
+    ...         default=True,
+    ...     ),
+    ... )
     (True, True)
     >>> settings_.setValue("demo/on", "FALSE")
-    >>> bool_value(settings_, key="demo/on", default=True)
+    >>> bool_value(
+    ...     settings_, key="demo/on", default=True
+    ... )
     False
     >>> settings_.remove("demo")
     """
@@ -191,7 +238,8 @@ def save_bool(
     value: bool,
 ) -> None:
     """
-    Save a switch as the text "true" or "false", the form `bool_value` reads.
+    Save a switch as the text "true" or "false", the form `bool_value`
+    reads.
 
     Parameters
     ----------
@@ -205,7 +253,9 @@ def save_bool(
     Examples
     --------
     >>> settings_ = store()
-    >>> save_bool(settings_, key="demo/on", value=False)
+    >>> save_bool(
+    ...     settings_, key="demo/on", value=False
+    ... )
     >>> settings_.value("demo/on")
     'false'
     >>> settings_.remove("demo")
@@ -222,7 +272,8 @@ def list_value(
     """
     Read a saved list of words, such as "treble,bass".
 
-    `QSettings` may hand back text that contains commas as a list of its parts, so both forms are read.
+    `QSettings` may hand back text that contains commas as a list of its
+    parts, so both forms are read.
 
     Parameters
     ----------
@@ -236,16 +287,30 @@ def list_value(
     Returns
     -------
     list of str
-        The words in their saved order, without empty ones; empty if nothing is saved.
+        The words in their saved order, without empty ones; empty if
+        nothing is saved.
 
     Examples
     --------
     >>> settings_ = store()
-    >>> settings_.setValue("demo/clefs", "treble,,bass")
-    >>> list_value(settings_, key="demo/clefs"), list_value(settings_, key="demo/missing")
+    >>> settings_.setValue(
+    ...     "demo/clefs", "treble,,bass"
+    ... )
+    >>> (
+    ...     list_value(settings_, key="demo/clefs"),
+    ...     list_value(
+    ...         settings_, key="demo/missing"
+    ...     ),
+    ... )
     (['treble', 'bass'], [])
-    >>> settings_.setValue("demo/modes", ["major|minor"])
-    >>> list_value(settings_, key="demo/modes", separator="|")
+    >>> settings_.setValue(
+    ...     "demo/modes", ["major|minor"]
+    ... )
+    >>> list_value(
+    ...     settings_,
+    ...     key="demo/modes",
+    ...     separator="|",
+    ... )
     ['major', 'minor']
     >>> settings_.remove("demo")
     """
@@ -265,7 +330,8 @@ def choices_value(
     separator: str = ",",
 ) -> set[str]:
     """
-    Read a saved set of choices, keeping only the ones that are still offered.
+    Read a saved set of choices, keeping only the ones that are still
+    offered.
 
     Parameters
     ----------
@@ -281,18 +347,31 @@ def choices_value(
     Returns
     -------
     set of str
-        The saved choices that are allowed; empty if nothing is saved or none of them exists any more.
+        The saved choices that are allowed; empty if nothing is saved or
+        none of them exists any more.
 
     Examples
     --------
     >>> settings_ = store()
-    >>> settings_.setValue("demo/clefs", "treble,gone,bass")
-    >>> sorted(choices_value(settings_, key="demo/clefs", allowed=("treble", "bass", "alto")))
+    >>> settings_.setValue(
+    ...     "demo/clefs", "treble,gone,bass"
+    ... )
+    >>> sorted(
+    ...     choices_value(
+    ...         settings_,
+    ...         key="demo/clefs",
+    ...         allowed=("treble", "bass", "alto"),
+    ...     )
+    ... )
     ['bass', 'treble']
     >>> settings_.remove("demo")
     """
     offered = set(allowed)
-    return {word for word in list_value(settings, key=key, separator=separator) if word in offered}
+    return {
+        word
+        for word in list_value(settings, key=key, separator=separator)
+        if word in offered
+    }
 
 
 def keys_value(
@@ -301,7 +380,8 @@ def keys_value(
     key: str,
 ) -> set[int]:
     """
-    Read a saved set of key signatures, each a number of sharps (positive) or flats (negative) up to seven.
+    Read a saved set of key signatures, each a number of sharps
+    (positive) or flats (negative) up to seven.
 
     Parameters
     ----------
@@ -313,17 +393,26 @@ def keys_value(
     Returns
     -------
     set of int
-        The saved key signatures that exist; empty if nothing usable is saved.
+        The saved key signatures that exist; empty if nothing usable is
+        saved.
 
     Examples
     --------
     >>> settings_ = store()
-    >>> settings_.setValue("demo/keys", "-2,0,9,x,3")
-    >>> sorted(keys_value(settings_, key="demo/keys"))
+    >>> settings_.setValue(
+    ...     "demo/keys", "-2,0,9,x,3"
+    ... )
+    >>> sorted(
+    ...     keys_value(settings_, key="demo/keys")
+    ... )
     [-2, 0, 3]
     >>> settings_.remove("demo")
     """
-    return {int(word) for word in list_value(settings, key=key) if word.lstrip("-").isdigit() and abs(int(word)) <= 7}
+    return {
+        int(word)
+        for word in list_value(settings, key=key)
+        if word.lstrip("-").isdigit() and abs(int(word)) <= 7
+    }
 
 
 def joined(
@@ -332,7 +421,8 @@ def joined(
     separator: str = ",",
 ) -> str:
     """
-    Write values as the text that `list_value`, `choices_value` and `keys_value` read back.
+    Write values as the text that `list_value`, `choices_value` and
+    `keys_value` read back.
 
     Parameters
     ----------
@@ -348,7 +438,12 @@ def joined(
 
     Examples
     --------
-    >>> joined([-1, 0, 2]), joined(["major", "minor"], separator="|")
+    >>> (
+    ...     joined([-1, 0, 2]),
+    ...     joined(
+    ...         ["major", "minor"], separator="|"
+    ...     ),
+    ... )
     ('-1,0,2', 'major|minor')
     """
     return separator.join(str(value) for value in values)
@@ -361,7 +456,8 @@ def export_settings() -> dict[str, object]:
     Returns
     -------
     dict of str to object
-        Each key Alto has saved and its value. Qt byte arrays come back as `bytes` and lists as lists.
+        Each key Alto has saved and its value. Qt byte arrays come back
+        as `bytes` and lists as lists.
 
     Examples
     --------
@@ -387,12 +483,17 @@ def _plain(value: object) -> object:
     Returns
     -------
     object
-        The value, with Qt byte arrays as `bytes` and the items of lists made plain too.
+        The value, with Qt byte arrays as `bytes` and the items of lists
+        made plain too.
 
     Examples
     --------
     >>> from PySide6.QtCore import QByteArray
-    >>> _plain(QByteArray(b"ab")), _plain(["a", 1]), _plain("text")
+    >>> (
+    ...     _plain(QByteArray(b"ab")),
+    ...     _plain(["a", 1]),
+    ...     _plain("text"),
+    ... )
     (b'ab', ['a', 1], 'text')
     """
     if isinstance(value, QByteArray):
@@ -404,10 +505,13 @@ def _plain(value: object) -> object:
 
 def import_settings(values: Mapping[str, object]) -> None:
     """
-    Replace every saved preference with the ones from a backup, so the preferences are exactly as they were.
+    Replace every saved preference with the ones from a backup, so the
+    preferences are exactly as they were.
 
-    Preferences saved now that the backup does not have are removed. The marker that stops old "mtheory" preferences being
-    brought across again is kept, so an old installation's leftovers cannot leak back in.
+    Preferences saved now that the backup does not have are removed. The
+    marker that stops old "mtheory" preferences being
+    brought across again is kept, so an old installation's leftovers
+    cannot leak back in.
 
     Parameters
     ----------
@@ -416,13 +520,22 @@ def import_settings(values: Mapping[str, object]) -> None:
 
     Examples
     --------
-    >>> import_settings({"demo/name": "Ada", "demo/count": 3})
-    >>> store().value("demo/name"), int_value(store(), key="demo/count", default=0)
+    >>> import_settings(
+    ...     {"demo/name": "Ada", "demo/count": 3}
+    ... )
+    >>> (
+    ...     store().value("demo/name"),
+    ...     int_value(
+    ...         store(), key="demo/count", default=0
+    ...     ),
+    ... )
     ('Ada', 3)
     >>> store().remove("demo")
     >>> store().remove("")
     """
-    saved = store()  # first, so the one-time migration of old preferences has happened before everything is cleared
+    # first, so the one-time migration of old preferences has happened
+    # before everything is cleared
+    saved = store()
     saved.clear()
     for key, value in values.items():
         saved.setValue(key, value)

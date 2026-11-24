@@ -5,11 +5,15 @@ package: alto
 permalink: /api/alto.circle_schemes/
 ---
 {% raw %}
-The color schemes of the circle of fifths: the presets, and the schemes a user makes.
+The color schemes of the circle of fifths: the presets, and the schemes
+a user makes.
 
-A scheme says what color each of the 24 cells of the circle is when it is quiet and when it is lit, and whether its wedges
-are light, with dark names. The circle blends between the two as a cell brightens. The disc in the middle is not part of a
-scheme: it takes the colors of the app's theme. Nothing here needs Qt, so the schemes can be tested, saved and shown anywhere;
+A scheme says what color each of the 24 cells of the circle is when it
+is quiet and when it is lit, and whether its wedges
+are light, with dark names. The circle blends between the two as a cell
+brightens. The disc in the middle is not part of a
+scheme: it takes the colors of the app's theme. Nothing here needs Qt,
+so the schemes can be tested, saved and shown anywhere;
 `alto.ui.circle` turns them into pictures.
 
 A color is a hue (0 to 360), a saturation and a lightness (both 0 to 1).
@@ -20,7 +24,17 @@ A color is a hue (0 to 360), a saturation and a lightness (both 0 to 1).
 >>> scheme = preset("cyan-indigo")
 >>> scheme.name, scheme.light
 ('Cyan to indigo', False)
->>> round(scheme.color("outer", place=0, lift=1.0)[2], 2) > round(scheme.color("outer", place=0, lift=0.0)[2], 2)
+>>> round(
+...     scheme.color(
+...         "outer", place=0, lift=1.0
+...     )[2],
+...     2,
+... ) > round(
+...     scheme.color(
+...         "outer", place=0, lift=0.0
+...     )[2],
+...     2,
+... )
 True
 ```
 
@@ -30,7 +44,8 @@ True
 class CellMaker(Protocol)
 ```
 
-A function that gives the cell at a place on a ring its quiet and lit colors.
+A function that gives the cell at a place on a ring its quiet and
+lit colors.
 
 ## CustomRecord
 
@@ -96,10 +111,14 @@ Return the color of a cell as it is lit.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> red, green, blue = preset("spectrum").color("outer", place=0, lift=1.0)
+>>> red, green, blue = preset("spectrum").color(
+...     "outer", place=0, lift=1.0
+... )
 >>> red > green and red > blue
 True
->>> preset("spectrum").color("outer", place=6, lift=0.0)[0] < 0.2
+>>> preset("spectrum").color(
+...     "outer", place=6, lift=0.0
+... )[0] < 0.2
 True
 ```
 
@@ -118,7 +137,10 @@ Return the colors of the names written on the wedges.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> preset("paper").names()["ink"], preset("spectrum").names()["ink"]
+>>> (
+...     preset("paper").names()["ink"],
+...     preset("spectrum").names()["ink"],
+... )
 ('#1b2030', '#f5f5f5')
 ```
 
@@ -132,9 +154,11 @@ def rgb_of(
 ) -> tuple[float, float, float]
 ```
 
-Turn a color into red, green and blue, keeping a dark circle's cells from getting too bright.
+Turn a color into red, green and blue, keeping a dark circle's cells
+from getting too bright.
 
-Yellows and greens look far brighter than blues of the same lightness, so on dark wedges a color that is brighter than
+Yellows and greens look far brighter than blues of the same
+lightness, so on dark wedges a color that is brighter than
 white names can stand is brought down to the limit.
 
 **Parameters**
@@ -149,7 +173,9 @@ white names can stand is brought down to the limit.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> r, g, b = rgb_of((60.0, 0.9, 0.5), capped=True)
+>>> r, g, b = rgb_of(
+...     (60.0, 0.9, 0.5), capped=True
+... )
 >>> 0.299 * r + 0.587 * g + 0.114 * b <= MAX_BRIGHTNESS + 1e-9
 True
 >>> rgb_of((0.0, 0.0, 1.0), capped=False)
@@ -208,7 +234,8 @@ Read a color written as "#rrggbb".
 def signature_of(place: int) -> int
 ```
 
-Return how far a place is from C, with flats as negative: the key signature of the major key there.
+Return how far a place is from C, with flats as negative: the key
+signature of the major key there.
 
 **Parameters**
 
@@ -221,7 +248,10 @@ Return how far a place is from C, with flats as negative: the key signature of t
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> [signature_of(at) for at in (0, 1, 6, 7, 11)]
+>>> [
+...     signature_of(at)
+...     for at in (0, 1, 6, 7, 11)
+... ]
 [0, 1, 6, -5, -1]
 ```
 
@@ -284,7 +314,12 @@ Make the record of a scheme of the user's own.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])["light"]
+>>> record_of(
+...     "custom-1",
+...     name="Mine",
+...     mode="single",
+...     colors=["#2f6bd0"],
+... )["light"]
 False
 ```
 
@@ -307,12 +342,30 @@ Check one saved scheme of the user's own, and tidy it.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> good = record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"])
+>>> good = record_of(
+...     "custom-1",
+...     name="Mine",
+...     mode="rings",
+...     colors=["#2f6bd0", "#18a0c0"],
+... )
 >>> clean_record(good) == good
 True
->>> few = record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0"])
->>> unknown = record_of("custom-1", name="Mine", mode="nope", colors=["#2f6bd0", "#18a0c0"])
->>> clean_record(few) is None, clean_record(unknown) is None
+>>> few = record_of(
+...     "custom-1",
+...     name="Mine",
+...     mode="rings",
+...     colors=["#2f6bd0"],
+... )
+>>> unknown = record_of(
+...     "custom-1",
+...     name="Mine",
+...     mode="nope",
+...     colors=["#2f6bd0", "#18a0c0"],
+... )
+>>> (
+...     clean_record(few) is None,
+...     clean_record(unknown) is None,
+... )
 (True, True)
 >>> clean_record("not a record") is None
 True
@@ -326,7 +379,8 @@ def custom_scheme(record: CustomRecord) -> Scheme
 
 Make a scheme from one of the user's own records.
 
-The colors in a record are what a cell looks like when lit; the quiet cells are the same hue, calmer and darker (or, on a
+The colors in a record are what a cell looks like when lit; the
+quiet cells are the same hue, calmer and darker (or, on a
 light wedges, paler).
 
 **Parameters**
@@ -340,10 +394,21 @@ light wedges, paler).
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> scheme = custom_scheme(record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"]))
+>>> scheme = custom_scheme(
+...     record_of(
+...         "custom-1",
+...         name="Mine",
+...         mode="rings",
+...         colors=["#2f6bd0", "#18a0c0"],
+...     )
+... )
 >>> scheme.key, scheme.name, scheme.light
 ('custom-1', 'Mine', False)
->>> scheme.cells["outer"][0][1][0] != scheme.cells["inner"][0][1][0]  # two rings, two hues
+>>> scheme.cells["outer"][0][1][
+...     0
+... ] != scheme.cells["inner"][0][1][
+...     0
+... ]  # two rings, two hues
 True
 ```
 
@@ -376,7 +441,8 @@ Write the user's own schemes as text to save.
 def load_customs(text: str) -> list[CustomRecord]
 ```
 
-Read the user's own schemes back, leaving out any that are not valid and any beyond the limit.
+Read the user's own schemes back, leaving out any that are not valid
+and any beyond the limit.
 
 **Parameters**
 
@@ -389,10 +455,23 @@ Read the user's own schemes back, leaving out any that are not valid and any bey
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> load_customs("not json"), load_customs("[1, 2]")
+>>> (
+...     load_customs("not json"),
+...     load_customs("[1, 2]"),
+... )
 ([], [])
->>> one = record_of("custom-1", name="A", mode="single", colors=["#2f6bd0"])
->>> [r["id"] for r in load_customs(dump_customs([one, one]))]  # a repeated key is dropped
+>>> one = record_of(
+...     "custom-1",
+...     name="A",
+...     mode="single",
+...     colors=["#2f6bd0"],
+... )
+>>> [
+...     r["id"]
+...     for r in load_customs(
+...         dump_customs([one, one])
+...     )
+... ]  # a repeated key is dropped
 ['custom-1']
 ```
 
@@ -406,7 +485,8 @@ def resolve(
 ) -> Scheme
 ```
 
-Find a scheme by its key, among the presets and the user's own, falling back to the default.
+Find a scheme by its key, among the presets and the user's own,
+falling back to the default.
 
 **Parameters**
 
@@ -420,7 +500,10 @@ Find a scheme by its key, among the presets and the user's own, falling back to 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> resolve("midnight", customs=[]).name, resolve("gone", customs=[]).key
+>>> (
+...     resolve("midnight", customs=[]).name,
+...     resolve("gone", customs=[]).key,
+... )
 ('Midnight', 'cyan-indigo')
 ```
 
@@ -443,7 +526,14 @@ Return a key that none of the user's schemes has.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> taken = [record_of("custom-1", name="", mode="single", colors=[])]
+>>> taken = [
+...     record_of(
+...         "custom-1",
+...         name="",
+...         mode="single",
+...         colors=[],
+...     )
+... ]
 >>> next_custom_key([]), next_custom_key(taken)
 ('custom-1', 'custom-2')
 ```

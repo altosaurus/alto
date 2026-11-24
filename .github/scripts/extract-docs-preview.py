@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Copy regular site files from a PR artifact into a fresh directory for publication."""
+"""
+Copy regular site files from a PR artifact into a fresh directory for
+publication.
+"""
 
 import shutil
 import stat
@@ -14,7 +17,9 @@ with ZipFile(archive) as site:
         sys.exit("Preview exceeds the 512 MiB unpacked size limit.")
     for member in site.infolist():
         parts = member.filename.rstrip("/").split("/")
-        if any(not part or part.startswith(".") or "\\" in part for part in parts):
+        if any(
+            not part or part.startswith(".") or "\\" in part for part in parts
+        ):
             sys.exit("Unexpected path in the preview artifact.")
         if member.is_dir():
             continue

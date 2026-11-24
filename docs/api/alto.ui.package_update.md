@@ -5,11 +5,15 @@ package: alto.ui
 permalink: /api/alto.ui.package_update/
 ---
 {% raw %}
-The window that updates a packaged copy of Alto: the download and its checks with their progress, then what happens next.
+The window that updates a packaged copy of Alto: the download and its
+checks with their progress, then what happens next.
 
-The work is in `alto.selfupdate`, which has no Qt, and runs on another thread here so that the window keeps moving. Until the
-download has been checked nothing has been installed, and Cancel (or closing the window) throws it away. When it is ready the
-window says that Alto will close, install the update and open again, and OK hands over; the caller starts the installer and quits.
+The work is in `alto.selfupdate`, which has no Qt, and runs on another
+thread here so that the window keeps moving. Until the
+download has been checked nothing has been installed, and Cancel (or
+closing the window) throws it away. When it is ready the
+window says that Alto will close, install the update and open again, and
+OK hands over; the caller starts the installer and quits.
 
 **Examples**
 
@@ -27,7 +31,8 @@ UpdatePreparer(parent: QObject | None = None)
 
 Bases: `QObject`
 
-Download and check an update on another thread, and report how it goes through signals.
+Download and check an update on another thread, and report how it
+goes through signals.
 
 **Attributes**
 
@@ -112,7 +117,8 @@ PackageUpdateDialog(
 
 Bases: `QDialog`
 
-The window that downloads and checks an update for a packaged copy, and then says what happens next.
+The window that downloads and checks an update for a packaged copy,
+and then says what happens next.
 
 **Attributes**
 
@@ -141,7 +147,8 @@ Build the window; nothing is downloaded until `run` is called.
 def run() -> Prepared | None
 ```
 
-Download and check the update, showing the window until the person has read how it went.
+Download and check the update, showing the window until the
+person has read how it went.
 
 **Returns**
 
@@ -150,9 +157,17 @@ Download and check the update, showing the window until the person has read how 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> here = Target("linux", folder=Path("/x"), prefix=None)
+>>> here = Target(
+...     "linux", folder=Path("/x"), prefix=None
+... )
 >>> # noinspection PyTypeChecker
->>> PackageUpdateDialog(None, release=Release("0.1.0", tag="v0.1.0", url=""), target=here).ready
+>>> PackageUpdateDialog(
+...     None,
+...     release=Release(
+...         "0.1.0", tag="v0.1.0", url=""
+...     ),
+...     target=here,
+... ).ready
 False
 ```
 

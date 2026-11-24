@@ -15,7 +15,8 @@ MidiInput()
 
 Bases: `QToolButton`
 
-Select one ALSA sequencer source and forward its key presses on the Qt event loop.
+Select one ALSA sequencer source and forward its key presses on the
+Qt event loop.
 
 **Constructor**
 
@@ -27,5 +28,6 @@ Create the source menu with input turned off.
 def disconnect_port() -> None
 ```
 
-Release the input when the learner turns it off or leaves the exercise.
+Release the input when the learner turns it off or leaves the
+exercise.
 {% endraw %}

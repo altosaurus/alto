@@ -5,15 +5,20 @@ package: alto
 permalink: /api/alto.location/
 ---
 {% raw %}
-Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`.
+Where Alto keeps its practice history and its settings, and how to keep
+them somewhere else with `ALTO_HOME`.
 
-Without `ALTO_HOME` they are in the usual places for the system. With it, both are in that folder instead, so a copy of Alto
-that is being worked on can have its own history and settings, apart from the copy that is used for practicing.
+Without `ALTO_HOME` they are in the usual places for the system. With
+it, both are in that folder instead, so a copy of Alto
+that is being worked on can have its own history and settings, apart
+from the copy that is used for practicing.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> database_path(environ={"ALTO_HOME": "/tmp/alto-dev"}).as_posix()
+>>> database_path(
+...     environ={"ALTO_HOME": "/tmp/alto-dev"}
+... ).as_posix()
 '/tmp/alto-dev/data/alto.db'
 ```
 
@@ -43,9 +48,17 @@ Give the folder named by `ALTO_HOME`, if there is one.
 True
 >>> alto_home(environ={"ALTO_HOME": ""}) is None
 True
->>> str(alto_home(environ={"ALTO_HOME": "/tmp/alto-dev"}))
+>>> str(
+...     alto_home(
+...         environ={
+...             "ALTO_HOME": "/tmp/alto-dev"
+...         }
+...     )
+... )
 '/tmp/alto-dev'
->>> alto_home(environ={"ALTO_HOME": "~/alto-dev"}) == Path.home() / "alto-dev"
+>>> alto_home(
+...     environ={"ALTO_HOME": "~/alto-dev"}
+... ) == Path.home() / "alto-dev"
 True
 ```
 
@@ -71,7 +84,9 @@ Give the file that holds the practice history.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> database_path(environ={"ALTO_HOME": "/tmp/alto-dev"}).as_posix()
+>>> database_path(
+...     environ={"ALTO_HOME": "/tmp/alto-dev"}
+... ).as_posix()
 '/tmp/alto-dev/data/alto.db'
 >>> database_path(environ={}).name
 'alto.db'
@@ -101,7 +116,13 @@ Give the folder that holds the settings when `ALTO_HOME` moves them.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_folder(environ={}) is None
 True
->>> str(settings_folder(environ={"ALTO_HOME": "/tmp/alto-dev"}))
+>>> str(
+...     settings_folder(
+...         environ={
+...             "ALTO_HOME": "/tmp/alto-dev"
+...         }
+...     )
+... )
 '/tmp/alto-dev/config'
 ```
 
@@ -114,7 +135,8 @@ def desktop_name(
 ) -> str
 ```
 
-Give the name the desktop uses to match Alto's window to its menu entry, and so to its icon in the dock.
+Give the name the desktop uses to match Alto's window to its menu
+entry, and so to its icon in the dock.
 
 **Parameters**
 
@@ -127,7 +149,14 @@ Give the name the desktop uses to match Alto's window to its menu entry, and so 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> desktop_name(environ={}), desktop_name(environ={"ALTO_HOME": "/tmp/alto-dev"})
+>>> (
+...     desktop_name(environ={}),
+...     desktop_name(
+...         environ={
+...             "ALTO_HOME": "/tmp/alto-dev"
+...         }
+...     ),
+... )
 ('alto', 'alto-dev')
 ```
 {% endraw %}
