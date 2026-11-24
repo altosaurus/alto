@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -750,7 +756,9 @@ previews it.</p>
 
 <h2 id="previewcard">PreviewCard</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PreviewCard</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PreviewCard</span><span class="p">(</span>
     <span class="n">preview</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -759,7 +767,11 @@ previews it.</p>
     <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L194" aria-label="Source for PreviewCard">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
 
@@ -822,12 +834,18 @@ its name and a few words about it underneath.</p>
 
 <h2 id="stylecard">StyleCard</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StyleCard</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StyleCard</span><span class="p">(</span>
     <span class="n">style</span><span class="p">:</span> <span class="n">notation</span><span class="p">.</span><span class="n">NotationStyle</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L291" aria-label="Source for StyleCard">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">PreviewCard</code></p>
 
@@ -869,12 +887,18 @@ a staff, drawn in that style.</p>
 
 <h2 id="keyboardcard">KeyboardCard</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardCard</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardCard</span><span class="p">(</span>
     <span class="n">style</span><span class="p">:</span> <span class="n">keyboard_styles</span><span class="p">.</span><span class="n">KeyboardStyle</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L369" aria-label="Source for KeyboardCard">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">PreviewCard</code></p>
 
@@ -919,8 +943,14 @@ keys drawn in that style.</p>
 
 <h3 id="keyboardcardshow_style">KeyboardCard.show_style</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_style</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="n">keyboard_styles</span><span class="p">.</span><span class="n">KeyboardStyle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_style</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="n">keyboard_styles</span><span class="p">.</span><span class="n">KeyboardStyle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L448" aria-label="Source for KeyboardCard.show_style">[Source]</a></p>
+
+</div>
 
 <p>Redraw the preview in a style.</p>
 
@@ -947,8 +977,14 @@ keys drawn in that style.</p>
 
 <h2 id="keyboardbuilder">KeyboardBuilder</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardBuilder</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardBuilder</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L475" aria-label="Source for KeyboardBuilder">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QFrame</code></p>
 
@@ -992,8 +1028,14 @@ the Custom style.</p>
 
 <h3 id="keyboardbuilderrefresh">KeyboardBuilder.refresh</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L621" aria-label="Source for KeyboardBuilder.refresh">[Source]</a></p>
+
+</div>
 
 <p>Show each part’s current color on its swatch.</p>
 
@@ -1010,12 +1052,18 @@ the Custom style.</p>
 
 <h2 id="appsettingsdialog">AppSettingsDialog</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AppSettingsDialog</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AppSettingsDialog</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L732" aria-label="Source for AppSettingsDialog">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
@@ -1074,8 +1122,14 @@ down opening Settings or changing themes.</p>
 
 <h3 id="appsettingsdialogcard">AppSettingsDialog.card</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThemeCard</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThemeCard</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L1402" aria-label="Source for AppSettingsDialog.card">[Source]</a></p>
+
+</div>
 
 <p>Give the card of a theme, building it the first time it is asked
 for.</p>
@@ -1111,8 +1165,14 @@ been looked at exist.</p>
 
 <h3 id="appsettingsdialogcard_page">AppSettingsDialog.card_page</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_page</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QScrollArea</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_page</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QScrollArea</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L1451" aria-label="Source for AppSettingsDialog.card_page">[Source]</a></p>
+
+</div>
 
 <p>Give the scroll area that holds a theme’s card, which is the
 page the stack shows for it.</p>
@@ -1140,8 +1200,14 @@ page the stack shows for it.</p>
 
 <h3 id="appsettingsdialogthumb">AppSettingsDialog.thumb</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">thumb</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThemeThumb</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">thumb</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThemeThumb</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L1477" aria-label="Source for AppSettingsDialog.thumb">[Source]</a></p>
+
+</div>
 
 <p>Give the clickable picture that chooses a theme, with the card
 it is on built if it was not yet.</p>
@@ -1167,8 +1233,14 @@ it is on built if it was not yet.</p>
 
 <h3 id="appsettingsdialogchoose_theme">AppSettingsDialog.choose_theme</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">choose_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">choose_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L2238" aria-label="Source for AppSettingsDialog.choose_theme">[Source]</a></p>
+
+</div>
 
 <p>Switch the color theme, remember it, and note that the window
 should be rebuilt in it.</p>
@@ -1189,6 +1261,10 @@ should be rebuilt in it.</p>
 </code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1399,10 +1475,10 @@ should be rebuilt in it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

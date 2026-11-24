@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -759,8 +765,14 @@ is diminished and has no wedge.)</p>
 
 <h2 id="place_of_major">place_of_major</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_of_major</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_of_major</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/fifths.py#L118" aria-label="Source for place_of_major">[Source]</a></p>
+
+</div>
 
 <p>Return where a major key is on the circle, by either of its names.</p>
 
@@ -794,8 +806,14 @@ is diminished and has no wedge.)</p>
 
 <h2 id="relative_minor">relative_minor</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">relative_minor</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">relative_minor</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/fifths.py#L152" aria-label="Source for relative_minor">[Source]</a></p>
+
+</div>
 
 <p>Return the relative minor of a major key.</p>
 
@@ -823,8 +841,14 @@ is diminished and has no wedge.)</p>
 
 <h2 id="cells_of_key">cells_of_key</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cells_of_key</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cells_of_key</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/fifths.py#L178" aria-label="Source for cells_of_key">[Source]</a></p>
+
+</div>
 
 <p>Return the six wedges that hold the chords of a major key, and the
 Roman numeral of each.</p>
@@ -861,8 +885,14 @@ Roman numeral of each.</p>
 
 <h2 id="numeral_chords">numeral_chords</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">numeral_chords</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">numeral_chords</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/fifths.py#L217" aria-label="Source for numeral_chords">[Source]</a></p>
+
+</div>
 
 <p>Return the six chords of a major key that are on the circle, spelled
 as that key spells them.</p>
@@ -895,8 +925,14 @@ the key decides which name is right: C♯ is the V of F♯.</p>
 
 <h2 id="display_major">display_major</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">display_major</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">display_major</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/fifths.py#L258" aria-label="Source for display_major">[Source]</a></p>
+
+</div>
 
 <p>Return the major key of a place as it is written to ask about it: “A
 major”, or “B major / C♭ major”.</p>
@@ -921,8 +957,14 @@ major”, or “B major / C♭ major”.</p>
 
 <h2 id="display_minor">display_minor</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">display_minor</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">display_minor</span><span class="p">(</span><span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/fifths.py#L281" aria-label="Source for display_minor">[Source]</a></p>
+
+</div>
 
 <p>Return the minor key of a place as it is written to ask about it:
 “F♯ minor”, or “G♯ minor / A♭ minor”.</p>
@@ -947,8 +989,14 @@ major”, or “B major / C♭ major”.</p>
 
 <h2 id="accidentals_of">accidentals_of</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">accidentals_of</span><span class="p">(</span><span class="n">signature</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">accidentals_of</span><span class="p">(</span><span class="n">signature</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/fifths.py#L304" aria-label="Source for accidentals_of">[Source]</a></p>
+
+</div>
 
 <p>Return the sharps or flats of a key signature, in the order they are
 written.</p>
@@ -973,12 +1021,18 @@ written.</p>
 
 <h2 id="explain">explain</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">explain</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">explain</span><span class="p">(</span>
     <span class="n">ring</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/fifths.py#L364" aria-label="Source for explain">[Source]</a></p>
+
+</div>
 
 <p>Explain a cell of the circle: its key signature, where it comes
 from, its relative key and its chords.</p>
@@ -1016,6 +1070,10 @@ from, its relative key and its chords.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1214,10 +1272,10 @@ from, its relative key and its chords.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

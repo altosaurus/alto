@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -752,12 +758,18 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <h2 id="synth_piano">synth_piano</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">synth_piano</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">synth_piano</span><span class="p">(</span>
     <span class="n">midi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.6</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L60" aria-label="Source for synth_piano">[Source]</a></p>
+
+</div>
 
 <p>Synthesize a piano note, for notes outside the recorded range.</p>
 
@@ -790,7 +802,9 @@ time, which needs no sine or exponential per sample.</p>
 
 <h2 id="instrument">Instrument</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Instrument</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Instrument</span><span class="p">(</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -804,7 +818,11 @@ time, which needs no sine or exponential per sample.</p>
     <span class="n">pack_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L158" aria-label="Source for Instrument">[Source]</a></p>
+
+</div>
 
 <p>An instrument that notes can be played on, and where its recordings
 are.</p>
@@ -843,9 +861,15 @@ are.</p>
 
 <h3 id="instrumentkind_name">Instrument.kind_name</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">kind_name</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L245" aria-label="Source for Instrument.kind_name">[Source]</a></p>
+
+</div>
 
 <p>Name what sort of instrument this is, in lowercase.</p>
 
@@ -868,9 +892,15 @@ are.</p>
 
 <h3 id="instrumentpicker_group">Instrument.picker_group</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">picker_group</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L268" aria-label="Source for Instrument.picker_group">[Source]</a></p>
+
+</div>
 
 <p>Identify the instrument’s entry in the sound picker.</p>
 
@@ -890,8 +920,14 @@ are.</p>
 
 <h3 id="instrumentplayback_volume">Instrument.playback_volume</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">playback_volume</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">playback_volume</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L287" aria-label="Source for Instrument.playback_volume">[Source]</a></p>
+
+</div>
 
 <p>Return the output volume for a note or clip played on this
 instrument.</p>
@@ -916,8 +952,14 @@ instrument.</p>
 
 <h2 id="instrument_groups">instrument_groups</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instrument_groups</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Instrument</span><span class="p">]]]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instrument_groups</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Instrument</span><span class="p">]]]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L366" aria-label="Source for instrument_groups">[Source]</a></p>
+
+</div>
 
 <p>Return the instruments as they are listed for choosing.</p>
 
@@ -944,8 +986,14 @@ instrument.</p>
 
 <h2 id="read_wav">read_wav</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_wav</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_wav</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L460" aria-label="Source for read_wav">[Source]</a></p>
+
+</div>
 
 <p>Read a mono 16-bit WAV file.</p>
 
@@ -977,12 +1025,18 @@ instrument.</p>
 
 <h2 id="shift_pitch">shift_pitch</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">shift_pitch</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">shift_pitch</span><span class="p">(</span>
     <span class="n">samples</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">semitones</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L541" aria-label="Source for shift_pitch">[Source]</a></p>
+
+</div>
 
 <p>Change the pitch of samples by resampling them.</p>
 
@@ -1011,12 +1065,18 @@ instrument.</p>
 
 <h2 id="to_wav_bytes">to_wav_bytes</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">to_wav_bytes</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">to_wav_bytes</span><span class="p">(</span>
     <span class="n">samples</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SAMPLE_RATE</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L576" aria-label="Source for to_wav_bytes">[Source]</a></p>
+
+</div>
 
 <p>Encode samples as a mono 16-bit WAV file in memory.</p>
 
@@ -1053,12 +1113,18 @@ instrument.</p>
 
 <h2 id="write_file_atomically">write_file_atomically</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">write_file_atomically</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">write_file_atomically</span><span class="p">(</span>
     <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L631" aria-label="Source for write_file_atomically">[Source]</a></p>
+
+</div>
 
 <p>Write a file so that nothing ever reads it half written, even
 another copy of Alto writing the same file.</p>
@@ -1088,8 +1154,14 @@ the file in one step.</p>
 
 <h2 id="sounds">Sounds</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Sounds</span><span class="p">()</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Sounds</span><span class="p">()</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L671" aria-label="Source for Sounds">[Source]</a></p>
+
+</div>
 
 <p>A lazy cache of notes played through <code class="language-plaintext highlighter-rouge">QSoundEffect</code>, in the chosen
 instrument.</p>
@@ -1123,8 +1195,14 @@ instrument.</p>
 
 <h3 id="soundsrecordings">Sounds.recordings</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">recordings</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">recordings</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L758" aria-label="Source for Sounds.recordings">[Source]</a></p>
+
+</div>
 
 <p>Return the notes an instrument has a recording for on disk.</p>
 
@@ -1150,8 +1228,14 @@ instrument.</p>
 
 <h3 id="soundsunrecorded">Sounds.unrecorded</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">unrecorded</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">unrecorded</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L860" aria-label="Source for Sounds.unrecorded">[Source]</a></p>
+
+</div>
 
 <p>List the notes within an instrument’s recorded range that have
 no recording of their own, nearest middle C first.</p>
@@ -1183,12 +1267,18 @@ recording. <code class="language-plaintext highlighter-rouge">alto.ui.warmup</co
 
 <h3 id="soundsprepare">Sounds.prepare</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span>
     <span class="n">midi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L902" aria-label="Source for Sounds.prepare">[Source]</a></p>
+
+</div>
 
 <p>Make the file a note plays, if it has no recording and was not
 made before, so that its first play is quick.</p>
@@ -1207,12 +1297,18 @@ made before, so that its first play is quick.</p>
 
 <h3 id="soundsnote_duration_ms">Sounds.note_duration_ms</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">note_duration_ms</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">note_duration_ms</span><span class="p">(</span>
     <span class="n">midi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L988" aria-label="Source for Sounds.note_duration_ms">[Source]</a></p>
+
+</div>
 
 <p>Read the playback length of a note for synchronized instrument
 animations.</p>
@@ -1238,7 +1334,9 @@ muted.
 
 <h3 id="soundsplay_midi">Sounds.play_midi</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_midi</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_midi</span><span class="p">(</span>
     <span class="n">midi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
@@ -1246,7 +1344,11 @@ muted.
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">release_previous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L1117" aria-label="Source for Sounds.play_midi">[Source]</a></p>
+
+</div>
 
 <p>Play a note in the chosen instrument (or another one).</p>
 
@@ -1278,8 +1380,14 @@ so audio can never break an exercise.</p>
 
 <h3 id="soundsstop_all">Sounds.stop_all</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop_all</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop_all</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L1183" aria-label="Source for Sounds.stop_all">[Source]</a></p>
+
+</div>
 
 <p>Silence every note at once, and cancel any fade-outs underway.</p>
 
@@ -1290,13 +1398,19 @@ so audio can never break an exercise.</p>
 
 <h3 id="soundspreview">Sounds.preview</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">preview</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">preview</span><span class="p">(</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">midis</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
     <span class="n">step_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L1320" aria-label="Source for Sounds.preview">[Source]</a></p>
+
+</div>
 
 <p>Play notes one after another in an instrument, even while muted,
 to hear what it sounds like.</p>
@@ -1322,7 +1436,9 @@ Starting a preview silences the one before it.</p>
 
 <h3 id="soundsplay_notes">Sounds.play_notes</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_notes</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_notes</span><span class="p">(</span>
     <span class="n">columns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Note</span><span class="p">]],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_NOTE_GAP_MS</span><span class="p">,</span>
@@ -1331,7 +1447,11 @@ Starting a preview silences the one before it.</p>
     <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L1658" aria-label="Source for Sounds.play_notes">[Source]</a></p>
+
+</div>
 
 <p>Play staff columns left to right, evenly spaced.</p>
 
@@ -1366,8 +1486,14 @@ more there are.</p>
 
 <h3 id="soundsstop_sample">Sounds.stop_sample</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop_sample</span><span class="p">(</span><span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop_sample</span><span class="p">(</span><span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L1740" aria-label="Source for Sounds.stop_sample">[Source]</a></p>
+
+</div>
 
 <p>Stop a displayed sample if it still owns playback.</p>
 
@@ -1384,7 +1510,9 @@ more there are.</p>
 
 <h3 id="soundsplay_sample">Sounds.play_sample</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_sample</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_sample</span><span class="p">(</span>
     <span class="n">columns</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Note</span><span class="p">]],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -1393,7 +1521,11 @@ more there are.</p>
     <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">warmup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L1756" aria-label="Source for Sounds.play_sample">[Source]</a></p>
+
+</div>
 
 <p>Play a displayed sample and report the sounding column until it
 ends or is interrupted.</p>
@@ -1425,8 +1557,14 @@ ends or is interrupted.</p>
 
 <h3 id="soundsplay_correct">Sounds.play_correct</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_correct</span><span class="p">(</span><span class="n">streak</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_correct</span><span class="p">(</span><span class="n">streak</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/audio.py#L1832" aria-label="Source for Sounds.play_correct">[Source]</a></p>
+
+</div>
 
 <p>Play a note that climbs the C major scale (C5 to C6) as the
 streak grows, then wraps.</p>
@@ -1445,6 +1583,10 @@ streak grows, then wraps.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1581,10 +1723,10 @@ streak grows, then wraps.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

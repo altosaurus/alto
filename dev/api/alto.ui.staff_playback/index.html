@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -735,12 +741,18 @@
 
 <h2 id="staffplayback">StaffPlayback</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StaffPlayback</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StaffPlayback</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">highlight</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/staff_playback.py#L14" aria-label="Source for StaffPlayback">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QObject</code></p>
 
@@ -760,7 +772,9 @@ closes.</p>
 
 <h3 id="staffplaybackplay">StaffPlayback.play</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play</span><span class="p">(</span>
     <span class="n">columns</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Note</span><span class="p">]],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_NOTE_GAP_MS</span><span class="p">,</span>
@@ -768,7 +782,11 @@ closes.</p>
     <span class="n">warmup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/staff_playback.py#L48" aria-label="Source for StaffPlayback.play">[Source]</a></p>
+
+</div>
 
 <p>Play the displayed notes in order.</p>
 
@@ -784,18 +802,30 @@ closes.</p>
 
 <h3 id="staffplaybackstop">StaffPlayback.stop</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/staff_playback.py#L84" aria-label="Source for StaffPlayback.stop">[Source]</a></p>
+
+</div>
 
 <p>Clear this view’s sounding note and cancel its pending audio.</p>
 
 <h3 id="staffplaybackeventfilter">StaffPlayback.eventFilter</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span>
     <span class="n">watched</span><span class="p">:</span> <span class="n">QObject</span><span class="p">,</span>
     <span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/staff_playback.py#L90" aria-label="Source for StaffPlayback.eventFilter">[Source]</a></p>
+
+</div>
 
 <p>End the sample when the learner leaves its view.</p>
 
@@ -813,6 +843,10 @@ closes.</p>
 </ul>
 
 
+          
+          
+          
+          
           
           
           
@@ -1111,10 +1145,10 @@ closes.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -774,13 +780,19 @@ SLOW_PENALTY.</li>
 
 <h2 id="arts_priority">arts_priority</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">arts_priority</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">arts_priority</span><span class="p">(</span>
     <span class="n">intervening</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">correct</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">duration_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/scheduler.py#L66" aria-label="Source for arts_priority">[Source]</a></p>
+
+</div>
 
 <p>Score a previously answered item for Adaptive Response-Time-based
 Sequencing.</p>
@@ -813,12 +825,18 @@ Sequencing.</p>
 
 <h2 id="speed_term">speed_term</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">speed_term</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">speed_term</span><span class="p">(</span>
     <span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">par_seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/scheduler.py#L110" aria-label="Source for speed_term">[Source]</a></p>
+
+</div>
 
 <p>Return the strain change for how long the first answer took.</p>
 
@@ -853,7 +871,9 @@ Sequencing.</p>
 
 <h2 id="update_strain">update_strain</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">update_strain</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">update_strain</span><span class="p">(</span>
     <span class="n">strain</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">correct</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
@@ -861,7 +881,11 @@ Sequencing.</p>
     <span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">par_seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/scheduler.py#L156" aria-label="Source for update_strain">[Source]</a></p>
+
+</div>
 
 <p>Return the question’s strain after one more answer.</p>
 
@@ -914,13 +938,19 @@ Sequencing.</p>
 
 <h2 id="weight">weight</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">weight</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">weight</span><span class="p">(</span>
     <span class="n">strain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">last_seen</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/scheduler.py#L230" aria-label="Source for weight">[Source]</a></p>
+
+</div>
 
 <p>Return how likely a question is to be picked, relative to the
 others.</p>
@@ -963,13 +993,19 @@ returns within the minute.</p>
 
 <h2 id="choose">choose</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">choose</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">choose</span><span class="p">(</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">weights</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/scheduler.py#L284" aria-label="Source for choose">[Source]</a></p>
+
+</div>
 
 <p>Pick one option at random, in proportion to its weight.</p>
 
@@ -998,6 +1034,10 @@ returns within the minute.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1176,10 +1216,10 @@ returns within the minute.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

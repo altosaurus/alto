@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -743,14 +749,20 @@ font-specific combining accents.</p>
 
 <h2 id="draw_degree_text">draw_degree_text</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_degree_text</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_degree_text</span><span class="p">(</span>
     <span class="n">painter</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">rect</span><span class="p">:</span> <span class="n">QRectF</span><span class="p">,</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">alignment</span><span class="p">:</span> <span class="n">Qt</span><span class="p">.</span><span class="n">AlignmentFlag</span> <span class="o">=</span> <span class="n">Qt</span><span class="p">.</span><span class="n">AlignmentFlag</span><span class="p">.</span><span class="n">AlignCenter</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/degree_text.py#L44" aria-label="Source for draw_degree_text">[Source]</a></p>
+
+</div>
 
 <p>Draw text with each combining circumflex centered above its
 preceding digit.</p>
@@ -780,8 +792,14 @@ preceding digit.</p>
 
 <h2 id="degree_tooltip">degree_tooltip</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">degree_tooltip</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">degree_tooltip</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/degree_text.py#L123" aria-label="Source for degree_tooltip">[Source]</a></p>
+
+</div>
 
 <p>Render caret examples as an inline image for Qt’s rich-text tooltip.</p>
 
@@ -809,8 +827,14 @@ preceding digit.</p>
 
 <h2 id="degreebutton">DegreeButton</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DegreeButton</span><span class="p">(</span><span class="n">QPushButton</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DegreeButton</span><span class="p">(</span><span class="n">QPushButton</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/degree_text.py#L182" aria-label="Source for DegreeButton">[Source]</a></p>
+
+</div>
 
 <p>An answer button that draws scale-degree carets directly above the
 digits.</p>
@@ -823,8 +847,14 @@ digits.</p>
 
 <h3 id="degreebuttonpaintevent">DegreeButton.paintEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/degree_text.py#L193" aria-label="Source for DegreeButton.paintEvent">[Source]</a></p>
+
+</div>
 
 <p>Keep the native button appearance and position degree accents
 explicitly.</p>
@@ -843,24 +873,42 @@ explicitly.</p>
 
 <h2 id="degreecheckbox">DegreeCheckBox</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DegreeCheckBox</span><span class="p">(</span><span class="n">QCheckBox</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DegreeCheckBox</span><span class="p">(</span><span class="n">QCheckBox</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/degree_text.py#L230" aria-label="Source for DegreeCheckBox">[Source]</a></p>
+
+</div>
 
 <p>Draw the scale degree caret centered above the checkbox label’s
 digit.</p>
 
 <h3 id="degreecheckboxpaintevent">DegreeCheckBox.paintEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/degree_text.py#L236" aria-label="Source for DegreeCheckBox.paintEvent">[Source]</a></p>
+
+</div>
 
 <p>Paint the native checkbox and use the shared scale degree
 renderer for its label.</p>
 
 <h2 id="degreelabel">DegreeLabel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DegreeLabel</span><span class="p">(</span><span class="n">QLabel</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DegreeLabel</span><span class="p">(</span><span class="n">QLabel</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/degree_text.py#L270" aria-label="Source for DegreeLabel">[Source]</a></p>
+
+</div>
 
 <p>A plain-text label with explicitly positioned scale-degree carets.</p>
 
@@ -872,8 +920,14 @@ renderer for its label.</p>
 
 <h3 id="degreelabelpaintevent">DegreeLabel.paintEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/degree_text.py#L280" aria-label="Source for DegreeLabel.paintEvent">[Source]</a></p>
+
+</div>
 
 <p>Paint degree labels with carets centered above their numbers.</p>
 
@@ -890,6 +944,10 @@ renderer for its label.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1116,10 +1174,10 @@ renderer for its label.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -736,8 +742,14 @@ the same SVG.</p>
 
 <h2 id="scoreexcerpt">ScoreExcerpt</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScoreExcerpt</span><span class="p">(</span><span class="n">excerpt</span><span class="p">:</span> <span class="n">Excerpt</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScoreExcerpt</span><span class="p">(</span><span class="n">excerpt</span><span class="p">:</span> <span class="n">Excerpt</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/score_excerpt.py#L19" aria-label="Source for ScoreExcerpt">[Source]</a></p>
+
+</div>
 
 <p>The score artwork and its per-pixel index into the excerpt’s target
 list.</p>
@@ -748,8 +760,14 @@ list.</p>
 
 <h3 id="scoreexcerptmusic_rect">ScoreExcerpt.music_rect</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">music_rect</span><span class="p">(</span><span class="n">paper</span><span class="p">:</span> <span class="n">QRectF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QRectF</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">music_rect</span><span class="p">(</span><span class="n">paper</span><span class="p">:</span> <span class="n">QRectF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QRectF</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/score_excerpt.py#L46" aria-label="Source for ScoreExcerpt.music_rect">[Source]</a></p>
+
+</div>
 
 <p>Fit the music inside its paper, leaving one line for the source
 credit.</p>
@@ -762,12 +780,18 @@ credit.</p>
 
 <h3 id="scoreexcerptcomponent_at">ScoreExcerpt.component_at</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">component_at</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">component_at</span><span class="p">(</span>
     <span class="n">point</span><span class="p">:</span> <span class="n">QPoint</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">rect</span><span class="p">:</span> <span class="n">QRectF</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/score_excerpt.py#L64" aria-label="Source for ScoreExcerpt.component_at">[Source]</a></p>
+
+</div>
 
 <p>Look up the visible ink under a point in the scaled engraving.</p>
 
@@ -779,22 +803,34 @@ credit.</p>
 
 <h3 id="scoreexcerptpaint">ScoreExcerpt.paint</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paint</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paint</span><span class="p">(</span>
     <span class="n">painter</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">paper</span><span class="p">:</span> <span class="n">QRectF</span><span class="p">,</span>
     <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/score_excerpt.py#L96" aria-label="Source for ScoreExcerpt.paint">[Source]</a></p>
+
+</div>
 
 <p>Draw the excerpt and its attribution at the current paper size.</p>
 
 <h2 id="score_artwork">score_artwork</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">score_artwork</span><span class="p">(</span><span class="n">excerpt</span><span class="p">:</span> <span class="n">Excerpt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ScoreExcerpt</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/score_excerpt.py#L182" aria-label="Source for score_artwork">[Source]</a></p>
+
+</div>
 
 <p>Load the music and hit map once per recently viewed passage.</p>
 
@@ -805,6 +841,10 @@ credit.</p>
 </ul>
 
 
+          
+          
+          
+          
           
           
           
@@ -1093,10 +1133,10 @@ credit.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

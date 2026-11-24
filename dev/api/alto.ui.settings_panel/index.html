@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -752,12 +758,18 @@ question. The widgets the panels are built from are in
 
 <h2 id="notenamesettingspanel">NoteNameSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNameSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNameSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">NoteNameSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L145" aria-label="Source for NoteNameSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">NoteAnswerSettingsPanel</code></p>
 
@@ -813,12 +825,18 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <h2 id="keyboardsettingspanel">KeyboardSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeyboardSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L437" aria-label="Source for KeyboardSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">KeyboardRangePanel</code></p>
 
@@ -872,12 +890,18 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <h2 id="noteconstructionsettingspanel">NoteConstructionSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteConstructionSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteConstructionSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">ConstructionSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L761" aria-label="Source for NoteConstructionSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ClefsPanel</code></p>
 
@@ -927,12 +951,18 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <h2 id="intervalsettingspanel">IntervalSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'intervals'</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L1070" aria-label="Source for IntervalSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">StaffRangePanel</code></p>
 
@@ -968,12 +998,18 @@ Melodic.</p>
 
 <h2 id="keyboardintervalsettingspanel">KeyboardIntervalSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardIntervalSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardIntervalSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeyboardIntervalSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L1553" aria-label="Source for KeyboardIntervalSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">KeyboardRangePanel</code></p>
 
@@ -1026,12 +1062,18 @@ identification.</p>
 
 <h2 id="arpeggiosettingspanel">ArpeggioSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ArpeggioSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ArpeggioSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">ArpeggioSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L2235" aria-label="Source for ArpeggioSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ClefsPanel</code></p>
 
@@ -1083,14 +1125,20 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <h2 id="keysignaturesettingspanel">KeySignatureSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignatureSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignatureSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeySignatureSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'keySignatures'</span><span class="p">,</span>
     <span class="n">keys_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'Key signatures'</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L2508" aria-label="Source for KeySignatureSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ClefsPanel</code></p>
 
@@ -1150,8 +1198,14 @@ each changes the settings, saves them and emits <code class="language-plaintext 
 
 <h2 id="notationsettingspanel">NotationSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NotationSettingsPanel</span><span class="p">()</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NotationSettingsPanel</span><span class="p">()</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L3062" aria-label="Source for NotationSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
 
@@ -1177,12 +1231,18 @@ each changes the settings, saves them and emits <code class="language-plaintext 
 
 <h2 id="clefbasicssettingspanel">ClefBasicsSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ClefBasicsSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ClefBasicsSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">ClefBasicsSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L3245" aria-label="Source for ClefBasicsSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ClefsPanel</code></p>
 
@@ -1241,8 +1301,14 @@ the settings, saves them and emits <code class="language-plaintext highlighter-r
 
 <h2 id="settings_inversion_names">settings_inversion_names</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_inversion_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_inversion_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L3425" aria-label="Source for settings_inversion_names">[Source]</a></p>
+
+</div>
 
 <p>Return the inversions as they are written in the settings.</p>
 
@@ -1260,12 +1326,18 @@ the settings, saves them and emits <code class="language-plaintext highlighter-r
 
 <h2 id="circlesettingspanel">CircleSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettingsPanel</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettingsPanel</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">CircleSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L3443" aria-label="Source for CircleSettingsPanel">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
 
@@ -1325,12 +1397,18 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 
 <h2 id="settings_panel_for">settings_panel_for</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExerciseSettingsPanel</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/settings_panel.py#L3782" aria-label="Source for settings_panel_for">[Source]</a></p>
+
+</div>
 
 <p>Return the settings panel for an exercise.</p>
 
@@ -1364,6 +1442,10 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1656,10 +1738,10 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

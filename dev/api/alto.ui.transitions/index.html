@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -752,7 +758,9 @@ different ones share one player.</p>
 
 <h2 id="sprite">Sprite</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Sprite</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Sprite</span><span class="p">(</span>
     <span class="n">pixmap</span><span class="p">:</span> <span class="n">QPixmap</span><span class="p">,</span>
     <span class="n">rect</span><span class="p">:</span> <span class="n">QRectF</span><span class="p">,</span>
     <span class="n">opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
@@ -765,7 +773,11 @@ different ones share one player.</p>
     <span class="n">reveal</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="n">reveal_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L61" aria-label="Source for Sprite">[Source]</a></p>
+
+</div>
 
 <p>A photograph of one card, and how it is drawn at this moment.</p>
 
@@ -797,13 +809,19 @@ different ones share one player.</p>
 
 <h2 id="scene">Scene</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Scene</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Scene</span><span class="p">(</span>
     <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">old</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sprite</span><span class="p">],</span>
     <span class="n">new</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sprite</span><span class="p">],</span>
     <span class="n">direction</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L116" aria-label="Source for Scene">[Source]</a></p>
+
+</div>
 
 <p>What a transition is given at each moment: the time, the two sets of
 sprites and the direction.</p>
@@ -827,8 +845,14 @@ sprites and the direction.</p>
 
 <h2 id="ease_out">ease_out</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ease_out</span><span class="p">(</span><span class="n">progress</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ease_out</span><span class="p">(</span><span class="n">progress</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L146" aria-label="Source for ease_out">[Source]</a></p>
+
+</div>
 
 <p>Ease a progress from 0 to 1 so that it starts fast and slows to a
 stop.</p>
@@ -853,13 +877,19 @@ stop.</p>
 
 <h2 id="ramp">ramp</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ramp</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ramp</span><span class="p">(</span>
     <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">start</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">length</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L170" aria-label="Source for ramp">[Source]</a></p>
+
+</div>
 
 <p>Say how far along a part of a transition is, from 0 before it starts
 to 1 once it has finished.</p>
@@ -890,8 +920,14 @@ to 1 once it has finished.</p>
 
 <h2 id="hide">hide</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hide</span><span class="p">(</span><span class="n">sprites</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sprite</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hide</span><span class="p">(</span><span class="n">sprites</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sprite</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L206" aria-label="Source for hide">[Source]</a></p>
+
+</div>
 
 <p>Make sprites invisible.</p>
 
@@ -913,8 +949,14 @@ to 1 once it has finished.</p>
 
 <h2 id="fade_in">fade_in</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fade_in</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fade_in</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L228" aria-label="Source for fade_in">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a fade in: the new cards fade up from clear, and
 nothing of the old remains.</p>
@@ -941,8 +983,14 @@ nothing of the old remains.</p>
 
 <h2 id="crossfade">crossfade</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">crossfade</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">crossfade</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L257" aria-label="Source for crossfade">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a crossfade: the old cards fade out as the new
 ones fade in.</p>
@@ -981,8 +1029,14 @@ ones fade in.</p>
 
 <h2 id="slide">slide</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slide</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slide</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L300" aria-label="Source for slide">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a slide: both sets move sideways, toward the
 side of the switch that was pressed.</p>
@@ -1009,8 +1063,14 @@ side of the switch that was pressed.</p>
 
 <h2 id="rise">rise</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rise</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rise</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L337" aria-label="Source for rise">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a rise: the old cards sink and fade, and the new
 ones rise into place.</p>
@@ -1037,8 +1097,14 @@ ones rise into place.</p>
 
 <h2 id="cascade">cascade</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cascade</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cascade</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L371" aria-label="Source for cascade">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a cascade: the new cards arrive one after
 another, each rising a little as it appears.</p>
@@ -1069,8 +1135,14 @@ another, each rising a little as it appears.</p>
 
 <h2 id="zoom">zoom</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">zoom</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">zoom</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L405" aria-label="Source for zoom">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a zoom: the old cards grow a little as they
 fade, and the new ones grow into place.</p>
@@ -1097,8 +1169,14 @@ fade, and the new ones grow into place.</p>
 
 <h2 id="flip">flip</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flip</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flip</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L441" aria-label="Source for flip">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a flip: each old card turns edge on and goes,
 then each new one turns face on.</p>
@@ -1125,8 +1203,14 @@ then each new one turns face on.</p>
 
 <h2 id="blur">blur</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">blur</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">blur</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L479" aria-label="Source for blur">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a blur: the old cards dissolve into a blur and
 the new ones come into focus.</p>
@@ -1153,8 +1237,14 @@ the new ones come into focus.</p>
 
 <h2 id="wipe">wipe</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wipe</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wipe</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L513" aria-label="Source for wipe">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a wipe: the new cards are uncovered from one
 side while the old ones fade.</p>
@@ -1184,8 +1274,14 @@ side while the old ones fade.</p>
 
 <h2 id="drop">drop</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">drop</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">drop</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L547" aria-label="Source for drop">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for drop and pop: the old cards drop away one by
 one, then the new ones pop in with a small bounce.</p>
@@ -1212,14 +1308,20 @@ one, then the new ones pop in with a small bounce.</p>
 
 <h2 id="transition">Transition</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Transition</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Transition</span><span class="p">(</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">about</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">frame</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Scene</span><span class="p">],</span> <span class="bp">None</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
     <span class="n">length</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Scene</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="k">lambda</span> <span class="n">scene</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L590" aria-label="Source for Transition">[Source]</a></p>
+
+</div>
 
 <p>One way of moving between the exercises and the lessons.</p>
 
@@ -1241,7 +1343,9 @@ one, then the new ones pop in with a small bounce.</p>
 
 <h2 id="motion">Motion</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Motion</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Motion</span><span class="p">(</span>
     <span class="n">length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">320.0</span><span class="p">,</span>
     <span class="n">per_card</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">start</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -1258,7 +1362,11 @@ one, then the new ones pop in with a small bounce.</p>
     <span class="n">fade</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
     <span class="n">reveal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L642" aria-label="Source for Motion">[Source]</a></p>
+
+</div>
 
 <p>How one set of cards moves in a transition built from parts: when
 each card starts, how long it takes, and what it does.</p>
@@ -1295,12 +1403,18 @@ look to rest) and leaving (from rest to that look).</p>
 
 <h2 id="eased">eased</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eased</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eased</span><span class="p">(</span>
     <span class="n">progress</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">how</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L712" aria-label="Source for eased">[Source]</a></p>
+
+</div>
 
 <p>Time a progress from 0 to 1 in one of the ways a motion can be
 eased.</p>
@@ -1332,12 +1446,18 @@ eased.</p>
 
 <h2 id="ranks">ranks</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ranks</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ranks</span><span class="p">(</span>
     <span class="n">sprites</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sprite</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">order</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L761" aria-label="Source for ranks">[Source]</a></p>
+
+</div>
 
 <p>Say where each sprite comes in an order: 0 for the first to start.</p>
 
@@ -1373,12 +1493,18 @@ eased.</p>
 
 <h2 id="span">span</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">span</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">span</span><span class="p">(</span>
     <span class="n">motion</span><span class="p">:</span> <span class="n">Motion</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L833" aria-label="Source for span">[Source]</a></p>
+
+</div>
 
 <p>Say how long a motion takes for a number of cards, from when it
 starts to when the last card has finished.</p>
@@ -1411,13 +1537,19 @@ starts to when the last card has finished.</p>
 
 <h2 id="move">move</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">move</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">move</span><span class="p">(</span>
     <span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">leaving</span><span class="p">:</span> <span class="n">Motion</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">arriving</span><span class="p">:</span> <span class="n">Motion</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L869" aria-label="Source for move">[Source]</a></p>
+
+</div>
 
 <p>Set the sprites for a transition built from a motion for the cards
 that leave and one for the cards that arrive.</p>
@@ -1448,12 +1580,18 @@ that leave and one for the cards that arrive.</p>
 
 <h2 id="built">built</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">built</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">built</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">leaving</span><span class="p">:</span> <span class="n">Motion</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">arriving</span><span class="p">:</span> <span class="n">Motion</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Scene</span><span class="p">],</span> <span class="bp">None</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Scene</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1014" aria-label="Source for built">[Source]</a></p>
+
+</div>
 
 <p>Make the frame and length functions of a transition built from
 motions.</p>
@@ -1498,7 +1636,9 @@ motions.</p>
 
 <h2 id="made">made</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">made</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">made</span><span class="p">(</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1506,7 +1646,11 @@ motions.</p>
     <span class="n">leaving</span><span class="p">:</span> <span class="n">Motion</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">arriving</span><span class="p">:</span> <span class="n">Motion</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transition</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1102" aria-label="Source for made">[Source]</a></p>
+
+</div>
 
 <p>Make a transition from motions.</p>
 
@@ -1540,8 +1684,14 @@ motions.</p>
 
 <h2 id="transition_named">transition_named</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">transition_named</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transition</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">transition_named</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transition</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1487" aria-label="Source for transition_named">[Source]</a></p>
+
+</div>
 
 <p>Find a transition by its key.</p>
 
@@ -1568,8 +1718,14 @@ motions.</p>
 
 <h2 id="saved_transition">saved_transition</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">saved_transition</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">saved_transition</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1516" aria-label="Source for saved_transition">[Source]</a></p>
+
+</div>
 
 <p>Return the key of the transition that is chosen in the settings.</p>
 
@@ -1588,8 +1744,14 @@ motions.</p>
 
 <h2 id="save_transition">save_transition</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_transition</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_transition</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1541" aria-label="Source for save_transition">[Source]</a></p>
+
+</div>
 
 <p>Remember which transition to use.</p>
 
@@ -1609,12 +1771,18 @@ motions.</p>
 
 <h2 id="paint_sprites">paint_sprites</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paint_sprites</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paint_sprites</span><span class="p">(</span>
     <span class="n">painter</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">sprites</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sprite</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1560" aria-label="Source for paint_sprites">[Source]</a></p>
+
+</div>
 
 <p>Draw sprites as they now look.</p>
 
@@ -1647,8 +1815,14 @@ motions.</p>
 
 <h2 id="transitioncanvas">TransitionCanvas</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TransitionCanvas</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TransitionCanvas</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1639" aria-label="Source for TransitionCanvas">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
@@ -1689,8 +1863,14 @@ drawn.</p>
 
 <h3 id="transitioncanvascover">TransitionCanvas.cover</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="n">old</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sprite</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="n">old</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sprite</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1692" aria-label="Source for TransitionCanvas.cover">[Source]</a></p>
+
+</div>
 
 <p>Show the old cards on the canvas as they are, so that they can
 be swapped for the new ones unseen.</p>
@@ -1711,13 +1891,19 @@ be swapped for the new ones unseen.</p>
 
 <h3 id="transitioncanvasplay">TransitionCanvas.play</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play</span><span class="p">(</span>
     <span class="n">transition</span><span class="p">:</span> <span class="n">Transition</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sprite</span><span class="p">],</span>
     <span class="n">direction</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1718" aria-label="Source for TransitionCanvas.play">[Source]</a></p>
+
+</div>
 
 <p>Play a transition from the old cards that cover the canvas to
 the new ones.</p>
@@ -1744,8 +1930,14 @@ the new ones.</p>
 
 <h3 id="transitioncanvasstop">TransitionCanvas.stop</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1763" aria-label="Source for TransitionCanvas.stop">[Source]</a></p>
+
+</div>
 
 <p>End the transition at once and take the canvas away.</p>
 
@@ -1760,8 +1952,14 @@ the new ones.</p>
 
 <h3 id="transitioncanvaspaintevent">TransitionCanvas.paintEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/transitions.py#L1808" aria-label="Source for TransitionCanvas.paintEvent">[Source]</a></p>
+
+</div>
 
 <p>Draw every sprite as it now looks.</p>
 
@@ -1780,6 +1978,10 @@ the new ones.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -2094,10 +2296,10 @@ the new ones.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

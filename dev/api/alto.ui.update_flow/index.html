@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -755,12 +761,18 @@ source folder is told to update with git.</p>
 
 <h2 id="brief">brief</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">brief</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">brief</span><span class="p">(</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L104" aria-label="Source for brief">[Source]</a></p>
+
+</div>
 
 <p>Cut what a program printed down to what is worth showing in a
 message: the end of it, without the blank space around it.</p>
@@ -788,8 +800,14 @@ message: the end of it, without the blank space around it.</p>
 
 <h2 id="commandrunner">CommandRunner</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CommandRunner</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CommandRunner</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L136" aria-label="Source for CommandRunner">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QObject</code></p>
 
@@ -822,9 +840,15 @@ prints as it prints it, and how it ended.</p>
 
 <h3 id="commandrunnerrunning">CommandRunner.running</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">running</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L191" aria-label="Source for CommandRunner.running">[Source]</a></p>
+
+</div>
 
 <p>Say whether a program has been started and has not yet ended.</p>
 
@@ -836,13 +860,19 @@ prints as it prints it, and how it ended.</p>
 
 <h3 id="commandrunnerstart">CommandRunner.start</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span>
     <span class="n">program</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L202" aria-label="Source for CommandRunner.start">[Source]</a></p>
+
+</div>
 
 <p>Start a program.</p>
 
@@ -872,8 +902,14 @@ prints as it prints it, and how it ended.</p>
 
 <h3 id="commandrunnerstop">CommandRunner.stop</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L247" aria-label="Source for CommandRunner.stop">[Source]</a></p>
+
+</div>
 
 <p>Stop the program, if it is running, without announcing that it
 has ended.</p>
@@ -885,8 +921,14 @@ has ended.</p>
 
 <h2 id="saved_channel">saved_channel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">saved_channel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">saved_channel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L340" aria-label="Source for saved_channel">[Source]</a></p>
+
+</div>
 
 <p>Return what the update check follows, as chosen in Settings.</p>
 
@@ -908,8 +950,14 @@ has ended.</p>
 
 <h2 id="save_channel">save_channel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_channel</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_channel</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L372" aria-label="Source for save_channel">[Source]</a></p>
+
+</div>
 
 <p>Remember what the update check follows.</p>
 
@@ -928,12 +976,18 @@ has ended.</p>
 
 <h2 id="waitdialog">WaitDialog</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">WaitDialog</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">WaitDialog</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L395" aria-label="Source for WaitDialog">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
@@ -960,20 +1014,32 @@ shown while something is asked for.</p>
 
 <h3 id="waitdialogreject">WaitDialog.reject</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L439" aria-label="Source for WaitDialog.reject">[Source]</a></p>
+
+</div>
 
 <p>Cancel the asking.</p>
 
 <h2 id="checkdialog">CheckDialog</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CheckDialog</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CheckDialog</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
     <span class="n">git</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L454" aria-label="Source for CheckDialog">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">WaitDialog</code></p>
 
@@ -1002,8 +1068,14 @@ newest commit of its main branch.</p>
 
 <h3 id="checkdialogrun">CheckDialog.run</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L496" aria-label="Source for CheckDialog.run">[Source]</a></p>
+
+</div>
 
 <p>Ask, showing the window until there is an answer.</p>
 
@@ -1023,8 +1095,14 @@ newest commit of its main branch.</p>
 
 <h2 id="releasefetcher">ReleaseFetcher</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseFetcher</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseFetcher</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L544" aria-label="Source for ReleaseFetcher">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QObject</code></p>
 
@@ -1054,11 +1132,17 @@ window never freezes while it waits.</p>
 
 <h3 id="releasefetcherstart">ReleaseFetcher.start</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L574" aria-label="Source for ReleaseFetcher.start">[Source]</a></p>
+
+</div>
 
 <p>Start asking.</p>
 
@@ -1070,16 +1154,28 @@ window never freezes while it waits.</p>
 
 <h3 id="releasefetchercancel">ReleaseFetcher.cancel</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cancel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cancel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L591" aria-label="Source for ReleaseFetcher.cancel">[Source]</a></p>
+
+</div>
 
 <p>Stop caring about the answer; the thread ends by itself when
 GitHub answers or the time is up.</p>
 
 <h2 id="dailyreleasecheck">DailyReleaseCheck</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DailyReleaseCheck</span><span class="p">(</span><span class="n">window</span><span class="p">:</span> <span class="n">MainWindow</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DailyReleaseCheck</span><span class="p">(</span><span class="n">window</span><span class="p">:</span> <span class="n">MainWindow</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L628" aria-label="Source for DailyReleaseCheck">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QTimer</code></p>
 
@@ -1108,8 +1204,14 @@ learner’s reminder choice at the exercise grid.</p>
 
 <h2 id="releasedialog">ReleaseDialog</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseDialog</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseDialog</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L751" aria-label="Source for ReleaseDialog">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">WaitDialog</code></p>
 
@@ -1135,8 +1237,14 @@ learner’s reminder choice at the exercise grid.</p>
 
 <h3 id="releasedialogrun">ReleaseDialog.run</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L781" aria-label="Source for ReleaseDialog.run">[Source]</a></p>
+
+</div>
 
 <p>Ask, showing the window until there is an answer.</p>
 
@@ -1149,12 +1257,18 @@ learner’s reminder choice at the exercise grid.</p>
 
 <h2 id="updatedialog">UpdateDialog</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">UpdateDialog</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">UpdateDialog</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">command</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L823" aria-label="Source for UpdateDialog">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
 
@@ -1192,8 +1306,14 @@ called.</p>
 
 <h3 id="updatedialogrun">UpdateDialog.run</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L899" aria-label="Source for UpdateDialog.run">[Source]</a></p>
+
+</div>
 
 <p>Install the update, showing the window until the person has read
 how it went.</p>
@@ -1219,15 +1339,27 @@ how it went.</p>
 
 <h3 id="updatedialogreject">UpdateDialog.reject</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L926" aria-label="Source for UpdateDialog.reject">[Source]</a></p>
+
+</div>
 
 <p>Close the window, but not while the update is running.</p>
 
 <h3 id="updatedialogcloseevent">UpdateDialog.closeEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L931" aria-label="Source for UpdateDialog.closeEvent">[Source]</a></p>
+
+</div>
 
 <p>Refuse to close while the update is running.</p>
 
@@ -1239,13 +1371,19 @@ how it went.</p>
 
 <h2 id="check_for_updates">check_for_updates</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_for_updates</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_for_updates</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
     <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">.</span><span class="n">quit</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L998" aria-label="Source for check_for_updates">[Source]</a></p>
+
+</div>
 
 <p>Ask whether a newer Alto is available and, if the person agrees,
 install it and restart.</p>
@@ -1271,7 +1409,9 @@ or the main branch, and can install it.</p>
 
 <h2 id="check_release">check_release</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_release</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_release</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">kind</span><span class="p">:</span> <span class="n">InstallKind</span><span class="p">,</span>
@@ -1279,7 +1419,11 @@ or the main branch, and can install it.</p>
     <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
     <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L1056" aria-label="Source for check_release">[Source]</a></p>
+
+</div>
 
 <p>Ask GitHub for the latest release and compare it with the version
 that is running.</p>
@@ -1301,7 +1445,9 @@ that is running.</p>
 
 <h2 id="offer_release">offer_release</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">offer_release</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">offer_release</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">release</span><span class="p">:</span> <span class="n">Release</span><span class="p">,</span>
@@ -1311,7 +1457,11 @@ that is running.</p>
     <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
     <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L1121" aria-label="Source for offer_release">[Source]</a></p>
+
+</div>
 
 <p>Ask whether to upgrade using the installation’s supported update
 path.</p>
@@ -1335,13 +1485,19 @@ path.</p>
 
 <h2 id="check_main">check_main</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_main</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_main</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
     <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L1216" aria-label="Source for check_main">[Source]</a></p>
+
+</div>
 
 <p>Ask the address Alto came from for the newest commit on its main
 branch and compare it with the one that is running.</p>
@@ -1361,14 +1517,20 @@ branch and compare it with the one that is running.</p>
 
 <h2 id="install">install</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
     <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L1282" aria-label="Source for install">[Source]</a></p>
+
+</div>
 
 <p>Install a release, or the newest commit of the main branch, showing
 the progress, and restart if it worked.</p>
@@ -1389,14 +1551,20 @@ the progress, and restart if it worked.</p>
 
 <h2 id="update_package">update_package</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">update_package</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">update_package</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">release</span><span class="p">:</span> <span class="n">updates</span><span class="p">.</span><span class="n">Release</span><span class="p">,</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">selfupdate</span><span class="p">.</span><span class="n">Target</span><span class="p">,</span>
     <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/update_flow.py#L1320" aria-label="Source for update_package">[Source]</a></p>
+
+</div>
 
 <p>Replace a packaged copy after the user agrees: download and check
 it, say that Alto will restart, and hand over.</p>
@@ -1416,6 +1584,10 @@ it, say that Alto will restart, and hand over.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1732,10 +1904,10 @@ it, say that Alto will restart, and hand over.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

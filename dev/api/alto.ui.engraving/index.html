@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -751,13 +757,19 @@ so they are flipped on screen.</p>
 
 <h2 id="notation_glyph">notation_glyph</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">cache</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">cache</span>
 <span class="k">def</span> <span class="nf">notation_glyph</span><span class="p">(</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">codepoint</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPainterPath</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L350" aria-label="Source for notation_glyph">[Source]</a></p>
+
+</div>
 
 <p>Read a score marking from a bundled font at four staff spaces per
 em.</p>
@@ -785,12 +797,18 @@ em.</p>
 
 <h2 id="staff_line_width">staff_line_width</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">staff_line_width</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">staff_line_width</span><span class="p">(</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">gap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L382" aria-label="Source for staff_line_width">[Source]</a></p>
+
+</div>
 
 <p>Return the thickness of a staff line, as the font specifies.</p>
 
@@ -815,12 +833,18 @@ em.</p>
 
 <h2 id="ledger_width">ledger_width</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ledger_width</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ledger_width</span><span class="p">(</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">gap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L410" aria-label="Source for ledger_width">[Source]</a></p>
+
+</div>
 
 <p>Return the thickness of a ledger line, as the font specifies.</p>
 
@@ -845,13 +869,19 @@ em.</p>
 
 <h2 id="fill_path">fill_path</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fill_path</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fill_path</span><span class="p">(</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">path</span><span class="p">:</span> <span class="n">QPainterPath</span><span class="p">,</span>
     <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L438" aria-label="Source for fill_path">[Source]</a></p>
+
+</div>
 
 <p>Fill a path with a color and no outline.</p>
 
@@ -886,7 +916,9 @@ em.</p>
 
 <h2 id="draw_note">draw_note</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_note</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_note</span><span class="p">(</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -898,7 +930,11 @@ em.</p>
     <span class="n">stem_down</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">flag_color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L483" aria-label="Source for draw_note">[Source]</a></p>
+
+</div>
 
 <p>Draw a note with its head centered on a point.</p>
 
@@ -944,7 +980,9 @@ the font’s anchors.</p>
 
 <h2 id="draw_clef">draw_clef</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_clef</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_clef</span><span class="p">(</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -954,7 +992,11 @@ the font’s anchors.</p>
     <span class="n">gap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L629" aria-label="Source for draw_clef">[Source]</a></p>
+
+</div>
 
 <p>Draw a clef with its left edge at a point.</p>
 
@@ -1000,13 +1042,19 @@ the font’s anchors.</p>
 
 <h2 id="accidental_width">accidental_width</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">accidental_width</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">accidental_width</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">sign</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">gap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L701" aria-label="Source for accidental_width">[Source]</a></p>
+
+</div>
 
 <p>Return how wide a sharp, flat or natural is drawn, so that it can be
 placed beside other things.</p>
@@ -1037,7 +1085,9 @@ placed beside other things.</p>
 
 <h2 id="draw_accidental">draw_accidental</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_accidental</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_accidental</span><span class="p">(</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1048,7 +1098,11 @@ placed beside other things.</p>
     <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
     <span class="n">fit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L740" aria-label="Source for draw_accidental">[Source]</a></p>
+
+</div>
 
 <p>Draw a sharp, flat or natural with its left edge at a point.</p>
 
@@ -1105,7 +1159,9 @@ placed beside other things.</p>
 
 <h2 id="draw_brace">draw_brace</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_brace</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_brace</span><span class="p">(</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1115,7 +1171,11 @@ placed beside other things.</p>
     <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
     <span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/engraving.py#L829" aria-label="Source for draw_brace">[Source]</a></p>
+
+</div>
 
 <p>Draw the font’s brace stretched between two heights, for a grand
 staff.</p>
@@ -1160,6 +1220,10 @@ staff.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1390,10 +1454,10 @@ staff.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

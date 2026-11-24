@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -740,7 +746,9 @@ not introduce it.</p>
 
 <h2 id="reviewinterval">ReviewInterval</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReviewInterval</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReviewInterval</span><span class="p">(</span>
     <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">identity</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
     <span class="n">previous_state</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
@@ -748,7 +756,11 @@ not introduce it.</p>
     <span class="n">graded_state</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">previous_due</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L105" aria-label="Source for ReviewInterval">[Source]</a></p>
+
+</div>
 
 <p>A preview of one rating for a card in its current scheduling state.</p>
 
@@ -764,9 +776,15 @@ not introduce it.</p>
 
 <h3 id="reviewintervalduration">ReviewInterval.duration</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">duration</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L127" aria-label="Source for ReviewInterval.duration">[Source]</a></p>
+
+</div>
 
 <p>Format a review interval for display above a grade button or
 beside the music.</p>
@@ -789,8 +807,14 @@ beside the music.</p>
 
 <h2 id="calendarpractice">CalendarPractice</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L219" aria-label="Source for CalendarPractice">[Source]</a></p>
+
+</div>
 
 <p>Prepare daily exercise queues and store each scheduler’s review
 dates.</p>
@@ -820,12 +844,18 @@ dates.</p>
 
 <h3 id="calendarpracticeinherit_schedules">CalendarPractice.inherit_schedules</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">inherit_schedules</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">inherit_schedules</span><span class="p">(</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L248" aria-label="Source for CalendarPractice.inherit_schedules">[Source]</a></p>
+
+</div>
 
 <p>Initialize missing schedules for this profile from the other
 calendar scheduler.</p>
@@ -845,12 +875,18 @@ consuming a review.
 
 <h3 id="calendarpracticelimits">CalendarPractice.limits</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">limits</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">limits</span><span class="p">(</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L299" aria-label="Source for CalendarPractice.limits">[Source]</a></p>
+
+</div>
 
 <p>Return the effective daily new-card and review limits.</p>
 
@@ -875,12 +911,18 @@ consuming a review.
 
 <h3 id="calendarpracticeoverrides">CalendarPractice.overrides</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">overrides</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">overrides</span><span class="p">(</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L334" aria-label="Source for CalendarPractice.overrides">[Source]</a></p>
+
+</div>
 
 <p>Read the two explicitly saved limits for an exercise.</p>
 
@@ -907,14 +949,20 @@ consuming a review.
 
 <h3 id="calendarpracticeset_limits">CalendarPractice.set_limits</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_limits</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_limits</span><span class="p">(</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">new_cards</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">reviews</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L372" aria-label="Source for CalendarPractice.set_limits">[Source]</a></p>
+
+</div>
 
 <p>Save the profile defaults or an exercise’s individual overrides.</p>
 
@@ -943,8 +991,14 @@ consuming a review.
 
 <h3 id="calendarpracticereset_limits">CalendarPractice.reset_limits</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset_limits</span><span class="p">(</span><span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset_limits</span><span class="p">(</span><span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L417" aria-label="Source for CalendarPractice.reset_limits">[Source]</a></p>
+
+</div>
 
 <p>Restore the profile defaults and remove its exercise overrides.</p>
 
@@ -962,14 +1016,20 @@ reviews.
 
 <h3 id="calendarpracticequeue">CalendarPractice.queue</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">queue</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">queue</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Question</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Question</span><span class="p">]]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L437" aria-label="Source for CalendarPractice.queue">[Source]</a></p>
+
+</div>
 
 <p>Find due reviews and prepare the remaining new cards for this
 local day.</p>
@@ -1006,14 +1066,20 @@ local day.</p>
 
 <h3 id="calendarpracticecounts">CalendarPractice.counts</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">counts</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">counts</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L489" aria-label="Source for CalendarPractice.counts">[Source]</a></p>
+
+</div>
 
 <p>Count due reviews and unseen cards available with the selected
 settings.</p>
@@ -1048,14 +1114,20 @@ settings.</p>
 
 <h3 id="calendarpracticetile_counts">CalendarPractice.tile_counts</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tile_counts</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tile_counts</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L538" aria-label="Source for CalendarPractice.tile_counts">[Source]</a></p>
+
+</div>
 
 <p>Count available reviews, new cards, and missed cards awaiting a
 correct review.</p>
@@ -1090,7 +1162,9 @@ correct review.</p>
 
 <h3 id="calendarpracticestudy_counts">CalendarPractice.study_counts</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">study_counts</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">study_counts</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -1098,7 +1172,11 @@ correct review.</p>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">current_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L586" aria-label="Source for CalendarPractice.study_counts">[Source]</a></p>
+
+</div>
 
 <p>Count the exercise queues and identify the queue of the question
 on screen.</p>
@@ -1127,14 +1205,20 @@ during its retry.
 
 <h3 id="calendarpracticetake">CalendarPractice.take</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">take</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">take</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L919" aria-label="Source for CalendarPractice.take">[Source]</a></p>
+
+</div>
 
 <p>Take the first eligible card, recording a new introduction only
 when served.</p>
@@ -1173,7 +1257,9 @@ when served.</p>
 
 <h3 id="calendarpracticetake_or_wait">CalendarPractice.take_or_wait</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">take_or_wait</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">take_or_wait</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -1182,7 +1268,11 @@ when served.</p>
     <span class="n">avoid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">wait_learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L970" aria-label="Source for CalendarPractice.take_or_wait">[Source]</a></p>
+
+</div>
 
 <p>Draw an eligible card or return the time when a missed card can
 be reviewed.</p>
@@ -1212,14 +1302,20 @@ step expires.
 
 <h3 id="calendarpracticeintroduce">CalendarPractice.introduce</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L1035" aria-label="Source for CalendarPractice.introduce">[Source]</a></p>
+
+</div>
 
 <p>Register a calendar introduction once, in the caller’s draw or
 answer transaction.</p>
@@ -1240,7 +1336,9 @@ answer transaction.</p>
 
 <h3 id="calendarpracticecorrect_interval">CalendarPractice.correct_interval</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">correct_interval</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">correct_interval</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -1248,7 +1346,11 @@ answer transaction.</p>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReviewInterval</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L1113" aria-label="Source for CalendarPractice.correct_interval">[Source]</a></p>
+
+</div>
 
 <p>Preview the next correct answer without grading the card.</p>
 
@@ -1284,7 +1386,9 @@ answer transaction.</p>
 
 <h3 id="calendarpracticepassing_intervals">CalendarPractice.passing_intervals</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">passing_intervals</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">passing_intervals</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -1293,7 +1397,11 @@ answer transaction.</p>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">displayed</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Rating</span><span class="p">,</span> <span class="n">ReviewInterval</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Rating</span><span class="p">,</span> <span class="n">ReviewInterval</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L1167" aria-label="Source for CalendarPractice.passing_intervals">[Source]</a></p>
+
+</div>
 
 <p>Preview the three passing outcomes from one snapshot of this
 card.</p>
@@ -1330,7 +1438,9 @@ card.</p>
 
 <h3 id="calendarpracticegrade">CalendarPractice.grade</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">grade</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">grade</span><span class="p">(</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -1341,7 +1451,11 @@ card.</p>
     <span class="n">manual_rating</span><span class="p">:</span> <span class="n">Rating</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">preview</span><span class="p">:</span> <span class="n">ReviewInterval</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/calendar.py#L1242" aria-label="Source for CalendarPractice.grade">[Source]</a></p>
+
+</div>
 
 <p>Reschedule a card from the first submission to this
 presentation.</p>
@@ -1386,6 +1500,10 @@ presentation.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1554,10 +1672,10 @@ presentation.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

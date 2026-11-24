@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -751,13 +757,19 @@ the interval between two notes.</p>
 
 <h2 id="note">Note</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Note</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Note</span><span class="p">(</span>
     <span class="n">octave</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">letter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">accidental</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L76" aria-label="Source for Note">[Source]</a></p>
+
+</div>
 
 <p>A spelled pitch: a letter name, an accidental and an octave.</p>
 
@@ -786,9 +798,15 @@ different lines of the staff.</p>
 
 <h3 id="notemidi">Note.midi</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">midi</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L112" aria-label="Source for Note.midi">[Source]</a></p>
+
+</div>
 
 <p>Return the MIDI note number, where middle C (C4) is 60.</p>
 
@@ -810,9 +828,15 @@ different lines of the staff.</p>
 
 <h3 id="notediatonic">Note.diatonic</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">diatonic</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L137" aria-label="Source for Note.diatonic">[Source]</a></p>
+
+</div>
 
 <p>Return the absolute staff-step index of the note, ignoring its
 accidental.</p>
@@ -839,9 +863,15 @@ staff steps is the difference of their indexes.</p>
 
 <h3 id="notepitch_class">Note.pitch_class</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">pitch_class</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L163" aria-label="Source for Note.pitch_class">[Source]</a></p>
+
+</div>
 
 <p>Return the pitch class: the note’s MIDI number modulo 12.</p>
 
@@ -865,9 +895,15 @@ staff steps is the difference of their indexes.</p>
 
 <h3 id="notename">Note.name</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">name</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L187" aria-label="Source for Note.name">[Source]</a></p>
+
+</div>
 
 <p>Return the pitch-class name with Unicode accidentals, without
 the octave.</p>
@@ -888,13 +924,19 @@ the octave.</p>
 
 <h3 id="notefrom_diatonic">Note.from_diatonic</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
 <span class="k">def</span> <span class="nf">from_diatonic</span><span class="p">(</span>
     <span class="n">diatonic</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">accidental</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L224" aria-label="Source for Note.from_diatonic">[Source]</a></p>
+
+</div>
 
 <p>Build a note from an absolute staff-step index.</p>
 
@@ -921,9 +963,15 @@ the octave.</p>
 
 <h3 id="noteparse">Note.parse</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
 <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L255" aria-label="Source for Note.parse">[Source]</a></p>
+
+</div>
 
 <p>Parse a note with ASCII or musical accidentals, such as ‘F#4’,
 ‘B♭3’ or ‘E𝄫2’.</p>
@@ -963,12 +1011,18 @@ the octave.</p>
 
 <h3 id="notetranspose">Note.transpose</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span>
     <span class="n">interval</span><span class="p">:</span> <span class="n">Interval</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">descending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L300" aria-label="Source for Note.transpose">[Source]</a></p>
+
+</div>
 
 <p>Move the note up or down by an interval, keeping the spelling
 correct.</p>
@@ -1011,12 +1065,18 @@ correct.</p>
 
 <h2 id="interval">Interval</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Interval</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Interval</span><span class="p">(</span>
     <span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L356" aria-label="Source for Interval">[Source]</a></p>
+
+</div>
 
 <p>A simple or compound interval between two spelled notes.</p>
 
@@ -1037,9 +1097,15 @@ correct.</p>
 
 <h3 id="intervalinversion">Interval.inversion</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">inversion</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Interval</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L403" aria-label="Source for Interval.inversion">[Source]</a></p>
+
+</div>
 
 <p>Invert the spelled interval within an octave.</p>
 
@@ -1065,9 +1131,15 @@ correct.</p>
 
 <h3 id="intervalis_perfect_type">Interval.is_perfect_type</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">is_perfect_type</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L441" aria-label="Source for Interval.is_perfect_type">[Source]</a></p>
+
+</div>
 
 <p>Report whether this size of interval is “perfect type” (unison,
 fourth, fifth, octave) rather than major or minor type.</p>
@@ -1088,9 +1160,15 @@ fourth, fifth, octave) rather than major or minor type.</p>
 
 <h3 id="intervalsemitones">Interval.semitones</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">semitones</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L462" aria-label="Source for Interval.semitones">[Source]</a></p>
+
+</div>
 
 <p>Return the size of the interval in semitones.</p>
 
@@ -1115,9 +1193,15 @@ fourth, fifth, octave) rather than major or minor type.</p>
 
 <h3 id="intervalshort">Interval.short</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">short</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L506" aria-label="Source for Interval.short">[Source]</a></p>
+
+</div>
 
 <p>Return the interval in short form: its quality followed by its
 number.</p>
@@ -1136,13 +1220,19 @@ number.</p>
 
 <h3 id="intervalbetween">Interval.between</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
 <span class="k">def</span> <span class="nf">between</span><span class="p">(</span>
     <span class="n">low</span><span class="p">:</span> <span class="n">Note</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">high</span><span class="p">:</span> <span class="n">Note</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Interval</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L540" aria-label="Source for Interval.between">[Source]</a></p>
+
+</div>
 
 <p>Work out the interval from one note up to a higher one.</p>
 
@@ -1173,9 +1263,15 @@ number.</p>
 
 <h3 id="intervalparse">Interval.parse</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
 <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Interval</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L597" aria-label="Source for Interval.parse">[Source]</a></p>
+
+</div>
 
 <p>Parse an interval written in short form, such as ‘M3’, ‘P5’ or
 ‘d7’.</p>
@@ -1202,12 +1298,18 @@ number.</p>
 
 <h2 id="key_accidental">key_accidental</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_accidental</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_accidental</span><span class="p">(</span>
     <span class="n">letter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/theory/pitch.py#L674" aria-label="Source for key_accidental">[Source]</a></p>
+
+</div>
 
 <p>Return the accidental a key signature applies to a letter.</p>
 
@@ -1235,6 +1337,10 @@ number.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1437,10 +1543,10 @@ number.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

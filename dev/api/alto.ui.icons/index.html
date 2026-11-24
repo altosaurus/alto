@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -748,11 +754,17 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 
 <h2 id="set_palette_icon">set_palette_icon</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_palette_icon</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_palette_icon</span><span class="p">(</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">QAbstractButton</span> <span class="o">|</span> <span class="n">QAction</span> <span class="o">|</span> <span class="n">QMenu</span><span class="p">,</span>
     <span class="n">render</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">QPalette</span><span class="p">],</span> <span class="n">QIcon</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/icons.py#L150" aria-label="Source for set_palette_icon">[Source]</a></p>
+
+</div>
 
 <p>Assign a native Qt icon and refresh it whenever the application
 palette changes.</p>
@@ -780,14 +792,20 @@ palette changes.</p>
 
 <h2 id="set_svg_icon">set_svg_icon</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_svg_icon</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_svg_icon</span><span class="p">(</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">QAbstractButton</span> <span class="o">|</span> <span class="n">QAction</span> <span class="o">|</span> <span class="n">QMenu</span><span class="p">,</span>
     <span class="n">inner</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span> <span class="o">=</span> <span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">WindowText</span><span class="p">,</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/icons.py#L200" aria-label="Source for set_svg_icon">[Source]</a></p>
+
+</div>
 
 <p>Tint an SVG icon with the control’s current foreground or accent
 color.</p>
@@ -812,11 +830,17 @@ color.</p>
 
 <h2 id="set_item_icons">set_item_icons</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_item_icons</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_item_icons</span><span class="p">(</span>
     <span class="n">view</span><span class="p">:</span> <span class="n">QAbstractItemView</span><span class="p">,</span>
     <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">QIcon</span><span class="p">],</span> <span class="bp">None</span><span class="p">]]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/icons.py#L236" aria-label="Source for set_item_icons">[Source]</a></p>
+
+</div>
 
 <p>Recolor the current rows of a navigation list or tree without
 rebuilding it.</p>
@@ -836,14 +860,20 @@ changes.
 
 <h2 id="svg_icon">svg_icon</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">svg_icon</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">svg_icon</span><span class="p">(</span>
     <span class="n">inner</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
     <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QIcon</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/icons.py#L286" aria-label="Source for svg_icon">[Source]</a></p>
+
+</div>
 
 <p>Render 24 by 24 SVG shapes into a crisp icon.</p>
 
@@ -872,6 +902,10 @@ changes.
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1114,10 +1148,10 @@ changes.
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

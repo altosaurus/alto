@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -730,7 +736,11 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>Developer guide</h1>
-          <h2 id="application-launch">Application launch</h2>
+          <h2 id="development-environment">Development environment</h2>
+
+<p>Follow <a href="/alto/dev/developer-guide/environment-setup/">Development environment</a> to set up your checkout with uv, install the developer tools, and run a first test.</p>
+
+<h2 id="application-launch">Application launch</h2>
 
 <p>For a code walkthrough, start with <a href="/alto/dev/developer-guide/application-launch/">Application launch</a>. It follows <code class="language-plaintext highlighter-rouge">alto/__main__.py</code> from the terminal command to the first click on an exercise tile.</p>
 
@@ -797,7 +807,7 @@
     
     <a class="component-region" href="/alto/dev/api/alto.ui.home/#exercisecard" aria-label="Note Identification tile (ExerciseCard)" title="Note Identification tile (ExerciseCard)" style="left: 13.5%; top: 15%; width: 17.3%; height: 26%"><span aria-hidden="true">3</span></a>
     
-    <a class="component-region" href="/alto/dev/api/alto.ui.home/#homepage" aria-label="Exercise catalog (HomePage)" title="Exercise catalog (HomePage)" style="left: 13.5%; top: 42.5%; width: 73%; height: 54%"><span aria-hidden="true">4</span></a>
+    <a class="component-region component-group" href="/alto/dev/api/alto.ui.home/#homepage" aria-label="Exercise catalog (HomePage)" title="Exercise catalog (HomePage)" style="left: 13%; top: 14.5%; width: 74%; height: 84.5%"><span aria-hidden="true">4</span></a>
     
   </div>
   <figcaption>
@@ -820,6 +830,8 @@
 <h3 id="exercise-workspace">Exercise workspace</h3>
 
 <p>Choosing <strong>Note Identification</strong> calls <code class="language-plaintext highlighter-rouge">MainWindow.open_exercise()</code>. It opens an <code class="language-plaintext highlighter-rouge">ExerciseView</code> for the exercise and connects it to the active learner. The staff is a separate widget. When tracing a misplaced note, start with <code class="language-plaintext highlighter-rouge">StaffWidget</code>. For a click on an answer button, start with <code class="language-plaintext highlighter-rouge">ExerciseView</code>.</p>
+
+<p>Follow a note from the staff to the graded answer, then turn on <strong>Octave</strong> to trace how the settings rebuild the question. <a href="/alto/dev/developer-guide/exercise-view/">Exercise view walkthrough</a></p>
 
 <figure class="shot component-shot">
   <div class="component-map">
@@ -1089,7 +1101,7 @@
           
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/development/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>For developers</span></a>
-            <a class="next" href="/alto/dev/developer-guide/application-launch/" rel="next"><span class="np-label">Next</span><span class="np-title">Application launch<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
+            <a class="next" href="/alto/dev/developer-guide/environment-setup/" rel="next"><span class="np-label">Next</span><span class="np-title">Development environment<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
         </article>
@@ -1147,10 +1159,10 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

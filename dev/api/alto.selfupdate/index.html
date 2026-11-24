@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795545480">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
   
 </head>
 <body>
@@ -258,7 +258,13 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/dev/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -756,27 +762,45 @@ worker thread and shows its progress.</p>
 
 <h2 id="updateerror">UpdateError</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UpdateError</span><span class="p">(</span><span class="nb">Exception</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UpdateError</span><span class="p">(</span><span class="nb">Exception</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L105" aria-label="Source for UpdateError">[Source]</a></p>
+
+</div>
 
 <p>Something went wrong in getting or checking an update. The message
 says what, in words for the person.</p>
 
 <h2 id="updatecanceled">UpdateCanceled</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UpdateCanceled</span><span class="p">(</span><span class="nb">Exception</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UpdateCanceled</span><span class="p">(</span><span class="nb">Exception</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L112" aria-label="Source for UpdateCanceled">[Source]</a></p>
+
+</div>
 
 <p>The person canceled the update before it was ready.</p>
 
 <h2 id="target">Target</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Target</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Target</span><span class="p">(</span>
     <span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L117" aria-label="Source for Target">[Source]</a></p>
+
+</div>
 
 <p>A packaged copy that can replace itself, and where it is.</p>
 
@@ -800,12 +824,18 @@ says what, in words for the person.</p>
 
 <h2 id="prepared">Prepared</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Prepared</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Prepared</span><span class="p">(</span>
     <span class="n">work</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">installer</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">root</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L147" aria-label="Source for Prepared">[Source]</a></p>
+
+</div>
 
 <p>An update that has been downloaded and checked, and is ready to be
 handed over.</p>
@@ -830,12 +860,18 @@ handed over.</p>
 
 <h2 id="self_update_target">self_update_target</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">self_update_target</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">self_update_target</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">executable</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">system</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Target</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L177" aria-label="Source for self_update_target">[Source]</a></p>
+
+</div>
 
 <p>Say whether the running copy can replace itself, and if so where it
 is.</p>
@@ -874,7 +910,9 @@ installer made it, which leaves <code class="language-plaintext highlighter-roug
 
 <h2 id="download">download</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">download</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">download</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">destination</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
@@ -884,7 +922,11 @@ installer made it, which leaves <code class="language-plaintext highlighter-roug
     <span class="n">canceled</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">bool</span><span class="p">],</span>
     <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L241" aria-label="Source for download">[Source]</a></p>
+
+</div>
 
 <p>Fetch a file, checking the address, the size and the connection, and
 give its SHA-256 hash.</p>
@@ -916,12 +958,18 @@ give its SHA-256 hash.</p>
 
 <h2 id="extract_tarball">extract_tarball</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">extract_tarball</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">extract_tarball</span><span class="p">(</span>
     <span class="n">archive</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">destination</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L359" aria-label="Source for extract_tarball">[Source]</a></p>
+
+</div>
 
 <p>Unpack the Linux download, refusing anything that would land outside
 the folder.</p>
@@ -947,11 +995,17 @@ the folder.</p>
 
 <h2 id="ignore_progress">ignore_progress</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ignore_progress</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ignore_progress</span><span class="p">(</span>
     <span class="n">done</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">total</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L416" aria-label="Source for ignore_progress">[Source]</a></p>
+
+</div>
 
 <p>Take a note of progress and do nothing with it, for a download whose
 progress nobody watches.</p>
@@ -970,7 +1024,9 @@ progress nobody watches.</p>
 
 <h2 id="prepare_update">prepare_update</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">prepare_update</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">prepare_update</span><span class="p">(</span>
     <span class="n">release</span><span class="p">:</span> <span class="n">updates</span><span class="p">.</span><span class="n">Release</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">Target</span><span class="p">,</span>
@@ -982,7 +1038,11 @@ progress nobody watches.</p>
     <span class="n">progress</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="bp">None</span><span class="p">],</span>
     <span class="n">canceled</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">bool</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Prepared</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L435" aria-label="Source for prepare_update">[Source]</a></p>
+
+</div>
 
 <p>Download a release for this copy and check it: its signed list of
 checksums, then the file against its listed hash.</p>
@@ -1016,8 +1076,14 @@ checksums, then the file against its listed hash.</p>
 
 <h2 id="clean_environment">clean_environment</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">clean_environment</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">clean_environment</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L591" aria-label="Source for clean_environment">[Source]</a></p>
+
+</div>
 
 <p>Undo what PyInstaller did to the environment, for a program that
 this one starts.</p>
@@ -1066,8 +1132,14 @@ only, so it is dropped too.</p>
 
 <h2 id="log_path">log_path</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">log_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">log_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L653" aria-label="Source for log_path">[Source]</a></p>
+
+</div>
 
 <p>Give the file the Linux helper writes to, so that a failed update
 can be looked into.</p>
@@ -1086,13 +1158,19 @@ can be looked into.</p>
 
 <h2 id="windows_handoff_command">windows_handoff_command</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">windows_handoff_command</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">windows_handoff_command</span><span class="p">(</span>
     <span class="n">installer</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">pid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">alto</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L675" aria-label="Source for windows_handoff_command">[Source]</a></p>
+
+</div>
 
 <p>Give the command that waits for Alto to end, runs the installer, and
 starts the old Alto again if the installer fails.</p>
@@ -1138,7 +1216,9 @@ Alto’s process to be gone before it begins.</p>
 
 <h2 id="start_handoff">start_handoff</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">start_handoff</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">start_handoff</span><span class="p">(</span>
     <span class="n">prepared</span><span class="p">:</span> <span class="n">Prepared</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">Target</span><span class="p">,</span>
@@ -1146,7 +1226,11 @@ Alto’s process to be gone before it begins.</p>
     <span class="n">log</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">environ</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L782" aria-label="Source for start_handoff">[Source]</a></p>
+
+</div>
 
 <p>Start the program that installs the update, and return at once so
 that Alto can quit.</p>
@@ -1169,8 +1253,14 @@ that Alto can quit.</p>
 
 <h2 id="new_work_folder">new_work_folder</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">new_work_folder</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">new_work_folder</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L872" aria-label="Source for new_work_folder">[Source]</a></p>
+
+</div>
 
 <p>Make a new temporary folder for an update, whose name says what it
 is for.</p>
@@ -1193,13 +1283,19 @@ is for.</p>
 
 <h2 id="remove_leftovers">remove_leftovers</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">remove_leftovers</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">remove_leftovers</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">older_than</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">86400.0</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">root</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/selfupdate.py#L894" aria-label="Source for remove_leftovers">[Source]</a></p>
+
+</div>
 
 <p>Remove the temporary folders of earlier updates that were never
 cleaned up, such as a Windows installer that was run and left.</p>
@@ -1227,6 +1323,10 @@ cleaned up, such as a Windows installer that was run and left.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1379,10 +1479,10 @@ cleaned up, such as a Windows installer that was run and left.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795545480" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795545480" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
