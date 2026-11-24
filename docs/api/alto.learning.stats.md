@@ -41,6 +41,8 @@ question, not as extra questions.
 
 ## Bucket
 
+<div class="api-signature" markdown="1">
+
 ```python
 Bucket(
     start: datetime,
@@ -51,6 +53,10 @@ Bucket(
     times: list[float] = field(default_factory=list),
 )
 ```
+
+{% endraw %}{% include api-source.html name="Bucket" line=64 %}{% raw %}
+
+</div>
 
 The answers given in one period (an hour, day, week or month), for
 the charts.
@@ -79,10 +85,16 @@ the charts.
 
 ### Bucket.accuracy
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def accuracy() -> float | None
 ```
+
+{% endraw %}{% include api-source.html name="Bucket.accuracy" line=105 %}{% raw %}
+
+</div>
 
 Return the percentage of questions in the period that were right
 on the first try.
@@ -109,10 +121,16 @@ True
 
 ### Bucket.median_seconds
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def median_seconds() -> float | None
 ```
+
+{% endraw %}{% include api-source.html name="Bucket.median_seconds" line=136 %}{% raw %}
+
+</div>
 
 Return the typical time to a first answer in the period.
 
@@ -133,6 +151,8 @@ Return the typical time to a first answer in the period.
 
 ## ExerciseStats
 
+<div class="api-signature" markdown="1">
+
 ```python
 ExerciseStats(
     exercise: str,
@@ -142,6 +162,10 @@ ExerciseStats(
     median_seconds: float,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseStats" line=159 %}{% raw %}
+
+</div>
 
 How practice is going on one exercise.
 
@@ -166,6 +190,8 @@ How practice is going on one exercise.
 
 ## HardQuestion
 
+<div class="api-signature" markdown="1">
+
 ```python
 HardQuestion(
     exercise: str,
@@ -178,6 +204,10 @@ HardQuestion(
     payload: str | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="HardQuestion" line=193 %}{% raw %}
+
+</div>
 
 A question that needs practice, for the list on the statistics
 screen.
@@ -207,6 +237,8 @@ screen.
 
 ## Stats
 
+<div class="api-signature" markdown="1">
+
 ```python
 Stats(
     questions: int = 0,
@@ -223,6 +255,10 @@ Stats(
     hardest: list[HardQuestion] = field(default_factory=list),
 )
 ```
+
+{% endraw %}{% include api-source.html name="Stats" line=239 %}{% raw %}
+
+</div>
 
 Everything the statistics screen shows.
 
@@ -253,10 +289,16 @@ True
 
 ### Stats.accuracy
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def accuracy() -> float | None
 ```
+
+{% endraw %}{% include api-source.html name="Stats.accuracy" line=296 %}{% raw %}
+
+</div>
 
 Return the percentage of questions that were right on the first
 try.
@@ -274,10 +316,16 @@ try.
 
 ### Stats.attempts_per_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def attempts_per_question() -> float | None
 ```
+
+{% endraw %}{% include api-source.html name="Stats.attempts_per_question" line=318 %}{% raw %}
+
+</div>
 
 Return the average number of answers it took per question.
 
@@ -294,6 +342,8 @@ Return the average number of answers it took per question.
 
 ## period_end
 
+<div class="api-signature" markdown="1">
+
 ```python
 def period_end(
     start: datetime,
@@ -301,6 +351,10 @@ def period_end(
     granularity: str,
 ) -> datetime
 ```
+
+{% endraw %}{% include api-source.html name="period_end" line=495 %}{% raw %}
+
+</div>
 
 Return the moment a chart period ends, which is when the next one
 begins.
@@ -330,9 +384,15 @@ datetime.datetime(2027, 1, 1, 0, 0)
 
 ## describe
 
+<div class="api-signature" markdown="1">
+
 ```python
 def describe(question: Question) -> str
 ```
+
+{% endraw %}{% include api-source.html name="describe" line=532 %}{% raw %}
+
+</div>
 
 Return a short line saying what a question was, for the list of
 questions that need practice.
@@ -361,6 +421,8 @@ questions that need practice.
 
 ## daily_counts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def daily_counts(
     db: Database,
@@ -371,6 +433,10 @@ def daily_counts(
     now: float | None = None,
 ) -> dict[date, int]
 ```
+
+{% endraw %}{% include api-source.html name="daily_counts" line=635 %}{% raw %}
+
+</div>
 
 Return how many questions were answered on each day, for the review
 heatmap.
@@ -421,6 +487,8 @@ else here.
 
 ## collect
 
+<div class="api-signature" markdown="1">
+
 ```python
 def collect(
     db: Database,
@@ -433,6 +501,10 @@ def collect(
     volume_granularity: str | None = None,
 ) -> Stats
 ```
+
+{% endraw %}{% include api-source.html name="collect" line=755 %}{% raw %}
+
+</div>
 
 Work out everything the statistics screen shows.
 

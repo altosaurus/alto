@@ -32,6 +32,8 @@ True
 
 ## note_shape
 
+<div class="api-signature" markdown="1">
+
 ```python
 def note_shape(
     value: str,
@@ -39,6 +41,10 @@ def note_shape(
     stem_down: bool = False,
 ) -> QPainterPath
 ```
+
+{% endraw %}{% include api-source.html name="note_shape" line=317 %}{% raw %}
+
+</div>
 
 Return the outline of a note of a value, with the stem up or down.
 
@@ -68,6 +74,8 @@ False
 
 ## draw_note
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_note(
     p: QPainter,
@@ -80,6 +88,10 @@ def draw_note(
     stem_down: bool = False,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="draw_note" line=358 %}{% raw %}
+
+</div>
 
 Draw a note with its head centered on a point, in Noto Music.
 

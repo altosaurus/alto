@@ -32,6 +32,8 @@ went on the window's thread.
 
 ## run_in_background
 
+<div class="api-signature" markdown="1">
+
 ```python
 def run_in_background(
     work: Callable[[], T],
@@ -41,6 +43,10 @@ def run_in_background(
     failed: Callable[[Exception], None],
 ) -> threading.Thread
 ```
+
+{% endraw %}{% include api-source.html name="run_in_background" line=204 %}{% raw %}
+
+</div>
 
 Run work on another thread, then call `done` with its result, or
 `failed` with its exception, on the owner's thread.

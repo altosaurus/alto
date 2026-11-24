@@ -1,7 +1,7 @@
 ---
 title: UI style guide
 parent: developer-guide
-order: 3
+order: 4
 permalink: /developer-guide/ui-style-guide/
 baseline: v0.0.2
 screens:

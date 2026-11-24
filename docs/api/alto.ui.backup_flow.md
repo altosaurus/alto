@@ -25,12 +25,18 @@ True
 
 ## default_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def default_name(
     *,
     now: float | None = None,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="default_name" line=49 %}{% raw %}
+
+</div>
 
 Suggest a file name for a backup made now.
 
@@ -55,6 +61,8 @@ Suggest a file name for a backup made now.
 
 ## counted
 
+<div class="api-signature" markdown="1">
+
 ```python
 def counted(
     number: int,
@@ -62,6 +70,10 @@ def counted(
     noun: str,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="counted" line=77 %}{% raw %}
+
+</div>
 
 Write a count with its noun, in the plural unless there is one.
 
@@ -86,9 +98,15 @@ Write a count with its noun, in the plural unless there is one.
 
 ## describe
 
+<div class="api-signature" markdown="1">
+
 ```python
 def describe(info: BackupInfo) -> str
 ```
+
+{% endraw %}{% include api-source.html name="describe" line=108 %}{% raw %}
+
+</div>
 
 Say what a backup holds and when it was made, for the question asked
 before importing it.
@@ -122,6 +140,8 @@ and 1,500 answers.'
 
 ## export_backup
 
+<div class="api-signature" markdown="1">
+
 ```python
 def export_backup(
     parent: QWidget,
@@ -129,6 +149,10 @@ def export_backup(
     db: Database,
 ) -> Path | None
 ```
+
+{% endraw %}{% include api-source.html name="export_backup" line=151 %}{% raw %}
+
+</div>
 
 Ask where to save a backup, and write it.
 
@@ -152,9 +176,15 @@ PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
 
 ## safety_copy
 
+<div class="api-signature" markdown="1">
+
 ```python
 def safety_copy(db: Database) -> Path | None
 ```
+
+{% endraw %}{% include api-source.html name="safety_copy" line=208 %}{% raw %}
+
+</div>
 
 Save a backup of what the database holds now, beside it, before it
 is replaced.
@@ -180,6 +210,8 @@ True
 
 ## import_backup
 
+<div class="api-signature" markdown="1">
+
 ```python
 def import_backup(
     parent: QWidget,
@@ -187,6 +219,10 @@ def import_backup(
     db: Database,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="import_backup" line=242 %}{% raw %}
+
+</div>
 
 Ask for a backup file and, once the user has agreed, replace
 everything with what it holds.

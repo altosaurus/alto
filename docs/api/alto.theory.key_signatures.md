@@ -9,6 +9,8 @@ Staff positions for written key signatures.
 
 ## key_signature_positions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def key_signature_positions(
     clef: str,
@@ -16,6 +18,10 @@ def key_signature_positions(
     sign: int,
 ) -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="key_signature_positions" line=60 %}{% raw %}
+
+</div>
 
 Return the notes the sharps or flats of a key signature are written
 on, in a clef.
@@ -50,6 +56,8 @@ the treble, bass, alto and tenor clefs, and works out the rest.
 
 ## written_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def written_signature(
     clef: str,
@@ -57,6 +65,10 @@ def written_signature(
     key: int,
 ) -> list[Note]
 ```
+
+{% endraw %}{% include api-source.html name="written_signature" line=120 %}{% raw %}
+
+</div>
 
 Spell a key signature at its conventional staff positions, from left
 to right.

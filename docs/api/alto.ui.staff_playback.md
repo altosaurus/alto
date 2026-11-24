@@ -9,6 +9,8 @@ Connect a displayed music sample to the notes sounding on its staff.
 
 ## StaffPlayback
 
+<div class="api-signature" markdown="1">
+
 ```python
 StaffPlayback(
     parent: QWidget,
@@ -16,6 +18,10 @@ StaffPlayback(
     highlight: Callable[[int | None], object] | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="StaffPlayback" line=14 %}{% raw %}
+
+</div>
 
 Bases: `QObject`
 
@@ -33,6 +39,8 @@ Attach playback to its view.
 
 ### StaffPlayback.play
 
+<div class="api-signature" markdown="1">
+
 ```python
 def play(
     columns: Sequence[Sequence[Note]],
@@ -43,6 +51,10 @@ def play(
     instrument: str | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StaffPlayback.play" line=48 %}{% raw %}
+
+</div>
 
 Play the displayed notes in order.
 
@@ -56,13 +68,21 @@ Play the displayed notes in order.
 
 ### StaffPlayback.stop
 
+<div class="api-signature" markdown="1">
+
 ```python
 def stop() -> None
 ```
 
+{% endraw %}{% include api-source.html name="StaffPlayback.stop" line=84 %}{% raw %}
+
+</div>
+
 Clear this view's sounding note and cancel its pending audio.
 
 ### StaffPlayback.eventFilter
+
+<div class="api-signature" markdown="1">
 
 ```python
 def eventFilter(
@@ -70,6 +90,10 @@ def eventFilter(
     event: QEvent,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="StaffPlayback.eventFilter" line=90 %}{% raw %}
+
+</div>
 
 End the sample when the learner leaves its view.
 

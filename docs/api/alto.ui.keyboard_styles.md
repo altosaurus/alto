@@ -22,6 +22,8 @@ True
 
 ## KeyboardStyle
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardStyle(
     key: str,
@@ -48,6 +50,10 @@ KeyboardStyle(
     round: float = 7.0,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardStyle" line=40 %}{% raw %}
+
+</div>
 
 How a keyboard looks: the colors of the keys and the case, and a few
 details of the drawing.
@@ -86,9 +92,15 @@ details of the drawing.
 
 ## custom_colors
 
+<div class="api-signature" markdown="1">
+
 ```python
 def custom_colors() -> dict[str, str | None]
 ```
+
+{% endraw %}{% include api-source.html name="custom_colors" line=341 %}{% raw %}
+
+</div>
 
 Return the color of each part of the custom keyboard.
 
@@ -105,9 +117,15 @@ Return the color of each part of the custom keyboard.
 
 ## custom_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def custom_style() -> KeyboardStyle
 ```
+
+{% endraw %}{% include api-source.html name="custom_style" line=359 %}{% raw %}
+
+</div>
 
 Build the style from the custom colors.
 
@@ -126,9 +144,15 @@ Gradients and outlines are worked out from each part's color.
 
 ## style_for
 
+<div class="api-signature" markdown="1">
+
 ```python
 def style_for(key: str) -> KeyboardStyle
 ```
+
+{% endraw %}{% include api-source.html name="style_for" line=392 %}{% raw %}
+
+</div>
 
 Return the style with a given key.
 
@@ -151,9 +175,15 @@ Return the style with a given key.
 
 ## current
 
+<div class="api-signature" markdown="1">
+
 ```python
 def current() -> KeyboardStyle
 ```
+
+{% endraw %}{% include api-source.html name="current" line=418 %}{% raw %}
+
+</div>
 
 Return the keyboard style in use.
 
@@ -170,9 +200,15 @@ True
 
 ## load_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_style() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_style" line=436 %}{% raw %}
+
+</div>
 
 Apply the saved style (Classic if none is saved or it is unknown),
 and the saved custom colors.
@@ -189,9 +225,15 @@ and the saved custom colors.
 
 ## set_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_style(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_style" line=464 %}{% raw %}
+
+</div>
 
 Choose and save a style, and redraw every keyboard already on
 screen.
@@ -211,6 +253,8 @@ screen.
 
 ## set_custom_color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_custom_color(
     part: str,
@@ -218,6 +262,10 @@ def set_custom_color(
     color: str | None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_custom_color" line=487 %}{% raw %}
+
+</div>
 
 Color one part of the custom keyboard and switch to the custom
 style.
@@ -244,9 +292,15 @@ style.
 
 ## on_redraw
 
+<div class="api-signature" markdown="1">
+
 ```python
 def on_redraw(hook: Callable[[], None]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="on_redraw" line=525 %}{% raw %}
+
+</div>
 
 Register a function to call whenever the keyboard style changes.
 
@@ -273,6 +327,8 @@ this module.
 
 ## reversed_key
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reversed_key(
     style: KeyboardStyle,
@@ -280,6 +336,10 @@ def reversed_key(
     midi: int,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="reversed_key" line=570 %}{% raw %}
+
+</div>
 
 Report whether a key has swapped colors, as the low preset keys of
 an organ do.
@@ -310,6 +370,8 @@ True
 
 ## key_brush
 
+<div class="api-signature" markdown="1">
+
 ```python
 def key_brush(
     style: KeyboardStyle,
@@ -320,6 +382,10 @@ def key_brush(
     height: float,
 ) -> QBrush
 ```
+
+{% endraw %}{% include api-source.html name="key_brush" line=608 %}{% raw %}
+
+</div>
 
 Return the fill for a key.
 
@@ -358,6 +424,8 @@ True
 
 ## edge_color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def edge_color(
     style: KeyboardStyle,
@@ -366,6 +434,10 @@ def edge_color(
     black: bool,
 ) -> QColor
 ```
+
+{% endraw %}{% include api-source.html name="edge_color" line=677 %}{% raw %}
+
+</div>
 
 Return the outline color for a key.
 

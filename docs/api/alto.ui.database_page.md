@@ -19,6 +19,8 @@ record, and the profiles.
 
 ## RowsModel
 
+<div class="api-signature" markdown="1">
+
 ```python
 RowsModel(
     headers: list[str],
@@ -29,6 +31,10 @@ RowsModel(
     parent: QObject | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="RowsModel" line=66 %}{% raw %}
+
+</div>
 
 Bases: `QAbstractTableModel`
 
@@ -84,9 +90,15 @@ Create the model.
 
 ### RowsModel.rowCount
 
+<div class="api-signature" markdown="1">
+
 ```python
 def rowCount(parent: QModelIndex | QPersistentModelIndex = QModelIndex()) -> int
 ```
+
+{% endraw %}{% include api-source.html name="RowsModel.rowCount" line=138 %}{% raw %}
+
+</div>
 
 Return the number of rows.
 
@@ -113,9 +125,15 @@ Return the number of rows.
 
 ### RowsModel.columnCount
 
+<div class="api-signature" markdown="1">
+
 ```python
 def columnCount(parent: QModelIndex | QPersistentModelIndex = QModelIndex()) -> int
 ```
+
+{% endraw %}{% include api-source.html name="RowsModel.columnCount" line=168 %}{% raw %}
+
+</div>
 
 Return the number of columns.
 
@@ -138,12 +156,18 @@ Return the number of columns.
 
 ### RowsModel.data
 
+<div class="api-signature" markdown="1">
+
 ```python
 def data(
     index: QModelIndex | QPersistentModelIndex,
     role: int = Qt.ItemDataRole.DisplayRole,
 ) -> object
 ```
+
+{% endraw %}{% include api-source.html name="RowsModel.data" line=195 %}{% raw %}
+
+</div>
 
 Return one piece of a cell for a role.
 
@@ -177,6 +201,8 @@ True
 
 ### RowsModel.headerData
 
+<div class="api-signature" markdown="1">
+
 ```python
 def headerData(
     section: int,
@@ -184,6 +210,10 @@ def headerData(
     role: int = Qt.ItemDataRole.DisplayRole,
 ) -> object
 ```
+
+{% endraw %}{% include api-source.html name="RowsModel.headerData" line=251 %}{% raw %}
+
+</div>
 
 Return a column heading.
 
@@ -211,9 +241,15 @@ Return a column heading.
 
 ## QuestionTexts
 
+<div class="api-signature" markdown="1">
+
 ```python
 QuestionTexts()
 ```
+
+{% endraw %}{% include api-source.html name="QuestionTexts" line=332 %}{% raw %}
+
+</div>
 
 Describes stored questions in words, remembering each one so it is
 worked out only once.
@@ -239,6 +275,8 @@ Create an empty memory.
 
 ## answer_cells
 
+<div class="api-signature" markdown="1">
+
 ```python
 def answer_cells(
     rows: Sequence[sqlite3.Row],
@@ -247,6 +285,10 @@ def answer_cells(
     texts: QuestionTexts,
 ) -> tuple[list[list[tuple[str, object]]], list[dict]]
 ```
+
+{% endraw %}{% include api-source.html name="answer_cells" line=408 %}{% raw %}
+
+</div>
 
 Turn answers read from the database into the cells of a table, and
 the hidden details of each row.
@@ -293,6 +335,8 @@ the hidden details of each row.
 
 ## open_preview
 
+<div class="api-signature" markdown="1">
+
 ```python
 def open_preview(
     index: QModelIndex,
@@ -302,6 +346,10 @@ def open_preview(
     learner: Learner | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="open_preview" line=582 %}{% raw %}
+
+</div>
 
 Show the question behind a row of an answers table, if its record is
 still stored.
@@ -328,6 +376,8 @@ still stored.
 
 ## AnswerList
 
+<div class="api-signature" markdown="1">
+
 ```python
 AnswerList(
     *,
@@ -336,6 +386,10 @@ AnswerList(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="AnswerList" line=651 %}{% raw %}
+
+</div>
 
 Bases: `QTableView`
 
@@ -375,9 +429,15 @@ True
 
 ### AnswerList.show_answers
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_answers(rows: Sequence[sqlite3.Row]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="AnswerList.show_answers" line=720 %}{% raw %}
+
+</div>
 
 Show answers, newest first.
 
@@ -397,6 +457,8 @@ Show answers, newest first.
 
 ## DatabasePage
 
+<div class="api-signature" markdown="1">
+
 ```python
 DatabasePage(
     learner: Learner,
@@ -404,6 +466,10 @@ DatabasePage(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="DatabasePage" line=763 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -460,6 +526,8 @@ True
 
 ### DatabasePage.show_table
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_table(
     key: str,
@@ -467,6 +535,10 @@ def show_table(
     keep_sort: bool = False,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="DatabasePage.show_table" line=1145 %}{% raw %}
+
+</div>
 
 Show one of the tables.
 

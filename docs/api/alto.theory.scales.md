@@ -35,9 +35,15 @@ arpeggios from them.
 
 ## major_key_tonic
 
+<div class="api-signature" markdown="1">
+
 ```python
 def major_key_tonic(count: int) -> Note
 ```
+
+{% endraw %}{% include api-source.html name="major_key_tonic" line=90 %}{% raw %}
+
+</div>
 
 Return the tonic of the major key with a given number of sharps or
 flats.
@@ -69,6 +75,8 @@ flats.
 
 ## mode_tonic
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mode_tonic(
     count: int,
@@ -76,6 +84,10 @@ def mode_tonic(
     mode: str,
 ) -> Note
 ```
+
+{% endraw %}{% include api-source.html name="mode_tonic" line=131 %}{% raw %}
+
+</div>
 
 Return the note a scale in a given mode starts on, for a given key
 signature.
@@ -110,6 +122,8 @@ signature of C major, started from its second note.
 
 ## arpeggio
 
+<div class="api-signature" markdown="1">
+
 ```python
 def arpeggio(
     root: Note,
@@ -118,6 +132,10 @@ def arpeggio(
     inversion: int = 0,
 ) -> list[Note]
 ```
+
+{% endraw %}{% include api-source.html name="arpeggio" line=185 %}{% raw %}
+
+</div>
 
 Return a chord broken and rising from its lowest note, then that
 note again an octave higher.
@@ -156,6 +174,8 @@ note again an octave higher.
 
 ## build
 
+<div class="api-signature" markdown="1">
+
 ```python
 def build(
     tonic: Note,
@@ -163,6 +183,10 @@ def build(
     intervals: list[Interval],
 ) -> list[Note]
 ```
+
+{% endraw %}{% include api-source.html name="build" line=239 %}{% raw %}
+
+</div>
 
 Build the notes of a scale or chord above a tonic.
 
@@ -190,6 +214,8 @@ Build the notes of a scale or chord above a tonic.
 
 ## key_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def key_signature(
     tonic_name: str,
@@ -197,6 +223,10 @@ def key_signature(
     scale: str = 'Major (Ionian)',
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="key_signature" line=274 %}{% raw %}
+
+</div>
 
 Return the key signature of a scale as a signed count of
 accidentals.
@@ -227,9 +257,15 @@ accidentals.
 
 ## format_key_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def format_key_signature(count: int) -> str
 ```
+
+{% endraw %}{% include api-source.html name="format_key_signature" line=315 %}{% raw %}
+
+</div>
 
 Describe a key signature in words.
 
@@ -254,9 +290,15 @@ Describe a key signature in words.
 
 ## all_tonics
 
+<div class="api-signature" markdown="1">
+
 ```python
 def all_tonics(max_accidentals: int = 1) -> list[Note]
 ```
+
+{% endraw %}{% include api-source.html name="all_tonics" line=348 %}{% raw %}
+
+</div>
 
 Return every spelled tonic in octave 4, within a limit on
 accidentals.

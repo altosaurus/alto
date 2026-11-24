@@ -30,6 +30,8 @@ source folder is told to update with git.
 
 ## brief
 
+<div class="api-signature" markdown="1">
+
 ```python
 def brief(
     text: str,
@@ -37,6 +39,10 @@ def brief(
     limit: int = 400,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="brief" line=104 %}{% raw %}
+
+</div>
 
 Cut what a program printed down to what is worth showing in a
 message: the end of it, without the blank space around it.
@@ -61,9 +67,15 @@ message: the end of it, without the blank space around it.
 
 ## CommandRunner
 
+<div class="api-signature" markdown="1">
+
 ```python
 CommandRunner(parent: QObject | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="CommandRunner" line=136 %}{% raw %}
+
+</div>
 
 Bases: `QObject`
 
@@ -93,10 +105,16 @@ Make a runner that has not started anything.
 
 ### CommandRunner.running
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def running() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="CommandRunner.running" line=191 %}{% raw %}
+
+</div>
 
 Say whether a program has been started and has not yet ended.
 
@@ -106,6 +124,8 @@ Say whether a program has been started and has not yet ended.
 
 ### CommandRunner.start
 
+<div class="api-signature" markdown="1">
+
 ```python
 def start(
     program: str,
@@ -114,6 +134,10 @@ def start(
     seconds: int = 0,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="CommandRunner.start" line=202 %}{% raw %}
+
+</div>
 
 Start a program.
 
@@ -142,9 +166,15 @@ False
 
 ### CommandRunner.stop
 
+<div class="api-signature" markdown="1">
+
 ```python
 def stop() -> None
 ```
+
+{% endraw %}{% include api-source.html name="CommandRunner.stop" line=247 %}{% raw %}
+
+</div>
 
 Stop the program, if it is running, without announcing that it
 has ended.
@@ -157,9 +187,15 @@ has ended.
 
 ## saved_channel
 
+<div class="api-signature" markdown="1">
+
 ```python
 def saved_channel() -> str
 ```
+
+{% endraw %}{% include api-source.html name="saved_channel" line=340 %}{% raw %}
+
+</div>
 
 Return what the update check follows, as chosen in Settings.
 
@@ -180,9 +216,15 @@ Return what the update check follows, as chosen in Settings.
 
 ## save_channel
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_channel(channel: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_channel" line=372 %}{% raw %}
+
+</div>
 
 Remember what the update check follows.
 
@@ -200,6 +242,8 @@ Remember what the update check follows.
 
 ## WaitDialog
 
+<div class="api-signature" markdown="1">
+
 ```python
 WaitDialog(
     parent: QWidget | None,
@@ -207,6 +251,10 @@ WaitDialog(
     text: str,
 )
 ```
+
+{% endraw %}{% include api-source.html name="WaitDialog" line=395 %}{% raw %}
+
+</div>
 
 Bases: `QDialog`
 
@@ -229,13 +277,21 @@ Build the window.
 
 ### WaitDialog.reject
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reject() -> None
 ```
 
+{% endraw %}{% include api-source.html name="WaitDialog.reject" line=439 %}{% raw %}
+
+</div>
+
 Cancel the asking.
 
 ## CheckDialog
+
+<div class="api-signature" markdown="1">
 
 ```python
 CheckDialog(
@@ -245,6 +301,10 @@ CheckDialog(
     git: str,
 )
 ```
+
+{% endraw %}{% include api-source.html name="CheckDialog" line=454 %}{% raw %}
+
+</div>
 
 Bases: `WaitDialog`
 
@@ -269,9 +329,15 @@ Build the window; it asks nothing until `run` is called.
 
 ### CheckDialog.run
 
+<div class="api-signature" markdown="1">
+
 ```python
 def run() -> None
 ```
+
+{% endraw %}{% include api-source.html name="CheckDialog.run" line=496 %}{% raw %}
+
+</div>
 
 Ask, showing the window until there is an answer.
 
@@ -292,9 +358,15 @@ False
 
 ## ReleaseFetcher
 
+<div class="api-signature" markdown="1">
+
 ```python
 ReleaseFetcher(parent: QObject | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="ReleaseFetcher" line=544 %}{% raw %}
+
+</div>
 
 Bases: `QObject`
 
@@ -321,12 +393,18 @@ Make a fetcher that has not asked anything.
 
 ### ReleaseFetcher.start
 
+<div class="api-signature" markdown="1">
+
 ```python
 def start(
     *,
     seconds: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ReleaseFetcher.start" line=574 %}{% raw %}
+
+</div>
 
 Start asking.
 
@@ -336,18 +414,30 @@ Start asking.
 
 ### ReleaseFetcher.cancel
 
+<div class="api-signature" markdown="1">
+
 ```python
 def cancel() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ReleaseFetcher.cancel" line=591 %}{% raw %}
+
+</div>
 
 Stop caring about the answer; the thread ends by itself when
 GitHub answers or the time is up.
 
 ## DailyReleaseCheck
 
+<div class="api-signature" markdown="1">
+
 ```python
 DailyReleaseCheck(window: MainWindow)
 ```
+
+{% endraw %}{% include api-source.html name="DailyReleaseCheck" line=628 %}{% raw %}
+
+</div>
 
 Bases: `QTimer`
 
@@ -376,9 +466,15 @@ Source checkouts continue to use Git for updates.
 
 ## ReleaseDialog
 
+<div class="api-signature" markdown="1">
+
 ```python
 ReleaseDialog(parent: QWidget | None)
 ```
+
+{% endraw %}{% include api-source.html name="ReleaseDialog" line=751 %}{% raw %}
+
+</div>
 
 Bases: `WaitDialog`
 
@@ -400,9 +496,15 @@ Build the window; it asks nothing until `run` is called.
 
 ### ReleaseDialog.run
 
+<div class="api-signature" markdown="1">
+
 ```python
 def run() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ReleaseDialog.run" line=781 %}{% raw %}
+
+</div>
 
 Ask, showing the window until there is an answer.
 
@@ -416,6 +518,8 @@ False
 
 ## UpdateDialog
 
+<div class="api-signature" markdown="1">
+
 ```python
 UpdateDialog(
     parent: QWidget | None,
@@ -423,6 +527,10 @@ UpdateDialog(
     command: tuple[str, list[str]],
 )
 ```
+
+{% endraw %}{% include api-source.html name="UpdateDialog" line=823 %}{% raw %}
+
+</div>
 
 Bases: `QDialog`
 
@@ -456,9 +564,15 @@ called.
 
 ### UpdateDialog.run
 
+<div class="api-signature" markdown="1">
+
 ```python
 def run() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="UpdateDialog.run" line=899 %}{% raw %}
+
+</div>
 
 Install the update, showing the window until the person has read
 how it went.
@@ -483,17 +597,29 @@ False
 
 ### UpdateDialog.reject
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reject() -> None
 ```
+
+{% endraw %}{% include api-source.html name="UpdateDialog.reject" line=926 %}{% raw %}
+
+</div>
 
 Close the window, but not while the update is running.
 
 ### UpdateDialog.closeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def closeEvent(event: QCloseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="UpdateDialog.closeEvent" line=931 %}{% raw %}
+
+</div>
 
 Refuse to close while the update is running.
 
@@ -503,6 +629,8 @@ Refuse to close while the update is running.
 
 ## check_for_updates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_for_updates(
     parent: QWidget,
@@ -511,6 +639,10 @@ def check_for_updates(
     quit_app: Callable[[], None] = QApplication.quit,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="check_for_updates" line=998 %}{% raw %}
+
+</div>
 
 Ask whether a newer Alto is available and, if the person agrees,
 install it and restart.
@@ -535,6 +667,8 @@ or the main branch, and can install it.
 
 ## check_release
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_release(
     parent: QWidget,
@@ -545,6 +679,10 @@ def check_release(
     quit_app: Callable[[], None],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="check_release" line=1056 %}{% raw %}
+
+</div>
 
 Ask GitHub for the latest release and compare it with the version
 that is running.
@@ -565,6 +703,8 @@ that is running.
 
 ## offer_release
 
+<div class="api-signature" markdown="1">
+
 ```python
 def offer_release(
     parent: QWidget,
@@ -577,6 +717,10 @@ def offer_release(
     quit_app: Callable[[], None],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="offer_release" line=1121 %}{% raw %}
+
+</div>
 
 Ask whether to upgrade using the installation's supported update
 path.
@@ -599,6 +743,8 @@ A manual check can offer a version the learner previously declined.
 
 ## check_main
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_main(
     parent: QWidget,
@@ -607,6 +753,10 @@ def check_main(
     restart: Callable[[], None],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="check_main" line=1216 %}{% raw %}
+
+</div>
 
 Ask the address Alto came from for the newest commit on its main
 branch and compare it with the one that is running.
@@ -625,6 +775,8 @@ branch and compare it with the one that is running.
 
 ## install
 
+<div class="api-signature" markdown="1">
+
 ```python
 def install(
     parent: QWidget,
@@ -634,6 +786,10 @@ def install(
     restart: Callable[[], None],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="install" line=1282 %}{% raw %}
+
+</div>
 
 Install a release, or the newest commit of the main branch, showing
 the progress, and restart if it worked.
@@ -653,6 +809,8 @@ the progress, and restart if it worked.
 
 ## update_package
 
+<div class="api-signature" markdown="1">
+
 ```python
 def update_package(
     parent: QWidget,
@@ -662,6 +820,10 @@ def update_package(
     quit_app: Callable[[], None],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="update_package" line=1320 %}{% raw %}
+
+</div>
 
 Replace a packaged copy after the user agrees: download and check
 it, say that Alto will restart, and hand over.

@@ -19,9 +19,15 @@ part of its light and dark versions.
 
 ## ThemeEditor
 
+<div class="api-signature" markdown="1">
+
 ```python
 ThemeEditor(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="ThemeEditor" line=58 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -69,12 +75,18 @@ Build the form, ready to make a new theme.
 
 ### ThemeEditor.eventFilter
 
+<div class="api-signature" markdown="1">
+
 ```python
 def eventFilter(
     watched: QObject,
     event: QEvent,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="ThemeEditor.eventFilter" line=245 %}{% raw %}
+
+</div>
 
 Light up the code written beside a color while the pointer is
 over the color.
@@ -111,9 +123,15 @@ False
 
 ### ThemeEditor.load
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load(record: ThemeRecord | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ThemeEditor.load" line=291 %}{% raw %}
+
+</div>
 
 Fill the form from a theme that was saved, or for a new one that
 starts as Studio.
@@ -136,9 +154,15 @@ starts as Studio.
 
 ### ThemeEditor.record
 
+<div class="api-signature" markdown="1">
+
 ```python
 def record() -> ThemeRecord
 ```
+
+{% endraw %}{% include api-source.html name="ThemeEditor.record" line=340 %}{% raw %}
+
+</div>
 
 Give the theme as it is now in the form.
 

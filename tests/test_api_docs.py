@@ -6,6 +6,7 @@ written from.
 from __future__ import annotations
 
 import importlib.util
+import re
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -99,10 +100,22 @@ def test_a_page_has_the_front_matter_the_site_needs(
     assert body.startswith("{% raw %}") and body.rstrip().endswith(
         "{% endraw %}",
     )
-    assert "{%" not in body.replace("{% raw %}", "").replace(
-        "{% endraw %}",
+    source_tag = r'{% include api-source\.html name="[\w.]+" line=\d+ %}'
+    raw_body, count = re.subn(
+        "{% endraw %}" + source_tag + "{% raw %}",
         "",
+        body,
     )
+    assert count > 0
+    assert "{%" not in raw_body.removeprefix("{% raw %}").removesuffix(
+        "{% endraw %}\n",
+    )
+    lines = (ROOT / "alto/theory/pitch.py").read_text().splitlines()
+    for name, line in re.findall(r'name="([\w.]+)" line=(\d+)', body):
+        assert re.match(
+            rf"(class|def) {re.escape(name.split('.')[-1])}\b",
+            lines[int(line) - 1].lstrip(),
+        )
 
 
 def test_adding_a_module_leaves_existing_pages_identical(

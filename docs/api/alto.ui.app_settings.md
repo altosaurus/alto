@@ -25,6 +25,8 @@ previews it.
 
 ## PreviewCard
 
+<div class="api-signature" markdown="1">
+
 ```python
 PreviewCard(
     preview: QWidget,
@@ -36,6 +38,10 @@ PreviewCard(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="PreviewCard" line=194 %}{% raw %}
+
+</div>
 
 Bases: `QPushButton`
 
@@ -96,6 +102,8 @@ True
 
 ## StyleCard
 
+<div class="api-signature" markdown="1">
+
 ```python
 StyleCard(
     style: notation.NotationStyle,
@@ -103,6 +111,10 @@ StyleCard(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="StyleCard" line=291 %}{% raw %}
+
+</div>
 
 Bases: `PreviewCard`
 
@@ -142,6 +154,8 @@ Build the card for a notation style.
 
 ## KeyboardCard
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardCard(
     style: keyboard_styles.KeyboardStyle,
@@ -149,6 +163,10 @@ KeyboardCard(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardCard" line=369 %}{% raw %}
+
+</div>
 
 Bases: `PreviewCard`
 
@@ -191,9 +209,15 @@ Build the card for a keyboard style.
 
 ### KeyboardCard.show_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_style(style: keyboard_styles.KeyboardStyle) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardCard.show_style" line=448 %}{% raw %}
+
+</div>
 
 Redraw the preview in a style.
 
@@ -219,9 +243,15 @@ The custom card follows the colors being edited.
 
 ## KeyboardBuilder
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardBuilder(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardBuilder" line=475 %}{% raw %}
+
+</div>
 
 Bases: `QFrame`
 
@@ -263,9 +293,15 @@ Build the rows and show each part's current color.
 
 ### KeyboardBuilder.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh() -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardBuilder.refresh" line=621 %}{% raw %}
+
+</div>
 
 Show each part's current color on its swatch.
 
@@ -283,6 +319,8 @@ Show each part's current color on its swatch.
 
 ## AppSettingsDialog
 
+<div class="api-signature" markdown="1">
+
 ```python
 AppSettingsDialog(
     parent: QWidget | None = None,
@@ -290,6 +328,10 @@ AppSettingsDialog(
     learner: Learner | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="AppSettingsDialog" line=732 %}{% raw %}
+
+</div>
 
 Bases: `QDialog`
 
@@ -346,9 +388,15 @@ Build the dialog with the Appearance page showing.
 
 ### AppSettingsDialog.card
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card(family: str) -> ThemeCard
 ```
+
+{% endraw %}{% include api-source.html name="AppSettingsDialog.card" line=1402 %}{% raw %}
+
+</div>
 
 Give the card of a theme, building it the first time it is asked
 for.
@@ -381,9 +429,15 @@ False
 
 ### AppSettingsDialog.card_page
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_page(family: str) -> QScrollArea
 ```
+
+{% endraw %}{% include api-source.html name="AppSettingsDialog.card_page" line=1451 %}{% raw %}
+
+</div>
 
 Give the scroll area that holds a theme's card, which is the
 page the stack shows for it.
@@ -408,9 +462,15 @@ True
 
 ### AppSettingsDialog.thumb
 
+<div class="api-signature" markdown="1">
+
 ```python
 def thumb(key: str) -> ThemeThumb
 ```
+
+{% endraw %}{% include api-source.html name="AppSettingsDialog.thumb" line=1477 %}{% raw %}
+
+</div>
 
 Give the clickable picture that chooses a theme, with the card
 it is on built if it was not yet.
@@ -433,9 +493,15 @@ False
 
 ### AppSettingsDialog.choose_theme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def choose_theme(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="AppSettingsDialog.choose_theme" line=2238 %}{% raw %}
+
+</div>
 
 Switch the color theme, remember it, and note that the window
 should be rebuilt in it.

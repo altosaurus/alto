@@ -28,6 +28,8 @@ in `alto.ui.settings_panel` and `alto.ui.pack_settings_panel`.
 
 ## guard_last
 
+<div class="api-signature" markdown="1">
+
 ```python
 def guard_last(
     boxes: Iterable[QAbstractButton],
@@ -35,6 +37,10 @@ def guard_last(
     enabled: bool = True,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="guard_last" line=110 %}{% raw %}
+
+</div>
 
 Disable the only checked box, so that at least one choice always
 stays selected.
@@ -60,6 +66,8 @@ True
 
 ## arrow_button
 
+<div class="api-signature" markdown="1">
+
 ```python
 def arrow_button(
     kind: Qt.ArrowType,
@@ -67,6 +75,10 @@ def arrow_button(
     tip: str,
 ) -> QToolButton
 ```
+
+{% endraw %}{% include api-source.html name="arrow_button" line=168 %}{% raw %}
+
+</div>
 
 Make a small arrow button that repeats while it is held.
 
@@ -92,6 +104,8 @@ Make a small arrow button that repeats while it is held.
 
 ## RangeEditor
 
+<div class="api-signature" markdown="1">
+
 ```python
 RangeEditor(
     key: str,
@@ -102,6 +116,10 @@ RangeEditor(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="RangeEditor" line=211 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -156,6 +174,8 @@ True
 
 ## KeyDiagram
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyDiagram(
     keys: set[int] | None = None,
@@ -163,6 +183,10 @@ KeyDiagram(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyDiagram" line=432 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -202,9 +226,15 @@ set()
 
 ### KeyDiagram.set_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_keys(keys: set[int]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyDiagram.set_keys" line=507 %}{% raw %}
+
+</div>
 
 Choose which key signatures are shown as selected.
 
@@ -223,9 +253,15 @@ Choose which key signatures are shown as selected.
 
 ### KeyDiagram.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyDiagram.paintEvent" line=545 %}{% raw %}
+
+</div>
 
 Draw a dot for each key signature, filled when selected.
 
@@ -242,6 +278,8 @@ False
 
 ## label_with_picture
 
+<div class="api-signature" markdown="1">
+
 ```python
 def label_with_picture(
     button: QAbstractButton,
@@ -250,6 +288,10 @@ def label_with_picture(
     name: str,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="label_with_picture" line=615 %}{% raw %}
+
+</div>
 
 Label a checkbox or radio button with a picture instead of text.
 
@@ -276,6 +318,8 @@ The name stays as the tooltip and the accessible name.
 
 ## clef_choice_page
 
+<div class="api-signature" markdown="1">
+
 ```python
 def clef_choice_page(
     choices: Iterable[str],
@@ -287,6 +331,10 @@ def clef_choice_page(
     hint: str = 'One of the checked clefs is picked at random.',
 ) -> tuple[dict[str, QCheckBox], QWidget]
 ```
+
+{% endraw %}{% include api-source.html name="clef_choice_page" line=775 %}{% raw %}
+
+</div>
 
 Build the "Clefs" page that every exercise with a choice of clefs
 shares.
@@ -333,6 +381,8 @@ False
 
 ## show_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_keys(
     row: MenuRow,
@@ -342,6 +392,10 @@ def show_keys(
     keys: set[int],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="show_keys" line=855 %}{% raw %}
+
+</div>
 
 Show the selected keys as a diagram in a menu row, or "Off" when key
 signatures are switched off.
@@ -372,6 +426,8 @@ signatures are switched off.
 
 ## MenuRow
 
+<div class="api-signature" markdown="1">
+
 ```python
 MenuRow(
     title: str,
@@ -380,6 +436,10 @@ MenuRow(
     tall: bool = False,
 )
 ```
+
+{% endraw %}{% include api-source.html name="MenuRow" line=948 %}{% raw %}
+
+</div>
 
 Bases: `QPushButton`
 
@@ -423,9 +483,15 @@ Build the row.
 
 ### MenuRow.attach
 
+<div class="api-signature" markdown="1">
+
 ```python
 def attach(widget: QWidget) -> None
 ```
+
+{% endraw %}{% include api-source.html name="MenuRow.attach" line=1049 %}{% raw %}
+
+</div>
 
 Put a widget in the row.
 
@@ -449,9 +515,15 @@ own line below.
 
 ### MenuRow.fit
 
+<div class="api-signature" markdown="1">
+
 ```python
 def fit() -> None
 ```
+
+{% endraw %}{% include api-source.html name="MenuRow.fit" line=1078 %}{% raw %}
+
+</div>
 
 Make a tall row as high as its contents need.
 
@@ -468,9 +540,15 @@ True
 
 ## Switch
 
+<div class="api-signature" markdown="1">
+
 ```python
 Switch(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="Switch" line=1095 %}{% raw %}
+
+</div>
 
 Bases: `QAbstractButton`
 
@@ -506,9 +584,15 @@ False
 
 ### Switch.setChecked
 
+<div class="api-signature" markdown="1">
+
 ```python
 def setChecked(on: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Switch.setChecked" line=1180 %}{% raw %}
+
+</div>
 
 Turn the switch on or off without animating, as when a setting
 is loaded.
@@ -528,9 +612,15 @@ is loaded.
 
 ### Switch.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Switch.paintEvent" line=1204 %}{% raw %}
+
+</div>
 
 Draw the track, tinted between off and on, and the knob.
 
@@ -547,9 +637,15 @@ False
 
 ### Switch.sizeHint
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sizeHint() -> QSize
 ```
+
+{% endraw %}{% include api-source.html name="Switch.sizeHint" line=1236 %}{% raw %}
+
+</div>
 
 Return the switch's fixed size.
 
@@ -566,9 +662,15 @@ PySide6.QtCore.QSize(42, 24)
 
 ## ToggleRow
 
+<div class="api-signature" markdown="1">
+
 ```python
 ToggleRow(title: str)
 ```
+
+{% endraw %}{% include api-source.html name="ToggleRow" line=1253 %}{% raw %}
+
+</div>
 
 Bases: `MenuRow`
 
@@ -608,9 +710,15 @@ False
 
 ### ToggleRow.isOn
 
+<div class="api-signature" markdown="1">
+
 ```python
 def isOn() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="ToggleRow.isOn" line=1327 %}{% raw %}
+
+</div>
 
 Report whether the switch is on.
 
@@ -627,9 +735,15 @@ False
 
 ### ToggleRow.setOn
 
+<div class="api-signature" markdown="1">
+
 ```python
 def setOn(on: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ToggleRow.setOn" line=1344 %}{% raw %}
+
+</div>
 
 Set the switch without announcing it, as when a setting is
 loaded.
@@ -649,6 +763,8 @@ True
 
 ## subpage
 
+<div class="api-signature" markdown="1">
+
 ```python
 def subpage(
     title: str,
@@ -658,6 +774,10 @@ def subpage(
     fill: bool = False,
 ) -> QWidget
 ```
+
+{% endraw %}{% include api-source.html name="subpage" line=1364 %}{% raw %}
+
+</div>
 
 Build a second-layer page: a Back button and title above a body.
 
@@ -692,9 +812,15 @@ Build a second-layer page: a Back button and title above a body.
 
 ## SlideStack
 
+<div class="api-signature" markdown="1">
+
 ```python
 SlideStack(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="SlideStack" line=1425 %}{% raw %}
+
+</div>
 
 Bases: `QStackedWidget`
 
@@ -728,10 +854,16 @@ Create an empty stack.
 
 ### SlideStack.sliding
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def sliding() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="SlideStack.sliding" line=1457 %}{% raw %}
+
+</div>
 
 Report whether a page is sliding in.
 
@@ -748,9 +880,15 @@ False
 
 ### SlideStack.slide_to
 
+<div class="api-signature" markdown="1">
+
 ```python
 def slide_to(index: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SlideStack.slide_to" line=1473 %}{% raw %}
+
+</div>
 
 Slide to another page.
 
@@ -775,9 +913,15 @@ True
 
 ## ExerciseSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ExerciseSettingsPanel(QWidget)
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseSettingsPanel" line=1540 %}{% raw %}
+
+</div>
 
 What every exercise's settings pane has in common: it says when a
 setting has been edited.
@@ -803,6 +947,8 @@ True
 
 ### ExerciseSettingsPanel.refresh_limits
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh_limits(
     mode: str,
@@ -810,6 +956,10 @@ def refresh_limits(
     self_grading: bool = False,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseSettingsPanel.refresh_limits" line=1603 %}{% raw %}
+
+</div>
 
 Update scheduling controls for the active scheduler and profile.
 
@@ -826,9 +976,15 @@ Switching to ASRS hides the row and leaves its submenu.
 
 ## KeyboardRangePanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 class KeyboardRangePanel(ExerciseSettingsPanel)
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardRangePanel" line=1738 %}{% raw %}
+
+</div>
 
 Settings for selecting a practice range on a keyboard.
 
@@ -841,9 +997,15 @@ coincide.
 
 ## ClefsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ClefsPanel(ExerciseSettingsPanel)
 ```
+
+{% endraw %}{% include api-source.html name="ClefsPanel" line=1851 %}{% raw %}
+
+</div>
 
 A settings pane with a Clefs page, whose checkboxes choose the clefs
 that are asked about.
@@ -871,9 +1033,15 @@ True
 
 ## StaffRangePanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 class StaffRangePanel(ClefsPanel)
 ```
+
+{% endraw %}{% include api-source.html name="StaffRangePanel" line=1916 %}{% raw %}
+
+</div>
 
 Shared navigation and per-clef pitch range editors.
 
@@ -885,9 +1053,15 @@ Note and interval identification both open Range on page two.
 
 ## NoteAnswerSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 class NoteAnswerSettingsPanel(StaffRangePanel)
 ```
+
+{% endraw %}{% include api-source.html name="NoteAnswerSettingsPanel" line=2249 %}{% raw %}
+
+</div>
 
 Staff range settings for note names and optional octaves.
 
@@ -900,6 +1074,8 @@ require the octave in an answer.
 
 ## KeyChecklist
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyChecklist(
     selected: set[int],
@@ -910,6 +1086,10 @@ KeyChecklist(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyChecklist" line=2344 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -952,9 +1132,15 @@ Build the checklist.
 
 ### KeyChecklist.selected
 
+<div class="api-signature" markdown="1">
+
 ```python
 def selected() -> set[int]
 ```
+
+{% endraw %}{% include api-source.html name="KeyChecklist.selected" line=2486 %}{% raw %}
+
+</div>
 
 Return the checked key signatures.
 
@@ -971,6 +1157,8 @@ True
 
 ## KeySignaturePage
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeySignaturePage(
     enabled: bool,
@@ -981,6 +1169,10 @@ KeySignaturePage(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeySignaturePage" line=2522 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -1025,9 +1217,15 @@ False
 
 ### KeySignaturePage.enabled
 
+<div class="api-signature" markdown="1">
+
 ```python
 def enabled() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="KeySignaturePage.enabled" line=2600 %}{% raw %}
+
+</div>
 
 Report whether key signatures are switched on.
 
@@ -1046,9 +1244,15 @@ True
 
 ### KeySignaturePage.selected
 
+<div class="api-signature" markdown="1">
+
 ```python
 def selected() -> set[int]
 ```
+
+{% endraw %}{% include api-source.html name="KeySignaturePage.selected" line=2618 %}{% raw %}
+
+</div>
 
 Return the checked key signatures.
 
@@ -1067,6 +1271,8 @@ True
 
 ## ScaleKeyPicker
 
+<div class="api-signature" markdown="1">
+
 ```python
 ScaleKeyPicker(
     *,
@@ -1074,6 +1280,10 @@ ScaleKeyPicker(
     minor_keys: set[int],
 )
 ```
+
+{% endraw %}{% include api-source.html name="ScaleKeyPicker" line=2661 %}{% raw %}
+
+</div>
 
 Bases: `QTabWidget`
 
@@ -1108,6 +1318,8 @@ Build one checklist per mode.
 
 ## ChoiceChecklist
 
+<div class="api-signature" markdown="1">
+
 ```python
 ChoiceChecklist(
     groups: list[tuple[str, list[tuple[object, str]]]],
@@ -1118,6 +1330,10 @@ ChoiceChecklist(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceChecklist" line=2721 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -1176,9 +1392,15 @@ Build the checklist.
 
 ### ChoiceChecklist.selected
 
+<div class="api-signature" markdown="1">
+
 ```python
 def selected() -> set
 ```
+
+{% endraw %}{% include api-source.html name="ChoiceChecklist.selected" line=2828 %}{% raw %}
+
+</div>
 
 Return the checked choices.
 
@@ -1198,6 +1420,8 @@ Return the checked choices.
 
 ## buttons_page
 
+<div class="api-signature" markdown="1">
+
 ```python
 def buttons_page(
     cfg: ButtonSettings | settings.IntervalSettings | settings.ScaleIdentificationSettings,
@@ -1206,6 +1430,10 @@ def buttons_page(
     back: Callable[[], None],
 ) -> QWidget
 ```
+
+{% endraw %}{% include api-source.html name="buttons_page" line=2870 %}{% raw %}
+
+</div>
 
 Build the shared Limited and All answer-button submenu.
 
@@ -1227,6 +1455,8 @@ Choosing All hides the count picker and retains its last value.
 
 ## direction_choices
 
+<div class="api-signature" markdown="1">
+
 ```python
 def direction_choices(
     cfg: settings.ScaleIdentificationSettings | settings.ScaleConstructionSettings,
@@ -1234,6 +1464,10 @@ def direction_choices(
     edited: Callable[[], None],
 ) -> QWidget
 ```
+
+{% endraw %}{% include api-source.html name="direction_choices" line=2941 %}{% raw %}
+
+</div>
 
 Choose the direction of a scale.
 
@@ -1266,9 +1500,15 @@ Choose the direction of a scale.
 
 ## scrolling
 
+<div class="api-signature" markdown="1">
+
 ```python
 def scrolling(body: QWidget) -> QScrollArea
 ```
+
+{% endraw %}{% include api-source.html name="scrolling" line=3012 %}{% raw %}
+
+</div>
 
 Put a page's body in a scroll area, so a long page scrolls inside
 the pane and never makes the window taller.

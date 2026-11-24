@@ -17,9 +17,15 @@ button and a segmented control.
 
 ## vertical_scroll_area
 
+<div class="api-signature" markdown="1">
+
 ```python
 def vertical_scroll_area(body: QWidget) -> QScrollArea
 ```
+
+{% endraw %}{% include api-source.html name="vertical_scroll_area" line=48 %}{% raw %}
+
+</div>
 
 Put a resizable widget in a frameless vertical scroll area.
 
@@ -42,9 +48,15 @@ True
 
 ## busy_progress_bar
 
+<div class="api-signature" markdown="1">
+
 ```python
 def busy_progress_bar() -> QProgressBar
 ```
+
+{% endraw %}{% include api-source.html name="busy_progress_bar" line=77 %}{% raw %}
+
+</div>
 
 Create the indeterminate progress indicator used during updates.
 
@@ -66,9 +78,15 @@ Create the indeterminate progress indicator used during updates.
 
 ## PracticeCounts
 
+<div class="api-signature" markdown="1">
+
 ```python
 class PracticeCounts(QLabel)
 ```
+
+{% endraw %}{% include api-source.html name="PracticeCounts" line=102 %}{% raw %}
+
+</div>
 
 Colored counts for calendar practice on tiles and in the exercise
 screen.
@@ -88,6 +106,8 @@ True
 
 ### PracticeCounts.set_counts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_counts(
     counts: tuple[int, int, int],
@@ -97,6 +117,10 @@ def set_counts(
     totals: bool = False,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="PracticeCounts.set_counts" line=121 %}{% raw %}
+
+</div>
 
 Show the counts in blue, red, green order and underline the
 active queue.
@@ -121,6 +145,8 @@ True
 
 ## SidebarToggle
 
+<div class="api-signature" markdown="1">
+
 ```python
 SidebarToggle(
     parent: QWidget | None = None,
@@ -128,6 +154,10 @@ SidebarToggle(
     noun: str = 'exercise list',
 )
 ```
+
+{% endraw %}{% include api-source.html name="SidebarToggle" line=216 %}{% raw %}
+
+</div>
 
 Bases: `QToolButton`
 
@@ -167,9 +197,15 @@ True
 
 ### SidebarToggle.set_open
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_open(is_open: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SidebarToggle.set_open" line=265 %}{% raw %}
+
+</div>
 
 Show the icon and tooltip for the list being open or closed.
 
@@ -188,6 +224,8 @@ Show the icon and tooltip for the list being open or closed.
 
 ## HelpButton
 
+<div class="api-signature" markdown="1">
+
 ```python
 HelpButton(
     text_provider: Callable[[], str],
@@ -195,6 +233,10 @@ HelpButton(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="HelpButton" line=290 %}{% raw %}
+
+</div>
 
 Bases: `QToolButton`
 
@@ -234,9 +276,15 @@ Create the button.
 
 ### HelpButton.show_help
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_help() -> None
 ```
+
+{% endraw %}{% include api-source.html name="HelpButton.show_help" line=343 %}{% raw %}
+
+</div>
 
 Open the popover under the button, right-aligned with it.
 
@@ -250,6 +298,8 @@ Open the popover under the button, right-aligned with it.
 
 ## SegmentedControl
 
+<div class="api-signature" markdown="1">
+
 ```python
 SegmentedControl(
     labels: Sequence[str],
@@ -258,6 +308,10 @@ SegmentedControl(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="SegmentedControl" line=389 %}{% raw %}
+
+</div>
 
 Bases: `QFrame`
 
@@ -312,9 +366,15 @@ False
 
 ### SegmentedControl.set_compact
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_compact(compact: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SegmentedControl.set_compact" line=485 %}{% raw %}
+
+</div>
 
 Show only the icons, or the icons and the text.
 
@@ -344,9 +404,15 @@ The text is still the tooltip and the name a screen reader says.
 
 ### SegmentedControl.current
 
+<div class="api-signature" markdown="1">
+
 ```python
 def current() -> int
 ```
+
+{% endraw %}{% include api-source.html name="SegmentedControl.current" line=515 %}{% raw %}
+
+</div>
 
 Return the number of the chosen choice.
 
@@ -363,9 +429,15 @@ Return the number of the chosen choice.
 
 ### SegmentedControl.set_current
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_current(number: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SegmentedControl.set_current" line=531 %}{% raw %}
+
+</div>
 
 Choose one, without announcing it.
 
@@ -384,9 +456,15 @@ Choose one, without announcing it.
 
 ### SegmentedControl.restyle
 
+<div class="api-signature" markdown="1">
+
 ```python
 def restyle() -> None
 ```
+
+{% endraw %}{% include api-source.html name="SegmentedControl.restyle" line=549 %}{% raw %}
+
+</div>
 
 Style the control from the palette now in use: a rounded track
 with the chosen choice raised and tinted.

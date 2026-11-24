@@ -22,9 +22,15 @@ tasks cannot be failed and are not recorded.
 
 ## saved_step
 
+<div class="api-signature" markdown="1">
+
 ```python
 def saved_step(lesson: Lesson) -> int
 ```
+
+{% endraw %}{% include api-source.html name="saved_step" line=78 %}{% raw %}
+
+</div>
 
 Return the step a lesson was left at, from the saved settings.
 
@@ -47,6 +53,8 @@ True
 
 ## save_step
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_step(
     lesson: Lesson,
@@ -54,6 +62,10 @@ def save_step(
     step: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_step" line=104 %}{% raw %}
+
+</div>
 
 Remember the step a lesson is at.
 
@@ -72,6 +84,8 @@ Remember the step a lesson is at.
 
 ## StepView
 
+<div class="api-signature" markdown="1">
+
 ```python
 StepView(
     step: Step,
@@ -80,6 +94,10 @@ StepView(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="StepView" line=350 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -138,9 +156,15 @@ True
 
 ### StepView.hear
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hear() -> None
 ```
+
+{% endraw %}{% include api-source.html name="StepView.hear" line=692 %}{% raw %}
+
+</div>
 
 Play the step's notes.
 
@@ -159,9 +183,15 @@ Play the step's notes.
 
 ### StepView.walk
 
+<div class="api-signature" markdown="1">
+
 ```python
 def walk(step: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StepView.walk" line=766 %}{% raw %}
+
+</div>
 
 Move the pick one fifth around the outer ring.
 
@@ -189,9 +219,15 @@ Move the pick one fifth around the outer ring.
 
 ### StepView.ask
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ask() -> None
 ```
+
+{% endraw %}{% include api-source.html name="StepView.ask" line=839 %}{% raw %}
+
+</div>
 
 Ask a new task, with a fresh circle and clean feedback.
 
@@ -213,6 +249,8 @@ True
 
 ## LessonView
 
+<div class="api-signature" markdown="1">
+
 ```python
 LessonView(
     lesson: Lesson,
@@ -221,6 +259,10 @@ LessonView(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="LessonView" line=1123 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -272,12 +314,18 @@ Build the view at a step.
 
 ### LessonView.go
 
+<div class="api-signature" markdown="1">
+
 ```python
 def go(
     *,
     to: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="LessonView.go" line=1224 %}{% raw %}
+
+</div>
 
 Show a step. Going before the first leaves to the list, and
 going past the last finishes the lesson.
@@ -297,6 +345,8 @@ going past the last finishes the lesson.
 
 ## LessonsPage
 
+<div class="api-signature" markdown="1">
+
 ```python
 LessonsPage(
     key: str,
@@ -305,6 +355,10 @@ LessonsPage(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="LessonsPage" line=1283 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 

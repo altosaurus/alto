@@ -16,9 +16,15 @@ True
 
 ## FieldComboBox
 
+<div class="api-signature" markdown="1">
+
 ```python
 FieldComboBox(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="FieldComboBox" line=31 %}{% raw %}
+
+</div>
 
 Bases: `QComboBox`
 
@@ -51,9 +57,15 @@ Create a themed dropdown and prepare to clip its popup corners.
 
 ### FieldComboBox.showPopup
 
+<div class="api-signature" markdown="1">
+
 ```python
 def showPopup() -> None
 ```
+
+{% endraw %}{% include api-source.html name="FieldComboBox.showPopup" line=62 %}{% raw %}
+
+</div>
 
 Open the dropdown with a rounded outer window, including its
 native container.
@@ -71,9 +83,15 @@ False
 
 ## style_combo_popup
 
+<div class="api-signature" markdown="1">
+
 ```python
 def style_combo_popup(combo: QComboBox) -> None
 ```
+
+{% endraw %}{% include api-source.html name="style_combo_popup" line=80 %}{% raw %}
+
+</div>
 
 Apply the shared field and popup styling to a dropdown, including
 one created by Qt.

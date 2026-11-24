@@ -26,6 +26,8 @@ Interval(number=5, quality='P')
 
 ## Note
 
+<div class="api-signature" markdown="1">
+
 ```python
 Note(
     octave: int,
@@ -34,6 +36,10 @@ Note(
     accidental: int = 0,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Note" line=76 %}{% raw %}
+
+</div>
 
 A spelled pitch: a letter name, an accidental and an octave.
 
@@ -61,10 +67,16 @@ True
 
 ### Note.midi
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def midi() -> int
 ```
+
+{% endraw %}{% include api-source.html name="Note.midi" line=112 %}{% raw %}
+
+</div>
 
 Return the MIDI note number, where middle C (C4) is 60.
 
@@ -85,10 +97,16 @@ Return the MIDI note number, where middle C (C4) is 60.
 
 ### Note.diatonic
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def diatonic() -> int
 ```
+
+{% endraw %}{% include api-source.html name="Note.diatonic" line=137 %}{% raw %}
+
+</div>
 
 Return the absolute staff-step index of the note, ignoring its
 accidental.
@@ -114,10 +132,16 @@ staff steps is the difference of their indexes.
 
 ### Note.pitch_class
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def pitch_class() -> int
 ```
+
+{% endraw %}{% include api-source.html name="Note.pitch_class" line=163 %}{% raw %}
+
+</div>
 
 Return the pitch class: the note's MIDI number modulo 12.
 
@@ -140,10 +164,16 @@ Return the pitch class: the note's MIDI number modulo 12.
 
 ### Note.name
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def name() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Note.name" line=187 %}{% raw %}
+
+</div>
 
 Return the pitch-class name with Unicode accidentals, without
 the octave.
@@ -163,6 +193,8 @@ the octave.
 
 ### Note.from_diatonic
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def from_diatonic(
@@ -171,6 +203,10 @@ def from_diatonic(
     accidental: int = 0,
 ) -> Note
 ```
+
+{% endraw %}{% include api-source.html name="Note.from_diatonic" line=224 %}{% raw %}
+
+</div>
 
 Build a note from an absolute staff-step index.
 
@@ -194,10 +230,16 @@ Note(octave=4, letter=2, accidental=0)
 
 ### Note.parse
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def parse(text: str) -> Note
 ```
+
+{% endraw %}{% include api-source.html name="Note.parse" line=255 %}{% raw %}
+
+</div>
 
 Parse a note with ASCII or musical accidentals, such as 'F#4',
 'B♭3' or 'E𝄫2'.
@@ -232,6 +274,8 @@ ValueError: substring not found
 
 ### Note.transpose
 
+<div class="api-signature" markdown="1">
+
 ```python
 def transpose(
     interval: Interval,
@@ -239,6 +283,10 @@ def transpose(
     descending: bool = False,
 ) -> Note
 ```
+
+{% endraw %}{% include api-source.html name="Note.transpose" line=300 %}{% raw %}
+
+</div>
 
 Move the note up or down by an interval, keeping the spelling
 correct.
@@ -278,6 +326,8 @@ correct.
 
 ## Interval
 
+<div class="api-signature" markdown="1">
+
 ```python
 Interval(
     number: int,
@@ -285,6 +335,10 @@ Interval(
     quality: str,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Interval" line=356 %}{% raw %}
+
+</div>
 
 A simple or compound interval between two spelled notes.
 
@@ -304,10 +358,16 @@ A simple or compound interval between two spelled notes.
 
 ### Interval.inversion
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def inversion() -> Interval
 ```
+
+{% endraw %}{% include api-source.html name="Interval.inversion" line=403 %}{% raw %}
+
+</div>
 
 Invert the spelled interval within an octave.
 
@@ -332,10 +392,16 @@ Invert the spelled interval within an octave.
 
 ### Interval.is_perfect_type
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def is_perfect_type() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Interval.is_perfect_type" line=441 %}{% raw %}
+
+</div>
 
 Report whether this size of interval is "perfect type" (unison,
 fourth, fifth, octave) rather than major or minor type.
@@ -355,10 +421,16 @@ False
 
 ### Interval.semitones
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def semitones() -> int
 ```
+
+{% endraw %}{% include api-source.html name="Interval.semitones" line=462 %}{% raw %}
+
+</div>
 
 Return the size of the interval in semitones.
 
@@ -382,10 +454,16 @@ Return the size of the interval in semitones.
 
 ### Interval.short
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def short() -> str
 ```
+
+{% endraw %}{% include api-source.html name="Interval.short" line=506 %}{% raw %}
+
+</div>
 
 Return the interval in short form: its quality followed by its
 number.
@@ -403,6 +481,8 @@ number.
 
 ### Interval.between
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def between(
@@ -411,6 +491,10 @@ def between(
     high: Note,
 ) -> Interval
 ```
+
+{% endraw %}{% include api-source.html name="Interval.between" line=540 %}{% raw %}
+
+</div>
 
 Work out the interval from one note up to a higher one.
 
@@ -438,10 +522,16 @@ Interval(number=3, quality='M')
 
 ### Interval.parse
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def parse(text: str) -> Interval
 ```
+
+{% endraw %}{% include api-source.html name="Interval.parse" line=597 %}{% raw %}
+
+</div>
 
 Parse an interval written in short form, such as 'M3', 'P5' or
 'd7'.
@@ -465,6 +555,8 @@ Interval(number=7, quality='m')
 
 ## key_accidental
 
+<div class="api-signature" markdown="1">
+
 ```python
 def key_accidental(
     letter: int,
@@ -472,6 +564,10 @@ def key_accidental(
     count: int,
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="key_accidental" line=674 %}{% raw %}
+
+</div>
 
 Return the accidental a key signature applies to a letter.
 

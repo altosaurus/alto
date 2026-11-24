@@ -26,9 +26,15 @@ wheel to move it.
 
 ## node_position
 
+<div class="api-signature" markdown="1">
+
 ```python
 def node_position(value: int) -> QPointF
 ```
+
+{% endraw %}{% include api-source.html name="node_position" line=86 %}{% raw %}
+
+</div>
 
 Return where a signature sits on the fork.
 
@@ -55,9 +61,15 @@ True
 
 ## route
 
+<div class="api-signature" markdown="1">
+
 ```python
 def route(value: int) -> list[QPointF]
 ```
+
+{% endraw %}{% include api-source.html name="route" line=120 %}{% raw %}
+
+</div>
 
 Return the way along the fork from the end of the stem to a
 signature.
@@ -90,6 +102,8 @@ True
 
 ## path_between
 
+<div class="api-signature" markdown="1">
+
 ```python
 def path_between(
     a: int,
@@ -97,6 +111,10 @@ def path_between(
     b: int,
 ) -> list[QPointF]
 ```
+
+{% endraw %}{% include api-source.html name="path_between" line=170 %}{% raw %}
+
+</div>
 
 Return the way along the fork from one signature to another.
 
@@ -132,6 +150,8 @@ True
 
 ## point_along
 
+<div class="api-signature" markdown="1">
+
 ```python
 def point_along(
     points: list[QPointF],
@@ -139,6 +159,10 @@ def point_along(
     t: float,
 ) -> QPointF
 ```
+
+{% endraw %}{% include api-source.html name="point_along" line=214 %}{% raw %}
+
+</div>
 
 Return the point a fraction of the way along a path made of short
 straight pieces.
@@ -172,9 +196,15 @@ straight pieces.
 
 ## nearest_on_fork
 
+<div class="api-signature" markdown="1">
+
 ```python
 def nearest_on_fork(point: QPointF) -> QPointF
 ```
+
+{% endraw %}{% include api-source.html name="nearest_on_fork" line=258 %}{% raw %}
+
+</div>
 
 Return the point on the fork's line that is closest to a point.
 
@@ -205,9 +235,15 @@ True
 
 ## fork_path
 
+<div class="api-signature" markdown="1">
+
 ```python
 def fork_path() -> QPainterPath
 ```
+
+{% endraw %}{% include api-source.html name="fork_path" line=314 %}{% raw %}
+
+</div>
 
 Return the outline of the fork: the stem, a half circle for the U,
 and the two tines.
@@ -229,6 +265,8 @@ True
 
 ## draw_natural
 
+<div class="api-signature" markdown="1">
+
 ```python
 def draw_natural(
     p: QPainter,
@@ -238,6 +276,10 @@ def draw_natural(
     color: QColor,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="draw_natural" line=354 %}{% raw %}
+
+</div>
 
 Draw a natural sign: two upright lines joined by two slanting bars.
 
@@ -265,12 +307,18 @@ Draw a natural sign: two upright lines joined by two slanting bars.
 
 ## KeyFork
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyFork(
     *,
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork" line=415 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -312,6 +360,8 @@ Build the fork, set to no sharps or flats.
 
 ### KeyFork.set_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_value(
     value: int,
@@ -319,6 +369,10 @@ def set_value(
     slide: bool = True,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.set_value" line=498 %}{% raw %}
+
+</div>
 
 Choose a signature and move the circle to it.
 
@@ -341,9 +395,15 @@ Choose a signature and move the circle to it.
 
 ### KeyFork.set_marker_color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_marker_color(color: QColor | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.set_marker_color" line=563 %}{% raw %}
+
+</div>
 
 Color the circle, for a right or wrong answer.
 
@@ -362,10 +422,16 @@ True
 
 ### KeyFork.value_at
 
+<div class="api-signature" markdown="1">
+
 ```python
 @staticmethod
 def value_at(point: QPointF) -> int | None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.value_at" line=583 %}{% raw %}
+
+</div>
 
 Return the signature whose number is under a point.
 
@@ -393,9 +459,15 @@ True
 
 ### KeyFork.mousePressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mousePressEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.mousePressEvent" line=617 %}{% raw %}
+
+</div>
 
 Pick up the circle if it was pressed, or choose the number that
 was clicked.
@@ -426,9 +498,15 @@ was clicked.
 
 ### KeyFork.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.mouseMoveEvent" line=663 %}{% raw %}
+
+</div>
 
 Carry the circle along the fork while it is held, and light the
 number under the mouse otherwise.
@@ -473,9 +551,15 @@ it.
 
 ### KeyFork.mouseReleaseEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseReleaseEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.mouseReleaseEvent" line=734 %}{% raw %}
+
+</div>
 
 Let go of the circle, which slides to the number it is nearest.
 
@@ -508,9 +592,15 @@ False
 
 ### KeyFork.leaveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def leaveEvent(event: QEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.leaveEvent" line=771 %}{% raw %}
+
+</div>
 
 Stop lighting a number when the mouse leaves the fork.
 
@@ -530,9 +620,15 @@ True
 
 ### KeyFork.wheelEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def wheelEvent(event: QWheelEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.wheelEvent" line=792 %}{% raw %}
+
+</div>
 
 Move the circle one number along the fork for each notch of the
 wheel.
@@ -568,9 +664,15 @@ passing through the natural sign.
 
 ### KeyFork.keyPressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def keyPressEvent(event: QKeyEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.keyPressEvent" line=834 %}{% raw %}
+
+</div>
 
 Move the circle with the arrow keys: up or right for a sharp,
 down or left for a flat.
@@ -597,9 +699,15 @@ down or left for a flat.
 
 ### KeyFork.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="KeyFork.paintEvent" line=869 %}{% raw %}
+
+</div>
 
 Draw the fork, its numbers and the circle on the chosen one.
 

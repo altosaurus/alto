@@ -16,6 +16,8 @@ A responsive, scrollable grid for large banks of answer buttons.
 
 ## AnswerBank
 
+<div class="api-signature" markdown="1">
+
 ```python
 AnswerBank(
     parent: QWidget | None = None,
@@ -23,6 +25,10 @@ AnswerBank(
     show_all_rows: bool = False,
 )
 ```
+
+{% endraw %}{% include api-source.html name="AnswerBank" line=26 %}{% raw %}
+
+</div>
 
 Bases: `QScrollArea`
 
@@ -63,6 +69,8 @@ True
 
 ### AnswerBank.set_buttons
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_buttons(
     buttons: list[QAbstractButton],
@@ -70,6 +78,10 @@ def set_buttons(
     positions: list[tuple[int, int]] | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="AnswerBank.set_buttons" line=93 %}{% raw %}
+
+</div>
 
 Display answer buttons in a stable order.
 
@@ -92,9 +104,15 @@ Display answer buttons in a stable order.
 
 ### AnswerBank.resizeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def resizeEvent(event: QResizeEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="AnswerBank.resizeEvent" line=191 %}{% raw %}
+
+</div>
 
 Rewrap the buttons when the exercise or settings pane changes
 width.

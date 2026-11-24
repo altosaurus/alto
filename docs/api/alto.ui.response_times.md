@@ -10,6 +10,8 @@ exercise.
 
 ## ResponseTimeDialog
 
+<div class="api-signature" markdown="1">
+
 ```python
 ResponseTimeDialog(
     learner: Learner,
@@ -18,6 +20,10 @@ ResponseTimeDialog(
     exercise: str | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ResponseTimeDialog" line=30 %}{% raw %}
+
+</div>
 
 Bases: `QDialog`
 

@@ -24,9 +24,15 @@ True
 
 ## load_note_names
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_note_names() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_note_names" line=52 %}{% raw %}
+
+</div>
 
 Load the saved note identification settings into the shared settings
 object.
@@ -51,9 +57,15 @@ in the saved data that is not valid is ignored.
 
 ## save_note_names
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_note_names() -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_note_names" line=124 %}{% raw %}
+
+</div>
 
 Save the note identification settings.
 
@@ -71,9 +83,15 @@ Save the note identification settings.
 
 ## load_keyboard
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_keyboard() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_keyboard" line=159 %}{% raw %}
+
+</div>
 
 Load the saved keyboard exercise settings into the shared settings
 object.
@@ -97,9 +115,15 @@ True
 
 ## save_keyboard
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_keyboard() -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_keyboard" line=207 %}{% raw %}
+
+</div>
 
 Save the keyboard exercise settings.
 
@@ -116,9 +140,15 @@ True
 
 ## load_keyboard_intervals
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_keyboard_intervals() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_keyboard_intervals" line=238 %}{% raw %}
+
+</div>
 
 Load keyboard interval settings, ignoring invalid values and
 intervals that cannot fit.
@@ -135,9 +165,15 @@ True
 
 ## save_keyboard_intervals
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_keyboard_intervals(cfg: settings.KeyboardIntervalSettings) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_keyboard_intervals" line=305 %}{% raw %}
+
+</div>
 
 Save the keyboard interval range and selected distances.
 
@@ -157,9 +193,15 @@ Save the keyboard interval range and selected distances.
 
 ## load_construction
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_construction() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_construction" line=343 %}{% raw %}
+
+</div>
 
 Load the saved note construction settings into the shared settings
 object.
@@ -177,9 +219,15 @@ False
 
 ## save_construction
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_construction(cfg: settings.ConstructionSettings) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_construction" line=413 %}{% raw %}
+
+</div>
 
 Save the note construction settings.
 
@@ -202,9 +250,15 @@ Save the note construction settings.
 
 ## load_arpeggio
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_arpeggio() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_arpeggio" line=460 %}{% raw %}
+
+</div>
 
 Load the saved arpeggio settings into the shared settings object.
 
@@ -234,9 +288,15 @@ with nothing valid in it leaves the setting as it was.
 
 ## save_arpeggio
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_arpeggio(cfg: settings.ArpeggioSettings) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_arpeggio" line=514 %}{% raw %}
+
+</div>
 
 Save the arpeggio settings.
 
@@ -258,6 +318,8 @@ True
 
 ## load_intervals
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_intervals(
     cfg: settings.IntervalSettings | None = None,
@@ -265,6 +327,10 @@ def load_intervals(
     prefix: str = 'intervals',
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_intervals" line=548 %}{% raw %}
+
+</div>
 
 Restore the saved staff interval options, keeping valid choices and
 per-clef ranges.
@@ -284,6 +350,8 @@ True
 
 ## save_key_settings
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_key_settings(
     cfg: settings.KeySignatureSettings,
@@ -291,6 +359,10 @@ def save_key_settings(
     prefix: str,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_key_settings" line=791 %}{% raw %}
+
+</div>
 
 Save the settings of a key exercise: its clefs, scales and key
 signatures, and the options of the kind of exercise it is.
@@ -323,9 +395,15 @@ signatures, and the options of the kind of exercise it is.
 
 ## load_key_signatures
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_key_signatures() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_key_signatures" line=877 %}{% raw %}
+
+</div>
 
 Load the saved key signature identification settings into the shared
 settings object.
@@ -353,9 +431,15 @@ with nothing valid in it leaves the setting as it was.
 
 ## load_key_construction
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_key_construction() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_key_construction" line=904 %}{% raw %}
+
+</div>
 
 Load the saved key signature construction settings into the shared
 settings object.
@@ -380,9 +464,15 @@ with nothing valid in it leaves the setting as it was.
 
 ## load_order_of_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_order_of_keys() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_order_of_keys" line=928 %}{% raw %}
+
+</div>
 
 Restore the clefs, scales, and key signatures selected for Order of
 Keys.
@@ -395,9 +485,15 @@ Keys.
 
 ## load_scale_identification
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_scale_identification() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_scale_identification" line=945 %}{% raw %}
+
+</div>
 
 Load the saved scale identification options independently of scale
 construction.
@@ -412,9 +508,15 @@ construction.
 
 ## load_scale_construction
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_scale_construction() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_scale_construction" line=962 %}{% raw %}
+
+</div>
 
 Load the saved scale construction settings into the shared settings
 object.
@@ -451,9 +553,15 @@ with nothing valid in it leaves the setting as it was.
 
 ## saved_notation_terms
 
+<div class="api-signature" markdown="1">
+
 ```python
 def saved_notation_terms() -> set[str]
 ```
+
+{% endraw %}{% include api-source.html name="saved_notation_terms" line=998 %}{% raw %}
+
+</div>
 
 Read the last nonempty selection of notation terms.
 
@@ -469,9 +577,15 @@ Switching Select none off restores these checkboxes.
 
 ## load_notation_terms
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_notation_terms() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_notation_terms" line=1020 %}{% raw %}
+
+</div>
 
 Restore the question type and term selection, defaulting to Answer
 Button and all terms.
@@ -486,9 +600,15 @@ True
 
 ## load_clef_basics
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_clef_basics() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_clef_basics" line=1047 %}{% raw %}
+
+</div>
 
 Load the saved clef basics settings into the shared settings object.
 
@@ -523,9 +643,15 @@ setting as it was.
 
 ## save_clef_basics
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_clef_basics(cfg: settings.ClefBasicsSettings) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_clef_basics" line=1089 %}{% raw %}
+
+</div>
 
 Save clef basics settings, the form `load_clef_basics` reads.
 
@@ -552,9 +678,15 @@ Save clef basics settings, the form `load_clef_basics` reads.
 
 ## load_circle
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_circle() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_circle" line=1118 %}{% raw %}
+
+</div>
 
 Load the saved circle of fifths settings into the shared settings
 object.
@@ -588,9 +720,15 @@ from a newer Alto) leaves the default.
 
 ## save_circle
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_circle(cfg: settings.CircleSettings) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_circle" line=1173 %}{% raw %}
+
+</div>
 
 Save the circle of fifths settings.
 
@@ -611,9 +749,15 @@ Save the circle of fifths settings.
 
 ## load_pack_options
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_pack_options() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_pack_options" line=1197 %}{% raw %}
+
+</div>
 
 Restore the options learners chose for each plugin exercise that
 offers settings.
@@ -628,9 +772,15 @@ Anything in the saved data that is not valid is ignored.
 
 ## save_pack_options
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_pack_options(name: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_pack_options" line=1279 %}{% raw %}
+
+</div>
 
 Save the options chosen for one plugin exercise.
 
@@ -646,9 +796,15 @@ Save the options chosen for one plugin exercise.
 
 ## load_choice_buttons
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_choice_buttons() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_choice_buttons" line=1318 %}{% raw %}
+
+</div>
 
 Restore the independent button preferences for each multiple-choice
 exercise.
@@ -667,9 +823,15 @@ True
 
 ## load_exercise_settings
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_exercise_settings() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_exercise_settings" line=1358 %}{% raw %}
+
+</div>
 
 Load the saved exercise options before creating a practice or export
 settings panel.

@@ -29,9 +29,15 @@ True
 
 ## choice_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def choice_keys(choices: list[str]) -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="choice_keys" line=176 %}{% raw %}
+
+</div>
 
 Choose a key for each answer button, so that every answer can be
 given from the keyboard.
@@ -71,6 +77,8 @@ Ctrl for a flat, and Alt added for double alterations.
 
 ## second_row_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 def second_row_keys(
     first: list[str],
@@ -78,6 +86,10 @@ def second_row_keys(
     labels: list[str],
 ) -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="second_row_keys" line=264 %}{% raw %}
+
+</div>
 
 Choose a key for each button of the second row of a two-part answer,
 such as the octave or the inversion.
@@ -116,6 +128,8 @@ digit takes that digit.
 
 ## note_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def note_name(
     note: Note,
@@ -124,6 +138,10 @@ def note_name(
     minor: bool = False,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="note_name" line=314 %}{% raw %}
+
+</div>
 
 Return a note's name as it is written, with its octave: F♯4.
 
@@ -146,6 +164,8 @@ Return a note's name as it is written, with its octave: F♯4.
 
 ## note_words
 
+<div class="api-signature" markdown="1">
+
 ```python
 def note_words(
     note: Note,
@@ -154,6 +174,10 @@ def note_words(
     minor: bool = False,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="note_words" line=357 %}{% raw %}
+
+</div>
 
 Return a note's name in words, for a screen reader: "F sharp 4".
 
@@ -180,6 +204,8 @@ Return a note's name in words, for a screen reader: "F sharp 4".
 
 ## ExerciseView
 
+<div class="api-signature" markdown="1">
+
 ```python
 ExerciseView(
     exercise: Exercise,
@@ -189,6 +215,10 @@ ExerciseView(
     learner: Learner | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView" line=425 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -259,9 +289,15 @@ True
 
 ### ExerciseView.hideEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hideEvent(event: QHideEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView.hideEvent" line=1159 %}{% raw %}
+
+</div>
 
 Pause automatic advancement and answer timing while browsing
 another page.
@@ -283,9 +319,15 @@ False
 
 ### ExerciseView.showEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def showEvent(event: QShowEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView.showEvent" line=1188 %}{% raw %}
+
+</div>
 
 Resume the exercise's answer clock and pending advance when it
 reappears.
@@ -308,9 +350,15 @@ True
 
 ### ExerciseView.settings_state
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_state() -> tuple[bool, int, int] | None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView.settings_state" line=1322 %}{% raw %}
+
+</div>
 
 Remember the exercise settings pane, selected page, and scroll
 position before a theme rebuild.
@@ -331,9 +379,15 @@ position before a theme rebuild.
 
 ### ExerciseView.restore_settings_state
 
+<div class="api-signature" markdown="1">
+
 ```python
 def restore_settings_state(state: tuple[bool, int, int]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView.restore_settings_state" line=1353 %}{% raw %}
+
+</div>
 
 Restore exercise settings navigation immediately after
 rebuilding the view.
@@ -356,9 +410,15 @@ rebuilding the view.
 
 ### ExerciseView.scheduling_changed
 
+<div class="api-signature" markdown="1">
+
 ```python
 def scheduling_changed() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView.scheduling_changed" line=1525 %}{% raw %}
+
+</div>
 
 Refresh the visible exercise or invalidate its queue until it is
 reopened.
@@ -372,9 +432,15 @@ previously opened exercise.
 
 ### ExerciseView.next_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def next_question() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView.next_question" line=1563 %}{% raw %}
+
+</div>
 
 Show the next question: its staff, keyboard or text, and a fresh
 set of answer buttons.
@@ -398,12 +464,18 @@ set of answer buttons.
 
 ### ExerciseView.eventFilter
 
+<div class="api-signature" markdown="1">
+
 ```python
 def eventFilter(
     watched: QObject,
     event: QEvent,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView.eventFilter" line=3203 %}{% raw %}
+
+</div>
 
 Handle staff clicks in notation questions and forward wheel
 turns to the fork or clef staff.
@@ -449,6 +521,8 @@ True
 
 ### ExerciseView.submit
 
+<div class="api-signature" markdown="1">
+
 ```python
 def submit(
     choice: str,
@@ -456,6 +530,10 @@ def submit(
     button: QPushButton | None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseView.submit" line=3732 %}{% raw %}
+
+</div>
 
 Check an answer chosen with a button or by clicking the
 notation.

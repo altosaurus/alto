@@ -27,6 +27,8 @@ question. The widgets the panels are built from are in
 
 ## NoteNameSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 NoteNameSettingsPanel(
     cfg: NoteNameSettings,
@@ -34,6 +36,10 @@ NoteNameSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="NoteNameSettingsPanel" line=145 %}{% raw %}
+
+</div>
 
 Bases: `NoteAnswerSettingsPanel`
 
@@ -87,6 +93,8 @@ Build the panel for a set of settings.
 
 ## KeyboardSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardSettingsPanel(
     cfg: settings.KeyboardSettings,
@@ -94,6 +102,10 @@ KeyboardSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardSettingsPanel" line=437 %}{% raw %}
+
+</div>
 
 Bases: `KeyboardRangePanel`
 
@@ -145,6 +157,8 @@ Build the panel for a set of settings.
 
 ## NoteConstructionSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 NoteConstructionSettingsPanel(
     cfg: settings.ConstructionSettings,
@@ -152,6 +166,10 @@ NoteConstructionSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="NoteConstructionSettingsPanel" line=761 %}{% raw %}
+
+</div>
 
 Bases: `ClefsPanel`
 
@@ -199,6 +217,8 @@ Build the panel for a set of settings.
 
 ## IntervalSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 IntervalSettingsPanel(
     cfg: settings.IntervalSettings,
@@ -206,6 +226,10 @@ IntervalSettingsPanel(
     prefix: str = 'intervals',
 )
 ```
+
+{% endraw %}{% include api-source.html name="IntervalSettingsPanel" line=1070 %}{% raw %}
+
+</div>
 
 Bases: `StaffRangePanel`
 
@@ -241,6 +265,8 @@ Melodic.
 
 ## KeyboardIntervalSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeyboardIntervalSettingsPanel(
     cfg: settings.KeyboardIntervalSettings,
@@ -248,6 +274,10 @@ KeyboardIntervalSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettingsPanel" line=1553 %}{% raw %}
+
+</div>
 
 Bases: `KeyboardRangePanel`
 
@@ -298,6 +328,8 @@ Build the range selector and interval checklist.
 
 ## ArpeggioSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 ArpeggioSettingsPanel(
     cfg: settings.ArpeggioSettings,
@@ -305,6 +337,10 @@ ArpeggioSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ArpeggioSettingsPanel" line=2235 %}{% raw %}
+
+</div>
 
 Bases: `ClefsPanel`
 
@@ -354,6 +390,8 @@ Build the panel for a set of settings.
 
 ## KeySignatureSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 KeySignatureSettingsPanel(
     cfg: settings.KeySignatureSettings,
@@ -363,6 +401,10 @@ KeySignatureSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="KeySignatureSettingsPanel" line=2508 %}{% raw %}
+
+</div>
 
 Bases: `ClefsPanel`
 
@@ -420,9 +462,15 @@ Build the panel for a set of settings.
 
 ## NotationSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 NotationSettingsPanel()
 ```
+
+{% endraw %}{% include api-source.html name="NotationSettingsPanel" line=3062 %}{% raw %}
+
+</div>
 
 Bases: `ExerciseSettingsPanel`
 
@@ -450,6 +498,8 @@ True
 
 ## ClefBasicsSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 ClefBasicsSettingsPanel(
     cfg: settings.ClefBasicsSettings,
@@ -457,6 +507,10 @@ ClefBasicsSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ClefBasicsSettingsPanel" line=3245 %}{% raw %}
+
+</div>
 
 Bases: `ClefsPanel`
 
@@ -513,9 +567,15 @@ Build the panel for a set of settings.
 
 ## settings_inversion_names
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_inversion_names() -> tuple[str, ...]
 ```
+
+{% endraw %}{% include api-source.html name="settings_inversion_names" line=3425 %}{% raw %}
+
+</div>
 
 Return the inversions as they are written in the settings.
 
@@ -532,6 +592,8 @@ Return the inversions as they are written in the settings.
 
 ## CircleSettingsPanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 CircleSettingsPanel(
     cfg: settings.CircleSettings,
@@ -539,6 +601,10 @@ CircleSettingsPanel(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="CircleSettingsPanel" line=3443 %}{% raw %}
+
+</div>
 
 Bases: `ExerciseSettingsPanel`
 
@@ -596,6 +662,8 @@ Build the panel for a set of settings.
 
 ## settings_panel_for
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_panel_for(
     exercise: Exercise,
@@ -603,6 +671,10 @@ def settings_panel_for(
     learner: Learner | None = None,
 ) -> ExerciseSettingsPanel
 ```
+
+{% endraw %}{% include api-source.html name="settings_panel_for" line=3782 %}{% raw %}
+
+</div>
 
 Return the settings panel for an exercise.
 

@@ -66,9 +66,15 @@ False
 
 ## warmup_steps
 
+<div class="api-signature" markdown="1">
+
 ```python
 def warmup_steps() -> list[Callable[[], None]]
 ```
+
+{% endraw %}{% include api-source.html name="warmup_steps" line=195 %}{% raw %}
+
+</div>
 
 List the steps of the warm-up.
 
@@ -98,6 +104,8 @@ True
 
 ## start
 
+<div class="api-signature" markdown="1">
+
 ```python
 def start(
     owner: QObject,
@@ -106,6 +114,10 @@ def start(
     delay: int = START_DELAY_MS,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="start" line=237 %}{% raw %}
+
+</div>
 
 Run the warm-up's steps one at a time, each when the event loop has
 nothing else to do, beginning after a short delay.

@@ -23,9 +23,15 @@ the middle, and the text underneath explains it.
 
 ## ExplorableCircle
 
+<div class="api-signature" markdown="1">
+
 ```python
 ExplorableCircle(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle" line=93 %}{% raw %}
+
+</div>
 
 Bases: `FifthsCircle`
 
@@ -65,9 +71,15 @@ True
 
 ### ExplorableCircle.set_interactive
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_interactive(interactive: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.set_interactive" line=146 %}{% raw %}
+
+</div>
 
 Let the circle be clicked and moved with the keys, or make it a
 picture.
@@ -91,9 +103,15 @@ picture.
 
 ### ExplorableCircle.clear
 
+<div class="api-signature" markdown="1">
+
 ```python
 def clear() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.clear" line=175 %}{% raw %}
+
+</div>
 
 Pick nothing: every key is named, none is lit and the middle
 says what to do.
@@ -110,6 +128,8 @@ says what to do.
 
 ### ExplorableCircle.select
 
+<div class="api-signature" markdown="1">
+
 ```python
 def select(
     ring: str,
@@ -117,6 +137,10 @@ def select(
     place: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.select" line=203 %}{% raw %}
+
+</div>
 
 Pick a cell: light the chords of its key, and show its name and
 key signature in the middle.
@@ -145,9 +169,15 @@ relative major.
 
 ### ExplorableCircle.cell_at
 
+<div class="api-signature" markdown="1">
+
 ```python
 def cell_at(point: QPointF) -> tuple[str, int] | None
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.cell_at" line=262 %}{% raw %}
+
+</div>
 
 Return the cell under a point.
 
@@ -183,6 +213,8 @@ True
 
 ### ExplorableCircle.lift_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def lift_of(
     ring: str,
@@ -190,6 +222,10 @@ def lift_of(
     place: int,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.lift_of" line=306 %}{% raw %}
+
+</div>
 
 Return how bright a cell is drawn: as for any question, and a
 little brighter under the pointer.
@@ -217,9 +253,15 @@ little brighter under the pointer.
 
 ### ExplorableCircle.mousePressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mousePressEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.mousePressEvent" line=341 %}{% raw %}
+
+</div>
 
 Pick the cell that is clicked; a click in the middle clears the
 pick.
@@ -250,9 +292,15 @@ pick.
 
 ### ExplorableCircle.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.mouseMoveEvent" line=378 %}{% raw %}
+
+</div>
 
 Light the cell under the pointer, and show a hand over the ones
 that can be picked.
@@ -283,9 +331,15 @@ that can be picked.
 
 ### ExplorableCircle.leaveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def leaveEvent(event: QEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.leaveEvent" line=410 %}{% raw %}
+
+</div>
 
 Stop lighting a cell once the pointer has left.
 
@@ -305,9 +359,15 @@ True
 
 ### ExplorableCircle.keyPressEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def keyPressEvent(event: QKeyEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExplorableCircle.keyPressEvent" line=459 %}{% raw %}
+
+</div>
 
 Move the pick with the arrow keys: Left and Right around the
 circle, Up and Down between the rings.
@@ -337,9 +397,15 @@ Escape clears the pick, and Home picks C major.
 
 ## ReferencePanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 ReferencePanel(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="ReferencePanel" line=509 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -380,9 +446,15 @@ False
 
 ## ClefReferencePanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 ClefReferencePanel(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="ClefReferencePanel" line=633 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -427,9 +499,15 @@ True
 
 ## ScaleReferencePanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 ScaleReferencePanel(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="ScaleReferencePanel" line=724 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -441,9 +519,15 @@ Build a scrollable guide to tonic reading and scale patterns.
 
 ## NoteReferencePanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 NoteReferencePanel(exercise: Exercise)
 ```
+
+{% endraw %}{% include api-source.html name="NoteReferencePanel" line=868 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -469,6 +553,8 @@ Show the hints for the current note exercise.
 
 ## PluginReferencePanel
 
+<div class="api-signature" markdown="1">
+
 ```python
 PluginReferencePanel(
     exercise: Exercise,
@@ -476,6 +562,10 @@ PluginReferencePanel(
     lessons: list[Lesson],
 )
 ```
+
+{% endraw %}{% include api-source.html name="PluginReferencePanel" line=923 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -512,9 +602,15 @@ that goes with it.
 
 ## reference_panel_for
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | NoteReferencePanel | PluginReferencePanel | None
 ```
+
+{% endraw %}{% include api-source.html name="reference_panel_for" line=993 %}{% raw %}
+
+</div>
 
 Return the reference pane for an exercise.
 

@@ -9,9 +9,15 @@ A searchable glossary of the notation terms used in Alto.
 
 ## GlossaryPage
 
+<div class="api-signature" markdown="1">
+
 ```python
 GlossaryPage()
 ```
+
+{% endraw %}{% include api-source.html name="GlossaryPage" line=809 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -23,9 +29,15 @@ Build the glossary and select its first term.
 
 ### GlossaryPage.hideEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hideEvent(event: QHideEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="GlossaryPage.hideEvent" line=1159 %}{% raw %}
+
+</div>
 
 End the example when leaving the glossary.
 

@@ -20,6 +20,8 @@ is light or dark whatever the desktop is set to.
 
 ## CustomTheme
 
+<div class="api-signature" markdown="1">
+
 ```python
 CustomTheme(
     key: str,
@@ -36,6 +38,10 @@ CustomTheme(
     track: str,
 )
 ```
+
+{% endraw %}{% include api-source.html name="CustomTheme" line=40 %}{% raw %}
+
+</div>
 
 A theme with colors of its own.
 
@@ -67,6 +73,8 @@ A theme with colors of its own.
 
 ## hsl_hex
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hsl_hex(
     hue: float,
@@ -75,6 +83,10 @@ def hsl_hex(
     lightness: float,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="hsl_hex" line=201 %}{% raw %}
+
+</div>
 
 Turn a color given as hue, saturation and lightness into "#rrggbb".
 
@@ -104,9 +116,15 @@ Turn a color given as hue, saturation and lightness into "#rrggbb".
 
 ## seeded_themes
 
+<div class="api-signature" markdown="1">
+
 ```python
 def seeded_themes(seed: tuple[str, str, str, float, float, float, float]) -> tuple[CustomTheme, CustomTheme]
 ```
+
+{% endraw %}{% include api-source.html name="seeded_themes" line=264 %}{% raw %}
+
+</div>
 
 Make the light and the dark theme of a seed: neutrals tinted by one
 hue, and an accent of another.
@@ -129,9 +147,15 @@ hue, and an accent of another.
 
 ## family_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def family_of(key: str) -> tuple[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="family_of" line=393 %}{% raw %}
+
+</div>
 
 Split a theme's key into its family and which version of it that is.
 
@@ -159,6 +183,8 @@ Split a theme's key into its family and which version of it that is.
 
 ## variant_key
 
+<div class="api-signature" markdown="1">
+
 ```python
 def variant_key(
     family: str,
@@ -166,6 +192,10 @@ def variant_key(
     version: str,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="variant_key" line=432 %}{% raw %}
+
+</div>
 
 Give the key of one version of a family.
 
@@ -191,9 +221,15 @@ Give the key of one version of a family.
 
 ## ThemeRecord
 
+<div class="api-signature" markdown="1">
+
 ```python
 class ThemeRecord(TypedDict)
 ```
+
+{% endraw %}{% include api-source.html name="ThemeRecord" line=496 %}{% raw %}
+
+</div>
 
 A theme the user made, as it is saved: its key, its name, and the
 colors of its light and dark versions.
@@ -212,9 +248,15 @@ colors of its light and dark versions.
 
 ## user_records
 
+<div class="api-signature" markdown="1">
+
 ```python
 def user_records() -> list[ThemeRecord]
 ```
+
+{% endraw %}{% include api-source.html name="user_records" line=576 %}{% raw %}
+
+</div>
 
 Read the themes the user has made, as they are saved.
 
@@ -232,9 +274,15 @@ Read the themes the user has made, as they are saved.
 
 ## save_user_records
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_user_records(records: list[ThemeRecord]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_user_records" line=606 %}{% raw %}
+
+</div>
 
 Save the themes the user has made.
 
@@ -252,9 +300,15 @@ Save the themes the user has made.
 
 ## new_family_id
 
+<div class="api-signature" markdown="1">
+
 ```python
 def new_family_id() -> str
 ```
+
+{% endraw %}{% include api-source.html name="new_family_id" line=624 %}{% raw %}
+
+</div>
 
 Make the key for a new theme of the user's.
 
@@ -271,9 +325,15 @@ True
 
 ## upsert_user_theme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def upsert_user_theme(record: ThemeRecord) -> None
 ```
+
+{% endraw %}{% include api-source.html name="upsert_user_theme" line=645 %}{% raw %}
+
+</div>
 
 Save a theme the user made, replacing the one with the same key if
 there is one.
@@ -313,9 +373,15 @@ there is one.
 
 ## delete_user_theme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def delete_user_theme(family: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="delete_user_theme" line=698 %}{% raw %}
+
+</div>
 
 Remove a theme the user made.
 
@@ -343,6 +409,8 @@ Remove a theme the user made.
 
 ## theme_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def theme_of(
     colors: dict[str, str],
@@ -354,6 +422,10 @@ def theme_of(
     note: str = '',
 ) -> CustomTheme
 ```
+
+{% endraw %}{% include api-source.html name="theme_of" line=728 %}{% raw %}
+
+</div>
 
 Build a custom theme from its saved or preview colors.
 
@@ -382,9 +454,15 @@ Build a custom theme from its saved or preview colors.
 
 ## user_themes
 
+<div class="api-signature" markdown="1">
+
 ```python
 def user_themes() -> tuple[CustomTheme, ...]
 ```
+
+{% endraw %}{% include api-source.html name="user_themes" line=784 %}{% raw %}
+
+</div>
 
 Give the themes the user has made, light and dark versions of each.
 
@@ -402,9 +480,15 @@ Give the themes the user has made, light and dark versions of each.
 
 ## families
 
+<div class="api-signature" markdown="1">
+
 ```python
 def families() -> tuple[tuple[str, str, str], ...]
 ```
+
+{% endraw %}{% include api-source.html name="families" line=822 %}{% raw %}
+
+</div>
 
 List every theme there is to choose, the user's own first.
 
@@ -422,9 +506,15 @@ True
 
 ## custom_theme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def custom_theme(key: str) -> CustomTheme | None
 ```
+
+{% endraw %}{% include api-source.html name="custom_theme" line=845 %}{% raw %}
+
+</div>
 
 Find a theme with colors of its own, one of the built-in ones or one
 the user made.
@@ -450,9 +540,15 @@ the user made.
 
 ## scheme_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def scheme_of(key: str) -> Qt.ColorScheme | None
 ```
+
+{% endraw %}{% include api-source.html name="scheme_of" line=880 %}{% raw %}
+
+</div>
 
 Say which color scheme a theme uses: light, dark, or the desktop's
 own.
@@ -480,9 +576,15 @@ own.
 
 ## preview_colors
 
+<div class="api-signature" markdown="1">
+
 ```python
 def preview_colors(theme: CustomTheme) -> dict[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="preview_colors" line=917 %}{% raw %}
+
+</div>
 
 Pick the colors for the small picture of a theme in the settings.
 
@@ -510,9 +612,15 @@ Pick the colors for the small picture of a theme in the settings.
 
 ## theme_palette
 
+<div class="api-signature" markdown="1">
+
 ```python
 def theme_palette(theme: CustomTheme) -> QPalette
 ```
+
+{% endraw %}{% include api-source.html name="theme_palette" line=956 %}{% raw %}
+
+</div>
 
 Build the Qt palette of a theme with colors of its own.
 
@@ -541,9 +649,15 @@ Build the Qt palette of a theme with colors of its own.
 
 ## saved_theme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def saved_theme() -> str
 ```
+
+{% endraw %}{% include api-source.html name="saved_theme" line=1029 %}{% raw %}
+
+</div>
 
 Return the theme the user chose.
 
@@ -562,9 +676,15 @@ Return the theme the user chose.
 
 ## save_theme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_theme(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_theme" line=1051 %}{% raw %}
+
+</div>
 
 Remember the theme the user chose.
 
@@ -583,9 +703,15 @@ Remember the theme the user chose.
 
 ## system_is_dark
 
+<div class="api-signature" markdown="1">
+
 ```python
 def system_is_dark() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="system_is_dark" line=1086 %}{% raw %}
+
+</div>
 
 Say whether the desktop is set to dark, as long as the app is not
 forcing a color scheme of its own.
@@ -606,9 +732,15 @@ True
 
 ## apply_theme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def apply_theme(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="apply_theme" line=1161 %}{% raw %}
+
+</div>
 
 Switch the application's color scheme and rebuild the stylesheet
 from the new palette.

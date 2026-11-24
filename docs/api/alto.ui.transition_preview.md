@@ -21,9 +21,15 @@ from the exercises to the lessons once.
 
 ## make_sides
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_sides() -> tuple[list[TileCard], list[TileCard]]
 ```
+
+{% endraw %}{% include api-source.html name="make_sides" line=79 %}{% raw %}
+
+</div>
 
 Make the cards for the two sides of the preview: the app's own
 exercise cards, and its lesson cards.
@@ -46,9 +52,15 @@ card to move.
 
 ## Stage
 
+<div class="api-signature" markdown="1">
+
 ```python
 Stage(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="Stage" line=113 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -84,9 +96,15 @@ False
 
 ### Stage.resizeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def resizeEvent(event: QResizeEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Stage.resizeEvent" line=149 %}{% raw %}
+
+</div>
 
 Keep the canvas the size of the stage.
 
@@ -108,9 +126,15 @@ True
 
 ### Stage.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Stage.paintEvent" line=171 %}{% raw %}
+
+</div>
 
 Draw the cards at rest, unless a transition is drawing them.
 
@@ -129,9 +153,15 @@ False
 
 ## TransitionPreview
 
+<div class="api-signature" markdown="1">
+
 ```python
 TransitionPreview(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="TransitionPreview" line=194 %}{% raw %}
+
+</div>
 
 Bases: `QFrame`
 
@@ -175,9 +205,15 @@ Build the preview, showing the default transition.
 
 ### TransitionPreview.show_transition
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_transition(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="TransitionPreview.show_transition" line=334 %}{% raw %}
+
+</div>
 
 Show a transition: the exercises appear, and after a moment they
 change to the lessons, once.
@@ -197,9 +233,15 @@ change to the lessons, once.
 
 ### TransitionPreview.replay
 
+<div class="api-signature" markdown="1">
+
 ```python
 def replay() -> None
 ```
+
+{% endraw %}{% include api-source.html name="TransitionPreview.replay" line=360 %}{% raw %}
+
+</div>
 
 Play the transition that is showing again, from the exercises.
 
@@ -214,9 +256,15 @@ Play the transition that is showing again, from the exercises.
 
 ### TransitionPreview.go_to
 
+<div class="api-signature" markdown="1">
+
 ```python
 def go_to(side: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="TransitionPreview.go_to" line=387 %}{% raw %}
+
+</div>
 
 Switch to one side with the transition, as the switch does in
 the real window.
@@ -242,9 +290,15 @@ if that side is already showing.
 
 ### TransitionPreview.resizeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def resizeEvent(event: QResizeEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="TransitionPreview.resizeEvent" line=444 %}{% raw %}
+
+</div>
 
 Lay the cards out again for the new size, unless a transition is
 playing.

@@ -9,6 +9,8 @@ Media and fingerboard geometry supplied by third-party instrument packs.
 
 ## PackString
 
+<div class="api-signature" markdown="1">
+
 ```python
 PackString(
     pitch: str,
@@ -17,14 +19,24 @@ PackString(
 )
 ```
 
+{% endraw %}{% include api-source.html name="PackString" line=27 %}{% raw %}
+
+</div>
+
 One open pitch with its nut and bridge locations in the original
 image pixels.
 
 ### PackString.point
 
+<div class="api-signature" markdown="1">
+
 ```python
 def point(half_steps: int) -> Point
 ```
+
+{% endraw %}{% include api-source.html name="PackString.point" line=37 %}{% raw %}
+
+</div>
 
 Locate the pitch along the photographed string.
 
@@ -34,6 +46,8 @@ Locate the pitch along the photographed string.
 
 ## AnswerAnimation
 
+<div class="api-signature" markdown="1">
+
 ```python
 AnswerAnimation(
     file: Path,
@@ -41,10 +55,16 @@ AnswerAnimation(
 )
 ```
 
+{% endraw %}{% include api-source.html name="AnswerAnimation" line=54 %}{% raw %}
+
+</div>
+
 An author-supplied animated overlay and its alignment on the
 instrument.
 
 ## PackView
+
+<div class="api-signature" markdown="1">
 
 ```python
 PackView(
@@ -54,10 +74,16 @@ PackView(
 )
 ```
 
+{% endraw %}{% include api-source.html name="PackView" line=65 %}{% raw %}
+
+</div>
+
 Another picture of an instrument, such as its back, with its own
 pixel size.
 
 ## PackKeyboard
+
+<div class="api-signature" markdown="1">
 
 ```python
 PackKeyboard(
@@ -66,6 +92,10 @@ PackKeyboard(
     highest: str,
 )
 ```
+
+{% endraw %}{% include api-source.html name="PackKeyboard" line=103 %}{% raw %}
+
+</div>
 
 One keyboard of an instrument, drawn by Alto from the range of keys
 the plugin gives it.
@@ -88,10 +118,16 @@ the plugin gives it.
 
 ### PackKeyboard.naturals
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def naturals() -> int
 ```
+
+{% endraw %}{% include api-source.html name="PackKeyboard.naturals" line=131 %}{% raw %}
+
+</div>
 
 Count the natural keys.
 
@@ -108,9 +144,15 @@ Count the natural keys.
 
 ### PackKeyboard.has
 
+<div class="api-signature" markdown="1">
+
 ```python
 def has(name: str) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="PackKeyboard.has" line=152 %}{% raw %}
+
+</div>
 
 Report whether a pitch is a key on this keyboard.
 
@@ -137,12 +179,18 @@ Report whether a pitch is a key on this keyboard.
 
 ## PackKeyboardStyle
 
+<div class="api-signature" markdown="1">
+
 ```python
 PackKeyboardStyle(
     colors: tuple[tuple[str, str | tuple[str, str]], ...] = (),
     numbers: tuple[tuple[str, float], ...] = (),
 )
 ```
+
+{% endraw %}{% include api-source.html name="PackKeyboardStyle" line=192 %}{% raw %}
+
+</div>
 
 How a plugin's keyboards look: the colors of the keys and case, and
 the proportions of the keys.
@@ -165,6 +213,8 @@ the proportions of the keys.
 
 ## read_keyboard_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_keyboard_style(
     value: object,
@@ -172,6 +222,10 @@ def read_keyboard_style(
     where: str,
 ) -> PackKeyboardStyle | None
 ```
+
+{% endraw %}{% include api-source.html name="read_keyboard_style" line=219 %}{% raw %}
+
+</div>
 
 Validate the optional look of an instrument's keyboards.
 
@@ -208,6 +262,8 @@ True
 
 ## PackInstrument
 
+<div class="api-signature" markdown="1">
+
 ```python
 PackInstrument(
     key: str,
@@ -224,13 +280,23 @@ PackInstrument(
 )
 ```
 
+{% endraw %}{% include api-source.html name="PackInstrument" line=378 %}{% raw %}
+
+</div>
+
 A pack-qualified identity and the resources shared by its exercises.
 
 ### PackInstrument.keyboard
 
+<div class="api-signature" markdown="1">
+
 ```python
 def keyboard(name: str) -> PackKeyboard | None
 ```
+
+{% endraw %}{% include api-source.html name="PackInstrument.keyboard" line=395 %}{% raw %}
+
+</div>
 
 Find one of the instrument's keyboards by name.
 
@@ -263,9 +329,15 @@ Find one of the instrument's keyboards by name.
 
 ### PackInstrument.picture
 
+<div class="api-signature" markdown="1">
+
 ```python
 def picture(view: str = '') -> tuple[Path, tuple[int, int]] | None
 ```
+
+{% endraw %}{% include api-source.html name="PackInstrument.picture" line=432 %}{% raw %}
+
+</div>
 
 Find the picture for a view: the instrument's main picture for
 an empty name, otherwise the named extra picture.
@@ -303,9 +375,15 @@ an empty name, otherwise the named extra picture.
 
 ## identifier
 
+<div class="api-signature" markdown="1">
+
 ```python
 def identifier(value: object) -> str
 ```
+
+{% endraw %}{% include api-source.html name="identifier" line=481 %}{% raw %}
+
+</div>
 
 Validate one component of a pack-qualified id.
 
@@ -319,9 +397,15 @@ Validate one component of a pack-qualified id.
 
 ## pitch
 
+<div class="api-signature" markdown="1">
+
 ```python
 def pitch(value: object) -> Note
 ```
+
+{% endraw %}{% include api-source.html name="pitch" line=505 %}{% raw %}
+
+</div>
 
 Read a pitch spelled with an octave.
 
@@ -335,6 +419,8 @@ Read a pitch spelled with an octave.
 
 ## PackFiles
 
+<div class="api-signature" markdown="1">
+
 ```python
 PackFiles(
     manifest: Path,
@@ -342,6 +428,10 @@ PackFiles(
     archive: ZipFile | None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="PackFiles" line=529 %}{% raw %}
+
+</div>
 
 Resolve only manifest-declared assets, from a folder or the root of
 a ZIP.
@@ -357,6 +447,8 @@ generated filenames.
 
 ### PackFiles.asset
 
+<div class="api-signature" markdown="1">
+
 ```python
 def asset(
     name: object,
@@ -364,6 +456,10 @@ def asset(
     extensions: tuple[str, ...],
 ) -> Path
 ```
+
+{% endraw %}{% include api-source.html name="PackFiles.asset" line=564 %}{% raw %}
+
+</div>
 
 Resolve a regular asset from this pack.
 
@@ -377,9 +473,15 @@ Resolve a regular asset from this pack.
 
 ### PackFiles.manifest
 
+<div class="api-signature" markdown="1">
+
 ```python
 def manifest() -> dict
 ```
+
+{% endraw %}{% include api-source.html name="PackFiles.manifest" line=628 %}{% raw %}
+
+</div>
 
 Read the API version and top-level pack object.
 
@@ -393,6 +495,8 @@ Read the API version and top-level pack object.
 
 ## image_point
 
+<div class="api-signature" markdown="1">
+
 ```python
 def image_point(
     value: object,
@@ -401,6 +505,10 @@ def image_point(
     height: int,
 ) -> Point
 ```
+
+{% endraw %}{% include api-source.html name="image_point" line=668 %}{% raw %}
+
+</div>
 
 Validate a marker or string endpoint against the image dimensions.
 
@@ -414,6 +522,8 @@ Validate a marker or string endpoint against the image dimensions.
 
 ## read_sound_info
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_sound_info(
     value: object,
@@ -422,6 +532,10 @@ def read_sound_info(
     pack_name: str,
 ) -> InstrumentInfo | None
 ```
+
+{% endraw %}{% include api-source.html name="read_sound_info" line=709 %}{% raw %}
+
+</div>
 
 Validate the optional facts a pack gives about where its recordings
 came from.
@@ -460,6 +574,8 @@ True
 
 ## plain_text
 
+<div class="api-signature" markdown="1">
+
 ```python
 def plain_text(
     value: object,
@@ -467,6 +583,10 @@ def plain_text(
     limit: int,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="plain_text" line=805 %}{% raw %}
+
+</div>
 
 Check that a manifest entry is nonblank plain text of a reasonable
 length.
@@ -493,6 +613,8 @@ length.
 
 ## read_text
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_text(
     value: object,
@@ -502,6 +624,10 @@ def read_text(
     where: str,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="read_text" line=841 %}{% raw %}
+
+</div>
 
 Check one piece of plain text and return it trimmed.
 
@@ -534,6 +660,8 @@ Check one piece of plain text and return it trimmed.
 
 ## read_focus
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_focus(
     value: object,
@@ -542,6 +670,10 @@ def read_focus(
     height: int,
 ) -> tuple[float, float, float, float]
 ```
+
+{% endraw %}{% include api-source.html name="read_focus" line=885 %}{% raw %}
+
+</div>
 
 Validate a picture question's region to show.
 
@@ -570,9 +702,15 @@ Validate a picture question's region to show.
 
 ## read_marker_size
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_marker_size(value: object) -> float
 ```
+
+{% endraw %}{% include api-source.html name="read_marker_size" line=948 %}{% raw %}
+
+</div>
 
 Validate a picture's marker size.
 
@@ -597,6 +735,8 @@ Validate a picture's marker size.
 
 ## read_icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_icon(
     files: PackFiles,
@@ -604,6 +744,10 @@ def read_icon(
     name: object,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="read_icon" line=1029 %}{% raw %}
+
+</div>
 
 Read a plugin's tile icon: a plain SVG of simple shapes, redrawn in
 the theme's ink.
@@ -630,6 +774,8 @@ photograph.
 
 ## read_picture_file
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_picture_file(
     files: PackFiles,
@@ -637,6 +783,10 @@ def read_picture_file(
     name: object,
 ) -> tuple[Path, tuple[int, int]]
 ```
+
+{% endraw %}{% include api-source.html name="read_picture_file" line=1160 %}{% raw %}
+
+</div>
 
 Find and check a picture in the pack.
 
@@ -655,6 +805,8 @@ Find and check a picture in the pack.
 
 ## read_views
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_views(
     value: object,
@@ -663,6 +815,10 @@ def read_views(
     where: str,
 ) -> tuple[PackView, ...]
 ```
+
+{% endraw %}{% include api-source.html name="read_views" line=1205 %}{% raw %}
+
+</div>
 
 Validate the optional extra pictures of an instrument, such as a
 view of its back.
@@ -693,6 +849,8 @@ view of its back.
 
 ## read_keyboards
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_keyboards(
     value: object,
@@ -700,6 +858,10 @@ def read_keyboards(
     where: str,
 ) -> tuple[PackKeyboard, ...]
 ```
+
+{% endraw %}{% include api-source.html name="read_keyboards" line=1264 %}{% raw %}
+
+</div>
 
 Validate the optional keyboards of an instrument, which Alto draws
 from their ranges.
@@ -737,6 +899,8 @@ from their ranges.
 
 ## read_positions
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_positions(
     value: object,
@@ -744,6 +908,10 @@ def read_positions(
     where: str,
 ) -> tuple[tuple[int, str], ...]
 ```
+
+{% endraw %}{% include api-source.html name="read_positions" line=1359 %}{% raw %}
+
+</div>
 
 Validate the optional named positions along a string, which label
 the ruler beside the fingerboard.
@@ -778,6 +946,8 @@ the ruler beside the fingerboard.
 
 ## read_instrument
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_instrument(
     row: object,
@@ -787,6 +957,10 @@ def read_instrument(
     pack_name: str = '',
 ) -> PackInstrument
 ```
+
+{% endraw %}{% include api-source.html name="read_instrument" line=1450 %}{% raw %}
+
+</div>
 
 Validate one declared instrument against its own artwork and
 recordings.

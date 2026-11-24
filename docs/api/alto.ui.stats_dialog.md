@@ -24,6 +24,8 @@ True
 
 ## since_for
 
+<div class="api-signature" markdown="1">
+
 ```python
 def since_for(
     span: str | int | None,
@@ -31,6 +33,10 @@ def since_for(
     now: float,
 ) -> float | None
 ```
+
+{% endraw %}{% include api-source.html name="since_for" line=86 %}{% raw %}
+
+</div>
 
 Return the timestamp a timeframe starts from.
 
@@ -58,9 +64,15 @@ True
 
 ## format_duration
 
+<div class="api-signature" markdown="1">
+
 ```python
 def format_duration(seconds: float) -> str
 ```
+
+{% endraw %}{% include api-source.html name="format_duration" line=132 %}{% raw %}
+
+</div>
 
 Write a length of time the way the statistics show it.
 
@@ -87,6 +99,8 @@ Write a length of time the way the statistics show it.
 
 ## period_title
 
+<div class="api-signature" markdown="1">
+
 ```python
 def period_title(
     start: datetime,
@@ -94,6 +108,10 @@ def period_title(
     granularity: str,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="period_title" line=168 %}{% raw %}
+
+</div>
 
 Name a chart period in words, for the heading of its list of
 answers.
@@ -132,6 +150,8 @@ answers.
 
 ## Tile
 
+<div class="api-signature" markdown="1">
+
 ```python
 Tile(
     caption: str,
@@ -139,6 +159,10 @@ Tile(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Tile" line=229 %}{% raw %}
+
+</div>
 
 Bases: `QFrame`
 
@@ -179,9 +203,15 @@ Create a tile showing a dash until it is given a value.
 
 ### Tile.show_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_value(text: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="Tile.show_value" line=285 %}{% raw %}
+
+</div>
 
 Show a number (or any text) in the tile.
 
@@ -200,6 +230,8 @@ Show a number (or any text) in the tile.
 
 ## StatsPage
 
+<div class="api-signature" markdown="1">
+
 ```python
 StatsPage(
     learner: Learner,
@@ -207,6 +239,10 @@ StatsPage(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="StatsPage" line=304 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -264,9 +300,15 @@ Build the page and fill it for the current filters.
 
 ### StatsPage.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh() -> None
 ```
+
+{% endraw %}{% include api-source.html name="StatsPage.refresh" line=620 %}{% raw %}
+
+</div>
 
 Recalculate everything for the chosen exercise and timeframe and
 show it.

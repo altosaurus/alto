@@ -25,9 +25,15 @@ OK hands over; the caller starts the installer and quits.
 
 ## UpdatePreparer
 
+<div class="api-signature" markdown="1">
+
 ```python
 UpdatePreparer(parent: QObject | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="UpdatePreparer" line=96 %}{% raw %}
+
+</div>
 
 Bases: `QObject`
 
@@ -58,6 +64,8 @@ Make a preparer that has not started.
 
 ### UpdatePreparer.start
 
+<div class="api-signature" markdown="1">
+
 ```python
 def start(
     *,
@@ -67,6 +75,10 @@ def start(
     keys: tuple[str, ...],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="UpdatePreparer.start" line=144 %}{% raw %}
+
+</div>
 
 Start downloading and checking.
 
@@ -79,17 +91,29 @@ Start downloading and checking.
 
 ### UpdatePreparer.cancel
 
+<div class="api-signature" markdown="1">
+
 ```python
 def cancel() -> None
 ```
+
+{% endraw %}{% include api-source.html name="UpdatePreparer.cancel" line=180 %}{% raw %}
+
+</div>
 
 Stop, at the next chance, and say nothing more.
 
 ### UpdatePreparer.is_canceled
 
+<div class="api-signature" markdown="1">
+
 ```python
 def is_canceled() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="UpdatePreparer.is_canceled" line=184 %}{% raw %}
+
+</div>
 
 Say whether the person has canceled.
 
@@ -106,6 +130,8 @@ False
 
 ## PackageUpdateDialog
 
+<div class="api-signature" markdown="1">
+
 ```python
 PackageUpdateDialog(
     parent: QWidget | None,
@@ -114,6 +140,10 @@ PackageUpdateDialog(
     target: Target,
 )
 ```
+
+{% endraw %}{% include api-source.html name="PackageUpdateDialog" line=327 %}{% raw %}
+
+</div>
 
 Bases: `QDialog`
 
@@ -143,9 +173,15 @@ Build the window; nothing is downloaded until `run` is called.
 
 ### PackageUpdateDialog.run
 
+<div class="api-signature" markdown="1">
+
 ```python
 def run() -> Prepared | None
 ```
+
+{% endraw %}{% include api-source.html name="PackageUpdateDialog.run" line=397 %}{% raw %}
+
+</div>
 
 Download and check the update, showing the window until the
 person has read how it went.
@@ -173,9 +209,15 @@ False
 
 ### PackageUpdateDialog.reject
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reject() -> None
 ```
+
+{% endraw %}{% include api-source.html name="PackageUpdateDialog.reject" line=439 %}{% raw %}
+
+</div>
 
 Close the window; before the update is ready that cancels it.
 {% endraw %}

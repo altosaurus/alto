@@ -21,9 +21,15 @@ True
 
 ## category_tree
 
+<div class="api-signature" markdown="1">
+
 ```python
 def category_tree(name: str) -> QTreeWidget
 ```
+
+{% endraw %}{% include api-source.html name="category_tree" line=166 %}{% raw %}
+
+</div>
 
 Build a navigation tree with themed checkboxes and right-aligned
 expansion arrows.
@@ -45,6 +51,8 @@ expansion arrows.
 
 ## TileCard
 
+<div class="api-signature" markdown="1">
+
 ```python
 TileCard(
     *,
@@ -56,6 +64,10 @@ TileCard(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="TileCard" line=312 %}{% raw %}
+
+</div>
 
 Bases: `QPushButton`
 
@@ -115,9 +127,15 @@ Build a card.
 
 ### TileCard.changeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def changeEvent(event: QEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="TileCard.changeEvent" line=494 %}{% raw %}
+
+</div>
 
 Recolor the icon when the tile receives a new palette.
 
@@ -136,9 +154,15 @@ Recolor the icon when the tile receives a new palette.
 
 ## exercise_icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 def exercise_icon(name: str) -> str
 ```
+
+{% endraw %}{% include api-source.html name="exercise_icon" line=515 %}{% raw %}
+
+</div>
 
 Find the icon for an exercise: the one its plugin supplies, or
 Alto's own.
@@ -166,9 +190,15 @@ True
 
 ## lesson_icon
 
+<div class="api-signature" markdown="1">
+
 ```python
 def lesson_icon(lesson: Lesson) -> str
 ```
+
+{% endraw %}{% include api-source.html name="lesson_icon" line=548 %}{% raw %}
+
+</div>
 
 Find the icon for a lesson's tile: its own if a plugin gave it one,
 otherwise its primary exercise's.
@@ -192,6 +222,8 @@ True
 
 ## ExerciseCard
 
+<div class="api-signature" markdown="1">
+
 ```python
 ExerciseCard(
     cls: type[Exercise],
@@ -199,6 +231,10 @@ ExerciseCard(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseCard" line=573 %}{% raw %}
+
+</div>
 
 Bases: `TileCard`
 
@@ -240,9 +276,15 @@ Build the card for one exercise.
 
 ### ExerciseCard.set_counts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_counts(counts: tuple[int, int] | tuple[int, int, int] | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExerciseCard.set_counts" line=631 %}{% raw %}
+
+</div>
 
 Show due reviews, new cards, and outstanding incorrect cards in
 the upper right corner.
@@ -265,6 +307,8 @@ Green — 2 reviews due
 
 ## lesson_card
 
+<div class="api-signature" markdown="1">
+
 ```python
 def lesson_card(
     lesson: Lesson,
@@ -272,6 +316,10 @@ def lesson_card(
     parent: QWidget | None = None,
 ) -> TileCard
 ```
+
+{% endraw %}{% include api-source.html name="lesson_card" line=672 %}{% raw %}
+
+</div>
 
 Make the card of a lesson: the icon of the exercise that practices
 the same topic, and a bar for how far through it you are.
@@ -295,6 +343,8 @@ the same topic, and a bar for how far through it you are.
 
 ## HomePage
 
+<div class="api-signature" markdown="1">
+
 ```python
 HomePage(
     registry: Iterable[type[Exercise]],
@@ -304,6 +354,10 @@ HomePage(
     filter_layout: QHBoxLayout | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="HomePage" line=710 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -359,9 +413,15 @@ Build the page.
 
 ### HomePage.set_search
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_search(text: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.set_search" line=926 %}{% raw %}
+
+</div>
 
 Show only tiles matching a title, description or category
 search.
@@ -382,6 +442,8 @@ search.
 
 ### HomePage.matches_filter
 
+<div class="api-signature" markdown="1">
+
 ```python
 def matches_filter(
     card: TileCard,
@@ -389,6 +451,10 @@ def matches_filter(
     section: str,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.matches_filter" line=966 %}{% raw %}
+
+</div>
 
 Check whether a tile matches the search text and the selection
 for its section.
@@ -415,12 +481,18 @@ True
 
 ### HomePage.eventFilter
 
+<div class="api-signature" markdown="1">
+
 ```python
 def eventFilter(
     watched: QObject,
     event: QEvent,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.eventFilter" line=1070 %}{% raw %}
+
+</div>
 
 Fit the open filter sidebar when its workspace changes width.
 
@@ -442,9 +514,15 @@ the filters.
 
 ### HomePage.set_filter_available
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_filter_available(available: bool) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.set_filter_available" line=1119 %}{% raw %}
+
+</div>
 
 Show the filter control on browsing and exercise pages,
 remembering the sidebar's open state.
@@ -464,6 +542,8 @@ True
 
 ### HomePage.restore_tile_filters
 
+<div class="api-signature" markdown="1">
+
 ```python
 def restore_tile_filters(
     selections: dict[str, frozenset[str]],
@@ -471,6 +551,10 @@ def restore_tile_filters(
     expanded: bool | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.restore_tile_filters" line=1223 %}{% raw %}
+
+</div>
 
 Restore exercise and lesson checkboxes after a theme change.
 
@@ -487,9 +571,15 @@ Restore exercise and lesson checkboxes after a theme change.
 
 ### HomePage.set_category
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_category(category: str | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.set_category" line=1253 %}{% raw %}
+
+</div>
 
 Select the tiles of one category, or all tiles when the category
 is absent.
@@ -506,6 +596,8 @@ is absent.
 
 ### HomePage.set_mode
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_mode(
     mode: str,
@@ -513,6 +605,10 @@ def set_mode(
     animate: bool = True,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.set_mode" line=1304 %}{% raw %}
+
+</div>
 
 Show the exercises or the lessons, and remember which.
 
@@ -538,9 +634,15 @@ waits on it.
 
 ### HomePage.page_changed
 
+<div class="api-signature" markdown="1">
+
 ```python
 def page_changed() -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.page_changed" line=1375 %}{% raw %}
+
+</div>
 
 Animate the tiles from an empty grid on return, or stop the
 animation when leaving.
@@ -556,9 +658,15 @@ False
 
 ### HomePage.refresh_counts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh_counts() -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.refresh_counts" line=1475 %}{% raw %}
+
+</div>
 
 Refresh each exercise tile and the totals for the current
 filters.
@@ -571,9 +679,15 @@ filters.
 
 ### HomePage.showEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def showEvent(event: QShowEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.showEvent" line=1507 %}{% raw %}
+
+</div>
 
 Bring the lesson cards up to date each time the page is shown,
 so they say where each lesson was left.
@@ -592,9 +706,15 @@ so they say where each lesson was left.
 
 ### HomePage.resizeEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def resizeEvent(event: QResizeEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HomePage.resizeEvent" line=1528 %}{% raw %}
+
+</div>
 
 Lay the cards out again when the page changes size.
 

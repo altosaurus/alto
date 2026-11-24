@@ -22,6 +22,8 @@ a C clef).
 
 ## NotationStyle
 
+<div class="api-signature" markdown="1">
+
 ```python
 NotationStyle(
     key: str,
@@ -32,6 +34,10 @@ NotationStyle(
     line: float = 1.4,
 )
 ```
+
+{% endraw %}{% include api-source.html name="NotationStyle" line=31 %}{% raw %}
+
+</div>
 
 One look for the music: a font and how heavy the staff lines are.
 
@@ -53,9 +59,15 @@ One look for the music: a font and how heavy the staff lines are.
 
 ## baritone_clef
 
+<div class="api-signature" markdown="1">
+
 ```python
 def baritone_clef() -> str
 ```
+
+{% endraw %}{% include api-source.html name="baritone_clef" line=153 %}{% raw %}
+
+</div>
 
 Return which way the baritone clef is written.
 
@@ -72,9 +84,15 @@ True
 
 ## clef_shape
 
+<div class="api-signature" markdown="1">
+
 ```python
 def clef_shape(clef: str) -> str
 ```
+
+{% endraw %}{% include api-source.html name="clef_shape" line=171 %}{% raw %}
+
+</div>
 
 Return the clef as it is drawn.
 
@@ -103,9 +121,15 @@ Return the clef as it is drawn.
 
 ## set_baritone_clef
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_baritone_clef(kind: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_baritone_clef" line=202 %}{% raw %}
+
+</div>
 
 Choose and save how the baritone clef is written, and redraw every
 staff already on screen.
@@ -129,9 +153,15 @@ staff already on screen.
 
 ## current
 
+<div class="api-signature" markdown="1">
+
 ```python
 def current() -> NotationStyle
 ```
+
+{% endraw %}{% include api-source.html name="current" line=229 %}{% raw %}
+
+</div>
 
 Return the notation style in use.
 
@@ -148,9 +178,15 @@ True
 
 ## load_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_style() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load_style" line=247 %}{% raw %}
+
+</div>
 
 Apply the saved choices: the style (Finale Maestro if none is saved
 or it is unknown) and the baritone clef.
@@ -167,9 +203,15 @@ or it is unknown) and the baritone clef.
 
 ## set_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_style(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="set_style" line=274 %}{% raw %}
+
+</div>
 
 Choose and save a style, and redraw every staff already on screen.
 
@@ -188,9 +230,15 @@ Choose and save a style, and redraw every staff already on screen.
 
 ## on_redraw
 
+<div class="api-signature" markdown="1">
+
 ```python
 def on_redraw(hook: Callable[[], None]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="on_redraw" line=299 %}{% raw %}
+
+</div>
 
 Register a function to call whenever the notation style changes.
 

@@ -1,7 +1,7 @@
 ---
 title: Database
 parent: developer-guide
-order: 2
+order: 3
 permalink: /developer-guide/database/
 ---
 Alto keeps practice history for all local profiles in one SQLite file. At launch, `Database(database_path())` opens `alto.db` in the application data directory, or `$ALTO_HOME/data/alto.db` when a development directory is set. A new database uses schema version 7, recorded in SQLite’s `PRAGMA user_version`. [Application launch]({{ '/developer-guide/application-launch/' | relative_url }})

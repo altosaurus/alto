@@ -31,9 +31,15 @@ False
 
 ## percent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def percent() -> int
 ```
+
+{% endraw %}{% include api-source.html name="percent" line=100 %}{% raw %}
+
+</div>
 
 Give the zoom now in force.
 
@@ -50,9 +56,15 @@ Give the zoom now in force.
 
 ## factor
 
+<div class="api-signature" markdown="1">
+
 ```python
 def factor() -> float
 ```
+
+{% endraw %}{% include api-source.html name="factor" line=117 %}{% raw %}
+
+</div>
 
 Give the zoom as a multiplier.
 
@@ -69,9 +81,15 @@ Give the zoom as a multiplier.
 
 ## px
 
+<div class="api-signature" markdown="1">
+
 ```python
 def px(value: float) -> int
 ```
+
+{% endraw %}{% include api-source.html name="px" line=134 %}{% raw %}
+
+</div>
 
 Scale a length in pixels by the zoom.
 
@@ -92,9 +110,15 @@ Scale a length in pixels by the zoom.
 
 ## css
 
+<div class="api-signature" markdown="1">
+
 ```python
 def css(text: str) -> str
 ```
+
+{% endraw %}{% include api-source.html name="css" line=160 %}{% raw %}
+
+</div>
 
 Scale every pixel and point length in a stylesheet by the zoom.
 
@@ -118,9 +142,15 @@ Scale every pixel and point length in a stylesheet by the zoom.
 
 ## apply_font
 
+<div class="api-signature" markdown="1">
+
 ```python
 def apply_font() -> None
 ```
+
+{% endraw %}{% include api-source.html name="apply_font" line=231 %}{% raw %}
+
+</div>
 
 Make the application font as large as the zoom says, from the size
 it had at 100%.
@@ -133,9 +163,15 @@ it had at 100%.
 
 ## set_percent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_percent(value: int) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="set_percent" line=254 %}{% raw %}
+
+</div>
 
 Zoom to the step nearest a percentage, save it and say so.
 
@@ -162,9 +198,15 @@ True
 
 ## step
 
+<div class="api-signature" markdown="1">
+
 ```python
 def step(direction: int) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="step" line=290 %}{% raw %}
+
+</div>
 
 Zoom in or out by one step.
 
@@ -193,9 +235,15 @@ Zoom in or out by one step.
 
 ## reset
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reset() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="reset" line=323 %}{% raw %}
+
+</div>
 
 Go back to 100%.
 
@@ -212,9 +260,15 @@ False
 
 ## load
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load() -> None
 ```
+
+{% endraw %}{% include api-source.html name="load" line=340 %}{% raw %}
+
+</div>
 
 Take the saved zoom into force, without announcing it, ignoring
 anything that is not a step.
@@ -234,9 +288,15 @@ anything that is not a step.
 
 ## WheelZoom
 
+<div class="api-signature" markdown="1">
+
 ```python
 WheelZoom(parent: QObject | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="WheelZoom" line=365 %}{% raw %}
+
+</div>
 
 Bases: `QObject`
 
@@ -272,9 +332,15 @@ Start with no wheel turned.
 
 ### WheelZoom.follow
 
+<div class="api-signature" markdown="1">
+
 ```python
 def follow(app: QGuiApplication) -> None
 ```
+
+{% endraw %}{% include api-source.html name="WheelZoom.follow" line=398 %}{% raw %}
+
+</div>
 
 Watch the window that has the focus, and each window that gains
 it later, such as a dialog that opens.
@@ -299,9 +365,15 @@ made building a page half as slow again.
 
 ### WheelZoom.watch
 
+<div class="api-signature" markdown="1">
+
 ```python
 def watch(window: QWindow | None) -> None
 ```
+
+{% endraw %}{% include api-source.html name="WheelZoom.watch" line=423 %}{% raw %}
+
+</div>
 
 Zoom when the wheel turns with Ctrl held over a window.
 
@@ -322,12 +394,18 @@ Zoom when the wheel turns with Ctrl held over a window.
 
 ### WheelZoom.eventFilter
 
+<div class="api-signature" markdown="1">
+
 ```python
 def eventFilter(
     watched: QObject,
     event: QEvent,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="WheelZoom.eventFilter" line=448 %}{% raw %}
+
+</div>
 
 Take a wheel event with Ctrl held as a zoom, and let every other
 event through.

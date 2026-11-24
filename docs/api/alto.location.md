@@ -24,12 +24,18 @@ from the copy that is used for practicing.
 
 ## alto_home
 
+<div class="api-signature" markdown="1">
+
 ```python
 def alto_home(
     *,
     environ: Mapping[str, str] = os.environ,
 ) -> Path | None
 ```
+
+{% endraw %}{% include api-source.html name="alto_home" line=29 %}{% raw %}
+
+</div>
 
 Give the folder named by `ALTO_HOME`, if there is one.
 
@@ -64,12 +70,18 @@ True
 
 ## database_path
 
+<div class="api-signature" markdown="1">
+
 ```python
 def database_path(
     *,
     environ: Mapping[str, str] = os.environ,
 ) -> Path
 ```
+
+{% endraw %}{% include api-source.html name="database_path" line=67 %}{% raw %}
+
+</div>
 
 Give the file that holds the practice history.
 
@@ -94,12 +106,18 @@ Give the file that holds the practice history.
 
 ## settings_folder
 
+<div class="api-signature" markdown="1">
+
 ```python
 def settings_folder(
     *,
     environ: Mapping[str, str] = os.environ,
 ) -> Path | None
 ```
+
+{% endraw %}{% include api-source.html name="settings_folder" line=105 %}{% raw %}
+
+</div>
 
 Give the folder that holds the settings when `ALTO_HOME` moves them.
 
@@ -128,12 +146,18 @@ True
 
 ## desktop_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def desktop_name(
     *,
     environ: Mapping[str, str] = os.environ,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="desktop_name" line=137 %}{% raw %}
+
+</div>
 
 Give the name the desktop uses to match Alto's window to its menu
 entry, and so to its icon in the dock.

@@ -10,6 +10,8 @@ settings.
 
 ## Sm2State
 
+<div class="api-signature" markdown="1">
+
 ```python
 Sm2State(
     repetitions: int = 0,
@@ -20,6 +22,10 @@ Sm2State(
     delay: int = 0,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Sm2State" line=61 %}{% raw %}
+
+</div>
 
 SM-2 learning step, review history, and actual delay for the current
 presentation.
@@ -33,10 +39,16 @@ presentation.
 
 ### Sm2State.read
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def read(previous: str | None) -> Sm2State
 ```
+
+{% endraw %}{% include api-source.html name="Sm2State.read" line=80 %}{% raw %}
+
+</div>
 
 Read a button-graded or original automatic SM-2 schedule.
 
@@ -57,6 +69,8 @@ Read a button-graded or original automatic SM-2 schedule.
 
 ## inherited_state
 
+<div class="api-signature" markdown="1">
+
 ```python
 def inherited_state(
     key: str,
@@ -67,6 +81,10 @@ def inherited_state(
     rating: Rating,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="inherited_state" line=114 %}{% raw %}
+
+</div>
 
 Translate one saved calendar schedule into the other scheduler's
 initial state.
@@ -99,6 +117,8 @@ initial state.
 
 ## read_fsrs_card
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_fsrs_card(
     key: str,
@@ -107,6 +127,10 @@ def read_fsrs_card(
     due: datetime,
 ) -> Card
 ```
+
+{% endraw %}{% include api-source.html name="read_fsrs_card" line=300 %}{% raw %}
+
+</div>
 
 Restore a saved FSRS card or start one for the question.
 
@@ -128,6 +152,8 @@ A new card is due at the time of its first review.
 
 ## review_options
 
+<div class="api-signature" markdown="1">
+
 ```python
 def review_options(
     key: str,
@@ -138,6 +164,10 @@ def review_options(
     now: float,
 ) -> dict[Rating, tuple[int, str]]
 ```
+
+{% endraw %}{% include api-source.html name="review_options" line=409 %}{% raw %}
+
+</div>
 
 Calculate a consistent set of answer-button intervals from one
 scheduling state.

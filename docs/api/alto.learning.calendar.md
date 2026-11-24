@@ -14,6 +14,8 @@ not introduce it.
 
 ## ReviewInterval
 
+<div class="api-signature" markdown="1">
+
 ```python
 ReviewInterval(
     seconds: int,
@@ -24,6 +26,10 @@ ReviewInterval(
     previous_due: float | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ReviewInterval" line=105 %}{% raw %}
+
+</div>
 
 A preview of one rating for a card in its current scheduling state.
 
@@ -40,10 +46,16 @@ A preview of one rating for a card in its current scheduling state.
 
 ### ReviewInterval.duration
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def duration() -> str
 ```
+
+{% endraw %}{% include api-source.html name="ReviewInterval.duration" line=127 %}{% raw %}
+
+</div>
 
 Format a review interval for display above a grade button or
 beside the music.
@@ -65,9 +77,15 @@ beside the music.
 
 ## CalendarPractice
 
+<div class="api-signature" markdown="1">
+
 ```python
 CalendarPractice(db: Database)
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice" line=219 %}{% raw %}
+
+</div>
 
 Prepare daily exercise queues and store each scheduler's review
 dates.
@@ -97,6 +115,8 @@ Attach the queues to an Alto database.
 
 ### CalendarPractice.inherit_schedules
 
+<div class="api-signature" markdown="1">
+
 ```python
 def inherit_schedules(
     profile: int,
@@ -104,6 +124,10 @@ def inherit_schedules(
     mode: str,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.inherit_schedules" line=248 %}{% raw %}
+
+</div>
 
 Initialize missing schedules for this profile from the other
 calendar scheduler.
@@ -122,6 +146,8 @@ consuming a review.
 
 ### CalendarPractice.limits
 
+<div class="api-signature" markdown="1">
+
 ```python
 def limits(
     profile: int,
@@ -129,6 +155,10 @@ def limits(
     exercise: str = '',
 ) -> tuple[int, int]
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.limits" line=299 %}{% raw %}
+
+</div>
 
 Return the effective daily new-card and review limits.
 
@@ -150,6 +180,8 @@ Return the effective daily new-card and review limits.
 
 ### CalendarPractice.overrides
 
+<div class="api-signature" markdown="1">
+
 ```python
 def overrides(
     profile: int,
@@ -157,6 +189,10 @@ def overrides(
     exercise: str,
 ) -> tuple[int | None, int | None]
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.overrides" line=334 %}{% raw %}
+
+</div>
 
 Read the two explicitly saved limits for an exercise.
 
@@ -180,6 +216,8 @@ Read the two explicitly saved limits for an exercise.
 
 ### CalendarPractice.set_limits
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_limits(
     profile: int,
@@ -189,6 +227,10 @@ def set_limits(
     reviews: int | None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.set_limits" line=372 %}{% raw %}
+
+</div>
 
 Save the profile defaults or an exercise's individual overrides.
 
@@ -216,9 +258,15 @@ Save the profile defaults or an exercise's individual overrides.
 
 ### CalendarPractice.reset_limits
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reset_limits(profile: int) -> None
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.reset_limits" line=417 %}{% raw %}
+
+</div>
 
 Restore the profile defaults and remove its exercise overrides.
 
@@ -235,6 +283,8 @@ reviews.
 
 ### CalendarPractice.queue
 
+<div class="api-signature" markdown="1">
+
 ```python
 def queue(
     exercise: Exercise,
@@ -244,6 +294,10 @@ def queue(
     now: float,
 ) -> tuple[list[Question], list[Question]]
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.queue" line=437 %}{% raw %}
+
+</div>
 
 Find due reviews and prepare the remaining new cards for this
 local day.
@@ -277,6 +331,8 @@ True
 
 ### CalendarPractice.counts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def counts(
     exercise: Exercise,
@@ -286,6 +342,10 @@ def counts(
     now: float,
 ) -> tuple[int, int]
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.counts" line=489 %}{% raw %}
+
+</div>
 
 Count due reviews and unseen cards available with the selected
 settings.
@@ -317,6 +377,8 @@ True
 
 ### CalendarPractice.tile_counts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def tile_counts(
     exercise: Exercise,
@@ -326,6 +388,10 @@ def tile_counts(
     now: float,
 ) -> tuple[int, int, int]
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.tile_counts" line=538 %}{% raw %}
+
+</div>
 
 Count available reviews, new cards, and missed cards awaiting a
 correct review.
@@ -357,6 +423,8 @@ correct review.
 
 ### CalendarPractice.study_counts
 
+<div class="api-signature" markdown="1">
+
 ```python
 def study_counts(
     exercise: Exercise,
@@ -367,6 +435,10 @@ def study_counts(
     current_key: str | None = None,
 ) -> tuple[tuple[int, int, int], str | None]
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.study_counts" line=586 %}{% raw %}
+
+</div>
 
 Count the exercise queues and identify the queue of the question
 on screen.
@@ -392,6 +464,8 @@ during its retry.
 
 ### CalendarPractice.take
 
+<div class="api-signature" markdown="1">
+
 ```python
 def take(
     exercise: Exercise,
@@ -401,6 +475,10 @@ def take(
     now: float,
 ) -> Question | None
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.take" line=919 %}{% raw %}
+
+</div>
 
 Take the first eligible card, recording a new introduction only
 when served.
@@ -436,6 +514,8 @@ True
 
 ### CalendarPractice.take_or_wait
 
+<div class="api-signature" markdown="1">
+
 ```python
 def take_or_wait(
     exercise: Exercise,
@@ -447,6 +527,10 @@ def take_or_wait(
     wait_learning: bool = False,
 ) -> tuple[Question | None, float | None]
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.take_or_wait" line=970 %}{% raw %}
+
+</div>
 
 Draw an eligible card or return the time when a missed card can
 be reviewed.
@@ -473,6 +557,8 @@ step expires.
 
 ### CalendarPractice.introduce
 
+<div class="api-signature" markdown="1">
+
 ```python
 def introduce(
     exercise: Exercise,
@@ -482,6 +568,10 @@ def introduce(
     now: float,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.introduce" line=1035 %}{% raw %}
+
+</div>
 
 Register a calendar introduction once, in the caller's draw or
 answer transaction.
@@ -501,6 +591,8 @@ Answering a pending card keeps its original introduction day.
 
 ### CalendarPractice.correct_interval
 
+<div class="api-signature" markdown="1">
+
 ```python
 def correct_interval(
     exercise: str,
@@ -511,6 +603,10 @@ def correct_interval(
     now: float,
 ) -> ReviewInterval
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.correct_interval" line=1113 %}{% raw %}
+
+</div>
 
 Preview the next correct answer without grading the card.
 
@@ -543,6 +639,8 @@ Preview the next correct answer without grading the card.
 
 ### CalendarPractice.passing_intervals
 
+<div class="api-signature" markdown="1">
+
 ```python
 def passing_intervals(
     exercise: str,
@@ -554,6 +652,10 @@ def passing_intervals(
     displayed: dict[Rating, ReviewInterval] | None = None,
 ) -> dict[Rating, ReviewInterval]
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.passing_intervals" line=1167 %}{% raw %}
+
+</div>
 
 Preview the three passing outcomes from one snapshot of this
 card.
@@ -587,6 +689,8 @@ card.
 
 ### CalendarPractice.grade
 
+<div class="api-signature" markdown="1">
+
 ```python
 def grade(
     exercise: str,
@@ -600,6 +704,10 @@ def grade(
     preview: ReviewInterval | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="CalendarPractice.grade" line=1242 %}{% raw %}
+
+</div>
 
 Reschedule a card from the first submission to this
 presentation.

@@ -30,6 +30,8 @@ show, and explains the bar or square under the pointer in a tooltip.
 
 ## nice_ticks
 
+<div class="api-signature" markdown="1">
+
 ```python
 def nice_ticks(
     top: float,
@@ -37,6 +39,10 @@ def nice_ticks(
     count: int = 4,
 ) -> list[float]
 ```
+
+{% endraw %}{% include api-source.html name="nice_ticks" line=77 %}{% raw %}
+
+</div>
 
 Return round tick values from 0 up to just above a top value.
 
@@ -62,6 +68,8 @@ True
 
 ## StackedBarChart
 
+<div class="api-signature" markdown="1">
+
 ```python
 StackedBarChart(
     title: str,
@@ -70,6 +78,10 @@ StackedBarChart(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="StackedBarChart" line=902 %}{% raw %}
+
+</div>
 
 Bases: `_Chart`
 
@@ -115,6 +127,8 @@ Create an empty chart.
 
 ### StackedBarChart.set_data
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_data(
     labels: Sequence[str],
@@ -123,6 +137,10 @@ def set_data(
     wrong: Sequence[int],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StackedBarChart.set_data" line=976 %}{% raw %}
+
+</div>
 
 Show a count of right and missed questions for each period.
 
@@ -145,9 +163,15 @@ Show a count of right and missed questions for each period.
 
 ### StackedBarChart.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StackedBarChart.paintEvent" line=1060 %}{% raw %}
+
+</div>
 
 Draw the axes and a bar for each period, or a message when no
 questions were answered.
@@ -170,9 +194,15 @@ False
 
 ### StackedBarChart.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="StackedBarChart.mouseMoveEvent" line=1172 %}{% raw %}
+
+</div>
 
 Explain the bar under the pointer in a tooltip.
 
@@ -210,6 +240,8 @@ Explain the bar under the pointer in a tooltip.
 
 ## LineChart
 
+<div class="api-signature" markdown="1">
+
 ```python
 LineChart(
     title: str,
@@ -219,6 +251,10 @@ LineChart(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="LineChart" line=1227 %}{% raw %}
+
+</div>
 
 Bases: `_Chart`
 
@@ -270,6 +306,8 @@ True
 
 ### LineChart.set_data
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_data(
     labels: Sequence[str],
@@ -277,6 +315,10 @@ def set_data(
     values: Sequence[float | None],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="LineChart.set_data" line=1293 %}{% raw %}
+
+</div>
 
 Show a value for each period.
 
@@ -300,9 +342,15 @@ Show a value for each period.
 
 ### LineChart.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="LineChart.paintEvent" line=1371 %}{% raw %}
+
+</div>
 
 Draw the axes, the line (one run at a time, so gaps show) and a
 dot for each value.
@@ -327,9 +375,15 @@ False
 
 ### LineChart.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="LineChart.mouseMoveEvent" line=1498 %}{% raw %}
+
+</div>
 
 Say what the value under the pointer is in a tooltip.
 
@@ -367,6 +421,8 @@ Say what the value under the pointer is in a tooltip.
 
 ## HBarChart
 
+<div class="api-signature" markdown="1">
+
 ```python
 HBarChart(
     title: str,
@@ -374,6 +430,10 @@ HBarChart(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="HBarChart" line=1544 %}{% raw %}
+
+</div>
 
 Bases: `_Chart`
 
@@ -419,9 +479,15 @@ Create an empty chart.
 
 ### HBarChart.set_data
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_data(rows: Sequence[tuple[str, float, str]]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HBarChart.set_data" line=1598 %}{% raw %}
+
+</div>
 
 Show a bar for each name, and make the chart tall enough for
 them.
@@ -446,9 +512,15 @@ them.
 
 ### HBarChart.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HBarChart.paintEvent" line=1627 %}{% raw %}
+
+</div>
 
 Draw a bar with its name and value for each row, or a message
 when there are none.
@@ -469,9 +541,15 @@ False
 
 ### HBarChart.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HBarChart.mouseMoveEvent" line=1754 %}{% raw %}
+
+</div>
 
 Highlight the row under the pointer.
 
@@ -504,6 +582,8 @@ Highlight the row under the pointer.
 
 ## HeatmapChart
 
+<div class="api-signature" markdown="1">
+
 ```python
 HeatmapChart(
     title: str,
@@ -511,6 +591,10 @@ HeatmapChart(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="HeatmapChart" line=1787 %}{% raw %}
+
+</div>
 
 Bases: `_Chart`
 
@@ -554,6 +638,8 @@ Create an empty calendar for the last 53 weeks.
 
 ### HeatmapChart.set_data
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_data(
     counts: dict[date, int],
@@ -562,6 +648,10 @@ def set_data(
     weeks: int = 53,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HeatmapChart.set_data" line=1844 %}{% raw %}
+
+</div>
 
 Show how many questions were answered on each day.
 
@@ -584,9 +674,15 @@ Show how many questions were answered on each day.
 
 ### HeatmapChart.first_day
 
+<div class="api-signature" markdown="1">
+
 ```python
 def first_day() -> date
 ```
+
+{% endraw %}{% include api-source.html name="HeatmapChart.first_day" line=1875 %}{% raw %}
+
+</div>
 
 Return the first day shown: the Monday that starts the first
 week.
@@ -609,9 +705,15 @@ week.
 
 ### HeatmapChart.level
 
+<div class="api-signature" markdown="1">
+
 ```python
 def level(count: int) -> int
 ```
+
+{% endraw %}{% include api-source.html name="HeatmapChart.level" line=1899 %}{% raw %}
+
+</div>
 
 Return how dark a day's square is.
 
@@ -645,9 +747,15 @@ Return how dark a day's square is.
 
 ### HeatmapChart.day_at
 
+<div class="api-signature" markdown="1">
+
 ```python
 def day_at(pos: QPointF) -> date | None
 ```
+
+{% endraw %}{% include api-source.html name="HeatmapChart.day_at" line=2007 %}{% raw %}
+
+</div>
 
 Return the day whose square is under a point.
 
@@ -687,9 +795,15 @@ True
 
 ### HeatmapChart.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HeatmapChart.paintEvent" line=2057 %}{% raw %}
+
+</div>
 
 Draw the month and weekday labels, a square for each day, and
 the Less-More legend.
@@ -713,9 +827,15 @@ False
 
 ### HeatmapChart.mouseMoveEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="HeatmapChart.mouseMoveEvent" line=2237 %}{% raw %}
+
+</div>
 
 Say how many questions were answered on the day under the
 pointer, in a tooltip.

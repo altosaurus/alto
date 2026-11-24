@@ -10,6 +10,8 @@ review dates.
 
 ## Review
 
+<div class="api-signature" markdown="1">
+
 ```python
 Review(
     item_key: str,
@@ -22,14 +24,24 @@ Review(
 )
 ```
 
+{% endraw %}{% include api-source.html name="Review" line=60 %}{% raw %}
+
+</div>
+
 One practiced example and its calendar schedule in the exporting
 profile.
 
 ## profile_reviews
 
+<div class="api-signature" markdown="1">
+
 ```python
 def profile_reviews(learner: Learner) -> dict[str, list[Review]]
 ```
+
+{% endraw %}{% include api-source.html name="profile_reviews" line=75 %}{% raw %}
+
+</div>
 
 Read this profile's graded calendar cards in due order.
 
@@ -39,6 +51,8 @@ Read this profile's graded calendar cards in due order.
 
 ## deck_candidates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def deck_candidates(
     exercise: Exercise,
@@ -46,6 +60,10 @@ def deck_candidates(
     reviews: Sequence[Review],
 ) -> Iterator[tuple[Question, Review | None]]
 ```
+
+{% endraw %}{% include api-source.html name="deck_candidates" line=102 %}{% raw %}
+
+</div>
 
 Visit eligible scheduled examples before generating additional
 questions.
@@ -56,6 +74,8 @@ questions.
 
 ## export_deck
 
+<div class="api-signature" markdown="1">
+
 ```python
 def export_deck(
     path: Path,
@@ -65,6 +85,10 @@ def export_deck(
     render: Callable[[Question, Path], list[str]],
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="export_deck" line=187 %}{% raw %}
+
+</div>
 
 Write a deck and replace the destination only after the package is
 complete.
@@ -82,6 +106,8 @@ complete.
 
 ## DeckSelection
 
+<div class="api-signature" markdown="1">
+
 ```python
 DeckSelection(
     exercise: Exercise,
@@ -89,9 +115,15 @@ DeckSelection(
 )
 ```
 
+{% endraw %}{% include api-source.html name="DeckSelection" line=224 %}{% raw %}
+
+</div>
+
 One exercise deck and its optional review schedules.
 
 ## PlannedDeck
+
+<div class="api-signature" markdown="1">
 
 ```python
 PlannedDeck(
@@ -100,14 +132,24 @@ PlannedDeck(
 )
 ```
 
+{% endraw %}{% include api-source.html name="PlannedDeck" line=232 %}{% raw %}
+
+</div>
+
 Distinct questions and their stable export identities for one
 exercise.
 
 ## plan_deck
 
+<div class="api-signature" markdown="1">
+
 ```python
 def plan_deck(selection: DeckSelection) -> PlannedDeck
 ```
+
+{% endraw %}{% include api-source.html name="plan_deck" line=242 %}{% raw %}
+
+</div>
 
 Select the exact cards to count in the summary and write to the
 package.
@@ -118,6 +160,8 @@ package.
 
 ## export_decks
 
+<div class="api-signature" markdown="1">
+
 ```python
 def export_decks(
     path: Path,
@@ -127,6 +171,10 @@ def export_decks(
     progress: Callable[[str, int, int], None] | None = None,
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="export_decks" line=274 %}{% raw %}
+
+</div>
 
 Save the selected exercise decks together in one Anki package.
 
@@ -143,9 +191,15 @@ Save the selected exercise decks together in one Anki package.
 
 ## ExportControl
 
+<div class="api-signature" markdown="1">
+
 ```python
 ExportControl()
 ```
+
+{% endraw %}{% include api-source.html name="ExportControl" line=311 %}{% raw %}
+
+</div>
 
 Coordinate a cancellation decision with the final replacement of the
 destination.
@@ -156,9 +210,15 @@ Start with a pending export and an untouched destination.
 
 ### ExportControl.confirm_cancel
 
+<div class="api-signature" markdown="1">
+
 ```python
 def confirm_cancel(confirm: Callable[[], bool]) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="ExportControl.confirm_cancel" line=323 %}{% raw %}
+
+</div>
 
 Reserve the destination until the user decides whether to
 cancel.
@@ -169,9 +229,15 @@ cancel.
 
 ### ExportControl.check
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check() -> None
 ```
+
+{% endraw %}{% include api-source.html name="ExportControl.check" line=340 %}{% raw %}
+
+</div>
 
 Stop work and unwind temporary files after confirmed
 cancellation.
@@ -182,6 +248,8 @@ cancellation.
 
 ### ExportControl.publish
 
+<div class="api-signature" markdown="1">
+
 ```python
 def publish(
     package: Path,
@@ -190,9 +258,15 @@ def publish(
 ) -> None
 ```
 
+{% endraw %}{% include api-source.html name="ExportControl.publish" line=353 %}{% raw %}
+
+</div>
+
 Replace the destination only while cancellation is excluded.
 
 ## write_decks
+
+<div class="api-signature" markdown="1">
 
 ```python
 def write_decks(
@@ -205,6 +279,10 @@ def write_decks(
     deck_progress: Callable[[int, bool], None] | None = None,
 ) -> int
 ```
+
+{% endraw %}{% include api-source.html name="write_decks" line=363 %}{% raw %}
+
+</div>
 
 Write the cards from a completed export plan into a single package.
 

@@ -10,9 +10,15 @@ folders.
 
 ## PackExercise
 
+<div class="api-signature" markdown="1">
+
 ```python
 class PackExercise(ChoiceExercise)
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise" line=60 %}{% raw %}
+
+</div>
 
 A finite set of illustrated multiple-choice cards declared by an
 instrument pack.
@@ -26,10 +32,16 @@ string and pitch.
 
 ### PackExercise.options
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def options() -> settings.PackExerciseSettings
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.options" line=123 %}{% raw %}
+
+</div>
 
 Return the learner's options for this exercise, creating the
 defaults the first time.
@@ -54,10 +66,16 @@ defaults the first time.
 
 ### PackExercise.is_keyboard
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def is_keyboard() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.is_keyboard" line=158 %}{% raw %}
+
+</div>
 
 Report whether this is a keyboard interval exercise.
 
@@ -76,10 +94,16 @@ True
 
 ### PackExercise.chosen_keys
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def chosen_keys() -> tuple[int, int]
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.chosen_keys" line=178 %}{% raw %}
+
+</div>
 
 Find the lowest and highest key a keyboard exercise asks.
 
@@ -101,10 +125,16 @@ Find the lowest and highest key a keyboard exercise asks.
 
 ### PackExercise.chosen_span
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def chosen_span() -> tuple[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.chosen_span" line=207 %}{% raw %}
+
+</div>
 
 Name the lowest and highest key a keyboard exercise asks, for
 drawing the keyboards over that range.
@@ -127,10 +157,16 @@ drawing the keyboards over that range.
 
 ### PackExercise.chosen_intervals
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def chosen_intervals() -> tuple[str, ...]
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.chosen_intervals" line=231 %}{% raw %}
+
+</div>
 
 Find the intervals a keyboard exercise asks.
 
@@ -149,10 +185,16 @@ Find the intervals a keyboard exercise asks.
 
 ### PackExercise.chosen_manuals
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def chosen_manuals() -> tuple[str, ...]
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.chosen_manuals" line=260 %}{% raw %}
+
+</div>
 
 Find the keyboards a keyboard exercise puts its highlighted keys
 on.
@@ -175,9 +217,15 @@ on.
 
 ### PackExercise.active_cards
 
+<div class="api-signature" markdown="1">
+
 ```python
 def active_cards() -> tuple[Question, ...]
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.active_cards" line=328 %}{% raw %}
+
+</div>
 
 Build the cards for the learner's settings: the sharps and
 flats, the octave, and the range they chose.
@@ -195,9 +243,15 @@ card.
 
 ### PackExercise.sound_instrument
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sound_instrument(key: str | None) -> str | None
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.sound_instrument" line=367 %}{% raw %}
+
+</div>
 
 Play the pack's own sound unless the pack offers the choice and
 the learner chose another instrument.
@@ -219,10 +273,16 @@ instrument.
 
 ### PackExercise.sound_options
 
+<div class="api-signature" markdown="1">
+
 ```python
 @classmethod
 def sound_options() -> list[tuple[str, list[tuple[str, str]]]]
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.sound_options" line=394 %}{% raw %}
+
+</div>
 
 List the instruments a learner can choose to sound in this
 exercise, in the order they are offered.
@@ -253,9 +313,15 @@ disk is left out.
 
 ### PackExercise.practice_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def practice_signature() -> str
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.practice_signature" line=479 %}{% raw %}
+
+</div>
 
 Identify the pack settings used to generate this catalog.
 
@@ -272,9 +338,15 @@ asking sharps and flats or the octave.
 
 ### PackExercise.refresh
 
+<div class="api-signature" markdown="1">
+
 ```python
 def refresh(question: Question) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.refresh" line=534 %}{% raw %}
+
+</div>
 
 Restore the instrument reference on cards saved by the
 single-instrument prototype.
@@ -296,9 +368,15 @@ pack is upgraded.
 
 ### PackExercise.make_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def make_question(rng: random.Random) -> Question
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.make_question" line=568 %}{% raw %}
+
+</div>
 
 Pick one of the illustrated questions in the pack.
 
@@ -318,9 +396,15 @@ An open D4 on a viola asks for D.
 
 ### PackExercise.daily_candidates
 
+<div class="api-signature" markdown="1">
+
 ```python
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.daily_candidates" line=588 %}{% raw %}
+
+</div>
 
 Visit each question in the pack once in shuffled order.
 
@@ -340,9 +424,15 @@ Open G and G on the C string yield separate cards.
 
 ### PackExercise.card_count
 
+<div class="api-signature" markdown="1">
+
 ```python
 def card_count() -> int
 ```
+
+{% endraw %}{% include api-source.html name="PackExercise.card_count" line=610 %}{% raw %}
+
+</div>
 
 Count the distinct questions in the exercise.
 
@@ -358,6 +448,8 @@ The viola example offers twenty positions.
 
 ## read_controls
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_controls(
     value: object,
@@ -366,6 +458,10 @@ def read_controls(
     kinds: tuple[str, ...] = CONTROL_KINDS,
 ) -> dict[str, str | bool]
 ```
+
+{% endraw %}{% include api-source.html name="read_controls" line=640 %}{% raw %}
+
+</div>
 
 Validate the settings a pack offers for one of its exercises.
 
@@ -403,9 +499,15 @@ Validate the settings a pack offers for one of its exercises.
 
 ## read_pack
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_pack(path: Path) -> list[type[PackExercise]]
 ```
+
+{% endraw %}{% include api-source.html name="read_pack" line=1425 %}{% raw %}
+
+</div>
 
 Read and validate every exercise before making any of them
 available.
@@ -431,9 +533,15 @@ anatomy exercises.
 
 ## pack_manifests
 
+<div class="api-signature" markdown="1">
+
 ```python
 def pack_manifests(folder: Path) -> tuple[list[Path], list[str]]
 ```
+
+{% endraw %}{% include api-source.html name="pack_manifests" line=1776 %}{% raw %}
+
+</div>
 
 Find each installed ZIP or folder manifest, including packs that
 failed validation.
@@ -454,9 +562,15 @@ An author can install either viola.zip or viola/pack.json.
 
 ## installed_pack_info
 
+<div class="api-signature" markdown="1">
+
 ```python
 def installed_pack_info(path: Path) -> dict
 ```
+
+{% endraw %}{% include api-source.html name="installed_pack_info" line=1818 %}{% raw %}
+
+</div>
 
 Read a pack's manifest for display or duplicate detection without
 loading its media.
@@ -477,6 +591,8 @@ A damaged pack can still be listed for removal by filename.
 
 ## InstalledPlugin
 
+<div class="api-signature" markdown="1">
+
 ```python
 InstalledPlugin(
     title: str,
@@ -485,6 +601,10 @@ InstalledPlugin(
     snapshot: stat_result,
 )
 ```
+
+{% endraw %}{% include api-source.html name="InstalledPlugin" line=1857 %}{% raw %}
+
+</div>
 
 One pack in the plugins folder, as listed for removal.
 
@@ -512,9 +632,15 @@ One pack in the plugins folder, as listed for removal.
 
 ## installed_plugins
 
+<div class="api-signature" markdown="1">
+
 ```python
 def installed_plugins(folder: Path) -> tuple[list[InstalledPlugin], list[str]]
 ```
+
+{% endraw %}{% include api-source.html name="installed_plugins" line=1895 %}{% raw %}
+
+</div>
 
 List the packs in the plugins folder, including damaged ones, so
 each can be removed.
@@ -539,6 +665,8 @@ each can be removed.
 
 ## install_pack
 
+<div class="api-signature" markdown="1">
+
 ```python
 def install_pack(
     source: Path,
@@ -548,6 +676,10 @@ def install_pack(
     replacing: InstalledPlugin | None = None,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="install_pack" line=1946 %}{% raw %}
+
+</div>
 
 Validate a copy of the selected ZIP and install it for the next
 startup.
@@ -577,9 +709,15 @@ next launch.
 
 ## load_packs
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_packs(folder: Path) -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="load_packs" line=2076 %}{% raw %}
+
+</div>
 
 Register valid packs and return readable errors for any packs that
 were skipped.

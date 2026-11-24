@@ -29,6 +29,8 @@ scored or recorded.
 
 ## Task
 
+<div class="api-signature" markdown="1">
+
 ```python
 Task(
     prompt: str,
@@ -42,6 +44,10 @@ Task(
     targets: tuple[tuple[float, float, float], ...] = (),
 )
 ```
+
+{% endraw %}{% include api-source.html name="Task" line=40 %}{% raw %}
+
+</div>
 
 One small question inside a lesson step.
 
@@ -82,6 +88,8 @@ True
 
 ### Task.hits
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hits(
     x: float,
@@ -89,6 +97,10 @@ def hits(
     y: float,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Task.hits" line=103 %}{% raw %}
+
+</div>
 
 Say whether a click on the instrument picture is on one of the
 right places.
@@ -116,9 +128,15 @@ False
 
 ### Task.check
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check(answer: tuple[str, int] | str) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="Task.check" line=135 %}{% raw %}
+
+</div>
 
 Say whether an answer is right.
 
@@ -152,6 +170,8 @@ False
 
 ## Staff
 
+<div class="api-signature" markdown="1">
+
 ```python
 Staff(
     clef: str,
@@ -160,6 +180,10 @@ Staff(
     key: int = 0,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Staff" line=174 %}{% raw %}
+
+</div>
 
 A staff to show beside the words of a step: a clef, and perhaps a
 note, with a line of words under it.
@@ -184,6 +208,8 @@ note, with a line of words under it.
 
 ## Step
 
+<div class="api-signature" markdown="1">
+
 ```python
 Step(
     title: str,
@@ -206,6 +232,10 @@ Step(
     label_middle_c: bool = False,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Step" line=209 %}{% raw %}
+
+</div>
 
 One page of a lesson.
 
@@ -241,6 +271,8 @@ One page of a lesson.
 
 ## Lesson
 
+<div class="api-signature" markdown="1">
+
 ```python
 Lesson(
     key: str,
@@ -254,6 +286,10 @@ Lesson(
     icon: str = '',
 )
 ```
+
+{% endraw %}{% include api-source.html name="Lesson" line=300 %}{% raw %}
+
+</div>
 
 A lesson: a title, a line about it, and its steps.
 

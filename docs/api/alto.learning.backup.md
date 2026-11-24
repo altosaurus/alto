@@ -41,9 +41,15 @@ instead of half applied.
 
 ## BackupError
 
+<div class="api-signature" markdown="1">
+
 ```python
 class BackupError(Exception)
 ```
+
+{% endraw %}{% include api-source.html name="BackupError" line=62 %}{% raw %}
+
+</div>
 
 A backup file could not be written or read: it is damaged, is not a
 backup, or was made by a newer Alto.
@@ -61,6 +67,8 @@ backup, or was made by a newer Alto.
 
 ## BackupInfo
 
+<div class="api-signature" markdown="1">
+
 ```python
 BackupInfo(
     created: float,
@@ -70,6 +78,10 @@ BackupInfo(
     attempts: int,
 )
 ```
+
+{% endraw %}{% include api-source.html name="BackupInfo" line=79 %}{% raw %}
+
+</div>
 
 What a backup says about itself.
 
@@ -96,6 +108,8 @@ What a backup says about itself.
 
 ## Backup
 
+<div class="api-signature" markdown="1">
+
 ```python
 Backup(
     info: BackupInfo,
@@ -103,6 +117,10 @@ Backup(
     database: bytes,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Backup" line=116 %}{% raw %}
+
+</div>
 
 A backup that has been read and checked, ready to be applied.
 
@@ -131,9 +149,15 @@ A backup that has been read and checked, ready to be applied.
 
 ## app_version
 
+<div class="api-signature" markdown="1">
+
 ```python
 def app_version() -> str
 ```
+
+{% endraw %}{% include api-source.html name="app_version" line=150 %}{% raw %}
+
+</div>
 
 Return the version of Alto that is running.
 
@@ -150,9 +174,15 @@ True
 
 ## encode_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def encode_value(value: object) -> object
 ```
+
+{% endraw %}{% include api-source.html name="encode_value" line=172 %}{% raw %}
+
+</div>
 
 Turn a saved preference into something JSON can hold.
 
@@ -184,9 +214,15 @@ them back.
 
 ## decode_value
 
+<div class="api-signature" markdown="1">
+
 ```python
 def decode_value(value: object) -> object
 ```
+
+{% endraw %}{% include api-source.html name="decode_value" line=209 %}{% raw %}
+
+</div>
 
 Undo `encode_value`.
 
@@ -209,6 +245,8 @@ b'\x00\x01'
 
 ## write_backup
 
+<div class="api-signature" markdown="1">
+
 ```python
 def write_backup(
     db: Database,
@@ -218,6 +256,10 @@ def write_backup(
     now: float | None = None,
 ) -> BackupInfo
 ```
+
+{% endraw %}{% include api-source.html name="write_backup" line=259 %}{% raw %}
+
+</div>
 
 Write a backup of the database and the saved preferences to a file.
 
@@ -253,9 +295,15 @@ Write a backup of the database and the saved preferences to a file.
 
 ## read_backup
 
+<div class="api-signature" markdown="1">
+
 ```python
 def read_backup(path: Path) -> Backup
 ```
+
+{% endraw %}{% include api-source.html name="read_backup" line=350 %}{% raw %}
+
+</div>
 
 Read a backup file and check it all the way through, without
 changing anything.
@@ -289,6 +337,8 @@ alto.learning.backup.BackupError: This is not an Alto backup.
 
 ## restore_database
 
+<div class="api-signature" markdown="1">
+
 ```python
 def restore_database(
     db: Database,
@@ -296,6 +346,10 @@ def restore_database(
     backup: Backup,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="restore_database" line=445 %}{% raw %}
+
+</div>
 
 Replace everything in the database with what a backup holds.
 

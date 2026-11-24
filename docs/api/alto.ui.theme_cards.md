@@ -22,9 +22,15 @@ desktop is) and the squares of its colors.
 
 ## colors_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def colors_of(key: str) -> dict[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="colors_of" line=86 %}{% raw %}
+
+</div>
 
 Give the colors of a theme's picture.
 
@@ -48,6 +54,8 @@ Give the colors of a theme's picture.
 
 ## ThemeThumb
 
+<div class="api-signature" markdown="1">
+
 ```python
 ThemeThumb(
     key: str,
@@ -58,6 +66,10 @@ ThemeThumb(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ThemeThumb" line=116 %}{% raw %}
+
+</div>
 
 Bases: `QPushButton`
 
@@ -106,9 +118,15 @@ Build the picture.
 
 ### ThemeThumb.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ThemeThumb.paintEvent" line=191 %}{% raw %}
+
+</div>
 
 Draw the window, cut through on a slant if it has two halves,
 with an outline that is heavier when it is chosen.
@@ -128,6 +146,8 @@ False
 
 ## ThemeCard
 
+<div class="api-signature" markdown="1">
+
 ```python
 ThemeCard(
     family: str,
@@ -136,6 +156,10 @@ ThemeCard(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ThemeCard" line=337 %}{% raw %}
+
+</div>
 
 Bases: `QFrame`
 
@@ -181,9 +205,15 @@ Build the card of a family.
 
 ### ThemeCard.show_current
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_current(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="ThemeCard.show_current" line=549 %}{% raw %}
+
+</div>
 
 Mark the picture of the theme that is in use, and outline the
 card that has it.

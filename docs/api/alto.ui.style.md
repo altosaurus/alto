@@ -19,9 +19,15 @@ Colors come from the palette so it follows the system light/dark theme.
 
 ## navigation_heading_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def navigation_heading_style(palette: QPalette) -> tuple[QFont, QColor]
 ```
+
+{% endraw %}{% include api-source.html name="navigation_heading_style" line=22 %}{% raw %}
+
+</div>
 
 Style category headings in the navigation pane and tile filters.
 
@@ -44,6 +50,8 @@ True
 
 ## app_style
 
+<div class="api-signature" markdown="1">
+
 ```python
 def app_style(
     palette: QPalette,
@@ -51,6 +59,10 @@ def app_style(
     paper_palette: QPalette | None = None,
 ) -> str
 ```
+
+{% endraw %}{% include api-source.html name="app_style" line=92 %}{% raw %}
+
+</div>
 
 Build the stylesheet for a palette.
 

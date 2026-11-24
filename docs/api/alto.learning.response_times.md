@@ -9,6 +9,8 @@ Rolling response times for one learner and exercise.
 
 ## ResponseTimes
 
+<div class="api-signature" markdown="1">
+
 ```python
 ResponseTimes(
     times: tuple[int, ...],
@@ -16,6 +18,10 @@ ResponseTimes(
     hard_percent: int,
 )
 ```
+
+{% endraw %}{% include api-source.html name="ResponseTimes" line=14 %}{% raw %}
+
+</div>
 
 Sorted millisecond timings and the profile's fastest and slowest
 tail percentages.
@@ -36,10 +42,16 @@ tail percentages.
 
 ### ResponseTimes.ready
 
+<div class="api-signature" markdown="1">
+
 ```python
 @property
 def ready() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="ResponseTimes.ready" line=37 %}{% raw %}
+
+</div>
 
 Check whether this exercise has enough eligible answers.
 
@@ -56,9 +68,15 @@ False
 
 ### ResponseTimes.percentile
 
+<div class="api-signature" markdown="1">
+
 ```python
 def percentile(percent: int) -> float
 ```
+
+{% endraw %}{% include api-source.html name="ResponseTimes.percentile" line=53 %}{% raw %}
+
+</div>
 
 Interpolate a percentile between adjacent observations in a
 nonempty sample.
@@ -82,9 +100,15 @@ nonempty sample.
 
 ### ResponseTimes.grade
 
+<div class="api-signature" markdown="1">
+
 ```python
 def grade(milliseconds: int) -> Rating
 ```
+
+{% endraw %}{% include api-source.html name="ResponseTimes.grade" line=84 %}{% raw %}
+
+</div>
 
 Grade a correct first answer against earlier answers to this
 exercise.

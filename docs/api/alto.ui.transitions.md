@@ -27,6 +27,8 @@ different ones share one player.
 
 ## Sprite
 
+<div class="api-signature" markdown="1">
+
 ```python
 Sprite(
     pixmap: QPixmap,
@@ -42,6 +44,10 @@ Sprite(
     reveal_from: int = 1,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Sprite" line=61 %}{% raw %}
+
+</div>
 
 A photograph of one card, and how it is drawn at this moment.
 
@@ -72,6 +78,8 @@ A photograph of one card, and how it is drawn at this moment.
 
 ## Scene
 
+<div class="api-signature" markdown="1">
+
 ```python
 Scene(
     time: float,
@@ -80,6 +88,10 @@ Scene(
     direction: int,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Scene" line=116 %}{% raw %}
+
+</div>
 
 What a transition is given at each moment: the time, the two sets of
 sprites and the direction.
@@ -102,9 +114,15 @@ sprites and the direction.
 
 ## ease_out
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ease_out(progress: float) -> float
 ```
+
+{% endraw %}{% include api-source.html name="ease_out" line=146 %}{% raw %}
+
+</div>
 
 Ease a progress from 0 to 1 so that it starts fast and slows to a
 stop.
@@ -126,6 +144,8 @@ stop.
 
 ## ramp
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ramp(
     time: float,
@@ -134,6 +154,10 @@ def ramp(
     length: float,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="ramp" line=170 %}{% raw %}
+
+</div>
 
 Say how far along a part of a transition is, from 0 before it starts
 to 1 once it has finished.
@@ -161,9 +185,15 @@ to 1 once it has finished.
 
 ## hide
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hide(sprites: Sequence[Sprite]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="hide" line=206 %}{% raw %}
+
+</div>
 
 Make sprites invisible.
 
@@ -184,9 +214,15 @@ Make sprites invisible.
 
 ## fade_in
 
+<div class="api-signature" markdown="1">
+
 ```python
 def fade_in(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="fade_in" line=228 %}{% raw %}
+
+</div>
 
 Set the sprites for a fade in: the new cards fade up from clear, and
 nothing of the old remains.
@@ -212,9 +248,15 @@ nothing of the old remains.
 
 ## crossfade
 
+<div class="api-signature" markdown="1">
+
 ```python
 def crossfade(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="crossfade" line=257 %}{% raw %}
+
+</div>
 
 Set the sprites for a crossfade: the old cards fade out as the new
 ones fade in.
@@ -252,9 +294,15 @@ ones fade in.
 
 ## slide
 
+<div class="api-signature" markdown="1">
+
 ```python
 def slide(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="slide" line=300 %}{% raw %}
+
+</div>
 
 Set the sprites for a slide: both sets move sideways, toward the
 side of the switch that was pressed.
@@ -280,9 +328,15 @@ side of the switch that was pressed.
 
 ## rise
 
+<div class="api-signature" markdown="1">
+
 ```python
 def rise(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="rise" line=337 %}{% raw %}
+
+</div>
 
 Set the sprites for a rise: the old cards sink and fade, and the new
 ones rise into place.
@@ -308,9 +362,15 @@ ones rise into place.
 
 ## cascade
 
+<div class="api-signature" markdown="1">
+
 ```python
 def cascade(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="cascade" line=371 %}{% raw %}
+
+</div>
 
 Set the sprites for a cascade: the new cards arrive one after
 another, each rising a little as it appears.
@@ -340,9 +400,15 @@ True
 
 ## zoom
 
+<div class="api-signature" markdown="1">
+
 ```python
 def zoom(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="zoom" line=405 %}{% raw %}
+
+</div>
 
 Set the sprites for a zoom: the old cards grow a little as they
 fade, and the new ones grow into place.
@@ -368,9 +434,15 @@ fade, and the new ones grow into place.
 
 ## flip
 
+<div class="api-signature" markdown="1">
+
 ```python
 def flip(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="flip" line=441 %}{% raw %}
+
+</div>
 
 Set the sprites for a flip: each old card turns edge on and goes,
 then each new one turns face on.
@@ -396,9 +468,15 @@ then each new one turns face on.
 
 ## blur
 
+<div class="api-signature" markdown="1">
+
 ```python
 def blur(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="blur" line=479 %}{% raw %}
+
+</div>
 
 Set the sprites for a blur: the old cards dissolve into a blur and
 the new ones come into focus.
@@ -424,9 +502,15 @@ the new ones come into focus.
 
 ## wipe
 
+<div class="api-signature" markdown="1">
+
 ```python
 def wipe(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="wipe" line=513 %}{% raw %}
+
+</div>
 
 Set the sprites for a wipe: the new cards are uncovered from one
 side while the old ones fade.
@@ -455,9 +539,15 @@ side while the old ones fade.
 
 ## drop
 
+<div class="api-signature" markdown="1">
+
 ```python
 def drop(scene: Scene) -> None
 ```
+
+{% endraw %}{% include api-source.html name="drop" line=547 %}{% raw %}
+
+</div>
 
 Set the sprites for drop and pop: the old cards drop away one by
 one, then the new ones pop in with a small bounce.
@@ -483,6 +573,8 @@ one, then the new ones pop in with a small bounce.
 
 ## Transition
 
+<div class="api-signature" markdown="1">
+
 ```python
 Transition(
     key: str,
@@ -492,6 +584,10 @@ Transition(
     length: Callable[[Scene], float] = field(default=lambda scene: 0.0, compare=False),
 )
 ```
+
+{% endraw %}{% include api-source.html name="Transition" line=590 %}{% raw %}
+
+</div>
 
 One way of moving between the exercises and the lessons.
 
@@ -512,6 +608,8 @@ True
 
 ## Motion
 
+<div class="api-signature" markdown="1">
+
 ```python
 Motion(
     length: float = 320.0,
@@ -531,6 +629,10 @@ Motion(
     reveal: str = '',
 )
 ```
+
+{% endraw %}{% include api-source.html name="Motion" line=642 %}{% raw %}
+
+</div>
 
 How one set of cards moves in a transition built from parts: when
 each card starts, how long it takes, and what it does.
@@ -566,6 +668,8 @@ look to rest) and leaving (from rest to that look).
 
 ## eased
 
+<div class="api-signature" markdown="1">
+
 ```python
 def eased(
     progress: float,
@@ -573,6 +677,10 @@ def eased(
     how: str,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="eased" line=712 %}{% raw %}
+
+</div>
 
 Time a progress from 0 to 1 in one of the ways a motion can be
 eased.
@@ -601,6 +709,8 @@ True
 
 ## ranks
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ranks(
     sprites: Sequence[Sprite],
@@ -608,6 +718,10 @@ def ranks(
     order: str,
 ) -> list[int]
 ```
+
+{% endraw %}{% include api-source.html name="ranks" line=761 %}{% raw %}
+
+</div>
 
 Say where each sprite comes in an order: 0 for the first to start.
 
@@ -640,6 +754,8 @@ Say where each sprite comes in an order: 0 for the first to start.
 
 ## span
 
+<div class="api-signature" markdown="1">
+
 ```python
 def span(
     motion: Motion,
@@ -647,6 +763,10 @@ def span(
     count: int,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="span" line=833 %}{% raw %}
+
+</div>
 
 Say how long a motion takes for a number of cards, from when it
 starts to when the last card has finished.
@@ -676,6 +796,8 @@ starts to when the last card has finished.
 
 ## move
 
+<div class="api-signature" markdown="1">
+
 ```python
 def move(
     scene: Scene,
@@ -684,6 +806,10 @@ def move(
     arriving: Motion,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="move" line=869 %}{% raw %}
+
+</div>
 
 Set the sprites for a transition built from a motion for the cards
 that leave and one for the cards that arrive.
@@ -713,6 +839,8 @@ that leave and one for the cards that arrive.
 
 ## built
 
+<div class="api-signature" markdown="1">
+
 ```python
 def built(
     *,
@@ -720,6 +848,10 @@ def built(
     arriving: Motion,
 ) -> tuple[Callable[[Scene], None], Callable[[Scene], float]]
 ```
+
+{% endraw %}{% include api-source.html name="built" line=1014 %}{% raw %}
+
+</div>
 
 Make the frame and length functions of a transition built from
 motions.
@@ -761,6 +893,8 @@ motions.
 
 ## made
 
+<div class="api-signature" markdown="1">
+
 ```python
 def made(
     key: str,
@@ -771,6 +905,10 @@ def made(
     arriving: Motion,
 ) -> Transition
 ```
+
+{% endraw %}{% include api-source.html name="made" line=1102 %}{% raw %}
+
+</div>
 
 Make a transition from motions.
 
@@ -801,9 +939,15 @@ Make a transition from motions.
 
 ## transition_named
 
+<div class="api-signature" markdown="1">
+
 ```python
 def transition_named(key: str) -> Transition
 ```
+
+{% endraw %}{% include api-source.html name="transition_named" line=1487 %}{% raw %}
+
+</div>
 
 Find a transition by its key.
 
@@ -827,9 +971,15 @@ Find a transition by its key.
 
 ## saved_transition
 
+<div class="api-signature" markdown="1">
+
 ```python
 def saved_transition() -> str
 ```
+
+{% endraw %}{% include api-source.html name="saved_transition" line=1516 %}{% raw %}
+
+</div>
 
 Return the key of the transition that is chosen in the settings.
 
@@ -847,9 +997,15 @@ Return the key of the transition that is chosen in the settings.
 
 ## save_transition
 
+<div class="api-signature" markdown="1">
+
 ```python
 def save_transition(key: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="save_transition" line=1541 %}{% raw %}
+
+</div>
 
 Remember which transition to use.
 
@@ -868,6 +1024,8 @@ Remember which transition to use.
 
 ## paint_sprites
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paint_sprites(
     painter: QPainter,
@@ -875,6 +1033,10 @@ def paint_sprites(
     sprites: Sequence[Sprite],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="paint_sprites" line=1560 %}{% raw %}
+
+</div>
 
 Draw sprites as they now look.
 
@@ -906,9 +1068,15 @@ True
 
 ## TransitionCanvas
 
+<div class="api-signature" markdown="1">
+
 ```python
 TransitionCanvas(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="TransitionCanvas" line=1639 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -947,9 +1115,15 @@ True
 
 ### TransitionCanvas.cover
 
+<div class="api-signature" markdown="1">
+
 ```python
 def cover(old: list[Sprite]) -> None
 ```
+
+{% endraw %}{% include api-source.html name="TransitionCanvas.cover" line=1692 %}{% raw %}
+
+</div>
 
 Show the old cards on the canvas as they are, so that they can
 be swapped for the new ones unseen.
@@ -969,6 +1143,8 @@ True
 
 ### TransitionCanvas.play
 
+<div class="api-signature" markdown="1">
+
 ```python
 def play(
     transition: Transition,
@@ -977,6 +1153,10 @@ def play(
     direction: int,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="TransitionCanvas.play" line=1718 %}{% raw %}
+
+</div>
 
 Play a transition from the old cards that cover the canvas to
 the new ones.
@@ -1002,9 +1182,15 @@ True
 
 ### TransitionCanvas.stop
 
+<div class="api-signature" markdown="1">
+
 ```python
 def stop() -> None
 ```
+
+{% endraw %}{% include api-source.html name="TransitionCanvas.stop" line=1763 %}{% raw %}
+
+</div>
 
 End the transition at once and take the canvas away.
 
@@ -1020,9 +1206,15 @@ End the transition at once and take the canvas away.
 
 ### TransitionCanvas.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="TransitionCanvas.paintEvent" line=1808 %}{% raw %}
+
+</div>
 
 Draw every sprite as it now looks.
 

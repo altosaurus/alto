@@ -5,7 +5,7 @@
     <img class="for-light" src="{{ image | append: '.png' | relative_url }}" alt="{{ include.alt | escape }}" width="{{ include.width }}" height="{{ include.height }}" loading="lazy">
     <img class="for-dark" src="{{ image | append: '-dark.png' | relative_url }}" alt="{{ include.alt | escape }}" width="{{ include.width }}" height="{{ include.height }}" loading="lazy">
     {% for region in regions %}
-    <a class="component-region" href="{{ region.href | relative_url }}" aria-label="{{ region.label | escape }} ({{ region.type }})" title="{{ region.label | escape }} ({{ region.type }})"
+    <a class="component-region{% if region.group %} component-group{% endif %}" href="{{ region.href | relative_url }}" aria-label="{{ region.label | escape }} ({{ region.type }})" title="{{ region.label | escape }} ({{ region.type }})"
        style="left: {{ region.rect[0] }}%; top: {{ region.rect[1] }}%; width: {{ region.rect[2] }}%; height: {{ region.rect[3] }}%"><span aria-hidden="true">{{ forloop.index }}</span></a>
     {% endfor %}
   </div>

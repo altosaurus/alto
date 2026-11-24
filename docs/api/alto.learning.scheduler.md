@@ -47,6 +47,8 @@ or removes strain on top: very quick
 
 ## arts_priority
 
+<div class="api-signature" markdown="1">
+
 ```python
 def arts_priority(
     intervening: int,
@@ -55,6 +57,10 @@ def arts_priority(
     duration_ms: int,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="arts_priority" line=66 %}{% raw %}
+
+</div>
 
 Score a previously answered item for Adaptive Response-Time-based
 Sequencing.
@@ -84,6 +90,8 @@ Sequencing.
 
 ## speed_term
 
+<div class="api-signature" markdown="1">
+
 ```python
 def speed_term(
     seconds: float,
@@ -91,6 +99,10 @@ def speed_term(
     par_seconds: float,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="speed_term" line=110 %}{% raw %}
+
+</div>
 
 Return the strain change for how long the first answer took.
 
@@ -122,6 +134,8 @@ Return the strain change for how long the first answer took.
 
 ## update_strain
 
+<div class="api-signature" markdown="1">
+
 ```python
 def update_strain(
     strain: float,
@@ -132,6 +146,10 @@ def update_strain(
     par_seconds: float,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="update_strain" line=156 %}{% raw %}
+
+</div>
 
 Return the question's strain after one more answer.
 
@@ -181,6 +199,8 @@ Return the question's strain after one more answer.
 
 ## weight
 
+<div class="api-signature" markdown="1">
+
 ```python
 def weight(
     strain: float | None,
@@ -189,6 +209,10 @@ def weight(
     now: float,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="weight" line=230 %}{% raw %}
+
+</div>
 
 Return how likely a question is to be picked, relative to the
 others.
@@ -228,6 +252,8 @@ returns within the minute.
 
 ## choose
 
+<div class="api-signature" markdown="1">
+
 ```python
 def choose(
     options: Sequence[T],
@@ -236,6 +262,10 @@ def choose(
     rng: random.Random,
 ) -> T
 ```
+
+{% endraw %}{% include api-source.html name="choose" line=284 %}{% raw %}
+
+</div>
 
 Pick one option at random, in proportion to its weight.
 

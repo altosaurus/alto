@@ -40,18 +40,30 @@ True
 
 ## CellMaker
 
+<div class="api-signature" markdown="1">
+
 ```python
 class CellMaker(Protocol)
 ```
+
+{% endraw %}{% include api-source.html name="CellMaker" line=52 %}{% raw %}
+
+</div>
 
 A function that gives the cell at a place on a ring its quiet and
 lit colors.
 
 ## CustomRecord
 
+<div class="api-signature" markdown="1">
+
 ```python
 class CustomRecord(TypedDict)
 ```
+
+{% endraw %}{% include api-source.html name="CustomRecord" line=103 %}{% raw %}
+
+</div>
 
 A scheme of the user's own, as it is saved.
 
@@ -65,6 +77,8 @@ A scheme of the user's own, as it is saved.
 
 ## Scheme
 
+<div class="api-signature" markdown="1">
+
 ```python
 Scheme(
     key: str,
@@ -74,6 +88,10 @@ Scheme(
     cells: dict[str, tuple[Cell, ...]],
 )
 ```
+
+{% endraw %}{% include api-source.html name="Scheme" line=130 %}{% raw %}
+
+</div>
 
 A color scheme for the circle.
 
@@ -87,6 +105,8 @@ A color scheme for the circle.
 
 ### Scheme.color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def color(
     ring: str,
@@ -95,6 +115,10 @@ def color(
     lift: float,
 ) -> tuple[float, float, float]
 ```
+
+{% endraw %}{% include api-source.html name="Scheme.color" line=156 %}{% raw %}
+
+</div>
 
 Return the color of a cell as it is lit.
 
@@ -124,9 +148,15 @@ True
 
 ### Scheme.names
 
+<div class="api-signature" markdown="1">
+
 ```python
 def names() -> dict[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="Scheme.names" line=201 %}{% raw %}
+
+</div>
 
 Return the colors of the names written on the wedges.
 
@@ -146,6 +176,8 @@ Return the colors of the names written on the wedges.
 
 ## rgb_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def rgb_of(
     color: Hsl,
@@ -153,6 +185,10 @@ def rgb_of(
     capped: bool,
 ) -> tuple[float, float, float]
 ```
+
+{% endraw %}{% include api-source.html name="rgb_of" line=222 %}{% raw %}
+
+</div>
 
 Turn a color into red, green and blue, keeping a dark circle's cells
 from getting too bright.
@@ -184,9 +220,15 @@ True
 
 ## hex_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hex_of(rgb: tuple[float, float, float]) -> str
 ```
+
+{% endraw %}{% include api-source.html name="hex_of" line=276 %}{% raw %}
+
+</div>
 
 Write a color as "#rrggbb".
 
@@ -207,9 +249,15 @@ Write a color as "#rrggbb".
 
 ## hsl_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def hsl_of(text: str) -> Hsl
 ```
+
+{% endraw %}{% include api-source.html name="hsl_of" line=300 %}{% raw %}
+
+</div>
 
 Read a color written as "#rrggbb".
 
@@ -230,9 +278,15 @@ Read a color written as "#rrggbb".
 
 ## signature_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def signature_of(place: int) -> int
 ```
+
+{% endraw %}{% include api-source.html name="signature_of" line=324 %}{% raw %}
+
+</div>
 
 Return how far a place is from C, with flats as negative: the key
 signature of the major key there.
@@ -257,9 +311,15 @@ signature of the major key there.
 
 ## preset
 
+<div class="api-signature" markdown="1">
+
 ```python
 def preset(key: str) -> Scheme
 ```
+
+{% endraw %}{% include api-source.html name="preset" line=709 %}{% raw %}
+
+</div>
 
 Return a preset by its key.
 
@@ -286,6 +346,8 @@ Return a preset by its key.
 
 ## record_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def record_of(
     key: str,
@@ -296,6 +358,10 @@ def record_of(
     light: bool = False,
 ) -> CustomRecord
 ```
+
+{% endraw %}{% include api-source.html name="record_of" line=738 %}{% raw %}
+
+</div>
 
 Make the record of a scheme of the user's own.
 
@@ -325,9 +391,15 @@ False
 
 ## clean_record
 
+<div class="api-signature" markdown="1">
+
 ```python
 def clean_record(raw: object) -> CustomRecord | None
 ```
+
+{% endraw %}{% include api-source.html name="clean_record" line=786 %}{% raw %}
+
+</div>
 
 Check one saved scheme of the user's own, and tidy it.
 
@@ -373,9 +445,15 @@ True
 
 ## custom_scheme
 
+<div class="api-signature" markdown="1">
+
 ```python
 def custom_scheme(record: CustomRecord) -> Scheme
 ```
+
+{% endraw %}{% include api-source.html name="custom_scheme" line=866 %}{% raw %}
+
+</div>
 
 Make a scheme from one of the user's own records.
 
@@ -414,9 +492,15 @@ True
 
 ## dump_customs
 
+<div class="api-signature" markdown="1">
+
 ```python
 def dump_customs(records: list[CustomRecord]) -> str
 ```
+
+{% endraw %}{% include api-source.html name="dump_customs" line=991 %}{% raw %}
+
+</div>
 
 Write the user's own schemes as text to save.
 
@@ -437,9 +521,15 @@ Write the user's own schemes as text to save.
 
 ## load_customs
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load_customs(text: str) -> list[CustomRecord]
 ```
+
+{% endraw %}{% include api-source.html name="load_customs" line=1013 %}{% raw %}
+
+</div>
 
 Read the user's own schemes back, leaving out any that are not valid
 and any beyond the limit.
@@ -477,6 +567,8 @@ and any beyond the limit.
 
 ## resolve
 
+<div class="api-signature" markdown="1">
+
 ```python
 def resolve(
     key: str,
@@ -484,6 +576,10 @@ def resolve(
     customs: list[CustomRecord],
 ) -> Scheme
 ```
+
+{% endraw %}{% include api-source.html name="resolve" line=1065 %}{% raw %}
+
+</div>
 
 Find a scheme by its key, among the presets and the user's own,
 falling back to the default.
@@ -509,9 +605,15 @@ falling back to the default.
 
 ## next_custom_key
 
+<div class="api-signature" markdown="1">
+
 ```python
 def next_custom_key(customs: list[CustomRecord]) -> str
 ```
+
+{% endraw %}{% include api-source.html name="next_custom_key" line=1109 %}{% raw %}
+
+</div>
 
 Return a key that none of the user's schemes has.
 

@@ -27,6 +27,8 @@ and its name (or its Roman numeral) is blank until the answer is right.
 
 ## wedge_path
 
+<div class="api-signature" markdown="1">
+
 ```python
 def wedge_path(
     *,
@@ -36,6 +38,10 @@ def wedge_path(
     index: int,
 ) -> QPainterPath
 ```
+
+{% endraw %}{% include api-source.html name="wedge_path" line=113 %}{% raw %}
+
+</div>
 
 Return the outline of one wedge of a ring.
 
@@ -68,6 +74,8 @@ Return the outline of one wedge of a ring.
 
 ## wedge_middle
 
+<div class="api-signature" markdown="1">
+
 ```python
 def wedge_middle(
     *,
@@ -76,6 +84,10 @@ def wedge_middle(
     index: int,
 ) -> QPointF
 ```
+
+{% endraw %}{% include api-source.html name="wedge_middle" line=180 %}{% raw %}
+
+</div>
 
 Return the point in the middle of a wedge, at a given distance from
 the center.
@@ -111,6 +123,8 @@ the center.
 
 ## wedge_color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def wedge_color(
     index: int,
@@ -120,6 +134,10 @@ def wedge_color(
     scheme: Scheme | None = None,
 ) -> QColor
 ```
+
+{% endraw %}{% include api-source.html name="wedge_color" line=230 %}{% raw %}
+
+</div>
 
 Return the color of a wedge in a color scheme: quiet when it is not
 being talked about and bright when it is.
@@ -185,6 +203,8 @@ True
 
 ## write_text
 
+<div class="api-signature" markdown="1">
+
 ```python
 def write_text(
     p: QPainter,
@@ -197,6 +217,10 @@ def write_text(
     max_width: float | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="write_text" line=313 %}{% raw %}
+
+</div>
 
 Write a line of text centered on a point, with its sharps and flats
 drawn as the notation font draws them.
@@ -245,9 +269,15 @@ True
 
 ## FifthsCircle
 
+<div class="api-signature" markdown="1">
+
 ```python
 FifthsCircle(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle" line=460 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -293,9 +323,15 @@ True
 
 ### FifthsCircle.sizeHint
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sizeHint() -> QSize
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.sizeHint" line=539 %}{% raw %}
+
+</div>
 
 Return the size it would like: a square, big enough to read.
 
@@ -312,9 +348,15 @@ Return the size it would like: a square, big enough to read.
 
 ### FifthsCircle.set_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_question(question: Question) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.set_question" line=555 %}{% raw %}
+
+</div>
 
 Display a circle question using its caption and selected cell.
 
@@ -330,6 +372,8 @@ A numeral question highlights the selected chord's key.
 
 ### FifthsCircle.show_question
 
+<div class="api-signature" markdown="1">
+
 ```python
 def show_question(
     kind: str,
@@ -340,6 +384,10 @@ def show_question(
     key: int | None = None,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.show_question" line=577 %}{% raw %}
+
+</div>
 
 Ask about a cell, showing what the question needs and leaving
 the answer blank.
@@ -389,9 +437,15 @@ asks for the Roman numeral of one of them.
 
 ### FifthsCircle.reset
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reset() -> None
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.reset" line=753 %}{% raw %}
+
+</div>
 
 Clear everything: no question, no names shown, no animation
 running.
@@ -414,12 +468,18 @@ True
 
 ### FifthsCircle.reveal
 
+<div class="api-signature" markdown="1">
+
 ```python
 def reveal(
     *,
     animate: bool = True,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.reveal" line=785 %}{% raw %}
+
+</div>
 
 Show the answer: the key's name in its cell, brightened, and its
 staff and key signature in the middle.
@@ -452,9 +512,15 @@ numeral, as the circle in the reference does.
 
 ### FifthsCircle.set_subtitle
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_subtitle(text: str) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.set_subtitle" line=837 %}{% raw %}
+
+</div>
 
 Change the small text in the middle, for example to say that a
 second answer is wanted.
@@ -474,9 +540,15 @@ second answer is wanted.
 
 ### FifthsCircle.flash_wrong
 
+<div class="api-signature" markdown="1">
+
 ```python
 def flash_wrong() -> None
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.flash_wrong" line=857 %}{% raw %}
+
+</div>
 
 Flash the cell asked about in the red of a wrong answer, striped
 as well so that it still shows on the red wedge.
@@ -495,6 +567,8 @@ True
 
 ### FifthsCircle.lift_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def lift_of(
     ring: str,
@@ -502,6 +576,10 @@ def lift_of(
     place: int,
 ) -> float
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.lift_of" line=948 %}{% raw %}
+
+</div>
 
 Return how bright a cell is drawn, from 0 (quiet) to 1 (fully
 lit).
@@ -540,9 +618,15 @@ chords of the key are lit instead.
 
 ### FifthsCircle.geometry_of
 
+<div class="api-signature" markdown="1">
+
 ```python
 def geometry_of() -> tuple[QPointF, float]
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.geometry_of" line=999 %}{% raw %}
+
+</div>
 
 Return where the circle is drawn: its middle and its radius.
 
@@ -568,9 +652,15 @@ True
 
 ### FifthsCircle.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="FifthsCircle.paintEvent" line=1028 %}{% raw %}
+
+</div>
 
 Draw the two rings, the names, the question and the disc in the
 middle.
@@ -593,9 +683,15 @@ False
 
 ## question_circle
 
+<div class="api-signature" markdown="1">
+
 ```python
 def question_circle(question: Question) -> FifthsCircle
 ```
+
+{% endraw %}{% include api-source.html name="question_circle" line=1381 %}{% raw %}
+
+</div>
 
 Build a fixed-size circle for a question preview or export.
 

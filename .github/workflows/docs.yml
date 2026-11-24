@@ -149,6 +149,7 @@ jobs:
           build() { # build FOLDER LABEL: the docs in source/ into site/FOLDER, which a page knows as LABEL
             rm -rf "site/$1"
             printf 'baseurl: %s/%s\ndocs_version: %s\napp_version: "%s"\n' "$SITE_PATH" "$1" "$2" "$APP_VERSION" > version.yml
+            printf 'source_revision: "%s"\n' "$(git -C source rev-parse HEAD)" >> version.yml
             bundle exec jekyll build --source source/docs --destination "site/$1" --config "source/docs/_config.yml,version.yml"
             bundle exec ruby tooling/scripts/docs_search.rb "site/$1"
           }

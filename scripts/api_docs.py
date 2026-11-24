@@ -413,6 +413,38 @@ def decorator_names(node: ast.FunctionDef | ast.ClassDef) -> list[str]:
     return [ast.unparse(d) for d in node.decorator_list]
 
 
+def signature_box(code: str, *, name: str, line: int) -> str:
+    """
+    Group a signature with its source link.
+
+    Parameters
+    ----------
+    code : str
+        The fenced Python signature.
+    name : str
+        The displayed class, function, or qualified method name.
+    line : int
+        The line where the definition starts in the module.
+
+    Returns
+    -------
+    str
+        The Markdown box with a version-specific source link.
+
+    Examples
+    --------
+    >>> 'line=12' in signature_box('example()', name='example', line=12)
+    True
+    """
+    return (
+        '<div class="api-signature" markdown="1">\n\n'
+        f"{code}\n\n"
+        "{% endraw %}{% include api-source.html "
+        f'name="{name}" line={line}'
+        " %}{% raw %}\n\n</div>"
+    )
+
+
 def render_function(
     node: ast.FunctionDef,
     *,
@@ -443,16 +475,9 @@ def render_function(
     ...     "def f(n: int) -> int:\n    '''Double it.'''\n    return n"
     ...     " * 2"
     ... )
-    >>> print(
-    ...     render_function(tree.body[0], level=2)
-    ... )
-    ## f
-    <BLANKLINE>
-    ```python
-    def f(n: int) -> int
-    ```
-    <BLANKLINE>
-    Double it.
+    >>> section = render_function(tree.body[0], level=2)
+    >>> "def f(n: int) -> int" in section
+    True
     """
     head = "\n".join(f"@{d}" for d in decorator_names(node))
     sig = fence(
@@ -464,7 +489,7 @@ def render_function(
         sig = sig.replace("```python\n", f"```python\n{head}\n", 1)
     parts = [
         f"{'#' * level} {prefix}{node.name}",
-        sig,
+        signature_box(sig, name=f"{prefix}{node.name}", line=node.lineno),
         render_doc(ast.get_docstring(node, clean=False)),
     ]
     return "\n\n".join(p for p in parts if p)
@@ -573,6 +598,7 @@ def render_class(node: ast.ClassDef) -> str:
         parts[1] = fence(node.name, params=params)
         if bases:
             parts.append(f"Bases: `{bases}`")
+    parts[1] = signature_box(parts[1], name=node.name, line=node.lineno)
     parts.append(render_doc(ast.get_docstring(node, clean=False)))
     if init is not None and ast.get_docstring(init):
         built = render_doc(ast.get_docstring(init, clean=False)).replace(

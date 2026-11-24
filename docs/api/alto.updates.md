@@ -36,6 +36,8 @@ file, and the file's hash is the one listed.
 
 ## Source
 
+<div class="api-signature" markdown="1">
+
 ```python
 Source(
     url: str,
@@ -43,6 +45,10 @@ Source(
     ref: str = 'HEAD',
 )
 ```
+
+{% endraw %}{% include api-source.html name="Source" line=101 %}{% raw %}
+
+</div>
 
 Where an installed copy of Alto came from.
 
@@ -64,9 +70,15 @@ Where an installed copy of Alto came from.
 
 ## short
 
+<div class="api-signature" markdown="1">
+
 ```python
 def short(commit: str) -> str
 ```
+
+{% endraw %}{% include api-source.html name="short" line=129 %}{% raw %}
+
+</div>
 
 Shorten a commit id to the seven characters people use for it.
 
@@ -89,9 +101,15 @@ Shorten a commit id to the seven characters people use for it.
 
 ## parse_direct_url
 
+<div class="api-signature" markdown="1">
+
 ```python
 def parse_direct_url(text: str) -> Source | None
 ```
+
+{% endraw %}{% include api-source.html name="parse_direct_url" line=153 %}{% raw %}
+
+</div>
 
 Read where a package was installed from, out of the
 `direct_url.json` that the installer leaves with it.
@@ -132,9 +150,15 @@ True
 
 ## installed_source
 
+<div class="api-signature" markdown="1">
+
 ```python
 def installed_source() -> Source | None
 ```
+
+{% endraw %}{% include api-source.html name="installed_source" line=217 %}{% raw %}
+
+</div>
 
 Say where the Alto that is running was installed from.
 
@@ -154,12 +178,18 @@ True
 
 ## is_tool_install
 
+<div class="api-signature" markdown="1">
+
 ```python
 def is_tool_install(
     *,
     prefix: Path | None = None,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="is_tool_install" line=243 %}{% raw %}
+
+</div>
 
 Say whether Alto is running from an environment that `uv tool` made,
 which is what the install script makes.
@@ -181,9 +211,15 @@ False
 
 ## InstallKind
 
+<div class="api-signature" markdown="1">
+
 ```python
 class InstallKind(Enum)
 ```
+
+{% endraw %}{% include api-source.html name="InstallKind" line=270 %}{% raw %}
+
+</div>
 
 How the running copy of Alto got where it is, which decides how it
 can be updated.
@@ -204,9 +240,15 @@ can be updated.
 
 ## is_frozen
 
+<div class="api-signature" markdown="1">
+
 ```python
 def is_frozen() -> bool
 ```
+
+{% endraw %}{% include api-source.html name="is_frozen" line=301 %}{% raw %}
+
+</div>
 
 Say whether Alto is running as a packaged build, made with
 PyInstaller, rather than from Python.
@@ -224,6 +266,8 @@ False
 
 ## install_kind
 
+<div class="api-signature" markdown="1">
+
 ```python
 def install_kind(
     source: Source | None,
@@ -232,6 +276,10 @@ def install_kind(
     frozen: bool,
 ) -> InstallKind
 ```
+
+{% endraw %}{% include api-source.html name="install_kind" line=319 %}{% raw %}
+
+</div>
 
 Decide what kind of copy of Alto this is.
 
@@ -273,9 +321,15 @@ Decide what kind of copy of Alto this is.
 
 ## cannot_update
 
+<div class="api-signature" markdown="1">
+
 ```python
 def cannot_update(kind: InstallKind) -> str | None
 ```
+
+{% endraw %}{% include api-source.html name="cannot_update" line=375 %}{% raw %}
+
+</div>
 
 Say why a kind of copy cannot update itself at all, if it cannot.
 
@@ -307,6 +361,8 @@ True
 
 ## find_program
 
+<div class="api-signature" markdown="1">
+
 ```python
 def find_program(
     name: str,
@@ -314,6 +370,10 @@ def find_program(
     home: Path | None = None,
 ) -> str | None
 ```
+
+{% endraw %}{% include api-source.html name="find_program" line=412 %}{% raw %}
+
+</div>
 
 Find a program to run, also in the places the installers put them,
 which a program started from the dock may not search.
@@ -338,6 +398,8 @@ True
 
 ## check_command
 
+<div class="api-signature" markdown="1">
+
 ```python
 def check_command(
     source: Source,
@@ -345,6 +407,10 @@ def check_command(
     git: str,
 ) -> tuple[str, list[str]]
 ```
+
+{% endraw %}{% include api-source.html name="check_command" line=452 %}{% raw %}
+
+</div>
 
 Give the command that asks the address Alto came from for the commit
 at the end of a branch or tag.
@@ -373,6 +439,8 @@ at the end of a branch or tag.
 
 ## install_command
 
+<div class="api-signature" markdown="1">
+
 ```python
 def install_command(
     source: Source,
@@ -381,6 +449,10 @@ def install_command(
     tag: str | None = None,
 ) -> tuple[str, list[str]]
 ```
+
+{% endraw %}{% include api-source.html name="install_command" line=487 %}{% raw %}
+
+</div>
 
 Give the command that installs Alto over the installed copy: a
 release, or the newest commit of the address.
@@ -415,9 +487,15 @@ move to the main branch and back.
 
 ## parse_ls_remote
 
+<div class="api-signature" markdown="1">
+
 ```python
 def parse_ls_remote(text: str) -> str | None
 ```
+
+{% endraw %}{% include api-source.html name="parse_ls_remote" line=536 %}{% raw %}
+
+</div>
 
 Read the commit id out of what `git ls-remote` printed.
 
@@ -448,6 +526,8 @@ Read the commit id out of what `git ls-remote` printed.
 
 ## Asset
 
+<div class="api-signature" markdown="1">
+
 ```python
 Asset(
     name: str,
@@ -455,6 +535,10 @@ Asset(
     size: int = 0,
 )
 ```
+
+{% endraw %}{% include api-source.html name="Asset" line=578 %}{% raw %}
+
+</div>
 
 A file of a release: the installer, the tarball, the checksums or
 their signature.
@@ -478,6 +562,8 @@ their signature.
 
 ## Release
 
+<div class="api-signature" markdown="1">
+
 ```python
 Release(
     version: str,
@@ -486,6 +572,10 @@ Release(
     assets: tuple[Asset, ...] = field(default=()),
 )
 ```
+
+{% endraw %}{% include api-source.html name="Release" line=608 %}{% raw %}
+
+</div>
 
 A release of Alto, as published on GitHub.
 
@@ -509,9 +599,15 @@ A release of Alto, as published on GitHub.
 
 ## version_key
 
+<div class="api-signature" markdown="1">
+
 ```python
 def version_key(text: str) -> tuple[int, ...] | None
 ```
+
+{% endraw %}{% include api-source.html name="version_key" line=639 %}{% raw %}
+
+</div>
 
 Turn a version, with or without the "v" of a tag, into numbers that
 can be compared.
@@ -539,6 +635,8 @@ can be compared.
 
 ## is_newer
 
+<div class="api-signature" markdown="1">
+
 ```python
 def is_newer(
     candidate: str,
@@ -546,6 +644,10 @@ def is_newer(
     installed: str,
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="is_newer" line=674 %}{% raw %}
+
+</div>
 
 Say whether one version is newer than another, comparing numbers and
 not text, so 0.10.0 is newer than 0.9.0.
@@ -578,9 +680,15 @@ False
 
 ## installed_version
 
+<div class="api-signature" markdown="1">
+
 ```python
 def installed_version() -> str
 ```
+
+{% endraw %}{% include api-source.html name="installed_version" line=718 %}{% raw %}
+
+</div>
 
 Give the version of Alto that is running.
 
@@ -597,9 +705,15 @@ True
 
 ## parse_latest_release
 
+<div class="api-signature" markdown="1">
+
 ```python
 def parse_latest_release(text: str) -> Release | None
 ```
+
+{% endraw %}{% include api-source.html name="parse_latest_release" line=740 %}{% raw %}
+
+</div>
 
 Read GitHub's answer about the latest release.
 
@@ -635,6 +749,8 @@ True
 
 ## release_answer
 
+<div class="api-signature" markdown="1">
+
 ```python
 def release_answer(
     status: int,
@@ -642,6 +758,10 @@ def release_answer(
     text: str,
 ) -> Release | str
 ```
+
+{% endraw %}{% include api-source.html name="release_answer" line=810 %}{% raw %}
+
+</div>
 
 Make sense of what came back when the latest release was asked for.
 
@@ -671,6 +791,8 @@ True
 
 ## fetch_text
 
+<div class="api-signature" markdown="1">
+
 ```python
 def fetch_text(
     url: str,
@@ -678,6 +800,10 @@ def fetch_text(
     seconds: int,
 ) -> tuple[int, str]
 ```
+
+{% endraw %}{% include api-source.html name="fetch_text" line=863 %}{% raw %}
+
+</div>
 
 Fetch a web address, waiting at most a number of seconds. It blocks,
 so the interface runs it on another thread.
@@ -702,9 +828,15 @@ so the interface runs it on another thread.
 
 ## ssl_context
 
+<div class="api-signature" markdown="1">
+
 ```python
 def ssl_context() -> ssl.SSLContext
 ```
+
+{% endraw %}{% include api-source.html name="ssl_context" line=915 %}{% raw %}
+
+</div>
 
 Make the settings for a secure connection, trusting the certificate
 authorities that come with Alto.
@@ -731,6 +863,8 @@ them somewhere else.
 
 ## platform_asset_name
 
+<div class="api-signature" markdown="1">
+
 ```python
 def platform_asset_name(
     version: str,
@@ -739,6 +873,10 @@ def platform_asset_name(
     machine: str,
 ) -> str | None
 ```
+
+{% endraw %}{% include api-source.html name="platform_asset_name" line=943 %}{% raw %}
+
+</div>
 
 Give the name of the file that updates a packaged copy on this
 system, as the release workflow names it.
@@ -778,6 +916,8 @@ True
 
 ## find_asset
 
+<div class="api-signature" markdown="1">
+
 ```python
 def find_asset(
     release: Release,
@@ -786,6 +926,10 @@ def find_asset(
     base: str = DOWNLOAD_BASE,
 ) -> Asset | None
 ```
+
+{% endraw %}{% include api-source.html name="find_asset" line=998 %}{% raw %}
+
+</div>
 
 Find a file of a release by its name, if it is at the address where
 a release keeps its files.
@@ -826,9 +970,15 @@ True
 
 ## parse_checksums
 
+<div class="api-signature" markdown="1">
+
 ```python
 def parse_checksums(text: str) -> dict[str, str]
 ```
+
+{% endraw %}{% include api-source.html name="parse_checksums" line=1055 %}{% raw %}
+
+</div>
 
 Read a `SHA256SUMS` file: a line for each file, with its SHA-256
 hash and its name.
@@ -860,6 +1010,8 @@ hash and its name.
 
 ## verify_signature
 
+<div class="api-signature" markdown="1">
+
 ```python
 def verify_signature(
     data: bytes,
@@ -868,6 +1020,10 @@ def verify_signature(
     keys: tuple[str, ...],
 ) -> bool
 ```
+
+{% endraw %}{% include api-source.html name="verify_signature" line=1097 %}{% raw %}
+
+</div>
 
 Say whether an Ed25519 signature of some data was made with one of
 the keys.
@@ -913,9 +1069,15 @@ False
 
 ## self_check
 
+<div class="api-signature" markdown="1">
+
 ```python
 def self_check() -> list[str]
 ```
+
+{% endraw %}{% include api-source.html name="self_check" line=1169 %}{% raw %}
+
+</div>
 
 Check, without any network, that what a copy needs to check an
 update is there and works.

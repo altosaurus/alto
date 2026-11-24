@@ -18,9 +18,15 @@ grid of schemes to pick from, and an editor to make one.
 
 ## blank
 
+<div class="api-signature" markdown="1">
+
 ```python
 def blank(key: str) -> CustomRecord
 ```
+
+{% endraw %}{% include api-source.html name="blank" line=66 %}{% raw %}
+
+</div>
 
 Make the scheme a new one starts as: colors by key signature, from
 cyan through blue to indigo, on dark wedges.
@@ -45,6 +51,8 @@ cyan through blue to indigo, on dark wedges.
 
 ## SchemeThumb
 
+<div class="api-signature" markdown="1">
+
 ```python
 SchemeThumb(
     scheme: Scheme,
@@ -53,6 +61,10 @@ SchemeThumb(
     parent: QWidget | None = None,
 )
 ```
+
+{% endraw %}{% include api-source.html name="SchemeThumb" line=98 %}{% raw %}
+
+</div>
 
 Bases: `QPushButton`
 
@@ -95,9 +107,15 @@ Build the picture.
 
 ### SchemeThumb.sizeHint
 
+<div class="api-signature" markdown="1">
+
 ```python
 def sizeHint() -> QSize
 ```
+
+{% endraw %}{% include api-source.html name="SchemeThumb.sizeHint" line=153 %}{% raw %}
+
+</div>
 
 Return the size it asks for.
 
@@ -117,9 +135,15 @@ Return the size it asks for.
 
 ### SchemeThumb.paintEvent
 
+<div class="api-signature" markdown="1">
+
 ```python
 def paintEvent(_: QPaintEvent) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SchemeThumb.paintEvent" line=172 %}{% raw %}
+
+</div>
 
 Draw the circle, with one cell asked and its relative lit, and a
 ring around it when it is the chosen scheme.
@@ -140,9 +164,15 @@ False
 
 ## SchemePage
 
+<div class="api-signature" markdown="1">
+
 ```python
 SchemePage(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="SchemePage" line=228 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -185,6 +215,8 @@ Build the page, empty until `load` is called.
 
 ### SchemePage.load
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load(
     *,
@@ -192,6 +224,10 @@ def load(
     customs: list[CustomRecord],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SchemePage.load" line=279 %}{% raw %}
+
+</div>
 
 Fill the page: a picture and a name for each scheme, with the
 current one marked.
@@ -224,9 +260,15 @@ current one marked.
 
 ## SchemeEditor
 
+<div class="api-signature" markdown="1">
+
 ```python
 SchemeEditor(parent: QWidget | None = None)
 ```
+
+{% endraw %}{% include api-source.html name="SchemeEditor" line=404 %}{% raw %}
+
+</div>
 
 Bases: `QWidget`
 
@@ -277,6 +319,8 @@ Build the editor.
 
 ### SchemeEditor.load
 
+<div class="api-signature" markdown="1">
+
 ```python
 def load(
     record: CustomRecord | None,
@@ -284,6 +328,10 @@ def load(
     taken: list[CustomRecord],
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SchemeEditor.load" line=515 %}{% raw %}
+
+</div>
 
 Start editing a scheme, or a new one.
 
@@ -306,9 +354,15 @@ Start editing a scheme, or a new one.
 
 ### SchemeEditor.record
 
+<div class="api-signature" markdown="1">
+
 ```python
 def record() -> CustomRecord
 ```
+
+{% endraw %}{% include api-source.html name="SchemeEditor.record" line=551 %}{% raw %}
+
+</div>
 
 Return the scheme as it is being edited.
 
@@ -327,6 +381,8 @@ Return the scheme as it is being edited.
 
 ### SchemeEditor.set_color
 
+<div class="api-signature" markdown="1">
+
 ```python
 def set_color(
     index: int,
@@ -334,6 +390,10 @@ def set_color(
     color: str,
 ) -> None
 ```
+
+{% endraw %}{% include api-source.html name="SchemeEditor.set_color" line=570 %}{% raw %}
+
+</div>
 
 Set one of the colors.
 
