@@ -334,7 +334,8 @@ def test_top_bar_version_then_theme_then_github_and_theme_only() -> None:
         layout.index('<div class="top-actions">') : layout.index("</header>")
     ]
     assert (
-        bar.index('id="version-slot"')
+        bar.index('id="docs-search-input"')
+        < bar.index('id="version-slot"')
         < bar.index('id="theme-button"')
         < bar.index('class="icon-link"')
     )
@@ -579,11 +580,10 @@ def test_home_page_download_button_and_download_section_in_place() -> None:
     )
     assert (
         "run Alto from its source code" in home
-        and "/getting-started/#install-and-run" in home
+        and "/getting-started/#mac-source-installation" in home
     )
-    assert "## Install and run" in (DOCS / "getting-started.md").read_text(
-        encoding="utf-8",
-    )  # the section that link goes to
+    guide = (DOCS / "getting-started.md").read_text(encoding="utf-8")
+    assert "### Mac source installation" in guide
 
 
 def test_file_names_in_download_section_ones_release_workflow() -> None:
@@ -855,8 +855,8 @@ def test_no_page_listed_twice_and_heading_page_pages_link() -> None:
     Check that the sidebar can list each page once: the titles differ,
     and a heading named like a page stands for that page.
 
-    "For developers" is both a heading and a page. The layout makes the
-    heading the page's link and leaves the page out of the
+    Each category heading links to its overview. The layout leaves
+    that page out of the
     list under it, so it appears once. Resources and the API reference
     are single rows that link to their page and
     open their chapters, so they appear once as well.
@@ -865,20 +865,24 @@ def test_no_page_listed_twice_and_heading_page_pages_link() -> None:
     titles = [page["title"] for page in pages]
     assert len(titles) == len(set(titles))
     same = [page for page in pages if page["title"] == page["group"]]
-    assert [page["title"] for page in same] == ["For developers"]
+    assert [page["title"] for page in same] == [
+        "Using Alto",
+        "For developers",
+        "About",
+    ]
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
     assert (
         'where: "title", group' in layout
         and 'unless group != "" and p.title == group' in layout
     )
-    assert (
-        layout.count("<summary") >= 4
-        and 'class="count"' not in layout
-        and "count"
-        not in layout.split("<nav")[1]
-        .split("</nav>")[0]
-        .replace("account", "")
-    )
+    category = (DOCS / "_includes" / "nav-category.html").read_text()
+    assert 'title="Contents" url="/contents/" %}' in layout
+    assert "{% if include.controls %}" in category
+    assert category.index("</a>") < category.index("<button")
+    assert 'aria-controls="{{ include.controls }}"' in category
+    assert 'class="count"' not in layout and "count" not in layout.split(
+        "<nav",
+    )[1].split("</nav>")[0].replace("account", "")
 
 
 def test_sidebar_opens_whatever_holds_current_page_and_groups() -> None:
@@ -890,7 +894,7 @@ def test_sidebar_opens_whatever_holds_current_page_and_groups() -> None:
     assert (
         "page.parent == p.children" in layout
         and "page.package == a.package" in layout
-        and "data-nav-group" in layout
+        and "include nav-category.html" in layout
     )
     script = (DOCS / "assets" / "js" / "nav.js").read_text(encoding="utf-8")
     assert (
@@ -958,9 +962,8 @@ def test_home_page_keeps_to_download_and_leaves_checking_and() -> None:
     assert (
         "offers to open its download page" not in guide
     )  # a packaged copy replaces itself now
-    assert guide.index("## Updating Alto") < guide.index(
-        "## Install and run",
-    )  # for everyone, not under the Linux-only script section
+    assert guide.index('id="os-picker"') < guide.index("## Install and run")
+    assert guide.index("## Install and run") < guide.index("## Updating Alto")
 
 
 def test_every_page_in_sidebar_ends_with_links_to_previous_and() -> None:

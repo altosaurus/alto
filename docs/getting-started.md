@@ -4,120 +4,224 @@ nav_order: 2
 nav_group: Using Alto
 permalink: /getting-started/
 ---
-## What you need
+{% include os-icons.html logos_only=true %}
 
-- Python 3.11 or newer.
-- A desktop operating system that runs Qt 6: Linux, macOS or Windows.
-- Alto installs [PySide6](https://doc.qt.io/qtforpython-6/) (6.8 or newer) for you.
+<fieldset class="os-picker" id="os-picker">
+  <legend>Operating system</legend>
+  <label><input type="radio" name="guide-os" value="linux" checked><span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#os-linux"/></svg>Linux</span></label>
+  <label><input type="radio" name="guide-os" value="windows"><span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#os-windows"/></svg>Windows</span></label>
+  <label><input type="radio" name="guide-os" value="macos"><span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#os-apple"/></svg>Mac</span></label>
+</fieldset>
 
-The default notation style, Finale Maestro, uses a font that comes with Alto, so nothing more needs to be installed. Only the
-"Noto Music" style reads a font from your system; most Linux distributions include it in their Noto font packages. You can
-change the notation style in [Settings]({{ '/settings/' | relative_url }}).
+{% assign release = 'https://github.com/altosaurus/alto/releases' %}
+{% assign v = site.app_version %}
+{% if v != empty and v %}
+{% assign assets = release | append: '/download/v' | append: v | append: '/' %}
+{% assign linux_download = assets | append: 'alto-' | append: v | append: '-linux-x86_64.tar.gz' %}
+{% assign windows_download = assets | append: 'alto-' | append: v | append: '-windows-x64-setup.exe' %}
+{% endif %}
+<span id="what-you-need"></span><span id="download-and-install"></span>
 
-## Download and install
+## Install and run
 
-Each release on the [Releases page](https://github.com/altosaurus/alto/releases) has a Linux download and a Windows installer. They
-carry their own Python and Qt, so nothing else needs to be installed, apart from Microsoft's Visual C++ Runtime on Windows,
-which the installer takes care of.
+<div data-platforms="linux" markdown="1">
 
-**Linux.** Download `alto-<version>-linux-x86_64.tar.gz`, unpack it, and in the folder it makes run:
+### Linux download
+{: .no-toc}
 
-```bash
-sh install.sh install
-```
+1. [Download Alto for Linux]({{ linux_download | default: release }}) for an x86-64 desktop. The archive includes Python and Qt.
+2. Extract the archive, open a terminal in the extracted folder, and run `sh install.sh install`.
+3. Open **Alto** from your application menu.
 
-This copies Alto to `~/.local/opt/alto`, links it as `~/.local/bin/alto`, and adds Alto to your application menu, for you only, with no
-root. To update, unpack the newer download and run the same command. `sh install.sh uninstall` removes Alto and keeps your practice
-history and settings; add `--purge` to delete those too (use **Export backup…** first if you might want them back).
+The installer puts Alto in `~/.local/opt/alto` and creates the command `~/.local/bin/alto` for your account.
+For other processor architectures, see [Running from a source checkout](#running-from-a-source-checkout).
 
-**Windows.** Download `alto-<version>-windows-x64-setup.exe` and run it. It installs for you only, with no administrator prompt, adds
-Alto to the Start menu, and lists it in Settings → Apps. Windows may say it protects your PC because the publisher is unknown: the
-installer is not signed yet. Choose **More info**, then **Run anyway**. To update, run the newer installer. To uninstall, use
-Settings → Apps; the uninstaller asks whether to also remove your practice history and settings.
+</div>
 
-Alto needs Windows 10 or 11 and Microsoft's Visual C++ Runtime, which most computers already have because many programs use it.
-If yours does not, or has an older one, the installer downloads Microsoft's installer for it from Microsoft and runs it: Windows asks
-for administrator permission, and Microsoft's window asks you to accept Microsoft's license. This happens once, and only the first
-time it is needed. Without an internet connection, install the runtime yourself from
-[Microsoft's download page](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) and run Alto's installer again.
+<div data-platforms="windows" markdown="1">
+
+### Windows installer
+{: .no-toc}
+
+> **Windows code-signing certificate.** We’re working on getting a certificate to sign Alto’s Windows installer.
+> Until then, Windows may show **Unknown publisher** or block the installer before setup starts.
+> [Help with Windows installation warnings](#windows-installer-troubleshooting)
+{: role="note" aria-label="Windows installer notice"}
+
+1. [Download the 64-bit Windows installer]({{ windows_download | default: release }}) for Windows 10 or 11.
+2. Open the downloaded `.exe` and follow the setup prompts.
+3. Open **Alto** from the Start menu.
+
+The installer includes Python and Qt and installs Alto for your account.
+
+</div>
+
+<div data-platforms="macos" markdown="1">
+
+### Mac source installation
+{: .no-toc}
+
+On Mac, you can try Alto from source. macOS is currently untested.
+With Git and Python 3.11 or newer installed, open **Terminal** and run:
+
+{% include source-install-unix.md %}
+
+To open Alto again, run `.venv/bin/python -m alto` from the same `alto` folder.
+
+</div>
+
+<div data-platforms="linux windows" markdown="1">
 
 ### Check your download
+{: .no-toc}
 
-Each release has a file called `SHA256SUMS` next to the downloads. It lists the SHA-256 fingerprint of every file in the release, so you
-can check that yours arrived complete and unchanged. Download it from the same release page, then:
+Download `SHA256SUMS` from the same [release]({{ release }}) as your download. It lists the SHA-256 checksum of each file.
 
-**Linux.** In the folder that has both files, run:
+<div data-platforms="linux" markdown="1">
+In the folder containing the archive and `SHA256SUMS`, run:
 
 ```bash
 sha256sum --check --ignore-missing SHA256SUMS
 ```
 
-It prints `OK` after the name of each file it finds.
+Look for `OK` after the archive name.
+</div>
 
-**Windows.** In PowerShell, in the folder that has the installer, run:
+<div data-platforms="windows" markdown="1">
+Open PowerShell in the folder containing the installer. Use the exact name of the file you downloaded:
 
 ```powershell
-Get-FileHash .\alto-<version>-windows-x64-setup.exe -Algorithm SHA256
+Get-FileHash ".\alto-{{ v | default: '<version>' }}-windows-x64-setup.exe" -Algorithm SHA256
 ```
 
-The value it prints should be the same as the one on that file's line in `SHA256SUMS`.
+Open `SHA256SUMS` in Notepad and find the line naming that same `.exe`. Every character in its checksum should match
+the **Hash** printed by PowerShell (uppercase and lowercase are equivalent). If they differ, discard the installer
+and download it again from the official Alto release.
+</div>
 
-The list is signed as well (`SHA256SUMS.sig`). Alto checks that signature itself whenever it updates a packaged copy; see
-[Updating Alto](#updating-alto).
+</div>
+
+<div data-platforms="windows" markdown="1">
+
+### Windows installer troubleshooting
+{: .no-toc}
+
+#### Edge says the download is uncommon
+
+An uncommon-download warning means Microsoft Edge has little download history for that file. Check that you started
+from the **altosaurus/alto** GitHub release. If you choose to keep the file, [check its checksum](#check-your-download)
+before opening it. If the browser or antivirus identifies a specific threat, stop and leave the file blocked.
+[Microsoft’s SmartScreen guidance](https://learn.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-smartscreen/microsoft-defender-smartscreen-overview)
+
+#### “Windows protected your PC” or “Unknown publisher”
+
+If SmartScreen calls Alto an unrecognized app, select **More info** to see the filename and publisher. **Unknown publisher**
+is expected for the current unsigned installer. On your own PC, if the filename and checksum match the official release
+and you trust the download, choose **Run anyway** to start setup. Choose **Don’t run** if you’re unsure.
+[How SmartScreen checks app reputation](https://learn.microsoft.com/windows/apps/package-and-deploy/smartscreen-reputation)
+
+#### Windows blocks the installer with no “Run anyway” option
+
+On a work or school PC, your organization may control which apps can run. Give your IT team the Alto release link
+and the exact message so they can review it. If Windows 11 names **Smart App Control**, it has no per-app exception.
+Keep the protection enabled and check back for a signed release. [Microsoft’s Smart App Control FAQ](https://support.microsoft.com/en-gb/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions)
+
+#### Setup stops at “Microsoft Visual C++ Runtime”
+
+Alto needs Microsoft’s **x64 Visual C++ Redistributable**. If setup asks for administrator permission for that component,
+check that the prompt identifies **Microsoft Corporation** as the publisher. If its download fails or you’re installing
+offline, get the x64 package from Microsoft, install it, restart if prompted, then run Alto’s installer again.
+[Microsoft’s runtime download](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)
+
+If you’re still stuck, include the Alto installer filename, your Windows version, and the exact message when you
+[report an installation issue](https://github.com/altosaurus/alto/issues).
+
+</div>
+
+<div data-platforms="linux" markdown="1">
+
+### Install as a program (Linux)
+{: .no-toc}
+
+To install from GitHub with [uv](https://docs.astral.sh/uv/), run `sh scripts/alto-install.sh install` from the repository.
+Open Alto from the application menu. Use `sh scripts/alto-install.sh update` to update the program and refresh its menu entry
+and icon. The in-app updater can update this installation too. Choose **Follow the main branch** in **Settings → Updates**
+to get changes before release. Packaged installations follow releases.
+</div>
+
+<div data-platforms="linux windows" markdown="1">
+
+### Running from a source checkout
+{: .no-toc}
+
+For development, install Git and Python 3.11 or newer. Alto installs PySide6 and the other dependencies into the virtual
+environment. Run the following commands, then use `git pull` from the checkout to get source updates.
+
+<div data-platforms="linux" markdown="1">
+{% include source-install-unix.md %}
+</div>
+
+<div data-platforms="windows" markdown="1">
+```powershell
+git clone https://github.com/altosaurus/alto.git
+cd alto
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m alto
+```
+</div>
+
+</div>
 
 ## Updating Alto
 
-Alto checks for published releases in the background when the main grid is active, up to once every 24 hours. If a newer version is available, Alto asks whether you want to upgrade. Choose **Yes** to start the upgrade, **No** for a reminder after 24 hours, or **Don’t remind me again** to skip that release. You can turn off automatic checks in **Settings → Updates**.
+Open **☰ → Tools** and choose **Check for updates…** to check manually. Alto also checks for releases when the main grid is active,
+up to once every 24 hours. **Settings → Updates** shows your version and lets you turn automatic checks off.
 
-To update Alto, open the ☰ menu and choose **Tools** → **Check for updates…**. By default Alto asks GitHub for the
-newest **release** and compares it with the version you have (**Settings → Updates** shows it). If yours is the newest, it
-says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press
-OK.
+<div data-platforms="linux windows" markdown="1">
+For a packaged installation, choose **Yes** to download an offered release, **No** for a reminder after 24 hours, or
+**Don’t remind me again** to skip it. Alto verifies the signature on `SHA256SUMS` with its built-in public key and
+checks the package against the signed list before installation. Press **OK** when prompted to restart.
+</div>
 
-- **A copy installed with the script** installs the new release itself.
-- **A packaged copy** (the Linux tarball installed with `install.sh`, or the Windows installer) replaces itself. It downloads the
-  new release, checks it (see below), tells you that Alto will close, install it and open again when you press OK, and does so.
-  A Linux folder that you only unpacked and ran from is not an install, so it is offered the page where the release can be
-  downloaded, as is a build that has no way to check a download.
-- **A copy you run from a clone** is updated with `git pull`.
+<div data-platforms="linux" markdown="1">
+You can also unpack a newer archive and run `sh install.sh install` again. A failed installation keeps your previous
+copy. If you run Alto straight from the unpacked folder, download the new archive yourself.
+</div>
 
-**How an update is checked.** Every release has a file of checksums (`SHA256SUMS`) and a signature of it
-(`SHA256SUMS.sig`), made with a private key that only the release workflow has. Alto carries the matching public key. It installs a
-download only if the signature on the list is valid, the signed list names that file, and the file's SHA-256 hash is the one
-listed. If any of that fails, it says why and installs nothing. If an update fails while installing on Linux, the copy you had is kept.
+<div data-platforms="windows" markdown="1">
+You can also run a newer Windows installer to update your copy.
+</div>
 
-To get changes as soon as they are merged, before they are released, select **Follow the main branch** in **Settings →
-Updates**. The check then compares commits on the main branch instead of releases. This works for a copy installed with the
-script, and may be less stable than a release; a packaged copy always follows releases.
-
-An update from the menu does not refresh the application-menu entry or icon; `sh scripts/alto-install.sh update` does that too.
-
-## Install and run
+<div data-platforms="macos" markdown="1">
+Close Alto and run these commands in Terminal from your `alto` folder to update the source and its dependencies:
 
 ```bash
-git clone https://github.com/altosaurus/alto.git
-cd alto
-python -m venv .venv
-.venv/bin/pip install -e .
+git pull
+.venv/bin/python -m pip install -e .
 .venv/bin/python -m alto
 ```
+</div>
 
-On Windows the virtual environment's programs are in `.venv\Scripts\` instead of `.venv/bin/`. After installing, the
-command `alto` also starts the app from inside the environment.
+## Uninstalling Alto
 
-## Install as a program (Linux)
+<div data-platforms="linux" markdown="1">
+For the Linux download, run `sh install.sh uninstall` from the extracted folder. For the uv installation, run
+`sh scripts/alto-install.sh uninstall` from the repository. Both commands remove the program and its menu entry
+and keep your practice history and settings. Add `--purge` to delete them too.
+</div>
 
-To have Alto in your application menu, separate from a clone you are working in, use the install script. It needs
-[uv](https://docs.astral.sh/uv/). It installs the newest version from GitHub into its own environment.
+<div data-platforms="windows" markdown="1">
+Open **Settings → Apps**, select **Alto**, and choose **Uninstall**. The uninstaller asks whether to also remove your
+practice history and settings.
+</div>
 
-```bash
-sh scripts/alto-install.sh install     # install, and add Alto to the application menu
-sh scripts/alto-install.sh update      # fetch the newest version
-sh scripts/alto-install.sh uninstall   # remove the program, the menu entry and the icon
-```
+<div data-platforms="macos" markdown="1">
+Quit Alto. If you no longer need the source checkout, move the cloned `alto` folder, including its `.venv`, to the Trash.
+Your practice history is stored separately in `~/Library/Application Support/Alto/alto.db`.
+</div>
 
-Uninstalling keeps your practice history and settings (see [Your data]({{ '/data/' | relative_url }})). Add `--purge` to
-delete those too; use **Export backup…** first if you might want them back.
+To keep a copy of your practice history and settings, choose **Export backup…** in Alto before uninstalling. [Your data]({{ '/data/' | relative_url }})
 
 ## First launch
 
@@ -129,6 +233,9 @@ Type a name and press **Create profile**. There is no password, and the name is 
 separate from anyone else who uses the same computer. Next time Alto opens straight into the profile you used last.
 
 To switch to someone else, or add another profile, open the menu (☰) and choose **Profile**.
+
+Alto includes the default Finale Maestro notation font. To use the optional Noto Music style, install the Noto Music
+font on your system and choose it in [Settings]({{ '/settings/' | relative_url }}).
 
 ## Your first session
 
@@ -174,7 +281,20 @@ Open **Glossary** in the top toolbar to look up a term. Search for *minor*, for 
 
 ## Running the tests
 
+From a source checkout, install the development dependencies and run the test suite.
+
+<div data-platforms="linux macos" markdown="1">
 ```bash
-.venv/bin/pip install -e ".[dev]"
-.venv/bin/pytest
+.venv/bin/python -m pip install -e ".[dev]"
+.venv/bin/python -m pytest
 ```
+</div>
+
+<div data-platforms="windows" markdown="1">
+```powershell
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe -m pytest
+```
+</div>
+
+<script src="{{ '/assets/js/downloads.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

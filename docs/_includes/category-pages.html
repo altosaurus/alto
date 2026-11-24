@@ -1,0 +1,6 @@
+{% assign members = site.pages | where: "nav_group", include.group | sort: "nav_order" %}
+<ul>
+  {% for member in members %}{% unless member.title == include.group %}
+  <li><a href="{{ member.url | relative_url }}">{{ member.title }}</a></li>
+  {% endunless %}{% endfor %}
+</ul>

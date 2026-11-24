@@ -1,20 +1,28 @@
-// The groups of the sidebar open and close, and which of them you closed is remembered for the next page. Whatever holds the page you
-// are on stays open. Without this script the sidebar still works: every group starts open, and the sections open for the current page.
+// Category links navigate normally. Their adjacent buttons control only the named list.
 (function () {
   "use strict";
-  var KEY = "alto-docs-nav";
-  var groups = document.querySelectorAll("details[data-nav-group]");
-  if (!groups.length) { return; }
-  var closed = {};
-  try { closed = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { closed = {}; }
+  const key = "alto-docs-nav";
+  let closed = {};
+  try { closed = JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { /* Use the default state. */ }
 
-  Array.prototype.forEach.call(groups, function (group) {
-    var name = group.getAttribute("data-nav-group");
-    var holdsCurrent = !!group.querySelector('[aria-current="page"]');
-    if (closed[name] && !holdsCurrent) { group.open = false; }
-    group.addEventListener("toggle", function () {
-      if (group.open) { delete closed[name]; } else { closed[name] = true; }
-      try { localStorage.setItem(KEY, JSON.stringify(closed)); } catch (e) { /* not remembered; the sidebar still works */ }
+  document.querySelectorAll(".nav-toggle").forEach(button => {
+    const list = document.getElementById(button.getAttribute("aria-controls"));
+    const name = button.dataset.category;
+    const holdsCurrent = button.closest(".nav-group")?.querySelector('[aria-current="page"]');
+
+    function setOpen(open) {
+      list.hidden = !open;
+      button.setAttribute("aria-expanded", String(open));
+      button.setAttribute("aria-label", (open ? "Collapse " : "Expand ") + name);
+    }
+
+    setOpen(!closed[name] || !!holdsCurrent);
+    button.hidden = false;
+    button.addEventListener("click", () => {
+      setOpen(list.hidden);
+      if (list.hidden) closed[name] = true;
+      else delete closed[name];
+      try { localStorage.setItem(key, JSON.stringify(closed)); } catch (e) { /* The control still works. */ }
     });
   });
 })();

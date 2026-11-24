@@ -49,7 +49,7 @@ jobs:
           build=true
           if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
             if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && ! git diff --name-only "${BEFORE}" "${GITHUB_SHA}" \
-              | grep -qE '^(docs/|scripts/(docs_site|check_plugin_registry|tutorial_docs)\.py$|\.github/workflows/docs\.yml$)'; then
+              | grep -qE '^(docs/|scripts/(docs_site|check_plugin_registry|tutorial_docs)\.py$|scripts/docs_search\.rb$|\.github/workflows/docs\.yml$)'; then
               build=false
             fi
           fi
@@ -111,6 +111,9 @@ jobs:
           mkdir -p source/docs/_includes source/docs/assets/css
           cp -R tooling/docs/_includes/. source/docs/_includes/
           cp tooling/docs/assets/css/site.css source/docs/assets/css/site.css
+          mkdir -p source/docs/assets/js
+          cp tooling/docs/assets/js/{copy-code,nav,search}.js source/docs/assets/js/
+          cp tooling/docs/{about.md,contents.md,using-alto.md,search.html} source/docs/
           cp tooling/docs/_config.yml source/docs/_config.yml
 
       - uses: ruby/setup-ruby@v1
@@ -147,6 +150,7 @@ jobs:
             rm -rf "site/$1"
             printf 'baseurl: %s/%s\ndocs_version: %s\napp_version: "%s"\n' "$SITE_PATH" "$1" "$2" "$APP_VERSION" > version.yml
             bundle exec jekyll build --source source/docs --destination "site/$1" --config "source/docs/_config.yml,version.yml"
+            bundle exec ruby tooling/scripts/docs_search.rb "site/$1"
           }
           build "$VERSION" "$VERSION"
           if [ "$VERSION" = dev ]; then git -C source rev-parse --short HEAD > site/dev/commit.txt; fi
