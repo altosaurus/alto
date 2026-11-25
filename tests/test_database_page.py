@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 from datetime import datetime
 from typing import TYPE_CHECKING
+from unittest.mock import patch
 
 import pytest
 from PySide6.QtCore import (
@@ -36,6 +37,7 @@ from alto.ui.database_page import (
 from alto.ui.main_window import MainWindow
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.stats_dialog import StatsPage
+from alto.ui.theme import apply_theme
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -131,6 +133,111 @@ def test_the_answers_table_lists_every_answer_newest_first(
         "Due",
     ]
     assert page.grab().width() > 0
+
+
+def test_answers_sort_by_time_when_recorded_out_of_order(
+    app: QApplication,
+) -> None:
+    """Keep timestamps and row details together across header sorts."""
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    for key, timestamp in (("a", 300), ("b", 100), ("c", 300)):
+        db.add_attempt(
+            learner.profile.id,
+            exercise="NoteNames",
+            item_key=key,
+            attempt_no=1,
+            answer="C",
+            correct=True,
+            duration_ms=500,
+            answered_at=timestamp,
+        )
+    page = DatabasePage(learner)
+
+    def keys() -> list[str]:
+        return [
+            page.proxy.index(i, 0).data(ROW_ROLE)["item_key"]
+            for i in range(page.proxy.rowCount())
+        ]
+
+    assert keys() == ["c", "a", "b"]
+    page.view.sortByColumn(0, Qt.SortOrder.AscendingOrder)
+    assert keys() == ["b", "c", "a"]
+    page.show_table("answers", keep_sort=True)
+    assert keys() == ["b", "c", "a"]
+    page.tabs["profiles"].click()
+    page.tabs["answers"].click()
+    assert keys() == ["c", "a", "b"]
+
+
+def test_answer_pages_follow_the_viewport_and_cover_global_search_and_sort(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Query just the visible page, including after scrollbar jumps."""
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    for i in range(501):
+        db.add_attempt(
+            learner.profile.id,
+            exercise="NoteNames",
+            item_key=str(i),
+            attempt_no=1,
+            answer=f"answer-{i:03}",
+            correct=True,
+            duration_ms=i,
+            answered_at=1000 if i == 0 else i,
+        )
+    # The earliest insert has the latest timestamp and is outside the
+    # browser's newest 500 records.
+    monkeypatch.setattr(database_page, "ROW_LIMIT", 500)
+    monkeypatch.setattr(database_page, "ANSWER_PAGE_SIZE", 64)
+    apply_theme("dark")
+    window = MainWindow(learner)
+    window.resize(900, 400)
+    window.show()
+    app.processEvents()
+    with patch.object(db, "answer_page", wraps=db.answer_page) as read:
+        window.database_button.click()
+        page = window.stack.currentWidget()
+        assert isinstance(page, DatabasePage)
+        app.processEvents()
+        assert page.proxy.rowCount() == 500
+        assert [call.kwargs["offset"] for call in read.call_args_list] == [0]
+        assert read.call_args.kwargs["limit"] == database_page.ANSWER_PAGE_SIZE
+        assert page.proxy.index(0, 3).data() == "answer-500"
+
+        # A later insert cannot shift the offsets of pages already open.
+        db.add_attempt(
+            learner.profile.id,
+            exercise="NoteNames",
+            item_key="new",
+            attempt_no=1,
+            answer="new",
+            correct=True,
+            duration_ms=1,
+            answered_at=1001,
+        )
+        page.view.scrollToBottom()
+        app.processEvents()
+        assert page.proxy.index(499, 0).data(ROW_ROLE)["item_key"] == "1"
+        offsets = [call.kwargs["offset"] for call in read.call_args_list]
+        assert offsets == [0, 448]
+        page.view.scrollToTop()
+        app.processEvents()
+        assert read.call_count == 2
+
+        page.search.setText("answer-250")
+        assert page.proxy.rowCount() == 1
+        assert page.proxy.index(0, 0).data(ROW_ROLE)["item_key"] == "250"
+        assert "1 match the search." in page.note.text()
+        page.search.clear()
+        page.tabs["profiles"].click()
+        page.tabs["answers"].click()
+        page.view.sortByColumn(6, Qt.SortOrder.AscendingOrder)
+        assert page.proxy.index(0, 3).data() == "new"
+        assert page.proxy.index(1, 3).data() == "answer-002"
+        assert page.proxy.index(499, 3).data() == "answer-500"
 
 
 def test_a_long_history_says_how_much_of_it_is_shown(

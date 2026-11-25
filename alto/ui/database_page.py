@@ -59,6 +59,7 @@ from alto.ui.charts import LineChart
 from alto.ui.question_preview import QuestionPreview
 
 ROW_LIMIT = 10000
+ANSWER_PAGE_SIZE = 64
 SORT_ROLE = Qt.ItemDataRole.UserRole
 ROW_ROLE = Qt.ItemDataRole.UserRole + 1  # a row's hidden details
 
@@ -232,13 +233,12 @@ class RowsModel(QAbstractTableModel):
         ... )  # numbers are right-aligned
         True
         """
-        if role == ROW_ROLE:
-            return self.extras[index.row()]
-        text, value = self.rows[index.row()][index.column()]
-        if role == Qt.ItemDataRole.DisplayRole:
-            return text
-        if role == SORT_ROLE:
-            return value
+        if role in (Qt.ItemDataRole.DisplayRole, SORT_ROLE, ROW_ROLE):
+            cells, extra = self._record(index.row())
+            if role == ROW_ROLE:
+                return extra
+            text, value = cells[index.column()]
+            return value if role == SORT_ROLE else text
         if (
             role == Qt.ItemDataRole.TextAlignmentRole
             and index.column() in self.numeric
@@ -247,6 +247,17 @@ class RowsModel(QAbstractTableModel):
                 Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
             )
         return None
+
+    def _record(self, row: int) -> tuple[list[tuple[str, object]], dict]:
+        """
+        Look up one source row.
+
+        Returns
+        -------
+        tuple of list and dict
+            The displayed cells and hidden preview details.
+        """
+        return self.rows[row], self.extras[row]
 
     def headerData(  # noqa: PLR0917  (Qt calls this override with positional arguments)
         self,
@@ -405,12 +416,15 @@ class QuestionTexts:
         return cached
 
 
+_AnswerPage = tuple[list[list[tuple[str, object]]], list[dict]]
+
+
 def answer_cells(
     rows: Sequence[sqlite3.Row],
     *,
     names: dict[str, str],
     texts: QuestionTexts,
-) -> tuple[list[list[tuple[str, object]]], list[dict]]:
+) -> _AnswerPage:
     """
     Turn answers read from the database into the cells of a table, and
     the hidden details of each row.
@@ -462,6 +476,7 @@ def answer_cells(
     cells, extras = [], []
     for r in rows:
         seconds = float(r["duration_ms"]) / 1000
+        when = _when(r["answered_at"])
         extras.append(
             {
                 "exercise": r["exercise"],
@@ -476,17 +491,13 @@ def answer_cells(
                         ", "
                         f"attempt {r['attempt_no']}, {seconds:.1f} s)"
                     ),
-                    (
-                        "<span style='color: gray;'>"
-                        f"{_when(r['answered_at'])[0]}"
-                        "</span>"
-                    ),
+                    f"<span style='color: gray;'>{when[0]}</span>",
                 ],
             },
         )
         cells.append(
             [
-                _when(r["answered_at"]),
+                when,
                 (names.get(r["exercise"], r["exercise"]),) * 2,
                 (
                     texts(
@@ -504,6 +515,65 @@ def answer_cells(
             ],
         )
     return cells, extras
+
+
+class _PagedAnswers(RowsModel):
+    """Expose the answer history and read only the pages Qt requests."""
+
+    def __init__(
+        self,
+        learner: Learner,
+        *,
+        names: dict[str, str],
+        texts: QuestionTexts,
+    ) -> None:
+        super().__init__(ANSWER_HEADERS, rows=[], numeric={5, 6})
+        self._db = learner.db
+        self._profile_id = learner.profile.id
+        self.total, oldest, newest = self._db.answer_window(
+            self._profile_id,
+            limit=ROW_LIMIT,
+        )
+        self._id_range = oldest, newest
+        self._size = min(self.total, ROW_LIMIT)
+        self._names = names
+        self._texts = texts
+        self._pages: dict[int, _AnswerPage] = {}
+
+    def rowCount(
+        self,
+        parent: QModelIndex | QPersistentModelIndex = QModelIndex(),
+    ) -> int:
+        """
+        Report the full extent before Qt requests individual pages.
+
+        Returns
+        -------
+        int
+            The number of browsable rows, or zero for a child index.
+        """
+        return 0 if parent.isValid() else self._size
+
+    def _record(self, row: int) -> tuple[list[tuple[str, object]], dict]:
+        page, within = divmod(row, ANSWER_PAGE_SIZE)
+        if page not in self._pages:
+            offset = page * ANSWER_PAGE_SIZE
+            records = self._db.answer_page(
+                self._profile_id,
+                id_range=self._id_range,
+                offset=offset,
+                limit=min(ANSWER_PAGE_SIZE, self._size - offset),
+            )
+            self._pages[page] = answer_cells(
+                records,
+                names=self._names,
+                texts=self._texts,
+            )
+        cells, details = self._pages[page]
+        if within >= len(cells):
+            # Records may have been deleted since the page was opened.
+            return [("", None)] * len(self.headers), {}
+        return cells[within], details[within]
 
 
 def _show_question_statistics(
@@ -875,6 +945,9 @@ class DatabasePage(QWidget):
         self.view.verticalHeader().hide()
         self.view.verticalHeader().setDefaultSectionSize(28)
         self.view.horizontalHeader().setHighlightSections(False)
+        # A hidden table has no visible range during stylesheet layout.
+        # Give Qt a bounded sample even before the first paint.
+        self.view.horizontalHeader().setResizeContentsPrecision(24)
         self.view.horizontalHeader().setStretchLastSection(False)
         self.proxy = QSortFilterProxyModel(self)
         self.proxy.setSortRole(SORT_ROLE)
@@ -970,24 +1043,17 @@ class DatabasePage(QWidget):
         >>> model_.rowCount(), note_
         (0, '0 answers by Ada.')
         """
-        db, pid = self.learner.db, self.learner.profile.id
-        rows, extras = answer_cells(
-            db.attempt_rows(pid, limit=ROW_LIMIT),
+        model = _PagedAnswers(
+            self.learner,
             names=self._names,
             texts=self._texts,
         )
-        total = db.count_attempts(pid)
+        total = model.total
         who = self.learner.profile.name
         note = (
             f"{total:,} answers by {who}. Showing the newest {ROW_LIMIT:,}."
             if total > ROW_LIMIT
             else f"{total:,} answers by {who}."
-        )
-        model = RowsModel(
-            ANSWER_HEADERS,
-            rows=rows,
-            numeric={5, 6},
-            extras=extras,
         )
         return model, note
 
@@ -1176,16 +1242,9 @@ class DatabasePage(QWidget):
         self._base_note = note
         # noinspection PyAttributeOutsideInit
         self.model = model  # keeps the model alive while the proxy uses it
-        self.proxy.setSourceModel(model)
         head = self.view.horizontalHeader()
-        for col in range(model.columnCount()):
-            stretch = model.headers[col] == "Question"
-            head.setSectionResizeMode(
-                col,
-                QHeaderView.ResizeMode.Stretch
-                if stretch
-                else QHeaderView.ResizeMode.ResizeToContents,
-            )
+        # Qt accepts a null source when detaching the previous table.
+        self.proxy.setSourceModel(None)  # pyright: ignore[reportArgumentType]
         if not keep_sort:
             column = 2 if key == "questions" else 0
             order = (
@@ -1194,6 +1253,23 @@ class DatabasePage(QWidget):
                 else Qt.SortOrder.DescendingOrder
             )
             self.view.sortByColumn(column, order)
+        if (
+            key == "answers"
+            and head.sortIndicatorSection() == 0
+            and head.sortIndicatorOrder() == Qt.SortOrder.DescendingOrder
+        ):
+            # The answers are already newest first. Use source order
+            # until the user chooses another sort in the header.
+            self.proxy.sort(-1)
+        self.proxy.setSourceModel(model)
+        for col in range(model.columnCount()):
+            stretch = model.headers[col] == "Question"
+            head.setSectionResizeMode(
+                col,
+                QHeaderView.ResizeMode.Stretch
+                if stretch
+                else QHeaderView.ResizeMode.ResizeToContents,
+            )
         self._show_count()
 
     def _preview(self, index: QModelIndex) -> None:
