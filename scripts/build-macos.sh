@@ -25,7 +25,7 @@ ditto -c -k --keepParent "$WORK/dist/Alto.app" "$WORK/$NAME.zip"
 ditto -x -k "$WORK/$NAME.zip" "$WORK/unpacked"
 APP="$WORK/unpacked/Alto.app"
 EXE="$APP/Contents/MacOS/alto"
-lipo -verify_arch arm64 "$EXE"
+lipo "$EXE" -verify_arch arm64
 codesign --verify --deep --strict "$APP"
 [ "$("$EXE" --version)" = "Alto $VERSION" ]
 "$EXE" --self-test
