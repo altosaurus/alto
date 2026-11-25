@@ -1,4 +1,4 @@
-# PyInstaller recipe for Alto, used on Linux and Windows: `pyinstaller packaging/alto.spec`.
+# PyInstaller recipe for Alto on Linux, Windows, and macOS.
 #
 # It makes a folder, dist/alto, with the program `alto` (`alto.exe` on Windows) beside the Python, Qt and Alto files it needs. The
 # folder can be copied anywhere. scripts/build-linux.sh builds it and wraps it in the Linux download.
@@ -25,6 +25,7 @@ import json
 import os
 import re
 import sys
+from importlib.metadata import version
 from pathlib import Path
 
 from PyInstaller.depend.bindepend import get_imports
@@ -33,9 +34,10 @@ from PyInstaller.utils.hooks import collect_data_files, collect_submodules, copy
 if sys.platform == "win32":
     import pefile  # PyInstaller's own dependency on Windows, used to read the runtime's version
 
+metadata = copy_metadata("alto", recursive=True) if sys.platform == "darwin" else copy_metadata("alto") + copy_metadata("fsrs")
 a = Analysis(
     ["launcher.py"],
-    datas=collect_data_files("alto") + copy_metadata("alto") + copy_metadata("fsrs"),
+    datas=collect_data_files("alto") + metadata,
     hiddenimports=["_cffi_backend", *collect_submodules("nacl")],
     # numpy is for the tests only; Alto does not use it. readline is for an interactive prompt, which Alto does not have.
     excludes=["tkinter", "pytest", "numpy", "readline"],
@@ -155,6 +157,16 @@ coll = COLLECT(
     upx=False,
     name="alto",
 )
+
+if sys.platform == "darwin":
+    BUNDLE(
+        coll,
+        name="Alto.app",
+        icon=str(Path(SPECPATH).parent / "alto/assets/icon.png"),
+        bundle_identifier="io.github.altosaurus.alto",
+        version=version("alto"),
+        info_plist={"CFBundleVersion": version("alto"), "NSHighResolutionCapable": True},
+    )
 
 # Check the finished bundle, including native libraries and symlinks created during collection.
 for path in Path(coll.name).rglob("*"):

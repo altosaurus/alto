@@ -11,6 +11,11 @@ on:
       - ".github/workflows/build-packages.yml"
       - ".github/workflows/package.yml"
   workflow_dispatch:
+    inputs:
+      macos_test:
+        description: "Build the Apple Silicon test app only"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -22,4 +27,22 @@ concurrency:
 
 jobs:
   build:
+    if: ${{ !inputs.macos_test }}
     uses: ./.github/workflows/build-packages.yml
+
+  macos:
+    if: inputs.macos_test
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          architecture: arm64
+      - name: Build and check Alto.app
+        run: PYTHON=python sh scripts/build-macos.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: alto-macos-arm64-test
+          path: dist/alto-*-macos-arm64-test.zip
+          if-no-files-found: error
