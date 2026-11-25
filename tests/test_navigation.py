@@ -350,6 +350,45 @@ def test_empty_workspace_prompt_follows_the_selected_section(
     ]
 
 
+@pytest.mark.parametrize("section", ["exercises", "lessons"])
+@pytest.mark.parametrize("origin", ["tiles", "exercise", "lesson"])
+def test_section_buttons_leave_the_glossary(
+    window: MainWindow,
+    section: str,
+    origin: str,
+) -> None:
+    """
+    Open either catalog from the glossary and retain the prior activity.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The visible navigation window.
+    section : str
+        The requested toolbar destination.
+    origin : str
+        The page from which the glossary was opened.
+    """
+    if origin == "exercise":
+        window.open_exercise(NoteNames)
+    elif origin == "lesson":
+        window.open_lessons("circle-of-fifths")
+    previous = window.stack.currentWidget()
+    window.glossary_button.click()
+    assert isinstance(window.stack.currentWidget(), GlossaryPage)
+    window.home.mode_control.buttons[int(section == "lessons")].click()
+    assert window.stack.currentWidget() is window.home
+    assert window.home.mode == section
+    assert not window.glossary_button.isChecked()
+    cards = (
+        window.home.lesson_cards if section == "lessons" else window.home.cards
+    )
+    assert any(card.isVisible() for card in cards)
+    if origin != "tiles":
+        window.home.resume_button.click()
+        assert window.stack.currentWidget() is previous
+
+
 def test_switching_lists_preserves_the_exercise(window: MainWindow) -> None:
     """
     Browse lessons from an exercise without replacing the question or

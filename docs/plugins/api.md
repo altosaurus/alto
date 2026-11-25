@@ -225,7 +225,7 @@ Alto shows both: the lesson's last step offers each linked exercise as practice,
 
 ### Icons for tiles
 
-Give an exercise or a lesson an `icon`: the path to an SVG file in the pack. Alto redraws it in the theme's ink, as it does its own icons, so draw it as a single shape.
+Set an exercise or lesson's `icon` to the path of an SVG file in the pack. Alto uses the same SVG for its tile and navigation row. Draw it as a single shape so it stays legible at the smaller navigation size. Alto renders it in the current theme's text color.
 
 - The root must be `<svg viewBox="0 0 24 24">`, and the file at most 100 KB.
 - Use only `g`, `path`, `circle`, `ellipse`, `rect`, `line`, `polyline`, and `polygon`, with geometry and paint attributes. Scripts, styles, images, links, and entity declarations are refused.
