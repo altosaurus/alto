@@ -63,17 +63,50 @@ def test_release_made_only_for_tag_exists_and_only_publisher_can() -> None:
     )
     assert data["permissions"] == {"contents": "read"}
     assert data["jobs"]["publish"]["permissions"] == {"contents": "write"}
-    assert data["jobs"]["publish"]["if"] == "github.ref_type == 'tag'"
+    assert data["jobs"]["publish"]["if"] == (
+        "github.event_name == 'push' && github.ref_type == 'tag'"
+    )
     assert (
-        data["jobs"]["publish"]["needs"] == "build"
+        data["jobs"]["publish"]["needs"] == "sign-windows"
+        and data["jobs"]["sign-windows"]["needs"] == "build"
         and data["jobs"]["build"]["needs"] == "check"
     )
     assert "--verify-tag" in RELEASE
     assert all(
         "permissions" not in job
         for name, job in data["jobs"].items()
-        if name != "publish"
+        if name not in {"publish", "sign-windows"}
     )
+
+
+def test_release_publishes_the_verified_windows_installer() -> None:
+    """
+    Keep signing in the protected job and the unsigned installer out
+    of the files used to produce the release checksums.
+    """
+    yaml = pytest.importorskip("yaml")
+    jobs = yaml.safe_load(RELEASE)["jobs"]
+    signing = jobs["sign-windows"]
+    assert signing["environment"] == "windows-signing"
+    assert signing["permissions"] == {"contents": "read", "id-token": "write"}
+    steps = signing["steps"]
+    assert steps[0]["with"]["name"] == "windows"
+    assert "Get-AuthenticodeSignature" in steps[-2]["run"]
+    assert "TimeStamperCertificate" in steps[-2]["run"]
+    assert steps[-1]["with"]["name"] == "windows-signed"
+    downloads = [
+        step["with"]
+        for step in jobs["publish"]["steps"]
+        if step.get("uses", "").startswith("actions/download-artifact@")
+    ]
+    assert downloads == [
+        {
+            "pattern": "{linux,*-sources-*}",
+            "path": "dist",
+            "merge-multiple": True,
+        },
+        {"name": "windows-signed", "path": "dist"},
+    ]
 
 
 def test_release_checks_tag_against_version_and_changelog_before() -> None:

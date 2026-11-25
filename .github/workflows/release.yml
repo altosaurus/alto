@@ -49,9 +49,72 @@ jobs:
     needs: check
     uses: ./.github/workflows/build-packages.yml
 
-  publish:
+  sign-windows:
     needs: build
-    if: github.ref_type == 'tag'
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    environment: windows-signing
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: windows
+          path: installer
+
+      - name: Select the tested installer
+        id: installer
+        shell: pwsh
+        run: |
+          $files = @(Get-ChildItem -LiteralPath installer -Force)
+          if ($files.Count -ne 1 -or $files[0].PSIsContainer -or $files[0].Name -notmatch '^alto-[0-9]+\.[0-9]+\.[0-9]+-windows-x64-setup\.exe$') {
+            throw "Expected exactly one versioned Alto Windows installer."
+          }
+          "path=$($files[0].FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: Sign in to Azure with GitHub OIDC
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Sign and timestamp the installer
+        uses: azure/artifact-signing-action@c7ab2a863ab5f9a846ddb8265964877ef296ee82 # v2
+        with:
+          endpoint: ${{ vars.AZURE_SIGNING_ENDPOINT }}
+          signing-account-name: ${{ vars.AZURE_SIGNING_ACCOUNT_NAME }}
+          certificate-profile-name: ${{ vars.AZURE_CERTIFICATE_PROFILE_NAME }}
+          files: ${{ steps.installer.outputs.path }}
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
+          exclude-environment-credential: true
+
+      - name: Verify the Windows signature and timestamp
+        shell: pwsh
+        env:
+          INSTALLER_PATH: ${{ steps.installer.outputs.path }}
+        run: |
+          $signature = Get-AuthenticodeSignature -LiteralPath $env:INSTALLER_PATH
+          if ($signature.Status -ne 'Valid' -or $signature.SignatureType -ne 'Authenticode' -or !$signature.TimeStamperCertificate) {
+            throw "Expected a valid, timestamped Authenticode signature. $($signature.StatusMessage)"
+          }
+          $digest = (Get-FileHash -LiteralPath $env:INSTALLER_PATH -Algorithm SHA256).Hash
+          "Publisher: $($signature.SignerCertificate.Subject)" >> $env:GITHUB_STEP_SUMMARY
+          "SHA-256: $digest" >> $env:GITHUB_STEP_SUMMARY
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: windows-signed
+          path: ${{ steps.installer.outputs.path }}
+          if-no-files-found: error
+          overwrite: true
+
+  publish:
+    needs: sign-windows
+    if: github.event_name == 'push' && github.ref_type == 'tag'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -60,8 +123,14 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
+          pattern: '{linux,*-sources-*}'
           path: dist
           merge-multiple: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-signed
+          path: dist
 
       - uses: actions/setup-python@v5
         with:
@@ -83,7 +152,7 @@ jobs:
           ## Downloads
 
           - **Linux:** `alto-*-linux-x86_64.tar.gz`. Unpack it and run `sh install.sh install`. `sh install.sh uninstall` removes it and keeps your data; add `--purge` to delete that too.
-          - **Windows:** `alto-*-windows-x64-setup.exe`. Windows may say it protects your PC because the publisher is unknown, as the installer is not signed yet: choose **More info**, then **Run anyway**.
+          - **Windows:** `alto-*-windows-x64-setup.exe`. To inspect the publisher signature, right-click the installer and open **Properties → Digital Signatures**.
           - Qt and PySide/Shiboken source archives (`*-everywhere-src-*.tar.xz`) correspond to the Qt libraries in the installers. Versions and checksums are listed in the installed `licenses/Qt/README.txt`.
           - `alto-*-linux-x86_64-library-sources.tar` has the Ubuntu source packages of the LGPL and GPL system libraries in the Linux download. They are listed in the installed `licenses/Linux/README.txt`.
           - `SHA256SUMS` has the checksum of each file, and `SHA256SUMS.sig` is its signature. A copy of Alto that updates itself checks the signature first.

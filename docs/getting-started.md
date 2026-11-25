@@ -43,8 +43,8 @@ For other processor architectures, see [Running from a source checkout](#running
 ### Windows installer
 {: .no-toc}
 
-> **Windows code-signing certificate.** We’re working on getting a certificate to sign Alto’s Windows installer.
-> Until then, Windows may show **Unknown publisher** or block the installer before setup starts.
+> **Windows installer signature.** Alto 0.0.2 and earlier shipped unsigned. For releases that list a signed installer,
+> right-click the downloaded file and open **Properties → Digital Signatures → Details** to check its publisher.
 > [Help with Windows installation warnings](#windows-installer-troubleshooting)
 {: role="note" aria-label="Windows installer notice"}
 
@@ -115,16 +115,17 @@ before opening it. If the browser or antivirus identifies a specific threat, sto
 
 #### “Windows protected your PC” or “Unknown publisher”
 
-If SmartScreen calls Alto an unrecognized app, select **More info** to see the filename and publisher. **Unknown publisher**
-is expected for the current unsigned installer. On your own PC, if the filename and checksum match the official release
-and you trust the download, choose **Run anyway** to start setup. Choose **Don’t run** if you’re unsure.
+If SmartScreen calls Alto an unrecognized app, select **More info** to see the filename and publisher. For releases that list a signed
+installer, check that Windows reports a valid signature under **Properties → Digital Signatures → Details** and that the
+checksum matches the release. If Windows reports **Unknown publisher** for a signed release, cancel setup and check the
+download. For the unsigned 0.0.2 and earlier installers, verify the checksum before deciding whether to run setup.
 [How SmartScreen checks app reputation](https://learn.microsoft.com/windows/apps/package-and-deploy/smartscreen-reputation)
 
 #### Windows blocks the installer with no “Run anyway” option
 
 On a work or school PC, your organization may control which apps can run. Give your IT team the Alto release link
 and the exact message so they can review it. If Windows 11 names **Smart App Control**, it has no per-app exception.
-Keep the protection enabled and check back for a signed release. [Microsoft’s Smart App Control FAQ](https://support.microsoft.com/en-gb/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions)
+Keep the protection enabled while you check the installer’s signature and the release download. [Microsoft’s Smart App Control FAQ](https://support.microsoft.com/en-gb/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions)
 
 #### Setup stops at “Microsoft Visual C++ Runtime”
 

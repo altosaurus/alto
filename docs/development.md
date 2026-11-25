@@ -771,7 +771,7 @@ uninstall that must keep the data, and an uninstall with `/PURGE=1` that must re
 run it only on a computer where that folder may be touched, such as a CI runner. The installer is for one user (no administrator
 prompt); its `AppId` in `alto.iss` must never change, because a newer installer finds the copy it updates by it. The uninstaller asks
 whether to also remove the practice history (`%APPDATA%\Alto`) and the settings (`HKEY_CURRENT_USER\Software\alto`); a silent
-uninstall keeps them unless it is given `/PURGE=1`. The installer is not signed, so Windows shows an "unknown publisher" warning.
+uninstall keeps them unless it is given `/PURGE=1`. Local builds and pull request builds produce an unsigned installer.
 
 Microsoft's Visual C++ runtime comes from Windows, not from the installer. `packaging/alto.spec` leaves out the copies that Python,
 Qt and Shiboken bring, fails the build if one remains, and records which runtime files the program needs and the newest version
@@ -779,6 +779,17 @@ among them. The installer checks that Windows has them, at least that new, and o
 Redistributable, checks Microsoft's signature on it and runs it, both in an ordinary install and in the silent install of an update.
 The build test runs that step once with `/RUNTIMETEST=1`, so it needs the internet. Alto does not use NumPy, which is only a test
 dependency.
+
+### Windows installer signing
+
+For a signing rehearsal, run **Release** manually on `main`. Download the **windows-signed** artifact and compare its
+SHA-256 with the signing job summary. On Windows, open **Properties → Digital Signatures** on the downloaded installer
+and inspect the publisher and timestamp. The **windows** artifact contains the unsigned build used as input.
+
+The signing job uses the `windows-signing` GitHub environment. Its federated credential authenticates the job to Azure
+with `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID`. The environment variables
+`AZURE_SIGNING_ENDPOINT`, `AZURE_SIGNING_ACCOUNT_NAME`, and `AZURE_CERTIFICATE_PROFILE_NAME` select the signing profile.
+For a release tag, the publisher downloads the verified installer before calculating and signing the release checksums.
 
 ### Signing releases, once
 
@@ -810,7 +821,7 @@ Three GitHub workflows do the building:
   shows before a release. It publishes nothing.
 - **Release** runs when a tag such as `v0.1.0` is pushed. It first checks that the tag is `v` plus the version in `pyproject.toml` and
   that `CHANGELOG.md` has notes for it; then builds both packages; then creates the GitHub release with both files, a `SHA256SUMS`
-  file and the changelog notes. Started by hand from the Actions tab, it only builds, to rehearse a release.
+  file and the changelog notes. A manual run on `main` also signs and verifies the Windows installer and keeps it as a rehearsal artifact.
 
 The release is a normal one and never a pre-release, because Alto's update check asks GitHub for the latest release.
 
