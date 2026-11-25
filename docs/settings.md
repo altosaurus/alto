@@ -111,7 +111,9 @@ The choice applies the next time you flip the switch.
 
 ### Sound
 
-**Instrument.** The sound used for notes and for the correct-answer chime. The instruments are listed in a box on the
+#### Instruments
+
+Choose the instrument used for notes and for the correct-answer chime. The instruments are listed in a box on the
 left: piano, flute, French horn, viola, marimba and vibraphone. The one in use is in bold and
 checked. Choose any of them to see a summary on the right of what its sound is made from:
 
@@ -133,7 +135,13 @@ The flute, French horn and arco viola, which are blown or bowed, end each note a
 whose recordings are not installed in your copy of Alto is shown in italics and cannot be chosen, because it would
 only play as the synthesized piano.
 
-{% include shot.html src="settings-sound.png" alt="The Sound page of the settings dialog with a list of instruments and a summary of the selected one" %}
+{% include shot.html src="settings-sound.png" alt="The Instruments page under Sound with a list of instruments and a summary of the selected one" %}
+
+#### Metronome
+
+Select **High pip**, **Low pip**, or **Pencil click** in the list to read about its sound. Press **Preview** to hear four clicks at 120 BPM, even when exercise audio is muted. The spectrum curve rises with each click and settles between beats. Lower frequencies appear on the left and higher frequencies on the right. Press **Use this sound** or double-click the list entry to save it. A check mark identifies the sound in use. **High pip** is the default. The Duration lesson and rhythm glossary examples play this click at each written onset. In meter examples, louder clicks mark accents and softer clicks mark subdivisions. The tie example pairs the clicks with the selected instrument so you can hear the held note.
+
+{% include shot.html src="settings-metronome.png" alt="Metronome settings with three sounds on the left and the selected sound’s description and preview on the right" %}
 
 ### Updates
 

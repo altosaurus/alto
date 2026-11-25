@@ -80,6 +80,7 @@ alto = "alto.__main__:main"
 alto = [
     "assets/excerpts/*/*",
     "assets/piano/*",
+    "assets/metronome/*",
     "assets/samples/SOURCE.txt",
     "assets/samples/*/*",
     "assets/ui/*",

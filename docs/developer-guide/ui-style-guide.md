@@ -205,7 +205,7 @@ In **Appearance → Theme**, compare the selected category, selected family, and
 
 {% include reference-pair.html screen="settings" title="Notation style" alt="A selected notation card among white-paper previews of music fonts." %}
 
-**Sound** shows a selected instrument row alongside its detail panel. **Practice** shows checkboxes, editable limits, and a box around the selected profile’s options. The response-time dialog uses the accent for the filled length of each bar and a neutral track for the remaining width. **Updates** shows how enabled and disabled choices read against an open area of window color.
+**Sound → Instruments** shows a selected instrument row alongside its detail panel. **Practice** shows checkboxes, editable limits, and a box around the selected profile’s options. The response-time dialog uses the accent for the filled length of each bar and a neutral track for the remaining width. **Updates** shows how enabled and disabled choices read against an open area of window color.
 
 {% include reference-pair.html screen="settings-sound" title="Sound" alt="Instrument list with Viola selected beside its description and test controls." %}
 

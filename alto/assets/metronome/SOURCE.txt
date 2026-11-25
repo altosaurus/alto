@@ -1,0 +1,3 @@
+High pip, Low pip, and Pencil click were synthesized for Alto.
+The three audio samples are dedicated to the public domain under CC0 1.0.
+https://creativecommons.org/publicdomain/zero/1.0/

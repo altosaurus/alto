@@ -67,6 +67,7 @@ from alto.ui.database_page import (
 )
 from alto.ui.glossary import GlossaryPage
 from alto.ui.main_window import MainWindow
+from alto.ui.metronome_spectrum import MetronomeSpectrum
 from alto.ui.profile_dialog import ProfileDialog
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.response_times import ResponseTimeDialog
@@ -113,6 +114,7 @@ SHOTS = (
     "question-preview",
     "settings",
     "settings-sound",
+    "settings-metronome",
     "settings-updates",
 )
 
@@ -599,10 +601,19 @@ def capture(
     dialog.categories.setCurrentRow(2)
     wait(300)
     save(dialog, name="settings")
-    dialog.categories.setCurrentRow(5)
+    dialog.categories.setCurrentRow(6)
     dialog.instruments.select("viola_bowed")
     wait(200)
     save(dialog, name="settings-sound", width=1000)
+    if "settings-metronome" in names:
+        dialog.categories.setCurrentRow(7)
+        spectrum = dialog.findChild(MetronomeSpectrum)
+        assert spectrum is not None
+        spectrum.set_playing(True)
+        spectrum.animation.pause()
+        spectrum.animation.setCurrentTime(500)
+        save(dialog, name="settings-metronome", width=1000)
+        spectrum.set_playing(False)
     if "settings-updates" in names:
         dialog.categories.setCurrentItem(
             dialog.categories.findItems("Updates", Qt.MatchFlag.MatchExactly)[

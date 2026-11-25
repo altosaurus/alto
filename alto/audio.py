@@ -6,8 +6,8 @@ pitch-shifting for missing notes.
 created the first time it is needed. A note with
 no recording is made by shifting the nearest recording (or, for the
 piano outside its sampled range, by synthesis).
-Instrument previews render the phrase as one cached clip, with fixed
-spacing between its notes.
+Instrument previews render the phrase as one cached clip to preserve
+its rhythm from the first playback.
 The module-level `sounds` is the one the interface uses.
 
 Examples
@@ -39,12 +39,17 @@ from dataclasses import (
     KW_ONLY,
     dataclass,
 )
+from functools import lru_cache
+from itertools import accumulate
 from pathlib import Path
 
 from PySide6.QtCore import (
+    QMetaObject,
+    QObject,
     QPropertyAnimation,
     QTimer,
     QUrl,
+    Signal,
 )
 from PySide6.QtMultimedia import (
     QSoundEffect,
@@ -666,9 +671,116 @@ def write_file_atomically(
 
 ASSETS = Path(__file__).parent / "assets"
 ASSET_DIR = ASSETS / "piano"
+METRONOME_CLICKS = {
+    "high-pip": (
+        "High pip",
+        (
+            "A bright, high electronic beep like a quartz metronome. "
+            "Its 2,200 Hz tone cuts off quickly, giving each beat a crisp "
+            "edge."
+        ),
+    ),
+    "low-pip": (
+        "Low pip",
+        (
+            "A rounder electronic beep with the same short pulse as High pip. "
+            "Its lower pitch (980 Hz) gives the beat a softer sound."
+        ),
+    ),
+    "pencil-click": (
+        "Pencil click",
+        (
+            "A dry, hollow tap like a pencil striking wood. Three short tones "
+            "fade at different speeds to give the attack its woody sound."
+        ),
+    ),
+}
+DEFAULT_METRONOME_CLICK = "high-pip"
+# Accompaniment sits below the instrument so note attacks stay audible.
+METRONOME_MIX_LEVEL = 0.4
 
 
-class Sounds:
+@lru_cache(maxsize=len(METRONOME_CLICKS))
+def metronome_preview_pcm(key: str) -> tuple[bytes, int]:
+    """
+    Return the four beats used for playback and the spectrum display.
+
+    Parameters
+    ----------
+    key : str
+        The bundled click to repeat at 120 BPM.
+
+    Returns
+    -------
+    tuple of bytes and int
+        Mono 16-bit PCM frames and their sample rate in hertz.
+
+    Examples
+    --------
+    >>> pcm, rate = metronome_preview_pcm("high-pip")
+    >>> len(pcm) > 3 * rate
+    True
+    """
+    with wave.open(str(ASSETS / "metronome" / f"{key}.wav")) as wav:
+        rate = wav.getframerate()
+        frames = wav.getnframes()
+        click = wav.readframes(frames)
+    silence = bytes(2 * max(0, round(rate / 2) - frames))
+    return (click + silence) * 3 + click, rate
+
+
+def _add_clicks(
+    phrase: list[int],
+    *,
+    click_key: str,
+    rate: int,
+    beat_ms: int,
+    duration_ms: int,
+) -> None:
+    """
+    Mix the metronome onto the main beats of a rendered phrase.
+
+    Parameters
+    ----------
+    phrase : list of int
+        Mixed instrument samples at their playback gain.
+    click_key : str
+        The selected metronome sound.
+    rate : int
+        Sample rate of the instrument phrase.
+    beat_ms : int
+        Milliseconds between clicks.
+    duration_ms : int
+        End of the written rhythm, excluding any ringing tail.
+
+    Examples
+    --------
+    >>> pcm = [0] * SAMPLE_RATE
+    >>> _add_clicks(
+    ...     pcm, click_key="low-pip", rate=SAMPLE_RATE,
+    ...     beat_ms=500, duration_ms=1000,
+    ... )
+    >>> any(pcm)
+    True
+    """
+    click, click_rate = read_wav(ASSETS / "metronome" / f"{click_key}.wav")
+    if click_rate != rate:
+        click = _interpolate(
+            click,
+            step=click_rate / rate,
+            count=round(len(click) * rate / click_rate),
+        )
+    samples = [round(value * 32768 * METRONOME_MIX_LEVEL) for value in click]
+    for beat in range(0, duration_ms, beat_ms):
+        start = round(beat * rate / 1000)
+        for i, value in enumerate(
+            samples[: max(0, len(phrase) - start)],
+            start,
+        ):
+            phrase[i] += value
+
+
+class Sounds(QObject):
     """
     A lazy cache of notes played through `QSoundEffect`, in the chosen
     instrument.
@@ -692,6 +804,8 @@ class Sounds:
     >>> s.play_midi(60)
     """
 
+    metronome_preview_playing = Signal(bool)
+
     def __init__(self) -> None:
         """
         Create a player with the piano chosen and sound on.
@@ -701,11 +815,21 @@ class Sounds:
         >>> Sounds().instrument
         'piano'
         """
+        super().__init__()
         self.enabled = True
         self.instrument = "piano"  # key into INSTRUMENT_BY_KEY
+        self.metronome_click = DEFAULT_METRONOME_CLICK
+        self._metronome_effect: QSoundEffect | None = None
+        self._metronome_preview: QSoundEffect | None = None
         self._effects = {}
         self._preview_effects: dict[
-            tuple[str, tuple[int, ...], int],
+            tuple[
+                str,
+                tuple[int | None, ...],
+                int | tuple[int, ...],
+                tuple[str, int] | None,
+            ]
+            | tuple[str, tuple[int, ...], tuple[float, ...]],
             QSoundEffect,
         ] = {}
         # sustained and damped notes that may still be sounding, to
@@ -715,6 +839,7 @@ class Sounds:
         # which sequence of notes is current, so that an older one stops
         # when a new one starts
         self._sequence_run = 0
+        self._preview_ready: QMetaObject.Connection | None = None
         self._sample_step: Callable[[int | None], object] | None = None
         self._sample_files: dict[str, dict[int, Path]] = {}
         self._dir = Path(tempfile.gettempdir()) / "alto_sounds"
@@ -1180,6 +1305,103 @@ class Sounds:
         except Exception as exc:  # audio must never break an exercise
             print(f"audio unavailable: {exc}")
 
+    def play_metronome_click(self, *, force: bool = False) -> None:
+        """
+        Play one beat with the selected click sound.
+
+        Parameters
+        ----------
+        force : bool, default False
+            Play even when muted for an explicit settings preview.
+
+        Examples
+        --------
+        >>> player = Sounds()
+        >>> player.enabled = False
+        >>> player.play_metronome_click()
+        """
+        if not self.enabled and not force:
+            return
+        if self._metronome_effect is None:
+            self._metronome_effect = QSoundEffect()
+        effect = self._metronome_effect
+        path = ASSETS / "metronome" / f"{self.metronome_click}.wav"
+        source = QUrl.fromLocalFile(str(path))
+        if effect.source() != source:
+            effect.stop()
+            effect.setSource(source)
+        effect.play()
+
+    def preview_metronome(self, key: str) -> None:
+        """
+        Play four evenly spaced clicks at 120 BPM, even while muted.
+
+        Render one clip so loading the sound cannot delay later beats.
+
+        Parameters
+        ----------
+        key : str
+            The bundled click to audition.
+
+        Examples
+        --------
+        >>> sounds.preview_metronome("low-pip")  # doctest: +SKIP
+        """
+        self.stop_all()
+        try:
+            pcm, rate = metronome_preview_pcm(key)
+            digest = hashlib.sha256(pcm).hexdigest()[:16]
+            path = self._dir / f"metronome-{key}-{digest}-4x120.wav"
+            if not path.is_file():
+                buffer = io.BytesIO()
+                with wave.open(buffer, "wb") as wav_out:
+                    wav_out.setnchannels(1)
+                    wav_out.setsampwidth(2)
+                    wav_out.setframerate(rate)
+                    wav_out.writeframes(pcm)
+                self._dir.mkdir(parents=True, exist_ok=True)
+                write_file_atomically(path, data=buffer.getvalue())
+            if self._metronome_preview is None:
+                self._metronome_preview = QSoundEffect()
+                self._metronome_preview.playingChanged.connect(
+                    self._report_metronome_playback,
+                )
+                self._metronome_preview.statusChanged.connect(
+                    self._report_metronome_playback,
+                )
+            source = QUrl.fromLocalFile(str(path))
+            if self._metronome_preview.source() != source:
+                self._metronome_preview.setSource(source)
+            self._metronome_preview.play()
+        except (OSError, wave.Error) as exc:
+            print(f"audio unavailable: {exc}")
+
+    def _report_metronome_playback(self) -> None:
+        """
+        Notify the spectrum display when playback starts or stops.
+
+        Examples
+        --------
+        >>> Sounds()._report_metronome_playback()
+        """
+        effect = self._metronome_preview
+        self.metronome_preview_playing.emit(
+            effect is not None
+            and effect.status() == QSoundEffect.Status.Ready
+            and effect.isPlaying(),
+        )
+
+    def stop_metronome_preview(self) -> None:
+        """
+        End the four-click audition when leaving the preview.
+
+        Examples
+        --------
+        >>> sounds.stop_metronome_preview()
+        """
+        if self._metronome_preview is not None:
+            self._metronome_preview.stop()
+
     def stop_all(self) -> None:
         """
         Silence every note at once, and cancel any fade-outs underway.
@@ -1199,18 +1421,21 @@ class Sounds:
                 fx.stop()
         for fx in self._preview_effects.values():
             fx.stop()
+        if self._metronome_effect is not None:
+            self._metronome_effect.stop()
+        self.stop_metronome_preview()
 
     def _preview_file(
         self,
         inst: Instrument,
         *,
-        midis: tuple[int, ...],
-        step_ms: int,
+        midis: tuple[int | None, ...],
+        step_ms: int | tuple[int, ...],
         tail_ms: int = 0,
+        metronome: tuple[str, int] | None = None,
     ) -> Path:
         """
-        Render a preview as one WAV file with note onsets a fixed number
-        of samples apart.
+        Render a preview as a WAV file with the requested note lengths.
 
         The notes are mixed as 16-bit integers at the rate their
         recordings share, so no sample is converted or resampled:
@@ -1225,14 +1450,15 @@ class Sounds:
         ----------
         inst : Instrument
             The instrument whose recordings to use.
-        midis : tuple of int
-            The notes in playback order. Keyword-only.
-        step_ms : int
-            The interval between note onsets in milliseconds.
-            Keyword-only.
+        midis : tuple of int or None
+            Pitches in order, with None for a rest. Keyword-only.
+        step_ms : int or tuple of int
+            Duration in milliseconds for every note, or one per note.
         tail_ms : int, default 0
             Extra sustain for the last note, in milliseconds.
             Keyword-only.
+        metronome : tuple of str and int or None
+            Click sound and main beat length in milliseconds.
 
         Returns
         -------
@@ -1265,21 +1491,46 @@ class Sounds:
                 recordings,
             ),
         ).encode()
+        if metronome is not None:
+            click_file = ASSETS / "metronome" / f"{metronome[0]}.wav"
+            identity += repr(
+                (
+                    metronome,
+                    click_file.stat().st_mtime_ns,
+                    inst.playback_volume(),
+                    METRONOME_MIX_LEVEL,
+                ),
+            ).encode()
         path = (
             self._dir / f"preview_{hashlib.sha256(identity).hexdigest()}.wav"
         )
         if path.exists():
             return path
-        files = [self._note_file(inst, midi=midi) for midi in midis]
-        rates = {_frame_rate(file) for file in files}
+        files = [
+            self._note_file(inst, midi=midi) if midi is not None else None
+            for midi in midis
+        ]
+        rates = {_frame_rate(file) for file in files if file is not None}
         if len(rates) > 1:
-            files = [self._at_sample_rate(file) for file in files]
+            files = [
+                self._at_sample_rate(file) if file is not None else None
+                for file in files
+            ]
         rate = rates.pop() if len(rates) == 1 else SAMPLE_RATE
-        gap = max(1, round(rate * step_ms / 1000))
+        durations = (
+            (step_ms,) * len(files) if isinstance(step_ms, int) else step_ms
+        )
+        gaps = [
+            max(1, round(rate * duration / 1000)) for duration in durations
+        ]
+        offsets = list(accumulate(gaps, initial=0))
         fade = max(1, round(rate * self.FADE_MS / 1000))
         extra = round(rate * tail_ms / 1000)
         notes = []
-        for index, file in enumerate(files):
+        for index, (file, gap) in enumerate(zip(files, gaps, strict=True)):
+            if file is None:
+                notes.append([])
+                continue
             hold = gap + (extra if index == len(files) - 1 else 0)
             with wave.open(str(file)) as w:
                 pcm = _pcm(w.readframes(min(w.getnframes(), hold + fade)))
@@ -1293,15 +1544,25 @@ class Sounds:
                 )
             notes.append(pcm)
         length = max(
-            (i * gap + len(pcm) for i, pcm in enumerate(notes)),
+            (offsets[i] + len(pcm) for i, pcm in enumerate(notes)),
             default=0,
         )
         # Short recordings still need the full final beat for displays
         # that follow the output clock.
-        phrase = [0] * max(length, len(files) * gap + extra)
+        phrase = [0] * max(length, offsets[-1] + extra)
         for i, pcm in enumerate(notes):
-            start, end = i * gap, i * gap + len(pcm)
+            start, end = offsets[i], offsets[i] + len(pcm)
             phrase[start:end] = map(operator.add, phrase[start:end], pcm)
+        if metronome is not None:
+            gain = inst.playback_volume()
+            phrase = [round(sample * gain) for sample in phrase]
+            _add_clicks(
+                phrase,
+                click_key=metronome[0],
+                rate=rate,
+                beat_ms=metronome[1],
+                duration_ms=sum(durations),
+            )
         if phrase and (min(phrase) < -32768 or max(phrase) > 32767):
             phrase = [
                 -32768 if value < -32768 else min(value, 32767)
@@ -1321,8 +1582,11 @@ class Sounds:
         self,
         key: str,
         *,
-        midis: Iterable[int],
-        step_ms: int = 300,
+        midis: Iterable[int | None],
+        step_ms: int | tuple[int, ...] = 300,
+        beat_ms: int | None = None,
+        force: bool = True,
+        on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
         Play notes one after another in an instrument, even while muted,
@@ -1336,10 +1600,18 @@ class Sounds:
         ----------
         key : str
             The key of the instrument.
-        midis : iterable of int
-            The MIDI notes to play, in order. Keyword-only.
-        step_ms : int, default 300
-            The time between notes, in milliseconds. Keyword-only.
+        midis : iterable of int or None
+            MIDI pitches in order, with None for a rest. Keyword-only.
+        step_ms : int or tuple of int, default 300
+            Duration in milliseconds for every note, or one per note.
+        beat_ms : int or None
+            Add the selected metronome sound at this interval in
+            milliseconds. Omit for an unaccompanied preview.
+        force : bool, default True
+            Play even when muted. False follows the sound setting while
+            keeping the visual timing.
+        on_step : callable or None
+            Highlight each onset. Clear on completion or interruption.
 
         Examples
         --------
@@ -1351,20 +1623,221 @@ class Sounds:
         notes = tuple(midis)
         if not notes:
             return
+        if not force and not self.enabled:
+            if on_step is not None:
+                self._sample_step = on_step
+                self._walk(
+                    len(notes),
+                    gap_ms=step_ms,
+                    run=self._sequence_run,
+                    on_step=on_step,
+                )
+            return
         try:
             inst = INSTRUMENT_BY_KEY[key]
-            cache_key = (key, notes, step_ms)
+            metronome = (self.metronome_click, beat_ms) if beat_ms else None
+            cache_key = (key, notes, step_ms, metronome)
             effect = self._preview_effects.get(cache_key)
             if effect is None:
-                path = self._preview_file(inst, midis=notes, step_ms=step_ms)
+                path = self._preview_file(
+                    inst,
+                    midis=notes,
+                    step_ms=step_ms,
+                    metronome=metronome,
+                )
                 effect = QSoundEffect()
                 effect.setSource(QUrl.fromLocalFile(str(path)))
                 self._preview_effects[cache_key] = effect
-            effect.setVolume(inst.playback_volume())
-            effect.play()
+            # Accompanied clips already contain the instrument gain.
+            effect.setVolume(1.0 if metronome else inst.playback_volume())
+            self._start_preview(
+                effect,
+                count=len(notes),
+                step_ms=step_ms,
+                on_step=on_step,
+            )
         except (
             Exception
         ) as exc:  # audio must never break the instrument picker
+            print(f"audio unavailable: {exc}")
+
+    def _start_preview(
+        self,
+        effect: QSoundEffect,
+        *,
+        count: int,
+        step_ms: int | tuple[int, ...],
+        on_step: Callable[[int | None], object] | None,
+    ) -> None:
+        """
+        Start the clip and its visual clock together once loaded.
+
+        Parameters
+        ----------
+        effect : QSoundEffect
+            The prepared preview.
+        count : int
+            Number of visual steps.
+        step_ms : int or tuple of int
+            Duration of each step in milliseconds.
+        on_step : callable or None
+            Highlight each step and clear at the end.
+
+        Examples
+        --------
+        >>> sounds._start_preview(
+        ...     QSoundEffect(), count=1, step_ms=600, on_step=None,
+        ... )  # doctest: +SKIP
+        """
+        if on_step is None:
+            effect.play()
+            return
+        run = self._sequence_run
+        self._sample_step = on_step
+
+        def start() -> None:
+            """
+            Start the highlight clock when the clip is ready.
+
+            Examples
+            --------
+            >>> start()  # doctest: +SKIP
+            """
+            if run != self._sequence_run:
+                return
+            status = effect.status()
+            if status == QSoundEffect.Status.Loading:
+                return
+            if status != QSoundEffect.Status.Ready:
+                self._interrupt_sequence()
+                return
+            if self._preview_ready is not None:
+                QObject.disconnect(self._preview_ready)
+                self._preview_ready = None
+            effect.play()
+            self._walk(
+                count,
+                gap_ms=step_ms,
+                run=run,
+                on_step=on_step,
+            )
+
+        self._preview_ready = effect.statusChanged.connect(start)
+        start()
+
+    def _rhythm_file(
+        self,
+        step_ms: tuple[int, ...],
+        *,
+        levels: tuple[float, ...],
+    ) -> Path:
+        """
+        Render clicks and silent gaps into one clip at the source rate.
+
+        Parameters
+        ----------
+        step_ms : tuple of int
+            Length of each written step in milliseconds.
+        levels : tuple of float
+            Volume of each click from zero (rest) to one.
+
+        Returns
+        -------
+        pathlib.Path
+            The cached mono WAV file.
+
+        Examples
+        --------
+        >>> sounds._rhythm_file((600,), levels=(1.0,)).suffix
+        '.wav'
+        """
+        source = ASSETS / "metronome" / f"{self.metronome_click}.wav"
+        identity = (source.name, source.stat().st_mtime_ns, step_ms, levels)
+        digest = hashlib.sha256(repr(identity).encode()).hexdigest()
+        path = self._dir / f"rhythm-{digest}.wav"
+        if path.exists():
+            return path
+        with wave.open(str(source)) as wav:
+            rate = wav.getframerate()
+            click = _pcm(wav.readframes(wav.getnframes()))
+        accents = {
+            level: array.array(
+                "h",
+                (round(sample * level) for sample in click),
+            ).tobytes()
+            for level in set(levels)
+            if level
+        }
+        ends = [round(ms * rate / 1000) for ms in accumulate(step_ms)]
+        pcm = bytearray(2 * ends[-1])
+        start = 0
+        for end, level in zip(ends, levels, strict=True):
+            data = accents.get(level, b"")[: 2 * (end - start)]
+            pcm[2 * start : 2 * start + len(data)] = data
+            start = end
+        buffer = io.BytesIO()
+        with wave.open(buffer, "wb") as output:
+            output.setparams((1, 2, rate, 0, "NONE", "not compressed"))
+            output.writeframes(pcm)
+        self._dir.mkdir(parents=True, exist_ok=True)
+        write_file_atomically(path, data=buffer.getvalue())
+        return path
+
+    def play_rhythm(
+        self,
+        step_ms: tuple[int, ...],
+        *,
+        levels: tuple[float, ...],
+        force: bool = False,
+        on_step: Callable[[int | None], object],
+    ) -> None:
+        """
+        Play one metronome click per written onset, observing rests.
+
+        Parameters
+        ----------
+        step_ms : tuple of int
+            Length of each note or rest in milliseconds.
+        levels : tuple of float
+            Click volume from zero (rest) to one for each step.
+        force : bool
+            Allow an explicit audition while muted.
+        on_step : callable
+            Highlight notes and rests, then clear after the last step.
+
+        Examples
+        --------
+        >>> sounds.play_rhythm(
+        ...     (600, 600), levels=(1.0, 0.0), on_step=print,
+        ... )  # doctest: +SKIP
+        """
+        self.stop_all()
+        if not step_ms:
+            return
+        if not (self.enabled or force):
+            self._sample_step = on_step
+            self._walk(
+                len(step_ms),
+                gap_ms=step_ms,
+                run=self._sequence_run,
+                on_step=on_step,
+            )
+            return
+        key = (self.metronome_click, step_ms, levels)
+        try:
+            effect = self._preview_effects.get(key)
+            if effect is None:
+                path = self._rhythm_file(step_ms, levels=levels)
+                effect = QSoundEffect()
+                effect.setSource(QUrl.fromLocalFile(str(path)))
+                self._preview_effects[key] = effect
+            self._start_preview(
+                effect,
+                count=len(step_ms),
+                step_ms=step_ms,
+                on_step=on_step,
+            )
+        except (OSError, wave.Error) as exc:
             print(f"audio unavailable: {exc}")
 
     def _play_column(
@@ -1590,7 +2063,7 @@ class Sounds:
         self,
         count: int,
         *,
-        gap_ms: int,
+        gap_ms: int | tuple[int, ...],
         run: int,
         on_step: Callable[[int | None], object],
     ) -> None:
@@ -1602,9 +2075,8 @@ class Sounds:
         ----------
         count : int
             How many steps there are.
-        gap_ms : int
-            The time from the start of one step to the start of the
-            next, in milliseconds. Keyword-only.
+        gap_ms : int or tuple of int
+            Milliseconds per step, uniform or individually specified.
         run : int
             Which sequence this is; the walk stops if a newer one has
             started. Keyword-only.
@@ -1626,6 +2098,8 @@ class Sounds:
         [0]
         """
         started = time.monotonic()
+        durations = (gap_ms,) * count if isinstance(gap_ms, int) else gap_ms
+        deadlines = tuple(accumulate(durations))
 
         def step(i: int) -> None:
             """
@@ -1642,12 +2116,14 @@ class Sounds:
             """
             if run != self._sequence_run:
                 return
+            if i == count and self._sample_step == on_step:
+                self._sample_step = None
             on_step(i if i < count else None)
             if i < count:
                 delay = max(
                     1,
                     round(
-                        (started + (i + 1) * gap_ms / 1000 - time.monotonic())
+                        (started + deadlines[i] / 1000 - time.monotonic())
                         * 1000,
                     ),
                 )
@@ -1733,6 +2209,9 @@ class Sounds:
         1
         """
         self._sequence_run += 1
+        if self._preview_ready is not None:
+            QObject.disconnect(self._preview_ready)
+            self._preview_ready = None
         previous, self._sample_step = self._sample_step, None
         if previous is not None:
             previous(None)

@@ -98,7 +98,7 @@ from alto.ui import (
     zoom,
 )
 from alto.ui.anki_exporter import ExporterSession
-from alto.ui.app_settings import AppSettingsDialog
+from alto.ui.app_settings import AppSettingsDialog, load_metronome_click
 from alto.ui.database_page import DatabasePage
 from alto.ui.exercise_settings import load_exercise_settings
 from alto.ui.exercise_view import ExerciseView
@@ -800,6 +800,7 @@ class MainWindow(QMainWindow):
 
         load_exercise_settings()
         load_instrument()
+        load_metronome_click()
         load_notation_style()
         load_keyboard_style()
 

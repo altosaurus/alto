@@ -2,7 +2,7 @@
 The application-wide settings dialog.
 
 It holds the color theme, the notation font, the keyboard style, the
-transitions, the instrument and what updates follow.
+transitions, instruments, metronome clicks and what updates follow.
 
 Changes apply as soon as they are made. Each style is a card that
 previews it.
@@ -27,6 +27,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QColor,
+    QHideEvent,
 )
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -51,6 +52,11 @@ from PySide6.QtWidgets import (
 )
 
 from alto import updates
+from alto.audio import (
+    DEFAULT_METRONOME_CLICK,
+    METRONOME_CLICKS,
+    sounds,
+)
 from alto.learning import Learner
 from alto.learning.calendar import CALENDAR_SCHEDULERS, SCHEDULERS
 from alto.theory.pitch import Note
@@ -58,14 +64,15 @@ from alto.ui import (
     keyboard_styles,
     notation,
 )
-from alto.ui.instrument_picker import InstrumentPicker
+from alto.ui.instrument_picker import InstrumentPicker, sound_picker_layout
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.lesson_nav import section_item
+from alto.ui.metronome_spectrum import MetronomeSpectrum
 from alto.ui.pictures import ClefPictures
 from alto.ui.practice_limits import DailyLimitsEditor
 from alto.ui.response_times import ResponseTimeDialog
 from alto.ui.staff import StaffWidget
-from alto.ui.store import store
+from alto.ui.store import store, text_value
 from alto.ui.theme import (
     FAMILIES,
     USER_PREFIX,
@@ -99,6 +106,173 @@ from alto.ui.zoom import css, px
 
 # what the row that makes a new theme holds in place of a theme's key
 NEW_THEME = "__new__"
+
+
+def load_metronome_click() -> None:
+    """
+    Apply the saved click or use High pip as the default.
+
+    Examples
+    --------
+    >>> load_metronome_click()
+    >>> sounds.metronome_click in METRONOME_CLICKS
+    True
+    """
+    key = text_value(
+        store(),
+        key="audio/metronomeClick",
+        default=DEFAULT_METRONOME_CLICK,
+    )
+    sounds.metronome_click = (
+        key if key in METRONOME_CLICKS else DEFAULT_METRONOME_CLICK
+    )
+
+
+class _MetronomePicker(QWidget):
+    """
+    Browse, preview, and apply Alto's metronome sounds.
+
+    Examples
+    --------
+    >>> _MetronomePicker().list.count()
+    3
+    """
+
+    def __init__(self) -> None:
+        """
+        Show the saved click in the sound list and detail card.
+
+        Examples
+        --------
+        >>> picker = _MetronomePicker()
+        >>> picker.use.isEnabled()
+        False
+        """
+        super().__init__()
+        self.list = QListWidget()
+        self.list.setAccessibleName("Metronome sounds")
+        self.list.setObjectName("categories")
+        self.list.setFixedWidth(px(220))
+        for key, (label, _) in METRONOME_CLICKS.items():
+            item = QListWidgetItem(label, self.list)
+            item.setData(Qt.ItemDataRole.UserRole, key)
+            item.setSizeHint(QSize(0, px(34)))
+            if key == sounds.metronome_click:
+                self.list.setCurrentItem(item)
+
+        card = QFrame()
+        card.setObjectName("helpCard")
+        details = QVBoxLayout(card)
+        details.setContentsMargins(18, 16, 18, 14)
+        details.setSpacing(10)
+        self.title = QLabel()
+        font = self.title.font()
+        font.setPointSizeF(font.pointSizeF() * 1.5)
+        font.setBold(True)
+        self.title.setFont(font)
+        details.addWidget(self.title)
+        self.description = QLabel()
+        self.description.setWordWrap(True)
+        details.addWidget(self.description)
+        details.addStretch(1)
+        self.spectrum = MetronomeSpectrum()
+        sounds.metronome_preview_playing.connect(self.spectrum.set_playing)
+        details.addWidget(self.spectrum)
+        self.use = QPushButton()
+        self.use.clicked.connect(self._apply)
+        self.preview = QPushButton("▶  Preview")
+        self.preview.setToolTip("Play four clicks at 120 BPM")
+        self.preview.clicked.connect(
+            lambda: sounds.preview_metronome(self.key),
+        )
+        actions = QHBoxLayout()
+        actions.addWidget(self.use)
+        actions.addWidget(self.preview)
+        actions.addStretch(1)
+        details.addLayout(actions)
+        sound_picker_layout(self, choices=self.list, card=card)
+        self.list.currentRowChanged.connect(sounds.stop_metronome_preview)
+        self.list.currentRowChanged.connect(self._show_click)
+        self.list.itemDoubleClicked.connect(self._apply)
+        self._show_click()
+
+    @property
+    def key(self) -> str:
+        """
+        Identify the sound currently displayed in the card.
+
+        Returns
+        -------
+        str
+            The bundled click's key.
+
+        Examples
+        --------
+        >>> _MetronomePicker().key == sounds.metronome_click
+        True
+        """
+        return self.list.currentItem().data(Qt.ItemDataRole.UserRole)
+
+    def _show_click(self) -> None:
+        """
+        Show the selected sound and mark the one currently in use.
+
+        Examples
+        --------
+        >>> picker = _MetronomePicker()
+        >>> picker.list.setCurrentRow(2)
+        >>> picker.title.text()
+        'Pencil click'
+        """
+        title, description = METRONOME_CLICKS[self.key]
+        self.title.setText(title)
+        self.description.setText(description)
+        self.spectrum.set_sound(self.key)
+        for row in range(self.list.count()):
+            item = self.list.item(row)
+            key = item.data(Qt.ItemDataRole.UserRole)
+            label, _ = METRONOME_CLICKS[key]
+            active = key == sounds.metronome_click
+            item.setText(f"{label}  ✓" if active else label)
+            font = item.font()
+            font.setBold(active)
+            item.setFont(font)
+        in_use = self.key == sounds.metronome_click
+        self.use.setText("In use" if in_use else "Use this sound")
+        self.use.setEnabled(not in_use)
+
+    def _apply(self) -> None:
+        """
+        Save the sound shown in the card.
+
+        Examples
+        --------
+        >>> picker = _MetronomePicker()
+        >>> picker._apply()
+        >>> picker.key == sounds.metronome_click
+        True
+        """
+        sounds.metronome_click = self.key
+        store().setValue("audio/metronomeClick", self.key)
+        self._show_click()
+
+    def hideEvent(self, event: QHideEvent) -> None:
+        """
+        End the preview when leaving the pane or closing Settings.
+
+        Parameters
+        ----------
+        event : QHideEvent
+            The widget's hide event.
+
+        Examples
+        --------
+        >>> picker = _MetronomePicker()
+        >>> picker.hide()
+        """
+        sounds.stop_metronome_preview()
+        self.spectrum.animation.stop()
+        super().hideEvent(event)
 
 
 class _LazyPages(QStackedWidget):
@@ -748,8 +922,7 @@ class AppSettingsDialog(QDialog):
     pages : QStackedWidget
         The page for the chosen category.
     instruments : InstrumentPicker
-        The instrument chooser, available after the Sound page is first
-        selected.
+        The chooser, available after the Instruments page is selected.
     theme_list : QListWidget
         The themes, on the Theme section, with the one in use in bold.
     theme_items : dict of str to QListWidgetItem
@@ -833,50 +1006,30 @@ class AppSettingsDialog(QDialog):
         self.categories.setObjectName("categories")  # styled in style.py
         self.categories.setFixedWidth(px(170))
         self.pages = _LazyPages()
-        self._appearance_expanded = True
-        appearance = QListWidgetItem()
-        appearance.setData(Qt.ItemDataRole.AccessibleTextRole, "Appearance")
-        appearance.setData(Qt.ItemDataRole.UserRole, ("group", 0))
-        appearance.setSizeHint(QSize(0, px(36)))
-        self.categories.addItem(appearance)
-        parent_row = QWidget()
-        parent_layout = QHBoxLayout(parent_row)
-        parent_layout.setContentsMargins(10, 0, 8, 0)
-        parent_label = QLabel("Appearance")
-        parent_label.setAttribute(
-            Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+        self.appearance_toggle = self._add_category_group(
+            "Appearance",
+            children=(
+                "Theme",
+                "Notation style",
+                "Keyboard style",
+                "Transitions",
+            ),
         )
-        parent_layout.addWidget(parent_label, 1)
-        self.appearance_toggle = QToolButton()
-        self.appearance_toggle.setStyleSheet(
-            "QToolButton { border: none; background: transparent; }",
+        self.sound_toggle = self._add_category_group(
+            "Sound",
+            children=("Instruments", "Metronome"),
         )
-        self.appearance_toggle.clicked.connect(
-            lambda: self._toggle_category(appearance),
-        )
-        parent_layout.addWidget(self.appearance_toggle)
-        self.categories.setItemWidget(appearance, parent_row)
-        self._update_appearance_parent()
-        for index, name in enumerate(
-            ("Theme", "Notation style", "Keyboard style", "Transitions"),
-        ):
-            item = QListWidgetItem(f"\u2003{name}")
-            item.setData(Qt.ItemDataRole.UserRole, ("appearance", index))
-            item.setSizeHint(QSize(0, px(32)))
-            self.categories.addItem(item)
         self.pages.add_page(self._appearance_page)
-        sections = [
-            ("Sound", self._sound_page, 1),
-            ("Updates", self._updates_page, 2),
-        ]
+        self.pages.add_page(self._sound_page)
+        sections = [("Updates", self._updates_page)]
         if learner is not None:
-            sections.append(("Practice", self._practice_page, 3))
-        for name, factory, index in sections:
+            sections.append(("Practice", self._practice_page))
+        for name, factory in sections:
+            index = self.pages.add_page(factory)
             item = QListWidgetItem(name)
             item.setData(Qt.ItemDataRole.UserRole, ("page", index))
             item.setSizeHint(QSize(0, px(36)))
             self.categories.addItem(item)
-            self.pages.add_page(factory)
         self.categories.currentRowChanged.connect(self._select_category)
         self.categories.setCurrentRow(0)
         body = QHBoxLayout()
@@ -893,6 +1046,84 @@ class AppSettingsDialog(QDialog):
         restore.clicked.connect(self._restore_defaults)
         buttons.rejected.connect(self.accept)
         lay.addWidget(buttons)
+
+    def _add_category_group(
+        self,
+        name: str,
+        *,
+        children: tuple[str, ...],
+    ) -> QToolButton:
+        """
+        Add a sidebar heading and its expandable list of pages.
+
+        Parameters
+        ----------
+        name : str
+            Category heading.
+        children : tuple of str
+            Page names in the order used by the category's stack.
+
+        Returns
+        -------
+        QToolButton
+            The heading's expand and collapse control.
+
+        Examples
+        --------
+        >>> AppSettingsDialog().sound_toggle.isChecked()
+        True
+        """
+        parent = QListWidgetItem()
+        parent.setData(Qt.ItemDataRole.AccessibleTextRole, name)
+        parent.setData(Qt.ItemDataRole.UserRole, (name, -1))
+        parent.setSizeHint(QSize(0, px(36)))
+        self.categories.addItem(parent)
+        row = QWidget()
+        layout = QHBoxLayout(row)
+        layout.setContentsMargins(10, 0, 8, 0)
+        label = QLabel(name)
+        label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        layout.addWidget(label, 1)
+        toggle = QToolButton()
+        toggle.setCheckable(True)
+        toggle.setStyleSheet(
+            "QToolButton { border: none; background: transparent; }",
+        )
+        layout.addWidget(toggle)
+        self.categories.setItemWidget(parent, row)
+        items = []
+        for index, title in enumerate(children):
+            child = QListWidgetItem(f"\u2003{title}")
+            child.setData(Qt.ItemDataRole.UserRole, (name, index))
+            child.setSizeHint(QSize(0, px(32)))
+            self.categories.addItem(child)
+            items.append(child)
+
+        def expand(expanded: bool) -> None:
+            """
+            Show or hide the category's children.
+
+            Parameters
+            ----------
+            expanded : bool
+                Whether the child rows should be visible.
+
+            Examples
+            --------
+            The user clicks the category chevron.
+            """
+            if not expanded and self.categories.currentItem() in items:
+                self.categories.setCurrentItem(parent)
+            for child in items:
+                child.setHidden(not expanded)
+            toggle.setText("⌄" if expanded else ">")
+            action = "Collapse" if expanded else "Expand"
+            toggle.setAccessibleName(f"{action} {name}")
+            toggle.setToolTip(toggle.accessibleName())
+
+        toggle.toggled.connect(expand)
+        toggle.setChecked(True)
+        return toggle
 
     def _restore_defaults(self) -> None:
         """
@@ -969,7 +1200,7 @@ class AppSettingsDialog(QDialog):
         >>> layout = QVBoxLayout()
         >>> AppSettingsDialog._heading(
         ...     layout,
-        ...     title="Instrument",
+        ...     title="Instruments",
         ...     about="The sound used for notes.",
         ... )
         >>> layout.count()
@@ -1095,39 +1326,73 @@ class AppSettingsDialog(QDialog):
         --------
         >>> _appearance_summary()  # doctest: +SKIP
         """
-        page, lay = self._page()
-        self._heading(
-            lay,
-            title="Appearance",
+        return self._category_summary(
+            "Appearance",
             about="Customize how Alto looks and moves.",
-        )
-        for heading, children in (
-            (
-                "Colors & symbols",
+            toggle=self.appearance_toggle,
+            sections=(
                 (
-                    (1, "Theme", "Choose the app colors."),
-                    (2, "Notation style", "Choose the music font."),
-                ),
-            ),
-            (
-                "Instruments & motion",
-                (
-                    (3, "Keyboard style", "Style the piano keys."),
-                    (4, "Transitions", "Set how pages move."),
-                ),
-            ),
-        ):
-            section = QLabel(heading.upper())
-            section.setStyleSheet(
-                css(
+                    "Colors & symbols",
                     (
-                        "color: palette(placeholder-text); font-size: 9pt;"
-                        " padding-top: 14px;"
+                        ("Theme", "Choose the app colors."),
+                        ("Notation style", "Choose the music font."),
                     ),
                 ),
-            )
-            lay.addWidget(section)
-            for row, title, description in children:
+                (
+                    "Instruments & motion",
+                    (
+                        ("Keyboard style", "Style the piano keys."),
+                        ("Transitions", "Set how pages move."),
+                    ),
+                ),
+            ),
+        )
+
+    def _category_summary(
+        self,
+        title: str,
+        *,
+        about: str,
+        toggle: QToolButton,
+        sections: tuple[tuple[str, tuple[tuple[str, str], ...]], ...],
+    ) -> QWidget:
+        """
+        Build a category overview with links to its child pages.
+
+        Parameters
+        ----------
+        title : str
+            Category name.
+        about : str
+            Description under the heading.
+        toggle : QToolButton
+            Control that reveals the child rows in the sidebar.
+        sections : tuple
+            Page titles and descriptions grouped by optional headings.
+
+        Returns
+        -------
+        QWidget
+            The category overview.
+
+        Examples
+        --------
+        >>> AppSettingsDialog().appearance_pages.count()
+        5
+        """
+        page, lay = self._page()
+        self._heading(lay, title=title, about=about)
+        for heading, children in sections:
+            if heading:
+                section = QLabel(heading.upper())
+                section.setStyleSheet(
+                    css(
+                        "color: palette(placeholder-text); font-size: 9pt; "
+                        "padding-top: 14px;",
+                    ),
+                )
+                lay.addWidget(section)
+            for title, description in children:
                 button = QPushButton()
                 button.setAccessibleName(title)
                 button.setAccessibleDescription(description)
@@ -1161,110 +1426,63 @@ class AppSettingsDialog(QDialog):
                         Qt.WidgetAttribute.WA_TransparentForMouseEvents,
                     )
                 button.clicked.connect(
-                    lambda _checked=False, child=row: (
-                        self._open_appearance_child(child)
+                    lambda _checked=False, child=title: self._open_child(
+                        toggle,
+                        title=child,
                     ),
                 )
                 lay.addWidget(button)
         lay.addStretch()
         return page
 
-    def _open_appearance_child(self, row: int) -> None:
+    def _open_child(self, toggle: QToolButton, *, title: str) -> None:
         """
-        Expand Appearance and select one of its child pages.
+        Reveal a child page and select its sidebar row.
 
         Parameters
         ----------
-        row : int
-            The row of the settings navigation list.
-
+        toggle : QToolButton
+            The parent category's expand control.
+        title : str
+            The child page title.
 
         Examples
         --------
-        >>> _open_appearance_child()  # doctest: +SKIP
+        >>> dialog = AppSettingsDialog()
+        >>> dialog._open_child(dialog.sound_toggle, title="Instruments")
         """
-        if not self._appearance_expanded:
-            self._toggle_category(self.categories.item(0))
-        self.categories.setCurrentRow(row)
+        toggle.setChecked(True)
+        (item,) = self.categories.findItems(
+            f"\u2003{title}",
+            Qt.MatchFlag.MatchExactly,
+        )
+        self.categories.setCurrentItem(item)
 
     def _select_category(self, row: int) -> None:
         """
-        Show the selected settings page and, for Appearance, its
-        selected section.
+        Show the selected settings page or category overview.
 
         Parameters
         ----------
         row : int
             The row of the settings navigation list.
-
 
         Examples
         --------
         >>> _select_category()  # doctest: +SKIP
         """
         item = self.categories.item(row)
-        selection = (
-            item.data(Qt.ItemDataRole.UserRole) if item is not None else None
-        )
-        if not isinstance(selection, tuple):
-            return
-        kind, index = selection
-        if kind == "appearance":
-            self.pages.setCurrentIndex(0)
-            self.appearance_pages.setCurrentIndex(index)
-        elif kind == "group":
-            self.pages.setCurrentIndex(0)
-            self.appearance_pages.setCurrentIndex(4)
-        elif kind == "page":
-            self.pages.setCurrentIndex(index)
-
-    def _toggle_category(self, item: QListWidgetItem) -> None:
-        """
-        Expand or collapse a settings category that contains subitems.
-
-        Parameters
-        ----------
-        item : QListWidgetItem
-            The selected category item.
-
-
-        Examples
-        --------
-        >>> _toggle_category()  # doctest: +SKIP
-        """
-        if item.data(Qt.ItemDataRole.UserRole) != ("group", 0):
-            return
-        self._appearance_expanded = not self._appearance_expanded
-        if (
-            not self._appearance_expanded
-            and 1 <= self.categories.currentRow() <= 4
-        ):
-            self.categories.setCurrentItem(item)
-        for row in range(1, 5):
-            child = self.categories.item(row)
-            if child is not None:
-                child.setHidden(not self._appearance_expanded)
-        self._update_appearance_parent()
-
-    def _update_appearance_parent(self) -> None:
-        """
-        Show the category summary and its current expanded state.
-
-        Examples
-        --------
-        >>> _update_appearance_parent()  # doctest: +SKIP
-        """
-        item = self.categories.item(0)
         if item is None:
             return
-        self.appearance_toggle.setText(
-            "⌄" if self._appearance_expanded else ">",
-        )
-        self.appearance_toggle.setAccessibleName(
-            "Collapse Appearance"
-            if self._appearance_expanded
-            else "Expand Appearance",
-        )
+        kind, index = item.data(Qt.ItemDataRole.UserRole)
+        if kind == "Appearance":
+            self.pages.setCurrentIndex(0)
+            self.appearance_pages.setCurrentIndex(4 if index == -1 else index)
+        elif kind == "Sound":
+            self.pages.setCurrentIndex(1)
+            self.sound_pages.setCurrentIndex(index + 1)
+        else:
+            self.pages.setCurrentIndex(index)
 
     def _theme_tab(self) -> QWidget:
         """
@@ -1975,7 +2193,7 @@ class AppSettingsDialog(QDialog):
         ...         db, profile=db.add_profile("Ada")
         ...     )
         ... )
-        >>> dialog.categories.setCurrentRow(7)
+        >>> dialog.categories.setCurrentRow(9)
         >>> dialog.scheduler_list.currentItem().text()
         'ASRS'
         """
@@ -2125,7 +2343,74 @@ class AppSettingsDialog(QDialog):
 
     def _sound_page(self) -> QWidget:
         """
-        Build the Sound page: the instrument chooser.
+        Build the Sound category and its two child pages.
+
+        Returns
+        -------
+        QWidget
+            The Sound page stack.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog.categories.setCurrentRow(5)
+        >>> dialog.sound_pages.count()
+        3
+        """
+        self.sound_pages = _LazyPages()
+        self.sound_pages.add_page(
+            lambda: self._category_summary(
+                "Sound",
+                about="Choose the sounds Alto plays.",
+                toggle=self.sound_toggle,
+                sections=(
+                    (
+                        "",
+                        (
+                            (
+                                "Instruments",
+                                "Choose the sound for notes.",
+                            ),
+                            (
+                                "Metronome",
+                                "Choose and hear the metronome pulse.",
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        self.sound_pages.add_page(self._instruments_page)
+        self.sound_pages.add_page(self._metronome_page)
+        return self.sound_pages
+
+    def _metronome_page(self) -> QWidget:
+        """
+        Build the metronome click chooser.
+
+        Returns
+        -------
+        QWidget
+            The three click choices with the current sound selected.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog.categories.setCurrentRow(7)
+        """
+        page, lay = self._page()
+        self._heading(
+            lay,
+            title="Metronome",
+            about="Select a sound to see its details. "
+            "Preview plays four clicks at 120 BPM.",
+        )
+        lay.addWidget(_MetronomePicker(), 1)
+        return page
+
+    def _instruments_page(self) -> QWidget:
+        """
+        Build the instrument chooser.
 
         Returns
         -------
@@ -2135,14 +2420,14 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(5)
+        >>> dialog.categories.setCurrentRow(6)
         >>> dialog.instruments.list.count() > 0
         True
         """
         page, lay = self._page()
         self._heading(
             lay,
-            title="Instrument",
+            title="Instruments",
             about="The sound used for notes and for the correct-answer "
             "chime. Choose an instrument to see what it is "
             "made from, and press Hear it to listen.",
@@ -2164,7 +2449,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(6)
+        >>> dialog.categories.setCurrentRow(8)
         >>> dialog.main_channel.isChecked()
         False
         """
@@ -2225,7 +2510,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(6)
+        >>> dialog.categories.setCurrentRow(8)
         >>> dialog.main_channel.setChecked(True)
         >>> saved_channel()
         'main'
