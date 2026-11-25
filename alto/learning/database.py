@@ -1482,11 +1482,24 @@ class Database:
         """
         Capture the range of attempts for a database browser session.
 
+        Parameters
+        ----------
+        profile_id : int
+            The profile whose answers are being browsed.
+        limit : int
+            The number of recent attempts to include. Keyword-only.
+
         Returns
         -------
         tuple of int
             The profile's total count and inclusive lower and upper IDs
             for its newest `limit` attempts. Later inserts are excluded.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> db.answer_window(db.add_profile("Ada").id, limit=100)
+        (0, 0, 0)
         """
         total, newest = self.conn.execute(
             "SELECT COUNT(*), COALESCE(MAX(id), 0) FROM attempts "
@@ -1513,11 +1526,31 @@ class Database:
         """
         Read answer details for a slice of the browser's history.
 
+        Parameters
+        ----------
+        profile_id : int
+            The profile whose answers are being browsed.
+        id_range : tuple of int
+            Inclusive ID bounds from `answer_window`. Keyword-only.
+        offset : int
+            The number of rows to skip. Keyword-only.
+        limit : int
+            The maximum size of this page. Keyword-only.
+
         Returns
         -------
         list of sqlite3.Row
             Up to `limit` answers starting at `offset`, newest time
             first. The insertion ID breaks ties within a timestamp.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> pid = db.add_profile("Ada").id
+        >>> _, low, high = db.answer_window(pid, limit=100)
+        >>> bounds = (low, high)
+        >>> db.answer_page(pid, id_range=bounds, offset=0, limit=64)
+        []
         """
         return self.conn.execute(
             f"SELECT {_ANSWER_COLUMNS} FROM ("

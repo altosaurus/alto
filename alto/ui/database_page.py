@@ -252,10 +252,20 @@ class RowsModel(QAbstractTableModel):
         """
         Look up one source row.
 
+        Parameters
+        ----------
+        row : int
+            Zero-based source row.
+
         Returns
         -------
         tuple of list and dict
             The displayed cells and hidden preview details.
+
+        Examples
+        --------
+        >>> RowsModel(["Count"], rows=[[("2", 2)]])._record(0)
+        ([('2', 2)], {})
         """
         return self.rows[row], self.extras[row]
 
@@ -518,7 +528,17 @@ def answer_cells(
 
 
 class _PagedAnswers(RowsModel):
-    """Expose the answer history and read only the pages Qt requests."""
+    """
+    Expose the answer history and read only the pages Qt requests.
+
+    Examples
+    --------
+    >>> from alto.learning import Database
+    >>> db = Database()
+    >>> learner = Learner(db, profile=db.add_profile("Ada"))
+    >>> _PagedAnswers(learner, names={}, texts=QuestionTexts()).total
+    0
+    """
 
     def __init__(
         self,
@@ -527,6 +547,28 @@ class _PagedAnswers(RowsModel):
         names: dict[str, str],
         texts: QuestionTexts,
     ) -> None:
+        """
+        Capture the browsable answer range for the active profile.
+
+        Parameters
+        ----------
+        learner : Learner
+            Supplies the profile and its database.
+        names : dict of str to str
+            Display names for exercise classes. Keyword-only.
+        texts : QuestionTexts
+            Cache of descriptions for stored questions. Keyword-only.
+
+        Examples
+        --------
+        >>> from alto.learning import Database
+        >>> db = Database()
+        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> texts = QuestionTexts()
+        >>> model = _PagedAnswers(learner, names={}, texts=texts)
+        >>> model._pages
+        {}
+        """
         super().__init__(ANSWER_HEADERS, rows=[], numeric={5, 6})
         self._db = learner.db
         self._profile_id = learner.profile.id
@@ -547,14 +589,54 @@ class _PagedAnswers(RowsModel):
         """
         Report the full extent before Qt requests individual pages.
 
+        Parameters
+        ----------
+        parent : QModelIndex or QPersistentModelIndex
+            The parent index. Only the root has rows.
+
         Returns
         -------
         int
             The number of browsable rows, or zero for a child index.
+
+        Examples
+        --------
+        >>> from alto.learning import Database
+        >>> db = Database()
+        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> DatabasePage(learner).model.rowCount()
+        0
         """
         return 0 if parent.isValid() else self._size
 
     def _record(self, row: int) -> tuple[list[tuple[str, object]], dict]:
+        """
+        Read and cache the page containing one answer.
+
+        Parameters
+        ----------
+        row : int
+            Zero-based source row.
+
+        Returns
+        -------
+        tuple of list and dict
+            The answer cells and the details used by its preview.
+
+        Examples
+        --------
+        >>> from alto.learning import Database
+        >>> db = Database()
+        >>> profile = db.add_profile("Ada")
+        >>> db.add_attempt(
+        ...     profile.id, exercise="NoteNames", item_key="k",
+        ...     attempt_no=1, answer="C", correct=True,
+        ...     duration_ms=500, answered_at=1.0,
+        ... )
+        >>> model = DatabasePage(Learner(db, profile=profile)).model
+        >>> model._record(0)[1]["item_key"]
+        'k'
+        """
         page, within = divmod(row, ANSWER_PAGE_SIZE)
         if page not in self._pages:
             offset = page * ANSWER_PAGE_SIZE

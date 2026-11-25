@@ -35,7 +35,7 @@ each question. Pure Python (no Qt).
 def check_snapshot(data: bytes) -> tuple[int, int, int]
 ```
 
-{% endraw %}{% include api-source.html name="check_snapshot" line=198 %}{% raw %}
+{% endraw %}{% include api-source.html name="check_snapshot" line=211 %}{% raw %}
 
 </div>
 
@@ -81,7 +81,7 @@ Profile(
 )
 ```
 
-{% endraw %}{% include api-source.html name="Profile" line=279 %}{% raw %}
+{% endraw %}{% include api-source.html name="Profile" line=292 %}{% raw %}
 
 </div>
 
@@ -119,7 +119,7 @@ ItemRecord(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ItemRecord" line=303 %}{% raw %}
+{% endraw %}{% include api-source.html name="ItemRecord" line=316 %}{% raw %}
 
 </div>
 
@@ -162,7 +162,7 @@ What a profile's history says about one question.
 Database(path: str | Path = ':memory:')
 ```
 
-{% endraw %}{% include api-source.html name="Database" line=364 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database" line=377 %}{% raw %}
 
 </div>
 
@@ -211,7 +211,7 @@ True
 def write_transaction() -> Iterator[None]
 ```
 
-{% endraw %}{% include api-source.html name="Database.write_transaction" line=464 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.write_transaction" line=477 %}{% raw %}
 
 </div>
 
@@ -241,7 +241,7 @@ False
 def close() -> None
 ```
 
-{% endraw %}{% include api-source.html name="Database.close" line=490 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.close" line=503 %}{% raw %}
 
 </div>
 
@@ -262,7 +262,7 @@ Close the connection.
 def snapshot() -> bytes
 ```
 
-{% endraw %}{% include api-source.html name="Database.snapshot" line=501 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.snapshot" line=514 %}{% raw %}
 
 </div>
 
@@ -294,7 +294,7 @@ True
 def restore(data: bytes) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Database.restore" line=526 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.restore" line=539 %}{% raw %}
 
 </div>
 
@@ -334,7 +334,7 @@ Alto is brought up to date.
 def profiles() -> list[Profile]
 ```
 
-{% endraw %}{% include api-source.html name="Database.profiles" line=576 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.profiles" line=589 %}{% raw %}
 
 </div>
 
@@ -362,7 +362,7 @@ Return every profile, sorted by name without regard to case.
 def profile(profile_id: int) -> Profile | None
 ```
 
-{% endraw %}{% include api-source.html name="Database.profile" line=598 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.profile" line=611 %}{% raw %}
 
 </div>
 
@@ -396,7 +396,7 @@ True
 def add_profile(name: str) -> Profile
 ```
 
-{% endraw %}{% include api-source.html name="Database.add_profile" line=628 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.add_profile" line=641 %}{% raw %}
 
 </div>
 
@@ -434,7 +434,7 @@ ValueError: There is already a profile called ada lovelace.
 def delete_profile(profile_id: int) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Database.delete_profile" line=675 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.delete_profile" line=688 %}{% raw %}
 
 </div>
 
@@ -468,7 +468,7 @@ def get_item(
 ) -> ItemRecord | None
 ```
 
-{% endraw %}{% include api-source.html name="Database.get_item" line=702 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.get_item" line=715 %}{% raw %}
 
 </div>
 
@@ -511,7 +511,7 @@ def save_item(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Database.save_item" line=746 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.save_item" line=759 %}{% raw %}
 
 </div>
 
@@ -574,7 +574,7 @@ def add_attempt(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Database.add_attempt" line=826 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.add_attempt" line=839 %}{% raw %}
 
 </div>
 
@@ -626,7 +626,7 @@ def attempts(
 ) -> list[sqlite3.Row]
 ```
 
-{% endraw %}{% include api-source.html name="Database.attempts" line=905 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.attempts" line=918 %}{% raw %}
 
 </div>
 
@@ -684,7 +684,7 @@ def attempts_in(
 ) -> list[sqlite3.Row]
 ```
 
-{% endraw %}{% include api-source.html name="Database.attempts_in" line=1024 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.attempts_in" line=1037 %}{% raw %}
 
 </div>
 
@@ -740,7 +740,7 @@ def first_attempts_per_day(
 ) -> dict[str, int]
 ```
 
-{% endraw %}{% include api-source.html name="Database.first_attempts_per_day" line=1095 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.first_attempts_per_day" line=1108 %}{% raw %}
 
 </div>
 
@@ -796,7 +796,7 @@ def strained_items(
 ) -> list[sqlite3.Row]
 ```
 
-{% endraw %}{% include api-source.html name="Database.strained_items" line=1159 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.strained_items" line=1172 %}{% raw %}
 
 </div>
 
@@ -863,7 +863,7 @@ def count_attempts(
 ) -> int
 ```
 
-{% endraw %}{% include api-source.html name="Database.count_attempts" line=1247 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.count_attempts" line=1260 %}{% raw %}
 
 </div>
 
@@ -921,7 +921,7 @@ def attempt_rows(
 ) -> list[sqlite3.Row]
 ```
 
-{% endraw %}{% include api-source.html name="Database.attempt_rows" line=1382 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.attempt_rows" line=1395 %}{% raw %}
 
 </div>
 
@@ -970,6 +970,83 @@ it was an answer to (if that is still known).
 [2.0]
 ```
 
+### Database.answer_window
+
+<div class="api-signature" markdown="1">
+
+```python
+def answer_window(
+    profile_id: int,
+    *,
+    limit: int,
+) -> tuple[int, int, int]
+```
+
+{% endraw %}{% include api-source.html name="Database.answer_window" line=1476 %}{% raw %}
+
+</div>
+
+Capture the range of attempts for a database browser session.
+
+**Parameters**
+
+- `profile_id` (*int*): The profile whose answers are being browsed.
+- `limit` (*int*): The number of recent attempts to include. Keyword-only.
+
+**Returns**
+
+- *tuple of int*: The profile's total count and inclusive lower and upper IDs for its newest `limit` attempts. Later inserts are excluded.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> db = Database()
+>>> db.answer_window(db.add_profile("Ada").id, limit=100)
+(0, 0, 0)
+```
+
+### Database.answer_page
+
+<div class="api-signature" markdown="1">
+
+```python
+def answer_page(
+    profile_id: int,
+    *,
+    id_range: tuple[int, int],
+    offset: int,
+    limit: int,
+) -> list[sqlite3.Row]
+```
+
+{% endraw %}{% include api-source.html name="Database.answer_page" line=1518 %}{% raw %}
+
+</div>
+
+Read answer details for a slice of the browser's history.
+
+**Parameters**
+
+- `profile_id` (*int*): The profile whose answers are being browsed.
+- `id_range` (*tuple of int*): Inclusive ID bounds from `answer_window`. Keyword-only.
+- `offset` (*int*): The number of rows to skip. Keyword-only.
+- `limit` (*int*): The maximum size of this page. Keyword-only.
+
+**Returns**
+
+- *list of sqlite3.Row*: Up to `limit` answers starting at `offset`, newest time first. The insertion ID breaks ties within a timestamp.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> db = Database()
+>>> pid = db.add_profile("Ada").id
+>>> _, low, high = db.answer_window(pid, limit=100)
+>>> bounds = (low, high)
+>>> db.answer_page(pid, id_range=bounds, offset=0, limit=64)
+[]
+```
+
 ### Database.item_rows
 
 <div class="api-signature" markdown="1">
@@ -982,7 +1059,7 @@ def item_rows(
 ) -> list[sqlite3.Row]
 ```
 
-{% endraw %}{% include api-source.html name="Database.item_rows" line=1470 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.item_rows" line=1564 %}{% raw %}
 
 </div>
 
@@ -1015,7 +1092,7 @@ most strained first.
 def profile_rows() -> list[sqlite3.Row]
 ```
 
-{% endraw %}{% include api-source.html name="Database.profile_rows" line=1511 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.profile_rows" line=1605 %}{% raw %}
 
 </div>
 
@@ -1056,7 +1133,7 @@ def replay_candidates(
 ) -> list[ItemRecord]
 ```
 
-{% endraw %}{% include api-source.html name="Database.replay_candidates" line=1543 %}{% raw %}
+{% endraw %}{% include api-source.html name="Database.replay_candidates" line=1637 %}{% raw %}
 
 </div>
 

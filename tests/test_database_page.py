@@ -138,7 +138,14 @@ def test_the_answers_table_lists_every_answer_newest_first(
 def test_answers_sort_by_time_when_recorded_out_of_order(
     app: QApplication,
 ) -> None:
-    """Keep timestamps and row details together across header sorts."""
+    """
+    Keep timestamps and row details together across header sorts.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     for key, timestamp in (("a", 300), ("b", 100), ("c", 300)):
@@ -155,6 +162,14 @@ def test_answers_sort_by_time_when_recorded_out_of_order(
     page = DatabasePage(learner)
 
     def keys() -> list[str]:
+        """
+        Read the item keys in displayed order.
+
+        Returns
+        -------
+        list of str
+            The keys from the rows' preview details.
+        """
         return [
             page.proxy.index(i, 0).data(ROW_ROLE)["item_key"]
             for i in range(page.proxy.rowCount())
@@ -174,7 +189,16 @@ def test_answer_pages_follow_the_viewport_and_cover_global_search_and_sort(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """Query just the visible page, including after scrollbar jumps."""
+    """
+    Query just the visible page, including after scrollbar jumps.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the history limit and page size.
+    """
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     for i in range(501):
@@ -238,6 +262,32 @@ def test_answer_pages_follow_the_viewport_and_cover_global_search_and_sort(
         assert page.proxy.index(0, 3).data() == "new"
         assert page.proxy.index(1, 3).data() == "answer-002"
         assert page.proxy.index(499, 3).data() == "answer-500"
+
+
+def test_deleted_answers_leave_empty_preview_details(
+    app: QApplication,
+    practiced_learner: Callable[..., Learner],
+) -> None:
+    """
+    Read a pending page after the profile's history has been cleared.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    practiced_learner : Callable[..., Learner]
+        Builds a profile with recorded answers.
+    """
+    learner = practiced_learner(3)
+    model, _ = DatabasePage(learner)._answers()
+    with learner.db.conn:
+        learner.db.conn.execute(
+            "DELETE FROM attempts WHERE profile_id = ?",
+            (learner.profile.id,),
+        )
+    assert model.rowCount() > 0
+    assert model.index(0, 0).data() == ""
+    assert model.index(0, 0).data(ROW_ROLE) == {}
 
 
 def test_a_long_history_says_how_much_of_it_is_shown(
