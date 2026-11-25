@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import lzma
+import os
 import posixpath
 import re
 import subprocess
@@ -195,6 +196,13 @@ def _install(frozen: Path, *, sources: Path) -> None:
     destination = frozen / "licenses" / "Qt"
     destination.mkdir(parents=True, exist_ok=True)
     sources.mkdir(parents=True, exist_ok=True)
+    download = (
+        f"https://github.com/altosaurus/alto/releases/tag/v{version('alto')}"
+    )
+    if sys.platform == "darwin":
+        download = "The two .tar.xz files accompany this Mac download."
+        if run := os.environ.get("GITHUB_RUN_ID"):
+            download += f" See https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{run}"
     notice = f"""Alto uses Qt {qt}, PySide6 {pyside}, and Shiboken {shiboken}
 from The Qt Company and other contributors.
 Alto distributes the Qt libraries and Python bindings under LGPL version 3.
@@ -212,9 +220,22 @@ The binding extensions are under _internal/PySide6 and _internal/shiboken6, and
 so are the bindings' Python
 modules, as .py files that can be replaced with modified ones in the same way.
 
-Download the corresponding sources alongside this installer on Alto's GitHub
-release page:
-https://github.com/altosaurus/alto/releases/tag/v{version("alto")}
+On macOS, copy Alto.app from the disk image to a writable location. In Finder,
+choose Show Package Contents. Look under Contents for these folders:
+
+    Frameworks/PySide6/Qt/lib       Qt frameworks
+    Frameworks/{{PySide6,shiboken6}}  binding extensions
+    Resources/{{PySide6,shiboken6}}   binding Python files
+
+Replace the files in your copy, preserving framework symlinks. From the folder
+containing the app, sign locally and run the self-test:
+
+    codesign --force --deep --sign - --timestamp=none Alto.app
+    codesign --verify --deep --strict Alto.app
+    ./Alto.app/Contents/MacOS/alto --self-test
+
+Corresponding source downloads:
+{download}
 
 The original upstream source locations and SHA-256 checksums for this build
 follow.

@@ -713,7 +713,7 @@ prints the version of the copy you run.
 
 #### License compliance
 
-- **Bundled software and assets.** Unpack the Linux tarball and install the Windows candidate. On each platform, inventory
+- **Bundled software and assets.** Unpack the Linux tarball, install the Windows candidate, and mount the final stapled Mac DMG. On each platform, inventory
   the interpreter, frozen Python packages, embedded native code, Qt plugins and system libraries. Compare the contents with
   the exclusions in `packaging/alto.spec`. Check redistribution terms for each component and for the fonts, recordings,
   score excerpts, icons and vendored documentation assets. Confirm that Alto's MIT license and the applicable third-party
@@ -725,6 +725,10 @@ prints the version of the copy you run.
   Verify that the Qt libraries and PySide6 and Shiboken bindings can be replaced and that Alto's self-test still passes.
   Check the bundled Linux libraries against their package copyrights and verify the required Ubuntu source packages and file
   hashes in the companion archive. Verify the certifi source download and compare its CA bundle with the installed copy.
+- **Mac bundle.** Check the signed resources in `Alto.app/Contents/Resources`, the Mach-O dependencies, and the source
+  companions distributed with the disk image. Run the documented Qt and binding replacement procedure on a writable copy,
+  verify the modified behavior, and exercise WAV playback. Validate the stapled ticket and Gatekeeper assessment on the
+  original disk image and app.
 - **Windows upgrade terms.** Upgrade from the previous release with no recorded acceptance of the current Microsoft terms.
   Exercise both choices through Alto's updater. Declining must preserve the old installation, and accepting must complete
   the upgrade and record acceptance.

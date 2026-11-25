@@ -16,8 +16,11 @@ PYTHON="$WORK/venv/bin/python"
 # Pillow converts Alto's existing PNG icon to the macOS icon format at build time.
 "$PYTHON" -m pip install --quiet '.[package]' pillow
 VERSION="$("$PYTHON" -c 'from importlib.metadata import version; print(version("alto"))')"
+# Resolve distribution metadata from the installed wheel, outside the source checkout.
+cd "$WORK"
+export ALTO_QT_SOURCES="$WORK/qt-sources"
 "$PYTHON" -m PyInstaller --clean --noconfirm --log-level WARN \
-    --distpath "$WORK/dist" --workpath "$WORK/build" packaging/alto.spec
+    --distpath "$WORK/dist" --workpath "$WORK/build" "$ROOT/packaging/alto.spec"
 
 # ditto preserves the symlinks and executable permissions of the app and Qt frameworks.
 NAME="alto-$VERSION-macos-arm64-test"
@@ -25,6 +28,8 @@ ditto -c -k --keepParent "$WORK/dist/Alto.app" "$WORK/$NAME.zip"
 ditto -x -k "$WORK/$NAME.zip" "$WORK/unpacked"
 APP="$WORK/unpacked/Alto.app"
 EXE="$APP/Contents/MacOS/alto"
+"$PYTHON" "$ROOT/packaging/dependency_licenses.py" verify "$APP/Contents/Resources"
+"$PYTHON" "$ROOT/packaging/macos/check_bundle.py" "$APP" "$ALTO_QT_SOURCES"
 lipo "$EXE" -verify_arch arm64
 codesign --verify --deep --strict "$APP"
 [ "$("$EXE" --version)" = "Alto $VERSION" ]
@@ -43,7 +48,9 @@ else:
     sys.exit(f"Alto exited early with status {result.returncode}")
 PY
 
-mkdir -p "$ROOT/dist"
+sh "$ROOT/packaging/macos/check-replacement.sh" "$APP" "$WORK" "$PYTHON"
+mkdir -p "$ROOT/dist/qt-sources"
+cp "$ALTO_QT_SOURCES/"*.tar.xz "$ROOT/dist/qt-sources/"
 if [ -n "${ALTO_MACOS_SIGN_IDENTITY:-}" ]; then
     STAGE="$WORK/disk-image"
     mkdir -p "$STAGE"

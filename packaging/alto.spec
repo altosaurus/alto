@@ -25,6 +25,7 @@ import json
 import os
 import re
 import sys
+import subprocess
 from importlib.metadata import version
 from pathlib import Path
 
@@ -54,10 +55,11 @@ def unused_qt_component(destination):
     name = Path(destination).name.lower()
     return (
         "virtualkeyboard" in destination.lower()
+        or "qtpdf.framework" in destination.lower().split("/")
         or "ffmpeg" in name
-        or name in {"libqpdf.so", "qpdf.dll", "libqgtk3.so", "opengl32sw.dll"}
+        or name in {"libqpdf.dylib", "qtpdf", "libqpdf.so", "qpdf.dll", "libqgtk3.so", "opengl32sw.dll"}
         or name.startswith(("libqt6pdf.", "qt6pdf."))
-        or re.fullmatch(r"(?:lib)?(?:avcodec|avformat|avutil|swresample|swscale)(?:-\d+\.dll|\.so(?:\.\d+)*)", name)
+        or re.fullmatch(r"(?:lib)?(?:avcodec|avformat|avutil|swresample|swscale)(?:-\d+\.dll|\.so(?:\.\d+)*|(?:\.\d+)*\.dylib)", name)
     )
 
 
@@ -160,8 +162,23 @@ coll = COLLECT(
 )
 
 if sys.platform == "darwin":
+    # Collect notices against the flat bundle, then pass them to BUNDLE as resources
+    # so PyInstaller seals them in the original signature.
+    root = Path(SPECPATH).parent
+    flat = Path(coll.name)
+    for helper, arguments in (
+        ("dependency_licenses.py", ["copy", flat]),
+        ("qt_sources.py", [flat, os.environ["ALTO_QT_SOURCES"]]),
+    ):
+        subprocess.run([sys.executable, root / "packaging" / helper, *arguments], check=True)
+    documents = [(name, str(root / name), "DATA") for name in ("LICENSE", "THIRD_PARTY_NOTICES.md")]
+    documents.extend(
+        (file.relative_to(flat).as_posix(), str(file), "DATA")
+        for file in sorted((flat / "licenses").rglob("*")) if file.is_file()
+    )
     BUNDLE(
         coll,
+        documents,
         name="Alto.app",
         icon=str(Path(SPECPATH).parent / "alto/assets/icon.png"),
         bundle_identifier="io.github.altosaurus.alto",

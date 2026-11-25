@@ -75,7 +75,8 @@ Algorithm SM-2, © SuperMemo World, 1991. [SuperMemo](https://www.supermemo.com/
 
 - The desktop installers use Qt, PySide6, and Shiboken under LGPL-3.0. The installed `licenses/Qt/` directory
   contains the license texts, upstream credits, source archive names and checksums, and instructions for replacing
-  the libraries. The matching source archives accompany the installers on the [Alto releases page](https://github.com/altosaurus/alto/releases).
+  the libraries. On macOS, open Alto.app with **Show Package Contents** and look in `Contents/Resources`. The matching
+  source archives accompany the Mac test image in its workflow download and the release installers on the [Alto releases page](https://github.com/altosaurus/alto/releases).
 - The Linux download contains system libraries from Ubuntu, copied unchanged from Ubuntu's packages, among them GLib,
   PulseAudio, libsndfile, the X11 and XCB libraries, OpenSSL, and GCC's C++ runtime. Each keeps its own license. The
   installed `licenses/Linux/` directory lists every library with its package, version, and checksum, and contains each
@@ -89,11 +90,11 @@ Algorithm SM-2, © SuperMemo World, 1991. [SuperMemo](https://www.supermemo.com/
   with the licenses of the software CPython incorporates, among them the HACL* hash functions (MIT)), and these Python
   packages, each with its license installed under `licenses/`: FSRS (MIT), typing_extensions (PSF License), Chevron
   (MIT), cached-property (BSD-3-Clause), PyYAML (MIT) with the LibYAML library compiled into it (MIT), and cffi (MIT-0)
-  with the libffi library compiled into it (MIT).
+  with embedded libffi (MIT) on Linux and Windows. The Mac build uses the system libffi. Its interpreter extensions
+  include Expat, libmpdec, liblzma, and SQLite, listed in `licenses/README.txt`.
 - Alto checks update downloads with the certificate authorities in certifi, under the Mozilla Public License 2.0. Its
   license and where to get the source of the version in the installers are installed at `licenses/certifi/`.
-- The Linux Qt libraries use ICU (Unicode License), and the Windows installer contains OpenSSL (Apache License 2.0),
-  brought by Python and by Qt. `licenses/README.txt` lists each of these components with its version and the files of its
+- The Linux Qt libraries use ICU (Unicode License), and the Windows and Mac installers contain OpenSSL (Apache License 2.0). `licenses/README.txt` lists each of these components with its version and the files of its
   license.
 - The documentation uses Temml by Ron Kok (MIT) to show mathematical notation. Temml is derived from KaTeX, by Khan Academy
   and other contributors (MIT). Both licenses are in `docs/assets/vendor/temml-0.14.0/`.

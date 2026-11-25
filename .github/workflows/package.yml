@@ -86,7 +86,9 @@ jobs:
         if: ${{ !inputs.macos_notarize }}
         with:
           name: alto-macos-arm64-test
-          path: dist/alto-*-macos-arm64-test.zip
+          path: |
+            dist/alto-*-macos-arm64-test.zip
+            dist/qt-sources/*.tar.xz
           if-no-files-found: error
       # Preserve the exact submission if Apple's review outlasts this hosted runner.
       - uses: actions/upload-artifact@v4
@@ -127,9 +129,14 @@ jobs:
           codesign --verify --deep --strict "$mount/Alto.app"
           spctl --assess --type execute --verbose=2 "$mount/Alto.app"
           "$mount/Alto.app/Contents/MacOS/alto" --self-test
+          python packaging/macos/check_bundle.py "$mount/Alto.app" dist/qt-sources
+          (cd dist && shasum -a 256 *.dmg qt-sources/*.tar.xz > MACOS-SHA256SUMS)
       - uses: actions/upload-artifact@v4
         if: inputs.macos_notarize
         with:
           name: alto-macos-arm64-notarized
-          path: dist/alto-*-macos-arm64.dmg
+          path: |
+            dist/alto-*-macos-arm64.dmg
+            dist/qt-sources/*.tar.xz
+            dist/MACOS-SHA256SUMS
           if-no-files-found: error

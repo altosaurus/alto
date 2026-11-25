@@ -27,7 +27,9 @@ Alto's own credits.
 import hashlib
 import json
 import platform
+import pyexpat
 import re
+import sqlite3
 import subprocess
 import sys
 import sysconfig
@@ -246,14 +248,22 @@ def python_notices(licenses: Path) -> Notice:
         Path(sysconfig.get_path("stdlib")) / "LICENSE.txt",
     ]
     own = next((path for path in candidates if path.is_file()), None)
-    if own is None:
+    python = platform.python_version()
+    if own is None and sys.platform != "darwin":
         raise SystemExit(
             "The Python that builds the program has no LICENSE.txt in "
             f"{[str(path) for path in candidates]}",
         )
-    python = platform.python_version()
+    contents = (
+        own.read_bytes()
+        if own
+        else fetch(
+            f"{RAW}/python/cpython/v{python}/LICENSE",
+            expect="PYTHON SOFTWARE FOUNDATION LICENSE",
+        )
+    )
     (licenses / "Python").mkdir(parents=True, exist_ok=True)
-    (licenses / "Python" / "LICENSE.txt").write_bytes(own.read_bytes())
+    (licenses / "Python" / "LICENSE.txt").write_bytes(contents)
     incorporated = fetch(
         f"{RAW}/python/cpython/v{python}/Doc/license.rst",
         expect="Licenses and Acknowledgements for Incorporated Software",
@@ -564,7 +574,7 @@ def icu_notices(licenses: Path, *, internal: Path) -> Notice:
 
 def openssl_notices(licenses: Path, *, internal: Path) -> Notice:
     """
-    Install the license of the OpenSSL version in the Windows program's
+    Install the license of the OpenSSL version in the desktop program's
     OpenSSL libraries.
 
     Python and Qt each bring a pair of OpenSSL libraries (libcrypto and
@@ -588,10 +598,12 @@ def openssl_notices(licenses: Path, *, internal: Path) -> Notice:
         If there is no OpenSSL library, or the libraries are of
         different versions.
     """
+    suffix = "lib*.dylib" if sys.platform == "darwin" else "lib*-3*.dll"
     libraries = sorted(
         path
-        for path in internal.rglob("lib*-3*.dll")
+        for path in internal.rglob(suffix)
         if path.name.startswith(("libcrypto", "libssl"))
+        and not path.is_symlink()
     )
     cryptos = [path for path in libraries if path.name.startswith("libcrypto")]
     versions = {
@@ -618,6 +630,86 @@ def openssl_notices(licenses: Path, *, internal: Path) -> Notice:
         where=f"_internal: {names}",
         files=["OpenSSL/LICENSE.txt"],
     )
+
+
+def macos_python_notices(licenses: Path, *, internal: Path) -> list[Notice]:
+    """
+    Collect credits for the native libraries in the Mac interpreter.
+
+    Parameters
+    ----------
+    licenses : Path
+        Destination for the notices.
+    internal : Path
+        Collected binaries from the same interpreter.
+
+    Returns
+    -------
+    list of Notice
+        Installed credits for the native extensions.
+
+    Raises
+    ------
+    SystemExit
+        If cffi or ctypes no longer uses the system libffi.
+    """
+    for pattern in ("_cffi_backend*.so", "_ctypes*.so"):
+        extension = one(internal, pattern=pattern)
+        links = subprocess.check_output(["otool", "-L", extension], text=True)
+        if "/usr/lib/libffi.dylib " not in links:
+            raise SystemExit(f"Review libffi linkage in {extension}")
+    mpdec = binary_version(
+        one(internal, pattern="_decimal*.so"),
+        pattern=rb"\x00(\d+\.\d+\.\d+)\x00",
+    )
+    lzma = binary_version(
+        one(internal, pattern="_lzma*.so"),
+        pattern=rb"\x00(\d+\.\d+\.\d+)\x00",
+    )
+    expat = ".".join(map(str, pyexpat.version_info))
+    expat_tag = "R_" + expat.replace(".", "_")
+    files = [
+        (
+            f"libmpdec {mpdec}",
+            "_decimal",
+            "mpdecimal.txt",
+            (
+                Path(__file__).parent / "macos" / f"mpdecimal-{mpdec}.txt"
+            ).read_bytes(),
+        ),
+        (
+            f"Expat {expat}",
+            "pyexpat",
+            "Expat.txt",
+            fetch(
+                f"{RAW}/libexpat/libexpat/{expat_tag}/expat/COPYING",
+                expect="Permission is hereby granted",
+            ),
+        ),
+        (
+            f"liblzma {lzma}",
+            "_lzma",
+            "XZ-COPYING.txt",
+            fetch(
+                f"{RAW}/tukaani-project/xz/v{lzma}/COPYING",
+                expect="liblzma is in the public domain",
+            ),
+        ),
+    ]
+    notices = []
+    for component, extension, filename, contents in files:
+        (licenses / "Python" / filename).write_bytes(contents)
+        notices.append(
+            Notice(component, where=extension, files=[f"Python/{filename}"]),
+        )
+    notices.append(
+        Notice(
+            f"SQLite {sqlite3.sqlite_version}",
+            where="_sqlite3",
+            note="SQLite is in the public domain. https://sqlite.org/copyright.html",
+        ),
+    )
+    return notices
 
 
 def wheel_notices(licenses: Path) -> list[Notice]:
@@ -721,9 +813,12 @@ def copy(app: Path) -> None:
         python_notices(licenses),
         certifi_notices(licenses),
         libyaml_notices(licenses, internal=internal),
-        libffi_notices(licenses, internal=internal),
     ]
-    if sys.platform == "win32":
+    if sys.platform == "darwin":
+        notices.extend(macos_python_notices(licenses, internal=internal))
+    else:
+        notices.append(libffi_notices(licenses, internal=internal))
+    if sys.platform in {"win32", "darwin"}:
         notices.append(openssl_notices(licenses, internal=internal))
     else:
         notices.append(icu_notices(licenses, internal=internal))
@@ -748,6 +843,8 @@ def copy(app: Path) -> None:
             "this folder. Qt, PySide and Shiboken are in Qt/, and on"
         ),
         "Linux the system libraries from Ubuntu are in Linux/.",
+        "In Alto.app, notices and data are in Contents/Resources. Native",
+        "libraries are in Contents/Frameworks. These correspond to _internal.",
         "",
     ]
     for notice in notices:
@@ -801,10 +898,12 @@ def verify(app: Path) -> None:
     sample_credits = Path("alto/assets/samples/SOURCE.txt")
     notices = Path("THIRD_PARTY_NOTICES.md")
     wheel_metadata = Path(f"alto-{distribution('alto').version}.dist-info")
+    payload = Path(".") if sys.platform == "darwin" else Path("_internal")
     for source, installed in (
+        (Path("LICENSE"), Path("LICENSE")),
         (notices, notices),
-        (notices, Path("_internal") / wheel_metadata / "licenses" / notices),
-        (sample_credits, Path("_internal") / sample_credits),
+        (notices, payload / wheel_metadata / "licenses" / notices),
+        (sample_credits, payload / sample_credits),
     ):
         expected = (root / source).read_text(encoding="utf-8")
         if (app / installed).read_text(encoding="utf-8") != expected:
