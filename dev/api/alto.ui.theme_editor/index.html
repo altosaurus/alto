@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795641243">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
   
 </head>
 <body>
@@ -80,7 +80,10 @@
   
 </div>
 
-        <div class="nav">
+        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
+          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
+        </button>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -767,7 +770,7 @@ part of its light and dark versions.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ThemeEditor</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/theme_editor.py#L58" aria-label="Source for ThemeEditor">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/theme_editor.py#L58" aria-label="Source for ThemeEditor">[Source]</a></p>
 
 </div>
 
@@ -827,7 +830,7 @@ colors at once.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/theme_editor.py#L245" aria-label="Source for ThemeEditor.eventFilter">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/theme_editor.py#L245" aria-label="Source for ThemeEditor.eventFilter">[Source]</a></p>
 
 </div>
 
@@ -874,7 +877,7 @@ over the color.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">ThemeRecord</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/theme_editor.py#L291" aria-label="Source for ThemeEditor.load">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/theme_editor.py#L291" aria-label="Source for ThemeEditor.load">[Source]</a></p>
 
 </div>
 
@@ -905,7 +908,7 @@ starts as Studio.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">record</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ThemeRecord</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/theme_editor.py#L340" aria-label="Source for ThemeEditor.record">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/theme_editor.py#L340" aria-label="Source for ThemeEditor.record">[Source]</a></p>
 
 </div>
 
@@ -1249,10 +1252,10 @@ starts as Studio.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795641243">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
   
 </head>
 <body>
@@ -80,7 +80,10 @@
   
 </div>
 
-        <div class="nav">
+        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
+          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
+        </button>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -766,7 +769,7 @@ grid of schemes to pick from, and an editor to make one.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">blank</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CustomRecord</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L66" aria-label="Source for blank">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L66" aria-label="Source for blank">[Source]</a></p>
 
 </div>
 
@@ -806,7 +809,7 @@ cyan through blue to indigo, on dark wedges.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L98" aria-label="Source for SchemeThumb">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L98" aria-label="Source for SchemeThumb">[Source]</a></p>
 
 </div>
 
@@ -858,7 +861,7 @@ when lit.')
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sizeHint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSize</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L153" aria-label="Source for SchemeThumb.sizeHint">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L153" aria-label="Source for SchemeThumb.sizeHint">[Source]</a></p>
 
 </div>
 
@@ -886,7 +889,7 @@ when lit.')
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L172" aria-label="Source for SchemeThumb.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L172" aria-label="Source for SchemeThumb.paintEvent">[Source]</a></p>
 
 </div>
 
@@ -915,7 +918,7 @@ ring around it when it is the chosen scheme.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SchemePage</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L228" aria-label="Source for SchemePage">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L228" aria-label="Source for SchemePage">[Source]</a></p>
 
 </div>
 
@@ -971,7 +974,7 @@ and a button to make another.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L279" aria-label="Source for SchemePage.load">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L279" aria-label="Source for SchemePage.load">[Source]</a></p>
 
 </div>
 
@@ -1012,7 +1015,7 @@ current one marked.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SchemeEditor</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L404" aria-label="Source for SchemeEditor">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L404" aria-label="Source for SchemeEditor">[Source]</a></p>
 
 </div>
 
@@ -1076,7 +1079,7 @@ edited.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L515" aria-label="Source for SchemeEditor.load">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L515" aria-label="Source for SchemeEditor.load">[Source]</a></p>
 
 </div>
 
@@ -1107,7 +1110,7 @@ edited.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">record</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">CustomRecord</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L551" aria-label="Source for SchemeEditor.record">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L551" aria-label="Source for SchemeEditor.record">[Source]</a></p>
 
 </div>
 
@@ -1138,7 +1141,7 @@ edited.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/circle_colors.py#L570" aria-label="Source for SchemeEditor.set_color">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/circle_colors.py#L570" aria-label="Source for SchemeEditor.set_color">[Source]</a></p>
 
 </div>
 
@@ -1389,10 +1392,10 @@ edited.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

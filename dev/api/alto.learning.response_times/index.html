@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795641243">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
   
 </head>
 <body>
@@ -80,7 +80,10 @@
   
 </div>
 
-        <div class="nav">
+        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
+          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
+        </button>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -762,7 +765,7 @@
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/learning/response_times.py#L14" aria-label="Source for ResponseTimes">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/learning/response_times.py#L14" aria-label="Source for ResponseTimes">[Source]</a></p>
 
 </div>
 
@@ -790,7 +793,7 @@ tail percentages.</p>
 <span class="k">def</span> <span class="nf">ready</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/learning/response_times.py#L37" aria-label="Source for ResponseTimes.ready">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/learning/response_times.py#L37" aria-label="Source for ResponseTimes.ready">[Source]</a></p>
 
 </div>
 
@@ -815,7 +818,7 @@ tail percentages.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">percentile</span><span class="p">(</span><span class="n">percent</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/learning/response_times.py#L53" aria-label="Source for ResponseTimes.percentile">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/learning/response_times.py#L53" aria-label="Source for ResponseTimes.percentile">[Source]</a></p>
 
 </div>
 
@@ -849,7 +852,7 @@ nonempty sample.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">grade</span><span class="p">(</span><span class="n">milliseconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rating</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/learning/response_times.py#L84" aria-label="Source for ResponseTimes.grade">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/learning/response_times.py#L84" aria-label="Source for ResponseTimes.grade">[Source]</a></p>
 
 </div>
 
@@ -1059,10 +1062,10 @@ exercise.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

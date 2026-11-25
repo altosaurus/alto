@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795641243">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
   
 </head>
 <body>
@@ -80,7 +80,10 @@
   
 </div>
 
-        <div class="nav">
+        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
+          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
+        </button>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -1108,10 +1111,10 @@ versioning.</em> <em>Linter, formatter, static analysis, type checker.</em> <em>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

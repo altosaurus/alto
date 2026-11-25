@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795641243">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
   
 </head>
 <body>
@@ -80,7 +80,10 @@
   
 </div>
 
-        <div class="nav">
+        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
+          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
+        </button>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -773,7 +776,7 @@ exercise’s name.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/pack_settings_panel.py#L149" aria-label="Source for PackSettingsPanel">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/pack_settings_panel.py#L149" aria-label="Source for PackSettingsPanel">[Source]</a></p>
 
 </div>
 
@@ -842,7 +845,7 @@ options, saves them and emits <code class="language-plaintext highlighter-rouge"
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/pack_settings_panel.py#L438" aria-label="Source for PackKeyboardSettingsPanel">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/pack_settings_panel.py#L438" aria-label="Source for PackKeyboardSettingsPanel">[Source]</a></p>
 
 </div>
 
@@ -924,7 +927,7 @@ the options, saves them and emits <code class="language-plaintext highlighter-ro
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flush</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/pack_settings_panel.py#L1009" aria-label="Source for PackKeyboardSettingsPanel.flush">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/pack_settings_panel.py#L1009" aria-label="Source for PackKeyboardSettingsPanel.flush">[Source]</a></p>
 
 </div>
 
@@ -951,7 +954,7 @@ waiting.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hideEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QHideEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/pack_settings_panel.py#L1031" aria-label="Source for PackKeyboardSettingsPanel.hideEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/pack_settings_panel.py#L1031" aria-label="Source for PackKeyboardSettingsPanel.hideEvent">[Source]</a></p>
 
 </div>
 
@@ -1258,10 +1261,10 @@ waiting.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

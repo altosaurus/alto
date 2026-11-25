@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795641243">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
   
 </head>
 <body>
@@ -80,7 +80,10 @@
   
 </div>
 
-        <div class="nav">
+        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
+          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
+        </button>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -782,7 +785,7 @@ source folder is told to update with git.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L104" aria-label="Source for brief">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L104" aria-label="Source for brief">[Source]</a></p>
 
 </div>
 
@@ -817,7 +820,7 @@ message: the end of it, without the blank space around it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CommandRunner</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L136" aria-label="Source for CommandRunner">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L136" aria-label="Source for CommandRunner">[Source]</a></p>
 
 </div>
 
@@ -858,7 +861,7 @@ prints as it prints it, and how it ended.</p>
 <span class="k">def</span> <span class="nf">running</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L191" aria-label="Source for CommandRunner.running">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L191" aria-label="Source for CommandRunner.running">[Source]</a></p>
 
 </div>
 
@@ -882,7 +885,7 @@ prints as it prints it, and how it ended.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L202" aria-label="Source for CommandRunner.start">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L202" aria-label="Source for CommandRunner.start">[Source]</a></p>
 
 </div>
 
@@ -919,7 +922,7 @@ prints as it prints it, and how it ended.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L247" aria-label="Source for CommandRunner.stop">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L247" aria-label="Source for CommandRunner.stop">[Source]</a></p>
 
 </div>
 
@@ -938,7 +941,7 @@ has ended.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">saved_channel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L340" aria-label="Source for saved_channel">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L340" aria-label="Source for saved_channel">[Source]</a></p>
 
 </div>
 
@@ -967,7 +970,7 @@ has ended.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_channel</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L372" aria-label="Source for save_channel">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L372" aria-label="Source for save_channel">[Source]</a></p>
 
 </div>
 
@@ -997,7 +1000,7 @@ has ended.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L395" aria-label="Source for WaitDialog">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L395" aria-label="Source for WaitDialog">[Source]</a></p>
 
 </div>
 
@@ -1031,7 +1034,7 @@ shown while something is asked for.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L439" aria-label="Source for WaitDialog.reject">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L439" aria-label="Source for WaitDialog.reject">[Source]</a></p>
 
 </div>
 
@@ -1049,7 +1052,7 @@ shown while something is asked for.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L454" aria-label="Source for CheckDialog">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L454" aria-label="Source for CheckDialog">[Source]</a></p>
 
 </div>
 
@@ -1085,7 +1088,7 @@ newest commit of its main branch.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L496" aria-label="Source for CheckDialog.run">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L496" aria-label="Source for CheckDialog.run">[Source]</a></p>
 
 </div>
 
@@ -1112,7 +1115,7 @@ newest commit of its main branch.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseFetcher</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L544" aria-label="Source for ReleaseFetcher">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L544" aria-label="Source for ReleaseFetcher">[Source]</a></p>
 
 </div>
 
@@ -1152,7 +1155,7 @@ window never freezes while it waits.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L574" aria-label="Source for ReleaseFetcher.start">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L574" aria-label="Source for ReleaseFetcher.start">[Source]</a></p>
 
 </div>
 
@@ -1171,7 +1174,7 @@ window never freezes while it waits.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cancel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L591" aria-label="Source for ReleaseFetcher.cancel">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L591" aria-label="Source for ReleaseFetcher.cancel">[Source]</a></p>
 
 </div>
 
@@ -1185,7 +1188,7 @@ GitHub answers or the time is up.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DailyReleaseCheck</span><span class="p">(</span><span class="n">window</span><span class="p">:</span> <span class="n">MainWindow</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L628" aria-label="Source for DailyReleaseCheck">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L628" aria-label="Source for DailyReleaseCheck">[Source]</a></p>
 
 </div>
 
@@ -1221,7 +1224,7 @@ learner’s reminder choice at the exercise grid.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseDialog</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L751" aria-label="Source for ReleaseDialog">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L751" aria-label="Source for ReleaseDialog">[Source]</a></p>
 
 </div>
 
@@ -1254,7 +1257,7 @@ learner’s reminder choice at the exercise grid.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L781" aria-label="Source for ReleaseDialog.run">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L781" aria-label="Source for ReleaseDialog.run">[Source]</a></p>
 
 </div>
 
@@ -1278,7 +1281,7 @@ learner’s reminder choice at the exercise grid.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L823" aria-label="Source for UpdateDialog">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L823" aria-label="Source for UpdateDialog">[Source]</a></p>
 
 </div>
 
@@ -1323,7 +1326,7 @@ called.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L899" aria-label="Source for UpdateDialog.run">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L899" aria-label="Source for UpdateDialog.run">[Source]</a></p>
 
 </div>
 
@@ -1356,7 +1359,7 @@ how it went.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L926" aria-label="Source for UpdateDialog.reject">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L926" aria-label="Source for UpdateDialog.reject">[Source]</a></p>
 
 </div>
 
@@ -1369,7 +1372,7 @@ how it went.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L931" aria-label="Source for UpdateDialog.closeEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L931" aria-label="Source for UpdateDialog.closeEvent">[Source]</a></p>
 
 </div>
 
@@ -1393,7 +1396,7 @@ how it went.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L998" aria-label="Source for check_for_updates">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L998" aria-label="Source for check_for_updates">[Source]</a></p>
 
 </div>
 
@@ -1433,7 +1436,7 @@ or the main branch, and can install it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L1056" aria-label="Source for check_release">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L1056" aria-label="Source for check_release">[Source]</a></p>
 
 </div>
 
@@ -1471,7 +1474,7 @@ that is running.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L1121" aria-label="Source for offer_release">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L1121" aria-label="Source for offer_release">[Source]</a></p>
 
 </div>
 
@@ -1507,7 +1510,7 @@ path.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L1216" aria-label="Source for check_main">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L1216" aria-label="Source for check_main">[Source]</a></p>
 
 </div>
 
@@ -1540,7 +1543,7 @@ branch and compare it with the one that is running.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L1282" aria-label="Source for install">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L1282" aria-label="Source for install">[Source]</a></p>
 
 </div>
 
@@ -1574,7 +1577,7 @@ the progress, and restart if it worked.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/e3e25738d1d1f545fc2968eddfcdec660913fb9b/alto/ui/update_flow.py#L1320" aria-label="Source for update_package">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/update_flow.py#L1320" aria-label="Source for update_package">[Source]</a></p>
 
 </div>
 
@@ -1924,10 +1927,10 @@ it, say that Alto will restart, and hand over.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795641243" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
