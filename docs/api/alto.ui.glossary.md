@@ -15,7 +15,7 @@ A searchable glossary of the notation terms used in Alto.
 GlossaryPage()
 ```
 
-{% endraw %}{% include api-source.html name="GlossaryPage" line=809 %}{% raw %}
+{% endraw %}{% include api-source.html name="GlossaryPage" line=1356 %}{% raw %}
 
 </div>
 
@@ -35,7 +35,7 @@ Build the glossary and select its first term.
 def hideEvent(event: QHideEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="GlossaryPage.hideEvent" line=1159 %}{% raw %}
+{% endraw %}{% include api-source.html name="GlossaryPage.hideEvent" line=1743 %}{% raw %}
 
 </div>
 

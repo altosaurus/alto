@@ -29,7 +29,7 @@ the middle, and the text underneath explains it.
 ExplorableCircle(parent: QWidget | None = None)
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle" line=93 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle" line=94 %}{% raw %}
 
 </div>
 
@@ -77,7 +77,7 @@ True
 def set_interactive(interactive: bool) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.set_interactive" line=146 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.set_interactive" line=147 %}{% raw %}
 
 </div>
 
@@ -109,7 +109,7 @@ picture.
 def clear() -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.clear" line=175 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.clear" line=176 %}{% raw %}
 
 </div>
 
@@ -138,7 +138,7 @@ def select(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.select" line=203 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.select" line=204 %}{% raw %}
 
 </div>
 
@@ -175,7 +175,7 @@ relative major.
 def cell_at(point: QPointF) -> tuple[str, int] | None
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.cell_at" line=262 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.cell_at" line=263 %}{% raw %}
 
 </div>
 
@@ -223,7 +223,7 @@ def lift_of(
 ) -> float
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.lift_of" line=306 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.lift_of" line=307 %}{% raw %}
 
 </div>
 
@@ -259,7 +259,7 @@ little brighter under the pointer.
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.mousePressEvent" line=341 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.mousePressEvent" line=342 %}{% raw %}
 
 </div>
 
@@ -298,7 +298,7 @@ pick.
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.mouseMoveEvent" line=378 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.mouseMoveEvent" line=379 %}{% raw %}
 
 </div>
 
@@ -337,7 +337,7 @@ that can be picked.
 def leaveEvent(event: QEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.leaveEvent" line=410 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.leaveEvent" line=411 %}{% raw %}
 
 </div>
 
@@ -365,7 +365,7 @@ True
 def keyPressEvent(event: QKeyEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExplorableCircle.keyPressEvent" line=459 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExplorableCircle.keyPressEvent" line=460 %}{% raw %}
 
 </div>
 
@@ -403,7 +403,7 @@ Escape clears the pick, and Home picks C major.
 ReferencePanel(parent: QWidget | None = None)
 ```
 
-{% endraw %}{% include api-source.html name="ReferencePanel" line=509 %}{% raw %}
+{% endraw %}{% include api-source.html name="ReferencePanel" line=510 %}{% raw %}
 
 </div>
 
@@ -452,7 +452,7 @@ False
 ClefReferencePanel(parent: QWidget | None = None)
 ```
 
-{% endraw %}{% include api-source.html name="ClefReferencePanel" line=633 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefReferencePanel" line=634 %}{% raw %}
 
 </div>
 
@@ -505,7 +505,7 @@ True
 ScaleReferencePanel(parent: QWidget | None = None)
 ```
 
-{% endraw %}{% include api-source.html name="ScaleReferencePanel" line=724 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleReferencePanel" line=725 %}{% raw %}
 
 </div>
 
@@ -525,7 +525,7 @@ Build a scrollable guide to tonic reading and scale patterns.
 NoteReferencePanel(exercise: Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="NoteReferencePanel" line=868 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteReferencePanel" line=874 %}{% raw %}
 
 </div>
 
@@ -563,7 +563,7 @@ PluginReferencePanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="PluginReferencePanel" line=923 %}{% raw %}
+{% endraw %}{% include api-source.html name="PluginReferencePanel" line=929 %}{% raw %}
 
 </div>
 
@@ -608,7 +608,7 @@ that goes with it.
 def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | NoteReferencePanel | PluginReferencePanel | None
 ```
 
-{% endraw %}{% include api-source.html name="reference_panel_for" line=993 %}{% raw %}
+{% endraw %}{% include api-source.html name="reference_panel_for" line=999 %}{% raw %}
 
 </div>
 

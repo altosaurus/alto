@@ -230,6 +230,8 @@ Step(
     hear_instrument: str = '',
     single_question: bool = False,
     label_middle_c: bool = False,
+    rhythm: tuple[str, ...] = (),
+    rhythm_meter: tuple[int, int] = (4, 4),
 )
 ```
 
@@ -258,6 +260,8 @@ One page of a lesson.
 - `keyboard_note` (*str*): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.
 - `picture` (*PicturePosition or FingerboardPosition or None*): An instrument picture to show beside the words, such as one supplied by a plugin. Alto draws it with the same widget the exercises use. None for no picture.
 - `hear_instrument` (*str*): The key of the instrument that plays the Hear it notes, such as one supplied by a plugin. Empty for the learner's own choice of sound.
+- `rhythm` (*tuple of str*): Written note and rest values to count with a metronome.
+- `rhythm_meter` (*tuple of int*): Numerator and denominator for the rhythm example.
 - `label_middle_c` (*bool*): Label middle C and bracket the pair of black keys beside it.
 
 **Examples**
@@ -287,7 +291,7 @@ Lesson(
 )
 ```
 
-{% endraw %}{% include api-source.html name="Lesson" line=300 %}{% raw %}
+{% endraw %}{% include api-source.html name="Lesson" line=306 %}{% raw %}
 
 </div>
 

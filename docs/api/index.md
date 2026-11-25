@@ -38,6 +38,7 @@ The exercises and the framework they are built on.
 | [alto.exercises.base](alto.exercises.base/) | Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks. |
 | [alto.exercises.library](alto.exercises.library/) | The exercises: note names, intervals, key signatures, scales, chords, arpeggios, keyboard keys and note construction. |
 | [alto.exercises.packs](alto.exercises.packs/) | Load third-party instrument packs from ZIP archives and authoring folders. |
+| [alto.exercises.rhythm_equations](alto.exercises.rhythm_equations/) | Build balanced rhythm equations with exact operator counts. |
 
 ## alto.learning
 
@@ -63,6 +64,7 @@ The lessons: guided walks through a topic, with small exercises along the way.
 | [alto.lessons.base](alto.lessons.base/) | What a lesson is made of: steps, and the small tasks inside them. |
 | [alto.lessons.circle_of_fifths](alto.lessons.circle_of_fifths/) | The lesson on the circle of fifths, taught from nothing. |
 | [alto.lessons.clef_basics](alto.lessons.clef_basics/) | The lesson on clefs, taught from nothing. |
+| [alto.lessons.duration](alto.lessons.duration/) | A first rhythm lesson on counting the length of sound and silence. |
 | [alto.lessons.intervals](alto.lessons.intervals/) | A guided introduction to naming intervals on the staff and keyboard. |
 | [alto.lessons.key_signatures](alto.lessons.key_signatures/) | A guided lesson on reading and writing key signatures. |
 | [alto.lessons.packs](alto.lessons.packs/) | Turn the lessons that an instrument plugin declares into `Lesson`s that Alto lists and shows. |
@@ -113,6 +115,8 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.lesson](alto.ui.lesson/) | The lesson pages: a page that walks through one lesson step by step. |
 | [alto.ui.lesson_nav](alto.ui.lesson_nav/) | The list on the left in lesson mode: the lessons, and the steps of the one that is open. |
 | [alto.ui.main_window](alto.ui.main_window/) | The main window: tile browsing or a workspace with an independently selected exercise or lesson list. |
+| [alto.ui.meter_staff](alto.ui.meter_staff/) | Staffless rhythm notation for lesson and glossary examples. |
+| [alto.ui.metronome_spectrum](alto.ui.metronome_spectrum/) | A bouncing spectrum display for the metronome preview. |
 | [alto.ui.midi_input](alto.ui.midi_input/) | ALSA keyboard input for answering a question with a played pitch. |
 | [alto.ui.motion](alto.ui.motion/) | Animations and feedback delays, run in one place so that tests decide when they happen. |
 | [alto.ui.notation](alto.ui.notation/) | Notation styles: which music font the staff, clefs, notes and accidentals are engraved in. |

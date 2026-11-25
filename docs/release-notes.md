@@ -20,6 +20,12 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- A new **Duration** lesson under **Rhythm** introduces quarter, half, and whole notes and quarter rests with counted listening examples. Rhythm examples in lessons and the glossary show a time signature, upward stems, bar lines, and optional counts on staffless notation paper.
+
+- Rythmic Equations lets you choose both the arithmetic signs and the number of operators (zero to three) independently on each side of the equals sign. Its **Answer Type** checkboxes let you practice missing symbols, missing numbers, or both. Turn on **Parentheses** to practice grouped calculations.
+
+- Settings → Sound now has separate **Instruments** and **Metronome** pages. Hear four beats of High pip, Low pip, or Pencil click and watch a smooth spectrum curve rise and fall with each click. The Duration lesson and rhythm glossary examples use the selected click for note onsets and meter accents, with silence for rests. The tie example pairs the metronome with a sustained instrument note.
+
 - Third-party instrument packs can supply artwork, recordings, correct-answer animations, and exercises in one ZIP. Tools → Plugins lists the installed plugins and installs one from a downloaded ZIP or uninstalls it while keeping practice history. Packs can also add their own lessons, extra views of an instrument such as its back, settings for a note exercise (a sound override, a range, accidentals, and the octave), tile icons, glossary entries, links between exercises and lessons, and knowledge checks answered by clicking the picture. The viola plugin tutorial includes a downloadable example with fingerboard and instrument anatomy exercises and two lessons. Instruments can also declare keyboards, which Alto draws in a look the plugin chooses, and a keyboard interval exercise highlights two keys on them, with a range selector, a choice of intervals, and a choice of manuals. A plugin exercise's sound setting opens a list of instruments to sound instead of switching the plugin's sound on or off. It lists the plugin's own instruments first, then other instruments of the same kind, then the rest. The harpsichord example pack, with a Flemish harpsichord sound, shows a double harpsichord, asks the interval between two highlighted keys, names its parts, and adds two lessons and glossary entries.
 
 - Alto can zoom. <kbd>Ctrl</kbd>+<kbd>+</kbd>, <kbd>Ctrl</kbd>+<kbd>-</kbd> and <kbd>Ctrl</kbd> with the mouse wheel make the text, controls, notation, keyboard and icons larger or smaller together, from 50% to 300%, and <kbd>Ctrl</kbd>+<kbd>0</kbd> goes back to 100%. The zoom is remembered.
@@ -44,6 +50,9 @@ Changes that are in the development docs and not in a release yet.
 ### Fixed
 {: .no-toc}
 
+- Keyboard Note Identification now saves its own **Note names** choice. Switching to **Caret** in Note Identification leaves the keyboard exercise’s answers unchanged.
+
+- The Exercises and Lessons toolbar buttons now open their respective catalogs when the glossary is open.
 - Single-question lesson knowledge checks say **Try again** after a wrong answer. Checks with multiple questions keep **Try another**.
 - Lesson tiles, search, navigation, menus, and exercise controls now update their icons and colors when the desktop switches between light and dark mode while Alto is set to System.
 - Light mode uses a gray window with white tiles and a pale gray search bar, including when following a light desktop.

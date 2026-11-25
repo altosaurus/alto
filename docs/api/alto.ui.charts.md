@@ -40,7 +40,7 @@ def nice_ticks(
 ) -> list[float]
 ```
 
-{% endraw %}{% include api-source.html name="nice_ticks" line=77 %}{% raw %}
+{% endraw %}{% include api-source.html name="nice_ticks" line=82 %}{% raw %}
 
 </div>
 
@@ -79,7 +79,7 @@ StackedBarChart(
 )
 ```
 
-{% endraw %}{% include api-source.html name="StackedBarChart" line=902 %}{% raw %}
+{% endraw %}{% include api-source.html name="StackedBarChart" line=944 %}{% raw %}
 
 </div>
 
@@ -138,7 +138,7 @@ def set_data(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StackedBarChart.set_data" line=976 %}{% raw %}
+{% endraw %}{% include api-source.html name="StackedBarChart.set_data" line=1004 %}{% raw %}
 
 </div>
 
@@ -169,7 +169,7 @@ Show a count of right and missed questions for each period.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StackedBarChart.paintEvent" line=1060 %}{% raw %}
+{% endraw %}{% include api-source.html name="StackedBarChart.paintEvent" line=1088 %}{% raw %}
 
 </div>
 
@@ -200,7 +200,7 @@ False
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StackedBarChart.mouseMoveEvent" line=1172 %}{% raw %}
+{% endraw %}{% include api-source.html name="StackedBarChart.mouseMoveEvent" line=1200 %}{% raw %}
 
 </div>
 
@@ -252,7 +252,7 @@ LineChart(
 )
 ```
 
-{% endraw %}{% include api-source.html name="LineChart" line=1227 %}{% raw %}
+{% endraw %}{% include api-source.html name="LineChart" line=1255 %}{% raw %}
 
 </div>
 
@@ -316,7 +316,7 @@ def set_data(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="LineChart.set_data" line=1293 %}{% raw %}
+{% endraw %}{% include api-source.html name="LineChart.set_data" line=1321 %}{% raw %}
 
 </div>
 
@@ -348,7 +348,7 @@ Show a value for each period.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="LineChart.paintEvent" line=1371 %}{% raw %}
+{% endraw %}{% include api-source.html name="LineChart.paintEvent" line=1399 %}{% raw %}
 
 </div>
 
@@ -381,7 +381,7 @@ False
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="LineChart.mouseMoveEvent" line=1498 %}{% raw %}
+{% endraw %}{% include api-source.html name="LineChart.mouseMoveEvent" line=1526 %}{% raw %}
 
 </div>
 
@@ -431,7 +431,7 @@ HBarChart(
 )
 ```
 
-{% endraw %}{% include api-source.html name="HBarChart" line=1544 %}{% raw %}
+{% endraw %}{% include api-source.html name="HBarChart" line=1572 %}{% raw %}
 
 </div>
 
@@ -485,7 +485,7 @@ Create an empty chart.
 def set_data(rows: Sequence[tuple[str, float, str]]) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HBarChart.set_data" line=1598 %}{% raw %}
+{% endraw %}{% include api-source.html name="HBarChart.set_data" line=1626 %}{% raw %}
 
 </div>
 
@@ -518,7 +518,7 @@ them.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HBarChart.paintEvent" line=1627 %}{% raw %}
+{% endraw %}{% include api-source.html name="HBarChart.paintEvent" line=1655 %}{% raw %}
 
 </div>
 
@@ -547,7 +547,7 @@ False
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HBarChart.mouseMoveEvent" line=1754 %}{% raw %}
+{% endraw %}{% include api-source.html name="HBarChart.mouseMoveEvent" line=1782 %}{% raw %}
 
 </div>
 
@@ -592,7 +592,7 @@ HeatmapChart(
 )
 ```
 
-{% endraw %}{% include api-source.html name="HeatmapChart" line=1787 %}{% raw %}
+{% endraw %}{% include api-source.html name="HeatmapChart" line=1815 %}{% raw %}
 
 </div>
 
@@ -649,7 +649,7 @@ def set_data(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HeatmapChart.set_data" line=1844 %}{% raw %}
+{% endraw %}{% include api-source.html name="HeatmapChart.set_data" line=1924 %}{% raw %}
 
 </div>
 
@@ -680,7 +680,7 @@ Show how many questions were answered on each day.
 def first_day() -> date
 ```
 
-{% endraw %}{% include api-source.html name="HeatmapChart.first_day" line=1875 %}{% raw %}
+{% endraw %}{% include api-source.html name="HeatmapChart.first_day" line=1968 %}{% raw %}
 
 </div>
 
@@ -711,7 +711,7 @@ week.
 def level(count: int) -> int
 ```
 
-{% endraw %}{% include api-source.html name="HeatmapChart.level" line=1899 %}{% raw %}
+{% endraw %}{% include api-source.html name="HeatmapChart.level" line=1992 %}{% raw %}
 
 </div>
 
@@ -753,7 +753,7 @@ Return how dark a day's square is.
 def day_at(pos: QPointF) -> date | None
 ```
 
-{% endraw %}{% include api-source.html name="HeatmapChart.day_at" line=2007 %}{% raw %}
+{% endraw %}{% include api-source.html name="HeatmapChart.day_at" line=2155 %}{% raw %}
 
 </div>
 
@@ -801,7 +801,7 @@ True
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HeatmapChart.paintEvent" line=2057 %}{% raw %}
+{% endraw %}{% include api-source.html name="HeatmapChart.paintEvent" line=2204 %}{% raw %}
 
 </div>
 
@@ -833,7 +833,7 @@ False
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HeatmapChart.mouseMoveEvent" line=2237 %}{% raw %}
+{% endraw %}{% include api-source.html name="HeatmapChart.mouseMoveEvent" line=2384 %}{% raw %}
 
 </div>
 

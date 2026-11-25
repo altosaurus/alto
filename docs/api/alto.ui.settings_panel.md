@@ -37,7 +37,7 @@ NoteNameSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="NoteNameSettingsPanel" line=145 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNameSettingsPanel" line=261 %}{% raw %}
 
 </div>
 
@@ -103,7 +103,7 @@ KeyboardSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardSettingsPanel" line=437 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardSettingsPanel" line=479 %}{% raw %}
 
 </div>
 
@@ -112,7 +112,8 @@ Bases: `KeyboardRangePanel`
 The settings of the keyboard exercise: a menu with a page for the
 range of keys.
 
-The menu has Range, Black keys, Octave number and Key signatures.
+The menu includes Range, Black keys, Octave number, Key signatures
+and Note names.
 Edits are live: each changes the settings, saves them
 and emits `changed`.
 
@@ -151,8 +152,8 @@ Build the panel for a set of settings.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardSettingsPanel(
 ...     settings.KeyboardSettings()
-... ).stack.count()  # the menu, the range and the keys
-3
+... ).stack.count()  # the menu, range, keys and note names
+4
 ```
 
 ## NoteConstructionSettingsPanel
@@ -167,7 +168,7 @@ NoteConstructionSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstructionSettingsPanel" line=761 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstructionSettingsPanel" line=817 %}{% raw %}
 
 </div>
 
@@ -227,7 +228,7 @@ IntervalSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="IntervalSettingsPanel" line=1070 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalSettingsPanel" line=1126 %}{% raw %}
 
 </div>
 
@@ -275,7 +276,7 @@ KeyboardIntervalSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervalSettingsPanel" line=1553 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettingsPanel" line=1609 %}{% raw %}
 
 </div>
 
@@ -338,7 +339,7 @@ ArpeggioSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioSettingsPanel" line=2235 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioSettingsPanel" line=2291 %}{% raw %}
 
 </div>
 
@@ -402,7 +403,7 @@ KeySignatureSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatureSettingsPanel" line=2508 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatureSettingsPanel" line=2564 %}{% raw %}
 
 </div>
 
@@ -468,7 +469,7 @@ Build the panel for a set of settings.
 NotationSettingsPanel()
 ```
 
-{% endraw %}{% include api-source.html name="NotationSettingsPanel" line=3062 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationSettingsPanel" line=3118 %}{% raw %}
 
 </div>
 
@@ -508,7 +509,7 @@ ClefBasicsSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasicsSettingsPanel" line=3245 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasicsSettingsPanel" line=3301 %}{% raw %}
 
 </div>
 
@@ -573,7 +574,7 @@ Build the panel for a set of settings.
 def settings_inversion_names() -> tuple[str, ...]
 ```
 
-{% endraw %}{% include api-source.html name="settings_inversion_names" line=3425 %}{% raw %}
+{% endraw %}{% include api-source.html name="settings_inversion_names" line=3481 %}{% raw %}
 
 </div>
 
@@ -602,7 +603,7 @@ CircleSettingsPanel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="CircleSettingsPanel" line=3443 %}{% raw %}
+{% endraw %}{% include api-source.html name="CircleSettingsPanel" line=3499 %}{% raw %}
 
 </div>
 
@@ -672,7 +673,7 @@ def settings_panel_for(
 ) -> ExerciseSettingsPanel
 ```
 
-{% endraw %}{% include api-source.html name="settings_panel_for" line=3782 %}{% raw %}
+{% endraw %}{% include api-source.html name="settings_panel_for" line=3838 %}{% raw %}
 
 </div>
 

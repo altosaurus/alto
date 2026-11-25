@@ -27,7 +27,7 @@ right. Browsing tiles retains the active activity.
 def default_size() -> tuple[int, int]
 ```
 
-{% endraw %}{% include api-source.html name="default_size" line=153 %}{% raw %}
+{% endraw %}{% include api-source.html name="default_size" line=150 %}{% raw %}
 
 </div>
 
@@ -56,7 +56,7 @@ True
 MainWindow(learner: Learner | None = None)
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow" line=416 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow" line=413 %}{% raw %}
 
 </div>
 
@@ -125,7 +125,7 @@ False
 def closeEvent(event: QCloseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.closeEvent" line=548 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.closeEvent" line=545 %}{% raw %}
 
 </div>
 
@@ -152,7 +152,7 @@ def eventFilter(
 ) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.eventFilter" line=1076 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.eventFilter" line=1065 %}{% raw %}
 
 </div>
 
@@ -189,7 +189,7 @@ True
 def sidebar_width() -> int
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.sidebar_width" line=1123 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.sidebar_width" line=1112 %}{% raw %}
 
 </div>
 
@@ -214,7 +214,7 @@ Return how wide the exercise list is.
 def toggle_sidebar() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.toggle_sidebar" line=1222 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.toggle_sidebar" line=1211 %}{% raw %}
 
 </div>
 
@@ -238,7 +238,7 @@ True
 def open_exercise(cls: type[Exercise] | None) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.open_exercise" line=1438 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.open_exercise" line=1427 %}{% raw %}
 
 </div>
 
@@ -268,7 +268,7 @@ Show an exercise.
 def show_about() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.show_about" line=1485 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.show_about" line=1474 %}{% raw %}
 
 </div>
 
@@ -289,7 +289,7 @@ Alto.
 def open_anki_exporter() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.open_anki_exporter" line=1515 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.open_anki_exporter" line=1504 %}{% raw %}
 
 </div>
 
@@ -311,7 +311,7 @@ the exercise open.
 def open_settings() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.open_settings" line=1539 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.open_settings" line=1528 %}{% raw %}
 
 </div>
 
@@ -345,7 +345,7 @@ True
 def rebuild() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.rebuild" line=1763 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.rebuild" line=1752 %}{% raw %}
 
 </div>
 
@@ -374,7 +374,7 @@ False
 def open_glossary() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.open_glossary" line=2004 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.open_glossary" line=1993 %}{% raw %}
 
 </div>
 
@@ -394,7 +394,7 @@ Toggle the glossary from its toolbar button.
 def open_stats() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.open_stats" line=2020 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.open_stats" line=2009 %}{% raw %}
 
 </div>
 
@@ -425,7 +425,7 @@ happens without a profile.
 def toggle_navigation() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.toggle_navigation" line=2195 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.toggle_navigation" line=2187 %}{% raw %}
 
 </div>
 
@@ -453,7 +453,7 @@ without leaving the activity.
 def show_lessons() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.show_lessons" line=2283 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.show_lessons" line=2275 %}{% raw %}
 
 </div>
 
@@ -477,7 +477,7 @@ Go to the start screen showing the lessons.
 def open_lessons(lesson: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.open_lessons" line=2298 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.open_lessons" line=2290 %}{% raw %}
 
 </div>
 
@@ -510,7 +510,7 @@ left at, with the lesson list on the left.
 def open_database() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.open_database" line=2529 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.open_database" line=2521 %}{% raw %}
 
 </div>
 
@@ -541,7 +541,7 @@ happens without a profile.
 def close_overlay() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.close_overlay" line=2652 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.close_overlay" line=2644 %}{% raw %}
 
 </div>
 
@@ -572,7 +572,7 @@ open before it.
 def switch_profile() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.switch_profile" line=2684 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.switch_profile" line=2676 %}{% raw %}
 
 </div>
 
@@ -597,7 +597,7 @@ comes from theirs.
 def export_backup() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.export_backup" line=2725 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.export_backup" line=2717 %}{% raw %}
 
 </div>
 
@@ -619,7 +619,7 @@ history and settings to one file.
 def check_for_updates() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.check_for_updates" line=2738 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.check_for_updates" line=2730 %}{% raw %}
 
 </div>
 
@@ -640,7 +640,7 @@ agrees, install it and restart.
 def import_backup() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.import_backup" line=2749 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.import_backup" line=2741 %}{% raw %}
 
 </div>
 
@@ -662,7 +662,7 @@ ask again, and reload the whole window from it.
 def show_home() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.show_home" line=2788 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.show_home" line=2780 %}{% raw %}
 
 </div>
 
@@ -688,7 +688,7 @@ and hiding the exercise list.
 def open_plugins() -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.open_plugins" line=2852 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.open_plugins" line=2844 %}{% raw %}
 
 </div>
 
@@ -712,7 +712,7 @@ def install_plugin(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.install_plugin" line=2872 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.install_plugin" line=2864 %}{% raw %}
 
 </div>
 
@@ -741,7 +741,7 @@ def uninstall_plugin(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.uninstall_plugin" line=2919 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.uninstall_plugin" line=2911 %}{% raw %}
 
 </div>
 
@@ -771,7 +771,7 @@ def restart_app(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MainWindow.restart_app" line=2998 %}{% raw %}
+{% endraw %}{% include api-source.html name="MainWindow.restart_app" line=2990 %}{% raw %}
 
 </div>
 

@@ -28,7 +28,7 @@ tasks cannot be failed and are not recorded.
 def saved_step(lesson: Lesson) -> int
 ```
 
-{% endraw %}{% include api-source.html name="saved_step" line=78 %}{% raw %}
+{% endraw %}{% include api-source.html name="saved_step" line=80 %}{% raw %}
 
 </div>
 
@@ -63,7 +63,7 @@ def save_step(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_step" line=104 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_step" line=106 %}{% raw %}
 
 </div>
 
@@ -95,7 +95,7 @@ StepView(
 )
 ```
 
-{% endraw %}{% include api-source.html name="StepView" line=350 %}{% raw %}
+{% endraw %}{% include api-source.html name="StepView" line=363 %}{% raw %}
 
 </div>
 
@@ -162,7 +162,7 @@ True
 def hear() -> None
 ```
 
-{% endraw %}{% include api-source.html name="StepView.hear" line=692 %}{% raw %}
+{% endraw %}{% include api-source.html name="StepView.hear" line=711 %}{% raw %}
 
 </div>
 
@@ -189,7 +189,7 @@ Play the step's notes.
 def walk(step: int) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StepView.walk" line=766 %}{% raw %}
+{% endraw %}{% include api-source.html name="StepView.walk" line=791 %}{% raw %}
 
 </div>
 
@@ -225,7 +225,7 @@ Move the pick one fifth around the outer ring.
 def ask() -> None
 ```
 
-{% endraw %}{% include api-source.html name="StepView.ask" line=839 %}{% raw %}
+{% endraw %}{% include api-source.html name="StepView.ask" line=864 %}{% raw %}
 
 </div>
 
@@ -260,7 +260,7 @@ LessonView(
 )
 ```
 
-{% endraw %}{% include api-source.html name="LessonView" line=1123 %}{% raw %}
+{% endraw %}{% include api-source.html name="LessonView" line=1148 %}{% raw %}
 
 </div>
 
@@ -323,7 +323,7 @@ def go(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="LessonView.go" line=1224 %}{% raw %}
+{% endraw %}{% include api-source.html name="LessonView.go" line=1249 %}{% raw %}
 
 </div>
 
@@ -356,7 +356,7 @@ LessonsPage(
 )
 ```
 
-{% endraw %}{% include api-source.html name="LessonsPage" line=1283 %}{% raw %}
+{% endraw %}{% include api-source.html name="LessonsPage" line=1308 %}{% raw %}
 
 </div>
 
