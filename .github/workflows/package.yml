@@ -2,6 +2,12 @@ name: Package
 
 # Builds both packages on a pull request that could change them, so a break shows before a release is tagged. Nothing is published.
 on:
+  push:
+    branches: [macos-test-build]
+    paths:
+      - "packaging/**"
+      - "scripts/build-macos.sh"
+      - ".github/workflows/package.yml"
   pull_request:
     paths:
       - "packaging/**"
@@ -27,11 +33,11 @@ concurrency:
 
 jobs:
   build:
-    if: ${{ !inputs.macos_test }}
+    if: github.event_name != 'push' && !inputs.macos_test
     uses: ./.github/workflows/build-packages.yml
 
   macos:
-    if: inputs.macos_test
+    if: github.event_name == 'push' || inputs.macos_test
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
