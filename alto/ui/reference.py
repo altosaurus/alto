@@ -55,6 +55,7 @@ from alto.exercises.library import (
     NoteConstruction,
     NoteNames,
     OrderOfKeys,
+    RythmicEquations,
     ScaleIdentification,
 )
 from alto.exercises.packs import PackExercise
@@ -768,6 +769,11 @@ class ScaleReferencePanel(QWidget):
 
 
 _READING_HINTS = {
+    RythmicEquations: (
+        "<p>Count each side in the same units. With a quarter note as "
+        "one beat, a half note counts as two and a whole note as four. "
+        "A rest counts for the same time as its matching note.</p>"
+    ),
     KeySignatures: (
         "<p>For major, go a half step above the last sharp or read the "
         "next-to-last flat. One flat gives F major, "

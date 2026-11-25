@@ -5,14 +5,17 @@ the staff, and what is ignored.
 
 from __future__ import annotations
 
+import ast
+import operator
 import random
+from fractions import Fraction
 from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
 from PySide6.QtCore import Qt
 from PySide6.QtTest import QSignalSpy, QTest
-from PySide6.QtWidgets import QRadioButton, QToolButton
+from PySide6.QtWidgets import QLabel, QRadioButton, QSpinBox, QToolButton
 
 from alto import settings
 from alto.audio import sounds
@@ -32,6 +35,7 @@ from alto.exercises.library import (
 from alto.theory.pitch import Note
 from alto.ui import motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR
+from alto.ui.exercise_settings import load_exercise_settings
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.pictures import ValuePictures
 from alto.ui.settings_menu import ChoiceChecklist, ToggleRow
@@ -1044,7 +1048,7 @@ def test_rythmic_equations_show_and_fill_the_missing_note(
     ties : bool
         Whether the generator may use tied notes.
     """
-    monkeypatch.setattr(settings, "rhythm_operators", {operator})
+    monkeypatch.setattr(settings, "rhythm_left_signs", {operator})
     monkeypatch.setattr(settings, "rhythm_ties", ties)
     exercise = RythmicEquations()
     rng = random.Random(2)
@@ -1110,7 +1114,7 @@ def test_rhythm_settings_apply_symbols_and_grouped_notes(
     """
     monkeypatch.setattr(
         settings,
-        "rhythm_operators",
+        "rhythm_left_signs",
         settings.DEFAULT_RHYTHM_OPERATORS.copy(),
     )
     monkeypatch.setattr(
@@ -1125,14 +1129,18 @@ def test_rhythm_settings_apply_symbols_and_grouped_notes(
     view.show()
     panel = view.settings_panel
     checklists = panel.findChildren(ChoiceChecklist)
-    operators = next(listing for listing in checklists if "+" in listing.boxes)
+    operators = next(
+        listing
+        for listing in checklists
+        if listing.accessibleName() == "Left operators"
+    )
     symbols = next(
         listing for listing in checklists if "dotted-quarter" in listing.boxes
     )
     operators.boxes["−"].click()
     symbols.boxes["dotted-quarter"].click()
     assert exercise.settings_signature()
-    assert store().value("rythmicEquations/operators") == "+"
+    assert store().value("rythmicEquations/leftSigns") == "+"
     assert "dotted-quarter" in str(store().value("rythmicEquations/symbols"))
     switches = {
         control.toolTip(): control for control in panel.findChildren(ToggleRow)
@@ -1196,3 +1204,389 @@ def test_settle_waits_for_a_real_timer(app: QApplication) -> None:
     motion.later(15, owner=app, step=lambda: completed.append(True))
     motion.settle()
     assert completed == [True]
+
+
+def _equation_value(tokens: list[str]) -> Fraction:
+    """
+    Evaluate the printed notation with standard arithmetic precedence.
+
+    Parameters
+    ----------
+    tokens : list of str
+        One completed side of a generated equation.
+
+    Returns
+    -------
+    Fraction
+        The exact duration of that side.
+    """
+    text = []
+    signs = {"−": "-", "÷": "/", "×": "*", "+": "+", "(": "(", ")": ")"}
+    for token in tokens:
+        if token in signs or token.isdecimal():
+            text.append(signs.get(token, token))
+        else:
+            duration = sum(
+                settings.RHYTHM_DURATIONS[n]
+                for n in token.replace("|", "~").split("~")
+            )
+            text.append(str(duration))
+
+    def value(node: ast.expr) -> Fraction:
+        """
+        Evaluate an arithmetic node from the printed expression.
+
+        Parameters
+        ----------
+        node : ast.expr
+            A number or a binary operation.
+
+        Returns
+        -------
+        Fraction
+            The value of this expression.
+        """
+        if isinstance(node, ast.Constant):
+            assert isinstance(node.value, (int, float))
+            return Fraction(node.value)
+        assert isinstance(node, ast.BinOp)
+        operations = {
+            ast.Add: operator.add,
+            ast.Sub: operator.sub,
+            ast.Mult: operator.mul,
+            ast.Div: operator.truediv,
+        }
+        return operations[type(node.op)](value(node.left), value(node.right))
+
+    return value(ast.parse(" ".join(text), mode="eval").body)
+
+
+@pytest.mark.parametrize("parentheses", [False, True])
+@pytest.mark.parametrize(
+    ("left_signs", "right_signs"),
+    [
+        (set(settings.RHYTHM_OPERATORS), set(settings.RHYTHM_OPERATORS)),
+        ({"+", "÷"}, {"−", "×"}),
+    ],
+)
+def test_rhythm_equations_use_exact_counts_and_balance(
+    monkeypatch: pytest.MonkeyPatch,
+    parentheses: bool,
+    left_signs: set[str],
+    right_signs: set[str],
+) -> None:
+    """
+    Check the printed equation at every supported pair of counts.
+
+    Parameters
+    ----------
+    parentheses : bool
+        Whether to allow grouping on each side.
+    left_signs, right_signs : set of str
+        Signs enabled on the respective sides.
+    monkeypatch : pytest.MonkeyPatch
+        Isolates the options used to generate the equations.
+    """
+    monkeypatch.setattr(settings, "rhythm_parentheses", parentheses)
+    exercise = RythmicEquations()
+    rng = random.Random(591)
+    monkeypatch.setattr(
+        settings,
+        "rhythm_symbols",
+        set(settings.RHYTHM_DURATIONS),
+    )
+    monkeypatch.setattr(settings, "rhythm_ties", True)
+    monkeypatch.setattr(settings, "rhythm_beams", True)
+    monkeypatch.setattr(settings, "rhythm_left_signs", left_signs)
+    monkeypatch.setattr(settings, "rhythm_right_signs", right_signs)
+    saw_parentheses = False
+    for left in range(settings.MAX_RHYTHM_OPERATORS + 1):
+        monkeypatch.setattr(settings, "rhythm_left_operators", left)
+        for right in range(settings.MAX_RHYTHM_OPERATORS + 1):
+            monkeypatch.setattr(settings, "rhythm_right_operators", right)
+            for _ in range(15):
+                question = exercise.generate(rng)
+                tokens = question.prompt.split()
+                assert tokens.count("_") == 1
+                tokens[tokens.index("_")] = question.answer
+                split = tokens.index("=")
+                a, b = tokens[:split], tokens[split + 1 :]
+                assert sum(t in settings.RHYTHM_OPERATORS for t in a) == left
+                assert sum(t in settings.RHYTHM_OPERATORS for t in b) == right
+                assert (
+                    set(a).intersection(settings.RHYTHM_OPERATORS)
+                    <= left_signs
+                )
+                assert (
+                    set(b).intersection(settings.RHYTHM_OPERATORS)
+                    <= right_signs
+                )
+                assert _equation_value(a) == _equation_value(b)
+                saw_parentheses |= "(" in tokens
+    assert saw_parentheses == parentheses
+
+
+def test_rhythm_operator_selections_migrate_and_reload(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Load shared signs, edit each side, and restore independent choices.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Isolates the rhythm settings.
+    """
+    for side in ("left", "right"):
+        monkeypatch.setattr(settings, f"rhythm_{side}_signs", set())
+        monkeypatch.setattr(settings, f"rhythm_{side}_operators", 1)
+    saved = store()
+    saved.setValue("rythmicEquations/leftOperators", "invalid")
+    saved.setValue("rythmicEquations/operators", "+,×")
+    saved.setValue("rythmicEquations/rightOperators", 1)
+    load_exercise_settings()
+    view = view_of(RythmicEquations())
+    lists = {
+        listing.accessibleName(): listing
+        for listing in view.settings_panel.findChildren(ChoiceChecklist)
+        if "+" in listing.boxes
+    }
+    left, right = lists["Left operators"], lists["Right operators"]
+    assert left.selected() == right.selected() == {"+", "×"}
+    shared_signature = view.exercise.settings_signature()
+    left.boxes["×"].click()
+    load_exercise_settings()
+    assert settings.rhythm_left_signs == {"+"}
+    assert settings.rhythm_right_signs == {"+", "×"}
+    right.boxes["+"].click()
+    assert not right.boxes["×"].isEnabled()
+    assert not left.boxes["+"].isEnabled()
+    load_exercise_settings()
+    assert settings.rhythm_left_signs == {"+"}
+    assert settings.rhythm_right_signs == {"×"}
+    split_signature = view.exercise.settings_signature()
+    assert split_signature != shared_signature
+    first, second = asked(view).prompt.split(" = ")
+    assert " + " in first and " × " in second
+    left.boxes["×"].click()
+    left.boxes["+"].click()
+    right.boxes["+"].click()
+    right.boxes["×"].click()
+    assert view.exercise.settings_signature() != split_signature
+    first, second = asked(view).prompt.split(" = ")
+    assert " × " in first and " + " in second
+    settings.rhythm_left_operators = 0
+    right_only = view.exercise.settings_signature()
+    settings.rhythm_left_signs = settings.rhythm_right_signs.copy()
+    assert view.exercise.settings_signature() == right_only
+    view.close()
+
+
+def test_rhythm_count_fields_refresh_the_question_and_reload(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Edit both fields, solve the new question, and reload the counts.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Isolates the global operator counts.
+    """
+    monkeypatch.setattr(settings, "rhythm_left_operators", 1)
+    monkeypatch.setattr(settings, "rhythm_right_operators", 0)
+    monkeypatch.setattr(settings, "rhythm_parentheses", False)
+    view = view_of(RythmicEquations())
+    view.show()
+    switch = next(
+        row
+        for row in view.settings_panel.findChildren(ToggleRow)
+        if row.switch.accessibleName() == "Parentheses"
+    )
+    assert not switch.isOn()
+    fields = {
+        field.accessibleName(): field
+        for field in view.settings_panel.findChildren(QSpinBox)
+    }
+    left, right = fields["Left operators"], fields["Right operators"]
+    assert (left.value(), right.value()) == (1, 0)
+    original = view.exercise.settings_signature()
+    right.setValue(2)
+    left.setValue(0)
+    question = asked(view)
+    assert question.prompt.split()[1] == "="
+    assert view.exercise.settings_signature() != original
+    assert view.rhythm_terms.count() == len(question.prompt.split())
+    app.processEvents()
+    assert (
+        view.rhythm_scroll.viewport().height() >= view.rhythm_equation.height()
+    )
+    view.rhythm_scroll.setFixedWidth(view.rhythm_equation.width() // 2)
+    app.processEvents()
+    assert view.rhythm_scroll.horizontalScrollBar().maximum() > 0
+    assert view.rhythm_scroll.height() > view.rhythm_equation.height()
+    view.buttons[question.choices.index(question.answer)].click()
+    assert (
+        view.answered and "blank" not in view.rhythm_equation.accessibleName()
+    )
+    ungrouped = view.exercise.settings_signature()
+    switch.click()
+    assert switch.isOn() and settings.rhythm_parentheses
+    assert view.exercise.settings_signature() != ungrouped
+    assert not view.answered
+    settings.rhythm_parentheses = False
+    settings.rhythm_left_operators, settings.rhythm_right_operators = 1, 0
+    load_exercise_settings()
+    assert (
+        settings.rhythm_left_operators,
+        settings.rhythm_right_operators,
+    ) == (0, 2)
+    assert settings.rhythm_parentheses
+    switch.click()
+    assert view.exercise.settings_signature() == ungrouped
+    left.setValue(1)
+    right.setValue(0)
+    assert view.exercise.settings_signature() == original
+    view.close()
+
+
+def test_rhythm_answer_types_mix_persist_and_fill_numeric_blanks(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Select both types, then answer and reload a number-only question.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Isolates the rhythm options.
+    """
+    monkeypatch.setattr(settings, "rhythm_answer_types", {"symbol"})
+    monkeypatch.setattr(
+        settings,
+        "rhythm_left_signs",
+        settings.DEFAULT_RHYTHM_OPERATORS.copy(),
+    )
+    monkeypatch.setattr(
+        settings,
+        "rhythm_symbols",
+        settings.DEFAULT_RHYTHM_SYMBOLS.copy(),
+    )
+    exercise = RythmicEquations()
+    original = exercise.settings_signature()
+    view = view_of(exercise)
+    view.show()
+    listing = next(
+        menu
+        for menu in view.settings_panel.findChildren(ChoiceChecklist)
+        if "symbol" in menu.boxes
+    )
+    assert listing.selected() == {"symbol"}
+    listing.boxes["number"].click()
+    mixed = exercise.settings_signature()
+    rng = random.Random(0)
+    assert {exercise.generate(rng).answer.isdecimal() for _ in range(30)} == {
+        True,
+        False,
+    }
+    listing.boxes["symbol"].click()
+    numeric = exercise.settings_signature()
+    assert len({original, mixed, numeric}) == 3
+    q = asked(view)
+    assert q.answer.isdecimal() and all(c.isdecimal() for c in q.choices)
+    assert (
+        view.prompt.text() == q.caption
+        and q.caption in exercise.card_prompt(q)
+    )
+    assert [b.text() for b in view.buttons] == q.choices
+    assert all(
+        b.icon().isNull() and b.toolTip() == f"Key {b.text()}"
+        for b in view.buttons
+    )
+    view.buttons[q.choices.index(q.answer)].click()
+    item = view.rhythm_terms.itemAt(q.prompt.split().index("_"))
+    assert item is not None
+    label = item.widget()
+    assert isinstance(label, QLabel) and label.text() == q.answer
+    assert view.answered
+    settings.rhythm_answer_types = {"symbol"}
+    load_exercise_settings()
+    assert settings.rhythm_answer_types == {"number"}
+    listing.boxes["symbol"].click()
+    listing.boxes["number"].click()
+    assert exercise.settings_signature() == original
+    view.close()
+
+
+@pytest.mark.parametrize("parentheses", [False, True])
+def test_numeric_rhythm_blanks_have_one_balancing_answer(
+    monkeypatch: pytest.MonkeyPatch,
+    parentheses: bool,
+) -> None:
+    """
+    Substitute every numeric button into the printed equation.
+
+    Parameters
+    ----------
+    parentheses : bool
+        Whether to allow grouping on each side.
+    monkeypatch : pytest.MonkeyPatch
+        Isolates operators, answer types, and the selected note values.
+    """
+    monkeypatch.setattr(settings, "rhythm_parentheses", parentheses)
+    exercise = RythmicEquations()
+    rng = random.Random(9)
+    monkeypatch.setattr(settings, "rhythm_answer_types", {"number"})
+    monkeypatch.setattr(
+        settings,
+        "rhythm_symbols",
+        {"quarter", "half", "eighth"},
+    )
+    monkeypatch.setattr(settings, "rhythm_ties", True)
+    monkeypatch.setattr(settings, "rhythm_beams", True)
+    for left_signs, right_signs in (
+        ({"+", "−"}, {"+", "−"}),
+        ({"×", "÷"}, {"×", "÷"}),
+        (set(settings.RHYTHM_OPERATORS), set(settings.RHYTHM_OPERATORS)),
+        ({"+", "×"}, {"−", "÷"}),
+    ):
+        monkeypatch.setattr(settings, "rhythm_left_signs", left_signs)
+        monkeypatch.setattr(settings, "rhythm_right_signs", right_signs)
+        for left, right in ((0, 0), (0, 1), (1, 0), (3, 2)):
+            monkeypatch.setattr(settings, "rhythm_left_operators", left)
+            monkeypatch.setattr(settings, "rhythm_right_operators", right)
+            for _ in range(12):
+                q = exercise.generate(rng)
+                tokens = q.prompt.split()
+                index = tokens.index("_")
+                for c in q.choices:
+                    replacement = [c]
+                    if q.caption:
+                        unit = q.caption.split()[2]
+                        replacement = ["(", c, "×", unit, ")"]
+                    sides = tokens[:index] + replacement + tokens[index + 1 :]
+                    eq = sides.index("=")
+                    balanced = _equation_value(sides[:eq]) == _equation_value(
+                        sides[eq + 1 :],
+                    )
+                    assert q.check(c) == balanced
+    monkeypatch.setattr(settings, "rhythm_symbols", {"quarter"})
+    monkeypatch.setattr(settings, "rhythm_left_signs", {"+"})
+    monkeypatch.setattr(settings, "rhythm_left_operators", 1)
+    monkeypatch.setattr(settings, "rhythm_right_operators", 0)
+    monkeypatch.setattr(settings, "rhythm_ties", False)
+    q = exercise.generate(rng)
+    assert (q.prompt, q.answer, q.caption) == (
+        "quarter + quarter = _",
+        "2",
+        "Count in quarter notes.",
+    )

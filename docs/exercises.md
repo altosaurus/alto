@@ -77,9 +77,15 @@ when it contains the symbol and the bundled Bravura font otherwise. Glyph codes 
 
 ## Rythmic Equations
 
-Choose the note symbol that makes both sides of the equation last the same amount of time.
+Use **Answer Type** to choose what fills the blank. **Symbol** (the default) asks for a note or rest. **Number** shows numbered buttons. A number can be a missing factor, as in “half note ÷ □ = quarter note,” or a duration. For a duration, the question gives the counting unit: with **Count in eighth notes**, a quarter note plus a quarter note equals **4**. Check both types to practice a mix.
+
+For symbol answers, choose the note symbol that makes both sides of the equation last the same amount of time.
 For example, a quarter note plus another quarter note equals a half note. The blank can appear on either side of the equals sign.
-Use **Operators** to choose addition, subtraction, multiplication, and division. Multiplication and division use whole-number factors from 2 through 8 when the selected symbols allow them. Use **Symbols** to select notes, rests, and dotted notes from double whole through thirty-second values. A selected note and rest of the same duration both count as correct. Turn on **Ties** or **Beams** to mix in questions where a pair of notes counts as one duration. Beams group eighth, sixteenth, or thirty-second notes.
+Under **Operators**, set **Left operators** and **Right operators** to choose how many arithmetic signs appear on each side of the equals sign (0–3 per side). The default is one on the left and zero on the right. Use the checkboxes under each count to select the signs allowed on that side. For example, set both counts to one, select only **Addition (+)** on the left and only **Multiplication (×)** on the right, and you can get **quarter note + quarter note = □ × 2**.
+
+Turn on **Parentheses** to practice order of operations. Set at least two operators on one side so there is something to group. For example, in **(quarter note + quarter note) ÷ 2 = □**, add the two quarter notes first, then divide by two. With the switch off (the default), you can work from left to right on each side.
+
+Multiplication and division use whole-number factors from 2 through 8 when the selected symbols allow them. Use **Symbols** to select notes, rests, and dotted notes from double whole through thirty-second values. A selected note and rest of the same duration both count as correct. Turn on **Ties** or **Beams** to mix in questions where a pair of notes counts as one duration. Beams group eighth, sixteenth, or thirty-second notes.
 
 ## Keyboard Note Identification
 

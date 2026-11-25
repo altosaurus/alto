@@ -32,6 +32,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QRadioButton,
+    QSpinBox,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -3963,6 +3964,150 @@ def settings_panel_for(
     return panel
 
 
+def _rhythm_operator_summary() -> str:
+    """
+    Describe the selected signs and operator counts.
+
+    Returns
+    -------
+    str
+        The value shown on the Operators menu row.
+
+    Examples
+    --------
+    >>> "1 left" in _rhythm_operator_summary()
+    True
+    """
+    lines = []
+    for side in ("left", "right"):
+        count = getattr(settings, f"rhythm_{side}_operators")
+        selected = getattr(settings, f"rhythm_{side}_signs")
+        signs = " ".join(
+            op for op in settings.RHYTHM_OPERATORS if op in selected
+        )
+        lines.append(f"{count} {side} · {signs}")
+    return "\n".join(lines)
+
+
+def _rhythm_selection_summary(title: str, *, selected: set[str]) -> str:
+    """
+    Format the current selection on a rhythm settings row.
+
+    Parameters
+    ----------
+    title : str
+        The option shown on the row.
+    selected : set of str
+        Enabled choices.
+
+    Returns
+    -------
+    str
+        Summary for this option.
+
+    Examples
+    --------
+    >>> _rhythm_selection_summary("Answer Type", selected={"symbol"})
+    'Symbol'
+    """
+    if title == "Answer Type":
+        return ", ".join(
+            label
+            for key, label in settings.RHYTHM_ANSWER_TYPES.items()
+            if key in selected
+        )
+    return str(len(selected))
+
+
+def _operator_options(
+    panel: ExerciseSettingsPanel,
+    *,
+    menu: MenuRow,
+) -> QWidget:
+    """
+    Build a count field and a sign checklist for each side.
+
+    Parameters
+    ----------
+    panel : ExerciseSettingsPanel
+        Panel that refreshes the exercise when a setting changes.
+    menu : MenuRow
+        Row whose summary includes the counts.
+
+    Returns
+    -------
+    QWidget
+        Operator settings grouped by side of the equals sign.
+
+    Examples
+    --------
+    A right count of two puts two signs after the equals sign.
+    """
+    body = QWidget()
+    grid = QGridLayout(body)
+    grid.setContentsMargins(0, 0, 0, 0)
+    grid.setColumnStretch(0, 1)
+
+    for index, side in enumerate(("left", "right")):
+        title = f"{side.title()} operators"
+        label = QLabel(title)
+        field = QSpinBox()
+        field.setAccessibleName(title)
+        field.setRange(0, settings.MAX_RHYTHM_OPERATORS)
+        field.setValue(getattr(settings, f"rhythm_{side}_operators"))
+        field.setKeyboardTracking(False)
+        label.setBuddy(field)
+        grid.addWidget(label, 2 * index, 0)
+        grid.addWidget(field, 2 * index, 1)
+        choices = ChoiceChecklist(
+            [("", list(settings.RHYTHM_OPERATORS.items()))],
+            selected=getattr(settings, f"rhythm_{side}_signs"),
+        )
+        choices.setAccessibleName(title)
+        for box in choices.boxes.values():
+            box.setAccessibleName(f"{side.title()} {box.text()}")
+        grid.addWidget(choices, 2 * index + 1, 0, 1, 2)
+
+        def save(
+            *,
+            side: str = side,
+            field: QSpinBox = field,
+            choices: ChoiceChecklist = choices,
+        ) -> None:
+            """
+            Apply this side's count and signs to the next question.
+
+            Parameters
+            ----------
+            side : str
+                Side of the equals sign.
+            field : QSpinBox
+                Operator count for this side.
+            choices : ChoiceChecklist
+                Signs allowed on this side.
+
+            Examples
+            --------
+            Checking Division on the right updates the right selection.
+            """
+            count = field.value()
+            signs = choices.selected()
+            setattr(settings, f"rhythm_{side}_operators", count)
+            setattr(settings, f"rhythm_{side}_signs", signs)
+            saved = store()
+            saved.setValue(f"rythmicEquations/{side}Operators", count)
+            saved.setValue(
+                f"rythmicEquations/{side}Signs",
+                ",".join(sorted(signs)),
+            )
+            menu.value.setText(_rhythm_operator_summary())
+            panel.changed.emit()
+
+        field.valueChanged.connect(save)
+        choices.changed.connect(save)
+    return body
+
+
 def _add_rhythm_options(
     panel: ExerciseSettingsPanel,
     *,
@@ -3985,55 +4130,59 @@ def _add_rhythm_options(
     Buttons page.
     """
     stack = panel.stack
-    ties = ToggleRow("Ties")
-    ties.setOn(settings.rhythm_ties)
-    ties.setToolTip("Show two tied notes as one duration")
 
-    def save_ties(on: bool) -> None:
+    def save_switch(on: bool, *, key: str) -> None:
         """
-        Save tie practice and refresh the question.
+        Save a rhythm switch and refresh the question.
 
         Parameters
         ----------
         on : bool
-            Whether to include tied notes.
+            Whether to enable the option.
+        key : str
+            Rhythm setting controlled by this switch.
 
         Examples
         --------
-        Enabling Ties shows a pair of notes connected by a curved line.
+        Enabling Ties can show two notes connected by a curved line.
         """
-        settings.rhythm_ties = on
-        store().setValue("rythmicEquations/ties", "true" if on else "false")
+        setattr(settings, f"rhythm_{key}", on)
+        store().setValue(f"rythmicEquations/{key}", "true" if on else "false")
         panel.changed.emit()
 
-    ties.switched.connect(save_ties)
-    layout.insertWidget(layout.count() - 1, ties)
-    beams = ToggleRow("Beams")
-    beams.setOn(settings.rhythm_beams)
-    beams.setToolTip("Show two beamed notes as one duration")
-
-    def save_beams(on: bool) -> None:
-        """
-        Save beam practice and refresh the question.
-
-        Parameters
-        ----------
-        on : bool
-            Whether to include beamed note pairs.
-
-        Examples
-        --------
-        Enabling Beams can show two eighth notes joined by one beam.
-        """
-        settings.rhythm_beams = on
-        store().setValue("rythmicEquations/beams", "true" if on else "false")
-        panel.changed.emit()
-
-    beams.switched.connect(save_beams)
-    layout.insertWidget(layout.count() - 1, beams)
-    for title, attribute, labels in (
-        ("Operators", "rhythm_operators", settings.RHYTHM_OPERATORS),
-        ("Symbols", "rhythm_symbols", RHYTHM_SYMBOL_NAMES),
+    for key, tip in (
+        ("ties", "Show two tied notes as one duration"),
+        ("beams", "Show two beamed notes as one duration"),
+        (
+            "parentheses",
+            "Group operations on sides with two or more operators",
+        ),
+    ):
+        switch = ToggleRow(key.title())
+        switch.setOn(getattr(settings, f"rhythm_{key}"))
+        switch.setToolTip(tip)
+        switch.switched.connect(lambda on, key=key: save_switch(on, key=key))
+        layout.insertWidget(layout.count() - 1, switch)
+    operators = MenuRow("Operators")
+    operators.value.setText(_rhythm_operator_summary())
+    layout.insertWidget(layout.count() - 1, operators)
+    operator_page = stack.addWidget(
+        subpage(
+            "Operators",
+            body=scrolling(_operator_options(panel, menu=operators)),
+            back=lambda: stack.slide_to(0),
+            fill=True,
+        ),
+    )
+    operators.clicked.connect(lambda: stack.slide_to(operator_page))
+    for title, attribute, key, labels in (
+        (
+            "Answer Type",
+            "rhythm_answer_types",
+            "answerTypes",
+            settings.RHYTHM_ANSWER_TYPES,
+        ),
+        ("Symbols", "rhythm_symbols", "symbols", RHYTHM_SYMBOL_NAMES),
     ):
         row = MenuRow(title)
         selected = getattr(settings, attribute)
@@ -4064,11 +4213,7 @@ def _add_rhythm_options(
                 box.setText("")
                 box.setIcon(ValuePictures.icon(name, scale=1.0))
                 box.setIconSize(QSize(px(18), px(40)))
-        row.value.setText(
-            ", ".join(name for name in labels if name in selected)
-            if title == "Operators"
-            else str(len(selected)),
-        )
+        row.value.setText(_rhythm_selection_summary(title, selected=selected))
         layout.insertWidget(layout.count() - 1, row)
         page = stack.addWidget(
             subpage(
@@ -4088,6 +4233,7 @@ def _add_rhythm_options(
             row: MenuRow = row,
             attribute: str = attribute,
             title: str = title,
+            key: str = key,
         ) -> None:
             """
             Save the edited checklist and ask a new question.
@@ -4102,21 +4248,21 @@ def _add_rhythm_options(
                 The settings attribute to update.
             title : str
                 The settings page name.
+            key : str
+                Storage key for this option.
 
             Examples
             --------
-            Unchecking Addition leaves only subtraction questions.
+            Checking Number adds questions with numeric answers.
             """
             selected = choices.selected()
             setattr(settings, attribute, selected)
             store().setValue(
-                f"rythmicEquations/{title.lower()}",
+                f"rythmicEquations/{key}",
                 ",".join(sorted(selected)),
             )
             row.value.setText(
-                ", ".join(sorted(selected))
-                if title == "Operators"
-                else str(len(selected)),
+                _rhythm_selection_summary(title, selected=selected),
             )
             panel.changed.emit()
 
