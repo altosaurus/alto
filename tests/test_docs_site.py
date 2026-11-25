@@ -876,7 +876,10 @@ def test_no_page_listed_twice_and_heading_page_pages_link() -> None:
         and 'unless group != "" and p.title == group' in layout
     )
     category = (DOCS / "_includes" / "nav-category.html").read_text()
-    assert 'title="Contents" url="/contents/" %}' in layout
+    summary = '<summary aria-controls="docs-navigation">Contents</summary>'
+    assert summary in layout
+    assert 'class="nav" id="docs-navigation"' in layout
+    assert 'nav-category.html title="Contents"' not in layout
     assert "{% if include.controls %}" in category
     assert category.index("</a>") < category.index("<button")
     assert 'aria-controls="{{ include.controls }}"' in category
