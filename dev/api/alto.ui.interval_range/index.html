@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
   
 </head>
 <body>
@@ -75,14 +75,9 @@
   <div class="layout">
     <aside class="sidebar">
       <nav class="menu" aria-label="Documentation">
-        <div class="nav-head">
-  <a href="/alto/dev/contents/">Contents</a>
-  
-</div>
-
-        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
-          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
-        </button>
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
         <div class="nav" id="docs-navigation">
           
           
@@ -770,7 +765,7 @@ the keyboard range.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalRangeSlider</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/interval_range.py#L36" aria-label="Source for IntervalRangeSlider">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/interval_range.py#L36" aria-label="Source for IntervalRangeSlider">[Source]</a></p>
 
 </div>
 
@@ -825,7 +820,7 @@ endpoint.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/interval_range.py#L97" aria-label="Source for IntervalRangeSlider.set_range">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/interval_range.py#L97" aria-label="Source for IntervalRangeSlider.set_range">[Source]</a></p>
 
 </div>
 
@@ -860,7 +855,7 @@ endpoint.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/interval_range.py#L141" aria-label="Source for IntervalRangeSlider.move_endpoint">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/interval_range.py#L141" aria-label="Source for IntervalRangeSlider.move_endpoint">[Source]</a></p>
 
 </div>
 
@@ -888,7 +883,7 @@ endpoint.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/interval_range.py#L219" aria-label="Source for IntervalRangeSlider.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/interval_range.py#L219" aria-label="Source for IntervalRangeSlider.paintEvent">[Source]</a></p>
 
 </div>
 
@@ -913,7 +908,7 @@ endpoint.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/interval_range.py#L276" aria-label="Source for IntervalRangeSlider.mousePressEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/interval_range.py#L276" aria-label="Source for IntervalRangeSlider.mousePressEvent">[Source]</a></p>
 
 </div>
 
@@ -938,7 +933,7 @@ endpoint.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/interval_range.py#L304" aria-label="Source for IntervalRangeSlider.mouseMoveEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/interval_range.py#L304" aria-label="Source for IntervalRangeSlider.mouseMoveEvent">[Source]</a></p>
 
 </div>
 
@@ -963,7 +958,7 @@ endpoint.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseReleaseEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/interval_range.py#L332" aria-label="Source for IntervalRangeSlider.mouseReleaseEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/interval_range.py#L332" aria-label="Source for IntervalRangeSlider.mouseReleaseEvent">[Source]</a></p>
 
 </div>
 
@@ -988,7 +983,7 @@ endpoint.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QKeyEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/interval_range.py#L352" aria-label="Source for IntervalRangeSlider.keyPressEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/interval_range.py#L352" aria-label="Source for IntervalRangeSlider.keyPressEvent">[Source]</a></p>
 
 </div>
 
@@ -1264,10 +1259,10 @@ endpoint.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

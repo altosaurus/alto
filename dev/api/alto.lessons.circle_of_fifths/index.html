@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
   
 </head>
 <body>
@@ -75,14 +75,9 @@
   <div class="layout">
     <aside class="sidebar">
       <nav class="menu" aria-label="Documentation">
-        <div class="nav-head">
-  <a href="/alto/dev/contents/">Contents</a>
-  
-</div>
-
-        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
-          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
-        </button>
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
         <div class="nav" id="docs-navigation">
           
           
@@ -777,7 +772,7 @@ key mean.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/lessons/circle_of_fifths.py#L37" aria-label="Source for key_name">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/lessons/circle_of_fifths.py#L37" aria-label="Source for key_name">[Source]</a></p>
 
 </div>
 
@@ -816,7 +811,7 @@ key mean.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/lessons/circle_of_fifths.py#L68" aria-label="Source for summary">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/lessons/circle_of_fifths.py#L68" aria-label="Source for summary">[Source]</a></p>
 
 </div>
 
@@ -852,7 +847,7 @@ key mean.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fifth_task</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/lessons/circle_of_fifths.py#L110" aria-label="Source for fifth_task">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/lessons/circle_of_fifths.py#L110" aria-label="Source for fifth_task">[Source]</a></p>
 
 </div>
 
@@ -887,7 +882,7 @@ buttons.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sharps_task</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/lessons/circle_of_fifths.py#L156" aria-label="Source for sharps_task">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/lessons/circle_of_fifths.py#L156" aria-label="Source for sharps_task">[Source]</a></p>
 
 </div>
 
@@ -929,7 +924,7 @@ circle.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flats_task</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/lessons/circle_of_fifths.py#L213" aria-label="Source for flats_task">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/lessons/circle_of_fifths.py#L213" aria-label="Source for flats_task">[Source]</a></p>
 
 </div>
 
@@ -971,7 +966,7 @@ circle.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">relative_task</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/lessons/circle_of_fifths.py#L266" aria-label="Source for relative_task">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/lessons/circle_of_fifths.py#L266" aria-label="Source for relative_task">[Source]</a></p>
 
 </div>
 
@@ -1005,7 +1000,7 @@ circle.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">neighbor_task</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/lessons/circle_of_fifths.py#L314" aria-label="Source for neighbor_task">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/lessons/circle_of_fifths.py#L314" aria-label="Source for neighbor_task">[Source]</a></p>
 
 </div>
 
@@ -1223,10 +1218,10 @@ circle.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

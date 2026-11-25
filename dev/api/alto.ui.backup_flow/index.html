@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
   
 </head>
 <body>
@@ -75,14 +75,9 @@
   <div class="layout">
     <aside class="sidebar">
       <nav class="menu" aria-label="Documentation">
-        <div class="nav-head">
-  <a href="/alto/dev/contents/">Contents</a>
-  
-</div>
-
-        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
-          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
-        </button>
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
         <div class="nav" id="docs-navigation">
           
           
@@ -779,7 +774,7 @@ saved next to the database, so a wrong choice can be undone.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/backup_flow.py#L49" aria-label="Source for default_name">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/backup_flow.py#L49" aria-label="Source for default_name">[Source]</a></p>
 
 </div>
 
@@ -818,7 +813,7 @@ saved next to the database, so a wrong choice can be undone.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/backup_flow.py#L77" aria-label="Source for counted">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/backup_flow.py#L77" aria-label="Source for counted">[Source]</a></p>
 
 </div>
 
@@ -853,7 +848,7 @@ saved next to the database, so a wrong choice can be undone.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="n">BackupInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/backup_flow.py#L108" aria-label="Source for describe">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/backup_flow.py#L108" aria-label="Source for describe">[Source]</a></p>
 
 </div>
 
@@ -901,7 +896,7 @@ and 1,500 answers.'
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/backup_flow.py#L151" aria-label="Source for export_backup">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/backup_flow.py#L151" aria-label="Source for export_backup">[Source]</a></p>
 
 </div>
 
@@ -935,7 +930,7 @@ and 1,500 answers.'
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">safety_copy</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/backup_flow.py#L208" aria-label="Source for safety_copy">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/backup_flow.py#L208" aria-label="Source for safety_copy">[Source]</a></p>
 
 </div>
 
@@ -977,7 +972,7 @@ is replaced.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/backup_flow.py#L242" aria-label="Source for import_backup">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/backup_flow.py#L242" aria-label="Source for import_backup">[Source]</a></p>
 
 </div>
 
@@ -1234,10 +1229,10 @@ caller has to reload what is on screen afterwards.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
   
 </head>
 <body>
@@ -75,14 +75,9 @@
   <div class="layout">
     <aside class="sidebar">
       <nav class="menu" aria-label="Documentation">
-        <div class="nav-head">
-  <a href="/alto/dev/contents/">Contents</a>
-  
-</div>
-
-        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
-          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
-        </button>
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
         <div class="nav" id="docs-navigation">
           
           
@@ -810,7 +805,7 @@ Each release’s downloads are on its GitHub release.</p>
 
 <ul>
   <li>
-    <p>On small screens, the documentation menu starts closed so the article is visible immediately. <strong>Menu</strong> opens the navigation, and <strong>Contents</strong> links to the overview.</p>
+    <p>On small screens, tap <strong>Contents</strong> to expand the documentation menu below it. On desktop, the sidebar opens directly with the navigation links.</p>
   </li>
   <li>
     <p>Keyboard Note Identification now saves its own <strong>Note names</strong> choice. Switching to <strong>Caret</strong> in Note Identification leaves the keyboard exercise’s answers unchanged.</p>
@@ -1421,10 +1416,10 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

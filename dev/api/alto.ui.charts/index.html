@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795643956">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
   
 </head>
 <body>
@@ -75,14 +75,9 @@
   <div class="layout">
     <aside class="sidebar">
       <nav class="menu" aria-label="Documentation">
-        <div class="nav-head">
-  <a href="/alto/dev/contents/">Contents</a>
-  
-</div>
-
-        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
-          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
-        </button>
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
         <div class="nav" id="docs-navigation">
           
           
@@ -785,7 +780,7 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L82" aria-label="Source for nice_ticks">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L82" aria-label="Source for nice_ticks">[Source]</a></p>
 
 </div>
 
@@ -826,7 +821,7 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L944" aria-label="Source for StackedBarChart">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L944" aria-label="Source for StackedBarChart">[Source]</a></p>
 
 </div>
 
@@ -886,7 +881,7 @@ missed ones stacked above in red.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1004" aria-label="Source for StackedBarChart.set_data">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1004" aria-label="Source for StackedBarChart.set_data">[Source]</a></p>
 
 </div>
 
@@ -917,7 +912,7 @@ missed ones stacked above in red.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1088" aria-label="Source for StackedBarChart.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1088" aria-label="Source for StackedBarChart.paintEvent">[Source]</a></p>
 
 </div>
 
@@ -948,7 +943,7 @@ questions were answered.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1200" aria-label="Source for StackedBarChart.mouseMoveEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1200" aria-label="Source for StackedBarChart.mouseMoveEvent">[Source]</a></p>
 
 </div>
 
@@ -1000,7 +995,7 @@ questions were answered.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1255" aria-label="Source for LineChart">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1255" aria-label="Source for LineChart">[Source]</a></p>
 
 </div>
 
@@ -1065,7 +1060,7 @@ questions were answered.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1321" aria-label="Source for LineChart.set_data">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1321" aria-label="Source for LineChart.set_data">[Source]</a></p>
 
 </div>
 
@@ -1097,7 +1092,7 @@ questions were answered.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1399" aria-label="Source for LineChart.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1399" aria-label="Source for LineChart.paintEvent">[Source]</a></p>
 
 </div>
 
@@ -1130,7 +1125,7 @@ dot for each value.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1526" aria-label="Source for LineChart.mouseMoveEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1526" aria-label="Source for LineChart.mouseMoveEvent">[Source]</a></p>
 
 </div>
 
@@ -1180,7 +1175,7 @@ dot for each value.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1572" aria-label="Source for HBarChart">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1572" aria-label="Source for HBarChart">[Source]</a></p>
 
 </div>
 
@@ -1235,7 +1230,7 @@ end.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="n">rows</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1626" aria-label="Source for HBarChart.set_data">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1626" aria-label="Source for HBarChart.set_data">[Source]</a></p>
 
 </div>
 
@@ -1268,7 +1263,7 @@ them.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1655" aria-label="Source for HBarChart.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1655" aria-label="Source for HBarChart.paintEvent">[Source]</a></p>
 
 </div>
 
@@ -1297,7 +1292,7 @@ when there are none.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1782" aria-label="Source for HBarChart.mouseMoveEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1782" aria-label="Source for HBarChart.mouseMoveEvent">[Source]</a></p>
 
 </div>
 
@@ -1342,7 +1337,7 @@ when there are none.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1815" aria-label="Source for HeatmapChart">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1815" aria-label="Source for HeatmapChart">[Source]</a></p>
 
 </div>
 
@@ -1400,7 +1395,7 @@ square per day, darker the more questions.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1924" aria-label="Source for HeatmapChart.set_data">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1924" aria-label="Source for HeatmapChart.set_data">[Source]</a></p>
 
 </div>
 
@@ -1431,7 +1426,7 @@ square per day, darker the more questions.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">first_day</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">date</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1968" aria-label="Source for HeatmapChart.first_day">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1968" aria-label="Source for HeatmapChart.first_day">[Source]</a></p>
 
 </div>
 
@@ -1462,7 +1457,7 @@ week.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L1992" aria-label="Source for HeatmapChart.level">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L1992" aria-label="Source for HeatmapChart.level">[Source]</a></p>
 
 </div>
 
@@ -1506,7 +1501,7 @@ week.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">day_at</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="n">QPointF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">date</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L2155" aria-label="Source for HeatmapChart.day_at">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L2155" aria-label="Source for HeatmapChart.day_at">[Source]</a></p>
 
 </div>
 
@@ -1556,7 +1551,7 @@ week.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L2204" aria-label="Source for HeatmapChart.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L2204" aria-label="Source for HeatmapChart.paintEvent">[Source]</a></p>
 
 </div>
 
@@ -1588,7 +1583,7 @@ the Less-More legend.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/6e6d626d6e24759a1443409d7622367b03afaaed/alto/ui/charts.py#L2384" aria-label="Source for HeatmapChart.mouseMoveEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/charts.py#L2384" aria-label="Source for HeatmapChart.mouseMoveEvent">[Source]</a></p>
 
 </div>
 
@@ -1855,10 +1850,10 @@ pointer, in a tooltip.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795643956" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795643956" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
