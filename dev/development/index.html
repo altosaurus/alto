@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795612710">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795635316">
   
 </head>
 <body>
@@ -1745,7 +1745,7 @@ uninstall that must keep the data, and an uninstall with <code class="language-p
 run it only on a computer where that folder may be touched, such as a CI runner. The installer is for one user (no administrator
 prompt); its <code class="language-plaintext highlighter-rouge">AppId</code> in <code class="language-plaintext highlighter-rouge">alto.iss</code> must never change, because a newer installer finds the copy it updates by it. The uninstaller asks
 whether to also remove the practice history (<code class="language-plaintext highlighter-rouge">%APPDATA%\Alto</code>) and the settings (<code class="language-plaintext highlighter-rouge">HKEY_CURRENT_USER\Software\alto</code>); a silent
-uninstall keeps them unless it is given <code class="language-plaintext highlighter-rouge">/PURGE=1</code>. The installer is not signed, so Windows shows an “unknown publisher” warning.</p>
+uninstall keeps them unless it is given <code class="language-plaintext highlighter-rouge">/PURGE=1</code>. Local builds and pull request builds produce an unsigned installer.</p>
 
 <p>Microsoft’s Visual C++ runtime comes from Windows, not from the installer. <code class="language-plaintext highlighter-rouge">packaging/alto.spec</code> leaves out the copies that Python,
 Qt and Shiboken bring, fails the build if one remains, and records which runtime files the program needs and the newest version
@@ -1753,6 +1753,17 @@ among them. The installer checks that Windows has them, at least that new, and o
 Redistributable, checks Microsoft’s signature on it and runs it, both in an ordinary install and in the silent install of an update.
 The build test runs that step once with <code class="language-plaintext highlighter-rouge">/RUNTIMETEST=1</code>, so it needs the internet. Alto does not use NumPy, which is only a test
 dependency.</p>
+
+<h3 id="windows-installer-signing">Windows installer signing</h3>
+
+<p>For a signing rehearsal, run <strong>Release</strong> manually on <code class="language-plaintext highlighter-rouge">main</code>. Download the <strong>windows-signed</strong> artifact and compare its
+SHA-256 with the signing job summary. On Windows, open <strong>Properties → Digital Signatures</strong> on the downloaded installer
+and inspect the publisher and timestamp. The <strong>windows</strong> artifact contains the unsigned build used as input.</p>
+
+<p>The signing job uses the <code class="language-plaintext highlighter-rouge">windows-signing</code> GitHub environment. Its federated credential authenticates the job to Azure
+with <code class="language-plaintext highlighter-rouge">AZURE_CLIENT_ID</code>, <code class="language-plaintext highlighter-rouge">AZURE_TENANT_ID</code>, and <code class="language-plaintext highlighter-rouge">AZURE_SUBSCRIPTION_ID</code>. The environment variables
+<code class="language-plaintext highlighter-rouge">AZURE_SIGNING_ENDPOINT</code>, <code class="language-plaintext highlighter-rouge">AZURE_SIGNING_ACCOUNT_NAME</code>, and <code class="language-plaintext highlighter-rouge">AZURE_CERTIFICATE_PROFILE_NAME</code> select the signing profile.
+For a release tag, the publisher downloads the verified installer before calculating and signing the release checksums.</p>
 
 <h3 id="signing-releases-once">Signing releases, once</h3>
 
@@ -1787,7 +1798,7 @@ installer on a Windows runner, both with Python 3.13. The other two call it.</li
 shows before a release. It publishes nothing.</li>
   <li><strong>Release</strong> runs when a tag such as <code class="language-plaintext highlighter-rouge">v0.1.0</code> is pushed. It first checks that the tag is <code class="language-plaintext highlighter-rouge">v</code> plus the version in <code class="language-plaintext highlighter-rouge">pyproject.toml</code> and
 that <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code> has notes for it; then builds both packages; then creates the GitHub release with both files, a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code>
-file and the changelog notes. Started by hand from the Actions tab, it only builds, to rehearse a release.</li>
+file and the changelog notes. A manual run on <code class="language-plaintext highlighter-rouge">main</code> also signs and verifies the Windows installer and keeps it as a rehearsal artifact.</li>
 </ul>
 
 <p>The release is a normal one and never a pre-release, because Alto’s update check asks GitHub for the latest release.</p>
@@ -1908,10 +1919,10 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795612710" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795612710" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795612710" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795612710" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795635316" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795635316" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795635316" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795635316" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

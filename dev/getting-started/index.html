@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795612710">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795635316">
   
 </head>
 <body>
@@ -787,8 +787,8 @@ For other processor architectures, see <a href="#running-from-a-source-checkout"
   <h3 class="no-toc" id="windows-installer">Windows installer</h3>
 
   <blockquote role="note" aria-label="Windows installer notice">
-    <p><strong>Windows code-signing certificate.</strong> We’re working on getting a certificate to sign Alto’s Windows installer.
-Until then, Windows may show <strong>Unknown publisher</strong> or block the installer before setup starts.
+    <p><strong>Windows installer signature.</strong> Alto 0.0.2 and earlier shipped unsigned. For releases that list a signed installer,
+right-click the downloaded file and open <strong>Properties → Digital Signatures → Details</strong> to check its publisher.
 <a href="#windows-installer-troubleshooting">Help with Windows installation warnings</a></p>
   </blockquote>
 
@@ -861,16 +861,17 @@ before opening it. If the browser or antivirus identifies a specific threat, sto
 
   <h4 id="windows-protected-your-pc-or-unknown-publisher">“Windows protected your PC” or “Unknown publisher”</h4>
 
-  <p>If SmartScreen calls Alto an unrecognized app, select <strong>More info</strong> to see the filename and publisher. <strong>Unknown publisher</strong>
-is expected for the current unsigned installer. On your own PC, if the filename and checksum match the official release
-and you trust the download, choose <strong>Run anyway</strong> to start setup. Choose <strong>Don’t run</strong> if you’re unsure.
+  <p>If SmartScreen calls Alto an unrecognized app, select <strong>More info</strong> to see the filename and publisher. For releases that list a signed
+installer, check that Windows reports a valid signature under <strong>Properties → Digital Signatures → Details</strong> and that the
+checksum matches the release. If Windows reports <strong>Unknown publisher</strong> for a signed release, cancel setup and check the
+download. For the unsigned 0.0.2 and earlier installers, verify the checksum before deciding whether to run setup.
 <a href="https://learn.microsoft.com/windows/apps/package-and-deploy/smartscreen-reputation">How SmartScreen checks app reputation</a></p>
 
   <h4 id="windows-blocks-the-installer-with-no-run-anyway-option">Windows blocks the installer with no “Run anyway” option</h4>
 
   <p>On a work or school PC, your organization may control which apps can run. Give your IT team the Alto release link
 and the exact message so they can review it. If Windows 11 names <strong>Smart App Control</strong>, it has no per-app exception.
-Keep the protection enabled and check back for a signed release. <a href="https://support.microsoft.com/en-gb/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions">Microsoft’s Smart App Control FAQ</a></p>
+Keep the protection enabled while you check the installer’s signature and the release download. <a href="https://support.microsoft.com/en-gb/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions">Microsoft’s Smart App Control FAQ</a></p>
 
   <h4 id="setup-stops-at-microsoft-visual-c-runtime">Setup stops at “Microsoft Visual C++ Runtime”</h4>
 
@@ -1061,7 +1062,7 @@ explains it.</p>
 </span></code></pre></div>  </div>
 </div>
 
-<script src="/alto/dev/assets/js/downloads.js?v=1795612710" defer=""></script>
+<script src="/alto/dev/assets/js/downloads.js?v=1795635316" defer=""></script>
 
 
           
@@ -1134,10 +1135,10 @@ explains it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795612710" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795612710" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795612710" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795612710" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795635316" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795635316" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795635316" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795635316" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
