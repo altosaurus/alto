@@ -54,7 +54,7 @@ Changes that are in the development docs and not in a release yet.
 ### Fixed
 {: .no-toc}
 
-- On small screens, the documentation menu starts closed so the article is visible immediately. **Menu** opens the navigation, and **Contents** links to the overview.
+- On small screens, tap **Contents** to expand the documentation menu below it. On desktop, the sidebar opens directly with the navigation links.
 
 - Keyboard Note Identification now saves its own **Note names** choice. Switching to **Caret** in Note Identification leaves the keyboard exercise’s answers unchanged.
 
