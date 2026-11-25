@@ -694,6 +694,21 @@ NAVIGATION_CLOSE = (
     + '<path d="m17 9-3 3 3 3" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
+# The diagonal arrows open or close the gap at the month boundary.
+_MONTH_ARROW_STYLE = (
+    'fill="none" stroke="COLOR" stroke-width="1.25" '
+    'stroke-linecap="round" stroke-linejoin="round"'
+)
+_MONTH_DIVIDER = "M8.5 8.5l2 2m3 3 2 2"
+EXPAND_MONTHS = (
+    f'<path {_MONTH_ARROW_STYLE} d="M14 10l7-7m-6 0h6v6 '
+    f'M10 14l-7 7m0-6v6h6 {_MONTH_DIVIDER}"/>'
+)
+COLLAPSE_MONTHS = (
+    f'<path {_MONTH_ARROW_STYLE} d="M21 3l-7 7m0-6v6h6 '
+    f'M3 21l7-7m-6 0h6v6 {_MONTH_DIVIDER}"/>'
+)
+
 # Keyboard intervals: the shared keyboard with a span bracket above the
 # keys.
 EXERCISE_KEYBOARD_INTERVALS = (

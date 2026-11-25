@@ -26,7 +26,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtTest import QTest
 
-from alto.ui import charts
+from alto.ui import charts, motion
 
 if TYPE_CHECKING:
     from PySide6.QtWidgets import (
@@ -420,6 +420,58 @@ def calendar(today: date) -> charts.HeatmapChart:
     chart.resize(760, 190)
     chart.set_data({today: 3}, today=today)
     return chart
+
+
+@pytest.mark.parametrize("width", [320, 1500])
+def test_month_spacing_moves_dates_and_their_click_targets(
+    app: QApplication,
+    width: int,
+) -> None:
+    """
+    Follow a shared week across leap day as months separate and rejoin.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    width : int
+        Width available for the calendar.
+    """
+    feb, mar = date(2024, 2, 29), date(2024, 3, 1)
+    chart = charts.HeatmapChart("Reviews, last 12 months")
+    chart.set_data({feb: 1, mar: 3}, today=mar)
+    chart.resize(width, 218)
+    chart.show()
+    app.processEvents()
+    chart.set_selected(mar)
+    chart.month_button.click()
+    for time, separation in ((0, 0.0), (125, 0.75), (250, 1.5)):
+        chart._slide.setCurrentTime(time)
+        cell, (x, y) = chart._cell(), chart._origin()
+        last = (mar - chart.first_day()).days
+        march_left = x + cell * chart._column(last)
+        feb_left = x + cell * chart._column(last - 1)
+        assert march_left - feb_left == pytest.approx(separation * cell)
+        assert march_left + cell == pytest.approx(width - x)
+        for day, left in ((feb, feb_left), (mar, march_left)):
+            center = QPointF(
+                left + 0.5 * cell,
+                y + (day.weekday() + 0.5) * cell,
+            )
+            assert chart._item_at(center) == day
+    assert chart.day_at(QPointF(march_left - cell / 4, y + 4.5 * cell)) is None
+    assert chart.day_at(QPointF(march_left + cell / 2, y + 5.5 * cell)) is None
+    chart.month_button.click()
+    chart._slide.setCurrentTime(125)
+    halfway = chart._column(last)
+    chart.month_button.click()
+    assert chart._column(last) == pytest.approx(halfway)
+    motion.settle()
+    assert chart._column(last) > halfway and chart.selected == mar
+    chart.month_button.click()
+    motion.settle()
+    assert chart._column(last) == chart._column(last - 1)
+    chart.close()
 
 
 def test_the_heatmap_names_the_day_under_the_pointer(

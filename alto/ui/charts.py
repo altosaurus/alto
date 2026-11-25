@@ -34,10 +34,13 @@ from datetime import (
 )
 
 from PySide6.QtCore import (
+    QEasingCurve,
     QEvent,
     QPointF,
     QRectF,
+    QSize,
     Qt,
+    QVariantAnimation,
     Signal,
 )
 from PySide6.QtGui import (
@@ -54,11 +57,13 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QSizePolicy,
+    QToolButton,
     QToolTip,
     QVBoxLayout,
     QWidget,
 )
 
+from alto.ui import icons, motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
 from alto.ui.zoom import px
 
@@ -630,6 +635,43 @@ class _Chart(QWidget):
     # -- shared drawing
     # ------------------------------------------------------------------
 
+    def _add_header(self, control: QWidget) -> QLabel:
+        """
+        Lay out the title and its control above the plot.
+
+        Parameters
+        ----------
+        control : QWidget
+            Control on the right of the title.
+
+        Returns
+        -------
+        QLabel
+            The title label, which wraps on narrow charts.
+
+        Examples
+        --------
+        The review calendar shares its header with the month toggle.
+        """
+        heading = QLabel(self.title)
+        heading.setWordWrap(True)
+        font = self.font()
+        font.setBold(True)
+        heading.setFont(font)
+        header = QHBoxLayout()
+        header.addWidget(heading, 1)
+        header.addWidget(
+            control,
+            0,
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight,
+        )
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, self.RIGHT, 0)
+        layout.setSpacing(0)
+        layout.addLayout(header)
+        layout.addStretch()
+        return heading
+
     def _frame(self, p: QPainter) -> None:
         """
         Prepare the painter and draw the title.
@@ -951,25 +993,11 @@ class StackedBarChart(_Chart):
         []
         """
         super().__init__(title, parent=parent)
-        self._heading: QLabel | None = None
-        if header_control is not None:
-            self._heading = QLabel(title)
-            self._heading.setWordWrap(True)
-            font = self.font()
-            font.setBold(True)
-            self._heading.setFont(font)
-            header = QHBoxLayout()
-            header.addWidget(self._heading, 1)
-            header.addWidget(
-                header_control,
-                0,
-                Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight,
-            )
-            layout = QVBoxLayout(self)
-            layout.setContentsMargins(0, 0, self.RIGHT, 0)
-            layout.setSpacing(0)
-            layout.addLayout(header)
-            layout.addStretch()
+        self._heading = (
+            self._add_header(header_control)
+            if header_control is not None
+            else None
+        )
         self.right: list[int] = []
         self.wrong: list[int] = []
 
@@ -1836,10 +1864,62 @@ class HeatmapChart(_Chart):
         53
         """
         super().__init__(title, parent=parent)
-        self.counts: dict[date, int] = {}
-        self.today = date.today()
-        self.weeks = 53
-        self.setMinimumSize(px(260), px(190))
+        self.month_button = QToolButton()
+        self.month_button.setProperty("arrowButton", True)
+        self.month_button.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.month_button.setIconSize(QSize(px(22), px(22)))
+        self.month_button.setCheckable(True)
+        self._set_month_action(False)
+        self._heading = self._add_header(self.month_button)
+        self._slide = QVariantAnimation(self)
+        self._slide.setStartValue(0.0)
+        self._slide.setEndValue(1.0)
+        self._slide.setEasingCurve(QEasingCurve.Type.InOutCubic)
+        self._slide.valueChanged.connect(lambda _: self.update())
+        self.month_button.toggled.connect(self._toggle_months)
+        self.set_data({}, today=date.today())
+
+    def _set_month_action(self, split: bool) -> None:
+        """
+        Show the direction and name of the next layout change.
+
+        Parameters
+        ----------
+        split : bool
+            Whether the months are currently separated.
+
+        Examples
+        --------
+        The separated view offers inward arrows to close the gaps.
+        """
+        action = "Close month gaps" if split else "Split by month"
+        self.month_button.setToolTip(action)
+        self.month_button.setAccessibleName(action)
+        icons.set_svg_icon(
+            self.month_button,
+            icons.COLLAPSE_MONTHS if split else icons.EXPAND_MONTHS,
+        )
+
+    def _toggle_months(self, split: bool) -> None:
+        """
+        Move the days from their current positions to the chosen layout.
+
+        Parameters
+        ----------
+        split : bool
+            Whether adjacent months should have separate columns.
+
+        Examples
+        --------
+        Pressing the toggle again during the slide reverses the motion.
+        """
+        self._set_month_action(split)
+        progress = self._slide.currentValue()
+        self._slide.stop()
+        self._slide.setStartValue(progress)
+        self._slide.setEndValue(float(split))
+        self._slide.setDuration(round(250 * abs(float(split) - progress)))
+        motion.play(self._slide)
 
     def set_data(
         self,
@@ -1870,6 +1950,19 @@ class HeatmapChart(_Chart):
         26
         """
         self.counts, self.today, self.weeks = dict(counts), today, weeks
+        busy = sorted(counts.values())
+        self._busy_count = (
+            max(1, busy[int(0.9 * (len(busy) - 1))]) if busy else 1
+        )
+        self._month_offsets: list[float] = []
+        extra = 0.0
+        first = self.first_day()
+        for index in range((today - first).days + 1):
+            day = first + timedelta(days=index)
+            if index and day.day == 1:
+                # A week spanning two months needs a column in each.
+                extra += 0.5 + (day.weekday() != 0)
+            self._month_offsets.append(extra)
         self.update()
 
     def first_day(self) -> date:
@@ -1933,9 +2026,57 @@ class HeatmapChart(_Chart):
         """
         if count <= 0:
             return 0
-        busy = sorted(self.counts.values())
-        top = max(busy[int(0.9 * (len(busy) - 1))], 1)
-        return min(self.LEVELS, max(1, math.ceil(self.LEVELS * count / top)))
+        return min(
+            self.LEVELS,
+            max(1, math.ceil(self.LEVELS * count / self._busy_count)),
+        )
+
+    def _column(self, index: int) -> float:
+        """
+        Locate a day horizontally as the months slide apart.
+
+        Parameters
+        ----------
+        index : int
+            Days since the first Monday in the grid.
+
+        Returns
+        -------
+        float
+            Horizontal position in cell widths.
+
+        Examples
+        --------
+        The first Monday always occupies column zero.
+        """
+        return (
+            index // 7
+            + self._slide.currentValue() * self._month_offsets[index]
+        )
+
+    def _grid_top(self) -> float:
+        """
+        Reserve space for the header and month names.
+
+        Returns
+        -------
+        float
+            The top of the first weekday row.
+
+        Examples
+        --------
+        A wrapped title leaves more space above the calendar.
+        """
+        button = self.month_button.sizeHint()
+        title_width = max(
+            1,
+            self.width() - self.RIGHT - button.width() - px(8),
+        )
+        header = max(
+            self._heading.heightForWidth(title_width),
+            button.height(),
+        )
+        return max(self.TOP, header + px(20))
 
     def _cell(self) -> float:
         """
@@ -1944,18 +2085,23 @@ class HeatmapChart(_Chart):
         Returns
         -------
         float
-            In pixels: what fits across the weeks, but between 4 and 18.
+            The pitch that fits all columns and seven rows, in pixels.
 
         Examples
         --------
         >>> chart = HeatmapChart("Reviews")
-        >>> chart.resize(2000, 190)
+        >>> chart.resize(2000, 250)
         >>> chart._cell()
         18.0
         """
+        columns = self._column(len(self._month_offsets) - 1) + 1
         return max(
-            min((self.width() - self.LEFT - self.RIGHT) / self.weeks, 18.0),
-            4.0,
+            1.0,
+            min(
+                float(px(18)),
+                (self.width() - 2 * self.LEFT) / columns,
+                (self.height() - self._grid_top() - self.BOTTOM) / 7,
+            ),
         )
 
     def _origin(self) -> tuple[float, float]:
@@ -1969,10 +2115,12 @@ class HeatmapChart(_Chart):
 
         Examples
         --------
-        >>> HeatmapChart("Reviews")._origin()
-        (34.0, 44.0)
+        >>> chart = HeatmapChart("Reviews")
+        >>> round(chart._origin()[0]) >= chart.LEFT
+        True
         """
-        return float(self.LEFT), float(self.TOP)
+        columns = self._column(len(self._month_offsets) - 1) + 1
+        return (self.width() - columns * self._cell()) / 2, self._grid_top()
 
     def _shade(self, level: int) -> QColor:
         """
@@ -2044,15 +2192,14 @@ class HeatmapChart(_Chart):
         True
         """
         cell, (x0, y0) = self._cell(), self._origin()
-        col, row = int((pos.x() - x0) // cell), int((pos.y() - y0) // cell)
-        if (
-            pos.x() < x0
-            or pos.y() < y0
-            or not (0 <= col < self.weeks and 0 <= row < 7)
-        ):
-            return None
-        day = self.first_day() + timedelta(days=7 * col + row)
-        return day if day <= self.today else None
+        row = math.floor((pos.y() - y0) / cell)
+        if 0 <= row < 7:
+            column = (pos.x() - x0) / cell
+            for index in range(row, len(self._month_offsets), 7):
+                start = self._column(index)
+                if start <= column < start + 1:
+                    return self.first_day() + timedelta(days=index)
+        return None
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """
@@ -2076,7 +2223,7 @@ class HeatmapChart(_Chart):
         False
         """
         p = QPainter(self)
-        self._frame(p)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
         cell, (x0, y0) = self._cell(), self._origin()
         gap = 2.0 if cell >= 8 else 1.0
         small = QFont(self.font())
@@ -2084,63 +2231,63 @@ class HeatmapChart(_Chart):
         p.setFont(small)
         first = self.first_day()
         p.setPen(self._soft())
+        label_height = p.fontMetrics().height()
+        last_label_bottom = 0.0
         for row, name in ((0, "Mon"), (2, "Wed"), (4, "Fri")):
+            top = y0 + (row + 0.5) * cell - label_height / 2
+            if top < last_label_bottom:
+                continue
+            last_label_bottom = top + label_height
             label_box = QRectF(
-                0,
-                y0 + row * cell,
-                self.LEFT - 6,
-                cell,
+                x0 - self.LEFT,
+                top,
+                self.LEFT - px(6),
+                label_height,
             )
             p.drawText(
                 label_box,
                 Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
                 name,
             )
-        last_month_label = -99.0
+        month_label_end = 0.0
         p.setPen(Qt.PenStyle.NoPen)
-        for col in range(self.weeks):
-            monday = first + timedelta(days=7 * col)
-            if monday > self.today:
-                break
-            x = x0 + col * cell
-            if (
-                (monday.day <= 7 or col == 0) and x - last_month_label >= 30
-            ):  # label the week a month starts in
-                p.setPen(self._soft())
-                month_box = QRectF(
-                    x,
-                    y0 - 20,
-                    40,
-                    16,
-                )
-                p.drawText(
-                    month_box,
-                    Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
-                    monday.strftime("%b"),
-                )
-                p.setPen(Qt.PenStyle.NoPen)
-                last_month_label = x
-            for row in range(7):
-                day = monday + timedelta(days=row)
-                if day > self.today:
-                    break
-                square = QRectF(
-                    x,
-                    y0 + row * cell,
-                    cell - gap,
-                    cell - gap,
-                )
-                p.setBrush(
-                    self._tone(
-                        day,
-                        color=self._shade(self.level(self.counts.get(day, 0))),
-                    ),
-                )
-                p.drawRoundedRect(square, 2, 2)
+        colors = [self._shade(level) for level in range(self.LEVELS + 1)]
+        for index in range(len(self._month_offsets)):
+            day = first + timedelta(days=index)
+            x = x0 + self._column(index) * cell
+            if index == 0 or day.day == 1:
+                month = day.strftime("%b")
+                width = p.fontMetrics().horizontalAdvance(month) + 1
+                # A short opening month can share its only week with
+                # the next month, so place its label to the left.
+                label_x = x - width if index == 0 and day.day > 1 else x
+                if label_x >= month_label_end:
+                    p.setPen(self._soft())
+                    p.drawText(
+                        QRectF(label_x, y0 - px(20), width, px(16)),
+                        Qt.AlignmentFlag.AlignLeft
+                        | Qt.AlignmentFlag.AlignVCenter,
+                        month,
+                    )
+                    p.setPen(Qt.PenStyle.NoPen)
+                    month_label_end = label_x + width + px(3)
+            square = QRectF(
+                x,
+                y0 + day.weekday() * cell,
+                cell - gap,
+                cell - gap,
+            )
+            p.setBrush(
+                self._tone(
+                    day,
+                    color=colors[self.level(self.counts.get(day, 0))],
+                ),
+            )
+            p.drawRoundedRect(square, 2, 2)
         # the legend, bottom right: Less [squares] More
         y = y0 + 7 * cell + 8
         box = 11.0
-        right = self.width() - self.RIGHT
+        right = self.width() - x0
         p.setPen(self._soft())
         more_w = p.fontMetrics().horizontalAdvance("More")
         p.drawText(

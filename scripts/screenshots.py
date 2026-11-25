@@ -496,6 +496,7 @@ def capture(
         # noinspection PyProtectedMember
         scroller = stats_page.findChild(QScrollArea)
         assert scroller is not None
+        stats_page.heatmap.month_button.setChecked(True)
         scroller.verticalScrollBar().setValue(stats_page.heatmap.y() - 16)
         wait(300)
         save(window, name="stats-heatmap", width=1500)

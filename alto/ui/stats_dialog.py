@@ -491,7 +491,7 @@ class StatsPage(QWidget):
             QSizePolicy.Policy.Expanding,
             QSizePolicy.Policy.Fixed,
         )
-        self.heatmap.setFixedHeight(px(190))
+        self.heatmap.setFixedHeight(px(218))
         lay.addWidget(self.heatmap)
 
         # Clicking a bar, a point, a row or a day lists the answers
