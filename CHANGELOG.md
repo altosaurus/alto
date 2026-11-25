@@ -39,6 +39,8 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Fixed
 
+- On small screens, the documentation menu starts closed so the article is visible immediately. **Menu** opens the navigation, and **Contents** links to the overview.
+
 - Keyboard Note Identification now saves its own **Note names** choice. Switching to **Caret** in Note Identification leaves the keyboard exercise’s answers unchanged.
 
 - The Exercises and Lessons toolbar buttons now open their respective catalogs from the Database, Statistics, and Glossary pages.

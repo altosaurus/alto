@@ -91,7 +91,10 @@
     <aside class="sidebar">
       <nav class="menu" aria-label="Documentation">
         {% include nav-category.html title="Contents" url="/contents/" %}
-        <div class="nav">
+        <button type="button" class="docs-menu-toggle" aria-expanded="false" aria-controls="docs-navigation" hidden>
+          Menu <svg class="i" width="16" height="16" aria-hidden="true"><use href="#i-chev-d"/></svg>
+        </button>
+        <div class="nav" id="docs-navigation">
           {% comment %}
             Pages are listed in nav_order. A page with `nav_group` goes under that heading, which opens and closes. A heading that is also the
             title of a page (For developers) is that page's link, so the page is listed once. A page with `children` is one row that links to
