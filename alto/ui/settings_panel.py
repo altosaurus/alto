@@ -142,6 +142,121 @@ from alto.ui.zoom import (
 )
 
 
+def _note_naming_page(
+    cfg: NoteNameSettings | settings.KeyboardSettings,
+    *,
+    preview: NamePicture,
+    changed: Callable[[], None],
+    back: Callable[[], None],
+) -> tuple[dict[str, QRadioButton], QWidget]:
+    """
+    Build the Note names page for a staff or keyboard exercise.
+
+    Parameters
+    ----------
+    cfg : NoteNameSettings or KeyboardSettings
+        Exercise whose naming preference is edited.
+    preview : NamePicture
+        Menu row illustration to update.
+    changed : callable
+        Saves the exercise settings and refreshes its question.
+    back : callable
+        Opens the exercise settings menu.
+
+    Returns
+    -------
+    tuple
+        Naming radio buttons and the submenu containing them.
+
+    Examples
+    --------
+    Keyboard Note Identification can use letters while the staff uses
+    scale degrees.
+    """
+    body = QWidget()
+    layout = QVBoxLayout(body)
+    layout.setContentsMargins(0, 0, 0, 0)
+    degrees = QGroupBox("Scale degrees")
+    degree_layout = QVBoxLayout(degrees)
+    group = QButtonGroup(body)
+    radios = {}
+
+    def select(checked: bool, *, naming: str) -> None:
+        """
+        Apply the selected naming to this exercise.
+
+        Parameters
+        ----------
+        checked : bool
+            Whether this radio button is now checked.
+        naming : str
+            Naming system represented by the button.
+
+        Examples
+        --------
+        Choosing Caret updates the preview to show numbered degrees.
+        """
+        if checked:
+            cfg.naming = naming
+            preview.set_naming(naming)
+            changed()
+
+    for naming, label in NAMINGS.items():
+        radio = radios[naming] = QRadioButton()
+        label_with_picture(
+            radio,
+            picture=NamePicture(naming, scale=1.6),
+            name=label,
+        )
+        radio.setText(label.split(" (")[0])
+        radio.setToolTip(degree_tooltip(label))
+        group.addButton(radio)
+        radio.setChecked(naming == cfg.naming)
+        radio.toggled.connect(
+            lambda checked, n=naming: select(checked, naming=n),
+        )
+        target = degree_layout if naming in settings.DEGREE_NAMINGS else layout
+        target.addWidget(radio)
+    if isinstance(cfg, NoteNameSettings):
+
+        def select_reference(minor: bool) -> None:
+            """
+            Save the staff exercise's reference scale.
+
+            Parameters
+            ----------
+            minor : bool
+                Whether to count from the natural minor tonic.
+
+            Examples
+            --------
+            Natural minor makes A the tonic for a blank signature.
+            """
+            cfg.minor_degrees = minor
+            changed()
+
+        degree_layout.addWidget(QLabel("Reference scale"))
+        reference = QButtonGroup(body)
+        for minor, label in ((False, "Major"), (True, "Natural minor")):
+            radio = QRadioButton(label)
+            reference.addButton(radio)
+            radio.setChecked(minor == cfg.minor_degrees)
+            radio.clicked.connect(
+                lambda _checked=False, selected=minor: select_reference(
+                    selected,
+                ),
+            )
+            degree_layout.addWidget(radio)
+
+    layout.addWidget(degrees)
+    return radios, subpage(
+        "Note names",
+        body=scrolling(body),
+        back=back,
+        fill=True,
+    )
+
+
 class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
     """
     The settings of the note identification exercise: a menu leading to
@@ -278,46 +393,10 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
 
         values_page = self._values_page("Note values")
 
-        # layer 2: note names
-        self.naming_radios = {k: QRadioButton() for k in NAMINGS}
-        for k, radio in self.naming_radios.items():
-            label_with_picture(
-                radio,
-                picture=NamePicture(k, scale=1.6),
-                name=NAMINGS[k],
-            )
-            radio.setText(NAMINGS[k].split(" (")[0])
-            radio.setToolTip(degree_tooltip(NAMINGS[k]))
-        names_body = QWidget()
-        nlay = QVBoxLayout(names_body)
-        nlay.setContentsMargins(0, 0, 0, 0)
-        degree_group = QGroupBox("Scale degrees")
-        degree_layout = QVBoxLayout(degree_group)
-        naming_group = QButtonGroup(self)
-        for k, radio in self.naming_radios.items():
-            naming_group.addButton(radio)
-            radio.setChecked(k == cfg.naming)
-            radio.toggled.connect(self._names_edited)
-            if k in settings.DEGREE_NAMINGS:
-                degree_layout.addWidget(radio)
-            else:
-                nlay.addWidget(radio)
-        degree_layout.addWidget(QLabel("Reference scale"))
-        reference = QButtonGroup(self)
-        for minor, label in ((False, "Major"), (True, "Natural minor")):
-            radio = QRadioButton(label)
-            reference.addButton(radio)
-            radio.setChecked(minor == cfg.minor_degrees)
-            radio.clicked.connect(
-                lambda _checked=False, selected=minor: (
-                    self._degree_reference_edited(selected)
-                ),
-            )
-            degree_layout.addWidget(radio)
-        nlay.addWidget(degree_group)
-        names_page = subpage(
-            "Note names",
-            body=names_body,
+        self.naming_radios, names_page = _note_naming_page(
+            cfg,
+            preview=self.name_picture,
+            changed=self._save_and_emit,
             back=lambda: self._go(0),
         )
 
@@ -395,51 +474,14 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
         guard_last(list(self.key_boxes.values()))
         self._save_and_emit()
 
-    def _names_edited(self) -> None:
-        """
-        Take the chosen naming (letters, solfège or scale degrees) into
-        the settings, save it and say so.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(
-        ...     NoteNameSettings()
-        ... )
-        >>> panel.naming_radios["solfege"].setChecked(
-        ...     True
-        ... )
-        >>> panel.cfg.naming
-        'solfege'
-        """
-        self.cfg.naming = next(
-            k for k, r in self.naming_radios.items() if r.isChecked()
-        )
-        self._save_and_emit()
-
-    def _degree_reference_edited(self, minor: bool) -> None:
-        """
-        Change the reference scale for degree answers and save it.
-
-        Parameters
-        ----------
-        minor : bool
-            Whether to count from the relative natural minor tonic.
-
-        Examples
-        --------
-        Selecting Natural minor makes A the tonic on a staff with no key
-        signature.
-        """
-        self.cfg.minor_degrees = minor
-        self._save_and_emit()
-
 
 class KeyboardSettingsPanel(KeyboardRangePanel):
     """
     The settings of the keyboard exercise: a menu with a page for the
     range of keys.
 
-    The menu has Range, Black keys, Octave number and Key signatures.
+    The menu includes Range, Black keys, Octave number, Key signatures
+    and Note names.
     Edits are live: each changes the settings, saves them
     and emits `changed`.
 
@@ -489,8 +531,8 @@ class KeyboardSettingsPanel(KeyboardRangePanel):
         --------
         >>> KeyboardSettingsPanel(
         ...     settings.KeyboardSettings()
-        ... ).stack.count()  # the menu, the range and the keys
-        3
+        ... ).stack.count()  # the menu, range, keys and note names
+        4
         """
         super().__init__(parent)
         self.cfg = cfg
@@ -526,11 +568,16 @@ class KeyboardSettingsPanel(KeyboardRangePanel):
         self.keys_row.clicked.connect(lambda: self._go(2))
         self.keys_diagram = KeyDiagram()
         self.keys_row.attach(self.keys_diagram)
+        self.names_row = MenuRow("Note names")
+        self.name_picture = NamePicture(cfg.naming)
+        self.names_row.attach(self.name_picture)
+        self.names_row.clicked.connect(lambda: self._go(3))
         for row in (
             self.range_row,
             self.black_keys_row,
             self.octave_row,
             self.keys_row,
+            self.names_row,
         ):
             mlay.addWidget(row)
         mlay.addStretch()
@@ -553,9 +600,17 @@ class KeyboardSettingsPanel(KeyboardRangePanel):
             back=lambda: self._go(0),
         )
 
+        self.naming_radios, names_page = _note_naming_page(
+            cfg,
+            preview=self.name_picture,
+            changed=self._save_and_emit,
+            back=lambda: self._go(0),
+        )
+
         self.stack.addWidget(menu)
         self.stack.addWidget(range_page)
         self.stack.addWidget(keys_page)
+        self.stack.addWidget(names_page)
         self._refresh_range()
         self._show_keys()
 

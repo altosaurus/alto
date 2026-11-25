@@ -804,6 +804,8 @@ class KeyboardSettings(KeyChoice):
 
     Attributes
     ----------
+    naming : str, default "letters"
+        Naming system for the highlighted key. Keyword-only.
     black_keys : bool, default True
         Also ask the black keys, answered by either enharmonic name.
     require_octave : bool, default False
@@ -831,6 +833,7 @@ class KeyboardSettings(KeyChoice):
         True  # also ask the black keys, answered by either enharmonic name
     )
     _: KW_ONLY
+    naming: str = "letters"
     require_octave: bool = (
         False  # the answer must include the octave number as well
     )

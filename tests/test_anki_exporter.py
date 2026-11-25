@@ -287,7 +287,7 @@ def test_card_instructions_follow_the_expected_answer_format() -> None:
         ("degrees", "Give its scale degree in G major."),
         ("functions", "Give its scale-degree function in G major."),
     ):
-        settings.note_names.naming = naming
+        settings.keyboard.naming = naming
         assert (
             keyboard.card_prompt(keyboard.generate(rng))
             == f"Identify the note. {instruction} Include the octave."

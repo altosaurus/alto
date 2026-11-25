@@ -143,6 +143,10 @@ def save_note_names() -> None:
     )
     s.setValue("noteNames/keys", joined(cfg.active_keys()))
     s.setValue("noteNames/values", joined(cfg.active_values()))
+    if not s.contains("keyboard/naming"):
+        # Freeze the old shared choice before the staff changes it.
+        previous = text_value(s, key="noteNames/naming", default="letters")
+        s.setValue("keyboard/naming", previous)
     s.setValue("noteNames/naming", cfg.naming)
     s.setValue(
         "noteNames/minorDegrees",
@@ -178,6 +182,11 @@ def load_keyboard() -> None:
     """
     saved_settings = store()
     cfg = settings.keyboard
+    key = "keyboard/naming"
+    if not saved_settings.contains(key):
+        key = "noteNames/naming"  # older profiles shared this choice
+    naming = text_value(saved_settings, key=key, default="letters")
+    cfg.naming = naming if naming in NAMINGS else "letters"
     cfg.black_keys = bool_value(
         saved_settings,
         key="keyboard/blackKeys",
@@ -219,6 +228,7 @@ def save_keyboard() -> None:
     """
     saved_settings = store()
     cfg = settings.keyboard
+    saved_settings.setValue("keyboard/naming", cfg.naming)
     save_bool(saved_settings, key="keyboard/blackKeys", value=cfg.black_keys)
     save_bool(
         saved_settings,

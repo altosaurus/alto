@@ -85,7 +85,7 @@ Use **Operators** to choose addition, subtraction, multiplication, and division.
 
 One key on a piano keyboard is highlighted. Press the button with its name.
 
-This exercise uses the **Note names** setting from Note Identification. Scale degrees follow the shown major key,
+Use this exercise’s **Note names** setting to choose **Letters**, **Solfège**, **Caret**, or **Function** independently of Note Identification. Scale degrees follow the shown major key,
 or C major when key signatures are off. When octaves are required, degree and octave are separated: **1̂ / 4**.
 
 - **Black keys:** include them. A black key has two names, such as C♯ and D♭, and either one is accepted.

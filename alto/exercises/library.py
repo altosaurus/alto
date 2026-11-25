@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import random
 from collections.abc import Iterator
-from dataclasses import replace
+from dataclasses import asdict, replace
 from functools import lru_cache
 
 from alto import settings
@@ -193,7 +193,7 @@ def _degree_choices(
     return choices, grid
 
 
-def _note_card_prompt(q: Question) -> str:
+def _note_card_prompt(q: Question, *, naming: str) -> str:
     """
     Say how to name a note on a flashcard in the chosen naming: letters,
     solfège or a scale degree, with the octave if it counts.
@@ -202,6 +202,8 @@ def _note_card_prompt(q: Question) -> str:
     ----------
     q : Question
         The question on the card.
+    naming : str
+        Naming system selected for this exercise.
 
     Returns
     -------
@@ -216,11 +218,10 @@ def _note_card_prompt(q: Question) -> str:
     ...         choices=[],
     ...         answer="C4",
     ...         octaves=["C4"],
-    ...     )
+    ...     ), naming="letters",
     ... )
     'Identify the note. Include the octave.'
     """
-    naming = settings.note_names.naming
     prompt = "Identify the note."
     if naming == "solfege":
         prompt += " Use solfège."
@@ -279,7 +280,7 @@ class NoteNames(ChoiceExercise):
         ... )
         'Identify the note.'
         """
-        return _note_card_prompt(question)
+        return _note_card_prompt(question, naming=settings.note_names.naming)
 
     def practice_signature(self) -> str:
         """
@@ -3617,8 +3618,8 @@ class KeyboardNotes(ChoiceExercise):
         'Identify the note by letter and octave.'
         """
         q = question
-        if settings.note_names.naming != "letters":
-            return _note_card_prompt(q)
+        if settings.keyboard.naming != "letters":
+            return _note_card_prompt(q, naming=settings.keyboard.naming)
         prompt = (
             "Identify the note by letter and octave."
             if q.octaves
@@ -3645,7 +3646,10 @@ class KeyboardNotes(ChoiceExercise):
         ... )
         True
         """
-        return signature(settings.keyboard, settings.note_names.naming)
+        # Preserve the signature format of saved review questions.
+        parts = asdict(settings.keyboard)
+        naming = parts.pop("naming")
+        return signature(parts, naming)
 
     def instructions(self) -> str:
         """
@@ -3672,7 +3676,7 @@ class KeyboardNotes(ChoiceExercise):
                 "the letter for a flat."
             ),
         ]
-        if settings.note_names.naming in settings.DEGREE_NAMINGS:
+        if cfg.naming in settings.DEGREE_NAMINGS:
             text = [
                 (
                     "<b>Keyboard Note Identification</b><br>Name the "
@@ -3737,7 +3741,7 @@ class KeyboardNotes(ChoiceExercise):
         True
         """
         cfg = settings.keyboard
-        naming = settings.note_names.naming
+        naming = cfg.naming
         lo, hi = sorted((cfg.low, cfg.high))
         span = range(lo, hi + 1)
         naturals = [midi for midi in span if midi % 12 in NATURAL_LETTER_INDEX]
