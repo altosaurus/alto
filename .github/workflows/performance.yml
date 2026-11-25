@@ -7,10 +7,8 @@ name: Performance
 # from main, including versions that predate the benchmark suite.
 # The results are kept on the branch asv-results.
 #
-# A change of more than 30% against the previous release is written in the run's summary and opens an issue (or updates the one
-# that is open). The run itself does not fail: a shared build machine is too noisy for a strict gate, so an issue is a reason to look
-# and to run it again, not proof. The budgets in tests/test_performance.py, which catch a large slowdown right after a merge, are in
-# budgets.yml.
+# The history identifies possible slowdowns. An issue opens or updates only when the flagged
+# operations are also more than 30% slower with both revisions measured on this runner.
 on:
   schedule:
     - cron: "37 9 * * *" # 09:37 UTC daily
@@ -33,7 +31,7 @@ concurrency:
 jobs:
   benchmark:
     runs-on: ubuntu-latest
-    timeout-minutes: 90 # a full run takes 50 to 60 minutes on a shared machine
+    timeout-minutes: 240 # allow for two additional runs if the whole suite needs confirmation
     env:
       QT_QPA_PLATFORM: offscreen
       MACHINE: github-ubuntu
@@ -91,7 +89,7 @@ jobs:
           previous=$(git describe --tags --abbrev=0 --match 'v*' "$(git rev-parse HEAD)^" 2> /dev/null || true)
           worse=false
           {
-            echo "### Speed of $(git rev-parse --short HEAD) compared with ${previous:-nothing}"
+            echo "### Historical comparison of $(git rev-parse --short HEAD) with ${previous:-nothing}"
             echo
             if [ -z "$previous" ]; then
               echo "There is no earlier release to compare with."
@@ -99,7 +97,7 @@ jobs:
               echo '```'
               cat compare.txt
               echo '```'
-              if grep -q "Benchmarks that have got worse" compare.txt; then worse=true; fi
+              if grep -q '^| + ' compare.txt; then worse=true; fi
             else
               echo "The earlier release has not been measured yet. Run this workflow by hand with ref set to \`$previous\`."
             fi
@@ -107,20 +105,36 @@ jobs:
           echo "previous=$previous" >> "$GITHUB_OUTPUT"
           echo "worse=$worse" >> "$GITHUB_OUTPUT"
 
-      - name: Open an issue if something got slower
+      - name: Confirm flagged benchmarks on this runner
         if: steps.compare.outputs.worse == 'true'
+        id: confirm
+        env:
+          PREVIOUS: ${{ steps.compare.outputs.previous }}
+        run: |
+          # A manually selected release can predate the confirmation script.
+          git show "${GITHUB_WORKFLOW_SHA}:.github/scripts/confirm-performance.py" > "$RUNNER_TEMP/confirm-performance.py"
+          python "$RUNNER_TEMP/confirm-performance.py" "$PREVIOUS" compare.txt worse.txt
+          {
+            echo "### Same-runner confirmation"
+            echo
+            if [ -s worse.txt ]; then
+              cat worse.txt
+              echo "worse=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "None of the flagged benchmarks reproduced a slowdown above 30%."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open an issue for confirmed slowdowns
+        if: steps.confirm.outputs.worse == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           PREVIOUS: ${{ steps.compare.outputs.previous }}
         run: |
           title="Performance: slower than ${PREVIOUS}"
-          # Only the table of what got slower: from its heading to the heading of the next group.
-          awk '/^Benchmarks that have got worse/ {on=1; print; next} /^Benchmarks that have/ {on=0} on' compare.txt > worse.txt
           {
-            echo "Something is more than 30% slower than in ${PREVIOUS}, measured at $(git rev-parse --short HEAD)."
-            echo
-            echo "Shared build machines are noisy, so run the Performance workflow again by hand before acting on this. If it is real,"
-            echo "\`asv find\` or the results on the \`asv-results\` branch show which change did it."
+            echo "These operations were more than 30% slower at $(git rev-parse --short HEAD) than at ${PREVIOUS}."
+            echo "After the historical comparison flagged them, ASV measured both revisions again on the same runner."
             echo
             echo "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
             echo
@@ -128,7 +142,7 @@ jobs:
             echo
             echo "#### Changes since ${PREVIOUS}"
             echo
-            git log --no-merges --format='- %h %s' "${PREVIOUS}..HEAD" | head -40
+            git log --no-merges -40 --format='- %h %s' "${PREVIOUS}..HEAD"
             echo
             echo "#### To see it yourself"
             echo

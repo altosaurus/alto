@@ -95,9 +95,9 @@ behind it.
   with `pytest -m perf`.
 - **A history, from release to release.** `benchmarks/suite.py` is an [ASV](https://asv.readthedocs.io/) suite, and the Performance
   workflow (`.github/workflows/performance.yml`) measures main daily at 09:37 UTC and keeps the results on the
-  branch `asv-results`. A change of more than 30% against the previous release is written in the run's summary. That is advice and not a
-  failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
-  would catch.
+  branch `asv-results`. When the historical comparison flags a slowdown above 30%, the workflow measures the flagged operations
+  again on the previous release and the candidate, using the same runner, benchmark suite, and Python environment. The run summary
+  shows which slowdowns reproduced. Only confirmed slowdowns open or update a performance issue. The graphs keep the original full-suite measurements.
 - **First visits.** The first time a page shows text with ♯, ♭ or ♮ in a new size, Qt spends about 40 ms looking for a font that
   has the signs, because the interface font does not. `alto/ui/warmup.py` does that once for each size the interface uses, and
   loads the music font, a step at a time while the app is idle after it opens, so the first visit to a page is nearly as quick as
