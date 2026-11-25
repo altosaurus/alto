@@ -32,7 +32,7 @@ RowsModel(
 )
 ```
 
-{% endraw %}{% include api-source.html name="RowsModel" line=66 %}{% raw %}
+{% endraw %}{% include api-source.html name="RowsModel" line=67 %}{% raw %}
 
 </div>
 
@@ -96,7 +96,7 @@ Create the model.
 def rowCount(parent: QModelIndex | QPersistentModelIndex = QModelIndex()) -> int
 ```
 
-{% endraw %}{% include api-source.html name="RowsModel.rowCount" line=138 %}{% raw %}
+{% endraw %}{% include api-source.html name="RowsModel.rowCount" line=139 %}{% raw %}
 
 </div>
 
@@ -131,7 +131,7 @@ Return the number of rows.
 def columnCount(parent: QModelIndex | QPersistentModelIndex = QModelIndex()) -> int
 ```
 
-{% endraw %}{% include api-source.html name="RowsModel.columnCount" line=168 %}{% raw %}
+{% endraw %}{% include api-source.html name="RowsModel.columnCount" line=169 %}{% raw %}
 
 </div>
 
@@ -165,7 +165,7 @@ def data(
 ) -> object
 ```
 
-{% endraw %}{% include api-source.html name="RowsModel.data" line=195 %}{% raw %}
+{% endraw %}{% include api-source.html name="RowsModel.data" line=196 %}{% raw %}
 
 </div>
 
@@ -211,7 +211,7 @@ def headerData(
 ) -> object
 ```
 
-{% endraw %}{% include api-source.html name="RowsModel.headerData" line=251 %}{% raw %}
+{% endraw %}{% include api-source.html name="RowsModel.headerData" line=272 %}{% raw %}
 
 </div>
 
@@ -247,7 +247,7 @@ Return a column heading.
 QuestionTexts()
 ```
 
-{% endraw %}{% include api-source.html name="QuestionTexts" line=332 %}{% raw %}
+{% endraw %}{% include api-source.html name="QuestionTexts" line=353 %}{% raw %}
 
 </div>
 
@@ -283,10 +283,10 @@ def answer_cells(
     *,
     names: dict[str, str],
     texts: QuestionTexts,
-) -> tuple[list[list[tuple[str, object]]], list[dict]]
+) -> _AnswerPage
 ```
 
-{% endraw %}{% include api-source.html name="answer_cells" line=408 %}{% raw %}
+{% endraw %}{% include api-source.html name="answer_cells" line=432 %}{% raw %}
 
 </div>
 
@@ -347,7 +347,7 @@ def open_preview(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="open_preview" line=582 %}{% raw %}
+{% endraw %}{% include api-source.html name="open_preview" line=734 %}{% raw %}
 
 </div>
 
@@ -387,7 +387,7 @@ AnswerList(
 )
 ```
 
-{% endraw %}{% include api-source.html name="AnswerList" line=651 %}{% raw %}
+{% endraw %}{% include api-source.html name="AnswerList" line=803 %}{% raw %}
 
 </div>
 
@@ -435,7 +435,7 @@ True
 def show_answers(rows: Sequence[sqlite3.Row]) -> None
 ```
 
-{% endraw %}{% include api-source.html name="AnswerList.show_answers" line=720 %}{% raw %}
+{% endraw %}{% include api-source.html name="AnswerList.show_answers" line=872 %}{% raw %}
 
 </div>
 
@@ -467,7 +467,7 @@ DatabasePage(
 )
 ```
 
-{% endraw %}{% include api-source.html name="DatabasePage" line=763 %}{% raw %}
+{% endraw %}{% include api-source.html name="DatabasePage" line=915 %}{% raw %}
 
 </div>
 
@@ -536,7 +536,7 @@ def show_table(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="DatabasePage.show_table" line=1145 %}{% raw %}
+{% endraw %}{% include api-source.html name="DatabasePage.show_table" line=1293 %}{% raw %}
 
 </div>
 

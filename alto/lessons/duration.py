@@ -2,6 +2,23 @@
 
 from alto.lessons.base import Lesson, Step, Task
 
+# Noto Music quarter note with its stem shortened to meet the beam.
+_BEAMED_NOTE = (
+    "M350 857.353V173Q350 130 321.5 93Q293 56 248 33.5Q203 11 153 11"
+    "Q107 11 79 34.5Q51 58 51 98Q51 129 69 158Q87 187 116.5 210.5"
+    "Q146 234 181 247.5Q216 261 250 261Q293 261 324 236V857.353Z"
+)
+_DURATION_ICON = (
+    '<g fill="COLOR">'
+    + "".join(
+        f'<path transform="translate({x} 19.7) scale(.017 -.017)" '
+        f'd="{_BEAMED_NOTE}"/>'
+        for x in (0.85, 8.25, 15.65)
+    )
+    + '<path d="M6.358 4.3H21.6v1.65H6.358Z M13.758 7.1H21.6v1.65H13.758Z"/>'
+    "</g>"
+)
+
 DURATION = Lesson(
     key="duration",
     title="Duration",
@@ -9,6 +26,7 @@ DURATION = Lesson(
     about="Count a steady beat to read how long to play and when to rest.",
     summary="Count note lengths and keep the beat through a rest.",
     exercise="RythmicEquations",
+    icon=_DURATION_ICON,
     steps=(
         Step(
             title="The beat and the quarter note",

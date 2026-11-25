@@ -2174,7 +2174,7 @@ class MainWindow(QMainWindow):
         >>> window.nav_stack.currentWidget() is window.lesson_nav
         True
         """
-        if isinstance(self._overlay, GlossaryPage):
+        if isinstance(self._overlay, (StatsPage, DatabasePage, GlossaryPage)):
             self.show_home()
             return
         self._show_nav()

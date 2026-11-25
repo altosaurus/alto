@@ -200,8 +200,8 @@ def lesson_icon(lesson: Lesson) -> str
 
 </div>
 
-Find the icon for a lesson's tile: its own if a plugin gave it one,
-otherwise its primary exercise's.
+Use the lesson's own icon when present, falling back to its primary
+exercise's icon.
 
 **Parameters**
 

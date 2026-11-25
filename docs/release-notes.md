@@ -20,7 +20,7 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
-- A new **Duration** lesson under **Rhythm** introduces quarter, half, and whole notes and quarter rests with counted listening examples. Rhythm examples in lessons and the glossary show a time signature, upward stems, bar lines, and optional counts on staffless notation paper.
+- A new **Duration** lesson under **Rhythm** introduces quarter, half, and whole notes and quarter rests with counted listening examples. Its icon shows an eighth note beamed to two sixteenth notes. Rhythm examples in lessons and the glossary show a time signature, upward stems, bar lines, and optional counts on staffless notation paper.
 
 - Rythmic Equations lets you choose both the arithmetic signs and the number of operators (zero to three) independently on each side of the equals sign. Its **Answer Type** checkboxes let you practice missing symbols, missing numbers, or both. Turn on **Parentheses** to practice grouped calculations.
 
@@ -42,6 +42,8 @@ Changes that are in the development docs and not in a release yet.
 ### Changed
 {: .no-toc}
 
+- The Database page opens faster for long practice histories. It loads answers as you scroll and searches and sorts across the newest 10,000 answers.
+
 - Windows release installers gain a timestamped publisher signature that can be checked in the file’s **Properties → Digital Signatures** tab.
 
 - The Windows installer now uses the Microsoft Visual C++ Runtime installed on Windows. If Windows lacks it or has an older version, the installer downloads Microsoft's installer for it from Microsoft, checks Microsoft's signature, and runs it; Windows asks for administrator permission and Microsoft's window asks to accept Microsoft's license. This happens once, also when Alto updates itself. Alto now needs Windows 10 or later.
@@ -52,9 +54,11 @@ Changes that are in the development docs and not in a release yet.
 ### Fixed
 {: .no-toc}
 
+- On small screens, the documentation menu starts closed so the article is visible immediately. **Menu** opens the navigation, and **Contents** links to the overview.
+
 - Keyboard Note Identification now saves its own **Note names** choice. Switching to **Caret** in Note Identification leaves the keyboard exercise’s answers unchanged.
 
-- The Exercises and Lessons toolbar buttons now open their respective catalogs when the glossary is open.
+- The Exercises and Lessons toolbar buttons now open their respective catalogs from the Database, Statistics, and Glossary pages.
 - Single-question lesson knowledge checks say **Try again** after a wrong answer. Checks with multiple questions keep **Try another**.
 - Lesson tiles, search, navigation, menus, and exercise controls now update their icons and colors when the desktop switches between light and dark mode while Alto is set to System.
 - Light mode uses a gray window with white tiles and a pale gray search bar, including when following a light desktop.

@@ -352,13 +352,18 @@ def test_empty_workspace_prompt_follows_the_selected_section(
 
 @pytest.mark.parametrize("section", ["exercises", "lessons"])
 @pytest.mark.parametrize("origin", ["tiles", "exercise", "lesson"])
-def test_section_buttons_leave_the_glossary(
+@pytest.mark.parametrize(
+    "button_name",
+    ["database_button", "stats_button", "glossary_button"],
+)
+def test_section_buttons_leave_utility_pages(
     window: MainWindow,
     section: str,
     origin: str,
+    button_name: str,
 ) -> None:
     """
-    Open either catalog from the glossary and retain the prior activity.
+    Open either catalog from a utility page and retain the activity.
 
     Parameters
     ----------
@@ -367,19 +372,22 @@ def test_section_buttons_leave_the_glossary(
     section : str
         The requested toolbar destination.
     origin : str
-        The page from which the glossary was opened.
+        The page from which the utility was opened.
+    button_name : str
+        The toolbar button that opens the utility.
     """
     if origin == "exercise":
         window.open_exercise(NoteNames)
     elif origin == "lesson":
         window.open_lessons("circle-of-fifths")
     previous = window.stack.currentWidget()
-    window.glossary_button.click()
-    assert isinstance(window.stack.currentWidget(), GlossaryPage)
+    button = getattr(window, button_name)
+    button.click()
+    assert button.isChecked() and window.stack.currentWidget() is not previous
     window.home.mode_control.buttons[int(section == "lessons")].click()
     assert window.stack.currentWidget() is window.home
     assert window.home.mode == section
-    assert not window.glossary_button.isChecked()
+    assert not button.isChecked()
     cards = (
         window.home.lesson_cards if section == "lessons" else window.home.cards
     )

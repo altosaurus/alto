@@ -34,6 +34,19 @@ from pathlib import Path
 
 SCHEMA_VERSION = 7
 
+_ANSWER_COLUMNS = (
+    "a.answered_at, a.exercise, a.item_key, a.answer, "
+    "a.correct, a.attempt_no, a.duration_ms, i.payload, s.due"
+)
+_ANSWER_JOINS = (
+    "JOIN profiles p ON p.id = a.profile_id "
+    "LEFT JOIN items i ON (i.profile_id, i.exercise, i.item_key) = "
+    "(a.profile_id, a.exercise, a.item_key) "
+    "LEFT JOIN review_schedules s ON (s.profile_id, s.exercise, "
+    "s.item_key, s.scheduler) "
+    "= (a.profile_id, a.exercise, a.item_key, p.scheduler)"
+)
+
 _SCHEMA = """
 CREATE TABLE profiles (
     id          INTEGER PRIMARY KEY,
@@ -1455,16 +1468,97 @@ class Database:
             is None,
         )
         return self.conn.execute(
-            "SELECT a.answered_at, a.exercise, a.item_key, a.answer, "
-            "a.correct, a.attempt_no, a.duration_ms, i.payload, s.due "
-            "FROM attempts a JOIN profiles p ON p.id = a.profile_id "
-            "LEFT JOIN items i ON (i.profile_id, i.exercise, i.item_key) = "
-            "(a.profile_id, a.exercise, a.item_key) "
-            "LEFT JOIN review_schedules s ON (s.profile_id, s.exercise, "
-            "s.item_key, s.scheduler) "
-            "= (a.profile_id, a.exercise, a.item_key, p.scheduler) "
+            f"SELECT {_ANSWER_COLUMNS} FROM attempts a {_ANSWER_JOINS} "
             f"WHERE {where} ORDER BY a.id DESC LIMIT ?",
             [*args, limit],
+        ).fetchall()
+
+    def answer_window(
+        self,
+        profile_id: int,
+        *,
+        limit: int,
+    ) -> tuple[int, int, int]:
+        """
+        Capture the range of attempts for a database browser session.
+
+        Parameters
+        ----------
+        profile_id : int
+            The profile whose answers are being browsed.
+        limit : int
+            The number of recent attempts to include. Keyword-only.
+
+        Returns
+        -------
+        tuple of int
+            The profile's total count and inclusive lower and upper IDs
+            for its newest `limit` attempts. Later inserts are excluded.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> db.answer_window(db.add_profile("Ada").id, limit=100)
+        (0, 0, 0)
+        """
+        total, newest = self.conn.execute(
+            "SELECT COUNT(*), COALESCE(MAX(id), 0) FROM attempts "
+            "WHERE profile_id = ?",
+            (profile_id,),
+        ).fetchone()
+        oldest = 0
+        if total > limit:
+            oldest = self.conn.execute(
+                "SELECT id FROM attempts WHERE +profile_id = ? AND id <= ? "
+                "ORDER BY id DESC LIMIT 1 OFFSET ?",
+                (profile_id, newest, limit - 1),
+            ).fetchone()[0]
+        return total, oldest, newest
+
+    def answer_page(
+        self,
+        profile_id: int,
+        *,
+        id_range: tuple[int, int],
+        offset: int,
+        limit: int,
+    ) -> list[sqlite3.Row]:
+        """
+        Read answer details for a slice of the browser's history.
+
+        Parameters
+        ----------
+        profile_id : int
+            The profile whose answers are being browsed.
+        id_range : tuple of int
+            Inclusive ID bounds from `answer_window`. Keyword-only.
+        offset : int
+            The number of rows to skip. Keyword-only.
+        limit : int
+            The maximum size of this page. Keyword-only.
+
+        Returns
+        -------
+        list of sqlite3.Row
+            Up to `limit` answers starting at `offset`, newest time
+            first. The insertion ID breaks ties within a timestamp.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> pid = db.add_profile("Ada").id
+        >>> _, low, high = db.answer_window(pid, limit=100)
+        >>> bounds = (low, high)
+        >>> db.answer_page(pid, id_range=bounds, offset=0, limit=64)
+        []
+        """
+        return self.conn.execute(
+            f"SELECT {_ANSWER_COLUMNS} FROM ("
+            "SELECT * FROM attempts WHERE profile_id = ? "
+            "AND id BETWEEN ? AND ? ORDER BY answered_at DESC, id DESC "
+            "LIMIT ? OFFSET ?) a "
+            f"{_ANSWER_JOINS} ORDER BY a.answered_at DESC, a.id DESC",
+            (profile_id, *id_range, limit, offset),
         ).fetchall()
 
     def item_rows(
