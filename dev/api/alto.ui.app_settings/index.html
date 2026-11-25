@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
   
 </head>
 <body>
@@ -410,6 +410,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -453,6 +456,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.duration/">duration</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
@@ -573,6 +579,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
@@ -740,7 +752,7 @@
 <p>The application-wide settings dialog.</p>
 
 <p>It holds the color theme, the notation font, the keyboard style, the
-transitions, the instrument and what updates follow.</p>
+transitions, instruments, metronome clicks and what updates follow.</p>
 
 <p>Changes apply as soon as they are made. Each style is a card that
 previews it.</p>
@@ -752,6 +764,26 @@ previews it.</p>
 <span class="go">'Settings'
 </span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">pages</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># Appearance, Sound and Updates
 </span><span class="go">3
+</span></code></pre></div></div>
+
+<h2 id="load_metronome_click">load_metronome_click</h2>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_metronome_click</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L111" aria-label="Source for load_metronome_click">[Source]</a></p>
+
+</div>
+
+<p>Apply the saved click or use High pip as the default.</p>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">load_metronome_click</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">metronome_click</span> <span class="ow">in</span> <span class="n">METRONOME_CLICKS</span>
+<span class="go">True
 </span></code></pre></div></div>
 
 <h2 id="previewcard">PreviewCard</h2>
@@ -769,7 +801,7 @@ previews it.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L194" aria-label="Source for PreviewCard">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L368" aria-label="Source for PreviewCard">[Source]</a></p>
 
 </div>
 
@@ -843,7 +875,7 @@ its name and a few words about it underneath.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L291" aria-label="Source for StyleCard">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L465" aria-label="Source for StyleCard">[Source]</a></p>
 
 </div>
 
@@ -896,7 +928,7 @@ a staff, drawn in that style.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L369" aria-label="Source for KeyboardCard">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L543" aria-label="Source for KeyboardCard">[Source]</a></p>
 
 </div>
 
@@ -948,7 +980,7 @@ keys drawn in that style.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_style</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="n">keyboard_styles</span><span class="p">.</span><span class="n">KeyboardStyle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L448" aria-label="Source for KeyboardCard.show_style">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L622" aria-label="Source for KeyboardCard.show_style">[Source]</a></p>
 
 </div>
 
@@ -982,7 +1014,7 @@ keys drawn in that style.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardBuilder</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L475" aria-label="Source for KeyboardBuilder">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L649" aria-label="Source for KeyboardBuilder">[Source]</a></p>
 
 </div>
 
@@ -1033,7 +1065,7 @@ the Custom style.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L621" aria-label="Source for KeyboardBuilder.refresh">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L795" aria-label="Source for KeyboardBuilder.refresh">[Source]</a></p>
 
 </div>
 
@@ -1061,7 +1093,7 @@ the Custom style.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L732" aria-label="Source for AppSettingsDialog">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L906" aria-label="Source for AppSettingsDialog">[Source]</a></p>
 
 </div>
 
@@ -1079,7 +1111,7 @@ down opening Settings or changing themes.</p>
   <li><code class="language-plaintext highlighter-rouge">theme_changed</code> (<em>bool</em>): True once the theme has been changed, so the window can be rebuilt in it.</li>
   <li><code class="language-plaintext highlighter-rouge">categories</code> (<em>QListWidget</em>): The list of pages on the left: Appearance sections, Sound and Updates.</li>
   <li><code class="language-plaintext highlighter-rouge">pages</code> (<em>QStackedWidget</em>): The page for the chosen category.</li>
-  <li><code class="language-plaintext highlighter-rouge">instruments</code> (<em>InstrumentPicker</em>): The instrument chooser, available after the Sound page is first selected.</li>
+  <li><code class="language-plaintext highlighter-rouge">instruments</code> (<em>InstrumentPicker</em>): The chooser, available after the Instruments page is selected.</li>
   <li><code class="language-plaintext highlighter-rouge">theme_list</code> (<em>QListWidget</em>): The themes, on the Theme section, with the one in use in bold.</li>
   <li><code class="language-plaintext highlighter-rouge">theme_items</code> (<em>dict of str to QListWidgetItem</em>): The rows of that list, by the key of the theme’s family.</li>
   <li><code class="language-plaintext highlighter-rouge">theme_pages</code> (<em>QStackedWidget</em>): The card of the theme chosen in the list, or the editor.</li>
@@ -1127,7 +1159,7 @@ down opening Settings or changing themes.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThemeCard</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L1402" aria-label="Source for AppSettingsDialog.card">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L1620" aria-label="Source for AppSettingsDialog.card">[Source]</a></p>
 
 </div>
 
@@ -1170,7 +1202,7 @@ been looked at exist.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_page</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QScrollArea</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L1451" aria-label="Source for AppSettingsDialog.card_page">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L1669" aria-label="Source for AppSettingsDialog.card_page">[Source]</a></p>
 
 </div>
 
@@ -1205,7 +1237,7 @@ page the stack shows for it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">thumb</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ThemeThumb</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L1477" aria-label="Source for AppSettingsDialog.thumb">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L1695" aria-label="Source for AppSettingsDialog.thumb">[Source]</a></p>
 
 </div>
 
@@ -1238,7 +1270,7 @@ it is on built if it was not yet.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">choose_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/app_settings.py#L2238" aria-label="Source for AppSettingsDialog.choose_theme">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/app_settings.py#L2523" aria-label="Source for AppSettingsDialog.choose_theme">[Source]</a></p>
 
 </div>
 
@@ -1261,6 +1293,10 @@ should be rebuilt in it.</p>
 </code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1475,10 +1511,10 @@ should be rebuilt in it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

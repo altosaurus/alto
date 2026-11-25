@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
   
 </head>
 <body>
@@ -410,6 +410,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -453,6 +456,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.duration/">duration</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
@@ -573,6 +579,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
@@ -769,7 +781,7 @@ If your choice produces more than 48 bars, scroll left beneath the chart to see 
   <li><strong>Typical time to first answer:</strong> the median, over time, so a single slow answer does not distort it.</li>
   <li><strong>By exercise:</strong> accuracy, number of questions and typical time for each exercise.</li>
   <li><strong>Reviews:</strong> a calendar of the last 12 months, a square per day (weeks run left to right, Monday at the top), darker
-the more questions you answered. Hover a square for the exact count. It follows the exercise filter but ignores the
+the more questions you answered. Use the outward diagonal arrows to separate the months and the inward arrows to close the gaps. Hover a square for the exact count. It follows the exercise filter but ignores the
 timeframe.</li>
   <li><strong>Questions that need practice:</strong> the questions with the highest strain, how often you missed them, and how many times you have answered them.</li>
 </ul>
@@ -794,9 +806,9 @@ answers cannot be clicked. The list has the same columns as the database browser
 The <strong>Question Statistics</strong> button on the card opens that question’s speed and accuracy graphs.</p>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green, above the list of questions that need practice" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/stats-heatmap-dark.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green, above the list of questions that need practice" loading="lazy" />
-  <figcaption>The Reviews calendar: a year of practice at a glance. Gaps are days off, and the darkest squares are your busiest days.</figcaption>
+  <img class="for-light" src="/alto/dev/assets/img/stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green with a small gap between months, above the list of questions that need practice" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/stats-heatmap-dark.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green with a small gap between months, above the list of questions that need practice" loading="lazy" />
+  <figcaption>The Reviews calendar: a year of practice at a glance. Days without reviews use the lightest shade, and the darkest squares are your busiest days.</figcaption>
 </figure>
 
 <p>A question counts as <strong>right</strong> only if your first answer was right. That is the same rule the
@@ -921,10 +933,10 @@ up to that point. Hover over a point for its value. You can also open these grap
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

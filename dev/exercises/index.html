@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
   
 </head>
 <body>
@@ -410,6 +410,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -453,6 +456,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.duration/">duration</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
@@ -573,6 +579,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
@@ -814,15 +826,21 @@ when it contains the symbol and the bundled Bravura font otherwise. Glyph codes 
 
 <h2 id="rythmic-equations">Rythmic Equations</h2>
 
-<p>Choose the note symbol that makes both sides of the equation last the same amount of time.
+<p>Use <strong>Answer Type</strong> to choose what fills the blank. <strong>Symbol</strong> (the default) asks for a note or rest. <strong>Number</strong> shows numbered buttons. A number can be a missing factor, as in “half note ÷ □ = quarter note,” or a duration. For a duration, the question gives the counting unit: with <strong>Count in eighth notes</strong>, a quarter note plus a quarter note equals <strong>4</strong>. Check both types to practice a mix.</p>
+
+<p>For symbol answers, choose the note symbol that makes both sides of the equation last the same amount of time.
 For example, a quarter note plus another quarter note equals a half note. The blank can appear on either side of the equals sign.
-Use <strong>Operators</strong> to choose addition, subtraction, multiplication, and division. Multiplication and division use whole-number factors from 2 through 8 when the selected symbols allow them. Use <strong>Symbols</strong> to select notes, rests, and dotted notes from double whole through thirty-second values. A selected note and rest of the same duration both count as correct. Turn on <strong>Ties</strong> or <strong>Beams</strong> to mix in questions where a pair of notes counts as one duration. Beams group eighth, sixteenth, or thirty-second notes.</p>
+Under <strong>Operators</strong>, set <strong>Left operators</strong> and <strong>Right operators</strong> to choose how many arithmetic signs appear on each side of the equals sign (0–3 per side). The default is one on the left and zero on the right. Use the checkboxes under each count to select the signs allowed on that side. For example, set both counts to one, select only <strong>Addition (+)</strong> on the left and only <strong>Multiplication (×)</strong> on the right, and you can get <strong>quarter note + quarter note = □ × 2</strong>.</p>
+
+<p>Turn on <strong>Parentheses</strong> to practice order of operations. Set at least two operators on one side so there is something to group. For example, in <strong>(quarter note + quarter note) ÷ 2 = □</strong>, add the two quarter notes first, then divide by two. With the switch off (the default), you can work from left to right on each side.</p>
+
+<p>Multiplication and division use whole-number factors from 2 through 8 when the selected symbols allow them. Use <strong>Symbols</strong> to select notes, rests, and dotted notes from double whole through thirty-second values. A selected note and rest of the same duration both count as correct. Turn on <strong>Ties</strong> or <strong>Beams</strong> to mix in questions where a pair of notes counts as one duration. Beams group eighth, sixteenth, or thirty-second notes.</p>
 
 <h2 id="keyboard-note-identification">Keyboard Note Identification</h2>
 
 <p>One key on a piano keyboard is highlighted. Press the button with its name.</p>
 
-<p>This exercise uses the <strong>Note names</strong> setting from Note Identification. Scale degrees follow the shown major key,
+<p>Use this exercise’s <strong>Note names</strong> setting to choose <strong>Letters</strong>, <strong>Solfège</strong>, <strong>Caret</strong>, or <strong>Function</strong> independently of Note Identification. Scale degrees follow the shown major key,
 or C major when key signatures are off. When octaves are required, degree and octave are separated: <strong>1̂ / 4</strong>.</p>
 
 <ul>
@@ -1455,10 +1473,10 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

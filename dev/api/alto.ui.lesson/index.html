@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
   
 </head>
 <body>
@@ -410,6 +410,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -453,6 +456,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.duration/">duration</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
@@ -573,6 +579,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
@@ -758,7 +770,7 @@ tasks cannot be failed and are not recorded.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">saved_step</span><span class="p">(</span><span class="n">lesson</span><span class="p">:</span> <span class="n">Lesson</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L78" aria-label="Source for saved_step">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L80" aria-label="Source for saved_step">[Source]</a></p>
 
 </div>
 
@@ -795,7 +807,7 @@ tasks cannot be failed and are not recorded.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L104" aria-label="Source for save_step">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L106" aria-label="Source for save_step">[Source]</a></p>
 
 </div>
 
@@ -827,7 +839,7 @@ tasks cannot be failed and are not recorded.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L350" aria-label="Source for StepView">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L363" aria-label="Source for StepView">[Source]</a></p>
 
 </div>
 
@@ -895,7 +907,7 @@ task.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hear</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L692" aria-label="Source for StepView.hear">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L711" aria-label="Source for StepView.hear">[Source]</a></p>
 
 </div>
 
@@ -920,7 +932,7 @@ task.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L766" aria-label="Source for StepView.walk">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L791" aria-label="Source for StepView.walk">[Source]</a></p>
 
 </div>
 
@@ -956,7 +968,7 @@ task.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ask</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L839" aria-label="Source for StepView.ask">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L864" aria-label="Source for StepView.ask">[Source]</a></p>
 
 </div>
 
@@ -989,7 +1001,7 @@ task.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L1123" aria-label="Source for LessonView">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L1148" aria-label="Source for LessonView">[Source]</a></p>
 
 </div>
 
@@ -1053,7 +1065,7 @@ task.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L1224" aria-label="Source for LessonView.go">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L1249" aria-label="Source for LessonView.go">[Source]</a></p>
 
 </div>
 
@@ -1086,7 +1098,7 @@ going past the last finishes the lesson.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/ui/lesson.py#L1283" aria-label="Source for LessonsPage">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/ui/lesson.py#L1308" aria-label="Source for LessonsPage">[Source]</a></p>
 
 </div>
 
@@ -1137,6 +1149,10 @@ another is asked for.</p>
 </span></code></pre></div></div>
 
 
+          
+          
+          
+          
           
           
           
@@ -1395,10 +1411,10 @@ another is asked for.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

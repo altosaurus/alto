@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
   
 </head>
 <body>
@@ -410,6 +410,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg" open>
                   <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -453,6 +456,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.duration/">duration</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
@@ -573,6 +579,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
@@ -784,7 +796,7 @@ question, not as extra questions.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L64" aria-label="Source for Bucket">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L64" aria-label="Source for Bucket">[Source]</a></p>
 
 </div>
 
@@ -822,7 +834,7 @@ the charts.</p>
 <span class="k">def</span> <span class="nf">accuracy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L105" aria-label="Source for Bucket.accuracy">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L105" aria-label="Source for Bucket.accuracy">[Source]</a></p>
 
 </div>
 
@@ -858,7 +870,7 @@ on the first try.</p>
 <span class="k">def</span> <span class="nf">median_seconds</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L136" aria-label="Source for Bucket.median_seconds">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L136" aria-label="Source for Bucket.median_seconds">[Source]</a></p>
 
 </div>
 
@@ -893,7 +905,7 @@ on the first try.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L159" aria-label="Source for ExerciseStats">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L159" aria-label="Source for ExerciseStats">[Source]</a></p>
 
 </div>
 
@@ -935,7 +947,7 @@ on the first try.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L193" aria-label="Source for HardQuestion">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L193" aria-label="Source for HardQuestion">[Source]</a></p>
 
 </div>
 
@@ -986,7 +998,7 @@ screen.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L239" aria-label="Source for Stats">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L239" aria-label="Source for Stats">[Source]</a></p>
 
 </div>
 
@@ -1026,7 +1038,7 @@ screen.</p>
 <span class="k">def</span> <span class="nf">accuracy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L296" aria-label="Source for Stats.accuracy">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L296" aria-label="Source for Stats.accuracy">[Source]</a></p>
 
 </div>
 
@@ -1053,7 +1065,7 @@ try.</p>
 <span class="k">def</span> <span class="nf">attempts_per_question</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L318" aria-label="Source for Stats.attempts_per_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L318" aria-label="Source for Stats.attempts_per_question">[Source]</a></p>
 
 </div>
 
@@ -1082,7 +1094,7 @@ try.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L495" aria-label="Source for period_end">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L495" aria-label="Source for period_end">[Source]</a></p>
 
 </div>
 
@@ -1122,7 +1134,7 @@ begins.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L532" aria-label="Source for describe">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L532" aria-label="Source for describe">[Source]</a></p>
 
 </div>
 
@@ -1168,7 +1180,7 @@ questions that need practice.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">date</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L635" aria-label="Source for daily_counts">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L635" aria-label="Source for daily_counts">[Source]</a></p>
 
 </div>
 
@@ -1238,7 +1250,7 @@ else here.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Stats</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/learning/stats.py#L755" aria-label="Source for collect">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/learning/stats.py#L755" aria-label="Source for collect">[Source]</a></p>
 
 </div>
 
@@ -1294,6 +1306,8 @@ else here.</p>
 </span></code></pre></div></div>
 
 
+          
+          
           
           
           
@@ -1478,10 +1492,10 @@ else here.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
   
 </head>
 <body>
@@ -410,6 +410,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -453,6 +456,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.duration/">duration</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
@@ -573,6 +579,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
@@ -829,6 +841,10 @@
       <td><a href="alto.exercises.packs/">alto.exercises.packs</a></td>
       <td>Load third-party instrument packs from ZIP archives and authoring folders.</td>
     </tr>
+    <tr>
+      <td><a href="alto.exercises.rhythm_equations/">alto.exercises.rhythm_equations</a></td>
+      <td>Build balanced rhythm equations with exact operator counts.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -902,6 +918,10 @@
     <tr>
       <td><a href="alto.lessons.clef_basics/">alto.lessons.clef_basics</a></td>
       <td>The lesson on clefs, taught from nothing.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.lessons.duration/">alto.lessons.duration</a></td>
+      <td>A first rhythm lesson on counting the length of sound and silence.</td>
     </tr>
     <tr>
       <td><a href="alto.lessons.intervals/">alto.lessons.intervals</a></td>
@@ -1076,6 +1096,14 @@
     <tr>
       <td><a href="alto.ui.main_window/">alto.ui.main_window</a></td>
       <td>The main window: tile browsing or a workspace with an independently selected exercise or lesson list.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.meter_staff/">alto.ui.meter_staff</a></td>
+      <td>Staffless rhythm notation for lesson and glossary examples.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.metronome_spectrum/">alto.ui.metronome_spectrum</a></td>
+      <td>A bouncing spectrum display for the metronome preview.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.midi_input/">alto.ui.midi_input</a></td>
@@ -1344,10 +1372,10 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

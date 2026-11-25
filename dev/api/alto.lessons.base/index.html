@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
   
 </head>
 <body>
@@ -410,6 +410,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -453,6 +456,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.duration/">duration</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
@@ -573,6 +579,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
@@ -775,7 +787,7 @@ scored or recorded.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/lessons/base.py#L40" aria-label="Source for Task">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/lessons/base.py#L40" aria-label="Source for Task">[Source]</a></p>
 
 </div>
 
@@ -828,7 +840,7 @@ by pressing one of <code class="language-plaintext highlighter-rouge">choices</c
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/lessons/base.py#L103" aria-label="Source for Task.hits">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/lessons/base.py#L103" aria-label="Source for Task.hits">[Source]</a></p>
 
 </div>
 
@@ -866,7 +878,7 @@ right places.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/lessons/base.py#L135" aria-label="Source for Task.check">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/lessons/base.py#L135" aria-label="Source for Task.check">[Source]</a></p>
 
 </div>
 
@@ -915,7 +927,7 @@ right places.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/lessons/base.py#L174" aria-label="Source for Staff">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/lessons/base.py#L174" aria-label="Source for Staff">[Source]</a></p>
 
 </div>
 
@@ -964,10 +976,12 @@ note, with a line of words under it.</p>
     <span class="n">hear_instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">single_question</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">label_middle_c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">rhythm</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">rhythm_meter</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/lessons/base.py#L209" aria-label="Source for Step">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/lessons/base.py#L209" aria-label="Source for Step">[Source]</a></p>
 
 </div>
 
@@ -993,6 +1007,8 @@ note, with a line of words under it.</p>
   <li><code class="language-plaintext highlighter-rouge">keyboard_note</code> (<em>str</em>): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.</li>
   <li><code class="language-plaintext highlighter-rouge">picture</code> (<em>PicturePosition or FingerboardPosition or None</em>): An instrument picture to show beside the words, such as one supplied by a plugin. Alto draws it with the same widget the exercises use. None for no picture.</li>
   <li><code class="language-plaintext highlighter-rouge">hear_instrument</code> (<em>str</em>): The key of the instrument that plays the Hear it notes, such as one supplied by a plugin. Empty for the learner’s own choice of sound.</li>
+  <li><code class="language-plaintext highlighter-rouge">rhythm</code> (<em>tuple of str</em>): Written note and rest values to count with a metronome.</li>
+  <li><code class="language-plaintext highlighter-rouge">rhythm_meter</code> (<em>tuple of int</em>): Numerator and denominator for the rhythm example.</li>
   <li><code class="language-plaintext highlighter-rouge">label_middle_c</code> (<em>bool</em>): Label middle C and bracket the pair of black keys beside it.</li>
 </ul>
 
@@ -1021,7 +1037,7 @@ note, with a line of words under it.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2818f287a1048dfd56ebc6b469edd38d4f4d9e36/alto/lessons/base.py#L300" aria-label="Source for Lesson">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/2bcb26f4d9d437251d271e4a6f0e05e64be90ce7/alto/lessons/base.py#L306" aria-label="Source for Lesson">[Source]</a></p>
 
 </div>
 
@@ -1058,6 +1074,8 @@ note, with a line of words under it.</p>
 </span></code></pre></div></div>
 
 
+          
+          
           
           
           
@@ -1244,10 +1262,10 @@ note, with a line of words under it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

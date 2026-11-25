@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795547008">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
   
 </head>
 <body>
@@ -410,6 +410,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -453,6 +456,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.duration/">duration</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
@@ -573,6 +579,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
@@ -936,7 +948,9 @@ There are twenty-nine in all, and they fall into a few families:</p>
 
 <h3 id="sound">Sound</h3>
 
-<p><strong>Instrument.</strong> The sound used for notes and for the correct-answer chime. The instruments are listed in a box on the
+<h4 id="instruments">Instruments</h4>
+
+<p>Choose the instrument used for notes and for the correct-answer chime. The instruments are listed in a box on the
 left: piano, flute, French horn, viola, marimba and vibraphone. The one in use is in bold and
 checked. Choose any of them to see a summary on the right of what its sound is made from:</p>
 
@@ -961,8 +975,18 @@ whose recordings are not installed in your copy of Alto is shown in italics and 
 only play as the synthesized piano.</p>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/settings-sound.png" alt="The Sound page of the settings dialog with a list of instruments and a summary of the selected one" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/settings-sound-dark.png" alt="The Sound page of the settings dialog with a list of instruments and a summary of the selected one" loading="lazy" />
+  <img class="for-light" src="/alto/dev/assets/img/settings-sound.png" alt="The Instruments page under Sound with a list of instruments and a summary of the selected one" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/settings-sound-dark.png" alt="The Instruments page under Sound with a list of instruments and a summary of the selected one" loading="lazy" />
+  
+</figure>
+
+<h4 id="metronome">Metronome</h4>
+
+<p>Select <strong>High pip</strong>, <strong>Low pip</strong>, or <strong>Pencil click</strong> in the list to read about its sound. Press <strong>Preview</strong> to hear four clicks at 120 BPM, even when exercise audio is muted. The spectrum curve rises with each click and settles between beats. Lower frequencies appear on the left and higher frequencies on the right. Press <strong>Use this sound</strong> or double-click the list entry to save it. A check mark identifies the sound in use. <strong>High pip</strong> is the default. The Duration lesson and rhythm glossary examples play this click at each written onset. In meter examples, louder clicks mark accents and softer clicks mark subdivisions. The tie example pairs the clicks with the selected instrument so you can hear the held note.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/settings-metronome.png" alt="Metronome settings with three sounds on the left and the selected sound’s description and preview on the right" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/settings-metronome-dark.png" alt="Metronome settings with three sounds on the left and the selected sound’s description and preview on the right" loading="lazy" />
   
 </figure>
 
@@ -1088,10 +1112,10 @@ practice history. See <a href="/alto/dev/data/">Your data</a>.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795547008" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795547008" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
