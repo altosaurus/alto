@@ -259,7 +259,7 @@ def test_browser_shows_due_for_the_selected_scheduler(
     window.open_settings()
     dialog = window._settings
     assert dialog is not None
-    dialog.categories.setCurrentRow(7)  # Practice
+    dialog.categories.setCurrentRow(9)  # Practice
     # Two attempts at the third question share its current schedule.
     repetitions = 2 if tab == "answers" else 1
     for mode, due in (

@@ -12,8 +12,8 @@ pitch-shifting for missing notes.
 created the first time it is needed. A note with
 no recording is made by shifting the nearest recording (or, for the
 piano outside its sampled range, by synthesis).
-Instrument previews render the phrase as one cached clip, with fixed
-spacing between its notes.
+Instrument previews render the phrase as one cached clip to preserve
+its rhythm from the first playback.
 The module-level `sounds` is the one the interface uses.
 
 **Examples**
@@ -37,7 +37,7 @@ def synth_piano(
 ) -> list[float]
 ```
 
-{% endraw %}{% include api-source.html name="synth_piano" line=60 %}{% raw %}
+{% endraw %}{% include api-source.html name="synth_piano" line=65 %}{% raw %}
 
 </div>
 
@@ -88,7 +88,7 @@ Instrument(
 )
 ```
 
-{% endraw %}{% include api-source.html name="Instrument" line=158 %}{% raw %}
+{% endraw %}{% include api-source.html name="Instrument" line=163 %}{% raw %}
 
 </div>
 
@@ -135,7 +135,7 @@ are.
 def kind_name() -> str
 ```
 
-{% endraw %}{% include api-source.html name="Instrument.kind_name" line=245 %}{% raw %}
+{% endraw %}{% include api-source.html name="Instrument.kind_name" line=250 %}{% raw %}
 
 </div>
 
@@ -166,7 +166,7 @@ Name what sort of instrument this is, in lowercase.
 def picker_group() -> str
 ```
 
-{% endraw %}{% include api-source.html name="Instrument.picker_group" line=268 %}{% raw %}
+{% endraw %}{% include api-source.html name="Instrument.picker_group" line=273 %}{% raw %}
 
 </div>
 
@@ -193,7 +193,7 @@ Identify the instrument's entry in the sound picker.
 def playback_volume(level: float = 1.0) -> float
 ```
 
-{% endraw %}{% include api-source.html name="Instrument.playback_volume" line=287 %}{% raw %}
+{% endraw %}{% include api-source.html name="Instrument.playback_volume" line=292 %}{% raw %}
 
 </div>
 
@@ -223,7 +223,7 @@ instrument.
 def instrument_groups() -> list[tuple[str, list[Instrument]]]
 ```
 
-{% endraw %}{% include api-source.html name="instrument_groups" line=366 %}{% raw %}
+{% endraw %}{% include api-source.html name="instrument_groups" line=371 %}{% raw %}
 
 </div>
 
@@ -257,7 +257,7 @@ Ways of playing one instrument share a single entry.
 def read_wav(path: Path) -> tuple[list[float], int]
 ```
 
-{% endraw %}{% include api-source.html name="read_wav" line=460 %}{% raw %}
+{% endraw %}{% include api-source.html name="read_wav" line=465 %}{% raw %}
 
 </div>
 
@@ -298,7 +298,7 @@ def shift_pitch(
 ) -> list[float]
 ```
 
-{% endraw %}{% include api-source.html name="shift_pitch" line=541 %}{% raw %}
+{% endraw %}{% include api-source.html name="shift_pitch" line=546 %}{% raw %}
 
 </div>
 
@@ -336,7 +336,7 @@ def to_wav_bytes(
 ) -> bytes
 ```
 
-{% endraw %}{% include api-source.html name="to_wav_bytes" line=576 %}{% raw %}
+{% endraw %}{% include api-source.html name="to_wav_bytes" line=581 %}{% raw %}
 
 </div>
 
@@ -382,7 +382,7 @@ def write_file_atomically(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="write_file_atomically" line=631 %}{% raw %}
+{% endraw %}{% include api-source.html name="write_file_atomically" line=636 %}{% raw %}
 
 </div>
 
@@ -411,6 +411,37 @@ the file in one step.
 (b'RIFF', ['note.wav'])
 ```
 
+## metronome_preview_pcm
+
+<div class="api-signature" markdown="1">
+
+```python
+@lru_cache(maxsize=len(METRONOME_CLICKS))
+def metronome_preview_pcm(key: str) -> tuple[bytes, int]
+```
+
+{% endraw %}{% include api-source.html name="metronome_preview_pcm" line=704 %}{% raw %}
+
+</div>
+
+Return the four beats used for playback and the spectrum display.
+
+**Parameters**
+
+- `key` (*str*): The bundled click to repeat at 120 BPM.
+
+**Returns**
+
+- *tuple of bytes and int*: Mono 16-bit PCM frames and their sample rate in hertz.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> pcm, rate = metronome_preview_pcm("high-pip")
+>>> len(pcm) > 3 * rate
+True
+```
+
 ## Sounds
 
 <div class="api-signature" markdown="1">
@@ -419,9 +450,11 @@ the file in one step.
 Sounds()
 ```
 
-{% endraw %}{% include api-source.html name="Sounds" line=671 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds" line=783 %}{% raw %}
 
 </div>
+
+Bases: `QObject`
 
 A lazy cache of notes played through `QSoundEffect`, in the chosen
 instrument.
@@ -461,7 +494,7 @@ Create a player with the piano chosen and sound on.
 def recordings(inst: Instrument) -> dict[int, Path]
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.recordings" line=758 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.recordings" line=883 %}{% raw %}
 
 </div>
 
@@ -492,7 +525,7 @@ True
 def unrecorded(instrument: str | None = None) -> list[int]
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.unrecorded" line=860 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.unrecorded" line=985 %}{% raw %}
 
 </div>
 
@@ -533,7 +566,7 @@ def prepare(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.prepare" line=902 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.prepare" line=1027 %}{% raw %}
 
 </div>
 
@@ -563,7 +596,7 @@ def note_duration_ms(
 ) -> int
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.note_duration_ms" line=988 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.note_duration_ms" line=1113 %}{% raw %}
 
 </div>
 
@@ -601,7 +634,7 @@ def play_midi(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.play_midi" line=1117 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.play_midi" line=1242 %}{% raw %}
 
 </div>
 
@@ -632,6 +665,81 @@ so audio can never break an exercise.
 >>> Sounds().play_midi(60)  # doctest: +SKIP
 ```
 
+### Sounds.play_metronome_click
+
+<div class="api-signature" markdown="1">
+
+```python
+def play_metronome_click(
+    *,
+    force: bool = False,
+) -> None
+```
+
+{% endraw %}{% include api-source.html name="Sounds.play_metronome_click" line=1308 %}{% raw %}
+
+</div>
+
+Play one beat with the selected click sound.
+
+**Parameters**
+
+- `force` (*bool, default False*): Play even when muted for an explicit settings preview.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> player = Sounds()
+>>> player.enabled = False
+>>> player.play_metronome_click()
+```
+
+### Sounds.preview_metronome
+
+<div class="api-signature" markdown="1">
+
+```python
+def preview_metronome(key: str) -> None
+```
+
+{% endraw %}{% include api-source.html name="Sounds.preview_metronome" line=1335 %}{% raw %}
+
+</div>
+
+Play four evenly spaced clicks at 120 BPM, even while muted.
+
+Render one clip so loading the sound cannot delay later beats.
+
+**Parameters**
+
+- `key` (*str*): The bundled click to audition.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> sounds.preview_metronome("low-pip")  # doctest: +SKIP
+```
+
+### Sounds.stop_metronome_preview
+
+<div class="api-signature" markdown="1">
+
+```python
+def stop_metronome_preview() -> None
+```
+
+{% endraw %}{% include api-source.html name="Sounds.stop_metronome_preview" line=1394 %}{% raw %}
+
+</div>
+
+End the four-click audition when leaving the preview.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> sounds.stop_metronome_preview()
+```
+
 ### Sounds.stop_all
 
 <div class="api-signature" markdown="1">
@@ -640,7 +748,7 @@ so audio can never break an exercise.
 def stop_all() -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.stop_all" line=1183 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.stop_all" line=1405 %}{% raw %}
 
 </div>
 
@@ -660,12 +768,15 @@ Silence every note at once, and cancel any fade-outs underway.
 def preview(
     key: str,
     *,
-    midis: Iterable[int],
-    step_ms: int = 300,
+    midis: Iterable[int | None],
+    step_ms: int | tuple[int, ...] = 300,
+    beat_ms: int | None = None,
+    force: bool = True,
+    on_step: Callable[[int | None], object] | None = None,
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.preview" line=1320 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.preview" line=1581 %}{% raw %}
 
 </div>
 
@@ -679,14 +790,52 @@ Starting a preview silences the one before it.
 **Parameters**
 
 - `key` (*str*): The key of the instrument.
-- `midis` (*iterable of int*): The MIDI notes to play, in order. Keyword-only.
-- `step_ms` (*int, default 300*): The time between notes, in milliseconds. Keyword-only.
+- `midis` (*iterable of int or None*): MIDI pitches in order, with None for a rest. Keyword-only.
+- `step_ms` (*int or tuple of int, default 300*): Duration in milliseconds for every note, or one per note.
+- `beat_ms` (*int or None*): Add the selected metronome sound at this interval in milliseconds. Omit for an unaccompanied preview.
+- `force` (*bool, default True*): Play even when muted. False follows the sound setting while keeping the visual timing.
+- `on_step` (*callable or None*): Highlight each onset. Clear on completion or interruption.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> sounds.preview(
 ...     "flute", midis=[60, 64, 67]
+... )  # doctest: +SKIP
+```
+
+### Sounds.play_rhythm
+
+<div class="api-signature" markdown="1">
+
+```python
+def play_rhythm(
+    step_ms: tuple[int, ...],
+    *,
+    levels: tuple[float, ...],
+    force: bool = False,
+    on_step: Callable[[int | None], object],
+) -> None
+```
+
+{% endraw %}{% include api-source.html name="Sounds.play_rhythm" line=1786 %}{% raw %}
+
+</div>
+
+Play one metronome click per written onset, observing rests.
+
+**Parameters**
+
+- `step_ms` (*tuple of int*): Length of each note or rest in milliseconds.
+- `levels` (*tuple of float*): Click volume from zero (rest) to one for each step.
+- `force` (*bool*): Allow an explicit audition while muted.
+- `on_step` (*callable*): Highlight notes and rests, then clear after the last step.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> sounds.play_rhythm(
+...     (600, 600), levels=(1.0, 0.0), on_step=print,
 ... )  # doctest: +SKIP
 ```
 
@@ -706,7 +855,7 @@ def play_notes(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.play_notes" line=1658 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.play_notes" line=2134 %}{% raw %}
 
 </div>
 
@@ -748,7 +897,7 @@ more there are.
 def stop_sample(on_step: Callable[[int | None], object]) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.stop_sample" line=1740 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.stop_sample" line=2219 %}{% raw %}
 
 </div>
 
@@ -780,7 +929,7 @@ def play_sample(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.play_sample" line=1756 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.play_sample" line=2235 %}{% raw %}
 
 </div>
 
@@ -819,7 +968,7 @@ None
 def play_correct(streak: int) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.play_correct" line=1832 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.play_correct" line=2311 %}{% raw %}
 
 </div>
 

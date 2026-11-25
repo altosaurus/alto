@@ -14,6 +14,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import (
     QBoxLayout,
+    QCheckBox,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -31,6 +32,7 @@ from PySide6.QtWidgets import (
 from alto.audio import sounds
 from alto.exercises import REGISTRY
 from alto.lessons import LESSONS
+from alto.settings import RHYTHM_DURATIONS
 from alto.terms import (
     PLUGIN_TERMS,
     PluginTerm,
@@ -40,6 +42,7 @@ from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.home import ExerciseCard, lesson_card
 from alto.ui.icons import SEARCH, set_svg_icon
 from alto.ui.keyboard import KeyboardWidget
+from alto.ui.meter_staff import MeterStaff
 from alto.ui.reference import ExplorableCircle
 from alto.ui.staff import StaffWidget
 from alto.ui.staff_playback import StaffPlayback
@@ -60,13 +63,50 @@ class _Example:
 
     Pitches are separated by spaces and sound one after another. Join
     pitches with "+" to stack them in one column, so that
-    they are written and sound together, as in "C4+G4".
+    they are written and sound together, as in "C4+G4". A rhythm
+    with empty pitches plays clicks at its written onsets.
     """
 
     pitches: str
     caption: str
     clef: str = "treble"
     signature: int = 0
+    rhythm: str = ""
+    bpm: int = 100
+    meter: tuple[int, int] | None = None
+    counts: tuple[str, ...] = ()
+    bar_line: str = ""
+    click_levels: tuple[float, ...] = ()
+
+    @property
+    def beat_ms(self) -> int | None:
+        """Return the pulse interval for counted examples."""
+        if not self.rhythm or not self.pitches:
+            return None
+        quarter_ms = 60_000 / self.bpm
+        if self.meter in ((6, 8), (9, 8), (12, 8)):
+            return round(1.5 * quarter_ms)
+        return round(quarter_ms)
+
+    def durations_ms(self) -> tuple[int, ...]:
+        """
+        Convert written rhythm into playback timing.
+
+        Returns
+        -------
+        tuple of int
+            Milliseconds per sounding note, combining tied values.
+        """
+        quarter = RHYTHM_DURATIONS["quarter"]
+        return tuple(
+            round(
+                60_000
+                / self.bpm
+                * sum(RHYTHM_DURATIONS[v] for v in group.split("~"))
+                / quarter,
+            )
+            for group in self.rhythm.split()
+        )
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -80,13 +120,380 @@ class _Term:
     guide: str
     examples: tuple[_Example, ...]
     exercises: tuple[str, ...]
-    lesson: str
+    lesson: str | None = None
     keyboard: bool = False
     label_steps: bool = False
     circle: bool = False
 
 
+def _meter_example(
+    beats: int,
+    *,
+    divisions: int = 1,
+    bars_per_group: int = 1,
+) -> _Example:
+    """
+    Build two groups of counted measures at the same tapping speed.
+
+    Parameters
+    ----------
+    beats : int
+        Main beats in each measure.
+    divisions : int
+        Sound one pulse, two equal parts, or three equal parts per beat.
+    bars_per_group : int
+        Measures per group. A louder downbeat marks each group’s start.
+
+    Returns
+    -------
+    _Example
+        Counts, click levels, note values, and time signature.
+    """
+    syllables = {1: (), 2: ("&",), 3: ("la", "li")}[divisions]
+    levels = []
+    counts = []
+    for bar in range(bars_per_group):
+        for beat in range(1, beats + 1):
+            level = 0.6
+            if beat == 1:
+                level = 1.0 if bar == 0 else 0.8
+            elif beats == 4 and beat == 3:
+                level = 0.8
+            levels.append(level)
+            levels.extend([0.35] * len(syllables))
+            counts.extend((str(beat), *syllables))
+    value = "quarter" if divisions == 1 else "eighth"
+    meter = (beats * 3, 8) if divisions == 3 else (beats, 4)
+    caption = f"{meter[0]}/{meter[1]} · {beats} beats per measure"
+    if divisions > 1:
+        caption += f" · {divisions} sounds per beat"
+    if bars_per_group > 1:
+        caption += f" · {bars_per_group}-measure groups"
+    return _Example(
+        "",
+        caption,
+        rhythm=" ".join([value] * (len(counts) * 2)),
+        # At 150 quarters per minute, a dotted quarter lasts 600 ms too.
+        bpm=150 if divisions == 3 else 100,
+        meter=meter,
+        counts=tuple(counts * 2),
+        click_levels=tuple(levels * 2),
+    )
+
+
 TERMS = {
+    "musical alphabet": _Term(
+        definition="The musical alphabet uses seven letter names for notes. "
+        "In ascending order they are A, B, C, D, E, F, and G. "
+        "After G, the names start again at A.",
+        guide="Say each letter as its note sounds. On the way up, listen "
+        "for G moving to A. On the way down, A leads back to G.",
+        examples=(
+            _Example("C4 D4 E4 F4 G4 A4 B4 C5", "Ascending · C D E F G A B C"),
+            _Example(
+                "C5 B4 A4 G4 F4 E4 D4 C4",
+                "Descending · C B A G F E D C",
+            ),
+        ),
+        exercises=("NoteNames", "KeyboardNotes"),
+        lesson="pitches-and-notes",
+    ),
+    "piano keyboard": _Term(
+        definition="A piano keyboard arranges pitches from low on the left "
+        "to high on the right. The black keys repeat in groups of two "
+        "and three.",
+        guide="Find the pair of black keys. The white key immediately to "
+        "their left is C. Switch examples and use the group of three "
+        "black keys to find F the same way.",
+        examples=(
+            _Example("C4", "C · just left of two black keys"),
+            _Example("F4", "F · just left of three black keys"),
+        ),
+        exercises=("KeyboardNotes",),
+        lesson="pitches-and-notes",
+        keyboard=True,
+    ),
+    "middle C": _Term(
+        definition="Middle C is the C near the center of a piano keyboard. "
+        "Its name in scientific pitch notation is C4.",
+        guide="Switch clefs and listen. The same piano key is written on "
+        "the first short line below the treble staff or the first short "
+        "line above the bass staff.",
+        examples=(
+            _Example("C4", "Middle C below the treble staff"),
+            _Example("C4", "Middle C above the bass staff", clef="bass"),
+        ),
+        exercises=("KeyboardNotes", "NoteConstruction"),
+        lesson="clef-basics",
+    ),
+    "parallel minor": _Term(
+        definition="The parallel minor of a major key is the minor key "
+        "with the same home note, or tonic. C minor is the parallel "
+        "minor of C major.",
+        guide="Play C major, then switch to C natural minor. Both scales "
+        "begin and end on C. Listen for E, A, and B moving down a half "
+        "step to E♭, A♭, and B♭.",
+        examples=(
+            _Example("C4 D4 E4 F4 G4 A4 B4 C5", "C major"),
+            _Example(
+                "C4 D4 Eb4 F4 G4 Ab4 Bb4 C5",
+                "C natural minor",
+                signature=-3,
+            ),
+        ),
+        exercises=("ScaleIdentification", "KeySignatures"),
+        lesson="key-signatures",
+    ),
+    "rhythm": _Term(
+        definition="Rhythm is the pattern of sounds and silences in time. "
+        "It includes when notes begin and how long they last.",
+        guide="Tap four steady beats. Each click starts a note. In the first "
+        "example, the clicks fall on 1, 3, and 4. In the second, they fall "
+        "on 1, 2, and 3. Keep tapping while the long note is highlighted.",
+        examples=(
+            _Example(
+                "",
+                "Long, short, short · count 1–2, 3, 4",
+                rhythm="half quarter quarter",
+            ),
+            _Example(
+                "",
+                "Short, short, long · count 1, 2, 3–4",
+                rhythm="quarter quarter half",
+            ),
+        ),
+        exercises=("RythmicEquations",),
+        lesson="duration",
+    ),
+    "tie": _Term(
+        definition="A tie is a curved line joining two notes of the same "
+        "pitch. Play the first note and hold it for the combined length "
+        "of both notes.",
+        guide="Count three clicks. In the first example C sounds on clicks "
+        "one and two. In the tied example C holds through the second "
+        "click. G enters on the third click both times.",
+        examples=(
+            _Example(
+                "C4 C4 G4",
+                "Two separate Cs, then G",
+                rhythm="quarter quarter quarter",
+                meter=(3, 4),
+            ),
+            _Example(
+                "C4 G4",
+                "Two tied Cs, then G",
+                rhythm="quarter~quarter quarter",
+                meter=(3, 4),
+            ),
+        ),
+        exercises=("RythmicEquations", "NotationIdentification"),
+    ),
+    "dot": _Term(
+        definition="A dot to the right of a note or rest adds half of "
+        "its original duration. This is called an augmentation dot.",
+        guide="Tap two steady beats. In the first example, the second click "
+        "lands on your second tap. Add the dot and it lands halfway "
+        "between that tap and the next beat.",
+        examples=(
+            _Example(
+                "",
+                "Quarter note · click on beat two",
+                rhythm="quarter quarter",
+                meter=(2, 4),
+            ),
+            _Example(
+                "",
+                "Dotted quarter · click half a beat later",
+                rhythm="dotted-quarter eighth",
+                meter=(2, 4),
+            ),
+        ),
+        exercises=("RythmicEquations", "NotationIdentification"),
+    ),
+    "beat": _Term(
+        definition="A beat is the regular pulse you can tap along with "
+        "in music. Beats form groups called measures. A note can last "
+        "for several beats or for part of one.",
+        guide="Tap with the four clicks. Switch to the half notes and keep "
+        "tapping at the same speed. You still tap four beats, but now "
+        "you hear a click only on beats one and three.",
+        examples=(
+            _Example(
+                "",
+                "Four beats · one note per tap",
+                meter=(4, 4),
+                counts=("1", "2", "3", "4"),
+                rhythm="quarter quarter quarter quarter",
+            ),
+            _Example(
+                "",
+                "Four beats · two taps per note",
+                meter=(4, 4),
+                counts=("1–2", "3–4"),
+                rhythm="half half",
+            ),
+        ),
+        exercises=("RythmicEquations",),
+        lesson="duration",
+    ),
+    "meter": _Term(
+        definition="Meter is the recurring pattern of stronger and weaker "
+        "beats in music. The first beat of each group is the downbeat.",
+        guide="Tap at the same speed in both examples. A stronger click marks "
+        "each downbeat. Count the taps until the next strong click.",
+        examples=(_meter_example(2), _meter_example(3)),
+        exercises=("NotationIdentification", "RythmicEquations"),
+    ),
+    "measure": _Term(
+        definition="A measure, also called a bar, is a span of music set "
+        "off by bar lines. In 2/4, a full measure lasts two quarter-note "
+        "beats.",
+        guide="Count from one vertical line to the next. Switch examples "
+        "and tap the same two beats. Adding a sound on each “&” doubles "
+        "the number of notes in the measure while its length stays the same.",
+        examples=(_meter_example(2), _meter_example(2, divisions=2)),
+        exercises=("NotationIdentification", "RythmicEquations"),
+    ),
+    "bar line": _Term(
+        definition="A bar line is a vertical line across the staff that "
+        "marks the boundary of a measure. It is also spelled “barline.”",
+        guide="Count the four quarter notes and find the single line to "
+        "their right. Switch examples to see a double bar line, which "
+        "often marks a change of section.",
+        examples=(
+            _Example(
+                "",
+                "Single bar line at the end of a measure",
+                meter=(4, 4),
+                rhythm="quarter quarter quarter quarter",
+                counts=("1", "2", "3", "4"),
+                bar_line="Barline",
+            ),
+            _Example(
+                "",
+                "Double bar line at a section boundary",
+                meter=(4, 4),
+                rhythm="quarter quarter quarter quarter",
+                counts=("1", "2", "3", "4"),
+                bar_line="Double barline",
+            ),
+        ),
+        exercises=("NotationIdentification",),
+    ),
+    "duple meter": _Term(
+        definition="Duple means grouped in twos. In duple meter, each "
+        "measure has two main beats.",
+        guide="Tap once on each number. In 2/4, say “1 & 2 &.” In 6/8, "
+        "say “1 la li 2 la li.” Your foot still taps twice per measure.",
+        examples=(
+            _meter_example(2, divisions=2),
+            _meter_example(2, divisions=3),
+        ),
+        exercises=("NotationIdentification", "RythmicEquations"),
+    ),
+    "triple meter": _Term(
+        definition="Triple means grouped in threes. In triple meter, each "
+        "measure has three main beats.",
+        guide="Count “1, 2, 3” with the numbered pulses. In 3/4 each beat "
+        "divides in two. Switch to 9/8 and hear three sounds within each tap.",
+        examples=(
+            _meter_example(3, divisions=2),
+            _meter_example(3, divisions=3),
+        ),
+        exercises=("NotationIdentification", "RythmicEquations"),
+    ),
+    "quadruple meter": _Term(
+        definition="Quadruple means grouped in fours. In quadruple meter, "
+        "each measure has four main beats. Beat one usually feels strongest, "
+        "with a lighter emphasis on beat three.",
+        guide="Tap “1, 2, 3, 4” in both examples. Listen for the strongest "
+        "click on one and a lighter accent on three. In 12/8, say three "
+        "syllables for each tap.",
+        examples=(
+            _meter_example(4, divisions=2),
+            _meter_example(4, divisions=3),
+        ),
+        exercises=("NotationIdentification", "RythmicEquations"),
+    ),
+    "metric accent": _Term(
+        definition="A metric accent is the emphasis a beat gets from its "
+        "place in the meter. You can feel it even when the player keeps "
+        "the volume steady.",
+        guide="In 3/4, hear a strong click on one followed by two softer "
+        "clicks. Switch to 4/4 and listen for a second, lighter accent "
+        "on three.",
+        examples=(_meter_example(3), _meter_example(4)),
+        exercises=("NotationIdentification", "RythmicEquations"),
+    ),
+    "hypermeter": _Term(
+        definition="Hypermeter is a recurring pattern of stronger and weaker "
+        "measures. A whole measure can feel like one beat in a larger group.",
+        guide="Tap twice per measure. The loudest click begins each group. "
+        "Count how many measures pass before it returns, first in groups "
+        "of two measures and then in groups of four.",
+        examples=(
+            _meter_example(2, bars_per_group=2),
+            _meter_example(2, bars_per_group=4),
+        ),
+        exercises=("RythmicEquations",),
+    ),
+    "divisions of the beat": _Term(
+        definition="Divisions of the beat are the equal parts within a "
+        "beat. Two and three are common ways to divide a beat.",
+        guide="Tap on the numbered clicks. First say “1 & 2 &,” then say "
+        "“1 la li 2 la li.” Keep your taps equally far apart as the "
+        "number of sounds per tap changes.",
+        examples=(
+            _meter_example(2, divisions=2),
+            _meter_example(2, divisions=3),
+        ),
+        exercises=("RythmicEquations",),
+    ),
+    "simple beat": _Term(
+        definition="A simple beat divides naturally into two equal parts. "
+        "For example, a quarter-note beat divides into two eighth notes.",
+        guide="Tap on each number and say “&” halfway to the next tap. "
+        "Switch from two to three beats per measure and keep the same "
+        "two-part division.",
+        examples=(
+            _meter_example(2, divisions=2),
+            _meter_example(3, divisions=2),
+        ),
+        exercises=("RythmicEquations",),
+    ),
+    "compound beat": _Term(
+        definition="A compound beat divides naturally into three equal "
+        "parts. In 6/8 and 9/8, a dotted quarter note is the main beat "
+        "and each of its three parts is an eighth note.",
+        guide="Say “1 la li” with the first three clicks. Keep three clicks "
+        "per tap as you switch from two main beats in 6/8 to three in 9/8.",
+        examples=(
+            _meter_example(2, divisions=3),
+            _meter_example(3, divisions=3),
+        ),
+        exercises=("RythmicEquations",),
+    ),
+    "tempo": _Term(
+        definition="Tempo is the speed of the beat. It can be measured "
+        "in beats per minute (BPM).",
+        guide="Tap with the metronome at 60 BPM, one click per second. "
+        "Switch to 120 BPM and hear the same four clicks twice as fast.",
+        examples=(
+            _Example(
+                "",
+                "60 BPM · one beat per second",
+                rhythm="quarter quarter quarter quarter",
+                bpm=60,
+            ),
+            _Example(
+                "",
+                "120 BPM · two beats per second",
+                rhythm="quarter quarter quarter quarter",
+                bpm=120,
+            ),
+        ),
+        exercises=("RythmicEquations",),
+    ),
     "pitch": _Term(
         definition=(
             "Pitch is how high or low a sound seems. For a steady tone, "
@@ -192,6 +599,26 @@ TERMS = {
             ),
         ),
         exercises=("ClefBasics", "NoteNames"),
+        lesson="clef-basics",
+    ),
+    "bass": _Term(
+        definition=(
+            "The bass is the lowest sounding part of a piece of music. "
+            "At any moment, the lowest note in a chord is its bass note. "
+            "Bass can also mean a low singing voice or an instrument "
+            "that plays the low part."
+        ),
+        guide=(
+            "Listen to the single note, then follow it as the chord "
+            "sounds. Both examples use the notes of a C major chord. "
+            "C is its root, the note the chord is named for. "
+            "Switch examples to hear E take over as the bass."
+        ),
+        examples=(
+            _Example("C3 C3+E3+G3", "C in the bass · C major", clef="bass"),
+            _Example("E3 E3+G3+C4", "E in the bass · C major", clef="bass"),
+        ),
+        exercises=("ArpeggioNames", "NoteNames"),
         lesson="clef-basics",
     ),
     "grand staff": _Term(
@@ -743,7 +1170,127 @@ TERMS = {
         exercises=("IntervalNames", "KeyboardIntervals"),
         lesson="intervals",
     ),
+    "augmented": _Term(
+        definition=(
+            "An augmented interval is one half step wider than a perfect "
+            "or major interval with the same letter span. Its symbol is A."
+        ),
+        guide=(
+            "Follow the upper note as it rises. C to F is a perfect fourth. "
+            "Raising F to F♯ widens it to an augmented fourth. The same "
+            "idea gives an augmented triad its sound: raise the fifth "
+            "of a major chord."
+        ),
+        examples=(
+            _Example("C4+F4 C4+F#4", "Perfect fourth → augmented fourth"),
+            _Example("C4+E4+G4 C4+E4+G#4", "C major → C augmented"),
+        ),
+        exercises=("IntervalConstruction", "ChordQualities"),
+        lesson="intervals",
+    ),
+    "diminished": _Term(
+        definition=(
+            "A diminished interval is one half step narrower than a perfect "
+            "or minor interval with the same letter span. Its symbol is d."
+        ),
+        guide=(
+            "Keep C in place and lower G to G♭. The perfect fifth becomes "
+            "a diminished fifth. In the chord example, listen for the "
+            "same change above C and E♭: lowering the fifth of a minor "
+            "triad makes a diminished triad."
+        ),
+        examples=(
+            _Example("C4+G4 C4+Gb4", "Perfect fifth → diminished fifth"),
+            _Example("C4+Eb4+G4 C4+Eb4+Gb4", "C minor → C diminished"),
+        ),
+        exercises=("IntervalConstruction", "ChordQualities"),
+        lesson="intervals",
+    ),
+    "tritone": _Term(
+        definition=(
+            "A tritone spans three whole steps, or six half steps. "
+            "It divides an octave in half."
+        ),
+        guide=(
+            "Play both examples. F♯ and G♭ share a piano key, so you hear "
+            "the same distance above C. The spelling tells you which "
+            "interval to write: C up to F♯ spans four letters, while "
+            "C up to G♭ spans five."
+        ),
+        examples=(
+            _Example("C4 F#4", "C to F♯ · augmented fourth"),
+            _Example("C4 Gb4", "C to G♭ · diminished fifth"),
+        ),
+        exercises=("IntervalNames", "KeyboardIntervals"),
+        lesson="intervals",
+    ),
+    "interval inversion": _Term(
+        definition=(
+            "To invert an interval within an octave, move its lower note "
+            "up an octave or its upper note down an octave. The two "
+            "interval numbers add up to nine."
+        ),
+        guide=(
+            "Follow C in the first example. It starts below E and moves "
+            "above it while E stays in place. Inversion swaps major with "
+            "minor and augmented with diminished. Perfect intervals stay "
+            "perfect, as you can hear in the second example."
+        ),
+        examples=(
+            _Example(
+                "C4+E4 E4+C5",
+                "C–E becomes E–C · major third → minor sixth",
+            ),
+            _Example(
+                "D4+A4 A4+D5",
+                "D–A becomes A–D · perfect fifth → perfect fourth",
+            ),
+        ),
+        exercises=("IntervalNames", "IntervalConstruction"),
+        lesson="intervals",
+    ),
+    "consonant": _Term(
+        definition=(
+            "Two notes are called consonant when they sound relatively "
+            "stable together in a musical style. In tonal music a "
+            "consonant interval can give a phrase a place to rest."
+        ),
+        guide=(
+            "Listen to C and G together, then switch to C and E. The fifth "
+            "sounds open and the third has a different color, but either "
+            "can sound settled. Alto’s interval exercise also counts a "
+            "perfect fourth as consonant. In a piece, a fourth above "
+            "the bass can create tension."
+        ),
+        examples=(
+            _Example("C4+G4", "C with G · a perfect fifth"),
+            _Example("C4+E4", "C with E · a major third"),
+        ),
+        exercises=("IntervalNames",),
+        lesson="intervals",
+    ),
+    "dissonant": _Term(
+        definition=(
+            "Two notes are called dissonant when they create tension "
+            "together in a musical style. Moving to a more settled sound "
+            "is called resolution."
+        ),
+        guide=(
+            "Listen to the first pair, then hear where it goes. Over C, "
+            "B rises a half step to another C. In the next example, "
+            "both notes of a tritone move: F falls to E and B rises to C."
+        ),
+        examples=(
+            _Example("C4+B4 C4+C5", "Major seventh resolving to an octave"),
+            _Example("F4+B4 E4+C5", "Tritone resolving to a minor sixth"),
+        ),
+        exercises=("IntervalNames",),
+        lesson="intervals",
+    ),
 }
+
+for _name in ("duple", "triple", "quadruple"):
+    TERMS[_name] = TERMS[f"{_name} meter"]
 
 
 class _DefinitionArea(QScrollArea):
@@ -881,6 +1428,12 @@ class GlossaryPage(QWidget):
         self.example_keyboard.max_key_width = px(26)
         demo.addWidget(self.example_staff)
         demo.addWidget(self.example_keyboard)
+        self.meter_staff = MeterStaff()
+        demo.addWidget(self.meter_staff, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.counts = QCheckBox("Show counts")
+        self.counts.toggled.connect(self.meter_staff.set_counts_visible)
+        self.counts.setChecked(True)
+        demo.addWidget(self.counts)
         self.example_board = (
             FingerboardWidget()
         )  # a plugin's term shows its instrument here instead of notation
@@ -891,6 +1444,7 @@ class GlossaryPage(QWidget):
             self,
             highlight=self.example_staff.highlight_column,
         )
+        self.playback.step.connect(self.meter_staff.highlight_column)
         self._preview_played = False
         demo_controls = QVBoxLayout()
         self.example_label = QLabel()
@@ -1076,6 +1630,7 @@ class GlossaryPage(QWidget):
         self.example_board.hide()
         term = entry
         example = term.examples[self._example_index % len(term.examples)]
+        self._example = example
         columns = [
             [Note.parse(name) for name in column.split("+")]
             for column in example.pitches.split()
@@ -1087,8 +1642,17 @@ class GlossaryPage(QWidget):
         if term.circle:
             self.example_circle.select("outer", place=example.signature)
         self.example_keyboard.setVisible(term.keyboard)
-        self.example_staff.setVisible(not term.keyboard)
-        if term.keyboard:
+        self.meter_staff.setVisible(bool(example.rhythm))
+        self.counts.setVisible(bool(example.rhythm))
+        self.example_staff.setVisible(not (term.keyboard or example.rhythm))
+        if example.rhythm:
+            self.meter_staff.show_score(
+                tuple(example.rhythm.split()),
+                meter=example.meter or (4, 4),
+                counts=example.counts,
+                bar_line=example.bar_line,
+            )
+        elif term.keyboard:
             self.example_keyboard.show_keys(self._example_midis, span=(60, 72))
         else:
             self.example_staff.wedges = (
@@ -1106,7 +1670,9 @@ class GlossaryPage(QWidget):
             )
         self.example_label.setText(example.caption)
         self.hear.setText(
-            "▶  Hear note"
+            "▶  Hear rhythm"
+            if example.rhythm
+            else "▶  Hear note"
             if len(self._example_midis) == 1
             else "▶  Hear example",
         )
@@ -1125,6 +1691,8 @@ class GlossaryPage(QWidget):
             self.example_circle,
             self.example_staff,
             self.example_keyboard,
+            self.counts,
+            self.meter_staff,
             self.next_example,
             self.hear,
         ):
@@ -1135,16 +1703,32 @@ class GlossaryPage(QWidget):
         self.demo.setVisible(entry.picture is not None or bool(entry.caption))
 
     def _hear_example(self) -> None:
-        """Audition the pitches in the displayed order."""
-        if self.example_staff.isHidden():
+        """Play the displayed rhythm or pitches in reading order."""
+        if self._example.rhythm and not self._example.pitches:
+            durations = self._example.durations_ms()
+            sounds.play_rhythm(
+                durations,
+                levels=self._example.click_levels or (1.0,) * len(durations),
+                force=True,
+                on_step=self.playback.step.emit,
+            )
+        elif self.example_staff.isHidden():
             sounds.preview(
                 sounds.instrument,
                 midis=self._example_midis,
-                step_ms=450,
+                step_ms=self._example.durations_ms() or 450,
+                beat_ms=self._example.beat_ms,
+                on_step=self.playback.step.emit
+                if self._example.rhythm
+                else None,
             )
-            self._preview_played = True
+            self._preview_played = not self._example.rhythm
         else:
-            self.playback.play(self.example_staff.columns, force=True)
+            self.playback.play(
+                self.example_staff.columns,
+                force=True,
+                warmup=True,
+            )
 
     def _stop_preview(self) -> None:
         """

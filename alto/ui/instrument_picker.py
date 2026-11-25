@@ -65,6 +65,35 @@ PREVIEW = (
 )  # DSCH: D5, E♭5, C5, B4, matching the notation-font previews
 
 
+def sound_picker_layout(
+    picker: QWidget,
+    *,
+    choices: QListWidget,
+    card: QFrame,
+) -> None:
+    """
+    Place sound choices beside their detail card in Settings.
+
+    Parameters
+    ----------
+    picker : QWidget
+        The instrument or metronome picker.
+    choices : QListWidget
+        The list of sounds.
+    card : QFrame
+        The selected sound's details and preview.
+
+    Examples
+    --------
+    Resizing the picker gives extra width to the detail card.
+    """
+    outer = QHBoxLayout(picker)
+    outer.setContentsMargins(0, 0, 0, 0)
+    outer.setSpacing(14)
+    outer.addWidget(choices)
+    outer.addWidget(card, 1)
+
+
 def load_instrument() -> None:
     """
     Apply the saved instrument.
@@ -353,11 +382,7 @@ class InstrumentPicker(QWidget):
             14,
         )
         right.addWidget(bar)
-        outer = QHBoxLayout(self)
-        outer.setContentsMargins(0, 0, 0, 0)
-        outer.setSpacing(14)
-        outer.addWidget(self.list)
-        outer.addWidget(card, 1)
+        sound_picker_layout(self, choices=self.list, card=card)
 
         self.shown = ""  # the list entry whose page is showing
         self._mark_in_use()

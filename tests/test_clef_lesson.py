@@ -82,6 +82,7 @@ def test_the_lesson_is_listed_with_the_exercise_that_practices_it(
     assert [lesson.key for lesson in LESSONS] == [
         "pitches-and-notes",
         "clef-basics",
+        "duration",
         "intervals",
         "scale-identification",
         "key-signatures",

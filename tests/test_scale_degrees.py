@@ -1,6 +1,6 @@
 """
 Scale-degree names follow the question's key in each exercise that
-shares note naming.
+uses them.
 """
 
 from __future__ import annotations
@@ -25,8 +25,9 @@ from alto.theory.scales import (
     SCALES,
     build,
 )
+from alto.ui import motion
 from alto.ui.degree_text import DegreeCheckBox
-from alto.ui.exercise_settings import load_note_names
+from alto.ui.exercise_settings import load_keyboard, load_note_names
 from alto.ui.exercise_view import (
     ExerciseView,
     choice_keys,
@@ -35,7 +36,8 @@ from alto.ui.exercise_view import (
     second_row_keys,
 )
 from alto.ui.question_preview import QuestionPreview
-from alto.ui.settings_panel import NoteNameSettingsPanel
+from alto.ui.settings_panel import KeyboardSettingsPanel, NoteNameSettingsPanel
+from alto.ui.store import store
 from keys import (
     opened,
     press,
@@ -131,7 +133,7 @@ def test_keyboard_degree_answers_include_enharmonics_and_octaves(
     octave : bool
         Whether to require an octave. Keyword-only.
     """
-    settings.note_names.naming = "degrees"
+    settings.keyboard.naming = "degrees"
     cfg = settings.keyboard
     cfg.key_signature, cfg.require_octave, cfg.keys = (
         signature,
@@ -242,6 +244,46 @@ def test_degree_option_saves_and_reloads(app: QApplication) -> None:
     panel.close()
 
 
+def test_staff_and_keyboard_naming_stay_independent(app: QApplication) -> None:
+    """
+    Migrate the shared preference once, then change either exercise.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    """
+    store().setValue("noteNames/naming", "solfege")
+    load_note_names()
+    load_keyboard()
+    staff = NoteNameSettingsPanel(settings.note_names)
+    keyboard = KeyboardSettingsPanel(settings.keyboard)
+    keyboard.names_row.click()
+    motion.settle()
+    assert keyboard.stack.currentIndex() == 3
+    assert keyboard.naming_radios["solfege"].isChecked()
+    exercise = KeyboardNotes()
+    rng = random.Random(4)
+    original = exercise.settings_signature()
+    staff.naming_radios["degrees"].click()
+    load_keyboard()
+    assert settings.keyboard.naming == "solfege"
+    assert exercise.settings_signature() == original
+    assert "solfège" in exercise.card_prompt(exercise.generate(rng))
+    keyboard.naming_radios["letters"].click()
+    load_note_names()
+    load_keyboard()
+    assert settings.note_names.naming == "degrees"
+    assert settings.keyboard.naming == "letters"
+    assert keyboard.name_picture.naming == "letters"
+    assert exercise.settings_signature() != original
+    question = exercise.generate(rng)
+    assert "C" in question.choices and "1̂" not in question.choices
+    assert "letter" in exercise.card_prompt(question)
+    keyboard.close()
+    staff.close()
+
+
 def test_chromatic_degree_and_octave_shortcuts_answer_the_question(
     app: QApplication,
 ) -> None:
@@ -254,7 +296,7 @@ def test_chromatic_degree_and_octave_shortcuts_answer_the_question(
     app : QApplication
         The shared Qt application.
     """
-    settings.note_names.naming = "degrees"
+    settings.keyboard.naming = "degrees"
     settings.keyboard.low = settings.keyboard.high = 61
     settings.keyboard.require_octave = True
     view = opened(KeyboardNotes())
@@ -373,6 +415,7 @@ def test_function_names_and_exercise_answers(key: int) -> None:
     settings.note_names.naming = "functions"
     settings.note_names.key_signatures = {key}
     settings.note_names.accidentals = True
+    settings.keyboard.naming = "functions"
     settings.keyboard.key_signature = True
     settings.keyboard.keys = {key}
     settings.keyboard.require_octave = True
@@ -410,6 +453,7 @@ def test_function_notation_uses_degree_shortcuts_and_accessible_names(
         The shared Qt application.
     """
     settings.note_names.naming = "functions"
+    settings.keyboard.naming = "functions"
     settings.keyboard.low = settings.keyboard.high = 61
     settings.keyboard.require_octave = True
     view = opened(KeyboardNotes())

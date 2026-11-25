@@ -261,7 +261,8 @@ def card_fields(
             )
         front.append(" ".join(terms))
         solution_text = " / ".join(
-            RHYTHM_SYMBOL_NAMES[name] for name in (q.answer, *q.accept)
+            RHYTHM_SYMBOL_NAMES.get(name, name)
+            for name in (q.answer, *q.accept)
         )
     if (
         q.keyboard is not None or isinstance(exercise, IntervalConstruction)

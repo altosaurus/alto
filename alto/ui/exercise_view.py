@@ -926,10 +926,20 @@ class ExerciseView(QWidget):
                 px(16),
             )
             self.rhythm_terms.setSpacing(px(14))
-            lay.addWidget(
-                self.rhythm_equation,
-                alignment=Qt.AlignmentFlag.AlignHCenter,
+            self.rhythm_terms.setSizeConstraint(
+                QLayout.SizeConstraint.SetFixedSize,
             )
+            self.rhythm_scroll = QScrollArea()
+            self.rhythm_scroll.setFrameShape(QFrame.Shape.NoFrame)
+            self.rhythm_scroll.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.rhythm_scroll.setVerticalScrollBarPolicy(
+                Qt.ScrollBarPolicy.ScrollBarAlwaysOff,
+            )
+            self.rhythm_scroll.setWidget(self.rhythm_equation)
+            self.rhythm_scroll.viewport().setAutoFillBackground(False)
+            self.rhythm_equation.installEventFilter(self)
+            self.rhythm_scroll.installEventFilter(self)
+            lay.addWidget(self.rhythm_scroll)
         placement_layout = lay
         if isinstance(self.scale_input, SignatureInput):
             signature_area = QWidget()
@@ -1560,6 +1570,33 @@ class ExerciseView(QWidget):
         else:
             self.next_question()
 
+    def _rhythm_term(self, token: str) -> QWidget:
+        """
+        Render a note, number, sign, or blank on the equation paper.
+
+        Parameters
+        ----------
+        token : str
+            One term in the printed equation.
+
+        Returns
+        -------
+        QWidget
+            The symbol picture or text label for this term.
+
+        Examples
+        --------
+        >>> ExerciseView(RythmicEquations())._rhythm_term("2").text()
+        '2'
+        """
+        picture = rhythm_picture(token)
+        if picture is not None:
+            picture.setPalette(self.rhythm_equation.palette())
+            return picture
+        label = QLabel("□" if token == "_" else token)
+        label.setStyleSheet(css("font-size: 22pt;"))
+        return label
+
     def next_question(self) -> None:
         """
         Show the next question: its staff, keyboard or text, and a fresh
@@ -1677,9 +1714,10 @@ class ExerciseView(QWidget):
                 if item is not None and (widget := item.widget()) is not None:
                     widget.hide()
                     widget.deleteLater()
-            self.rhythm_equation.setVisible(bool(q.choices))
+            self.rhythm_scroll.setVisible(bool(q.choices))
             if q.choices:
-                self.prompt.hide()
+                self.prompt.setText(q.caption)
+                self.prompt.setVisible(bool(q.caption))
                 self.rhythm_equation.setAccessibleName(
                     " ".join(
                         "blank" if token == "_" else token
@@ -1689,18 +1727,11 @@ class ExerciseView(QWidget):
                     .replace("|", " beamed with "),
                 )
                 for term in q.prompt.split():
-                    picture = rhythm_picture(term)
-                    if picture is not None:
-                        picture.setPalette(self.rhythm_equation.palette())
-                        widget = picture
-                    else:
-                        label = QLabel("□" if term == "_" else term)
-                        label.setStyleSheet(css("font-size: 22pt;"))
-                        widget = label
                     self.rhythm_terms.addWidget(
-                        widget,
+                        self._rhythm_term(term),
                         alignment=Qt.AlignmentFlag.AlignVCenter,
                     )
+                self.rhythm_scroll.horizontalScrollBar().setValue(0)
         construct = q.construct is not None
         scale = q.places_sequence
         clef = bool(q.place_clef)
@@ -1845,10 +1876,18 @@ class ExerciseView(QWidget):
             not interval_bank and not self.staff.locate_notation,
         )
         self.interval_answers.setVisible(interval_bank and bool(q.choices))
-        keys = choice_keys(q.choices)
+        keys = (
+            q.choices
+            if isinstance(self.exercise, RythmicEquations)
+            and q.answer.isdecimal()
+            else choice_keys(q.choices)
+        )
         for i, c in enumerate(q.choices):
             b = DegreeButton(c)
-            if isinstance(self.exercise, RythmicEquations):
+            if (
+                isinstance(self.exercise, RythmicEquations)
+                and c in RHYTHM_SYMBOL_NAMES
+            ):
                 b.setAccessibleName(RHYTHM_SYMBOL_NAMES[c])
                 b.setText("")
                 b.setIcon(ValuePictures.icon(c))
@@ -3247,6 +3286,19 @@ class ExerciseView(QWidget):
         """
         if (
             event.type() == QEvent.Type.Resize
+            and isinstance(self.exercise, RythmicEquations)
+            and watched in (self.rhythm_equation, self.rhythm_scroll)
+        ):
+            height = self.rhythm_equation.height()
+            if self.rhythm_equation.width() > self.rhythm_scroll.width():
+                height += (
+                    self.rhythm_scroll.horizontalScrollBar()
+                    .sizeHint()
+                    .height()
+                )
+            self.rhythm_scroll.setFixedHeight(height)
+        if (
+            event.type() == QEvent.Type.Resize
             and watched is self._keyboard_interval_row
         ):
             self._align_keyboard_interval()
@@ -3802,18 +3854,16 @@ class ExerciseView(QWidget):
         self._record(ok, choice=choice)
         if ok:
             if button is None:
-                self.prompt.setText(q.prompt)
+                self.prompt.setText(q.caption or q.prompt)
             if isinstance(self.exercise, RythmicEquations):
                 blank = q.prompt.split().index("_")
                 item = self.rhythm_terms.takeAt(blank)
                 if item is not None and (widget := item.widget()) is not None:
                     widget.hide()
                     widget.deleteLater()
-                picture = ValuePictures([choice], scale=1.7)
-                picture.setPalette(self.rhythm_equation.palette())
                 self.rhythm_terms.insertWidget(
                     blank,
-                    picture,
+                    self._rhythm_term(choice),
                     alignment=Qt.AlignmentFlag.AlignVCenter,
                 )
                 self.rhythm_equation.setAccessibleName(

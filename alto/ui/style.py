@@ -465,6 +465,7 @@ QFrame#helpCard, QFrame#keyGroup, QFrame#detailPane, QFrame#lessonExample {{
 QTreeWidget#detailPane {{ padding: 4px; }}
 /* Extend the white notation paper through the gutters and padding to the panel border. */
 QFrame#lessonExample[staffPaper="true"] {{ background: white; }}
+QFrame#lessonExample[staffPaper="true"] > QCheckBox {{ color: black; }}
 
 QScrollBar:vertical {{ background: transparent; width: 12px; margin: 2px; }}
 QScrollBar::handle:vertical {{ background: palette(mid); border-radius: 4px; min-height: 28px; }}

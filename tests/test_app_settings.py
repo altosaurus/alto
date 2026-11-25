@@ -9,6 +9,7 @@ import gc
 import json
 import os
 from typing import TYPE_CHECKING
+from unittest.mock import Mock
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
@@ -35,10 +36,11 @@ from PySide6.QtWidgets import (
     QToolButton,
 )
 
-from alto import updates
+from alto import audio, updates
 from alto.ui import (
     app_settings,
     keyboard_styles,
+    metronome_spectrum,
     notation,
     theme,
     theme_editor,
@@ -178,11 +180,11 @@ def test_hidden_settings_pages_are_built_on_first_visit_and_reused(
     dialog.categories.setCurrentRow(1)
     dialog.categories.setCurrentRow(2)
     assert dialog.appearance_pages.currentWidget() is page
-    dialog.categories.setCurrentRow(5)
+    dialog.categories.setCurrentRow(6)
     sound = dialog.pages.currentWidget()
     dialog.instruments.select("flute")
+    dialog.categories.setCurrentRow(8)
     dialog.categories.setCurrentRow(6)
-    dialog.categories.setCurrentRow(5)
     assert (
         dialog.pages.currentWidget() is sound
         and dialog.instruments.shown == "Flute"
@@ -203,7 +205,7 @@ def test_a_page_first_opened_after_a_theme_change_uses_the_new_palette(
     """
     try:
         dialog.choose_theme("studio_dark")
-        dialog.categories.setCurrentRow(5)
+        dialog.categories.setCurrentRow(6)
         role = QPalette.ColorRole.Window
         assert dialog.instruments.palette().color(
             role,
@@ -1243,7 +1245,9 @@ def test_updates_page_shows_version_and_remembers_whether_to(
         "\u2003Notation style",
         "\u2003Keyboard style",
         "\u2003Transitions",
-        "Sound",
+        "",
+        "\u2003Instruments",
+        "\u2003Metronome",
         "Updates",
     ]
     dialog.categories.setCurrentRow(names.index("Updates"))
@@ -1282,12 +1286,12 @@ def test_a_dialog_opens_with_the_main_branch_ticked_if_that_was_chosen(
     save_channel("main")
     following = AppSettingsDialog()
     following.categories.setCurrentRow(1)
-    following.categories.setCurrentRow(6)
+    following.categories.setCurrentRow(8)
     assert following.main_channel.isChecked()
     save_channel("releases")
     releases = AppSettingsDialog()
     releases.categories.setCurrentRow(1)
-    releases.categories.setCurrentRow(6)
+    releases.categories.setCurrentRow(8)
     assert not releases.main_channel.isChecked()
     assert dialog is not None
 
@@ -1311,3 +1315,166 @@ def test_collapsing_appearance_selects_the_parent(
     assert child.isHidden() and dialog.categories.currentItem() == parent
     dialog.appearance_toggle.click()
     assert not child.isHidden()
+
+
+def test_metronome_choices_preview_save_and_restore(
+    dialog: AppSettingsDialog,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Browse and preview clicks independently of the saved choice.
+
+    Parameters
+    ----------
+    dialog : AppSettingsDialog
+        The dialog under test.
+    monkeypatch : pytest.MonkeyPatch
+        Isolates the player and records explicit previews.
+    """
+    player = app_settings.sounds
+    monkeypatch.setattr(player, "metronome_click", "high-pip")
+    preview = Mock()
+    monkeypatch.setattr(player, "preview_metronome", preview)
+    dialog.categories.setCurrentRow(5)
+    dialog.sound_toggle.click()
+    summary = dialog.sound_pages.currentWidget()
+    assert summary is not None
+    link = next(
+        button
+        for button in summary.findChildren(QPushButton)
+        if button.accessibleName() == "Metronome"
+    )
+    link.click()
+    assert dialog.sound_toggle.isChecked()
+    assert not dialog.findChildren(app_settings.InstrumentPicker)
+    page = dialog.sound_pages.currentWidget()
+    assert page is not None
+    picker = page.findChild(app_settings._MetronomePicker)
+    assert picker is not None
+    assert picker.key == "high-pip"
+    assert not picker.use.isEnabled()
+    preview.assert_not_called()
+    for row, (key, (label, _)) in enumerate(
+        app_settings.METRONOME_CLICKS.items(),
+    ):
+        picker.list.setCurrentRow(row)
+        assert picker.title.text() == label
+        assert picker.description.text()
+        assert picker.list.item(0).font().bold()
+        picker.preview.click()
+        preview.assert_called_with(key)
+        assert player.metronome_click == "high-pip"
+    assert preview.call_count == 3
+    assert picker.use.isEnabled()
+    picker.use.click()
+    assert not picker.use.isEnabled()
+    assert picker.list.item(2).font().bold()
+    assert not picker.list.item(0).font().bold()
+    assert store().value("audio/metronomeClick") == "pencil-click"
+    picker.list.setCurrentRow(1)
+    picker.list.itemDoubleClicked.emit(picker.list.currentItem())
+    assert store().value("audio/metronomeClick") == "low-pip"
+    player.metronome_click = "high-pip"
+    app_settings.load_metronome_click()
+    assert player.metronome_click == "low-pip"
+    dialog.sound_toggle.click()
+    assert dialog.sound_pages.currentWidget() is summary
+    store().setValue("audio/metronomeClick", "unknown")
+    app_settings.load_metronome_click()
+    assert player.metronome_click == "high-pip"
+
+
+def test_metronome_curve_rises_on_each_click_and_clears_on_stop(
+    dialog: AppSettingsDialog,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check loading, the attack and fall of each beat, and interruption.
+
+    Parameters
+    ----------
+    dialog : AppSettingsDialog
+        The settings dialog containing the spectrum display.
+    monkeypatch : pytest.MonkeyPatch
+        Simulates the audio backend's loading and playback events.
+    """
+    player = audio.Sounds()
+    monkeypatch.setattr(app_settings, "sounds", player)
+    status = audio.QSoundEffect.Status
+    factory = Mock(Status=status)
+    monkeypatch.setattr(audio, "QSoundEffect", factory)
+    effect = factory.return_value
+    dialog.categories.setCurrentRow(7)
+    dialog.show()
+    picker = dialog.findChild(app_settings._MetronomePicker)
+    assert picker is not None
+    curve = picker.spectrum
+    idle = curve.grab().toImage()
+    picker.preview.click()
+    playing_changed = effect.playingChanged.connect.call_args.args[0]
+    status_changed = effect.statusChanged.connect.call_args.args[0]
+    effect.isPlaying.return_value = True
+    effect.status.return_value = status.Loading
+    playing_changed()
+    assert curve.grab().toImage() == idle
+    effect.status.return_value = status.Ready
+    status_changed()
+    assert curve.animation.state() == curve.animation.State.Running
+    strike = curve.grab().toImage()
+    assert strike != idle
+    for beat in (0, 500, 1000):
+        curve.animation.setCurrentTime(beat)
+        assert curve.grab().toImage() == strike
+        curve.animation.setCurrentTime(beat + 100)
+        falling = curve.grab().toImage()
+        assert falling != idle and falling != strike
+        curve.animation.setCurrentTime(beat + 350)
+        assert curve.grab().toImage() == idle
+    curve.animation.setCurrentTime(1500)
+    assert curve.grab().toImage() == strike
+    curve.animation.setCurrentTime(1542)
+    effect.isPlaying.return_value = False
+    playing_changed()
+    curve.animation.setCurrentTime(1600)
+    assert curve.grab().toImage() == falling
+    picker.list.setCurrentRow(2)
+    assert curve.grab().toImage() == idle
+    effect.isPlaying.return_value = True
+    playing_changed()
+    assert curve.animation.currentTime() == 0
+    assert curve.grab().toImage() != strike
+    curve.animation.setCurrentTime(20)
+    effect.isPlaying.return_value = False
+    playing_changed()
+    assert curve.grab().toImage() == idle
+    dialog.hide()
+    effect.stop.assert_called()
+
+
+def test_spectrum_stays_idle_without_audio(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Keep the preview usable if the selected click cannot be read.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared application.
+    monkeypatch : pytest.MonkeyPatch
+        Simulates a missing preview file.
+    """
+    monkeypatch.setattr(
+        metronome_spectrum,
+        "_spectrum",
+        Mock(side_effect=OSError),
+    )
+    curve = metronome_spectrum.MetronomeSpectrum()
+    curve.set_sound("low-pip")
+    curve.resize(8, curve.height())
+    curve.show()
+    curve.set_playing(True)
+    assert curve.animation.state() == curve.animation.State.Stopped
+    assert not curve.grab().isNull()
+    curve.close()

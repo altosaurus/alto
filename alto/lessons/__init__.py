@@ -9,7 +9,7 @@ without any window. The pages that show one are in
 Examples
 --------
 >>> [lesson.key for lesson in LESSONS]
-['pitches-and-notes', 'clef-basics', 'intervals',
+['pitches-and-notes', 'clef-basics', 'duration', 'intervals',
 'scale-identification', 'key-signatures', 'circle-of-fifths']
 """
 
@@ -21,6 +21,7 @@ from alto.lessons.base import (
 )
 from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
 from alto.lessons.clef_basics import CLEF_BASICS
+from alto.lessons.duration import DURATION
 from alto.lessons.intervals import INTERVALS
 from alto.lessons.key_signatures import KEY_SIGNATURES
 from alto.lessons.pitches_and_notes import PITCHES_AND_NOTES
@@ -29,6 +30,7 @@ from alto.lessons.scale_identification import SCALE_IDENTIFICATION
 LESSONS: list[Lesson] = [
     PITCHES_AND_NOTES,
     CLEF_BASICS,
+    DURATION,
     INTERVALS,
     SCALE_IDENTIFICATION,
     KEY_SIGNATURES,

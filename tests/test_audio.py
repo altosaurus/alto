@@ -652,10 +652,12 @@ def test_the_two_ways_of_playing_the_viola_are_listed_together() -> None:
 # -- hearing an instrument (the preview in the settings)
 # ------------------------------------------------------------
 @pytest.mark.parametrize("rate", [22050, 44100])
-def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
+@pytest.mark.parametrize("step_ms", [300, (600, 900, 300, 600)])
+def test_preview_note_onsets_follow_the_written_durations(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     rate: int,
+    step_ms: int | tuple[int, ...],
 ) -> None:
     """
     Check exact note spacing in the first rendered clip, including
@@ -669,6 +671,8 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
         Replaces the recordings with short impulses.
     rate : int
         The recordings' sample rate.
+    step_ms : int or tuple of int
+        One duration for the phrase or individual note lengths.
     """
     player = Sounds()
     player._dir = tmp_path
@@ -693,21 +697,21 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
     path = player._preview_file(
         INSTRUMENT_BY_KEY["flute"],
         midis=midis,
-        step_ms=300,
+        step_ms=step_ms,
     )
     rendered, rendered_rate = read_wav(path)
     samples = np.asarray(rendered)
     assert (
         rendered_rate == rate
     )  # mixed at the recordings' own rate, without resampling
-    assert len(samples) >= len(midis) * rate * 300 // 1000
+    durations = (
+        (step_ms,) * len(midis) if isinstance(step_ms, int) else step_ms
+    )
+    assert len(samples) == sum(durations) * rate // 1000
     sounding = np.flatnonzero(np.abs(samples) > 0.01)
     onsets = sounding[np.r_[True, np.diff(sounding) > 1]]
     assert [onset * 1000 / rate for onset in onsets.tolist()] == [
-        0,
-        300,
-        600,
-        900,
+        sum(durations[:index]) for index in range(len(midis))
     ]
     assert np.allclose(
         samples[onsets],
@@ -730,7 +734,7 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
         player._preview_file(
             INSTRUMENT_BY_KEY["flute"],
             midis=midis,
-            step_ms=300,
+            step_ms=step_ms,
         )
         == path
     )
@@ -888,6 +892,94 @@ def test_a_preview_reuses_one_clip_and_stops_it_before_replaying(
     assert len(player._preview_effects) == 2
     player.play_notes([[Note(4, letter=0)]])
     assert calls[-1] == ("stop", "piano.wav")
+
+
+def test_preview_highlights_follow_the_loaded_clip(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Start highlights with the clip and cancel them on interruption.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Controls note deadlines without audio hardware.
+    """
+    player = Sounds()
+    ready = audio_module.QTimer()
+    effect = Mock()
+    effect.statusChanged.connect.side_effect = ready.timeout.connect
+    status = audio_module.QSoundEffect.Status
+    effect.status.return_value = status.Loading
+    durations = (300, 600)
+    midis = (60, 67)
+    player._preview_effects["piano", midis, durations, None] = effect
+    seen = []
+    pending = []
+    monkeypatch.setattr(
+        audio_module.QTimer,
+        "singleShot",
+        lambda delay, callback: pending.append(callback),
+    )
+    player.preview(
+        "piano",
+        midis=midis,
+        step_ms=durations,
+        on_step=seen.append,
+    )
+    assert not seen and not effect.play.called
+    queued = effect.statusChanged.connect.call_args.args[0]
+    player.stop_sample(seen.append)
+    queued()  # A readiness notification queued before cancellation.
+    ready.timeout.emit()
+    assert seen == [None] and not effect.play.called
+
+    player.preview(
+        "piano",
+        midis=midis,
+        step_ms=durations,
+        on_step=seen.append,
+    )
+    effect.status.return_value = status.Ready
+    ready.timeout.emit()
+    effect.play.assert_called_once()
+    pending.pop()()
+    pending.pop()()
+    assert seen == [None, 0, 1, None]
+    player.preview(
+        "piano",
+        midis=midis,
+        step_ms=durations,
+        on_step=seen.append,
+    )
+    player.stop_sample(seen.append)
+    pending.pop()()
+    assert seen == [None, 0, 1, None, 0, None]
+
+    effect.status.return_value = status.Error
+    player.preview(
+        "piano",
+        midis=midis,
+        step_ms=durations,
+        on_step=seen.append,
+    )
+    assert seen[-1] is None and not pending
+    player.enabled = False
+    seen.clear()
+    player.preview(
+        "piano",
+        midis=midis,
+        step_ms=durations,
+        force=False,
+        on_step=seen.append,
+    )
+    assert seen == [0]
+    pending.pop()()
+    pending.pop()()
+    assert seen == [0, 1, None]
 
 
 def preview_engine(
@@ -1176,3 +1268,291 @@ def test_a_muted_melody_plays_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
     s.play_notes(melody(3), gap_ms=30)
     QTest.qWait(150)
     assert started == []
+
+
+def test_metronome_plays_bundled_click_and_obeys_mute(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Play each bundled click, replay the same source, and silence it.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Supplies a sound effect without requiring an audio device.
+    """
+    player = Sounds()
+    effect = Mock()
+    factory = Mock(return_value=effect)
+    monkeypatch.setattr(audio_module, "QSoundEffect", factory)
+    player.enabled = False
+    player.play_metronome_click()
+    factory.assert_not_called()
+    for key in audio_module.METRONOME_CLICKS:
+        player.metronome_click = key
+        player.play_metronome_click(force=True)
+        url = effect.setSource.call_args.args[0]
+        path = Path(url.toLocalFile())
+        assert path.name == f"{key}.wav"
+        with wave.open(str(path)) as clip:
+            assert clip.getnchannels() == 1 and clip.getnframes() > 0
+        effect.source.return_value = url
+    player.enabled = True
+    player.play_metronome_click()
+    factory.assert_called_once_with()
+    assert effect.setSource.call_count == 3
+    assert effect.play.call_count == 4
+    effect.stop.reset_mock()
+    player.stop_all()
+    effect.stop.assert_called_once_with()
+
+
+def test_metronome_preview_contains_four_evenly_spaced_original_clicks(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Verify each audition's PCM, beat spacing, and replay while muted.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The temporary preview cache.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the audio device with a recording mock.
+    """
+    player = Sounds()
+    player.enabled = False
+    player._dir = tmp_path
+    effect = Mock()
+    monkeypatch.setattr(audio_module, "QSoundEffect", lambda: effect)
+    for key in audio_module.METRONOME_CLICKS:
+        player.preview_metronome(key)
+        url = effect.setSource.call_args.args[0]
+        effect.source.return_value = url
+        source = audio_module.ASSETS / "metronome" / f"{key}.wav"
+        with wave.open(str(source)) as original:
+            rate = original.getframerate()
+            click = original.readframes(original.getnframes())
+        with wave.open(url.toLocalFile()) as preview:
+            assert preview.getframerate() == rate
+            beat = rate // 2 * preview.getsampwidth()
+            gap = bytes(beat - len(click))
+            pcm = preview.readframes(preview.getnframes())
+            assert pcm == (click + gap) * 3 + click
+        effect.stop.reset_mock()
+        player.preview_metronome(key)
+        effect.stop.assert_called_once_with()
+    assert effect.play.call_count == 6 and effect.setSource.call_count == 3
+    assert player.metronome_click == "high-pip"
+
+
+def test_glossary_clicks_follow_the_beat_through_a_held_note(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check the selected click, its spacing, and the instrument gain.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The preview cache and test instrument's recording.
+    monkeypatch : pytest.MonkeyPatch
+        Captures rendered previews without an audio device.
+    """
+    player = Sounds()
+    player._dir = tmp_path
+    rate = 22050
+    source = tmp_path / "held.wav"
+    source.write_bytes(to_wav_bytes([0.1] * (rate * 2), rate=rate))
+    monkeypatch.setattr(player, "_note_file", lambda *a, **k: source)
+    effects = [Mock() for _ in audio_module.METRONOME_CLICKS]
+    factory = Mock(side_effect=effects)
+    monkeypatch.setattr(audio_module, "QSoundEffect", factory)
+    inst = INSTRUMENT_BY_KEY["flute"]
+    notes = (60, 67)
+    durations = (1200, 600)
+    plain, _ = read_wav(
+        player._preview_file(inst, midis=notes, step_ms=durations),
+    )
+    instrument = np.rint(np.asarray(plain) * 32768 * inst.playback_volume())
+    for key, effect in zip(
+        audio_module.METRONOME_CLICKS,
+        effects,
+        strict=True,
+    ):
+        player.metronome_click = key
+        player.preview(inst.key, midis=notes, step_ms=durations, beat_ms=600)
+        effect.setVolume.assert_called_once_with(1.0)
+        path = Path(effect.setSource.call_args.args[0].toLocalFile())
+        mixed, mixed_rate = read_wav(path)
+        assert mixed_rate == rate
+        click, click_rate = read_wav(
+            audio_module.ASSETS / "metronome" / f"{key}.wav",
+        )
+        assert click_rate == 2 * rate
+        pulse = np.rint(
+            np.asarray(click[::2]) * 32768 * audio_module.METRONOME_MIX_LEVEL,
+        )
+        expected = instrument.copy()
+        for ms in (0, 600, 1200):
+            start = ms * rate // 1000
+            expected[start : start + len(pulse)] += pulse
+        np.testing.assert_array_equal(np.asarray(mixed) * 32768, expected)
+    player.preview(inst.key, midis=notes, step_ms=durations, beat_ms=600)
+    assert factory.call_count == len(audio_module.METRONOME_CLICKS)
+
+
+def test_preview_leaves_room_for_rests(tmp_path: Path) -> None:
+    """
+    Keep the rest silent and start the following note on time.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Temporary audio cache.
+    """
+    player = Sounds()
+    player._dir = tmp_path
+    phrase, rate = read_wav(
+        player._preview_file(
+            INSTRUMENT_BY_KEY["piano"],
+            midis=(60, None, 60),
+            step_ms=(500, 500, 500),
+        ),
+    )
+    assert any(phrase[: rate // 2])
+    assert not any(phrase[3 * rate // 4 : rate])
+    assert any(phrase[rate : 3 * rate // 2])
+
+
+def test_rhythm_clip_uses_selected_click_and_leaves_rests_silent(
+    tmp_path: Path,
+) -> None:
+    """
+    Check the exact click waveform, accents, rest, and final duration.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Temporary clip cache.
+    """
+    player = Sounds()
+    player._dir = tmp_path
+    for key in audio_module.METRONOME_CLICKS:
+        player.metronome_click = key
+        click, rate = read_wav(
+            audio_module.ASSETS / "metronome" / f"{key}.wav",
+        )
+        path = player._rhythm_file((600, 600, 300), levels=(1.0, 0.0, 0.5))
+        modified = path.stat().st_mtime_ns
+        assert (
+            player._rhythm_file((600, 600, 300), levels=(1.0, 0.0, 0.5))
+            == path
+        )
+        assert path.stat().st_mtime_ns == modified
+        phrase, actual_rate = read_wav(path)
+        assert rate == actual_rate
+        expected = np.zeros(round(1.5 * rate))
+        expected[: len(click)] = click
+        last = round(1.2 * rate)
+        expected[last : last + len(click)] = (
+            np.rint(np.array(click) * 16384) / 32768
+        )
+        np.testing.assert_array_equal(phrase, expected)
+
+
+def test_rhythm_playback_follows_clicks_and_cancels_on_exit(
+    app: QApplication,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Follow a rest and cancel its pending callback when playback stops.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    tmp_path : Path
+        Temporary clip cache.
+    monkeypatch : pytest.MonkeyPatch
+        Supplies an audio output and controls the animation clock.
+    """
+    player = Sounds()
+    player._dir = tmp_path
+    ready = audio_module.QTimer()
+    status = audio_module.QSoundEffect.Status
+    effect = Mock(statusChanged=ready.timeout)
+    effect.status.return_value = status.Loading
+    factory = Mock(return_value=effect, Status=status)
+    monkeypatch.setattr(audio_module, "QSoundEffect", factory)
+    pending = []
+    monkeypatch.setattr(
+        audio_module.QTimer,
+        "singleShot",
+        lambda delay, callback: pending.append(callback),
+    )
+    seen = []
+    player.enabled = False
+    durations = (600, 600, 1200)
+    levels = (1.0, 0.0, 1.0)
+    player.play_rhythm(durations, levels=levels, on_step=seen.append)
+    assert seen == [0]
+    factory.assert_not_called()
+    player.stop_sample(seen.append)
+    pending.pop()()
+    seen.clear()
+    player.play_rhythm(
+        durations,
+        levels=levels,
+        on_step=seen.append,
+        force=True,
+    )
+    assert not seen
+    effect.status.return_value = status.Ready
+    ready.timeout.emit()
+    effect.play.assert_called_once()
+    pending.pop()()
+    assert seen == [0, 1]
+    player.stop_sample(seen.append)
+    pending.pop()()
+    assert seen == [0, 1, None]
+    player.play_rhythm(
+        durations,
+        levels=levels,
+        on_step=seen.append,
+        force=True,
+    )
+    factory.assert_called_once()
+    assert effect.play.call_count == 2 and seen[-1] == 0
+    player.stop_sample(seen.append)
+
+
+def test_metronome_missing_sample_and_empty_phrase(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """
+    Missing clicks report an audio error while empty rhythms stay quiet.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Empty sample directory.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the sample directory.
+    capsys : pytest.CaptureFixture
+        Captures the audio diagnostic.
+    """
+    monkeypatch.setattr(audio_module, "ASSETS", tmp_path)
+    player = Sounds()
+    player.preview_metronome("missing")
+    assert "audio unavailable" in capsys.readouterr().out
+    steps = []
+    player.play_rhythm((), levels=(), force=True, on_step=steps.append)
+    assert not steps and not capsys.readouterr().out
+    player.play_rhythm((500,), levels=(1.0,), force=True, on_step=steps.append)
+    assert not steps and "audio unavailable" in capsys.readouterr().out

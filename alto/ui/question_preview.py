@@ -38,6 +38,7 @@ from alto.exercises import (
     REGISTRY,
     Question,
 )
+from alto.exercises.library import RythmicEquations
 from alto.settings import spell
 from alto.theory.pitch import Note
 from alto.ui import icons
@@ -145,8 +146,12 @@ class QuestionPreview(QDialog):
             stats_button.clicked.connect(lambda: statistics(self))
             header.addWidget(stats_button, alignment=Qt.AlignmentFlag.AlignTop)
         lay.addLayout(header)
-        if question.prompt and not question.caption:
-            prompt = QLabel(question.prompt)
+        if question.prompt and (
+            not question.caption or exercise_name == RythmicEquations.name
+        ):
+            prompt = QLabel(
+                "\n".join(filter(None, (question.caption, question.prompt))),
+            )
             prompt.setWordWrap(True)
             prompt.setStyleSheet(css("font-size: 14pt;"))
             lay.addWidget(prompt)

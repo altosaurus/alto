@@ -32,6 +32,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QRadioButton,
+    QSpinBox,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -140,6 +141,121 @@ from alto.ui.zoom import (
     css,
     px,
 )
+
+
+def _note_naming_page(
+    cfg: NoteNameSettings | settings.KeyboardSettings,
+    *,
+    preview: NamePicture,
+    changed: Callable[[], None],
+    back: Callable[[], None],
+) -> tuple[dict[str, QRadioButton], QWidget]:
+    """
+    Build the Note names page for a staff or keyboard exercise.
+
+    Parameters
+    ----------
+    cfg : NoteNameSettings or KeyboardSettings
+        Exercise whose naming preference is edited.
+    preview : NamePicture
+        Menu row illustration to update.
+    changed : callable
+        Saves the exercise settings and refreshes its question.
+    back : callable
+        Opens the exercise settings menu.
+
+    Returns
+    -------
+    tuple
+        Naming radio buttons and the submenu containing them.
+
+    Examples
+    --------
+    Keyboard Note Identification can use letters while the staff uses
+    scale degrees.
+    """
+    body = QWidget()
+    layout = QVBoxLayout(body)
+    layout.setContentsMargins(0, 0, 0, 0)
+    degrees = QGroupBox("Scale degrees")
+    degree_layout = QVBoxLayout(degrees)
+    group = QButtonGroup(body)
+    radios = {}
+
+    def select(checked: bool, *, naming: str) -> None:
+        """
+        Apply the selected naming to this exercise.
+
+        Parameters
+        ----------
+        checked : bool
+            Whether this radio button is now checked.
+        naming : str
+            Naming system represented by the button.
+
+        Examples
+        --------
+        Choosing Caret updates the preview to show numbered degrees.
+        """
+        if checked:
+            cfg.naming = naming
+            preview.set_naming(naming)
+            changed()
+
+    for naming, label in NAMINGS.items():
+        radio = radios[naming] = QRadioButton()
+        label_with_picture(
+            radio,
+            picture=NamePicture(naming, scale=1.6),
+            name=label,
+        )
+        radio.setText(label.split(" (")[0])
+        radio.setToolTip(degree_tooltip(label))
+        group.addButton(radio)
+        radio.setChecked(naming == cfg.naming)
+        radio.toggled.connect(
+            lambda checked, n=naming: select(checked, naming=n),
+        )
+        target = degree_layout if naming in settings.DEGREE_NAMINGS else layout
+        target.addWidget(radio)
+    if isinstance(cfg, NoteNameSettings):
+
+        def select_reference(minor: bool) -> None:
+            """
+            Save the staff exercise's reference scale.
+
+            Parameters
+            ----------
+            minor : bool
+                Whether to count from the natural minor tonic.
+
+            Examples
+            --------
+            Natural minor makes A the tonic for a blank signature.
+            """
+            cfg.minor_degrees = minor
+            changed()
+
+        degree_layout.addWidget(QLabel("Reference scale"))
+        reference = QButtonGroup(body)
+        for minor, label in ((False, "Major"), (True, "Natural minor")):
+            radio = QRadioButton(label)
+            reference.addButton(radio)
+            radio.setChecked(minor == cfg.minor_degrees)
+            radio.clicked.connect(
+                lambda _checked=False, selected=minor: select_reference(
+                    selected,
+                ),
+            )
+            degree_layout.addWidget(radio)
+
+    layout.addWidget(degrees)
+    return radios, subpage(
+        "Note names",
+        body=scrolling(body),
+        back=back,
+        fill=True,
+    )
 
 
 class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
@@ -278,46 +394,10 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
 
         values_page = self._values_page("Note values")
 
-        # layer 2: note names
-        self.naming_radios = {k: QRadioButton() for k in NAMINGS}
-        for k, radio in self.naming_radios.items():
-            label_with_picture(
-                radio,
-                picture=NamePicture(k, scale=1.6),
-                name=NAMINGS[k],
-            )
-            radio.setText(NAMINGS[k].split(" (")[0])
-            radio.setToolTip(degree_tooltip(NAMINGS[k]))
-        names_body = QWidget()
-        nlay = QVBoxLayout(names_body)
-        nlay.setContentsMargins(0, 0, 0, 0)
-        degree_group = QGroupBox("Scale degrees")
-        degree_layout = QVBoxLayout(degree_group)
-        naming_group = QButtonGroup(self)
-        for k, radio in self.naming_radios.items():
-            naming_group.addButton(radio)
-            radio.setChecked(k == cfg.naming)
-            radio.toggled.connect(self._names_edited)
-            if k in settings.DEGREE_NAMINGS:
-                degree_layout.addWidget(radio)
-            else:
-                nlay.addWidget(radio)
-        degree_layout.addWidget(QLabel("Reference scale"))
-        reference = QButtonGroup(self)
-        for minor, label in ((False, "Major"), (True, "Natural minor")):
-            radio = QRadioButton(label)
-            reference.addButton(radio)
-            radio.setChecked(minor == cfg.minor_degrees)
-            radio.clicked.connect(
-                lambda _checked=False, selected=minor: (
-                    self._degree_reference_edited(selected)
-                ),
-            )
-            degree_layout.addWidget(radio)
-        nlay.addWidget(degree_group)
-        names_page = subpage(
-            "Note names",
-            body=names_body,
+        self.naming_radios, names_page = _note_naming_page(
+            cfg,
+            preview=self.name_picture,
+            changed=self._save_and_emit,
             back=lambda: self._go(0),
         )
 
@@ -395,51 +475,14 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
         guard_last(list(self.key_boxes.values()))
         self._save_and_emit()
 
-    def _names_edited(self) -> None:
-        """
-        Take the chosen naming (letters, solfège or scale degrees) into
-        the settings, save it and say so.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(
-        ...     NoteNameSettings()
-        ... )
-        >>> panel.naming_radios["solfege"].setChecked(
-        ...     True
-        ... )
-        >>> panel.cfg.naming
-        'solfege'
-        """
-        self.cfg.naming = next(
-            k for k, r in self.naming_radios.items() if r.isChecked()
-        )
-        self._save_and_emit()
-
-    def _degree_reference_edited(self, minor: bool) -> None:
-        """
-        Change the reference scale for degree answers and save it.
-
-        Parameters
-        ----------
-        minor : bool
-            Whether to count from the relative natural minor tonic.
-
-        Examples
-        --------
-        Selecting Natural minor makes A the tonic on a staff with no key
-        signature.
-        """
-        self.cfg.minor_degrees = minor
-        self._save_and_emit()
-
 
 class KeyboardSettingsPanel(KeyboardRangePanel):
     """
     The settings of the keyboard exercise: a menu with a page for the
     range of keys.
 
-    The menu has Range, Black keys, Octave number and Key signatures.
+    The menu includes Range, Black keys, Octave number, Key signatures
+    and Note names.
     Edits are live: each changes the settings, saves them
     and emits `changed`.
 
@@ -489,8 +532,8 @@ class KeyboardSettingsPanel(KeyboardRangePanel):
         --------
         >>> KeyboardSettingsPanel(
         ...     settings.KeyboardSettings()
-        ... ).stack.count()  # the menu, the range and the keys
-        3
+        ... ).stack.count()  # the menu, range, keys and note names
+        4
         """
         super().__init__(parent)
         self.cfg = cfg
@@ -526,11 +569,16 @@ class KeyboardSettingsPanel(KeyboardRangePanel):
         self.keys_row.clicked.connect(lambda: self._go(2))
         self.keys_diagram = KeyDiagram()
         self.keys_row.attach(self.keys_diagram)
+        self.names_row = MenuRow("Note names")
+        self.name_picture = NamePicture(cfg.naming)
+        self.names_row.attach(self.name_picture)
+        self.names_row.clicked.connect(lambda: self._go(3))
         for row in (
             self.range_row,
             self.black_keys_row,
             self.octave_row,
             self.keys_row,
+            self.names_row,
         ):
             mlay.addWidget(row)
         mlay.addStretch()
@@ -553,9 +601,17 @@ class KeyboardSettingsPanel(KeyboardRangePanel):
             back=lambda: self._go(0),
         )
 
+        self.naming_radios, names_page = _note_naming_page(
+            cfg,
+            preview=self.name_picture,
+            changed=self._save_and_emit,
+            back=lambda: self._go(0),
+        )
+
         self.stack.addWidget(menu)
         self.stack.addWidget(range_page)
         self.stack.addWidget(keys_page)
+        self.stack.addWidget(names_page)
         self._refresh_range()
         self._show_keys()
 
@@ -3908,6 +3964,150 @@ def settings_panel_for(
     return panel
 
 
+def _rhythm_operator_summary() -> str:
+    """
+    Describe the selected signs and operator counts.
+
+    Returns
+    -------
+    str
+        The value shown on the Operators menu row.
+
+    Examples
+    --------
+    >>> "1 left" in _rhythm_operator_summary()
+    True
+    """
+    lines = []
+    for side in ("left", "right"):
+        count = getattr(settings, f"rhythm_{side}_operators")
+        selected = getattr(settings, f"rhythm_{side}_signs")
+        signs = " ".join(
+            op for op in settings.RHYTHM_OPERATORS if op in selected
+        )
+        lines.append(f"{count} {side} · {signs}")
+    return "\n".join(lines)
+
+
+def _rhythm_selection_summary(title: str, *, selected: set[str]) -> str:
+    """
+    Format the current selection on a rhythm settings row.
+
+    Parameters
+    ----------
+    title : str
+        The option shown on the row.
+    selected : set of str
+        Enabled choices.
+
+    Returns
+    -------
+    str
+        Summary for this option.
+
+    Examples
+    --------
+    >>> _rhythm_selection_summary("Answer Type", selected={"symbol"})
+    'Symbol'
+    """
+    if title == "Answer Type":
+        return ", ".join(
+            label
+            for key, label in settings.RHYTHM_ANSWER_TYPES.items()
+            if key in selected
+        )
+    return str(len(selected))
+
+
+def _operator_options(
+    panel: ExerciseSettingsPanel,
+    *,
+    menu: MenuRow,
+) -> QWidget:
+    """
+    Build a count field and a sign checklist for each side.
+
+    Parameters
+    ----------
+    panel : ExerciseSettingsPanel
+        Panel that refreshes the exercise when a setting changes.
+    menu : MenuRow
+        Row whose summary includes the counts.
+
+    Returns
+    -------
+    QWidget
+        Operator settings grouped by side of the equals sign.
+
+    Examples
+    --------
+    A right count of two puts two signs after the equals sign.
+    """
+    body = QWidget()
+    grid = QGridLayout(body)
+    grid.setContentsMargins(0, 0, 0, 0)
+    grid.setColumnStretch(0, 1)
+
+    for index, side in enumerate(("left", "right")):
+        title = f"{side.title()} operators"
+        label = QLabel(title)
+        field = QSpinBox()
+        field.setAccessibleName(title)
+        field.setRange(0, settings.MAX_RHYTHM_OPERATORS)
+        field.setValue(getattr(settings, f"rhythm_{side}_operators"))
+        field.setKeyboardTracking(False)
+        label.setBuddy(field)
+        grid.addWidget(label, 2 * index, 0)
+        grid.addWidget(field, 2 * index, 1)
+        choices = ChoiceChecklist(
+            [("", list(settings.RHYTHM_OPERATORS.items()))],
+            selected=getattr(settings, f"rhythm_{side}_signs"),
+        )
+        choices.setAccessibleName(title)
+        for box in choices.boxes.values():
+            box.setAccessibleName(f"{side.title()} {box.text()}")
+        grid.addWidget(choices, 2 * index + 1, 0, 1, 2)
+
+        def save(
+            *,
+            side: str = side,
+            field: QSpinBox = field,
+            choices: ChoiceChecklist = choices,
+        ) -> None:
+            """
+            Apply this side's count and signs to the next question.
+
+            Parameters
+            ----------
+            side : str
+                Side of the equals sign.
+            field : QSpinBox
+                Operator count for this side.
+            choices : ChoiceChecklist
+                Signs allowed on this side.
+
+            Examples
+            --------
+            Checking Division on the right updates the right selection.
+            """
+            count = field.value()
+            signs = choices.selected()
+            setattr(settings, f"rhythm_{side}_operators", count)
+            setattr(settings, f"rhythm_{side}_signs", signs)
+            saved = store()
+            saved.setValue(f"rythmicEquations/{side}Operators", count)
+            saved.setValue(
+                f"rythmicEquations/{side}Signs",
+                ",".join(sorted(signs)),
+            )
+            menu.value.setText(_rhythm_operator_summary())
+            panel.changed.emit()
+
+        field.valueChanged.connect(save)
+        choices.changed.connect(save)
+    return body
+
+
 def _add_rhythm_options(
     panel: ExerciseSettingsPanel,
     *,
@@ -3930,55 +4130,59 @@ def _add_rhythm_options(
     Buttons page.
     """
     stack = panel.stack
-    ties = ToggleRow("Ties")
-    ties.setOn(settings.rhythm_ties)
-    ties.setToolTip("Show two tied notes as one duration")
 
-    def save_ties(on: bool) -> None:
+    def save_switch(on: bool, *, key: str) -> None:
         """
-        Save tie practice and refresh the question.
+        Save a rhythm switch and refresh the question.
 
         Parameters
         ----------
         on : bool
-            Whether to include tied notes.
+            Whether to enable the option.
+        key : str
+            Rhythm setting controlled by this switch.
 
         Examples
         --------
-        Enabling Ties shows a pair of notes connected by a curved line.
+        Enabling Ties can show two notes connected by a curved line.
         """
-        settings.rhythm_ties = on
-        store().setValue("rythmicEquations/ties", "true" if on else "false")
+        setattr(settings, f"rhythm_{key}", on)
+        store().setValue(f"rythmicEquations/{key}", "true" if on else "false")
         panel.changed.emit()
 
-    ties.switched.connect(save_ties)
-    layout.insertWidget(layout.count() - 1, ties)
-    beams = ToggleRow("Beams")
-    beams.setOn(settings.rhythm_beams)
-    beams.setToolTip("Show two beamed notes as one duration")
-
-    def save_beams(on: bool) -> None:
-        """
-        Save beam practice and refresh the question.
-
-        Parameters
-        ----------
-        on : bool
-            Whether to include beamed note pairs.
-
-        Examples
-        --------
-        Enabling Beams can show two eighth notes joined by one beam.
-        """
-        settings.rhythm_beams = on
-        store().setValue("rythmicEquations/beams", "true" if on else "false")
-        panel.changed.emit()
-
-    beams.switched.connect(save_beams)
-    layout.insertWidget(layout.count() - 1, beams)
-    for title, attribute, labels in (
-        ("Operators", "rhythm_operators", settings.RHYTHM_OPERATORS),
-        ("Symbols", "rhythm_symbols", RHYTHM_SYMBOL_NAMES),
+    for key, tip in (
+        ("ties", "Show two tied notes as one duration"),
+        ("beams", "Show two beamed notes as one duration"),
+        (
+            "parentheses",
+            "Group operations on sides with two or more operators",
+        ),
+    ):
+        switch = ToggleRow(key.title())
+        switch.setOn(getattr(settings, f"rhythm_{key}"))
+        switch.setToolTip(tip)
+        switch.switched.connect(lambda on, key=key: save_switch(on, key=key))
+        layout.insertWidget(layout.count() - 1, switch)
+    operators = MenuRow("Operators")
+    operators.value.setText(_rhythm_operator_summary())
+    layout.insertWidget(layout.count() - 1, operators)
+    operator_page = stack.addWidget(
+        subpage(
+            "Operators",
+            body=scrolling(_operator_options(panel, menu=operators)),
+            back=lambda: stack.slide_to(0),
+            fill=True,
+        ),
+    )
+    operators.clicked.connect(lambda: stack.slide_to(operator_page))
+    for title, attribute, key, labels in (
+        (
+            "Answer Type",
+            "rhythm_answer_types",
+            "answerTypes",
+            settings.RHYTHM_ANSWER_TYPES,
+        ),
+        ("Symbols", "rhythm_symbols", "symbols", RHYTHM_SYMBOL_NAMES),
     ):
         row = MenuRow(title)
         selected = getattr(settings, attribute)
@@ -4009,11 +4213,7 @@ def _add_rhythm_options(
                 box.setText("")
                 box.setIcon(ValuePictures.icon(name, scale=1.0))
                 box.setIconSize(QSize(px(18), px(40)))
-        row.value.setText(
-            ", ".join(name for name in labels if name in selected)
-            if title == "Operators"
-            else str(len(selected)),
-        )
+        row.value.setText(_rhythm_selection_summary(title, selected=selected))
         layout.insertWidget(layout.count() - 1, row)
         page = stack.addWidget(
             subpage(
@@ -4033,6 +4233,7 @@ def _add_rhythm_options(
             row: MenuRow = row,
             attribute: str = attribute,
             title: str = title,
+            key: str = key,
         ) -> None:
             """
             Save the edited checklist and ask a new question.
@@ -4047,21 +4248,21 @@ def _add_rhythm_options(
                 The settings attribute to update.
             title : str
                 The settings page name.
+            key : str
+                Storage key for this option.
 
             Examples
             --------
-            Unchecking Addition leaves only subtraction questions.
+            Checking Number adds questions with numeric answers.
             """
             selected = choices.selected()
             setattr(settings, attribute, selected)
             store().setValue(
-                f"rythmicEquations/{title.lower()}",
+                f"rythmicEquations/{key}",
                 ",".join(sorted(selected)),
             )
             row.value.setText(
-                ", ".join(sorted(selected))
-                if title == "Operators"
-                else str(len(selected)),
+                _rhythm_selection_summary(title, selected=selected),
             )
             panel.changed.emit()
 

@@ -98,15 +98,12 @@ from alto.ui import (
     zoom,
 )
 from alto.ui.anki_exporter import ExporterSession
-from alto.ui.app_settings import AppSettingsDialog
+from alto.ui.app_settings import AppSettingsDialog, load_metronome_click
 from alto.ui.database_page import DatabasePage
 from alto.ui.exercise_settings import load_exercise_settings
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.glossary import GlossaryPage
-from alto.ui.home import (
-    EXERCISE_ICONS,
-    HomePage,
-)
+from alto.ui.home import HomePage
 from alto.ui.icons import set_svg_icon, svg_icon
 from alto.ui.instrument_picker import load_instrument
 from alto.ui.keyboard_styles import load_style as load_keyboard_style
@@ -629,7 +626,9 @@ class MainWindow(QMainWindow):
 
         self._items: dict[type[Exercise], QListWidgetItem] = {}
         seen: set[str] = set()
-        for cls in REGISTRY:
+        drawings = []
+        for card in self.home.cards:
+            cls = card.exercise_class
             if cls.category not in seen:
                 seen.add(cls.category)
                 self.nav.addItem(
@@ -641,19 +640,8 @@ class MainWindow(QMainWindow):
             item.setSizeHint(QSize(0, px(38)))
             self.nav.addItem(item)
             self._items[cls] = item
-        icons.set_item_icons(
-            self.nav,
-            [
-                (
-                    EXERCISE_ICONS.get(
-                        cls.__name__,
-                        icons.EXERCISE_NOTE_NAMES,
-                    ),
-                    item.setIcon,
-                )
-                for cls, item in self._items.items()
-            ],
-        )
+            drawings.append((card.icon_svg, item.setIcon))
+        icons.set_item_icons(self.nav, drawings)
         widest_navigation = max(
             self.nav.sizeHintForColumn(0),
             self.lesson_nav.sizeHintForColumn(0),
@@ -800,6 +788,7 @@ class MainWindow(QMainWindow):
 
         load_exercise_settings()
         load_instrument()
+        load_metronome_click()
         load_notation_style()
         load_keyboard_style()
 
@@ -2185,6 +2174,9 @@ class MainWindow(QMainWindow):
         >>> window.nav_stack.currentWidget() is window.lesson_nav
         True
         """
+        if isinstance(self._overlay, GlossaryPage):
+            self.show_home()
+            return
         self._show_nav()
         self._show_mode_control()
         self._update_empty_page()

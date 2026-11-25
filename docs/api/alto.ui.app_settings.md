@@ -8,7 +8,7 @@ permalink: /api/alto.ui.app_settings/
 The application-wide settings dialog.
 
 It holds the color theme, the notation font, the keyboard style, the
-transitions, the instrument and what updates follow.
+transitions, instruments, metronome clicks and what updates follow.
 
 Changes apply as soon as they are made. Each style is a card that
 previews it.
@@ -21,6 +21,28 @@ previews it.
 'Settings'
 >>> dialog.pages.count()  # Appearance, Sound and Updates
 3
+```
+
+## load_metronome_click
+
+<div class="api-signature" markdown="1">
+
+```python
+def load_metronome_click() -> None
+```
+
+{% endraw %}{% include api-source.html name="load_metronome_click" line=111 %}{% raw %}
+
+</div>
+
+Apply the saved click or use High pip as the default.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> load_metronome_click()
+>>> sounds.metronome_click in METRONOME_CLICKS
+True
 ```
 
 ## PreviewCard
@@ -39,7 +61,7 @@ PreviewCard(
 )
 ```
 
-{% endraw %}{% include api-source.html name="PreviewCard" line=194 %}{% raw %}
+{% endraw %}{% include api-source.html name="PreviewCard" line=368 %}{% raw %}
 
 </div>
 
@@ -112,7 +134,7 @@ StyleCard(
 )
 ```
 
-{% endraw %}{% include api-source.html name="StyleCard" line=291 %}{% raw %}
+{% endraw %}{% include api-source.html name="StyleCard" line=465 %}{% raw %}
 
 </div>
 
@@ -164,7 +186,7 @@ KeyboardCard(
 )
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardCard" line=369 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardCard" line=543 %}{% raw %}
 
 </div>
 
@@ -215,7 +237,7 @@ Build the card for a keyboard style.
 def show_style(style: keyboard_styles.KeyboardStyle) -> None
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardCard.show_style" line=448 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardCard.show_style" line=622 %}{% raw %}
 
 </div>
 
@@ -249,7 +271,7 @@ The custom card follows the colors being edited.
 KeyboardBuilder(parent: QWidget | None = None)
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardBuilder" line=475 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardBuilder" line=649 %}{% raw %}
 
 </div>
 
@@ -299,7 +321,7 @@ Build the rows and show each part's current color.
 def refresh() -> None
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardBuilder.refresh" line=621 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardBuilder.refresh" line=795 %}{% raw %}
 
 </div>
 
@@ -329,7 +351,7 @@ AppSettingsDialog(
 )
 ```
 
-{% endraw %}{% include api-source.html name="AppSettingsDialog" line=732 %}{% raw %}
+{% endraw %}{% include api-source.html name="AppSettingsDialog" line=906 %}{% raw %}
 
 </div>
 
@@ -346,7 +368,7 @@ down opening Settings or changing themes.
 - `theme_changed` (*bool*): True once the theme has been changed, so the window can be rebuilt in it.
 - `categories` (*QListWidget*): The list of pages on the left: Appearance sections, Sound and Updates.
 - `pages` (*QStackedWidget*): The page for the chosen category.
-- `instruments` (*InstrumentPicker*): The instrument chooser, available after the Sound page is first selected.
+- `instruments` (*InstrumentPicker*): The chooser, available after the Instruments page is selected.
 - `theme_list` (*QListWidget*): The themes, on the Theme section, with the one in use in bold.
 - `theme_items` (*dict of str to QListWidgetItem*): The rows of that list, by the key of the theme's family.
 - `theme_pages` (*QStackedWidget*): The card of the theme chosen in the list, or the editor.
@@ -394,7 +416,7 @@ Build the dialog with the Appearance page showing.
 def card(family: str) -> ThemeCard
 ```
 
-{% endraw %}{% include api-source.html name="AppSettingsDialog.card" line=1402 %}{% raw %}
+{% endraw %}{% include api-source.html name="AppSettingsDialog.card" line=1620 %}{% raw %}
 
 </div>
 
@@ -435,7 +457,7 @@ False
 def card_page(family: str) -> QScrollArea
 ```
 
-{% endraw %}{% include api-source.html name="AppSettingsDialog.card_page" line=1451 %}{% raw %}
+{% endraw %}{% include api-source.html name="AppSettingsDialog.card_page" line=1669 %}{% raw %}
 
 </div>
 
@@ -468,7 +490,7 @@ True
 def thumb(key: str) -> ThemeThumb
 ```
 
-{% endraw %}{% include api-source.html name="AppSettingsDialog.thumb" line=1477 %}{% raw %}
+{% endraw %}{% include api-source.html name="AppSettingsDialog.thumb" line=1695 %}{% raw %}
 
 </div>
 
@@ -499,7 +521,7 @@ False
 def choose_theme(key: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="AppSettingsDialog.choose_theme" line=2238 %}{% raw %}
+{% endraw %}{% include api-source.html name="AppSettingsDialog.choose_theme" line=2523 %}{% raw %}
 
 </div>
 

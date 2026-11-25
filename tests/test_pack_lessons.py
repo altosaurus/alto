@@ -30,6 +30,7 @@ from alto.ui.glossary import GlossaryPage
 from alto.ui.home import TileCard, exercise_icon, lesson_card, lesson_icon
 from alto.ui.lesson import LessonsPage, StepView
 from alto.ui.lesson_nav import LessonNav
+from alto.ui.main_window import MainWindow
 from alto.ui.reference import PluginReferencePanel, reference_panel_for
 from viola_pack import MANIFEST
 
@@ -627,13 +628,12 @@ def test_an_exercise_cannot_name_a_missing_lesson(tmp_path: Path) -> None:
         )
 
 
-def test_tiles_use_the_plugin_s_icon(
+def test_tiles_and_navigation_use_the_plugin_icon(
     installed: list[Lesson],
     app: QApplication,
 ) -> None:
     """
-    Draw a plugin's exercise and lesson tiles with the icon the plugin
-    supplied, not Alto's default.
+    Use the pack's icon for its tiles and exercise navigation rows.
 
     Parameters
     ----------
@@ -642,7 +642,6 @@ def test_tiles_use_the_plugin_s_icon(
     app : QApplication
         Shared Qt application.
     """
-    del app
     shapes = REGISTRY[-1].icon
     assert (
         shapes.startswith("<path")
@@ -650,6 +649,17 @@ def test_tiles_use_the_plugin_s_icon(
         and "fill-rule" in shapes
     )
     assert shapes != icons.EXERCISE_NOTE_NAMES
+    window = MainWindow()
+    size = window.nav.iconSize()
+    for cls in REGISTRY[-2:]:
+        leaf = window.home._filter_leaves[cls.name]
+        assert not leaf.icon(0).isNull()
+        assert (
+            window._items[cls].icon().pixmap(size).toImage()
+            == leaf.icon(0).pixmap(size).toImage()
+        )
+    window.close()
+    window.deleteLater()
     for lesson in installed:
         assert (
             lesson.icon == ""

@@ -280,7 +280,7 @@ True
 def set_values(values: list[str]) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ValuePictures.set_values" line=870 %}{% raw %}
+{% endraw %}{% include api-source.html name="ValuePictures.set_values" line=871 %}{% raw %}
 
 </div>
 
@@ -312,7 +312,7 @@ def icon(
 ) -> QIcon
 ```
 
-{% endraw %}{% include api-source.html name="ValuePictures.icon" line=898 %}{% raw %}
+{% endraw %}{% include api-source.html name="ValuePictures.icon" line=899 %}{% raw %}
 
 </div>
 
@@ -342,7 +342,7 @@ False
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ValuePictures.paintEvent" line=926 %}{% raw %}
+{% endraw %}{% include api-source.html name="ValuePictures.paintEvent" line=927 %}{% raw %}
 
 </div>
 
@@ -369,7 +369,7 @@ False
 def rhythm_picture(term: str) -> ValuePictures | None
 ```
 
-{% endraw %}{% include api-source.html name="rhythm_picture" line=1027 %}{% raw %}
+{% endraw %}{% include api-source.html name="rhythm_picture" line=1033 %}{% raw %}
 
 </div>
 
@@ -404,7 +404,7 @@ KeySignaturePicture(
 )
 ```
 
-{% endraw %}{% include api-source.html name="KeySignaturePicture" line=1059 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignaturePicture" line=1065 %}{% raw %}
 
 </div>
 
@@ -461,7 +461,7 @@ def icon(
 ) -> QIcon
 ```
 
-{% endraw %}{% include api-source.html name="KeySignaturePicture.icon" line=1140 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignaturePicture.icon" line=1146 %}{% raw %}
 
 </div>
 
@@ -491,7 +491,7 @@ False
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="KeySignaturePicture.paintEvent" line=1234 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignaturePicture.paintEvent" line=1240 %}{% raw %}
 
 </div>
 
@@ -522,7 +522,7 @@ RangePictures(
 )
 ```
 
-{% endraw %}{% include api-source.html name="RangePictures" line=1272 %}{% raw %}
+{% endraw %}{% include api-source.html name="RangePictures" line=1278 %}{% raw %}
 
 </div>
 
@@ -576,7 +576,7 @@ Create the picture.
 def set_items(items: list[tuple[str, int, int]]) -> None
 ```
 
-{% endraw %}{% include api-source.html name="RangePictures.set_items" line=1337 %}{% raw %}
+{% endraw %}{% include api-source.html name="RangePictures.set_items" line=1343 %}{% raw %}
 
 </div>
 
@@ -605,7 +605,7 @@ Show the ranges of some clefs and size the picture for them.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="RangePictures.paintEvent" line=1457 %}{% raw %}
+{% endraw %}{% include api-source.html name="RangePictures.paintEvent" line=1463 %}{% raw %}
 
 </div>
 
@@ -637,7 +637,7 @@ NamePicture(
 )
 ```
 
-{% endraw %}{% include api-source.html name="NamePicture" line=1569 %}{% raw %}
+{% endraw %}{% include api-source.html name="NamePicture" line=1575 %}{% raw %}
 
 </div>
 
@@ -684,7 +684,7 @@ Create the picture.
 def set_naming(naming: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="NamePicture.set_naming" line=1621 %}{% raw %}
+{% endraw %}{% include api-source.html name="NamePicture.set_naming" line=1627 %}{% raw %}
 
 </div>
 
@@ -716,7 +716,7 @@ def icon(
 ) -> QIcon
 ```
 
-{% endraw %}{% include api-source.html name="NamePicture.icon" line=1647 %}{% raw %}
+{% endraw %}{% include api-source.html name="NamePicture.icon" line=1653 %}{% raw %}
 
 </div>
 
@@ -746,7 +746,7 @@ False
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="NamePicture.paintEvent" line=1675 %}{% raw %}
+{% endraw %}{% include api-source.html name="NamePicture.paintEvent" line=1681 %}{% raw %}
 
 </div>
 

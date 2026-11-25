@@ -30,7 +30,7 @@ Choose **Response-time distribution…** below the speed chart to see the recent
 - **Typical time to first answer:** the median, over time, so a single slow answer does not distort it.
 - **By exercise:** accuracy, number of questions and typical time for each exercise.
 - **Reviews:** a calendar of the last 12 months, a square per day (weeks run left to right, Monday at the top), darker
-  the more questions you answered. Hover a square for the exact count. It follows the exercise filter but ignores the
+  the more questions you answered. Use the outward diagonal arrows to separate the months and the inward arrows to close the gaps. Hover a square for the exact count. It follows the exercise filter but ignores the
   timeframe.
 - **Questions that need practice:** the questions with the highest strain, how often you missed them, and how many times you have answered them.
 
@@ -51,7 +51,7 @@ answers cannot be clicked. The list has the same columns as the database browser
 Double-click any cell in **Questions that need practice** to open the saved question and its answer.
 The **Question Statistics** button on the card opens that question’s speed and accuracy graphs.
 
-{% include shot.html src="stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green, above the list of questions that need practice" caption="The Reviews calendar: a year of practice at a glance. Gaps are days off, and the darkest squares are your busiest days." %}
+{% include shot.html src="stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green with a small gap between months, above the list of questions that need practice" caption="The Reviews calendar: a year of practice at a glance. Days without reviews use the lightest shade, and the darkest squares are your busiest days." %}
 
 A question counts as **right** only if your first answer was right. That is the same rule the
 [practice scheduler]({{ '/practice/' | relative_url }}) uses, so the numbers match what Alto thinks about your progress.

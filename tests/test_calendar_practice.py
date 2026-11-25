@@ -464,7 +464,7 @@ def test_grading_preference_follows_profile(app: QApplication) -> None:
     window = MainWindow(learner)
     window.open_settings()
     dialog = window._settings
-    dialog.categories.setCurrentRow(7)
+    dialog.categories.setCurrentRow(9)
     assert dialog.self_grading.isHidden()
     dialog.scheduler_list.setCurrentRow(2)
     assert (
@@ -2117,7 +2117,7 @@ def test_scheduler_controls(
     window.open_settings()
     dialog = window._settings
     changes = QSignalSpy(dialog.scheduler_changed)
-    dialog.categories.setCurrentRow(7)
+    dialog.categories.setCurrentRow(9)
     algorithms = dialog.scheduler_list
     assert [algorithms.item(i).text() for i in range(algorithms.count())] == [
         "ASRS",
@@ -2145,7 +2145,7 @@ def test_scheduler_controls(
     dialog.close()
     window.open_settings()
     dialog = window._settings
-    dialog.categories.setCurrentRow(7)
+    dialog.categories.setCurrentRow(9)
     algorithms = dialog.scheduler_list
     assert (
         algorithms.currentItem().text() == "ARTS"
@@ -2186,7 +2186,7 @@ def test_scheduler_controls(
     card.click()
     assert view.question is None
     window.open_settings()
-    window._settings.categories.setCurrentRow(7)
+    window._settings.categories.setCurrentRow(9)
     assert window._settings.scheduler_list.currentItem().text() == "FSRS"
     assert (
         "Free Spaced Repetition Scheduler"
@@ -2223,7 +2223,7 @@ def test_daily_limit_controls_follow_the_scheduler(app: QApplication) -> None:
     window.home.set_mode("exercises", animate=False)
     window.open_settings()
     dialog = window._settings
-    dialog.categories.setCurrentRow(7)
+    dialog.categories.setCurrentRow(9)
     assert dialog.daily_limits.isHidden()
     dialog.scheduler_list.setCurrentRow(2)
     assert dialog.daily_limits.isVisible()
@@ -2256,7 +2256,7 @@ def test_daily_limit_controls_follow_the_scheduler(app: QApplication) -> None:
     ) == (5, None)
     window.open_settings()
     dialog = window._settings
-    dialog.categories.setCurrentRow(7)
+    dialog.categories.setCurrentRow(9)
     dialog.daily_limits.fields[0].setValue(2)
     dialog.daily_limits.fields[1].setValue(4)
     assert [field.value() for field in editor.fields] == [5, 4]
@@ -2276,7 +2276,7 @@ def test_daily_limit_controls_follow_the_scheduler(app: QApplication) -> None:
     tile.click()
     assert panel.limits_row.value.text() == "1 new · 4 reviews"
     window.open_settings()
-    window._settings.categories.setCurrentRow(7)
+    window._settings.categories.setCurrentRow(9)
     global_editor = window._settings.daily_limits
     global_editor.unlimited[0].click()
     assert panel.limits_row.value.text() == "∞ new · 4 reviews"

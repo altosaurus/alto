@@ -18,8 +18,8 @@ from __future__ import annotations
 
 import random
 from collections.abc import Iterator
-from dataclasses import replace
-from functools import lru_cache
+from dataclasses import asdict, replace
+from functools import lru_cache, partial
 
 from alto import settings
 from alto.exercises.base import (
@@ -29,6 +29,11 @@ from alto.exercises.base import (
     pick_distractors,
     register,
     signature,
+)
+from alto.exercises.rhythm_equations import (
+    counted_operands,
+    equation_tokens,
+    number_question,
 )
 from alto.notation_excerpts import passages_by_term
 from alto.notation_terms import CATALOG, MARKS, SIMILAR_MARKS
@@ -193,7 +198,7 @@ def _degree_choices(
     return choices, grid
 
 
-def _note_card_prompt(q: Question) -> str:
+def _note_card_prompt(q: Question, *, naming: str) -> str:
     """
     Say how to name a note on a flashcard in the chosen naming: letters,
     solfège or a scale degree, with the octave if it counts.
@@ -202,6 +207,8 @@ def _note_card_prompt(q: Question) -> str:
     ----------
     q : Question
         The question on the card.
+    naming : str
+        Naming system selected for this exercise.
 
     Returns
     -------
@@ -216,11 +223,10 @@ def _note_card_prompt(q: Question) -> str:
     ...         choices=[],
     ...         answer="C4",
     ...         octaves=["C4"],
-    ...     )
+    ...     ), naming="letters",
     ... )
     'Identify the note. Include the octave.'
     """
-    naming = settings.note_names.naming
     prompt = "Identify the note."
     if naming == "solfege":
         prompt += " Use solfège."
@@ -279,7 +285,7 @@ class NoteNames(ChoiceExercise):
         ... )
         'Identify the note.'
         """
-        return _note_card_prompt(question)
+        return _note_card_prompt(question, naming=settings.note_names.naming)
 
     def practice_signature(self) -> str:
         """
@@ -3617,8 +3623,8 @@ class KeyboardNotes(ChoiceExercise):
         'Identify the note by letter and octave.'
         """
         q = question
-        if settings.note_names.naming != "letters":
-            return _note_card_prompt(q)
+        if settings.keyboard.naming != "letters":
+            return _note_card_prompt(q, naming=settings.keyboard.naming)
         prompt = (
             "Identify the note by letter and octave."
             if q.octaves
@@ -3645,7 +3651,10 @@ class KeyboardNotes(ChoiceExercise):
         ... )
         True
         """
-        return signature(settings.keyboard, settings.note_names.naming)
+        # Preserve the signature format of saved review questions.
+        parts = asdict(settings.keyboard)
+        naming = parts.pop("naming")
+        return signature(parts, naming)
 
     def instructions(self) -> str:
         """
@@ -3672,7 +3681,7 @@ class KeyboardNotes(ChoiceExercise):
                 "the letter for a flat."
             ),
         ]
-        if settings.note_names.naming in settings.DEGREE_NAMINGS:
+        if cfg.naming in settings.DEGREE_NAMINGS:
             text = [
                 (
                     "<b>Keyboard Note Identification</b><br>Name the "
@@ -3737,7 +3746,7 @@ class KeyboardNotes(ChoiceExercise):
         True
         """
         cfg = settings.keyboard
-        naming = settings.note_names.naming
+        naming = cfg.naming
         lo, hi = sorted((cfg.low, cfg.high))
         span = range(lo, hi + 1)
         naturals = [midi for midi in span if midi % 12 in NATURAL_LETTER_INDEX]
@@ -5374,7 +5383,9 @@ class RythmicEquations(ChoiceExercise):
 
     name = "Rythmic Equations"
     category = "Rhythm"
-    description = "Fill in the missing note value to balance the equation."
+    description = (
+        "Fill in the missing symbol or number to balance the equation."
+    )
     has_sound = False
 
     durations = settings.RHYTHM_DURATIONS
@@ -5395,13 +5406,14 @@ class RythmicEquations(ChoiceExercise):
         True
         """
         return (
-            "Choose the symbol that balances the durations. Click its "
-            "button or use the keys shown when you hover."
+            "Choose the symbol or number that balances the equation. "
+            "If you see parentheses, work inside them first. "
+            "Click its button or use the keys shown when you hover."
         )
 
     def card_prompt(self, question: Question) -> str:
         """
-        Ask for the missing note or rest on an exported card.
+        Ask for the missing symbol or number on an exported card.
 
         Parameters
         ----------
@@ -5420,6 +5432,10 @@ class RythmicEquations(ChoiceExercise):
         ... )
         'Which note or rest balances the equation?'
         """
+        if question.answer.isdecimal():
+            return (
+                question.caption + " Which number balances the equation?"
+            ).strip()
         return "Which note or rest balances the equation?"
 
     def practice_signature(self) -> str:
@@ -5437,9 +5453,20 @@ class RythmicEquations(ChoiceExercise):
         >>> RythmicEquations().practice_signature()
         ''
         """
-        default_operators = (
-            settings.rhythm_operators == settings.DEFAULT_RHYTHM_OPERATORS
+        left = settings.rhythm_left_signs
+        right = settings.rhythm_right_signs
+        counts = (
+            settings.rhythm_left_operators,
+            settings.rhythm_right_operators,
         )
+        # Keep the shared selection's historical signature whenever one
+        # set of signs describes every active side.
+        if left == right or not counts[1]:
+            operators = left
+        elif not counts[0]:
+            operators = right
+        else:
+            operators = {"left": left, "right": right}
         groups = {
             name: True
             for name, enabled in (
@@ -5448,22 +5475,46 @@ class RythmicEquations(ChoiceExercise):
             )
             if enabled
         }
+        # Older mixed-operation questions could group sums before
+        # multiplication or division.
+        if max(counts) >= 2:
+            previously_grouped = any(
+                count >= 2 and signs & {"+", "−"} and signs & {"×", "÷"}
+                for count, signs in zip(counts, (left, right), strict=True)
+            )
+            if settings.rhythm_parentheses != previously_grouped:
+                groups["parentheses"] = settings.rhythm_parentheses
+        if settings.rhythm_answer_types != {"symbol"}:
+            return signature(
+                operators,
+                settings.rhythm_symbols,
+                groups,
+                counts,
+                settings.rhythm_answer_types,
+            )
+        if counts != (1, 0):
+            return signature(
+                operators,
+                settings.rhythm_symbols,
+                groups,
+                counts,
+            )
         if groups:
             return signature(
-                settings.rhythm_operators,
+                operators,
                 settings.rhythm_symbols,
                 groups,
             )
         if (
-            default_operators
+            operators == settings.DEFAULT_RHYTHM_OPERATORS
             and settings.rhythm_symbols == settings.DEFAULT_RHYTHM_SYMBOLS
         ):
             return ""
-        return signature(settings.rhythm_operators, settings.rhythm_symbols)
+        return signature(operators, settings.rhythm_symbols)
 
     def make_question(self, rng: random.Random) -> Question:
         """
-        Write a rhythm equation and hide one of its note values.
+        Write a rhythm equation and hide a symbol or number.
 
         Parameters
         ----------
@@ -5487,79 +5538,56 @@ class RythmicEquations(ChoiceExercise):
             for name, duration in self.durations.items()
             if name in settings.rhythm_symbols
         }
-        durations = symbols.copy()
+        ordinary: dict[float, list[str]] = {}
+        tied: dict[float, list[str]] = {}
+        beamed: dict[float, list[str]] = {}
+        for name, duration in symbols.items():
+            ordinary.setdefault(duration, []).append(name)
         if settings.rhythm_ties:
             notes = [name for name in symbols if not name.endswith("-rest")]
             for index, first in enumerate(notes):
                 for second in notes[index:]:
-                    durations[f"{first}~{second}"] = (
-                        symbols[first] + symbols[second]
-                    )
+                    duration = symbols[first] + symbols[second]
+                    tied.setdefault(duration, []).append(f"{first}~{second}")
         if settings.rhythm_beams:
             for name in settings.RHYTHM_BEAM_COUNTS:
                 if name in symbols:
-                    durations[f"{name}|{name}"] = 2 * symbols[name]
-        by_duration: dict[float, list[str]] = {}
-        for term, duration in durations.items():
-            by_duration.setdefault(duration, []).append(term)
-
-        available = {}
-        for operator in sorted(settings.rhythm_operators):
-            groups = {"ordinary": [], "tied": [], "beamed": []}
-            for left, duration in durations.items():
-                operands = (
-                    durations.items()
-                    if operator in {"+", "−"}
-                    else [(str(n), n) for n in range(2, 9)]
-                )
-                for right, amount in operands:
-                    total = (
-                        duration + amount
-                        if operator in {"+", "−"}
-                        else duration * amount
-                    )
-                    for result in by_duration.get(total, ()):
-                        terms = (
-                            (result, right, left)
-                            if operator in {"−", "÷"}
-                            else (left, right, result)
-                        )
-                        groups_in_question = [
-                            "tied" if "~" in term else "beamed"
-                            for term in terms
-                            if "~" in term or "|" in term
-                        ]
-                        blanks = [
-                            index
-                            for index, term in enumerate(terms)
-                            if term in symbols
-                        ]
-                        if len(groups_in_question) <= 1 and blanks:
-                            group = (
-                                groups_in_question[0]
-                                if groups_in_question
-                                else "ordinary"
-                            )
-                            groups[group].append((terms, blanks))
-            if any(groups.values()):
-                available[operator] = [
-                    group for group in groups.values() if group
-                ]
-
-        if not available:
+                    duration = 2 * symbols[name]
+                    beamed.setdefault(duration, []).append(f"{name}|{name}")
+        build = partial(
+            equation_tokens,
+            rng,
+            ordinary=ordinary,
+            left=settings.rhythm_left_operators,
+            right=settings.rhythm_right_operators,
+            operators=tuple(sorted(settings.rhythm_left_signs)),
+            right_operators=tuple(sorted(settings.rhythm_right_signs)),
+            parentheses=settings.rhythm_parentheses,
+        )
+        tokens = build(grouped=(tied, beamed))
+        if not tokens and "number" in settings.rhythm_answer_types:
+            tokens = build(grouped=(counted_operands(ordinary),))
+            if tokens:
+                return number_question(rng, tokens=tokens, ordinary=ordinary)
+        if not tokens:
             return Question(
-                "Choose operators and symbols that can form an equation.",
+                "These settings cannot form a balanced equation. "
+                "Change the operator counts, operations, or symbols.",
                 choices=[],
                 answer="",
             )
-        operator = rng.choice(list(available))
-        terms, blanks = rng.choice(rng.choice(available[operator]))
-        terms = list(terms)
-        blank = rng.choice(blanks)
-        answer = terms[blank]
-        terms[blank] = "_"
+        if "number" in settings.rhythm_answer_types and (
+            "symbol" not in settings.rhythm_answer_types
+            or rng.choice((False, True))
+        ):
+            return number_question(rng, tokens=tokens, ordinary=ordinary)
+        blank = rng.choice(
+            [i for i, token in enumerate(tokens) if token in symbols],
+        )
+        answer = tokens[blank]
+        tokens[blank] = "_"
         return Question(
-            f"{terms[0]} {operator} {terms[1]} = {terms[2]}",
+            " ".join(tokens),
             choices=list(symbols),
             answer=answer,
             accept=tuple(

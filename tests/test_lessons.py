@@ -36,6 +36,7 @@ from alto.lessons.circle_of_fifths import (
     CIRCLE_OF_FIFTHS,
     summary,
 )
+from alto.lessons.duration import DURATION
 from alto.lessons.intervals import INTERVALS
 from alto.lessons.key_signatures import KEY_SIGNATURES
 from alto.lessons.pitches_and_notes import PITCHES_AND_NOTES
@@ -1526,3 +1527,42 @@ def test_key_signature_lesson_reads_new_signatures(app: QApplication) -> None:
         seen.add((staff.key, minor))
         view.ask()
     assert len(seen) == 30
+
+
+def test_duration_lesson_counts_and_displays_its_written_rhythms(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Follow each four-beat example through its notes and rests.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Captures the preview produced by the listening button.
+    """
+    preview = Mock()
+    monkeypatch.setattr(sounds, "play_rhythm", preview)
+    assert DURATION.category == "Rhythm"
+    assert DURATION.exercise in {exercise.__name__ for exercise in REGISTRY}
+    for step, beats in zip(
+        DURATION.steps,
+        [(1, 1, 1, 1), (2, 1, 1), (4,), (1, 1, 2), (2, 1, 1)],
+        strict=True,
+    ):
+        view = StepView(step)
+        assert view.hear_button is not None and view.rhythm is not None
+        assert tuple(view.rhythm.values) == step.rhythm
+        view.hear_button.click()
+        args = preview.call_args.kwargs
+        assert preview.call_args.args == (tuple(beat * 600 for beat in beats),)
+        assert args["levels"] == tuple(
+            0.0 if value.endswith("-rest") else 1.0 for value in step.rhythm
+        )
+        for index in range(len(beats)):
+            args["on_step"](index)
+            assert view.rhythm.playback_column == index
+        args["on_step"](None)
+        assert view.rhythm.playback_column is None

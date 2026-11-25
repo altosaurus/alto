@@ -295,7 +295,7 @@ True
 def hideEvent(event: QHideEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.hideEvent" line=1159 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.hideEvent" line=1169 %}{% raw %}
 
 </div>
 
@@ -325,7 +325,7 @@ False
 def showEvent(event: QShowEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.showEvent" line=1188 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.showEvent" line=1198 %}{% raw %}
 
 </div>
 
@@ -356,7 +356,7 @@ True
 def settings_state() -> tuple[bool, int, int] | None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.settings_state" line=1322 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.settings_state" line=1332 %}{% raw %}
 
 </div>
 
@@ -385,7 +385,7 @@ position before a theme rebuild.
 def restore_settings_state(state: tuple[bool, int, int]) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.restore_settings_state" line=1353 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.restore_settings_state" line=1363 %}{% raw %}
 
 </div>
 
@@ -416,7 +416,7 @@ rebuilding the view.
 def scheduling_changed() -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.scheduling_changed" line=1525 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.scheduling_changed" line=1535 %}{% raw %}
 
 </div>
 
@@ -438,7 +438,7 @@ previously opened exercise.
 def next_question() -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.next_question" line=1563 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.next_question" line=1600 %}{% raw %}
 
 </div>
 
@@ -473,7 +473,7 @@ def eventFilter(
 ) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.eventFilter" line=3203 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.eventFilter" line=3242 %}{% raw %}
 
 </div>
 
@@ -531,7 +531,7 @@ def submit(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.submit" line=3732 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.submit" line=3784 %}{% raw %}
 
 </div>
 

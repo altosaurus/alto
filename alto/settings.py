@@ -721,6 +721,9 @@ class IntervalSettings(StaffRangeSettings):
 intervals = IntervalSettings()
 interval_construction = IntervalSettings()
 
+RHYTHM_ANSWER_TYPES = {"symbol": "Symbol", "number": "Number"}
+rhythm_answer_types = {"symbol"}
+
 RHYTHM_OPERATORS = {
     "+": "Addition (+)",
     "−": "Subtraction (−)",
@@ -748,10 +751,15 @@ RHYTHM_DURATIONS.update(
         if not name.endswith("-rest")
     },
 )
-rhythm_operators = DEFAULT_RHYTHM_OPERATORS.copy()
+MAX_RHYTHM_OPERATORS = 3
+rhythm_left_operators = 1
+rhythm_right_operators = 0
+rhythm_left_signs = DEFAULT_RHYTHM_OPERATORS.copy()
+rhythm_right_signs = DEFAULT_RHYTHM_OPERATORS.copy()
 rhythm_symbols = DEFAULT_RHYTHM_SYMBOLS.copy()
 rhythm_ties = False
 rhythm_beams = False
+rhythm_parentheses = False
 RHYTHM_BEAM_COUNTS = {"eighth": 1, "sixteenth": 2, "thirty_second": 3}
 
 # Keyboard exercise: the whole piano is A0..C8 (MIDI 21..108); by
@@ -804,6 +812,8 @@ class KeyboardSettings(KeyChoice):
 
     Attributes
     ----------
+    naming : str, default "letters"
+        Naming system for the highlighted key. Keyword-only.
     black_keys : bool, default True
         Also ask the black keys, answered by either enharmonic name.
     require_octave : bool, default False
@@ -831,6 +841,7 @@ class KeyboardSettings(KeyChoice):
         True  # also ask the black keys, answered by either enharmonic name
     )
     _: KW_ONLY
+    naming: str = "letters"
     require_octave: bool = (
         False  # the answer must include the octave number as well
     )

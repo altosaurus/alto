@@ -143,6 +143,10 @@ def save_note_names() -> None:
     )
     s.setValue("noteNames/keys", joined(cfg.active_keys()))
     s.setValue("noteNames/values", joined(cfg.active_values()))
+    if not s.contains("keyboard/naming"):
+        # Freeze the old shared choice before the staff changes it.
+        previous = text_value(s, key="noteNames/naming", default="letters")
+        s.setValue("keyboard/naming", previous)
     s.setValue("noteNames/naming", cfg.naming)
     s.setValue(
         "noteNames/minorDegrees",
@@ -178,6 +182,11 @@ def load_keyboard() -> None:
     """
     saved_settings = store()
     cfg = settings.keyboard
+    key = "keyboard/naming"
+    if not saved_settings.contains(key):
+        key = "noteNames/naming"  # older profiles shared this choice
+    naming = text_value(saved_settings, key=key, default="letters")
+    cfg.naming = naming if naming in NAMINGS else "letters"
     cfg.black_keys = bool_value(
         saved_settings,
         key="keyboard/blackKeys",
@@ -219,6 +228,7 @@ def save_keyboard() -> None:
     """
     saved_settings = store()
     cfg = settings.keyboard
+    saved_settings.setValue("keyboard/naming", cfg.naming)
     save_bool(saved_settings, key="keyboard/blackKeys", value=cfg.black_keys)
     save_bool(
         saved_settings,
@@ -1366,6 +1376,44 @@ def load_exercise_settings() -> None:
     """
     load_choice_buttons()
     saved = store()
+    shared_signs = (
+        choices_value(
+            saved,
+            key="rythmicEquations/operators",
+            allowed=settings.RHYTHM_OPERATORS,
+        )
+        or settings.DEFAULT_RHYTHM_OPERATORS
+    )
+    for side, default in (("left", 1), ("right", 0)):
+        signs = choices_value(
+            saved,
+            key=f"rythmicEquations/{side}Signs",
+            allowed=settings.RHYTHM_OPERATORS,
+        )
+        setattr(settings, f"rhythm_{side}_signs", signs or shared_signs.copy())
+        try:
+            count = int_value(
+                saved,
+                key=f"rythmicEquations/{side}Operators",
+                default=default,
+            )
+        except (ValueError, OverflowError):
+            count = default
+        setattr(
+            settings,
+            f"rhythm_{side}_operators",
+            max(0, min(settings.MAX_RHYTHM_OPERATORS, count)),
+        )
+    settings.rhythm_answer_types = choices_value(
+        saved,
+        key="rythmicEquations/answerTypes",
+        allowed=settings.RHYTHM_ANSWER_TYPES,
+    ) or {"symbol"}
+    settings.rhythm_parentheses = bool_value(
+        saved,
+        key="rythmicEquations/parentheses",
+        default=False,
+    )
     settings.rhythm_ties = bool_value(
         saved,
         key="rythmicEquations/ties",
@@ -1376,11 +1424,6 @@ def load_exercise_settings() -> None:
         key="rythmicEquations/beams",
         default=False,
     )
-    settings.rhythm_operators = choices_value(
-        saved,
-        key="rythmicEquations/operators",
-        allowed=settings.RHYTHM_OPERATORS,
-    ) or (settings.DEFAULT_RHYTHM_OPERATORS.copy())
     settings.rhythm_symbols = choices_value(
         saved,
         key="rythmicEquations/symbols",

@@ -27,6 +27,7 @@ from PySide6.QtGui import (
     QShortcut,
 )
 from PySide6.QtWidgets import (
+    QCheckBox,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -54,6 +55,7 @@ from alto.theory.pitch import Note
 from alto.ui.colors import blend
 from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.keyboard import KeyboardWidget
+from alto.ui.meter_staff import MeterStaff
 from alto.ui.reference import ExplorableCircle
 from alto.ui.scale_explorer import ScaleExplorer
 from alto.ui.staff import StaffWidget
@@ -137,6 +139,7 @@ class _IllustratedStep(QWidget):
         *,
         staves: list[StaffWidget],
         keyboard: KeyboardWidget | None,
+        rhythm: MeterStaff | None,
         playback: QPushButton | None,
     ) -> None:
         """
@@ -151,6 +154,8 @@ class _IllustratedStep(QWidget):
             Captioned staff illustrations in reading order.
         keyboard : KeyboardWidget or None
             Keyboard to show for a pitch example.
+        rhythm : MeterStaff or None
+            Written note and rest values of a counted example.
         playback : QPushButton or None
             Play the pitches shown in this example.
         """
@@ -177,7 +182,10 @@ class _IllustratedStep(QWidget):
 
         self.panel = QFrame()
         self.panel.setObjectName("lessonExample")
-        self.panel.setProperty("staffPaper", bool(staves))
+        self.panel.setProperty(
+            "staffPaper",
+            bool(staves) or rhythm is not None,
+        )
         group = QVBoxLayout(self.panel)
         group.setContentsMargins(12, 9, 12, 9)
         group.setSpacing(8)
@@ -197,6 +205,11 @@ class _IllustratedStep(QWidget):
         if keyboard is not None:
             keyboard.setMaximumWidth(px(300))
             group.addWidget(keyboard)
+        if rhythm is not None:
+            group.addWidget(rhythm)
+            counts = QCheckBox("Show counts")
+            counts.toggled.connect(rhythm.set_counts_visible)
+            group.addWidget(counts)
         if playback is not None:
             group.addWidget(playback, alignment=Qt.AlignmentFlag.AlignLeft)
         self.keyboard = keyboard
@@ -462,7 +475,11 @@ class StepView(QWidget):
             Qt.TextInteractionFlag.TextSelectableByMouse,
         )
         self.hear_button: QPushButton | None = None
-        if step.hear:
+        self.rhythm: MeterStaff | None = None
+        if step.rhythm:
+            self.rhythm = MeterStaff()
+            self.rhythm.show_score(step.rhythm, meter=step.rhythm_meter)
+        if step.hear or step.rhythm:
             self.hear_button = QPushButton(f"▶  {step.hear_label}")
             self.hear_button.setObjectName("lessonPlayback")
             self.hear_button.clicked.connect(self.hear)
@@ -485,6 +502,7 @@ class StepView(QWidget):
         self.illustration: _IllustratedStep | None = None
         if (
             self.staves
+            or self.rhythm is not None
             or self.keyboard is not None
             or (step.hear and step.circle == "none" and not step.scale)
         ):
@@ -500,6 +518,7 @@ class StepView(QWidget):
                 text,
                 staves=self.staves,
                 keyboard=self.keyboard,
+                rhythm=self.rhythm,
                 playback=self.hear_button,
             )
             left.addWidget(self.illustration)
@@ -704,6 +723,9 @@ class StepView(QWidget):
         ...         CIRCLE_OF_FIFTHS.steps[1]
         ...     ).hear()
         """
+        if self.step.rhythm:
+            self.playback.play_rhythm(self.step.rhythm)
+            return
         if self.scale_explorer is not None:
             self.scale_explorer.hear(force=False)
             return
@@ -727,6 +749,9 @@ class StepView(QWidget):
         index : int or None
             Playback onset, or None when the sample ends.
         """
+        if self.rhythm is not None:
+            self.rhythm.highlight_column(index)
+            return
         notes = self.step.hear[index] if index is not None else ()
         sounding = [Note.parse(name).midi for name in notes]
         for staff in self.staves:

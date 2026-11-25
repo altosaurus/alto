@@ -89,7 +89,7 @@ Save the note identification settings.
 def load_keyboard() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_keyboard" line=159 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_keyboard" line=163 %}{% raw %}
 
 </div>
 
@@ -121,7 +121,7 @@ True
 def save_keyboard() -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_keyboard" line=207 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_keyboard" line=216 %}{% raw %}
 
 </div>
 
@@ -146,7 +146,7 @@ True
 def load_keyboard_intervals() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_keyboard_intervals" line=238 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_keyboard_intervals" line=248 %}{% raw %}
 
 </div>
 
@@ -171,7 +171,7 @@ True
 def save_keyboard_intervals(cfg: settings.KeyboardIntervalSettings) -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_keyboard_intervals" line=305 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_keyboard_intervals" line=315 %}{% raw %}
 
 </div>
 
@@ -199,7 +199,7 @@ Save the keyboard interval range and selected distances.
 def load_construction() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_construction" line=343 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_construction" line=353 %}{% raw %}
 
 </div>
 
@@ -225,7 +225,7 @@ False
 def save_construction(cfg: settings.ConstructionSettings) -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_construction" line=413 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_construction" line=423 %}{% raw %}
 
 </div>
 
@@ -256,7 +256,7 @@ Save the note construction settings.
 def load_arpeggio() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_arpeggio" line=460 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_arpeggio" line=470 %}{% raw %}
 
 </div>
 
@@ -294,7 +294,7 @@ with nothing valid in it leaves the setting as it was.
 def save_arpeggio(cfg: settings.ArpeggioSettings) -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_arpeggio" line=514 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_arpeggio" line=524 %}{% raw %}
 
 </div>
 
@@ -328,7 +328,7 @@ def load_intervals(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_intervals" line=548 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_intervals" line=558 %}{% raw %}
 
 </div>
 
@@ -360,7 +360,7 @@ def save_key_settings(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_key_settings" line=791 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_key_settings" line=801 %}{% raw %}
 
 </div>
 
@@ -401,7 +401,7 @@ signatures, and the options of the kind of exercise it is.
 def load_key_signatures() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_key_signatures" line=877 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_key_signatures" line=887 %}{% raw %}
 
 </div>
 
@@ -437,7 +437,7 @@ with nothing valid in it leaves the setting as it was.
 def load_key_construction() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_key_construction" line=904 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_key_construction" line=914 %}{% raw %}
 
 </div>
 
@@ -470,7 +470,7 @@ with nothing valid in it leaves the setting as it was.
 def load_order_of_keys() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_order_of_keys" line=928 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_order_of_keys" line=938 %}{% raw %}
 
 </div>
 
@@ -491,7 +491,7 @@ Keys.
 def load_scale_identification() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_scale_identification" line=945 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_scale_identification" line=955 %}{% raw %}
 
 </div>
 
@@ -514,7 +514,7 @@ construction.
 def load_scale_construction() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_scale_construction" line=962 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_scale_construction" line=972 %}{% raw %}
 
 </div>
 
@@ -559,7 +559,7 @@ with nothing valid in it leaves the setting as it was.
 def saved_notation_terms() -> set[str]
 ```
 
-{% endraw %}{% include api-source.html name="saved_notation_terms" line=998 %}{% raw %}
+{% endraw %}{% include api-source.html name="saved_notation_terms" line=1008 %}{% raw %}
 
 </div>
 
@@ -583,7 +583,7 @@ Switching Select none off restores these checkboxes.
 def load_notation_terms() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_notation_terms" line=1020 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_notation_terms" line=1030 %}{% raw %}
 
 </div>
 
@@ -606,7 +606,7 @@ True
 def load_clef_basics() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_clef_basics" line=1047 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_clef_basics" line=1057 %}{% raw %}
 
 </div>
 
@@ -649,7 +649,7 @@ setting as it was.
 def save_clef_basics(cfg: settings.ClefBasicsSettings) -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_clef_basics" line=1089 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_clef_basics" line=1099 %}{% raw %}
 
 </div>
 
@@ -684,7 +684,7 @@ Save clef basics settings, the form `load_clef_basics` reads.
 def load_circle() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_circle" line=1118 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_circle" line=1128 %}{% raw %}
 
 </div>
 
@@ -726,7 +726,7 @@ from a newer Alto) leaves the default.
 def save_circle(cfg: settings.CircleSettings) -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_circle" line=1173 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_circle" line=1183 %}{% raw %}
 
 </div>
 
@@ -755,7 +755,7 @@ Save the circle of fifths settings.
 def load_pack_options() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_pack_options" line=1197 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_pack_options" line=1207 %}{% raw %}
 
 </div>
 
@@ -778,7 +778,7 @@ Anything in the saved data that is not valid is ignored.
 def save_pack_options(name: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_pack_options" line=1279 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_pack_options" line=1289 %}{% raw %}
 
 </div>
 
@@ -802,7 +802,7 @@ Save the options chosen for one plugin exercise.
 def load_choice_buttons() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_choice_buttons" line=1318 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_choice_buttons" line=1328 %}{% raw %}
 
 </div>
 
@@ -829,7 +829,7 @@ True
 def load_exercise_settings() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_exercise_settings" line=1358 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_exercise_settings" line=1368 %}{% raw %}
 
 </div>
 

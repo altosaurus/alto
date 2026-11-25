@@ -820,6 +820,7 @@ class ValuePictures(_Picture):
     """
 
     H, W, GAP, SPACING = 40, 18, 4.5, 4
+    playback_index: int | None = None
     tied = False
     beam_count = 0
     HEAD_X, HEAD_Y = (
@@ -940,8 +941,13 @@ class ValuePictures(_Picture):
         False
         """
         p = self._painter()
-        text, _line = self._colors()
+        ink, _line = self._colors()
         for i, value in enumerate(self.values):
+            text = (
+                self.palette().highlight().color()
+                if i == self.playback_index
+                else ink
+            )
             x = i * (self.W + self.SPACING)
             if value in REST_GLYPHS:
                 path = engraving.notation_glyph(
@@ -1012,7 +1018,7 @@ class ValuePictures(_Picture):
                         right - left,
                         self.GAP * 0.5,
                     ),
-                    text,
+                    ink,
                 )
 
         if self.tied and len(self.values) == 2:
@@ -1021,7 +1027,7 @@ class ValuePictures(_Picture):
             right = self.HEAD_X + self.W + self.SPACING
             path = QPainterPath(QPointF(left, y))
             path.quadTo((left + right) / 2, y + 10, right, y)
-            p.strokePath(path, QPen(text, 1.2))
+            p.strokePath(path, QPen(ink, 1.2))
 
 
 def rhythm_picture(term: str) -> ValuePictures | None:

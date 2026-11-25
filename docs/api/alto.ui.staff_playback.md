@@ -19,7 +19,7 @@ StaffPlayback(
 )
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback" line=14 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback" line=15 %}{% raw %}
 
 </div>
 
@@ -52,7 +52,7 @@ def play(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback.play" line=48 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback.play" line=49 %}{% raw %}
 
 </div>
 
@@ -66,6 +66,24 @@ Play the displayed notes in order.
 - `instrument` (*str or None*): Sound registered by the active pack, or the learner’s default.
 - `warmup` (*bool*): Prepare the audio streams before the first note.
 
+### StaffPlayback.play_rhythm
+
+<div class="api-signature" markdown="1">
+
+```python
+def play_rhythm(values: Sequence[str]) -> None
+```
+
+{% endraw %}{% include api-source.html name="StaffPlayback.play_rhythm" line=85 %}{% raw %}
+
+</div>
+
+Click at each note onset and leave rests silent.
+
+**Parameters**
+
+- `values` (*sequence of str*): Written note and rest values. A quarter note gets one beat.
+
 ### StaffPlayback.stop
 
 <div class="api-signature" markdown="1">
@@ -74,7 +92,7 @@ Play the displayed notes in order.
 def stop() -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback.stop" line=84 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback.stop" line=104 %}{% raw %}
 
 </div>
 
@@ -91,7 +109,7 @@ def eventFilter(
 ) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback.eventFilter" line=90 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback.eventFilter" line=110 %}{% raw %}
 
 </div>
 

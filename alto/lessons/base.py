@@ -261,6 +261,10 @@ class Step:
         The key of the instrument that plays the Hear it notes, such as
         one supplied by a plugin. Empty for the learner's own
         choice of sound.
+    rhythm : tuple of str
+        Written note and rest values to count with a metronome.
+    rhythm_meter : tuple of int
+        Numerator and denominator for the rhythm example.
     label_middle_c : bool
         Label middle C and bracket the pair of black keys beside it.
 
@@ -294,6 +298,8 @@ class Step:
     hear_instrument: str = ""
     single_question: bool = False
     label_middle_c: bool = False
+    rhythm: tuple[str, ...] = ()
+    rhythm_meter: tuple[int, int] = (4, 4)
 
 
 @dataclass(frozen=True)

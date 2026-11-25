@@ -17,6 +17,37 @@ one is made from.
 [74, 75, 72, 71]
 ```
 
+## sound_picker_layout
+
+<div class="api-signature" markdown="1">
+
+```python
+def sound_picker_layout(
+    picker: QWidget,
+    *,
+    choices: QListWidget,
+    card: QFrame,
+) -> None
+```
+
+{% endraw %}{% include api-source.html name="sound_picker_layout" line=68 %}{% raw %}
+
+</div>
+
+Place sound choices beside their detail card in Settings.
+
+**Parameters**
+
+- `picker` (*QWidget*): The instrument or metronome picker.
+- `choices` (*QListWidget*): The list of sounds.
+- `card` (*QFrame*): The selected sound's details and preview.
+
+**Examples**
+
+```text
+Resizing the picker gives extra width to the detail card.
+```
+
 ## load_instrument
 
 <div class="api-signature" markdown="1">
@@ -25,7 +56,7 @@ one is made from.
 def load_instrument() -> None
 ```
 
-{% endraw %}{% include api-source.html name="load_instrument" line=68 %}{% raw %}
+{% endraw %}{% include api-source.html name="load_instrument" line=97 %}{% raw %}
 
 </div>
 
@@ -59,7 +90,7 @@ instrument.
 def save_instrument() -> None
 ```
 
-{% endraw %}{% include api-source.html name="save_instrument" line=94 %}{% raw %}
+{% endraw %}{% include api-source.html name="save_instrument" line=123 %}{% raw %}
 
 </div>
 
@@ -84,7 +115,7 @@ Remember the instrument in use.
 def tokens(widget: QWidget) -> dict[str, str]
 ```
 
-{% endraw %}{% include api-source.html name="tokens" line=110 %}{% raw %}
+{% endraw %}{% include api-source.html name="tokens" line=139 %}{% raw %}
 
 </div>
 
@@ -119,7 +150,7 @@ True
 def format_size(nbytes: int) -> str
 ```
 
-{% endraw %}{% include api-source.html name="format_size" line=173 %}{% raw %}
+{% endraw %}{% include api-source.html name="format_size" line=202 %}{% raw %}
 
 </div>
 
@@ -152,7 +183,7 @@ Write a file size the way the instrument page shows it.
 InstrumentPicker(parent: QWidget | None = None)
 ```
 
-{% endraw %}{% include api-source.html name="InstrumentPicker" line=204 %}{% raw %}
+{% endraw %}{% include api-source.html name="InstrumentPicker" line=233 %}{% raw %}
 
 </div>
 
@@ -206,7 +237,7 @@ True
 def select(key: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="InstrumentPicker.select" line=424 %}{% raw %}
+{% endraw %}{% include api-source.html name="InstrumentPicker.select" line=449 %}{% raw %}
 
 </div>
 
@@ -233,7 +264,7 @@ Show the page of the entry an instrument belongs to.
 def show_group(group: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="InstrumentPicker.show_group" line=768 %}{% raw %}
+{% endraw %}{% include api-source.html name="InstrumentPicker.show_group" line=793 %}{% raw %}
 
 </div>
 
@@ -261,7 +292,7 @@ and what is on disk.
 def changeEvent(event: QEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="InstrumentPicker.changeEvent" line=985 %}{% raw %}
+{% endraw %}{% include api-source.html name="InstrumentPicker.changeEvent" line=1010 %}{% raw %}
 
 </div>
 
@@ -292,7 +323,7 @@ follow the theme.
 def use(key: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="InstrumentPicker.use" line=1012 %}{% raw %}
+{% endraw %}{% include api-source.html name="InstrumentPicker.use" line=1037 %}{% raw %}
 
 </div>
 
@@ -325,7 +356,7 @@ Nothing happens if it has no recordings installed.
 def preview(key: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="InstrumentPicker.preview" line=1043 %}{% raw %}
+{% endraw %}{% include api-source.html name="InstrumentPicker.preview" line=1068 %}{% raw %}
 
 </div>
 
