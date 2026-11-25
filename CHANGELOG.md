@@ -28,6 +28,8 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Changed
 
+- Windows release installers gain a timestamped publisher signature that can be checked in the file’s **Properties → Digital Signatures** tab.
+
 - The Windows installer now uses the Microsoft Visual C++ Runtime installed on Windows. If Windows lacks it or has an older version, the installer downloads Microsoft's installer for it from Microsoft, checks Microsoft's signature, and runs it; Windows asks for administrator permission and Microsoft's window asks to accept Microsoft's license. This happens once, also when Alto updates itself. Alto now needs Windows 10 or later.
 - On Windows, the installer asks once to accept the terms for the Microsoft code in Alto's program files, also when Alto updates itself: an update that has not been accepted yet asks before it changes anything, and canceling keeps the version already installed.
 - The release builds have added checks that strengthen license compliance, and the downloads include the license notices of the third-party components they contain, in the `licenses` folder.
