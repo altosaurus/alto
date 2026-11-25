@@ -54,6 +54,12 @@ A step has some reading, and may have:
   explanation, and a right answer is explained. **Try again** repeats a single question. In checks with multiple questions,
   **Try another** draws a question for the next attempt.
 
+## Duration
+
+Open **Lessons → Rhythm → Duration** for a five-step introduction to counting sounds and silences.
+Read each rhythm on one line of noteheads, with a time signature at the left and a bar line at the end of each measure. Choose **Show counts** to see where each symbol falls. Each click marks the start of a written note. Keep tapping through a half note, a whole note, or a silent quarter rest
+and try a four-beat rhythm on your own. The final step opens **Rythmic Equations** to practice matching durations.
+
 ## Intervals
 
 Allow about 12–15 minutes for a first pass. Count letter names to find an interval’s number, then count half steps to

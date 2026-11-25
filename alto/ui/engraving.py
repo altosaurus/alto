@@ -24,6 +24,7 @@ from functools import cache
 from pathlib import Path
 
 from PySide6.QtCore import (
+    QPointF,
     QRectF,
     Qt,
 )
@@ -605,6 +606,92 @@ def draw_note(
             ),
             color=flag_color or color,
         )
+
+
+def draw_beamed_eighths(
+    p: QPainter,
+    *,
+    font: str,
+    heads: list[QPointF],
+    colors: list[QColor],
+    gap: float,
+    middle: float,
+    ink: QColor,
+) -> None:
+    """
+    Draw one beat of eighth notes with stems joined to a common beam.
+
+    Parameters
+    ----------
+    p : QPainter
+        Score painter.
+    font : str
+        Selected SMuFL font.
+    heads : list of QPointF
+        Notehead centers in reading order.
+    colors : list of QColor
+        Ink for each notehead and its stem.
+    gap : float
+        Staff space in pixels.
+    middle : float
+        Height of the middle staff line, for choosing stem direction.
+    ink : QColor
+        Color of the shared beam.
+
+    Examples
+    --------
+    >>> from PySide6.QtGui import QPicture
+    >>> with QPainter(QPicture()) as painter:  # doctest: +SKIP
+    ...     draw_beamed_eighths(
+    ...         painter, font="bravura", gap=8, middle=40,
+    ...         heads=[QPointF(20, 48), QPointF(40, 44)],
+    ...         colors=[QColor("black")] * 2, ink=QColor("black"),
+    ...     )
+    """
+    head = "noteheadBlack"
+    left, _, right, _ = _ink(font, name=head)
+    down = (
+        middle - min(pt.y() for pt in heads)
+        > max(pt.y() for pt in heads) - middle
+    )
+    ax, ay = _anchor(
+        font,
+        name=head,
+        anchor="stemDownNW" if down else "stemUpSE",
+    )
+    offset = (ax - (left + right) / 2) * gap
+    thick = _metrics(font)["stem"] * gap
+    direction = 1 if down else -1
+    tilt = max(-gap / 2, min(gap / 2, (heads[-1].y() - heads[0].y()) / 4))
+    span = heads[-1].x() - heads[0].x()
+    slope = tilt / span
+    intercepts = [pt.y() - slope * (pt.x() - heads[0].x()) for pt in heads]
+    beam_y = (
+        max(intercepts) if down else min(intercepts)
+    ) + direction * 3.3 * gap
+    for pt, color in zip(heads, colors, strict=True):
+        path = _place(
+            _outline(font, name=head),
+            x=pt.x() - (left + right) * gap / 2,
+            y=pt.y(),
+            gap=gap,
+        )
+        fill_path(p, path=path, color=color)
+        stem_x = pt.x() + offset - (0 if down else thick)
+        start = pt.y() - ay * gap
+        end = beam_y + slope * (pt.x() - heads[0].x())
+        p.fillRect(
+            QRectF(stem_x, min(start, end), thick, abs(end - start)),
+            color,
+        )
+    x1 = heads[0].x() + offset - (0 if down else thick)
+    x2 = heads[-1].x() + offset + (thick if down else 0)
+    beam = QPainterPath(QPointF(x1, beam_y))
+    beam.lineTo(x2, beam_y + tilt)
+    beam.lineTo(x2, beam_y + tilt - direction * gap / 2)
+    beam.lineTo(x1, beam_y - direction * gap / 2)
+    beam.closeSubpath()
+    fill_path(p, path=beam, color=ink)
 
 
 # Each clef's SMuFL glyph and how many gaps above the bottom staff line
