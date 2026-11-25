@@ -141,7 +141,8 @@ Alto is installed from source today. When you want to cut a release:
    copy `alto.db` first.
 4. Refresh and review the screenshots in both themes using the [pre-release checklist]({{ '/development/' | relative_url }}#pre-release-checklist).
    Regenerate the API pages and check that [Your data]({{ '/data/' | relative_url }}) is current.
-5. **Check license compliance** on both packaged downloads. If you added fonts or recordings, verify their redistribution
+5. **Check license compliance** on the Linux tarball, Windows installer, and final stapled macOS DMG before tagging.
+   Record the results for each platform in the release PR. If you added fonts or recordings, verify their redistribution
    terms and update `THIRD_PARTY_NOTICES.md`. Follow the [release license compliance check]({{ '/development/' | relative_url }}#license-compliance).
 6. **Build** the package: `python -m pip install build` then `python -m build` produces a source distribution and a wheel in `dist/`.
    Open the wheel (it is a zip) and check that the fonts and recordings are inside; `pyproject.toml` lists them under

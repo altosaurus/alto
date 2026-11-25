@@ -700,8 +700,11 @@ fixed bug) adds a line under **Unreleased** in the same pull request. Internal t
    For screenshots using `component-shot.html`, check that the image dimensions match the captures and each clickable region covers its component.
    Run `sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py` and include the
    updated images and any caption or region corrections in the release PR.
-6. Run the **Release** workflow manually on the versioned candidate. Complete the [license compliance check](#license-compliance)
-   on its Linux and Windows downloads and record the results in the release PR. Resolve any findings before tagging.
+6. Build all three desktop downloads from the same versioned candidate commit. Run the **Release** workflow manually
+   for Linux and Windows. For macOS, run the **Package** workflow with `macos_notarize` enabled.
+   Complete the [license compliance check](#license-compliance) on the Linux tarball, Windows installer, and final
+   stapled macOS DMG. Record the results and artifact checksums for each platform in the release PR. Resolve any findings
+   before tagging.
 7. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
    the tag starts the **Release** workflow (see below), which publishes the downloads.
 
