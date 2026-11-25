@@ -36,7 +36,7 @@ FROZEN="$WORK/dist/alto"
 "$WORK/venv/bin/python" "$ROOT/packaging/linux_libraries.py" "$FROZEN" "$WORK/system-libraries.json" \
     "$ROOT/dist/$NAME-library-sources.tar"
 "$WORK/venv/bin/python" "$ROOT/packaging/dependency_licenses.py" copy "$FROZEN"
-cp "$ROOT/THIRD_PARTY_NOTICES.md" "$FROZEN/"
+cp "$ROOT/LICENSE" "$ROOT/THIRD_PARTY_NOTICES.md" "$FROZEN/"
 
 # The frozen program must say what version it is, and must open its window. Nothing is drawn on a screen, and it uses its own folder
 # for its data, so a real profile is never touched.

@@ -1,4 +1,4 @@
-# PyInstaller recipe for Alto, used on Linux and Windows: `pyinstaller packaging/alto.spec`.
+# PyInstaller recipe for Alto on Linux, Windows, and macOS.
 #
 # It makes a folder, dist/alto, with the program `alto` (`alto.exe` on Windows) beside the Python, Qt and Alto files it needs. The
 # folder can be copied anywhere. scripts/build-linux.sh builds it and wraps it in the Linux download.
@@ -25,6 +25,8 @@ import json
 import os
 import re
 import sys
+import subprocess
+from importlib.metadata import version
 from pathlib import Path
 
 from PyInstaller.depend.bindepend import get_imports
@@ -33,9 +35,10 @@ from PyInstaller.utils.hooks import collect_data_files, collect_submodules, copy
 if sys.platform == "win32":
     import pefile  # PyInstaller's own dependency on Windows, used to read the runtime's version
 
+metadata = copy_metadata("alto", recursive=True) if sys.platform == "darwin" else copy_metadata("alto") + copy_metadata("fsrs")
 a = Analysis(
     ["launcher.py"],
-    datas=collect_data_files("alto") + copy_metadata("alto") + copy_metadata("fsrs"),
+    datas=collect_data_files("alto") + metadata,
     hiddenimports=["_cffi_backend", *collect_submodules("nacl")],
     # numpy is for the tests only; Alto does not use it. readline is for an interactive prompt, which Alto does not have.
     excludes=["tkinter", "pytest", "numpy", "readline"],
@@ -52,10 +55,11 @@ def unused_qt_component(destination):
     name = Path(destination).name.lower()
     return (
         "virtualkeyboard" in destination.lower()
+        or "qtpdf.framework" in destination.lower().split("/")
         or "ffmpeg" in name
-        or name in {"libqpdf.so", "qpdf.dll", "libqgtk3.so", "opengl32sw.dll"}
+        or name in {"libqpdf.dylib", "qtpdf", "libqpdf.so", "qpdf.dll", "libqgtk3.so", "opengl32sw.dll"}
         or name.startswith(("libqt6pdf.", "qt6pdf."))
-        or re.fullmatch(r"(?:lib)?(?:avcodec|avformat|avutil|swresample|swscale)(?:-\d+\.dll|\.so(?:\.\d+)*)", name)
+        or re.fullmatch(r"(?:lib)?(?:avcodec|avformat|avutil|swresample|swscale)(?:-\d+\.dll|\.so(?:\.\d+)*|(?:\.\d+)*\.dylib)", name)
     )
 
 
@@ -143,6 +147,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
+    codesign_identity=os.environ.get("ALTO_MACOS_SIGN_IDENTITY") if sys.platform == "darwin" else None,
     name="alto",
     console=False,  # a window, not a terminal: there is no console to print to on Windows
     icon=os.environ.get("ALTO_ICON") or None,
@@ -155,6 +160,31 @@ coll = COLLECT(
     upx=False,
     name="alto",
 )
+
+if sys.platform == "darwin":
+    # Collect notices against the flat bundle, then pass them to BUNDLE as resources
+    # so PyInstaller seals them in the original signature.
+    root = Path(SPECPATH).parent
+    flat = Path(coll.name)
+    for helper, arguments in (
+        ("dependency_licenses.py", ["copy", flat]),
+        ("qt_sources.py", [flat, os.environ["ALTO_QT_SOURCES"]]),
+    ):
+        subprocess.run([sys.executable, root / "packaging" / helper, *arguments], check=True)
+    documents = [(name, str(root / name), "DATA") for name in ("LICENSE", "THIRD_PARTY_NOTICES.md")]
+    documents.extend(
+        (file.relative_to(flat).as_posix(), str(file), "DATA")
+        for file in sorted((flat / "licenses").rglob("*")) if file.is_file()
+    )
+    BUNDLE(
+        coll,
+        documents,
+        name="Alto.app",
+        icon=str(Path(SPECPATH).parent / "alto/assets/icon.png"),
+        bundle_identifier="io.github.altosaurus.alto",
+        version=version("alto"),
+        info_plist={"CFBundleVersion": version("alto"), "NSHighResolutionCapable": True},
+    )
 
 # Check the finished bundle, including native libraries and symlinks created during collection.
 for path in Path(coll.name).rglob("*"):
