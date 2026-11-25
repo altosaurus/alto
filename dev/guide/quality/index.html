@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795635316">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795641243">
   
 </head>
 <body>
@@ -946,7 +946,8 @@ MINOR.</li>
 copy <code class="language-plaintext highlighter-rouge">alto.db</code> first.</li>
   <li>Refresh and review the screenshots in both themes using the <a href="/alto/dev/development/#pre-release-checklist">pre-release checklist</a>.
 Regenerate the API pages and check that <a href="/alto/dev/data/">Your data</a> is current.</li>
-  <li><strong>Check license compliance</strong> on both packaged downloads. If you added fonts or recordings, verify their redistribution
+  <li><strong>Check license compliance</strong> on the Linux tarball, Windows installer, and final stapled macOS DMG before tagging.
+Record the results for each platform in the release PR. If you added fonts or recordings, verify their redistribution
 terms and update <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code>. Follow the <a href="/alto/dev/development/#license-compliance">release license compliance check</a>.</li>
   <li><strong>Build</strong> the package: <code class="language-plaintext highlighter-rouge">python -m pip install build</code> then <code class="language-plaintext highlighter-rouge">python -m build</code> produces a source distribution and a wheel in <code class="language-plaintext highlighter-rouge">dist/</code>.
 Open the wheel (it is a zip) and check that the fonts and recordings are inside; <code class="language-plaintext highlighter-rouge">pyproject.toml</code> lists them under
@@ -1107,10 +1108,10 @@ versioning.</em> <em>Linter, formatter, static analysis, type checker.</em> <em>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795635316" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795635316" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795635316" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795635316" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795641243" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795641243" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
