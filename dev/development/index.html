@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795611505">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795612710">
   
 </head>
 <body>
@@ -885,9 +885,9 @@ budget opens an issue labeled <code class="language-plaintext highlighter-rouge"
 with <code class="language-plaintext highlighter-rouge">pytest -m perf</code>.</li>
   <li><strong>A history, from release to release.</strong> <code class="language-plaintext highlighter-rouge">benchmarks/suite.py</code> is an <a href="https://asv.readthedocs.io/">ASV</a> suite, and the Performance
 workflow (<code class="language-plaintext highlighter-rouge">.github/workflows/performance.yml</code>) measures main daily at 09:37 UTC and keeps the results on the
-branch <code class="language-plaintext highlighter-rouge">asv-results</code>. A change of more than 30% against the previous release is written in the run’s summary. That is advice and not a
-failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
-would catch.</li>
+branch <code class="language-plaintext highlighter-rouge">asv-results</code>. When the historical comparison flags a slowdown above 30%, the workflow measures the flagged operations
+again on the previous release and the candidate, using the same runner, benchmark suite, and Python environment. The run summary
+shows which slowdowns reproduced. Only confirmed slowdowns open or update a performance issue. The graphs keep the original full-suite measurements.</li>
   <li><strong>First visits.</strong> The first time a page shows text with ♯, ♭ or ♮ in a new size, Qt spends about 40 ms looking for a font that
 has the signs, because the interface font does not. <code class="language-plaintext highlighter-rouge">alto/ui/warmup.py</code> does that once for each size the interface uses, and
 loads the music font, a step at a time while the app is idle after it opens, so the first visit to a page is nearly as quick as
@@ -1908,10 +1908,10 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795611505" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795611505" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795611505" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795611505" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795612710" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795612710" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795612710" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795612710" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
