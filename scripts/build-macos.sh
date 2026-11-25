@@ -1,5 +1,5 @@
 #!/bin/sh
-# Build and smoke-test an Apple Silicon preview, with a local ad-hoc signature.
+# Build and smoke-test an Apple Silicon app. A Developer ID also produces a signed DMG.
 set -eu
 
 if [ "$(uname -s)-$(uname -m)" != Darwin-arm64 ]; then
@@ -44,5 +44,18 @@ else:
 PY
 
 mkdir -p "$ROOT/dist"
+if [ -n "${ALTO_MACOS_SIGN_IDENTITY:-}" ]; then
+    STAGE="$WORK/disk-image"
+    mkdir -p "$STAGE"
+    mv "$APP" "$STAGE/Alto.app"
+    ln -s /Applications "$STAGE/Applications"
+    DMG="alto-$VERSION-macos-arm64.dmg"
+    hdiutil create -volname Alto -srcfolder "$STAGE" -fs HFS+ -format UDZO "$WORK/$DMG"
+    codesign --sign "$ALTO_MACOS_SIGN_IDENTITY" --timestamp "$WORK/$DMG"
+    codesign --verify --strict "$WORK/$DMG"
+    mv "$WORK/$DMG" "$ROOT/dist/"
+    echo "Wrote dist/$DMG"
+    exit 0
+fi
 mv "$WORK/$NAME.zip" "$ROOT/dist/"
 echo "Wrote dist/$NAME.zip"

@@ -145,6 +145,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
+    codesign_identity=os.environ.get("ALTO_MACOS_SIGN_IDENTITY") if sys.platform == "darwin" else None,
     name="alto",
     console=False,  # a window, not a terminal: there is no console to print to on Windows
     icon=os.environ.get("ALTO_ICON") or None,
