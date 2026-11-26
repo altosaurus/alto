@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.ui.keyboard · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.keyboard/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.ui.keyboard · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.keyboard/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795657983">
   
 </head>
 <body>
@@ -30,6 +30,7 @@
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/></symbol>
     <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
     <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
     <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
@@ -43,7 +44,21 @@
       <span>Alto</span>
     </a>
     <div class="top-actions">
+      <form class="docs-search" role="search" action="/alto/latest/search/" method="get"
+            data-index="/alto/latest/search-index.json" hidden>
+        <div class="search-field">
+          <svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5.5 5.5"/></svg>
+          <input id="docs-search-input" name="q" type="search" enterkeyhint="search" placeholder="Search docs" aria-label="Search documentation"
+                 autocomplete="off" aria-controls="docs-search-results">
+        </div>
+        <div id="docs-search-results" class="search-results" hidden>
+          <div role="status" class="search-status"></div>
+          <ul></ul>
+        </div>
+      </form>
+      
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      
       <div class="dd" id="theme-dd">
         <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
@@ -59,11 +74,11 @@
   </header>
   <div class="layout">
     <aside class="sidebar">
-      <details class="menu" id="menu">
-        <summary>Contents</summary>
-        <nav class="nav" aria-label="Documentation">
-          
-          
+      <nav class="menu" aria-label="Documentation">
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -85,9 +100,24 @@
             
             
             
-            <li class="nav-group"><details data-nav-group="Using Alto" open>
-              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/using-alto/">Using Alto</a>
+  
+  <button type="button" class="nav-toggle" data-category="Using Alto" aria-controls="nav-using-alto"
+          aria-expanded="true" aria-label="Collapse Using Alto" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-using-alto">
+            
+            
+            
+            
+            
             
             
             
@@ -163,12 +193,50 @@
             
             
             
-            </ul></details></li>
             
             
-            <li class="nav-group"><details data-nav-group="For developers" open>
-              <summary class="nav-head"><a class="grow" href="/alto/latest/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            </ul></li>
+            
+            
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/development/">For developers</a>
+  
+  <button type="button" class="nav-toggle" data-category="For developers" aria-controls="nav-for-developers"
+          aria-expanded="true" aria-label="Collapse For developers" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-for-developers">
             
             
             
@@ -188,10 +256,19 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/ui-style-guide/">UI style guide</a></li>
                 
                 
               </ul>
@@ -289,6 +366,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
                 
                 
@@ -298,10 +378,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.updates/">updates</a></li>
@@ -317,6 +403,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.packs/">packs</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
                 
                 
                 </ul></details></li>
@@ -364,10 +456,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.duration/">duration</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -409,6 +507,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.background/">background</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
                 
                 
@@ -436,7 +537,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.fingerboard/">fingerboard</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
@@ -472,16 +579,34 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.midi_input/">midi_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notation/">notation</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -503,6 +628,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -544,7 +672,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.warmup/">warmup</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.zoom/">zoom</a></li>
                 
                 </ul></details></li>
               </ul>
@@ -555,12 +689,27 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
             
             
-            <li class="nav-group"><details data-nav-group="About" open>
-              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/about/">About</a>
+  
+  <button type="button" class="nav-toggle" data-category="About" aria-controls="nav-about"
+          aria-expanded="true" aria-label="Collapse About" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-about">
+            
+            
+            
+            
+            
             
             
             
@@ -588,37 +737,51 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
           </ul>
-        </nav>
-      </details>
+        </div>
+      </nav>
     </aside>
     <main id="content" class="content">
       <div class="page-grid" id="page-grid">
         <article>
           <h1>alto.ui.keyboard</h1>
           
-<p>The on-screen piano keyboard, drawn to real proportions, and a miniature of the whole piano for choosing a span of keys.</p>
+<p>The on-screen piano keyboard, drawn to real proportions, and a miniature
+of the whole piano for choosing a span of keys.</p>
 
-<p><code class="language-plaintext highlighter-rouge">KeyboardWidget</code> shows a range of keys and can highlight one. <code class="language-plaintext highlighter-rouge">KeyboardSpan</code> shows all 88 keys in miniature, shades the
-range that will be asked, and can be dragged to change it. Colors and materials come from <code class="language-plaintext highlighter-rouge">keyboard_styles</code>.</p>
+<p><code class="language-plaintext highlighter-rouge">KeyboardWidget</code> shows a range of keys and can highlight one.
+<code class="language-plaintext highlighter-rouge">KeyboardSpan</code> shows all 88 keys in miniature, shades the
+range that will be asked, and can be dragged to change it. Colors and
+materials come from <code class="language-plaintext highlighter-rouge">keyboard_styles</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; keyboard.show_key(60)
-&gt;&gt;&gt; keyboard.highlight
-60
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_key</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">highlight</span>
+<span class="go">60
+</span></code></pre></div></div>
 
 <h2 id="keyboardwidget">KeyboardWidget</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardWidget</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardWidget</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">label_middle_c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L137" aria-label="Source for KeyboardWidget">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>A piano keyboard drawn to real proportions that can highlight one or more keys.</p>
+<p>A piano keyboard drawn to real proportions that can highlight one or
+more keys.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -631,36 +794,48 @@ range that will be asked, and can be dragged to change it. Colors and materials 
   <li><code class="language-plaintext highlighter-rouge">pad</code> (<em>float</em>): The frame padding, in pixels.</li>
   <li><code class="language-plaintext highlighter-rouge">max_key_width</code> (<em>float</em>): The widest a key may be, in pixels. Smaller when something else (the key signature) shares the page.</li>
   <li><code class="language-plaintext highlighter-rouge">highlight_color</code> (<em>QColor</em>): The color of the highlighted key.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_length</code> (<em>float</em>): How long a natural key is drawn, in key widths. A piano’s is 6.2, and a harpsichord’s keys can be shorter.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; (keyboard.lo, keyboard.hi)  # C3 to C5, until another range is shown
-(48, 72)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">lo</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">hi</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># C3 to C5, until another range is shown
+</span><span class="go">(48, 72)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
-<p>Create a keyboard showing the default range, with no key highlighted.</p>
+<p>Create a keyboard showing the default range, with no key
+highlighted.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the keyboard.</li>
+  <li><code class="language-plaintext highlighter-rouge">label_middle_c</code> (<em>bool, default False</em>): Mark middle C and its neighboring pair of black keys for an introductory lesson.</li>
 </ul>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardWidget().highlight is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardWidget</span><span class="p">().</span><span class="n">highlight</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardwidgetstyle">KeyboardWidget.style</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
 <span class="k">def</span> <span class="nf">style</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">KeyboardStyle</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L231" aria-label="Source for KeyboardWidget.style">[Source]</a></p>
+
+</div>
 
 <p>Return the style the keyboard is drawn in.</p>
 
@@ -672,16 +847,24 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; keyboard.style_override = keyboard_styles.BY_KEY["modern"]
-&gt;&gt;&gt; keyboard.style.label
-'Modern piano'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">style_override</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">]</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">style</span><span class="p">.</span><span class="n">label</span>
+<span class="go">'Modern piano'
+</span></code></pre></div></div>
 
 <h3 id="keyboardwidgetrefit">KeyboardWidget.refit</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L252" aria-label="Source for KeyboardWidget.refit">[Source]</a></p>
+
+</div>
 
 <p>Size and redraw the keyboard after the style changes.</p>
 
@@ -689,18 +872,25 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; keyboard.refit()
-&gt;&gt;&gt; keyboard.height() &gt; 0
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">refit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">height</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardwidgetfull_width">KeyboardWidget.full_width</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">full_width</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Measure the keyboard case when its keys reach their maximum width.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">full_width</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L290" aria-label="Source for KeyboardWidget.full_width">[Source]</a></p>
+
+</div>
+
+<p>Measure the keyboard case when its keys reach their maximum
+width.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -710,16 +900,23 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardWidget().full_width()
-590
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardWidget</span><span class="p">().</span><span class="n">full_width</span><span class="p">()</span>
+<span class="go">590
+</span></code></pre></div></div>
 
 <h3 id="keyboardwidgetresizeevent">KeyboardWidget.resizeEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Change the height to match the new width, since keys are drawn to real proportions.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L375" aria-label="Source for KeyboardWidget.resizeEvent">[Source]</a></p>
+
+</div>
+
+<p>Change the height to match the new width, since keys are drawn
+to real proportions.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -729,23 +926,30 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; keyboard.show()
-&gt;&gt;&gt; keyboard.resize(300, 300)
-&gt;&gt;&gt; keyboard.height()  # narrower, so shorter
-143
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">height</span><span class="p">()</span>  <span class="c1"># narrower, so shorter
+</span><span class="go">143
+</span></code></pre></div></div>
 
 <h3 id="keyboardwidgetshow_key">KeyboardWidget.show_key</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_key</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_key</span><span class="p">(</span>
     <span class="n">midi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">span</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Highlight a key, and optionally choose the range of keys to show.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L396" aria-label="Source for KeyboardWidget.show_key">[Source]</a></p>
+
+</div>
+
+<p>Highlight a key, and optionally choose the range of keys to
+show.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -756,22 +960,35 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; keyboard.show_key(60, span=(49, 71))  # C#3 is widened to C3
-&gt;&gt;&gt; (keyboard.lo, keyboard.hi, keyboard.highlight)
-(48, 71, 60)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_key</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">60</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="p">(</span><span class="mi">49</span><span class="p">,</span> <span class="mi">71</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># C#3 is widened to C3
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">lo</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">hi</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">highlight</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(48, 71, 60)
+</span></code></pre></div></div>
 
 <h3 id="keyboardwidgetshow_keys">KeyboardWidget.show_keys</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_keys</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_keys</span><span class="p">(</span>
     <span class="n">midis</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">span</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Highlight several keys together, clearing highlights from the previous question.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L441" aria-label="Source for KeyboardWidget.show_keys">[Source]</a></p>
+
+</div>
+
+<p>Highlight several keys together, clearing highlights from the
+previous question.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -782,19 +999,28 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; keyboard.show_keys([60, 66], span=(48, 72))
-&gt;&gt;&gt; keyboard.highlight, keyboard.additional_highlights
-(60, {66})
-&gt;&gt;&gt; keyboard.show_key(62)
-&gt;&gt;&gt; keyboard.additional_highlights
-set()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_keys</span><span class="p">([</span><span class="mi">60</span><span class="p">,</span> <span class="mi">66</span><span class="p">],</span> <span class="n">span</span><span class="o">=</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">highlight</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keyboard</span><span class="p">.</span><span class="n">additional_highlights</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(60, {66})
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_key</span><span class="p">(</span><span class="mi">62</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">additional_highlights</span>
+<span class="go">set()
+</span></code></pre></div></div>
 
 <h3 id="keyboardwidgetset_highlight_color">KeyboardWidget.set_highlight_color</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_highlight_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_highlight_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L477" aria-label="Source for KeyboardWidget.set_highlight_color">[Source]</a></p>
+
+</div>
 
 <p>Choose the color of the highlighted key and redraw.</p>
 
@@ -806,18 +1032,27 @@ set()
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; keyboard.set_highlight_color(QColor("#2e7d32"))
-&gt;&gt;&gt; keyboard.highlight_color.name()
-'#2e7d32'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">set_highlight_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QColor</span><span class="p">(</span><span class="s">"#2e7d32"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">highlight_color</span><span class="p">.</span><span class="n">name</span><span class="p">()</span>
+<span class="go">'#2e7d32'
+</span></code></pre></div></div>
 
 <h3 id="keyboardwidgetpaintevent">KeyboardWidget.paintEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Draw the case, the keys, the highlighted key and the style’s extras.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L499" aria-label="Source for KeyboardWidget.paintEvent">[Source]</a></p>
+
+</div>
+
+<p>Draw the case, the keys, the highlighted key and the style’s
+extras.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -827,27 +1062,35 @@ set()
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard = KeyboardWidget()
-&gt;&gt;&gt; keyboard.show_key(60)
-&gt;&gt;&gt; keyboard.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span> <span class="o">=</span> <span class="n">KeyboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">show_key</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="keyboardspan">KeyboardSpan</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardSpan</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardSpan</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">compact</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">124</span><span class="p">,</span> <span class="mi">26</span><span class="p">),</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L768" aria-label="Source for KeyboardSpan">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The whole 88-key piano in miniature, with the keys that will be asked shaded.</p>
+<p>The whole 88-key piano in miniature, with the keys that will be
+asked shaded.</p>
 
-<p>The full-size one can be dragged across to choose the span: <code class="language-plaintext highlighter-rouge">dragged</code> is emitted with the lowest and highest key as it
+<p>The full-size one can be dragged across to choose the span:
+<code class="language-plaintext highlighter-rouge">dragged</code> is emitted with the lowest and highest key as it
 changes.</p>
 
 <p><strong>Attributes</strong></p>
@@ -856,15 +1099,16 @@ changes.</p>
   <li><code class="language-plaintext highlighter-rouge">dragged</code> (<em>Signal</em>): Emitted with the lowest and highest key (MIDI numbers) as the span is dragged.</li>
   <li><code class="language-plaintext highlighter-rouge">lo</code> (<em>int</em>): The lowest key shaded.</li>
   <li><code class="language-plaintext highlighter-rouge">hi</code> (<em>int</em>): The highest key shaded.</li>
+  <li><code class="language-plaintext highlighter-rouge">full</code> (<em>tuple of int</em>): The lowest and highest key the miniature draws. All 88 keys, unless a plugin’s keyboard has fewer.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; span = KeyboardSpan()
-&gt;&gt;&gt; span.set_span(60, hi=72)
-&gt;&gt;&gt; (span.lo, span.hi)
-(60, 72)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">set_span</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mi">72</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">span</span><span class="p">.</span><span class="n">lo</span><span class="p">,</span> <span class="n">span</span><span class="p">.</span><span class="n">hi</span><span class="p">)</span>
+<span class="go">(60, 72)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -880,14 +1124,22 @@ changes.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardSpan(compact=True, size=(100, 20)).size().width()
-100
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardSpan</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">compact</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">size</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
+<span class="go">100
+</span></code></pre></div></div>
 
 <h3 id="keyboardspankey_at">KeyboardSpan.key_at</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_at</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="n">QPointF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_at</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="n">QPointF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L850" aria-label="Source for KeyboardSpan.key_at">[Source]</a></p>
+
+</div>
 
 <p>Return the key under a point.</p>
 
@@ -905,20 +1157,30 @@ changes.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; span = KeyboardSpan()
-&gt;&gt;&gt; span.resize(500, 64)
-&gt;&gt;&gt; span.key_at(QPointF(0, 50)), span.key_at(QPointF(499, 50))  # the lowest and highest keys
-(21, 108)
-&gt;&gt;&gt; span.key_at(QPointF(250, 50))
-64
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">span</span><span class="p">.</span><span class="n">key_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">span</span><span class="p">.</span><span class="n">key_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">499</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the lowest and highest keys
+</span><span class="go">(21, 108)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">key_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+<span class="go">64
+</span></code></pre></div></div>
 
 <h3 id="keyboardspanmousepressevent">KeyboardSpan.mousePressEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Start choosing a span: grab an edge, pick the span up, or start a new one.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L987" aria-label="Source for KeyboardSpan.mousePressEvent">[Source]</a></p>
+
+</div>
+
+<p>Start choosing a span: grab an edge, pick the span up, or start
+a new one.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -928,24 +1190,41 @@ changes.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; span = KeyboardSpan()
-&gt;&gt;&gt; span.resize(500, 64)
-&gt;&gt;&gt; got = []
-&gt;&gt;&gt; _ = span.dragged.connect(lambda lo, hi: got.append((lo, hi)))
-&gt;&gt;&gt; point = QPointF(5, 50)
-&gt;&gt;&gt; span.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                                  Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; got  # a press outside the span starts a new one on that key
-[(21, 21)]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">span</span><span class="p">.</span><span class="n">dragged</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">lambda</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">))</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span>  <span class="c1"># a press outside the span starts a new one on that key
+</span><span class="go">[(21, 21)]
+</span></code></pre></div></div>
 
 <h3 id="keyboardspanmousemoveevent">KeyboardSpan.mouseMoveEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Drag the span, or (with no button held) show the cursor for what a press here would do.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L1028" aria-label="Source for KeyboardSpan.mouseMoveEvent">[Source]</a></p>
+
+</div>
+
+<p>Drag the span, or (with no button held) show the cursor for what
+a press here would do.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -955,22 +1234,38 @@ changes.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; span = KeyboardSpan()
-&gt;&gt;&gt; span.resize(500, 64)
-&gt;&gt;&gt; middle = QPointF(sum(span._edges()) / 2, 50)
-&gt;&gt;&gt; span.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, middle, middle, Qt.MouseButton.NoButton,
-...                                 Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; span.cursor().shape() == Qt.CursorShape.OpenHandCursor  # inside the span: it can be picked up
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">middle</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">span</span><span class="p">.</span><span class="n">_edges</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">middle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">middle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># inside the span: it can be picked up
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">cursor</span><span class="p">().</span><span class="n">shape</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">CursorShape</span><span class="p">.</span><span class="n">OpenHandCursor</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardspanmousereleaseevent">KeyboardSpan.mouseReleaseEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseReleaseEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Finish a drag and refresh the cursor for where the pointer now is.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseReleaseEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L1082" aria-label="Source for KeyboardSpan.mouseReleaseEvent">[Source]</a></p>
+
+</div>
+
+<p>Finish a drag and refresh the cursor for where the pointer now
+is.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -980,24 +1275,38 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; span = KeyboardSpan()
-&gt;&gt;&gt; span.resize(500, 64)
-&gt;&gt;&gt; point = QPointF(5, 50)
-&gt;&gt;&gt; span.mouseReleaseEvent(QMouseEvent(QEvent.Type.MouseButtonRelease, point, point, Qt.MouseButton.LeftButton,
-...                                    Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; span._mode is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">mouseReleaseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">QMouseEvent</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonRelease</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">point</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">_mode</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardspanset_span">KeyboardSpan.set_span</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_span</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_span</span><span class="p">(</span>
     <span class="n">lo</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">hi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L1116" aria-label="Source for KeyboardSpan.set_span">[Source]</a></p>
+
+</div>
 
 <p>Choose which keys are shaded and redraw.</p>
 
@@ -1010,18 +1319,25 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; span = KeyboardSpan()
-&gt;&gt;&gt; span.set_span(48, hi=72)
-&gt;&gt;&gt; (span.lo, span.hi)
-(48, 72)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">set_span</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mi">72</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">span</span><span class="p">.</span><span class="n">lo</span><span class="p">,</span> <span class="n">span</span><span class="p">.</span><span class="n">hi</span><span class="p">)</span>
+<span class="go">(48, 72)
+</span></code></pre></div></div>
 
 <h3 id="keyboardspanpaintevent">KeyboardSpan.paintEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Draw the whole piano in miniature with the asked keys shaded and the span’s edges marked.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/keyboard.py#L1142" aria-label="Source for KeyboardSpan.paintEvent">[Source]</a></p>
+
+</div>
+
+<p>Draw the whole piano in miniature with the asked keys shaded and
+the span’s edges marked.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1031,12 +1347,48 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; span = KeyboardSpan()
-&gt;&gt;&gt; span.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span> <span class="o">=</span> <span class="n">KeyboardSpan</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           
           
           
@@ -1211,10 +1563,6 @@ False
     </main>
   </div>
   <script>
-    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
-    var menu = document.getElementById("menu");
-    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
-
     // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
@@ -1263,8 +1611,10 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/search.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/copy-code.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795657983" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

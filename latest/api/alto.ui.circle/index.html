@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.ui.circle · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.circle/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.ui.circle · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.circle/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795657983">
   
 </head>
 <body>
@@ -30,6 +30,7 @@
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/></symbol>
     <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
     <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
     <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
@@ -43,7 +44,21 @@
       <span>Alto</span>
     </a>
     <div class="top-actions">
+      <form class="docs-search" role="search" action="/alto/latest/search/" method="get"
+            data-index="/alto/latest/search-index.json" hidden>
+        <div class="search-field">
+          <svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5.5 5.5"/></svg>
+          <input id="docs-search-input" name="q" type="search" enterkeyhint="search" placeholder="Search docs" aria-label="Search documentation"
+                 autocomplete="off" aria-controls="docs-search-results">
+        </div>
+        <div id="docs-search-results" class="search-results" hidden>
+          <div role="status" class="search-status"></div>
+          <ul></ul>
+        </div>
+      </form>
+      
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      
       <div class="dd" id="theme-dd">
         <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
@@ -59,11 +74,11 @@
   </header>
   <div class="layout">
     <aside class="sidebar">
-      <details class="menu" id="menu">
-        <summary>Contents</summary>
-        <nav class="nav" aria-label="Documentation">
-          
-          
+      <nav class="menu" aria-label="Documentation">
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -85,9 +100,24 @@
             
             
             
-            <li class="nav-group"><details data-nav-group="Using Alto" open>
-              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/using-alto/">Using Alto</a>
+  
+  <button type="button" class="nav-toggle" data-category="Using Alto" aria-controls="nav-using-alto"
+          aria-expanded="true" aria-label="Collapse Using Alto" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-using-alto">
+            
+            
+            
+            
+            
             
             
             
@@ -163,12 +193,50 @@
             
             
             
-            </ul></details></li>
             
             
-            <li class="nav-group"><details data-nav-group="For developers" open>
-              <summary class="nav-head"><a class="grow" href="/alto/latest/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            </ul></li>
+            
+            
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/development/">For developers</a>
+  
+  <button type="button" class="nav-toggle" data-category="For developers" aria-controls="nav-for-developers"
+          aria-expanded="true" aria-label="Collapse For developers" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-for-developers">
             
             
             
@@ -188,10 +256,19 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/ui-style-guide/">UI style guide</a></li>
                 
                 
               </ul>
@@ -289,6 +366,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
                 
                 
@@ -298,10 +378,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.updates/">updates</a></li>
@@ -317,6 +403,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.packs/">packs</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
                 
                 
                 </ul></details></li>
@@ -364,10 +456,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.duration/">duration</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -409,6 +507,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.background/">background</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
                 
                 
@@ -436,7 +537,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.fingerboard/">fingerboard</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
@@ -472,16 +579,34 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.midi_input/">midi_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notation/">notation</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -503,6 +628,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -544,7 +672,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.warmup/">warmup</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.zoom/">zoom</a></li>
                 
                 </ul></details></li>
               </ul>
@@ -555,12 +689,27 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
             
             
-            <li class="nav-group"><details data-nav-group="About" open>
-              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/about/">About</a>
+  
+  <button type="button" class="nav-toggle" data-category="About" aria-controls="nav-about"
+          aria-expanded="true" aria-label="Collapse About" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-about">
+            
+            
+            
+            
+            
             
             
             
@@ -588,40 +737,51 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
           </ul>
-        </nav>
-      </details>
+        </div>
+      </nav>
     </aside>
     <main id="content" class="content">
       <div class="page-grid" id="page-grid">
         <article>
           <h1>alto.ui.circle</h1>
           
-<p>The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside.</p>
+<p>The circle of fifths: twelve wedges, the major keys on the outside and
+their relative minors on the inside.</p>
 
-<p>C is at the top and each step clockwise is a fifth up, so the keys gather sharps on the right and flats on the left. The
-disc in the middle shows the staff and key signature of the key being talked about. In an exercise one wedge is the question
+<p>C is at the top and each step clockwise is a fifth up, so the keys
+gather sharps on the right and flats on the left. The
+disc in the middle shows the staff and key signature of the key being
+talked about. In an exercise one wedge is the question
 and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=3, title="F♯ minor")
-&gt;&gt;&gt; circle.target
-('outer', 3)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"F♯ minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span>
+<span class="go">('outer', 3)
+</span></code></pre></div></div>
 
 <h2 id="wedge_path">wedge_path</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wedge_path</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wedge_path</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">center</span><span class="p">:</span> <span class="n">QPointF</span><span class="p">,</span>
     <span class="n">inner</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">outer</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPainterPath</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L113" aria-label="Source for wedge_path">[Source]</a></p>
+
+</div>
 
 <p>Return the outline of one wedge of a ring.</p>
 
@@ -642,22 +802,37 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; shape = wedge_path(center=QPointF(100, 100), inner=40, outer=90, index=0)
-&gt;&gt;&gt; shape.contains(QPointF(100, 30)), shape.contains(QPointF(100, 170))  # the top of the circle, and the bottom
-(True, False)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">shape</span> <span class="o">=</span> <span class="n">wedge_path</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">inner</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">outer</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">shape</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">shape</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">170</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># the top of the circle, and the bottom
+</span><span class="go">(True, False)
+</span></code></pre></div></div>
 
 <h2 id="wedge_middle">wedge_middle</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wedge_middle</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wedge_middle</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">center</span><span class="p">:</span> <span class="n">QPointF</span><span class="p">,</span>
     <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPointF</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Return the point in the middle of a wedge, at a given distance from the center.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L180" aria-label="Source for wedge_middle">[Source]</a></p>
+
+</div>
+
+<p>Return the point in the middle of a wedge, at a given distance from
+the center.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -675,24 +850,41 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; wedge_middle(center=QPointF(100, 100), radius=50, index=0).toTuple()  # straight up
-(100.0, 50.0)
-&gt;&gt;&gt; round(wedge_middle(center=QPointF(100, 100), radius=50, index=3).x())  # a quarter of the way around: to the right
-150
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wedge_middle</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>  <span class="c1"># straight up
+</span><span class="go">(100.0, 50.0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_middle</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">index</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">x</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>  <span class="c1"># a quarter of the way around: to the right
+</span><span class="go">150
+</span></code></pre></div></div>
 
 <h2 id="wedge_color">wedge_color</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wedge_color</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wedge_color</span><span class="p">(</span>
     <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">inner</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">lift</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">scheme</span><span class="p">:</span> <span class="n">Scheme</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QColor</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Return the color of a wedge in a color scheme: quiet when it is not being talked about and bright when it is.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L230" aria-label="Source for wedge_color">[Source]</a></p>
+
+</div>
+
+<p>Return the color of a wedge in a color scheme: quiet when it is not
+being talked about and bright when it is.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -711,22 +903,56 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.circle_schemes import preset
-&gt;&gt;&gt; spectrum = preset("spectrum")
-&gt;&gt;&gt; wedge_color(0, inner=False, lift=1.0, scheme=spectrum).hue(), wedge_color(6, inner=False, scheme=spectrum).hue()
-(0, 180)
-&gt;&gt;&gt; lit, quiet = (wedge_color(0, inner=False, lift=amount, scheme=spectrum) for amount in (1.0, 0.0))
-&gt;&gt;&gt; lit.lightness() &gt; quiet.lightness()
-True
-&gt;&gt;&gt; # no wedge looks too bright for white names
-&gt;&gt;&gt; every = [wedge_color(i, inner=False, lift=1.0, scheme=spectrum) for i in range(12)]
-&gt;&gt;&gt; all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() &lt;= 0.44 for c in every)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spectrum</span> <span class="o">=</span> <span class="n">preset</span><span class="p">(</span><span class="s">"spectrum"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">hue</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">6</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">hue</span><span class="p">(),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(0, 180)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lit</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">lift</span><span class="o">=</span><span class="n">amount</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">amount</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lit</span><span class="p">.</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">quiet</span><span class="p">.</span><span class="n">lightness</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># no wedge looks too bright for white names
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">every</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">wedge_color</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">i</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">all</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mf">0.299</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">redF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="mf">0.587</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">greenF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="mf">0.114</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">blueF</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">&lt;=</span> <span class="mf">0.44</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">every</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="write_text">write_text</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">write_text</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">write_text</span><span class="p">(</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">center</span><span class="p">:</span> <span class="n">QPointF</span><span class="p">,</span>
@@ -736,12 +962,19 @@ True
     <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
     <span class="n">max_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Write a line of text centered on a point, with its sharps and flats drawn as the notation font draws them.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L313" aria-label="Source for write_text">[Source]</a></p>
 
-<p>The letters are in the app’s own font. Its ♭ is the shape of a small “b”, though, and does not look like a flat sign, so
-the sharps, flats and naturals are the glyphs of the notation style that the staff is drawn in, sized to the letters.</p>
+</div>
+
+<p>Write a line of text centered on a point, with its sharps and flats
+drawn as the notation font draws them.</p>
+
+<p>The letters are in the app’s own font. Its ♭ is the shape of a small
+“b”, though, and does not look like a flat sign, so
+the sharps, flats and naturals are the glyphs of the notation style
+that the staff is drawn in, sized to the letters.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -757,21 +990,40 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(120, 60, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; image.fill(QColor("black"))
-&gt;&gt;&gt; painter = QPainter(image)
-&gt;&gt;&gt; write_text(painter, center=QPointF(60, 30), text="B♭m", pixels=24, weight=QFont.Weight.Bold, color=QColor("white"))
-&gt;&gt;&gt; painter.end()
-True
-&gt;&gt;&gt; any(image.pixelColor(x, 30).lightness() &gt; 128 for x in range(20, 100))
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">120</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_text</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">painter</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">text</span><span class="o">=</span><span class="s">"B♭m"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pixels</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">weight</span><span class="o">=</span><span class="n">QFont</span><span class="p">.</span><span class="n">Weight</span><span class="p">.</span><span class="n">Bold</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">30</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">&gt;</span> <span class="mi">128</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="fifthscircle">FifthsCircle</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FifthsCircle</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FifthsCircle</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L460" aria-label="Source for FifthsCircle">[Source]</a></p>
+
+</div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
@@ -792,12 +1044,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=0, title="A minor")
-&gt;&gt;&gt; circle.reveal(animate=False)
-&gt;&gt;&gt; circle.shown["outer"], circle.signature
-({0}, 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"outer"</span><span class="p">],</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span>
+<span class="go">({0}, 0)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -811,14 +1065,20 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; FifthsCircle().target is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">FifthsCircle</span><span class="p">().</span><span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclesizehint">FifthsCircle.sizeHint</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sizeHint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSize</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sizeHint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSize</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L539" aria-label="Source for FifthsCircle.sizeHint">[Source]</a></p>
+
+</div>
 
 <p>Return the size it would like: a square, big enough to read.</p>
 
@@ -830,13 +1090,39 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; FifthsCircle().sizeHint().width()
-460
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">FifthsCircle</span><span class="p">().</span><span class="n">sizeHint</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
+<span class="go">460
+</span></code></pre></div></div>
+
+<h3 id="fifthscircleset_question">FifthsCircle.set_question</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_question</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L555" aria-label="Source for FifthsCircle.set_question">[Source]</a></p>
+
+</div>
+
+<p>Display a circle question using its caption and selected cell.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The exercise question to display.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A numeral question highlights the selected chord's key.
+</code></pre></div></div>
 
 <h3 id="fifthscircleshow_question">FifthsCircle.show_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_question</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_question</span><span class="p">(</span>
     <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -844,12 +1130,19 @@ True
     <span class="n">ring</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Ask about a cell, showing what the question needs and leaving the answer blank.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L577" aria-label="Source for FifthsCircle.show_question">[Source]</a></p>
 
-<p>A “major” question shows the minor keys and asks for the major of one of them; a “minor” question shows the majors and
-asks for a minor; a “numeral” question shows every name, lights the six chords of a key with its staff in the middle, and
+</div>
+
+<p>Ask about a cell, showing what the question needs and leaving
+the answer blank.</p>
+
+<p>A “major” question shows the minor keys and asks for the major
+of one of them; a “minor” question shows the majors and
+asks for a minor; a “numeral” question shows every name, lights
+the six chords of a key with its staff in the middle, and
 asks for the Roman numeral of one of them.</p>
 
 <p><strong>Parameters</strong></p>
@@ -864,42 +1157,80 @@ asks for the Roman numeral of one of them.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("minor", place=3, title="A major")
-&gt;&gt;&gt; circle.target, circle.shown["outer"] == set(range(12)), circle.shown["inner"], circle.signature
-(('inner', 3), True, set(), None)
-&gt;&gt;&gt; circle.show_question("numeral", place=11, ring="outer", key=0, title="C major")
-&gt;&gt;&gt; sorted(circle.lit), circle.signature, circle.numerals
-([0, 1, 11], 0, {})
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"minor"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A major"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"outer"</span><span class="p">]</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(('inner', 3), True, set(), None)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"numeral"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">place</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ring</span><span class="o">=</span><span class="s">"outer"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"C major"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">sorted</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="n">lit</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">numerals</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">([0, 1, 11], 0, {})
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclereset">FifthsCircle.reset</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Clear everything: no question, no names shown, no animation running.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L753" aria-label="Source for FifthsCircle.reset">[Source]</a></p>
+
+</div>
+
+<p>Clear everything: no question, no names shown, no animation
+running.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=2, title="B minor")
-&gt;&gt;&gt; circle.reset()
-&gt;&gt;&gt; circle.target is None and circle.title == "" and circle.lit == set()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"B minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">and</span> <span class="n">circle</span><span class="p">.</span><span class="n">title</span> <span class="o">==</span> <span class="s">""</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">and</span> <span class="n">circle</span><span class="p">.</span><span class="n">lit</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclereveal">FifthsCircle.reveal</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reveal</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reveal</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">animate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Show the answer: the key’s name in its cell, brightened, and its staff and key signature in the middle.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L785" aria-label="Source for FifthsCircle.reveal">[Source]</a></p>
 
-<p>For a Roman numeral question every chord of the key shows its numeral, as the circle in the reference does.</p>
+</div>
+
+<p>Show the answer: the key’s name in its cell, brightened, and its
+staff and key signature in the middle.</p>
+
+<p>For a Roman numeral question every chord of the key shows its
+numeral, as the circle in the reference does.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -909,19 +1240,35 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("minor", place=5, title="B major / C♭ major")
-&gt;&gt;&gt; circle.reveal(animate=False)
-&gt;&gt;&gt; circle.shown["inner"], circle.title, circle.subtitle, circle.signature
-({5}, 'G♯ minor', '5 sharps', 5)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"minor"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">title</span><span class="o">=</span><span class="s">"B major / C♭ major"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">],</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">title</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">({5}, 'G♯ minor', '5 sharps', 5)
+</span></code></pre></div></div>
 
 <h3 id="fifthscircleset_subtitle">FifthsCircle.set_subtitle</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_subtitle</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Change the small text in the middle, for example to say that a second answer is wanted.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_subtitle</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L837" aria-label="Source for FifthsCircle.set_subtitle">[Source]</a></p>
+
+</div>
+
+<p>Change the small text in the middle, for example to say that a
+second answer is wanted.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -931,41 +1278,59 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.set_subtitle("and its other name")
-&gt;&gt;&gt; circle.subtitle
-'and its other name'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">set_subtitle</span><span class="p">(</span><span class="s">"and its other name"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span>
+<span class="go">'and its other name'
+</span></code></pre></div></div>
 
 <h3 id="fifthscircleflash_wrong">FifthsCircle.flash_wrong</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flash_wrong</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Flash the cell asked about in the red of a wrong answer, striped as well so that it still shows on the red wedge.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flash_wrong</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L857" aria-label="Source for FifthsCircle.flash_wrong">[Source]</a></p>
+
+</div>
+
+<p>Flash the cell asked about in the red of a wrong answer, striped
+as well so that it still shows on the red wedge.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=0, title="A minor")
-&gt;&gt;&gt; circle.flash_wrong()
-&gt;&gt;&gt; circle._warning is not None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">flash_wrong</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">_warning</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclelift_of">FifthsCircle.lift_of</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">lift_of</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">lift_of</span><span class="p">(</span>
     <span class="n">ring</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">place</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Return how bright a cell is drawn, from 0 (quiet) to 1 (fully lit).</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L948" aria-label="Source for FifthsCircle.lift_of">[Source]</a></p>
 
-<p>The cell asked about is half lit, and brightens when it is answered. The cell beside it on the other ring is a little
-lit, to show the pair; in a Roman numeral question the six chords of the key are lit instead.</p>
+</div>
+
+<p>Return how bright a cell is drawn, from 0 (quiet) to 1 (fully
+lit).</p>
+
+<p>The cell asked about is half lit, and brightens when it is
+answered. The cell beside it on the other ring is a little
+lit, to show the pair; in a Roman numeral question the six
+chords of the key are lit instead.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -982,23 +1347,36 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=0, title="A minor")
-&gt;&gt;&gt; circle.lift_of("outer", place=0), circle.lift_of("inner", place=0), circle.lift_of("outer", place=5)
-(0.5, 0.3, 0.0)
-&gt;&gt;&gt; circle.reveal(animate=False)
-&gt;&gt;&gt; circle.lift_of("outer", place=0)
-1.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(0.5, 0.3, 0.0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">1.0
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclegeometry_of">FifthsCircle.geometry_of</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">geometry_of</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">QPointF</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">geometry_of</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">QPointF</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L999" aria-label="Source for FifthsCircle.geometry_of">[Source]</a></p>
+
+</div>
 
 <p>Return where the circle is drawn: its middle and its radius.</p>
 
-<p>The circle fits the widget as a square in the middle of it, but no larger than <code class="language-plaintext highlighter-rouge">MAX_RADIUS</code>.</p>
+<p>The circle fits the widget as a square in the middle of it, but
+no larger than <code class="language-plaintext highlighter-rouge">MAX_RADIUS</code>.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1008,22 +1386,29 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.resize(400, 300)
-&gt;&gt;&gt; middle, radius = circle.geometry_of()
-&gt;&gt;&gt; middle.toTuple(), radius &lt; 150
-((200.0, 150.0), True)
-&gt;&gt;&gt; circle.resize(2400, 2000)
-&gt;&gt;&gt; circle.geometry_of()[1] == MAX_RADIUS
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">middle</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">middle</span><span class="p">.</span><span class="n">toTuple</span><span class="p">(),</span> <span class="n">radius</span> <span class="o">&lt;</span> <span class="mi">150</span>
+<span class="go">((200.0, 150.0), True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">2400</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">MAX_RADIUS</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclepaintevent">FifthsCircle.paintEvent</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Draw the two rings, the names, the question and the disc in the middle.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L1028" aria-label="Source for FifthsCircle.paintEvent">[Source]</a></p>
+
+</div>
+
+<p>Draw the two rings, the names, the question and the disc in the
+middle.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1033,14 +1418,78 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.resize(400, 400)
-&gt;&gt;&gt; circle.show_question("major", place=0, title="A minor")
-&gt;&gt;&gt; circle.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
+
+<h2 id="question_circle">question_circle</h2>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">question_circle</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FifthsCircle</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/circle.py#L1381" aria-label="Source for question_circle">[Source]</a></p>
+
+</div>
+
+<p>Build a fixed-size circle for a question preview or export.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The exercise question to display.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>FifthsCircle</em>: A circle showing the question before revealing its answer.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Anki export reveals the answer after saving the front image.
+</code></pre></div></div>
 
 
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           
           
           
@@ -1187,10 +1636,6 @@ False
     </main>
   </div>
   <script>
-    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
-    var menu = document.getElementById("menu");
-    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
-
     // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
@@ -1239,8 +1684,10 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/search.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/copy-code.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795657983" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

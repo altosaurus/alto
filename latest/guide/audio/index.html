@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Computer audio · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/guide/audio/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Computer audio · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/guide/audio/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795657983">
   
 </head>
 <body>
@@ -30,6 +30,7 @@
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/></symbol>
     <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
     <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
     <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
@@ -43,7 +44,21 @@
       <span>Alto</span>
     </a>
     <div class="top-actions">
+      <form class="docs-search" role="search" action="/alto/latest/search/" method="get"
+            data-index="/alto/latest/search-index.json" hidden>
+        <div class="search-field">
+          <svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5.5 5.5"/></svg>
+          <input id="docs-search-input" name="q" type="search" enterkeyhint="search" placeholder="Search docs" aria-label="Search documentation"
+                 autocomplete="off" aria-controls="docs-search-results">
+        </div>
+        <div id="docs-search-results" class="search-results" hidden>
+          <div role="status" class="search-status"></div>
+          <ul></ul>
+        </div>
+      </form>
+      
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      
       <div class="dd" id="theme-dd">
         <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
@@ -59,11 +74,11 @@
   </header>
   <div class="layout">
     <aside class="sidebar">
-      <details class="menu" id="menu">
-        <summary>Contents</summary>
-        <nav class="nav" aria-label="Documentation">
-          
-          
+      <nav class="menu" aria-label="Documentation">
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -85,9 +100,24 @@
             
             
             
-            <li class="nav-group"><details data-nav-group="Using Alto" open>
-              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/using-alto/">Using Alto</a>
+  
+  <button type="button" class="nav-toggle" data-category="Using Alto" aria-controls="nav-using-alto"
+          aria-expanded="true" aria-label="Collapse Using Alto" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-using-alto">
+            
+            
+            
+            
+            
             
             
             
@@ -163,12 +193,50 @@
             
             
             
-            </ul></details></li>
             
             
-            <li class="nav-group"><details data-nav-group="For developers" open>
-              <summary class="nav-head"><a class="grow" href="/alto/latest/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            </ul></li>
+            
+            
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/development/">For developers</a>
+  
+  <button type="button" class="nav-toggle" data-category="For developers" aria-controls="nav-for-developers"
+          aria-expanded="true" aria-label="Collapse For developers" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-for-developers">
             
             
             
@@ -188,10 +256,19 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/ui-style-guide/">UI style guide</a></li>
                 
                 
               </ul>
@@ -289,6 +366,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
                 
                 
@@ -298,10 +378,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.updates/">updates</a></li>
@@ -317,6 +403,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.packs/">packs</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
                 
                 
                 </ul></details></li>
@@ -364,10 +456,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.duration/">duration</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -409,6 +507,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.background/">background</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
                 
                 
@@ -436,7 +537,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.fingerboard/">fingerboard</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
@@ -472,16 +579,34 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.midi_input/">midi_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notation/">notation</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -503,6 +628,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -544,7 +672,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.warmup/">warmup</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.zoom/">zoom</a></li>
                 
                 </ul></details></li>
               </ul>
@@ -555,12 +689,27 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
             
             
-            <li class="nav-group"><details data-nav-group="About" open>
-              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/about/">About</a>
+  
+  <button type="button" class="nav-toggle" data-category="About" aria-controls="nav-about"
+          aria-expanded="true" aria-label="Collapse About" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-about">
+            
+            
+            
+            
+            
             
             
             
@@ -588,10 +737,10 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
           </ul>
-        </nav>
-      </details>
+        </div>
+      </nav>
     </aside>
     <main id="content" class="content">
       <div class="page-grid" id="page-grid">
@@ -622,11 +771,15 @@ header (the <strong>RIFF</strong> container) saying the rate, depth and channels
 which is all <code class="language-plaintext highlighter-rouge">audio.py</code> needs:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">wave</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
-    <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">readframes</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">getnframes</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">"&lt;i2"</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">/</span> <span class="mi">32768</span>
+    <span class="n">pcm</span> <span class="o">=</span> <span class="n">array</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="s">"h"</span><span class="p">)</span>  <span class="c1"># signed 16-bit integers
+</span>    <span class="n">pcm</span><span class="p">.</span><span class="n">frombytes</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">readframes</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">getnframes</span><span class="p">()))</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span> <span class="o">/</span> <span class="mi">32768</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">pcm</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p><code class="language-plaintext highlighter-rouge">"&lt;i2"</code> means “little-endian signed 16-bit integer”; dividing by 32,768 turns the integers into floating-point numbers between
--1 and 1, which are easier to compute with. Writing does the reverse: multiply by 32,767 and store as <code class="language-plaintext highlighter-rouge">"&lt;i2"</code>.</p>
+<p><code class="language-plaintext highlighter-rouge">array.array("h")</code> holds signed 16-bit integers. A WAV file stores them little-endian, least significant byte first, and <code class="language-plaintext highlighter-rouge">wave</code>
+hands them over in the computer’s own byte order, swapping them itself on a big-endian computer, which is the order <code class="language-plaintext highlighter-rouge">array</code> reads.
+Dividing by 32,768 turns the integers into floating-point numbers between -1 and 1, which are easier to compute with. Writing does
+the reverse: multiply by 32,767 and store as 16-bit integers, which <code class="language-plaintext highlighter-rouge">wave</code> writes little-endian.</p>
 
 <h3 id="the-sampling-theorem-and-aliasing">The sampling theorem and aliasing</h3>
 
@@ -696,8 +849,11 @@ of these, since each note is played once at one level.</p>
 
 <ol>
   <li><strong><code class="language-plaintext highlighter-rouge">_note_file</code></strong> returns the recording’s path if that note has one. If it does not, it picks the <em>nearest</em> recorded note and
-makes a new WAV by shifting its pitch (below), saved in <code class="language-plaintext highlighter-rouge">alto_sounds</code> in the system temporary folder. The piano is special:
-beyond two semitones from a recording it is synthesized instead (below).</li>
+makes a new WAV by shifting its pitch (below), saved in <code class="language-plaintext highlighter-rouge">alto_sounds</code> in the system temporary folder and reused after that.
+The file’s name includes the size and modification time of the recording it came from, so a plugin update that replaces a
+recording gets a new file. The piano is special: beyond two semitones from a recording it is synthesized instead (below).
+Making a note takes a few tens of milliseconds, so <code class="language-plaintext highlighter-rouge">alto.ui.warmup</code> makes the current instrument’s missing notes ahead of
+time (<code class="language-plaintext highlighter-rouge">Sounds.unrecorded</code> and <code class="language-plaintext highlighter-rouge">Sounds.prepare</code>), one per idle moment after the window opens.</li>
   <li><strong><code class="language-plaintext highlighter-rouge">_effect</code></strong> wraps the file in a <code class="language-plaintext highlighter-rouge">QSoundEffect</code> the first time and keeps it, so a note is loaded once.
 <strong><code class="language-plaintext highlighter-rouge">QSoundEffect</code></strong> is Qt Multimedia’s class for short, uncompressed sounds that must start with low delay: it loads the whole
 file into memory, so <code class="language-plaintext highlighter-rouge">play()</code> is quick. Qt has two others: <code class="language-plaintext highlighter-rouge">QMediaPlayer</code> streams longer, compressed audio and starts slower,
@@ -707,13 +863,24 @@ and <code class="language-plaintext highlighter-rouge">QAudioSink</code> is a lo
 <code class="language-plaintext highlighter-rouge">sounds.enabled</code> is the master switch the sound button controls; <code class="language-plaintext highlighter-rouge">force=True</code> plays anyway, for the instrument preview.</li>
 </ol>
 
+<p>A <strong>preview</strong> (the phrase played when you choose an instrument, and the sequences in some exercises) is one WAV with every note
+in it, so the notes stay evenly spaced whatever the computer is doing. <code class="language-plaintext highlighter-rouge">_preview_file</code> mixes it without leaving 16-bit integers:
+it reads the part of each note that is heard, fades out its tail, and adds the notes together with <code class="language-plaintext highlighter-rouge">map(operator.add, ...)</code>, so
+Python’s own C code does nearly all the work, at the rate the recordings share, so nothing is resampled. That is about as quick
+as NumPy would be. The clip is kept under a name made of everything it depends on, so a phrase is mixed once.</p>
+
 <h3 id="pitch-shifting-by-resampling">Pitch shifting by resampling</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">shift_pitch</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">semitones</span><span class="p">):</span>
     <span class="n">ratio</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">semitones</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span>
-    <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">interp</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)),</span> <span class="n">samples</span><span class="p">)</span>
-</code></pre></div></div>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">math</span><span class="p">.</span><span class="n">ceil</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ratio</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_interpolate</span><span class="p">(</span>
+        <span class="n">samples</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="n">count</span>
+    <span class="p">)</span>  <span class="c1"># the value at 0, ratio, 2 * ratio, ...
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">_interpolate</code> takes each position <code class="language-plaintext highlighter-rouge">x</code>, the sample <code class="language-plaintext highlighter-rouge">a</code> just before it and the one after, and returns <code class="language-plaintext highlighter-rouge">a + (after - a) * (x - i)</code>,
+where <code class="language-plaintext highlighter-rouge">i</code> is the whole part of <code class="language-plaintext highlighter-rouge">x</code>: a straight line between the two neighbors.</p>
 
 <p>To raise a recording by two semitones, read it 12% faster: take the samples at positions 0, 1.122, 2.245, … and interpolate
 between neighbors. This is <strong>resampling</strong>, and it is the simplest pitch shifter. It has two well-known side effects: the
@@ -727,7 +894,7 @@ two semitones on a flute or a viola neither is noticeable, which is why Alto shi
   <li><strong>Phase vocoder</strong>: works in the frequency domain, so it can change pitch without changing duration, at some cost in clarity.</li>
   <li><strong>PSOLA</strong> (<em>pitch-synchronous overlap-add</em>): cuts the sound into one-period grains and overlaps them at new spacing; good for
 speech and single voices.</li>
-  <li><strong>Better interpolation</strong>: <code class="language-plaintext highlighter-rouge">np.interp</code> is <strong>linear interpolation</strong>, which smooths the high frequencies slightly. Sinc or
+  <li><strong>Better interpolation</strong>: drawing straight lines is <strong>linear interpolation</strong>, which smooths the high frequencies slightly. Sinc or
 polynomial interpolation is more accurate (a polyphase resampler such as <code class="language-plaintext highlighter-rouge">scipy.signal.resample_poly</code>).</li>
 </ul>
 
@@ -738,13 +905,31 @@ waves, one per partial. The code has several pieces of real physics, each one li
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f0</span> <span class="o">=</span> <span class="mf">440.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">((</span><span class="n">midi</span> <span class="o">-</span> <span class="mi">69</span><span class="p">)</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">17</span><span class="p">):</span>  <span class="c1"># the first 16 partials
-</span>    <span class="n">f</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">inharm</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>  <span class="c1"># stiff strings: partials sit slightly sharp
+</span>    <span class="n">f</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">n</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">math</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">inharm</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># stiff strings: partials sit slightly sharp
 </span>    <span class="n">amp</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span><span class="o">**</span><span class="mf">1.15</span>  <span class="c1"># higher partials are quieter
 </span>    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">7</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">amp</span> <span class="o">*=</span> <span class="mf">0.3</span>  <span class="c1"># the hammer strikes ~1/7 along the string, which suppresses these
-</span>    <span class="n">decay</span> <span class="o">=</span> <span class="mf">2.2</span> <span class="o">+</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="p">(</span><span class="n">midi</span> <span class="o">-</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.03</span>  <span class="c1"># higher partials, and higher notes, die faster
-</span>    <span class="k">for</span> <span class="n">detune</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.0008</span><span class="p">,</span> <span class="mf">0.0008</span><span class="p">):</span>  <span class="c1"># two strings per note, slightly apart: the shimmer
-</span>        <span class="n">out</span> <span class="o">+=</span> <span class="n">amp</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">detune</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">phase</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">decay</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+</span>    <span class="n">decay</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">2.2</span> <span class="o">+</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="p">(</span><span class="n">midi</span> <span class="o">-</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.03</span>
+    <span class="p">)</span>  <span class="c1"># higher partials, and higher notes, die faster
+</span>    <span class="n">phase</span> <span class="o">=</span> <span class="n">rng</span><span class="p">.</span><span class="n">uniform</span><span class="p">(</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="p">.</span><span class="n">pi</span>
+    <span class="p">)</span>  <span class="c1"># one hammer strikes both strings, so they start together
+</span>    <span class="k">for</span> <span class="n">detune</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="o">-</span><span class="mf">0.0008</span><span class="p">,</span>
+        <span class="mf">0.0008</span><span class="p">,</span>
+    <span class="p">):</span>  <span class="c1"># two strings per note, slightly apart: the shimmer
+</span>        <span class="c1"># amp * 0.5 * sin(2π f (1 + detune) t + phase) * exp(-decay t), made one sample at a time
+</span>        <span class="n">step</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="p">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">detune</span><span class="p">)</span> <span class="o">/</span> <span class="n">SAMPLE_RATE</span>
+        <span class="n">turn</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">math</span><span class="p">.</span><span class="n">cos</span><span class="p">(</span><span class="n">step</span><span class="p">),</span> <span class="n">math</span><span class="p">.</span><span class="n">sin</span><span class="p">(</span><span class="n">step</span><span class="p">))</span> <span class="o">*</span> <span class="n">math</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="o">-</span><span class="n">decay</span> <span class="o">/</span> <span class="n">SAMPLE_RATE</span>
+        <span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">complex</span><span class="p">(</span><span class="n">math</span><span class="p">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">),</span> <span class="n">math</span><span class="p">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phase</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">z</span><span class="p">.</span><span class="n">imag</span>
+            <span class="n">z</span> <span class="o">*=</span> <span class="n">turn</span>
 </code></pre></div></div>
 
 <ul>
@@ -758,14 +943,21 @@ short burst of <strong>filtered noise</strong> for the hammer’s thump (white n
 and a 50 ms fade-out so the file does not end with a click.</li>
 </ul>
 
+<p>Alto computes this in plain Python, without NumPy: multiplying a complex number by the same small rotation, which also shrinks
+it a little, traces a decaying sine one sample at a time, so no sine or exponential is computed per sample. A note takes a fraction
+of a second, and the result is saved, so each note is made once.</p>
+
 <p>You can check the result in a few lines. A Fourier transform shows the spectrum, and the loudest peak of a synthesized middle C
-is at 261.9 Hz (the frequency resolution of a 1.6 second clip is about 0.6 Hz, so this is the fundamental, 261.63 Hz):</p>
+is at 261.9 Hz (the frequency resolution of a 1.6 second clip is about 0.6 Hz, so this is the fundamental, 261.63 Hz). This uses
+NumPy, which the tests install (<code class="language-plaintext highlighter-rouge">pip install -e ".[dev]"</code>) and Alto itself does not need:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 <span class="kn">from</span> <span class="nn">alto.audio</span> <span class="kn">import</span> <span class="n">synth_piano</span><span class="p">,</span> <span class="n">SAMPLE_RATE</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">synth_piano</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
-<span class="n">spectrum</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">fft</span><span class="p">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">hanning</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>  <span class="c1"># a window function reduces leakage
+<span class="n">spectrum</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span>
+    <span class="n">np</span><span class="p">.</span><span class="n">fft</span><span class="p">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">hanning</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="p">)</span>  <span class="c1"># a window function reduces leakage
 </span><span class="n">freqs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">fft</span><span class="p">.</span><span class="n">rfftfreq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">SAMPLE_RATE</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">freqs</span><span class="p">[</span><span class="n">spectrum</span><span class="p">.</span><span class="n">argmax</span><span class="p">()])</span>
 </code></pre></div></div>
@@ -919,6 +1111,22 @@ of the recordings Alto ships.</li>
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/latest/guide/notation/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Rendering music notation</span></a>
             <a class="next" href="/alto/latest/guide/spaced-repetition/" rel="next"><span class="np-label">Next</span><span class="np-title">Spaced repetition and adaptive practice<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -931,10 +1139,6 @@ of the recordings Alto ships.</li>
     </main>
   </div>
   <script>
-    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
-    var menu = document.getElementById("menu");
-    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
-
     // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
@@ -983,8 +1187,10 @@ of the recordings Alto ships.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/search.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/copy-code.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795657983" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

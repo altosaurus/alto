@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>For developers · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/development/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="For developers · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/development/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795657983">
   
 </head>
 <body>
@@ -30,6 +30,7 @@
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/></symbol>
     <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
     <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
     <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
@@ -43,7 +44,21 @@
       <span>Alto</span>
     </a>
     <div class="top-actions">
+      <form class="docs-search" role="search" action="/alto/latest/search/" method="get"
+            data-index="/alto/latest/search-index.json" hidden>
+        <div class="search-field">
+          <svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5.5 5.5"/></svg>
+          <input id="docs-search-input" name="q" type="search" enterkeyhint="search" placeholder="Search docs" aria-label="Search documentation"
+                 autocomplete="off" aria-controls="docs-search-results">
+        </div>
+        <div id="docs-search-results" class="search-results" hidden>
+          <div role="status" class="search-status"></div>
+          <ul></ul>
+        </div>
+      </form>
+      
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      
       <div class="dd" id="theme-dd">
         <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
@@ -59,11 +74,11 @@
   </header>
   <div class="layout">
     <aside class="sidebar">
-      <details class="menu" id="menu">
-        <summary>Contents</summary>
-        <nav class="nav" aria-label="Documentation">
-          
-          
+      <nav class="menu" aria-label="Documentation">
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -85,9 +100,24 @@
             
             
             
-            <li class="nav-group"><details data-nav-group="Using Alto" open>
-              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/using-alto/">Using Alto</a>
+  
+  <button type="button" class="nav-toggle" data-category="Using Alto" aria-controls="nav-using-alto"
+          aria-expanded="true" aria-label="Collapse Using Alto" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-using-alto">
+            
+            
+            
+            
+            
             
             
             
@@ -163,12 +193,50 @@
             
             
             
-            </ul></details></li>
             
             
-            <li class="nav-group"><details data-nav-group="For developers" open>
-              <summary class="nav-head"><a class="grow" href="/alto/latest/development/" aria-current="page">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            </ul></li>
+            
+            
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/development/" aria-current="page">For developers</a>
+  
+  <button type="button" class="nav-toggle" data-category="For developers" aria-controls="nav-for-developers"
+          aria-expanded="true" aria-label="Collapse For developers" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-for-developers">
             
             
             
@@ -188,10 +256,19 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/ui-style-guide/">UI style guide</a></li>
                 
                 
               </ul>
@@ -289,6 +366,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
                 
                 
@@ -298,10 +378,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.updates/">updates</a></li>
@@ -317,6 +403,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.packs/">packs</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
                 
                 
                 </ul></details></li>
@@ -364,10 +456,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.duration/">duration</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -409,6 +507,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.background/">background</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
                 
                 
@@ -436,7 +537,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.fingerboard/">fingerboard</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
@@ -472,16 +579,34 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.midi_input/">midi_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notation/">notation</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -503,6 +628,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -544,7 +672,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.warmup/">warmup</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.zoom/">zoom</a></li>
                 
                 </ul></details></li>
               </ul>
@@ -555,12 +689,27 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
             
             
-            <li class="nav-group"><details data-nav-group="About" open>
-              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/about/">About</a>
+  
+  <button type="button" class="nav-toggle" data-category="About" aria-controls="nav-about"
+          aria-expanded="true" aria-label="Collapse About" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-about">
+            
+            
+            
+            
+            
             
             
             
@@ -588,10 +737,10 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
           </ul>
-        </nav>
-      </details>
+        </div>
+      </nav>
     </aside>
     <main id="content" class="content">
       <div class="page-grid" id="page-grid">
@@ -618,7 +767,7 @@ the program works and the ideas underneath it (audio, notation, spaced repetitio
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">alto/exercises/</code></td>
-      <td>The exercises and the <code class="language-plaintext highlighter-rouge">Question</code> and <code class="language-plaintext highlighter-rouge">Exercise</code> base classes. No Qt.</td>
+      <td>The exercises, the <code class="language-plaintext highlighter-rouge">Question</code> and <code class="language-plaintext highlighter-rouge">Exercise</code> base classes, and registration of installed instrument packs.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">alto/learning/</code></td>
@@ -639,13 +788,27 @@ the program works and the ideas underneath it (audio, notation, spaced repetitio
   </tbody>
 </table>
 
-<p>Keeping the theory, exercises and learning code free of Qt means they can be tested without a display.</p>
+<p>The theory, exercise generation, and learning code can be tested without a display. The pack loader uses Qt’s image reader to check each supplied picture against its original dimensions. <a href="/alto/latest/plugins/api/">Plugin API</a></p>
 
 <h2 id="running-the-tests">Running the tests</h2>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install</span> <span class="nt">-e</span> <span class="s2">".[dev]"</span>
-pytest
+pytest <span class="nt">-n</span> auto        <span class="c"># the whole suite, on every core at once</span>
+pytest tests/test_audio.py   <span class="c"># one file, in one process</span>
 </code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-n auto</code> (from pytest-xdist) runs the tests in one process per core, which takes the suite from minutes to under a minute.
+Leave it out when running a few tests, where starting the processes would take longer than the tests.
+<code class="language-plaintext highlighter-rouge">sh scripts/run-tests.sh</code> runs the suite the way the pre-push hook and GitHub do: everything but the performance budgets, on
+every core. The budgets time real operations, so they run in the Budgets workflow instead (see below). Set <code class="language-plaintext highlighter-rouge">ALTO_TEST_WORKERS</code>
+to use a different number of processes.</p>
+
+<p>Two checks keep the suite fast as it grows. A test that takes longer than 8 seconds fails (<code class="language-plaintext highlighter-rouge">TEST_TIME_LIMIT</code> in
+<code class="language-plaintext highlighter-rouge">tests/conftest.py</code>) unless it is marked <code class="language-plaintext highlighter-rouge">@pytest.mark.slow</code>, for a thorough check that is worth the time. And
+<code class="language-plaintext highlighter-rouge">tests/test_test_speed.py</code> fails when a test file gains a fixed wait (<code class="language-plaintext highlighter-rouge">QTest.qWait</code> or <code class="language-plaintext highlighter-rouge">time.sleep</code>) outside tests marked
+<code class="language-plaintext highlighter-rouge">motion</code> or <code class="language-plaintext highlighter-rouge">slow</code>: let animations and feedback finish with <code class="language-plaintext highlighter-rouge">motion.settle()</code> instead, which takes no time (see the
+<a href="/alto/latest/guide/animation/#testing-animations">Animation</a> guide). When a file loses a wait, lower its number in
+that test’s <code class="language-plaintext highlighter-rouge">BASELINE</code>.</p>
 
 <p>The tests that touch widgets run with Qt’s offscreen platform, so no display is needed.</p>
 
@@ -709,23 +872,31 @@ painting each screen, drawing the circle of fifths at new sizes, and reading and
 behind it.</p>
 
 <ul>
-  <li><strong>Budgets, on every pull request.</strong> <code class="language-plaintext highlighter-rouge">tests/test_performance.py</code> fails when an operation takes longer than its budget in
+  <li><strong>Budgets, after each merge.</strong> <code class="language-plaintext highlighter-rouge">tests/test_performance.py</code> (marked <code class="language-plaintext highlighter-rouge">perf</code>) fails when an operation takes longer than its budget in
 <code class="language-plaintext highlighter-rouge">benchmarks/budgets.py</code>. A budget is four or five times what the operation takes on a development machine, so that a slow build
 machine does not fail a test but a change that makes something many times slower does. The first use of something in a new process
 (starting the app, the first look at a page, the circle at sizes not used before) is measured in a process of its own, because Qt
-makes fonts and layouts on first use and later runs hide that cost.</li>
+makes fonts and layouts on first use and later runs hide that cost. The budgets time real operations, so they are left out of the
+pull request’s tests, where other test processes share the cores. The Budgets workflow (<code class="language-plaintext highlighter-rouge">.github/workflows/budgets.yml</code>) runs them
+on a machine of their own after each merge into <code class="language-plaintext highlighter-rouge">main</code> that touches the app, the benchmarks or the budgets, and by hand. A missed
+budget opens an issue labeled <code class="language-plaintext highlighter-rouge">performance</code>, or adds the run to the one that is open, and does not fail the run. Run them yourself
+with <code class="language-plaintext highlighter-rouge">pytest -m perf</code>.</li>
   <li><strong>A history, from release to release.</strong> <code class="language-plaintext highlighter-rouge">benchmarks/suite.py</code> is an <a href="https://asv.readthedocs.io/">ASV</a> suite, and the Performance
-workflow (<code class="language-plaintext highlighter-rouge">.github/workflows/performance.yml</code>) runs it when a version is tagged and once a week, and keeps the results on the
-branch <code class="language-plaintext highlighter-rouge">asv-results</code>. A change of more than 30% against the previous release is written in the run’s summary. That is advice and not a
-failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
-would catch.</li>
+workflow (<code class="language-plaintext highlighter-rouge">.github/workflows/performance.yml</code>) measures main daily at 09:37 UTC and keeps the results on the
+branch <code class="language-plaintext highlighter-rouge">asv-results</code>. When the historical comparison flags a slowdown above 30%, the workflow measures the flagged operations
+again on the previous release and the candidate, using the same runner, benchmark suite, and Python environment. The run summary
+shows which slowdowns reproduced. Only confirmed slowdowns open or update a performance issue. The graphs keep the original full-suite measurements.</li>
+  <li><strong>First visits.</strong> The first time a page shows text with ♯, ♭ or ♮ in a new size, Qt spends about 40 ms looking for a font that
+has the signs, because the interface font does not. <code class="language-plaintext highlighter-rouge">alto/ui/warmup.py</code> does that once for each size the interface uses, and
+loads the music font, a step at a time while the app is idle after it opens, so the first visit to a page is nearly as quick as
+the second. A new style sheet size belongs in its <code class="language-plaintext highlighter-rouge">SIZES</code>.</li>
   <li><strong>By hand, before a release.</strong> The run takes a minute or two, and the feel of animations on a real screen is not something a test
 can judge, so look at the lesson, the circle of fifths and the statistics page on a real display as well.</li>
 </ul>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> benchmarks.survey        <span class="c"># every operation once, slowest first, in milliseconds</span>
 python <span class="nt">-m</span> benchmarks.operations page:lesson <span class="nt">--profile</span>   <span class="c"># where the time goes in one operation, the first time</span>
-pytest tests/test_performance.py   <span class="c"># the budgets</span>
+pytest <span class="nt">-m</span> perf                     <span class="c"># the budgets</span>
 asv run <span class="nt">-E</span> existing:<span class="si">$(</span>which python<span class="si">)</span> <span class="nt">--set-commit-hash</span> <span class="si">$(</span>git rev-parse HEAD<span class="si">)</span>   <span class="c"># record this commit</span>
 asv compare v0.0.0 HEAD            <span class="c"># what changed since a release, once both have been recorded</span>
 </code></pre></div></div>
@@ -733,7 +904,7 @@ asv compare v0.0.0 HEAD            <span class="c"># what changed since a releas
 <p>When an operation is made faster or slower on purpose, change its budget in the same commit. A new page or exercise needs a line in
 <code class="language-plaintext highlighter-rouge">benchmarks/budgets.py</code> (a prefix such as <code class="language-plaintext highlighter-rouge">page:</code> covers it) and, if it is a new kind of operation, an entry in
 <code class="language-plaintext highlighter-rouge">benchmarks/operations.py</code>; the tests fail until it has a budget, so nothing goes unwatched. The first release to be measured is the
-one that has <code class="language-plaintext highlighter-rouge">benchmarks/</code>; to measure an earlier one, run the Performance workflow by hand with <code class="language-plaintext highlighter-rouge">ref</code> set to its tag.</p>
+one that has <code class="language-plaintext highlighter-rouge">benchmarks/</code>. To record a release baseline, run the Performance workflow by hand with <code class="language-plaintext highlighter-rouge">ref</code> set to its tag.</p>
 
 <h2 id="type-checking">Type checking</h2>
 
@@ -774,8 +945,10 @@ pre-commit <span class="nb">install</span>
 files (the bundled recordings and fonts are exempt) and runs Ruff, applying its safe fixes. If a hook changes a file,
 the commit stops so you can review the change, then commit again.</p>
 
-<p>The test suite and Pyright run when you <strong>push</strong>, not on every commit, so commits stay quick. A failing test or a type
-error stops the push. Run the commit checks by hand with <code class="language-plaintext highlighter-rouge">pre-commit run --all-files</code>, the push checks with
+<p>On <strong>push</strong>, the hooks run the test suite, Pyright, and Pylint’s duplicate-code check (<code class="language-plaintext highlighter-rouge">R0801</code>). Pylint compares all
+modules in <code class="language-plaintext highlighter-rouge">alto/</code> so it can find matches in unchanged files. A failure in any of these checks stops the push.
+Run the duplicate check alone with <code class="language-plaintext highlighter-rouge">pre-commit run pylint-duplicates --hook-stage pre-push --all-files</code>,
+the commit checks with <code class="language-plaintext highlighter-rouge">pre-commit run --all-files</code>, the push checks with
 <code class="language-plaintext highlighter-rouge">pre-commit run --all-files --hook-stage pre-push</code>, and update the pinned hook versions with <code class="language-plaintext highlighter-rouge">pre-commit autoupdate</code>.</p>
 
 <h3 id="merged-local-branches">Merged local branches</h3>
@@ -799,8 +972,9 @@ references already in your clone and only deletes local branches.</p>
 <h2 id="linting">Linting</h2>
 
 <p>Alto uses <a href="https://docs.astral.sh/ruff/">Ruff</a> for linting and formatting. It is installed with the <code class="language-plaintext highlighter-rouge">dev</code> extra and
-configured in <code class="language-plaintext highlighter-rouge">pyproject.toml</code> (pycodestyle, pyflakes, import sorting, pyupgrade, bugbear and a few more rules, with a
-130-character line limit).</p>
+configured in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>. Ruff checks code at 79 characters and
+docstrings and standalone comments at 72 characters throughout the
+repository. Docstring summaries can wrap or start on their own line.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ruff format alto tests scripts        <span class="c"># format the code</span>
 ruff check <span class="nt">--fix</span> alto tests scripts   <span class="c"># report problems and apply the safe fixes</span>
@@ -913,7 +1087,7 @@ that satisfy it.</p>
 reinforce ideas introduced in several lessons. Reuse an existing lesson when it already explains the idea a new
 exercise depends on.</p>
 
-<p>Order the lesson tiles by prerequisite in <code class="language-plaintext highlighter-rouge">alto.lessons.LESSONS</code>. Start with a lesson that assumes no music theory
+<p>An instrument plugin follows the same guidance for the lessons in its manifest, which Alto appends to <code class="language-plaintext highlighter-rouge">alto.lessons.LESSONS</code> with <code class="language-plaintext highlighter-rouge">register_lesson</code> when the plugin loads. Order the lesson tiles by prerequisite in <code class="language-plaintext highlighter-rouge">alto.lessons.LESSONS</code>. Start with a lesson that assumes no music theory
 knowledge. When adding a lesson, place it after the ideas it uses and before lessons that build on it.</p>
 
 <ol>
@@ -926,8 +1100,10 @@ lessons. For each musical term, find where its meaning was taught. If it is new,
 where the learner first needs it, before a diagram or question asks them to use it. A mention in a title or a
 glossary entry alone does not teach the term. For example, introduce the tonic as the note that feels like home,
 then ask the learner to find it. Repeat this check when reordering lessons.</li>
-  <li><strong>Build a short guided sequence.</strong> Introduce the idea with an example the learner can read or hear. Change one
-feature and ask the learner to predict or explain the result. Give feedback that points back to the example.
+  <li><strong>Build a short guided sequence.</strong> Introduce the idea with an example the learner can read or hear. When the concept
+is visual, consider annotating the first example to show where to look. On a keyboard, bracket the pair of black
+keys and label the neighboring C. On a staff, an arrow from “notehead” to the oval shows which part of the note
+to read. Then change one feature and ask the learner to predict or explain the result. Give feedback that points back to the example.
 Use the closing step to name the skills the learner can practice next. Choose the primary practice target with <code class="language-plaintext highlighter-rouge">Lesson.exercise</code> and list
 additional practice targets in <code class="language-plaintext highlighter-rouge">Lesson.related_exercises</code>.</li>
   <li><strong>Time a first pass.</strong> Aim for <strong>20 minutes or less</strong>, including reading, listening, guided questions, and time
@@ -1089,7 +1265,13 @@ the guided G major example, and three for the comparison and recap.</p>
 </span>
     <span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
         <span class="p">...</span>
-        <span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"What is this?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span> <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">note</span><span class="p">]],</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Question</span><span class="p">(</span>
+            <span class="s">"What is this?"</span><span class="p">,</span>
+            <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">note</span><span class="p">]],</span>
+            <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span>
+        <span class="p">)</span>
 </code></pre></div></div>
 
 <ul>
@@ -1141,8 +1323,8 @@ request calls for a shared preference or the exercises already share it.</p>
 
 <h4 id="exercise-option-vocabulary">Exercise option vocabulary</h4>
 
-<p>The template exercise gives you a place to try the option in Alto. Its panel and the named helpers are in
-<code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>. Start with the option’s effect on the question or answer to choose among variants.</p>
+<p>The template exercise gives you a place to try the option in Alto. Its panel is in
+<code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>, and the named helpers are in <code class="language-plaintext highlighter-rouge">alto/ui/settings_menu.py</code>. Start with the option’s effect on the question or answer to choose among variants.</p>
 
 <table>
   <thead>
@@ -1156,7 +1338,7 @@ request calls for a shared preference or the exercises already share it.</p>
     <tr>
       <td><strong>Clefs</strong> (also “Clef”)</td>
       <td>A row showing the selected clef symbols. Its submenu has grouped, illustrated checkboxes. At least one stays checked. Offer the grand staff when the exercise supports questions on both staves.</td>
-      <td><strong>Note Identification</strong> uses <code class="language-plaintext highlighter-rouge">ClefPictures</code> with <code class="language-plaintext highlighter-rouge">_clefs_page</code>. <strong>Scale Construction</strong> shows the single-staff variant of the same picker.</td>
+      <td><strong>Note Identification</strong> uses <code class="language-plaintext highlighter-rouge">ClefPictures</code> with <code class="language-plaintext highlighter-rouge">clef_choice_page</code>. <strong>Scale Construction</strong> shows the single-staff variant of the same picker.</td>
     </tr>
     <tr>
       <td><strong>Range</strong></td>
@@ -1171,7 +1353,7 @@ request calls for a shared preference or the exercises already share it.</p>
     <tr>
       <td><strong>Scale Key</strong></td>
       <td>Choose the musical keys used in questions. Underlined Major and Minor tabs each offer 15 signatures. Either tab may be empty if the other has a selection. The row counts selections by mode.</td>
-      <td><strong>Scale Identification</strong> uses <code class="language-plaintext highlighter-rouge">_ScaleKeyPicker</code>. When both key options apply, place <strong>Staff Key</strong> above <strong>Scale Key</strong>.</td>
+      <td><strong>Scale Identification</strong> uses <code class="language-plaintext highlighter-rouge">ScaleKeyPicker</code>. When both key options apply, place <strong>Staff Key</strong> above <strong>Scale Key</strong>.</td>
     </tr>
     <tr>
       <td><strong>Key signatures</strong></td>
@@ -1199,6 +1381,11 @@ request calls for a shared preference or the exercises already share it.</p>
       <td><strong>Interval Identification</strong> uses a submenu with three radio buttons.</td>
     </tr>
     <tr>
+      <td><strong>Inversions</strong> (written intervals)</td>
+      <td>Show the selected interval and ask for its inversion in the chosen answer format.</td>
+      <td><strong>Interval Identification</strong> uses an inline switch, off by default.</td>
+    </tr>
+    <tr>
       <td><strong>Question Type</strong></td>
       <td>Choose what the learner is asked to do. Use radios for one format, or checkboxes when the question can combine parts.</td>
       <td><strong>Notation Identification</strong> has <strong>Click on Staff</strong> and <strong>Answer Button</strong> radios. <strong>Scale Identification</strong> has independent <strong>Key</strong> and <strong>Mode</strong> boxes. <strong>Note Construction</strong> shows its keys and degrees when <strong>Scale and Degree</strong> is selected.</td>
@@ -1216,7 +1403,7 @@ request calls for a shared preference or the exercises already share it.</p>
     <tr>
       <td><strong>Octave</strong></td>
       <td>An inline switch that makes the octave part of the required answer.</td>
-      <td><strong>Note Construction</strong> uses <code class="language-plaintext highlighter-rouge">_ToggleRow</code>. <strong>Keyboard Note Identification</strong> labels its variant <strong>Octave number</strong>.</td>
+      <td><strong>Note Construction</strong> uses <code class="language-plaintext highlighter-rouge">ToggleRow</code>. <strong>Keyboard Note Identification</strong> labels its variant <strong>Octave number</strong>.</td>
     </tr>
     <tr>
       <td><strong>Note names</strong>, <strong>Note values</strong>, <strong>Accidentals</strong></td>
@@ -1248,14 +1435,14 @@ When a new option needs a distinct interaction, describe the difference from its
 entry when introducing a reusable option or variant so it can be requested by name next time.</p>
 
 <ol>
-  <li>Give the option a row on the exercise settings menu. Use the shared <code class="language-plaintext highlighter-rouge">_Row</code> in <code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code> with
+  <li>Give the option a row on the exercise settings menu. Use the shared <code class="language-plaintext highlighter-rouge">MenuRow</code> in <code class="language-plaintext highlighter-rouge">alto/ui/settings_menu.py</code> with
 the option name, a short summary of the current selection, and the chevron. For a standalone on/off setting,
 such as <strong>Octave</strong>, an inline <code class="language-plaintext highlighter-rouge">Switch</code> in a row without a chevron is appropriate. Two named modes, such as
 <strong>Click on Staff</strong> and <strong>Answer Button</strong>, belong together in a submenu.</li>
-  <li>Open the option with the panel’s <code class="language-plaintext highlighter-rouge">SlideStack</code>. Build its page with <code class="language-plaintext highlighter-rouge">_subpage</code> so the title matches the row and
+  <li>Open the option with the panel’s <code class="language-plaintext highlighter-rouge">SlideStack</code>. Build its page with <code class="language-plaintext highlighter-rouge">subpage</code> so the title matches the row and
 Back returns to the settings menu. Use radio buttons when exactly one choice applies and checkboxes when
 several can apply. Group controls below the header at their natural height and leave extra space below the
-last row. For scrollable option lists, use <code class="language-plaintext highlighter-rouge">_scrolling</code> for the body and <code class="language-plaintext highlighter-rouge">fill=True</code> on <code class="language-plaintext highlighter-rouge">_subpage</code> so the
+last row. For scrollable option lists, use <code class="language-plaintext highlighter-rouge">scrolling</code> for the body and <code class="language-plaintext highlighter-rouge">fill=True</code> on <code class="language-plaintext highlighter-rouge">subpage</code> so the
 viewport can grow while the choices stay together. Verify row spacing at short and tall window sizes and
 check that the last option remains reachable when scrolling.</li>
   <li>Load the saved value when building the panel, using a default for first use. When a choice changes, save it,
@@ -1368,13 +1555,49 @@ home page, says <code class="language-plaintext highlighter-rouge">toc: false</c
 
 <p>The previous and next links at the bottom of each page follow the sidebar’s reading order.</p>
 
+<h3 id="pull-request-previews">Pull request previews</h3>
+
+<p>On a PR’s <strong>Conversation</strong> tab, click <strong>View rendered documentation</strong> in the GitHub Actions bot comment.
+The <strong>docs/preview</strong> check links to the same site. After each push, the bot updates its comment with the commit
+it verified. If the build or deployment fails, the link opens the run log.</p>
+
+<p><strong>Docs check</strong> builds the proposed merge with read-only permissions. <strong>Publish docs preview</strong> runs from the default
+branch, finds the open PR and its current head through GitHub, and publishes the rendered files to the preview fork.
+The preview for PR 97, for example, is served at <code class="language-plaintext highlighter-rouge">https://genedan.github.io/alto/pr-97/dev/</code>.
+Previously published previews remain accessible after the PR closes.</p>
+
+<p>The file <code class="language-plaintext highlighter-rouge">.github/docs-preview-repository</code> names the preview repository (<code class="language-plaintext highlighter-rouge">genedan/alto</code>). Set that repository’s Pages source to the root of its <code class="language-plaintext highlighter-rouge">docs-previews</code> branch with a
+<code class="language-plaintext highlighter-rouge">.nojekyll</code> file. Add a write deploy key to the preview repository and store the private key as
+<code class="language-plaintext highlighter-rouge">DOCS_PREVIEW_DEPLOY_KEY</code> in the upstream <code class="language-plaintext highlighter-rouge">docs-preview-publisher</code> environment. Restrict that environment to
+the <code class="language-plaintext highlighter-rouge">main</code> branch. Use a preview hostname separate from the production site, since the rendered content comes from PRs.</p>
+
 <h3 id="building-the-docs">Building the docs</h3>
+
+<p>The plugin tutorials are not stored in Alto. They live in
+<a href="https://github.com/altosaurus/viola-plugin-tutorial"><code class="language-plaintext highlighter-rouge">altosaurus/viola-plugin-tutorial</code></a> and
+<a href="https://github.com/altosaurus/harpsichord-plugin-tutorial"><code class="language-plaintext highlighter-rouge">altosaurus/harpsichord-plugin-tutorial</code></a>, which mirror the paths
+of <code class="language-plaintext highlighter-rouge">docs/</code>. The Docs and Docs check workflows run <code class="language-plaintext highlighter-rouge">scripts/tutorial_docs.py</code> before Jekyll. It copies in each tutorial page and
+only the files that page refers to: the artwork it links, and both themes of each screenshot. The download is a release asset
+of the tutorial repository, which its Release workflow builds when a tag is pushed, so the site links to it and does not host
+it. Nothing else in a tutorial repository is published. Run it once before a local build to see the pages. It clones both
+from GitHub, or takes one from a checkout of your own with <code class="language-plaintext highlighter-rouge">--from</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python scripts/tutorial_docs.py all
+python scripts/tutorial_docs.py harpsichord <span class="nt">--from</span> ../harpsichord-plugin-tutorial
+</code></pre></div></div>
+
+<p>The files it writes are listed in <code class="language-plaintext highlighter-rouge">.gitignore</code>. A merge into Alto’s <code class="language-plaintext highlighter-rouge">main</code> rebuilds the docs, and a change to a tutorial
+reaches the site at the next build, so run the Docs workflow by hand after you push a tutorial. The pictures in each tutorial
+are made by that repository’s <code class="language-plaintext highlighter-rouge">scripts/screenshots.py</code>. The plugin tests keep only the manifest of each example pack in <code class="language-plaintext highlighter-rouge">tests/packs/</code> (and the viola’s animation), and make its recordings,
+photographs and icons when they run (<code class="language-plaintext highlighter-rouge">tests/pack_fixtures.py</code>), because the plugin’s author provides the real ones. They also read
+the tutorial pages when they have been brought in.</p>
 
 <p>You need Ruby and Bundler. In <code class="language-plaintext highlighter-rouge">docs/</code>, <code class="language-plaintext highlighter-rouge">bundle install</code> once, then build one version the way the workflow does:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>docs
 <span class="nb">printf</span> <span class="s1">'baseurl: /alto/dev\ndocs_version: dev\n'</span> <span class="o">&gt;</span> /tmp/version.yml
 bundle <span class="nb">exec </span>jekyll build <span class="nt">--destination</span> /tmp/site/dev <span class="nt">--config</span> _config.yml,/tmp/version.yml
+bundle <span class="nb">exec </span>ruby ../scripts/docs_search.rb /tmp/site/dev
 git rev-parse <span class="nt">--short</span> HEAD <span class="o">&gt;</span> /tmp/site/dev/commit.txt
 python ../scripts/docs_site.py finish /tmp/site <span class="nt">--root-files</span> site-root <span class="nt">--site-url</span> https://altosaurus.github.io/alto
 </code></pre></div></div>
@@ -1384,14 +1607,22 @@ and open <code class="language-plaintext highlighter-rouge">http://127.0.0.1:800
 
 <h2 id="keeping-the-docs-and-screenshots-current">Keeping the docs and screenshots current</h2>
 
-<p>Every picture in the docs comes as a light and a dark pair, and <code class="language-plaintext highlighter-rouge">scripts/screenshots.py</code> makes all of them:</p>
+<p>The current app screenshots in <code class="language-plaintext highlighter-rouge">docs/assets/img/</code> come in light and dark pairs. Regenerate them with <code class="language-plaintext highlighter-rouge">scripts/screenshots.py</code>:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.venv/bin/python scripts/screenshots.py                    <span class="c"># every picture, both themes</span>
 .venv/bin/python scripts/screenshots.py <span class="nt">--only</span> home stats  <span class="c"># just these</span>
 .venv/bin/python scripts/screenshots.py <span class="nt">--out</span> /tmp/shots   <span class="c"># somewhere else, to look before replacing</span>
 </code></pre></div></div>
 
-<p>It runs against a made-up profile and a temporary settings folder, so it never touches your own history or settings. It
+<p>For a release, start with <code class="language-plaintext highlighter-rouge">.venv/bin/python scripts/screenshots.py --review /tmp/alto-shot-review</code> using an empty directory.
+The script compares decoded pixels with the checked-in PNGs. It writes new or resized captures and those where at least
+0.5% of pixels differ by more than 16 levels in any 8-bit color channel. Each line reports the changed percentage.
+Review the candidates beside the existing screenshots and copy only those that show a change readers need to see.
+A different sample question, chart value, or row of practice data can cross the threshold without changing the instructions.
+For a small important detail, such as the version in Settings, use <code class="language-plaintext highlighter-rouge">--only settings-updates --force</code> to capture it regardless
+of the percentage. An empty <code class="language-plaintext highlighter-rouge">--out</code> folder gives you every capture for inspection.</p>
+
+<p>The sample profile uses fixed random seeds, a fixed date, and UTC. Each theme gets its own temporary settings folder. The script
 needs a display or <code class="language-plaintext highlighter-rouge">QT_QPA_PLATFORM=offscreen</code>. Fonts render slightly differently on each machine, so regenerate on the
 machine you normally use and look at the pictures before committing them. To add a picture, include it in a docs page
 with <code class="language-plaintext highlighter-rouge">shot.html</code>, and add its name to <code class="language-plaintext highlighter-rouge">SHOTS</code> in the script. <code class="language-plaintext highlighter-rouge">tests/test_docs.py</code> checks that both match and that both themes
@@ -1438,12 +1669,20 @@ test fails when it is not, so a changelog line always arrives with its page.</li
   <li>Check that every user-facing feature in the release has a guide entry explaining where to find it and how to use it.
 Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed
 feature, follow the documented steps in the release candidate and add or correct instructions in the release PR.</li>
-  <li>With the release candidate installed in <code class="language-plaintext highlighter-rouge">.venv</code>, run <code class="language-plaintext highlighter-rouge">.venv/bin/python scripts/screenshots.py</code> to refresh every
-documentation screenshot in both themes. Review the light and dark images against their captions and alt text.
-In the Developer Guide, check that image dimensions match the captures and each clickable region covers its component.
+  <li>With the release candidate installed in <code class="language-plaintext highlighter-rouge">.venv</code>, run the <a href="#keeping-the-docs-and-screenshots-current">screenshot comparison</a> for both themes.
+Review the changed images against their captions and alt text, including small release-specific details such as the displayed version.
+Exclude the <a href="/alto/latest/developer-guide/ui-style-guide/">UI style guide</a> and its versioned screenshots in
+<code class="language-plaintext highlighter-rouge">docs/assets/ui-reference/</code> from this check. Update that baseline only for an explicitly requested visual change.
+For screenshots using <code class="language-plaintext highlighter-rouge">component-shot.html</code>, check that the image dimensions match the captures and each clickable region covers its component.
 Run <code class="language-plaintext highlighter-rouge">sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py</code> and include the
 updated images and any caption or region corrections in the release PR.</li>
-  <li>Merge that as a pull request, then tag the merge commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
+  <li>Build all three desktop downloads from the same versioned candidate commit. The release PR builds unsigned Linux and Windows
+candidates. Run <strong>Package</strong> on that branch with <code class="language-plaintext highlighter-rouge">macos_test</code> enabled for the Apple Silicon test ZIP. For signing rehearsals,
+run <strong>Release</strong> on the approved <code class="language-plaintext highlighter-rouge">main</code> commit for Windows and <strong>Package</strong> on that same commit with <code class="language-plaintext highlighter-rouge">macos_notarize</code> enabled for the Mac.
+Complete the <a href="#license-compliance">license compliance check</a> on the Linux tarball, Windows installer, and final
+stapled macOS DMG. Record the results and artifact checksums for each platform in the release PR. Resolve any findings
+before tagging.</li>
+  <li>After reviewing the PR and completing the signing rehearsals on the approved merge commit, tag that commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
 the tag starts the <strong>Release</strong> workflow (see below), which publishes the downloads.</li>
 </ol>
 
@@ -1452,6 +1691,33 @@ pre-releases out, and compares version numbers (<code class="language-plaintext 
 
 <p><code class="language-plaintext highlighter-rouge">python scripts/changelog_section.py 0.1.0</code> prints the notes of one version, which is what a GitHub release shows. <code class="language-plaintext highlighter-rouge">alto --version</code>
 prints the version of the copy you run.</p>
+
+<h4 id="license-compliance">License compliance</h4>
+
+<ul>
+  <li><strong>Bundled software and assets.</strong> Unpack the Linux tarball, install the Windows candidate, and mount the final stapled Mac DMG. On each platform, inventory
+the interpreter, frozen Python packages, embedded native code, Qt plugins and system libraries. Compare the contents with
+the exclusions in <code class="language-plaintext highlighter-rouge">packaging/alto.spec</code>. Check redistribution terms for each component and for the fonts, recordings,
+score excerpts, icons and vendored documentation assets. Confirm that Alto’s MIT license and the applicable third-party
+licenses and credits accompany the copies users receive, including the versioned documentation.</li>
+  <li><strong>Installed notices.</strong> Compare the inventory with <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code> and the installed <code class="language-plaintext highlighter-rouge">licenses/README.txt</code>.
+Check the notice texts against the exact upstream versions, including incorporated code such as CPython’s HACL*.
+Verify each SHA-256 in <code class="language-plaintext highlighter-rouge">licenses/notices.json</code> and resolve every license-file reference in <code class="language-plaintext highlighter-rouge">licenses/Qt/upstream-notices.zip</code>.</li>
+  <li><strong>Corresponding source.</strong> Match the Qt and Qt for Python source downloads to the versions and hashes in each installation.
+Verify that the Qt libraries and PySide6 and Shiboken bindings can be replaced and that Alto’s self-test still passes.
+Check the bundled Linux libraries against their package copyrights and verify the required Ubuntu source packages and file
+hashes in the companion archive. Verify the certifi source download and compare its CA bundle with the installed copy.</li>
+  <li><strong>Mac bundle.</strong> Check the signed resources in <code class="language-plaintext highlighter-rouge">Alto.app/Contents/Resources</code>, the Mach-O dependencies, and the source
+companions distributed with the disk image. Run the documented Qt and binding replacement procedure on a writable copy,
+verify the modified behavior, and exercise WAV playback. Validate the stapled ticket and Gatekeeper assessment on the
+original disk image and app.</li>
+  <li><strong>Windows upgrade terms.</strong> Upgrade from the previous release with no recorded acceptance of the current Microsoft terms.
+Exercise both choices through Alto’s updater. Declining must preserve the old installation, and accepting must complete
+the upgrade and record acceptance.</li>
+  <li><strong>Release evidence.</strong> Record the workflow run, commit, artifact SHA-256s and results. The publishing tag triggers a fresh
+build. Verify that the signed <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> covers the exact desktop downloads and source companions, and repeat the
+applicable checks on any files whose hashes differ from the reviewed copies.</li>
+</ul>
 
 <h2 id="building-the-linux-download">Building the Linux download</h2>
 
@@ -1493,7 +1759,25 @@ uninstall that must keep the data, and an uninstall with <code class="language-p
 run it only on a computer where that folder may be touched, such as a CI runner. The installer is for one user (no administrator
 prompt); its <code class="language-plaintext highlighter-rouge">AppId</code> in <code class="language-plaintext highlighter-rouge">alto.iss</code> must never change, because a newer installer finds the copy it updates by it. The uninstaller asks
 whether to also remove the practice history (<code class="language-plaintext highlighter-rouge">%APPDATA%\Alto</code>) and the settings (<code class="language-plaintext highlighter-rouge">HKEY_CURRENT_USER\Software\alto</code>); a silent
-uninstall keeps them unless it is given <code class="language-plaintext highlighter-rouge">/PURGE=1</code>. The installer is not signed, so Windows shows an “unknown publisher” warning.</p>
+uninstall keeps them unless it is given <code class="language-plaintext highlighter-rouge">/PURGE=1</code>. Local builds and pull request builds produce an unsigned installer.</p>
+
+<p>Microsoft’s Visual C++ runtime comes from Windows, not from the installer. <code class="language-plaintext highlighter-rouge">packaging/alto.spec</code> leaves out the copies that Python,
+Qt and Shiboken bring, fails the build if one remains, and records which runtime files the program needs and the newest version
+among them. The installer checks that Windows has them, at least that new, and otherwise downloads Microsoft’s Visual C++
+Redistributable, checks Microsoft’s signature on it and runs it, both in an ordinary install and in the silent install of an update.
+The build test runs that step once with <code class="language-plaintext highlighter-rouge">/RUNTIMETEST=1</code>, so it needs the internet. Alto does not use NumPy, which is only a test
+dependency.</p>
+
+<h3 id="windows-installer-signing">Windows installer signing</h3>
+
+<p>For a signing rehearsal, run <strong>Release</strong> manually on <code class="language-plaintext highlighter-rouge">main</code>. Download the <strong>windows-signed</strong> artifact and compare its
+SHA-256 with the signing job summary. On Windows, open <strong>Properties → Digital Signatures</strong> on the downloaded installer
+and inspect the publisher and timestamp. The <strong>windows</strong> artifact contains the unsigned build used as input.</p>
+
+<p>The signing job uses the <code class="language-plaintext highlighter-rouge">windows-signing</code> GitHub environment. Its federated credential authenticates the job to Azure
+with <code class="language-plaintext highlighter-rouge">AZURE_CLIENT_ID</code>, <code class="language-plaintext highlighter-rouge">AZURE_TENANT_ID</code>, and <code class="language-plaintext highlighter-rouge">AZURE_SUBSCRIPTION_ID</code>. The environment variables
+<code class="language-plaintext highlighter-rouge">AZURE_SIGNING_ENDPOINT</code>, <code class="language-plaintext highlighter-rouge">AZURE_SIGNING_ACCOUNT_NAME</code>, and <code class="language-plaintext highlighter-rouge">AZURE_CERTIFICATE_PROFILE_NAME</code> select the signing profile.
+For a release tag, the publisher downloads the verified installer before calculating and signing the release checksums.</p>
 
 <h3 id="signing-releases-once">Signing releases, once</h3>
 
@@ -1527,8 +1811,8 @@ installer on a Windows runner, both with Python 3.13. The other two call it.</li
   <li><strong>Package</strong> runs it on a pull request that changes <code class="language-plaintext highlighter-rouge">packaging/</code>, the build scripts, <code class="language-plaintext highlighter-rouge">pyproject.toml</code> or the assets, so a break
 shows before a release. It publishes nothing.</li>
   <li><strong>Release</strong> runs when a tag such as <code class="language-plaintext highlighter-rouge">v0.1.0</code> is pushed. It first checks that the tag is <code class="language-plaintext highlighter-rouge">v</code> plus the version in <code class="language-plaintext highlighter-rouge">pyproject.toml</code> and
-that <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code> has notes for it; then builds both packages; then creates the GitHub release with both files, a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code>
-file and the changelog notes. Started by hand from the Actions tab, it only builds, to rehearse a release.</li>
+that <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code> has notes for it. It builds Linux, signs Windows, and calls <strong>Package</strong> to sign and notarize the Apple Silicon DMG.
+It publishes all three downloads, the matching source archives, signed checksums, and changelog notes. A manual run on <code class="language-plaintext highlighter-rouge">main</code> also signs and verifies the Windows installer and keeps it as a rehearsal artifact.</li>
 </ul>
 
 <p>The release is a normal one and never a pre-release, because Alto’s update check asks GitHub for the latest release.</p>
@@ -1579,8 +1863,18 @@ original directory so older answers can still be opened.</p>
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
-            <a class="prev" href="/alto/latest/data/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Your data</span></a>
+            <a class="prev" href="/alto/latest/plugins/harpsichord/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Harpsichord plugin tutorial</span></a>
             <a class="next" href="/alto/latest/developer-guide/" rel="next"><span class="np-label">Next</span><span class="np-title">Developer guide<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
@@ -1591,10 +1885,6 @@ original directory so older answers can still be opened.</p>
     </main>
   </div>
   <script>
-    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
-    var menu = document.getElementById("menu");
-    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
-
     // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
@@ -1643,8 +1933,10 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/search.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/copy-code.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795657983" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

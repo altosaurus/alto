@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.updates · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.updates/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.updates · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.updates/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795657983">
   
 </head>
 <body>
@@ -30,6 +30,7 @@
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/></symbol>
     <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
     <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
     <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
@@ -43,7 +44,21 @@
       <span>Alto</span>
     </a>
     <div class="top-actions">
+      <form class="docs-search" role="search" action="/alto/latest/search/" method="get"
+            data-index="/alto/latest/search-index.json" hidden>
+        <div class="search-field">
+          <svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5.5 5.5"/></svg>
+          <input id="docs-search-input" name="q" type="search" enterkeyhint="search" placeholder="Search docs" aria-label="Search documentation"
+                 autocomplete="off" aria-controls="docs-search-results">
+        </div>
+        <div id="docs-search-results" class="search-results" hidden>
+          <div role="status" class="search-status"></div>
+          <ul></ul>
+        </div>
+      </form>
+      
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      
       <div class="dd" id="theme-dd">
         <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
@@ -59,11 +74,11 @@
   </header>
   <div class="layout">
     <aside class="sidebar">
-      <details class="menu" id="menu">
-        <summary>Contents</summary>
-        <nav class="nav" aria-label="Documentation">
-          
-          
+      <nav class="menu" aria-label="Documentation">
+        <details class="mobile-contents">
+          <summary aria-controls="docs-navigation">Contents</summary>
+        </details>
+        <div class="nav" id="docs-navigation">
           
           
           
@@ -85,9 +100,24 @@
             
             
             
-            <li class="nav-group"><details data-nav-group="Using Alto" open>
-              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/using-alto/">Using Alto</a>
+  
+  <button type="button" class="nav-toggle" data-category="Using Alto" aria-controls="nav-using-alto"
+          aria-expanded="true" aria-label="Collapse Using Alto" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-using-alto">
+            
+            
+            
+            
+            
             
             
             
@@ -163,12 +193,50 @@
             
             
             
-            </ul></details></li>
             
             
-            <li class="nav-group"><details data-nav-group="For developers" open>
-              <summary class="nav-head"><a class="grow" href="/alto/latest/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            </ul></li>
+            
+            
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/development/">For developers</a>
+  
+  <button type="button" class="nav-toggle" data-category="For developers" aria-controls="nav-for-developers"
+          aria-expanded="true" aria-label="Collapse For developers" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-for-developers">
             
             
             
@@ -188,10 +256,19 @@
               <ul class="kids">
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/environment-setup/">Development environment</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/ui-style-guide/">UI style guide</a></li>
                 
                 
               </ul>
@@ -289,6 +366,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
                 
                 
@@ -298,10 +378,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.updates/" aria-current="page">updates</a></li>
@@ -317,6 +403,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.packs/">packs</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.exercises.rhythm_equations/">rhythm_equations</a></li>
                 
                 
                 </ul></details></li>
@@ -364,10 +456,16 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.duration/">duration</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -409,6 +507,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.background/">background</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
                 
                 
@@ -436,7 +537,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.fingerboard/">fingerboard</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
@@ -472,16 +579,34 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.meter_staff/">meter_staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.metronome_spectrum/">metronome_spectrum</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.midi_input/">midi_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notation/">notation</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -503,6 +628,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -544,7 +672,13 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.warmup/">warmup</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.zoom/">zoom</a></li>
                 
                 </ul></details></li>
               </ul>
@@ -555,12 +689,27 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
             
             
-            <li class="nav-group"><details data-nav-group="About" open>
-              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
-              <ul>
+            
+            <li class="nav-group">
+              <div class="nav-head">
+  <a href="/alto/latest/about/">About</a>
+  
+  <button type="button" class="nav-toggle" data-category="About" aria-controls="nav-about"
+          aria-expanded="true" aria-label="Collapse About" hidden>
+    <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button>
+  
+</div>
+
+              <ul id="nav-about">
+            
+            
+            
+            
+            
             
             
             
@@ -588,42 +737,58 @@
             
             
             
-            </ul></details></li>
+            </ul></li>
           </ul>
-        </nav>
-      </details>
+        </div>
+      </nav>
     </aside>
     <main id="content" class="content">
       <div class="page-grid" id="page-grid">
         <article>
           <h1>alto.updates</h1>
           
-<p>What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves.</p>
+<p>What kind of copy of Alto is running, how it can be updated, and the
+commands and answers that checking involves.</p>
 
-<p>A copy installed with <code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code> is a <code class="language-plaintext highlighter-rouge">uv tool</code> install from a git address. The installed package records that
-address and the commit it was built from, so it can follow the newest release (a tag) or the newest commit on the main branch.
-A packaged copy (a PyInstaller build) cannot replace itself, so it can only be told that a newer release exists. This module
-decides and describes; <code class="language-plaintext highlighter-rouge">alto.ui.update_flow</code> runs the commands and asks the questions.</p>
+<p>A copy installed with <code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code> is a <code class="language-plaintext highlighter-rouge">uv tool</code> install
+from a git address. The installed package records that
+address and the commit it was built from, so it can follow the newest
+release (a tag) or the newest commit on the main branch.
+A packaged copy (a PyInstaller build) cannot replace itself, so it can
+only be told that a newer release exists. This module
+decides and describes; <code class="language-plaintext highlighter-rouge">alto.ui.update_flow</code> runs the commands and asks
+the questions.</p>
 
-<p>A packaged copy replaces itself with a downloaded release. What makes that safe is here: a release carries <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> and a
-signature of it (<code class="language-plaintext highlighter-rouge">SHA256SUMS.sig</code>, Ed25519, made with a private key that only the release workflow has), and a copy of Alto
-trusts only the public keys in <code class="language-plaintext highlighter-rouge">UPDATE_PUBLIC_KEYS</code>. It installs a file only if the signature verifies, the signed list names the
+<p>A packaged copy replaces itself with a downloaded release. What makes
+that safe is here: a release carries <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> and a
+signature of it (<code class="language-plaintext highlighter-rouge">SHA256SUMS.sig</code>, Ed25519, made with a private key that
+only the release workflow has), and a copy of Alto
+trusts only the public keys in <code class="language-plaintext highlighter-rouge">UPDATE_PUBLIC_KEYS</code>. It installs a file
+only if the signature verifies, the signed list names the
 file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
-'b6e2091'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">short</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">'b6e2091'
+</span></code></pre></div></div>
 
 <h2 id="source">Source</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Source</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Source</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">commit</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">ref</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'HEAD'</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L101" aria-label="Source for Source">[Source]</a></p>
+
+</div>
 
 <p>Where an installed copy of Alto came from.</p>
 
@@ -637,14 +802,23 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Source("https://github.com/altosaurus/alto.git", commit="b6e2091").ref
-'HEAD'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"https://github.com/altosaurus/alto.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">commit</span><span class="o">=</span><span class="s">"b6e2091"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">ref</span>
+<span class="go">'HEAD'
+</span></code></pre></div></div>
 
 <h2 id="short">short</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">short</span><span class="p">(</span><span class="n">commit</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">short</span><span class="p">(</span><span class="n">commit</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L129" aria-label="Source for short">[Source]</a></p>
+
+</div>
 
 <p>Shorten a commit id to the seven characters people use for it.</p>
 
@@ -662,16 +836,25 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
-'b6e2091'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">short</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">'b6e2091'
+</span></code></pre></div></div>
 
 <h2 id="parse_direct_url">parse_direct_url</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_direct_url</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Read where a package was installed from, out of the <code class="language-plaintext highlighter-rouge">direct_url.json</code> that the installer leaves with it.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_direct_url</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L153" aria-label="Source for parse_direct_url">[Source]</a></p>
+
+</div>
+
+<p>Read where a package was installed from, out of the
+<code class="language-plaintext highlighter-rouge">direct_url.json</code> that the installer leaves with it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -687,22 +870,39 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; parse_direct_url('{"url": "https://example.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234"}}')
-Source(url='https://example.org/a.git', commit='abc1234', ref='HEAD')
-&gt;&gt;&gt; named = '{"url": "https://x.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234", "requested_revision": "dev"}}'
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; parse_direct_url(named).ref
-'dev'
-&gt;&gt;&gt; parse_direct_url('{"url": "file:///home/me/alto", "dir_info": {"editable": true}}') is None
-True
-&gt;&gt;&gt; parse_direct_url("not json") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'{"url": "https://example.org/a.git", "vcs_info": {"vcs": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'"git", "commit_id": "abc1234"}}'</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">Source(url='https://example.org/a.git', commit='abc1234',
+ref='HEAD')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">named</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'{"url": "https://x.org/a.git", "vcs_info": {"vcs": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'"git", "commit_id": "abc1234", "requested_revision": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'"dev"}}'</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="n">named</span><span class="p">).</span><span class="n">ref</span>
+<span class="go">'dev'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'{"url": "file:///home/me/alto", "dir_info": {"editable": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'true}}'</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="s">"not json"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="installed_source">installed_source</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_source</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_source</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L217" aria-label="Source for installed_source">[Source]</a></p>
+
+</div>
 
 <p>Say where the Alto that is running was installed from.</p>
 
@@ -714,20 +914,29 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; source = installed_source()
-&gt;&gt;&gt; source is None or len(source.commit) == COMMIT_LENGTH
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="o">=</span> <span class="n">installed_source</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">source</span><span class="p">.</span><span class="n">commit</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="o">==</span> <span class="n">COMMIT_LENGTH</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="is_tool_install">is_tool_install</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_tool_install</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_tool_install</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Say whether Alto is running from an environment that <code class="language-plaintext highlighter-rouge">uv tool</code> made, which is what the install script makes.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L243" aria-label="Source for is_tool_install">[Source]</a></p>
+
+</div>
+
+<p>Say whether Alto is running from an environment that <code class="language-plaintext highlighter-rouge">uv tool</code> made,
+which is what the install script makes.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -743,16 +952,23 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; is_tool_install(prefix=Path("/nowhere"))
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_tool_install</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/nowhere"</span><span class="p">))</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="installkind">InstallKind</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">InstallKind</span><span class="p">(</span><span class="n">Enum</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>How the running copy of Alto got where it is, which decides how it can be updated.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">InstallKind</span><span class="p">(</span><span class="n">Enum</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L270" aria-label="Source for InstallKind">[Source]</a></p>
+
+</div>
+
+<p>How the running copy of Alto got where it is, which decides how it
+can be updated.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -765,16 +981,23 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; InstallKind.SCRIPT.name
-'SCRIPT'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SCRIPT</span><span class="p">.</span><span class="n">name</span>
+<span class="go">'SCRIPT'
+</span></code></pre></div></div>
 
 <h2 id="is_frozen">is_frozen</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_frozen</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Say whether Alto is running as a packaged build, made with PyInstaller, rather than from Python.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_frozen</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L301" aria-label="Source for is_frozen">[Source]</a></p>
+
+</div>
+
+<p>Say whether Alto is running as a packaged build, made with
+PyInstaller, rather than from Python.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -784,19 +1007,25 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; is_frozen()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_frozen</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="install_kind">install_kind</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install_kind</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install_kind</span><span class="p">(</span>
     <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">tool</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">frozen</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InstallKind</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L319" aria-label="Source for install_kind">[Source]</a></p>
+
+</div>
 
 <p>Decide what kind of copy of Alto this is.</p>
 
@@ -816,19 +1045,39 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; here = Source("https://example.org/a.git", commit="abc1234")
-&gt;&gt;&gt; install_kind(here, tool=True, frozen=False).name
-'SCRIPT'
-&gt;&gt;&gt; install_kind(here, tool=False, frozen=False).name, install_kind(None, tool=False, frozen=False).name
-('OTHER', 'SOURCE')
-&gt;&gt;&gt; install_kind(None, tool=False, frozen=True).name
-'PACKAGE'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"https://example.org/a.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">here</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span>
+<span class="go">'SCRIPT'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">install_kind</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">here</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">install_kind</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="bp">None</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">).</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">('OTHER', 'SOURCE')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="bp">None</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">name</span>
+<span class="go">'PACKAGE'
+</span></code></pre></div></div>
 
 <h2 id="cannot_update">cannot_update</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cannot_update</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="n">InstallKind</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cannot_update</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="n">InstallKind</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L375" aria-label="Source for cannot_update">[Source]</a></p>
+
+</div>
 
 <p>Say why a kind of copy cannot update itself at all, if it cannot.</p>
 
@@ -846,22 +1095,38 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cannot_update(InstallKind.SOURCE) == SOURCE_FOLDER, cannot_update(InstallKind.OTHER) == NOT_BY_SCRIPT
-(True, True)
-&gt;&gt;&gt; cannot_update(InstallKind.SCRIPT) is None and cannot_update(InstallKind.PACKAGE) is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SOURCE</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">SOURCE_FOLDER</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">OTHER</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">NOT_BY_SCRIPT</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(True, True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cannot_update</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SCRIPT</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cannot_update</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">InstallKind</span><span class="p">.</span><span class="n">PACKAGE</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="find_program">find_program</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_program</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_program</span><span class="p">(</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">home</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Find a program to run, also in the places the installers put them, which a program started from the dock may not search.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L412" aria-label="Source for find_program">[Source]</a></p>
+
+</div>
+
+<p>Find a program to run, also in the places the installers put them,
+which a program started from the dock may not search.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -878,20 +1143,29 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; find_program("no-such-program-anywhere") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">find_program</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"no-such-program-anywhere"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="check_command">check_command</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_command</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_command</span><span class="p">(</span>
     <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">git</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Give the command that asks the address Alto came from for the commit at the end of a branch or tag.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L452" aria-label="Source for check_command">[Source]</a></p>
+
+</div>
+
+<p>Give the command that asks the address Alto came from for the commit
+at the end of a branch or tag.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -908,24 +1182,39 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; check_command(Source("https://example.org/a.git", commit="abc1234"), git="git")
-('git', ['ls-remote', 'https://example.org/a.git', 'HEAD'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_command</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"https://example.org/a.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">git</span><span class="o">=</span><span class="s">"git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">('git', ['ls-remote', 'https://example.org/a.git', 'HEAD'])
+</span></code></pre></div></div>
 
 <h2 id="install_command">install_command</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install_command</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install_command</span><span class="p">(</span>
     <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">uv</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Give the command that installs Alto over the installed copy: a release, or the newest commit of the address.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L487" aria-label="Source for install_command">[Source]</a></p>
 
-<p><code class="language-plaintext highlighter-rouge">uv tool install --force</code> is used rather than <code class="language-plaintext highlighter-rouge">uv tool upgrade</code>, because an upgrade stays on the tag or branch the copy was
-installed from, and a copy that follows a release must be able to move to the main branch and back.</p>
+</div>
+
+<p>Give the command that installs Alto over the installed copy: a
+release, or the newest commit of the address.</p>
+
+<p><code class="language-plaintext highlighter-rouge">uv tool install --force</code> is used rather than <code class="language-plaintext highlighter-rouge">uv tool upgrade</code>,
+because an upgrade stays on the tag or branch the copy was
+installed from, and a copy that follows a release must be able to
+move to the main branch and back.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -943,17 +1232,26 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; here = Source("https://example.org/alto.git", commit="abc1234")
-&gt;&gt;&gt; install_command(here, uv="uv", tag="v0.1.0")
-('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git@v0.1.0'])
-&gt;&gt;&gt; install_command(here, uv="uv")
-('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"https://example.org/alto.git"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_command</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">uv</span><span class="o">=</span><span class="s">"uv"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v0.1.0"</span><span class="p">)</span>
+<span class="go">('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git@v0.1.0'])
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_command</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">uv</span><span class="o">=</span><span class="s">"uv"</span><span class="p">)</span>
+<span class="go">('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git'])
+</span></code></pre></div></div>
 
 <h2 id="parse_ls_remote">parse_ls_remote</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_ls_remote</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_ls_remote</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L536" aria-label="Source for parse_ls_remote">[Source]</a></p>
+
+</div>
 
 <p>Read the commit id out of what <code class="language-plaintext highlighter-rouge">git ls-remote</code> printed.</p>
 
@@ -971,22 +1269,37 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; parse_ls_remote("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe\tHEAD\n")
-'b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe'
-&gt;&gt;&gt; parse_ls_remote("") is None, parse_ls_remote("fatal: repository not found") is None
-(True, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_ls_remote</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe</span><span class="se">\t</span><span class="s">HEAD</span><span class="se">\n</span><span class="s">"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">'b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">parse_ls_remote</span><span class="p">(</span><span class="s">""</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">parse_ls_remote</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"fatal: repository not found"</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(True, True)
+</span></code></pre></div></div>
 
 <h2 id="asset">Asset</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Asset</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Asset</span><span class="p">(</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>A file of a release: the installer, the tarball, the checksums or their signature.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L578" aria-label="Source for Asset">[Source]</a></p>
+
+</div>
+
+<p>A file of a release: the installer, the tarball, the checksums or
+their signature.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -998,19 +1311,29 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Asset("SHA256SUMS", url="https://example.org/s", size=300).size
-300
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Asset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"SHA256SUMS"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/s"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">size</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">size</span>
+<span class="go">300
+</span></code></pre></div></div>
 
 <h2 id="release">Release</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Release</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Release</span><span class="p">(</span>
     <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">assets</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Asset</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">()),</span>
 <span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L608" aria-label="Source for Release">[Source]</a></p>
+
+</div>
 
 <p>A release of Alto, as published on GitHub.</p>
 
@@ -1025,16 +1348,27 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Release("0.1.0", tag="v0.1.0", url="https://example.org/r").version
-'0.1.0'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Release</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">tag</span><span class="o">=</span><span class="s">"v0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/r"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">version</span>
+<span class="go">'0.1.0'
+</span></code></pre></div></div>
 
 <h2 id="version_key">version_key</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">version_key</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="p">...]</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Turn a version, with or without the “v” of a tag, into numbers that can be compared.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">version_key</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="p">...]</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L639" aria-label="Source for version_key">[Source]</a></p>
+
+</div>
+
+<p>Turn a version, with or without the “v” of a tag, into numbers that
+can be compared.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1050,22 +1384,33 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; version_key("v0.10.2"), version_key("1.0")
-((0, 10, 2), (1, 0))
-&gt;&gt;&gt; version_key("1.0.0rc1") is None, version_key("") is None, version_key("unknown") is None
-(True, True, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">version_key</span><span class="p">(</span><span class="s">"v0.10.2"</span><span class="p">),</span> <span class="n">version_key</span><span class="p">(</span><span class="s">"1.0"</span><span class="p">)</span>
+<span class="go">((0, 10, 2), (1, 0))
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">version_key</span><span class="p">(</span><span class="s">"1.0.0rc1"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">version_key</span><span class="p">(</span><span class="s">""</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">version_key</span><span class="p">(</span><span class="s">"unknown"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(True, True, True)
+</span></code></pre></div></div>
 
 <h2 id="is_newer">is_newer</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_newer</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_newer</span><span class="p">(</span>
     <span class="n">candidate</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">installed</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Say whether one version is newer than another, comparing numbers and not text, so 0.10.0 is newer than 0.9.0.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L674" aria-label="Source for is_newer">[Source]</a></p>
+
+</div>
+
+<p>Say whether one version is newer than another, comparing numbers and
+not text, so 0.10.0 is newer than 0.9.0.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1082,18 +1427,30 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; is_newer("0.10.0", installed="0.9.0"), is_newer("v0.1.0", installed="0.0.0")
-(True, True)
-&gt;&gt;&gt; is_newer("1.0", installed="1.0.0"), is_newer("0.0.0", installed="0.1.0")
-(False, False)
-&gt;&gt;&gt; is_newer("1.0.0", installed="unknown")
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"0.10.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.9.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"v0.1.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.0.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(True, True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"1.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"1.0.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"0.0.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(False, False)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"1.0.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"unknown"</span><span class="p">)</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="installed_version">installed_version</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L718" aria-label="Source for installed_version">[Source]</a></p>
+
+</div>
 
 <p>Give the version of Alto that is running.</p>
 
@@ -1105,14 +1462,20 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; installed_version().count(".") &gt;= 1
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">installed_version</span><span class="p">().</span><span class="n">count</span><span class="p">(</span><span class="s">"."</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="parse_latest_release">parse_latest_release</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_latest_release</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Release</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_latest_release</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Release</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L740" aria-label="Source for parse_latest_release">[Source]</a></p>
+
+</div>
 
 <p>Read GitHub’s answer about the latest release.</p>
 
@@ -1130,23 +1493,39 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; answer = '{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'
-&gt;&gt;&gt; parse_latest_release(answer)
-Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r', assets=())
-&gt;&gt;&gt; parse_latest_release(answer.replace('"prerelease": false', '"prerelease": true')) is None
-True
-&gt;&gt;&gt; parse_latest_release("not json") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">answer</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'{"tag_name": "v0.1.0", "html_url": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'"https://example.org/r", "draft": false, "prerelease": '</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">'false}'</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+<span class="go">Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r',
+assets=())
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">answer</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">'"prerelease": false'</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">'"prerelease": true'</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span><span class="s">"not json"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="release_answer">release_answer</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">release_answer</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">release_answer</span><span class="p">(</span>
     <span class="n">status</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Release</span> <span class="o">|</span> <span class="nb">str</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L810" aria-label="Source for release_answer">[Source]</a></p>
+
+</div>
 
 <p>Make sense of what came back when the latest release was asked for.</p>
 
@@ -1165,24 +1544,35 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; release_answer(404, text="") == NO_RELEASE
-True
-&gt;&gt;&gt; release_answer(0, text="Name or service not known")
-'Alto could not reach GitHub: Name or service not known'
-&gt;&gt;&gt; release_answer(403, text="rate limit exceeded")
-'GitHub answered with an error (403): rate limit exceeded'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">""</span><span class="p">)</span> <span class="o">==</span> <span class="n">NO_RELEASE</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"Name or service not known"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">'Alto could not reach GitHub: Name or service not known'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="mi">403</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"rate limit exceeded"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">'GitHub answered with an error (403): rate limit exceeded'
+</span></code></pre></div></div>
 
 <h2 id="fetch_text">fetch_text</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fetch_text</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fetch_text</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Fetch a web address, waiting at most a number of seconds. It blocks, so the interface runs it on another thread.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L863" aria-label="Source for fetch_text">[Source]</a></p>
+
+</div>
+
+<p>Fetch a web address, waiting at most a number of seconds. It blocks,
+so the interface runs it on another thread.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1199,19 +1589,30 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; fetch_text("http://127.0.0.1:9/", seconds=2)[0]  # nothing listens there
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fetch_text</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"http://127.0.0.1:9/"</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># nothing listens there
+</span><span class="go">0
+</span></code></pre></div></div>
 
 <h2 id="ssl_context">ssl_context</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ssl_context</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ssl</span><span class="p">.</span><span class="n">SSLContext</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Make the settings for a secure connection, trusting the certificate authorities that come with Alto.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ssl_context</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ssl</span><span class="p">.</span><span class="n">SSLContext</span>
+</code></pre></div>  </div>
 
-<p>A packaged copy cannot count on the system’s: the Python inside it may look for them where the computer it was built on keeps
-them, and a connection would then fail on a distribution that keeps them somewhere else.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L915" aria-label="Source for ssl_context">[Source]</a></p>
+
+</div>
+
+<p>Make the settings for a secure connection, trusting the certificate
+authorities that come with Alto.</p>
+
+<p>A packaged copy cannot count on the system’s: the Python inside it
+may look for them where the computer it was built on keeps
+them, and a connection would then fail on a distribution that keeps
+them somewhere else.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1221,21 +1622,32 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ssl_context().verify_mode == ssl.CERT_REQUIRED, len(ssl_context().get_ca_certs()) &gt; 100
-(True, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">ssl_context</span><span class="p">().</span><span class="n">verify_mode</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">==</span> <span class="n">ssl</span><span class="p">.</span><span class="n">CERT_REQUIRED</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">len</span><span class="p">(</span><span class="n">ssl_context</span><span class="p">().</span><span class="n">get_ca_certs</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">(True, True)
+</span></code></pre></div></div>
 
 <h2 id="platform_asset_name">platform_asset_name</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">platform_asset_name</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">platform_asset_name</span><span class="p">(</span>
     <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">machine</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Give the name of the file that updates a packaged copy on this system, as the release workflow names it.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L943" aria-label="Source for platform_asset_name">[Source]</a></p>
+
+</div>
+
+<p>Give the name of the file that updates a packaged copy on this
+system, as the release workflow names it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1253,25 +1665,44 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; platform_asset_name("0.1.0", system="Linux", machine="x86_64")
-'alto-0.1.0-linux-x86_64.tar.gz'
-&gt;&gt;&gt; platform_asset_name("0.1.0", system="Windows", machine="AMD64")
-'alto-0.1.0-windows-x64-setup.exe'
-&gt;&gt;&gt; platform_asset_name("0.1.0", system="Linux", machine="aarch64") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"Linux"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">machine</span><span class="o">=</span><span class="s">"x86_64"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">'alto-0.1.0-linux-x86_64.tar.gz'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"Windows"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">machine</span><span class="o">=</span><span class="s">"AMD64"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">'alto-0.1.0-windows-x64-setup.exe'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"0.1.0"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">system</span><span class="o">=</span><span class="s">"Linux"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">machine</span><span class="o">=</span><span class="s">"aarch64"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="find_asset">find_asset</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_asset</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_asset</span><span class="p">(</span>
     <span class="n">release</span><span class="p">:</span> <span class="n">Release</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DOWNLOAD_BASE</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Asset</span> <span class="o">|</span> <span class="bp">None</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Find a file of a release by its name, if it is at the address where a release keeps its files.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L998" aria-label="Source for find_asset">[Source]</a></p>
+
+</div>
+
+<p>Find a file of a release by its name, if it is at the address where
+a release keeps its files.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1289,20 +1720,40 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; files = (Asset("a", url=DOWNLOAD_BASE + "v1/a"), Asset("b", url="https://example.org/b"))
-&gt;&gt;&gt; found = find_asset(Release("1", tag="v1", url="", assets=files), name="a")
-&gt;&gt;&gt; found.name if found else None
-'a'
-&gt;&gt;&gt; find_asset(Release("1", tag="v1", url="", assets=files), name="b") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">files</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Asset</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">DOWNLOAD_BASE</span> <span class="o">+</span> <span class="s">"v1/a"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Asset</span><span class="p">(</span><span class="s">"b"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/b"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">found</span> <span class="o">=</span> <span class="n">find_asset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Release</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"1"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v1"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">files</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">found</span><span class="p">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">found</span> <span class="k">else</span> <span class="bp">None</span>
+<span class="go">'a'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">find_asset</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">Release</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">         </span><span class="s">"1"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v1"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">files</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">name</span><span class="o">=</span><span class="s">"b"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="parse_checksums">parse_checksums</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_checksums</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Read a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> file: a line for each file, with its SHA-256 hash and its name.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_checksums</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L1055" aria-label="Source for parse_checksums">[Source]</a></p>
+
+</div>
+
+<p>Read a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> file: a line for each file, with its SHA-256
+hash and its name.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1318,22 +1769,38 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; entry = "ab" * 32 + "  alto-0.1.0-linux-x86_64.tar.gz"
-&gt;&gt;&gt; parse_checksums(entry + "\nnot a line\n" + "cd" * 32 + "  ../evil")
-{'alto-0.1.0-linux-x86_64.tar.gz': 'abababababababababababababababababababababababababababababababab'}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">entry</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="s">"ab"</span> <span class="o">*</span> <span class="mi">32</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="s">"  alto-0.1.0-linux-x86_64.tar.gz"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_checksums</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">entry</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">not a line</span><span class="se">\n</span><span class="s">"</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="s">"cd"</span> <span class="o">*</span> <span class="mi">32</span>
+<span class="gp">...</span><span class="w">     </span><span class="o">+</span> <span class="s">"  ../evil"</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">{'alto-0.1.0-linux-x86_64.tar.gz':
+'abababababababababababababababababababababababababababababababab'}
+</span></code></pre></div></div>
 
 <h2 id="verify_signature">verify_signature</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">verify_signature</span><span class="p">(</span>
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">verify_signature</span><span class="p">(</span>
     <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">signature</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">keys</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Say whether an Ed25519 signature of some data was made with one of the keys.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L1097" aria-label="Source for verify_signature">[Source]</a></p>
+
+</div>
+
+<p>Say whether an Ed25519 signature of some data was made with one of
+the keys.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1351,27 +1818,50 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from nacl.signing import SigningKey
-&gt;&gt;&gt; pair = SigningKey.generate()
-&gt;&gt;&gt; public = base64.b64encode(bytes(pair.verify_key)).decode()
-&gt;&gt;&gt; signed = base64.b64encode(pair.sign(b"the list").signature).decode()
-&gt;&gt;&gt; verify_signature(b"the list", signature=signed, keys=(public,))
-True
-&gt;&gt;&gt; verify_signature(b"another list", signature=signed, keys=(public,))
-False
-&gt;&gt;&gt; verify_signature(b"the list", signature=signed, keys=())
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">nacl.signing</span> <span class="kn">import</span> <span class="n">SigningKey</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pair</span> <span class="o">=</span> <span class="n">SigningKey</span><span class="p">.</span><span class="n">generate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">public</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64encode</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="nb">bytes</span><span class="p">(</span><span class="n">pair</span><span class="p">.</span><span class="n">verify_key</span><span class="p">)</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signed</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64encode</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">pair</span><span class="p">.</span><span class="n">sign</span><span class="p">(</span><span class="sa">b</span><span class="s">"the list"</span><span class="p">).</span><span class="n">signature</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="sa">b</span><span class="s">"the list"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="n">public</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="sa">b</span><span class="s">"another list"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="n">public</span><span class="p">,),</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="sa">b</span><span class="s">"the list"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">()</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="self_check">self_check</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">self_check</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
+<div class="api-signature">
 
-<p>Check, without any network, that what a copy needs to check an update is there and works.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">self_check</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>  </div>
 
-<p>It is what <code class="language-plaintext highlighter-rouge">alto --self-test</code> runs, so that the build can tell that a packaged copy carries the certificate list and the
-signature library (which PyInstaller must be told about), and that the keys in the code are keys.</p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/updates.py#L1169" aria-label="Source for self_check">[Source]</a></p>
+
+</div>
+
+<p>Check, without any network, that what a copy needs to check an
+update is there and works.</p>
+
+<p>It is what <code class="language-plaintext highlighter-rouge">alto --self-test</code> runs, so that the build can tell that
+a packaged copy carries the certificate list and the
+signature library (which PyInstaller must be told about), and that
+the keys in the code are keys.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1381,11 +1871,33 @@ signature library (which PyInstaller must be told about), and that the keys in t
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; self_check()
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_check</span><span class="p">()</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           
           
           
@@ -1467,7 +1979,7 @@ signature library (which PyInstaller must be told about), and that the keys in t
           
           
           <nav class="page-nav" aria-label="Previous and next pages">
-            <a class="prev" href="/alto/latest/api/alto.settings/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.settings</span></a>
+            <a class="prev" href="/alto/latest/api/alto.terms/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.terms</span></a>
             <a class="next" href="/alto/latest/api/alto.exercises.base/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.exercises.base<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
@@ -1478,10 +1990,6 @@ signature library (which PyInstaller must be told about), and that the keys in t
     </main>
   </div>
   <script>
-    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
-    var menu = document.getElementById("menu");
-    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
-
     // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
@@ -1530,8 +2038,10 @@ signature library (which PyInstaller must be told about), and that the keys in t
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/search.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/copy-code.js?v=1795657983" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795657983" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

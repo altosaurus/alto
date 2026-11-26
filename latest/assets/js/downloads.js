@@ -1,9 +1,37 @@
-// The main button of the download section on the home page: one button that names the visitor's system and goes to the right file,
-// with an arrow that lists every system. It is made here because only the visitor's browser knows which system it is on.
-// Nothing is sent, kept or logged: the system is read once, used to choose the words and the link, and forgotten. Without this script the
-// list of every system below is all there is, and it works on its own.
+// Choose the initial operating system for downloads and Getting started in the browser.
+// A manual guide selection goes in the URL so the reader can reload or share that view.
 (function () {
   "use strict";
+  var picker = document.getElementById("os-picker");
+  if (picker) {
+    var choices = Array.from(picker.querySelectorAll("input"));
+    var address = new URL(location.href);
+    var detected = detect();
+    var preferred = choices.find(choice => choice.value === address.searchParams.get("os"))
+      || choices.find(choice => choice.value === detected) || choices[0];
+    preferred.checked = true;
+
+    function revealTarget() {
+      var target = document.getElementById(location.hash.slice(1));
+      var group = target && target.closest("[data-platforms]");
+      if (!group) return;
+      var platforms = group.dataset.platforms.split(" ");
+      if (!platforms.includes(picker.querySelector(":checked").value)) {
+        choices.find(choice => platforms.includes(choice.value)).checked = true;
+        target.scrollIntoView();
+      }
+    }
+    revealTarget();
+    window.addEventListener("hashchange", revealTarget);
+    picker.addEventListener("change", function (event) {
+      var url = new URL(location.href);
+      url.searchParams.set("os", event.target.value);
+      var target = document.getElementById(url.hash.slice(1));
+      if (target && !target.getClientRects().length) url.hash = "";
+      history.replaceState(history.state, "", url);
+    });
+    return;
+  }
   var root = document.getElementById("download");
   var slot = document.getElementById("dl-main");
   if (!root || !slot) { return; }
@@ -56,11 +84,11 @@
 
   var os = detect();
   var main;
-  if (os === "windows" || os === "linux") {
+  if (systems[os] && systems[os].file) {
     var s = systems[os];
     main = { logo: s.logo, title: "Download for " + s.name, note: s.file + " · " + s.req, url: s.url };
   } else if (os === "macos") {
-    main = { logo: "os-apple", title: "Run Alto on macOS", note: "No installer yet · run it from source", url: source };
+    main = { logo: "os-apple", title: "Run Alto on macOS", note: "No installer yet · run it from source", url: systems.macos.url || source };
   } else {
     main = { logo: "os-computer", title: "Get Alto on a computer", note: "Linux, Windows or macOS · pick yours below", url: "#dl-all" };
   }
