@@ -977,7 +977,7 @@ def test_on_this_page_list_made_from_headings_and_only_for_pages() -> None:
     """
     script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
     assert (
-        '"h2, h3"' in script
+        '"h2, h3, dl.py.method > dt.sig[id]"' in script
         and "heads.length < 2" in script
         and "On this page" in script
     )

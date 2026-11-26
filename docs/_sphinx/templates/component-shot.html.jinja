@@ -1,0 +1,14 @@
+<figure class="shot component-shot{% if labels %} component-labeled{% endif %}">
+  <div class="component-map">
+    {% for theme, suffix in [('light', ''), ('dark', '-dark')] %}
+    <img class="for-{{ theme }}" src="{{ images }}/{{ screen }}{{ suffix }}.png" alt="{{ alt|e }}" width="{{ width }}" height="{{ height }}" loading="lazy">
+    {% endfor %}
+    {% for region in regions %}
+    <a class="component-region{% if region.group %} component-group{% endif %}{% if region.label_below %} label-below{% endif %}" href="{{ link(region.href) }}" aria-label="{{ region.label|e }} ({{ region.type|e }})" title="{{ region.label|e }} ({{ region.type|e }})"
+       style="left: {{ region.rect[0] }}%; top: {{ region.rect[1] }}%; width: {{ region.rect[2] }}%; height: {{ region.rect[3] }}%"><span aria-hidden="true">{{ loop.index }}{% if labels %} · {{ region.label|e }}{% endif %}</span></a>
+    {% endfor %}
+  </div>
+  <figcaption><ol class="component-key">
+    {% for region in regions %}<li><a href="{{ link(region.href) }}">{{ region.label|e }}</a> · <code>{{ region.type|e }}</code></li>{% endfor %}
+  </ol></figcaption>
+</figure>

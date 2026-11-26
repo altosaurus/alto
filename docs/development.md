@@ -647,7 +647,11 @@ uv run --isolated --locked --only-group docs sphinx-build -W -b dirhtml \
 python -m http.server 43220 --bind 127.0.0.1 --directory work/sphinx-preview/www
 ```
 
-Open [License and credits](http://127.0.0.1:43220/alto/dev/credits/) to see the existing Markdown rendered with MyST and the Alto theme.
+Open the [Exercise view walkthrough](http://127.0.0.1:43220/alto/dev/developer-guide/exercise-view/), its
+[generated class reference](http://127.0.0.1:43220/alto/dev/api/alto.ui.exercise_view/class-exerciseview/), or
+[License and credits](http://127.0.0.1:43220/alto/dev/credits/). The walkthrough and class reference read the
+Python source in the checkout. For committed source, line numbers link to the last commit that changed the file.
+Other API classes and practice guides link to the published development docs during the migration.
 
 ## Keeping the docs and screenshots current
 

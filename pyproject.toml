@@ -253,4 +253,5 @@ reportOptionalSubscript = false
 docs = [
     "myst-parser>=4",
     "sphinx>=8.2",
+    "sphinx-autoapi>=3.6,<4",
 ]

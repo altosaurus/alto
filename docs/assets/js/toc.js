@@ -9,11 +9,15 @@
   if (!article || !rail || !grid) { return; }
   if (grid.hasAttribute("data-no-toc")) { return; }  // a page can opt out with `toc: false` in its front matter
 
-  var heads = Array.prototype.slice.call(article.querySelectorAll("h2, h3")).filter(function (h) {
+  var heads = Array.prototype.slice.call(article.querySelectorAll("h2, h3, dl.py.method > dt.sig[id]")).filter(function (h) {
     return !h.classList.contains("no-toc");  // a heading can opt out with `{: .no-toc}` under it
   });
   if (heads.length < 2) { return; }
 
+  var labels = heads.map(function (h) {
+    var method = h.querySelector(".sig-name");
+    return method ? method.textContent : h.textContent;
+  });
   var used = {};
   function slug(text) {
     var base = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "section";
@@ -37,7 +41,7 @@
       var item = document.createElement("li");
       var a = document.createElement("a");
       a.href = "#" + targets[i];
-      a.textContent = h.textContent;
+      a.textContent = labels[i];
       if (h.tagName === "H3") { a.className = "sub"; }
       a.setAttribute("data-toc-for", targets[i]);
       item.appendChild(a);
@@ -80,7 +84,7 @@
     Array.prototype.forEach.call(document.querySelectorAll("[data-toc-for]"), function (a) {
       a.classList.toggle("on", a.getAttribute("data-toc-for") === targets[current]);
     });
-    here.textContent = heads[current].textContent;
+    here.textContent = labels[current];
   }
   window.addEventListener("scroll", function () { if (!pending) { pending = true; window.requestAnimationFrame(update); } }, { passive: true });
   window.addEventListener("resize", update);

@@ -62,6 +62,7 @@ docs = [
     { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "sphinx", version = "9.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.12.*'" },
     { name = "sphinx", version = "9.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "sphinx-autoapi" },
 ]
 
 [package.metadata]
@@ -90,6 +91,7 @@ provides-extras = ["dev", "package"]
 docs = [
     { name = "myst-parser", specifier = ">=4" },
     { name = "sphinx", specifier = ">=8.2" },
+    { name = "sphinx-autoapi", specifier = ">=3.6,<4" },
 ]
 
 [[package]]
@@ -1913,6 +1915,23 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/64/d4/413466f0be8b1cb0e3e43893a148b96d7462d0923d82b4166b21afc5f30c/sphinx-9.2.0.tar.gz", hash = "sha256:90470459f3cab15d9dfed146c71cf77694b0445df17b2e0e69059cb9f7fc9ee4", size = 8782438, upload-time = "2026-10-21T00:05:15.019Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c4/28/a0c50761cd215b7042f4bc617a6bc5c0cd7be62f75bc908e169e28a4d21e/sphinx-9.2.0-py3-none-any.whl", hash = "sha256:4c3ec13b612712c0d3ce4cbdd9e3eb91e68577e07a8e31f32f21cf178453578c", size = 3925388, upload-time = "2026-10-21T00:05:12.241Z" },
+]
+
+[[package]]
+name = "sphinx-autoapi"
+version = "3.9.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "astroid" },
+    { name = "jinja2" },
+    { name = "pyyaml" },
+    { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "sphinx", version = "9.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.12.*'" },
+    { name = "sphinx", version = "9.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4b/e8/12412b8c25b7e22fc6677ce84aceb278e856a688478e0a3c6eb211281c75/sphinx_autoapi-3.9.0.tar.gz", hash = "sha256:0b2a47beac401c5fe437fbcd41c650c6cdc072234e576f56ef04456805bddabf", size = 61311, upload-time = "2026-10-31T03:00:41.075Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3a/c4/d08333f57470065ca1e551d907f7cdd7ee873da436f6f352b773276e7720/sphinx_autoapi-3.9.0-py3-none-any.whl", hash = "sha256:8ecba31815322b00e9fb01973c210ba651522d25f92705a4384fd6c429c5a28f", size = 36448, upload-time = "2026-10-31T03:00:39.818Z" },
 ]
 
 [[package]]
