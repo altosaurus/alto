@@ -13,15 +13,23 @@
   var root = slot.getAttribute("data-root") || "";
   var current = slot.getAttribute("data-version") || "";
 
+  function versionHome(version) {
+    return root + (version === "latest" ? "/" : "/" + version + "/");
+  }
+
   function pageInVersion(version) {
-    var prefix = root + "/" + current + "/";
+    var prefix = versionHome(current);
+    // A cached copy of the old stable build can still be open under /latest/.
+    if (current === "latest" && location.pathname.indexOf(root + "/latest/") === 0) {
+      prefix = root + "/latest/";
+    }
     var rest = location.pathname.indexOf(prefix) === 0 ? location.pathname.slice(prefix.length) : "";
-    return root + "/" + version + "/" + rest + location.search;
+    return versionHome(version) + rest + location.search;
   }
 
   function go(version) {
     var target = pageInVersion(version);
-    var home = root + "/" + version + "/";
+    var home = versionHome(version);
     // Stay on the same page if that version has it; otherwise go to that version's home.
     fetch(target, { method: "HEAD" })
       .then(function (answer) { location.href = answer.ok ? target + location.hash : home; })
@@ -152,7 +160,7 @@
       slot.appendChild(wrap);
 
       if (current === "dev") {
-        banner("This is the development version, which has changes that are not in a release.", latest ? root + "/latest/" : "", "See the latest release.");
+        banner("This is the development version, which has changes that are not in a release.", latest ? versionHome("latest") : "", "See the latest release.");
       } else if (current !== "latest" && latest && current !== latest) {
         banner("You are reading the docs for " + current + ", which is not the latest release.", pageInVersion("latest"), "See " + latest + ".");
       }
