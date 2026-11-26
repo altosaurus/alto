@@ -170,6 +170,33 @@ def test_a_tutorial_with_a_file_missing_is_refused_before_anything_is_copied(
     assert not docs.exists()
 
 
+def test_api_guide_can_reference_tutorial_assets(tmp_path: Path) -> None:
+    """
+    Import a tutorial asset used only by the shared Plugin API guide.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Temporary tutorial checkout and destination site.
+    """
+    repo = make_tutorial(tmp_path)
+    docs = tmp_path / "docs"
+    (docs / "plugins").mkdir(parents=True)
+    path = "assets/plugins/viola/animations/string.gif"
+    animation = repo / "docs" / path
+    animation.parent.mkdir(parents=True)
+    animation.write_bytes(b"example")
+    (docs / "plugins/api.md").write_text(
+        f"[Animation]({{{{ '/{path}' | relative_url }}}})\n"
+        "[Other pack]({{ '/assets/plugins/harpsichord/keys.png' "
+        "| relative_url }})",
+        encoding="utf-8",
+    )
+    copied = tutorial_docs.bring_in("viola", source=repo, docs=docs)
+    assert path in copied
+    assert (docs / path).read_bytes() == animation.read_bytes()
+
+
 def test_the_command_reports_a_missing_tutorial(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],

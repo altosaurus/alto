@@ -7,8 +7,8 @@ A tutorial page and the pictures and downloads it shows live in a
 repository of their own: `altosaurus/viola-plugin-tutorial`
 and `altosaurus/harpsichord-plugin-tutorial`. Each mirrors the paths of
 Alto's `docs/` folder, and Alto keeps no copy. The Docs
-workflows run this script before Jekyll builds, and it copies in each
-page and only the files the page refers to, so the site
+workflows run this script before building. It copies each page and the
+assets referenced by the tutorial or the Plugin API guide, so the site
 publishes nothing else from the tutorial repositories: no loose sound
 files, no screenshots meant for a README.
 
@@ -148,7 +148,16 @@ def bring_in(name: str, *, source: Path, docs: Path = DOCS) -> list[str]:
     page, _ = TUTORIALS[name]
     text = (source / "docs" / page).read_text(encoding="utf-8")
     copied = [page]
-    for path in references(text):
+    assets = references(text)
+    api = docs / "plugins/api.md"
+    if api.is_file():
+        prefixes = (f"assets/plugins/{name}/", f"assets/plugins/{name}-")
+        assets.extend(
+            path
+            for path in references(api.read_text(encoding="utf-8"))
+            if path.startswith(prefixes) and path not in assets
+        )
+    for path in assets:
         if not (source / "docs" / path).is_file():
             raise FileNotFoundError(
                 "The "
