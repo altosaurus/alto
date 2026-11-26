@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.ui.transition_preview · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.transition_preview/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.ui.transition_preview · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.transition_preview/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795654009">
   
 </head>
 <body>
@@ -767,7 +767,7 @@ from the exercises to the lessons once.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_sides</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">TileCard</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">TileCard</span><span class="p">]]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L79" aria-label="Source for make_sides">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L79" aria-label="Source for make_sides">[Source]</a></p>
 
 </div>
 
@@ -798,7 +798,7 @@ card to move.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Stage</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L113" aria-label="Source for Stage">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L113" aria-label="Source for Stage">[Source]</a></p>
 
 </div>
 
@@ -843,7 +843,7 @@ and the transition plays on a canvas over it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L149" aria-label="Source for Stage.resizeEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L149" aria-label="Source for Stage.resizeEvent">[Source]</a></p>
 
 </div>
 
@@ -873,7 +873,7 @@ and the transition plays on a canvas over it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L171" aria-label="Source for Stage.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L171" aria-label="Source for Stage.paintEvent">[Source]</a></p>
 
 </div>
 
@@ -900,7 +900,7 @@ and the transition plays on a canvas over it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TransitionPreview</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L194" aria-label="Source for TransitionPreview">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L194" aria-label="Source for TransitionPreview">[Source]</a></p>
 
 </div>
 
@@ -953,7 +953,7 @@ as often as they like.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_transition</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L334" aria-label="Source for TransitionPreview.show_transition">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L334" aria-label="Source for TransitionPreview.show_transition">[Source]</a></p>
 
 </div>
 
@@ -981,7 +981,7 @@ change to the lessons, once.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">replay</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L360" aria-label="Source for TransitionPreview.replay">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L360" aria-label="Source for TransitionPreview.replay">[Source]</a></p>
 
 </div>
 
@@ -1002,7 +1002,7 @@ change to the lessons, once.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">go_to</span><span class="p">(</span><span class="n">side</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L387" aria-label="Source for TransitionPreview.go_to">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L387" aria-label="Source for TransitionPreview.go_to">[Source]</a></p>
 
 </div>
 
@@ -1036,7 +1036,7 @@ if that side is already showing.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/ui/transition_preview.py#L444" aria-label="Source for TransitionPreview.resizeEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/ui/transition_preview.py#L444" aria-label="Source for TransitionPreview.resizeEvent">[Source]</a></p>
 
 </div>
 
@@ -1384,10 +1384,10 @@ playing.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795654009" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

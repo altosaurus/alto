@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Release notes · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/release-notes/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Release notes · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/release-notes/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795654009">
   
 </head>
 <body>
@@ -751,13 +751,19 @@
 <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>, and Alto uses <a href="https://semver.org/">semantic versioning</a>.
 Each release’s downloads are on its GitHub release.</p>
 
-<h2 id="unreleased">Unreleased</h2>
+<h2 id="003">0.0.3</h2>
 
-<p>Changes that are in the development docs and not in a release yet.</p>
+<p>Released 2026-11-25. <a href="https://github.com/altosaurus/alto/releases/tag/v0.0.3">GitHub release</a></p>
 
 <h3 class="no-toc" id="added">Added</h3>
 
 <ul>
+  <li>Alto now has a signed and notarized disk image for Apple Silicon Macs. Open the disk image and drag Alto into Applications.</li>
+  <li>On Linux, play answers in supported note, interval, and scale exercises with a USB MIDI keyboard or the Virtual MIDI Piano Keyboard.</li>
+  <li>In Statistics, use the diagonal arrows beside the review heatmap to switch between a continuous calendar and one with gaps between months.</li>
+  <li>
+    <p>Search the documentation from the header and press Enter for all results. Code examples have a copy button, and API signatures link to their source.</p>
+  </li>
   <li>
     <p>A new <strong>Duration</strong> lesson under <strong>Rhythm</strong> introduces quarter, half, and whole notes and quarter rests with counted listening examples. Its icon shows an eighth note beamed to two sixteenth notes. Rhythm examples in lessons and the glossary show a time signature, upward stems, bar lines, and optional counts on staffless notation paper.</p>
   </li>
@@ -1416,10 +1422,10 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795654009" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

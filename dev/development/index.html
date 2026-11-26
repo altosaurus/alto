@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>For developers · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/development/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="For developers · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/development/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795654009">
   
 </head>
 <body>
@@ -1614,7 +1614,15 @@ and open <code class="language-plaintext highlighter-rouge">http://127.0.0.1:800
 .venv/bin/python scripts/screenshots.py <span class="nt">--out</span> /tmp/shots   <span class="c"># somewhere else, to look before replacing</span>
 </code></pre></div></div>
 
-<p>It runs against a made-up profile and a temporary settings folder, so it never touches your own history or settings. It
+<p>For a release, start with <code class="language-plaintext highlighter-rouge">.venv/bin/python scripts/screenshots.py --review /tmp/alto-shot-review</code> using an empty directory.
+The script compares decoded pixels with the checked-in PNGs. It writes new or resized captures and those where at least
+0.5% of pixels differ by more than 16 levels in any 8-bit color channel. Each line reports the changed percentage.
+Review the candidates beside the existing screenshots and copy only those that show a change readers need to see.
+A different sample question, chart value, or row of practice data can cross the threshold without changing the instructions.
+For a small important detail, such as the version in Settings, use <code class="language-plaintext highlighter-rouge">--only settings-updates --force</code> to capture it regardless
+of the percentage. An empty <code class="language-plaintext highlighter-rouge">--out</code> folder gives you every capture for inspection.</p>
+
+<p>The sample profile uses fixed random seeds, a fixed date, and UTC. Each theme gets its own temporary settings folder. The script
 needs a display or <code class="language-plaintext highlighter-rouge">QT_QPA_PLATFORM=offscreen</code>. Fonts render slightly differently on each machine, so regenerate on the
 machine you normally use and look at the pictures before committing them. To add a picture, include it in a docs page
 with <code class="language-plaintext highlighter-rouge">shot.html</code>, and add its name to <code class="language-plaintext highlighter-rouge">SHOTS</code> in the script. <code class="language-plaintext highlighter-rouge">tests/test_docs.py</code> checks that both match and that both themes
@@ -1661,19 +1669,20 @@ test fails when it is not, so a changelog line always arrives with its page.</li
   <li>Check that every user-facing feature in the release has a guide entry explaining where to find it and how to use it.
 Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed
 feature, follow the documented steps in the release candidate and add or correct instructions in the release PR.</li>
-  <li>With the release candidate installed in <code class="language-plaintext highlighter-rouge">.venv</code>, run <code class="language-plaintext highlighter-rouge">.venv/bin/python scripts/screenshots.py</code> to refresh every
-screenshot in <code class="language-plaintext highlighter-rouge">docs/assets/img/</code> in both themes. Review the light and dark images against their captions and alt text.
+  <li>With the release candidate installed in <code class="language-plaintext highlighter-rouge">.venv</code>, run the <a href="#keeping-the-docs-and-screenshots-current">screenshot comparison</a> for both themes.
+Review the changed images against their captions and alt text, including small release-specific details such as the displayed version.
 Exclude the <a href="/alto/dev/developer-guide/ui-style-guide/">UI style guide</a> and its versioned screenshots in
 <code class="language-plaintext highlighter-rouge">docs/assets/ui-reference/</code> from this check. Update that baseline only for an explicitly requested visual change.
 For screenshots using <code class="language-plaintext highlighter-rouge">component-shot.html</code>, check that the image dimensions match the captures and each clickable region covers its component.
 Run <code class="language-plaintext highlighter-rouge">sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py</code> and include the
 updated images and any caption or region corrections in the release PR.</li>
-  <li>Build all three desktop downloads from the same versioned candidate commit. Run the <strong>Release</strong> workflow manually
-for Linux and Windows. For macOS, run the <strong>Package</strong> workflow with <code class="language-plaintext highlighter-rouge">macos_notarize</code> enabled.
+  <li>Build all three desktop downloads from the same versioned candidate commit. The release PR builds unsigned Linux and Windows
+candidates. Run <strong>Package</strong> on that branch with <code class="language-plaintext highlighter-rouge">macos_test</code> enabled for the Apple Silicon test ZIP. For signing rehearsals,
+run <strong>Release</strong> on the approved <code class="language-plaintext highlighter-rouge">main</code> commit for Windows and <strong>Package</strong> on that same commit with <code class="language-plaintext highlighter-rouge">macos_notarize</code> enabled for the Mac.
 Complete the <a href="#license-compliance">license compliance check</a> on the Linux tarball, Windows installer, and final
 stapled macOS DMG. Record the results and artifact checksums for each platform in the release PR. Resolve any findings
 before tagging.</li>
-  <li>Merge that as a pull request, then tag the merge commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
+  <li>After reviewing the PR and completing the signing rehearsals on the approved merge commit, tag that commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
 the tag starts the <strong>Release</strong> workflow (see below), which publishes the downloads.</li>
 </ol>
 
@@ -1802,8 +1811,8 @@ installer on a Windows runner, both with Python 3.13. The other two call it.</li
   <li><strong>Package</strong> runs it on a pull request that changes <code class="language-plaintext highlighter-rouge">packaging/</code>, the build scripts, <code class="language-plaintext highlighter-rouge">pyproject.toml</code> or the assets, so a break
 shows before a release. It publishes nothing.</li>
   <li><strong>Release</strong> runs when a tag such as <code class="language-plaintext highlighter-rouge">v0.1.0</code> is pushed. It first checks that the tag is <code class="language-plaintext highlighter-rouge">v</code> plus the version in <code class="language-plaintext highlighter-rouge">pyproject.toml</code> and
-that <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code> has notes for it; then builds both packages; then creates the GitHub release with both files, a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code>
-file and the changelog notes. A manual run on <code class="language-plaintext highlighter-rouge">main</code> also signs and verifies the Windows installer and keeps it as a rehearsal artifact.</li>
+that <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code> has notes for it. It builds Linux, signs Windows, and calls <strong>Package</strong> to sign and notarize the Apple Silicon DMG.
+It publishes all three downloads, the matching source archives, signed checksums, and changelog notes. A manual run on <code class="language-plaintext highlighter-rouge">main</code> also signs and verifies the Windows installer and keeps it as a rehearsal artifact.</li>
 </ul>
 
 <p>The release is a normal one and never a pre-release, because Alto’s update check asks GitHub for the latest release.</p>
@@ -1924,10 +1933,10 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795654009" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

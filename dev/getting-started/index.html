@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Getting started · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/getting-started/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Getting started · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/getting-started/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795654009">
   
 </head>
 <body>
@@ -804,7 +804,7 @@ right-click the downloaded file and open <strong>Properties → Digital Signatur
 
   <h3 class="no-toc" id="mac-source-installation">Mac source installation</h3>
 
-  <p>On Mac, you can try Alto from source. macOS is currently untested.
+  <p>You can also run Alto from source, including on Intel Macs.
 With Git and Python 3.11 or newer installed, open <strong>Terminal</strong> and run:</p>
 
   <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/altosaurus/alto.git
@@ -942,7 +942,8 @@ copy. If you run Alto straight from the unpacked folder, download the new archiv
 </div>
 
 <div data-platforms="macos">
-  <p>Close Alto and run these commands in Terminal from your <code class="language-plaintext highlighter-rouge">alto</code> folder to update the source and its dependencies:</p>
+
+  <p>For a source installation, quit Alto and run these commands in Terminal from your <code class="language-plaintext highlighter-rouge">alto</code> folder:</p>
 
   <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull
 .venv/bin/python <span class="nt">-m</span> pip <span class="nb">install</span> <span class="nt">-e</span> <span class="nb">.</span>
@@ -964,7 +965,7 @@ practice history and settings.</p>
 </div>
 
 <div data-platforms="macos">
-  <p>Quit Alto. If you no longer need the source checkout, move the cloned <code class="language-plaintext highlighter-rouge">alto</code> folder, including its <code class="language-plaintext highlighter-rouge">.venv</code>, to the Trash.
+  <p>Quit Alto. For a source installation, move the cloned <code class="language-plaintext highlighter-rouge">alto</code> folder, including its <code class="language-plaintext highlighter-rouge">.venv</code>, to the Trash.
 Your practice history is stored separately in <code class="language-plaintext highlighter-rouge">~/Library/Application Support/Alto/alto.db</code>.</p>
 </div>
 
@@ -1060,7 +1061,7 @@ explains it.</p>
 </span></code></pre></div>  </div>
 </div>
 
-<script src="/alto/dev/assets/js/downloads.js?v=1795644849" defer=""></script>
+<script src="/alto/dev/assets/js/downloads.js?v=1795654009" defer=""></script>
 
 
           
@@ -1133,10 +1134,10 @@ explains it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795654009" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

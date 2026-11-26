@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.exercises.packs · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.exercises.packs/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.exercises.packs · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.exercises.packs/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795644849">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795654009">
   
 </head>
 <body>
@@ -757,7 +757,7 @@ folders.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PackExercise</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L60" aria-label="Source for PackExercise">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L60" aria-label="Source for PackExercise">[Source]</a></p>
 
 </div>
 
@@ -778,7 +778,7 @@ string and pitch.
 <span class="k">def</span> <span class="nf">options</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">settings</span><span class="p">.</span><span class="n">PackExerciseSettings</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L123" aria-label="Source for PackExercise.options">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L123" aria-label="Source for PackExercise.options">[Source]</a></p>
 
 </div>
 
@@ -812,7 +812,7 @@ defaults the first time.</p>
 <span class="k">def</span> <span class="nf">is_keyboard</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L158" aria-label="Source for PackExercise.is_keyboard">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L158" aria-label="Source for PackExercise.is_keyboard">[Source]</a></p>
 
 </div>
 
@@ -840,7 +840,7 @@ defaults the first time.</p>
 <span class="k">def</span> <span class="nf">chosen_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L178" aria-label="Source for PackExercise.chosen_keys">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L178" aria-label="Source for PackExercise.chosen_keys">[Source]</a></p>
 
 </div>
 
@@ -871,7 +871,7 @@ defaults the first time.</p>
 <span class="k">def</span> <span class="nf">chosen_span</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L207" aria-label="Source for PackExercise.chosen_span">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L207" aria-label="Source for PackExercise.chosen_span">[Source]</a></p>
 
 </div>
 
@@ -903,7 +903,7 @@ drawing the keyboards over that range.</p>
 <span class="k">def</span> <span class="nf">chosen_intervals</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L231" aria-label="Source for PackExercise.chosen_intervals">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L231" aria-label="Source for PackExercise.chosen_intervals">[Source]</a></p>
 
 </div>
 
@@ -931,7 +931,7 @@ drawing the keyboards over that range.</p>
 <span class="k">def</span> <span class="nf">chosen_manuals</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L260" aria-label="Source for PackExercise.chosen_manuals">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L260" aria-label="Source for PackExercise.chosen_manuals">[Source]</a></p>
 
 </div>
 
@@ -962,7 +962,7 @@ on.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_cards</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Question</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L328" aria-label="Source for PackExercise.active_cards">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L328" aria-label="Source for PackExercise.active_cards">[Source]</a></p>
 
 </div>
 
@@ -988,7 +988,7 @@ card.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sound_instrument</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L367" aria-label="Source for PackExercise.sound_instrument">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L367" aria-label="Source for PackExercise.sound_instrument">[Source]</a></p>
 
 </div>
 
@@ -1021,7 +1021,7 @@ instrument.
 <span class="k">def</span> <span class="nf">sound_options</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L394" aria-label="Source for PackExercise.sound_options">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L394" aria-label="Source for PackExercise.sound_options">[Source]</a></p>
 
 </div>
 
@@ -1060,7 +1060,7 @@ disk is left out.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L479" aria-label="Source for PackExercise.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L479" aria-label="Source for PackExercise.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -1085,7 +1085,7 @@ asking sharps and flats or the octave.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L534" aria-label="Source for PackExercise.refresh">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L534" aria-label="Source for PackExercise.refresh">[Source]</a></p>
 
 </div>
 
@@ -1117,7 +1117,7 @@ pack is upgraded.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L568" aria-label="Source for PackExercise.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L568" aria-label="Source for PackExercise.make_question">[Source]</a></p>
 
 </div>
 
@@ -1147,7 +1147,7 @@ pack is upgraded.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L588" aria-label="Source for PackExercise.daily_candidates">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L588" aria-label="Source for PackExercise.daily_candidates">[Source]</a></p>
 
 </div>
 
@@ -1177,7 +1177,7 @@ pack is upgraded.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L610" aria-label="Source for PackExercise.card_count">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L610" aria-label="Source for PackExercise.card_count">[Source]</a></p>
 
 </div>
 
@@ -1206,7 +1206,7 @@ pack is upgraded.
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L640" aria-label="Source for read_controls">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L640" aria-label="Source for read_controls">[Source]</a></p>
 
 </div>
 
@@ -1256,7 +1256,7 @@ pack is upgraded.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_pack</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">PackExercise</span><span class="p">]]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L1425" aria-label="Source for read_pack">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L1425" aria-label="Source for read_pack">[Source]</a></p>
 
 </div>
 
@@ -1294,7 +1294,7 @@ anatomy exercises.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">pack_manifests</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L1776" aria-label="Source for pack_manifests">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L1776" aria-label="Source for pack_manifests">[Source]</a></p>
 
 </div>
 
@@ -1325,7 +1325,7 @@ failed validation.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_pack_info</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L1818" aria-label="Source for installed_pack_info">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L1818" aria-label="Source for installed_pack_info">[Source]</a></p>
 
 </div>
 
@@ -1361,7 +1361,7 @@ loading its media.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L1857" aria-label="Source for InstalledPlugin">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L1857" aria-label="Source for InstalledPlugin">[Source]</a></p>
 
 </div>
 
@@ -1397,7 +1397,7 @@ loading its media.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_plugins</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">InstalledPlugin</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L1895" aria-label="Source for installed_plugins">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L1895" aria-label="Source for installed_plugins">[Source]</a></p>
 
 </div>
 
@@ -1438,7 +1438,7 @@ each can be removed.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L1946" aria-label="Source for install_pack">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L1946" aria-label="Source for install_pack">[Source]</a></p>
 
 </div>
 
@@ -1480,7 +1480,7 @@ next launch.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_packs</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/bb738744b9481301f603a16770fa4c1ec34e02bf/alto/exercises/packs.py#L2076" aria-label="Source for load_packs">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/309c9df33572ed872a718d188a01681cfceceb2b/alto/exercises/packs.py#L2076" aria-label="Source for load_packs">[Source]</a></p>
 
 </div>
 
@@ -1673,10 +1673,10 @@ were skipped.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795644849" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795644849" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795654009" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795654009" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
