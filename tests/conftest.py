@@ -243,6 +243,10 @@ def _default_settings() -> None:
         chosen = getattr(settings, name)
         chosen.__dict__.clear()
         chosen.__dict__.update(type(chosen)().__dict__)
+    settings.beat_rhythm_component = "Time signature"
+    for prefix, default in settings.DEFAULT_BEAT_NOTE_TYPES.items():
+        settings.beat_tuplets[prefix] = False
+        settings.beat_note_types[prefix] = default.copy()
     settings.pack_exercises.clear()
     saved = QSettings("alto", "alto")
     saved.clear()

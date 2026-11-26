@@ -27,7 +27,7 @@ True
 def category_tree(name: str) -> QTreeWidget
 ```
 
-{% endraw %}{% include api-source.html name="category_tree" line=166 %}{% raw %}
+{% endraw %}{% include api-source.html name="category_tree" line=168 %}{% raw %}
 
 </div>
 
@@ -65,7 +65,7 @@ TileCard(
 )
 ```
 
-{% endraw %}{% include api-source.html name="TileCard" line=312 %}{% raw %}
+{% endraw %}{% include api-source.html name="TileCard" line=314 %}{% raw %}
 
 </div>
 
@@ -133,7 +133,7 @@ Build a card.
 def changeEvent(event: QEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="TileCard.changeEvent" line=494 %}{% raw %}
+{% endraw %}{% include api-source.html name="TileCard.changeEvent" line=496 %}{% raw %}
 
 </div>
 
@@ -160,7 +160,7 @@ Recolor the icon when the tile receives a new palette.
 def exercise_icon(name: str) -> str
 ```
 
-{% endraw %}{% include api-source.html name="exercise_icon" line=515 %}{% raw %}
+{% endraw %}{% include api-source.html name="exercise_icon" line=517 %}{% raw %}
 
 </div>
 
@@ -196,7 +196,7 @@ True
 def lesson_icon(lesson: Lesson) -> str
 ```
 
-{% endraw %}{% include api-source.html name="lesson_icon" line=548 %}{% raw %}
+{% endraw %}{% include api-source.html name="lesson_icon" line=550 %}{% raw %}
 
 </div>
 
@@ -232,7 +232,7 @@ ExerciseCard(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseCard" line=573 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseCard" line=575 %}{% raw %}
 
 </div>
 
@@ -282,7 +282,7 @@ Build the card for one exercise.
 def set_counts(counts: tuple[int, int] | tuple[int, int, int] | None) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseCard.set_counts" line=631 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseCard.set_counts" line=633 %}{% raw %}
 
 </div>
 
@@ -317,7 +317,7 @@ def lesson_card(
 ) -> TileCard
 ```
 
-{% endraw %}{% include api-source.html name="lesson_card" line=672 %}{% raw %}
+{% endraw %}{% include api-source.html name="lesson_card" line=674 %}{% raw %}
 
 </div>
 
@@ -355,7 +355,7 @@ HomePage(
 )
 ```
 
-{% endraw %}{% include api-source.html name="HomePage" line=710 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage" line=712 %}{% raw %}
 
 </div>
 
@@ -419,7 +419,7 @@ Build the page.
 def set_search(text: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.set_search" line=926 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.set_search" line=928 %}{% raw %}
 
 </div>
 
@@ -452,7 +452,7 @@ def matches_filter(
 ) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.matches_filter" line=966 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.matches_filter" line=968 %}{% raw %}
 
 </div>
 
@@ -490,7 +490,7 @@ def eventFilter(
 ) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.eventFilter" line=1070 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.eventFilter" line=1072 %}{% raw %}
 
 </div>
 
@@ -520,7 +520,7 @@ the filters.
 def set_filter_available(available: bool) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.set_filter_available" line=1119 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.set_filter_available" line=1121 %}{% raw %}
 
 </div>
 
@@ -552,7 +552,7 @@ def restore_tile_filters(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.restore_tile_filters" line=1223 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.restore_tile_filters" line=1225 %}{% raw %}
 
 </div>
 
@@ -577,7 +577,7 @@ Restore exercise and lesson checkboxes after a theme change.
 def set_category(category: str | None) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.set_category" line=1253 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.set_category" line=1255 %}{% raw %}
 
 </div>
 
@@ -606,7 +606,7 @@ def set_mode(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.set_mode" line=1304 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.set_mode" line=1306 %}{% raw %}
 
 </div>
 
@@ -640,7 +640,7 @@ waits on it.
 def page_changed() -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.page_changed" line=1375 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.page_changed" line=1377 %}{% raw %}
 
 </div>
 
@@ -664,7 +664,7 @@ False
 def refresh_counts() -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.refresh_counts" line=1475 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.refresh_counts" line=1477 %}{% raw %}
 
 </div>
 
@@ -685,7 +685,7 @@ filters.
 def showEvent(event: QShowEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.showEvent" line=1507 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.showEvent" line=1509 %}{% raw %}
 
 </div>
 
@@ -712,7 +712,7 @@ so they say where each lesson was left.
 def resizeEvent(event: QResizeEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="HomePage.resizeEvent" line=1528 %}{% raw %}
+{% endraw %}{% include api-source.html name="HomePage.resizeEvent" line=1530 %}{% raw %}
 
 </div>
 

@@ -155,6 +155,7 @@ Question(
     fingerboard: FingerboardPosition | None = None,
     notation_target: tuple[str, int] | None = None,
     notation_excerpt: str | None = None,
+    rhythm: tuple[str, ...] = (),
 )
 ```
 
@@ -206,6 +207,7 @@ One question, with what to show for it and which answer is right.
 - `required` (*tuple of str*): Answers that must all be given, one after another in any order, such as both names of a key with two: B and C♭. Empty for an ordinary question with one answer. Keyword-only.
 - `notation_target` (*tuple of (str, int) or None*): Notation part and zero-based note column or staff line to highlight. Keyword-only.
 - `notation_excerpt` (*str or None*): Versioned score containing the target. Its position is an index into the excerpt manifest. Keyword-only.
+- `rhythm` (*tuple of str, default ()*): Written rhythm values in reading order. Keyword-only.
 - `place_clef` (*str, default ""*): The clef to put on a blank staff: the answer is a clef symbol (G, C or F) and a place on the staff, not a button. Empty for any other question. Keyword-only.
 
 **Examples**
@@ -233,7 +235,7 @@ True
 def check_placed(note: Note) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="Question.check_placed" line=389 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.check_placed" line=392 %}{% raw %}
 
 </div>
 
@@ -275,7 +277,7 @@ False
 def sounding_columns() -> list[list[Note]]
 ```
 
-{% endraw %}{% include api-source.html name="Question.sounding_columns" line=428 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.sounding_columns" line=431 %}{% raw %}
 
 </div>
 
@@ -299,7 +301,7 @@ A keyboard interval plays both of its highlighted pitches.
 def placement_columns(note: Note | None) -> list[list[Note]]
 ```
 
-{% endraw %}{% include api-source.html name="Question.placement_columns" line=447 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.placement_columns" line=450 %}{% raw %}
 
 </div>
 
@@ -339,7 +341,7 @@ True
 def check_scale(notes: list[Note]) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="Question.check_scale" line=484 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.check_scale" line=487 %}{% raw %}
 
 </div>
 
@@ -417,7 +419,7 @@ False
 def check_steps(steps: list[str]) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="Question.check_steps" line=567 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.check_steps" line=570 %}{% raw %}
 
 </div>
 
@@ -461,7 +463,7 @@ True
 def check_built(count: int) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="Question.check_built" line=605 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.check_built" line=608 %}{% raw %}
 
 </div>
 
@@ -500,7 +502,7 @@ asked for.
 def places_sequence() -> bool
 ```
 
-{% endraw %}{% include api-source.html name="Question.places_sequence" line=637 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.places_sequence" line=640 %}{% raw %}
 
 </div>
 
@@ -531,7 +533,7 @@ True
 def check(choice: str) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="Question.check" line=659 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.check" line=662 %}{% raw %}
 
 </div>
 
@@ -578,7 +580,7 @@ Report whether a chosen answer is right.
 def complete(given: set[str]) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="Question.complete" line=703 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.complete" line=706 %}{% raw %}
 
 </div>
 
@@ -620,7 +622,7 @@ True
 def item_key() -> str
 ```
 
-{% endraw %}{% include api-source.html name="Question.item_key" line=742 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.item_key" line=745 %}{% raw %}
 
 </div>
 
@@ -661,7 +663,7 @@ True
 def to_dict() -> dict
 ```
 
-{% endraw %}{% include api-source.html name="Question.to_dict" line=861 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.to_dict" line=866 %}{% raw %}
 
 </div>
 
@@ -694,7 +696,7 @@ again.
 def from_dict(d: dict) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="Question.from_dict" line=892 %}{% raw %}
+{% endraw %}{% include api-source.html name="Question.from_dict" line=897 %}{% raw %}
 
 </div>
 
@@ -730,7 +732,7 @@ True
 def note_from(v: dict | None) -> Note | None
 ```
 
-{% endraw %}{% include api-source.html name="note_from" line=972 %}{% raw %}
+{% endraw %}{% include api-source.html name="note_from" line=978 %}{% raw %}
 
 </div>
 
@@ -767,7 +769,7 @@ True
 def signature(*parts: object) -> str
 ```
 
-{% endraw %}{% include api-source.html name="signature" line=1002 %}{% raw %}
+{% endraw %}{% include api-source.html name="signature" line=1008 %}{% raw %}
 
 </div>
 
@@ -803,7 +805,7 @@ True
 class Exercise(ABC)
 ```
 
-{% endraw %}{% include api-source.html name="Exercise" line=1066 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise" line=1072 %}{% raw %}
 
 </div>
 
@@ -844,7 +846,7 @@ how long a good answer takes.
 def sound_instrument(key: str | None) -> str | None
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.sound_instrument" line=1125 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.sound_instrument" line=1131 %}{% raw %}
 
 </div>
 
@@ -876,7 +878,7 @@ Choose the instrument that plays this exercise's notes.
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.settings_signature" line=1152 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.settings_signature" line=1158 %}{% raw %}
 
 </div>
 
@@ -909,7 +911,7 @@ Exercises with settings override it.
 def card_prompt(question: Question) -> str
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.card_prompt" line=1176 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.card_prompt" line=1182 %}{% raw %}
 
 </div>
 
@@ -962,7 +964,7 @@ to press, a staff to click) override this.
 def card_groups() -> dict[str, str] | None
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.card_groups" line=1229 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.card_groups" line=1235 %}{% raw %}
 
 </div>
 
@@ -991,7 +993,7 @@ True
 def card_count() -> int | None
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.card_count" line=1250 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.card_count" line=1256 %}{% raw %}
 
 </div>
 
@@ -1020,7 +1022,7 @@ True
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.daily_candidates" line=1272 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.daily_candidates" line=1278 %}{% raw %}
 
 </div>
 
@@ -1064,7 +1066,7 @@ def review_question(
 ) -> Question | None
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.review_question" line=1315 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.review_question" line=1321 %}{% raw %}
 
 </div>
 
@@ -1101,7 +1103,7 @@ True
 def refresh(question: Question) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.refresh" line=1351 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.refresh" line=1357 %}{% raw %}
 
 </div>
 
@@ -1141,7 +1143,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.instructions" line=1383 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.instructions" line=1389 %}{% raw %}
 
 </div>
 
@@ -1176,7 +1178,7 @@ Exercises override it to describe themselves.
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="Exercise.generate" line=1409 %}{% raw %}
+{% endraw %}{% include api-source.html name="Exercise.generate" line=1415 %}{% raw %}
 
 </div>
 
@@ -1210,7 +1212,7 @@ ButtonSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ButtonSettings" line=1435 %}{% raw %}
+{% endraw %}{% include api-source.html name="ButtonSettings" line=1441 %}{% raw %}
 
 </div>
 
@@ -1232,7 +1234,7 @@ per group.
 class ChoiceExercise(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="ChoiceExercise" line=1450 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChoiceExercise" line=1456 %}{% raw %}
 
 </div>
 
@@ -1261,7 +1263,7 @@ to start in Limited mode.
 def button_settings() -> ButtonSettings
 ```
 
-{% endraw %}{% include api-source.html name="ChoiceExercise.button_settings" line=1470 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChoiceExercise.button_settings" line=1476 %}{% raw %}
 
 </div>
 
@@ -1288,7 +1290,7 @@ exercise.
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ChoiceExercise.settings_signature" line=1491 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChoiceExercise.settings_signature" line=1497 %}{% raw %}
 
 </div>
 
@@ -1317,7 +1319,7 @@ be replayed.
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ChoiceExercise.practice_signature" line=1519 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChoiceExercise.practice_signature" line=1525 %}{% raw %}
 
 </div>
 
@@ -1345,7 +1347,7 @@ Identify the exercise settings other than the answer layout.
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="ChoiceExercise.generate" line=1538 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChoiceExercise.generate" line=1544 %}{% raw %}
 
 </div>
 
@@ -1385,7 +1387,7 @@ def limit_buttons(
 ) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="ChoiceExercise.limit_buttons" line=1566 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChoiceExercise.limit_buttons" line=1572 %}{% raw %}
 
 </div>
 
@@ -1417,7 +1419,7 @@ their respective groups.
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="ChoiceExercise.make_question" line=1655 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChoiceExercise.make_question" line=1661 %}{% raw %}
 
 </div>
 
@@ -1447,7 +1449,7 @@ active clef and key settings.
 def register() -> type[Exercise]
 ```
 
-{% endraw %}{% include api-source.html name="register" line=1681 %}{% raw %}
+{% endraw %}{% include api-source.html name="register" line=1687 %}{% raw %}
 
 </div>
 
@@ -1498,7 +1500,7 @@ def pick_distractors(
 ) -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="pick_distractors" line=1732 %}{% raw %}
+{% endraw %}{% include api-source.html name="pick_distractors" line=1738 %}{% raw %}
 
 </div>
 

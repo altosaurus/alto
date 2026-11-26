@@ -229,7 +229,7 @@ StaffWidget(
 )
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget" line=539 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget" line=530 %}{% raw %}
 
 </div>
 
@@ -315,7 +315,7 @@ def show_notes(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.show_notes" line=729 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.show_notes" line=720 %}{% raw %}
 
 </div>
 
@@ -360,7 +360,7 @@ Show some notes, with a clef and a key signature.
 def sizeHint() -> QSize
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.sizeHint" line=879 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.sizeHint" line=870 %}{% raw %}
 
 </div>
 
@@ -390,7 +390,7 @@ centers it gives it that much.
 def resizeEvent(event: QResizeEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.resizeEvent" line=1142 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.resizeEvent" line=1133 %}{% raw %}
 
 </div>
 
@@ -415,7 +415,7 @@ Reflow a lesson excerpt when its available width changes.
 def highlight_column(index: int | None) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.highlight_column" line=1203 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.highlight_column" line=1194 %}{% raw %}
 
 </div>
 
@@ -443,7 +443,7 @@ markings.
 def set_note_color(color: QColor | None) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.set_note_color" line=1223 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.set_note_color" line=1214 %}{% raw %}
 
 </div>
 
@@ -475,7 +475,7 @@ True
 def staff_bottoms() -> dict[str, float]
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.staff_bottoms" line=1248 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.staff_bottoms" line=1239 %}{% raw %}
 
 </div>
 
@@ -502,7 +502,7 @@ Return where each staff is drawn.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.paintEvent" line=1276 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.paintEvent" line=1267 %}{% raw %}
 
 </div>
 
@@ -535,7 +535,7 @@ the notes and the caption.
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.mouseMoveEvent" line=1334 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.mouseMoveEvent" line=1325 %}{% raw %}
 
 </div>
 
@@ -561,7 +561,7 @@ False
 def leaveEvent(event: QEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.leaveEvent" line=1354 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.leaveEvent" line=1345 %}{% raw %}
 
 </div>
 
@@ -587,7 +587,7 @@ Clear the component preview when the pointer leaves the music.
 def hits_notation(point: QPoint) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="StaffWidget.hits_notation" line=1374 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffWidget.hits_notation" line=1365 %}{% raw %}
 
 </div>
 
@@ -617,7 +617,7 @@ False
 def keyboard_key_staff() -> StaffWidget
 ```
 
-{% endraw %}{% include api-source.html name="keyboard_key_staff" line=2642 %}{% raw %}
+{% endraw %}{% include api-source.html name="keyboard_key_staff" line=2633 %}{% raw %}
 
 </div>
 

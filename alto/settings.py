@@ -22,6 +22,8 @@ from dataclasses import (
     dataclass,
     field,
 )
+from fractions import Fraction
+from functools import cache
 from typing import ClassVar
 
 from alto.circle_schemes import (
@@ -721,6 +723,33 @@ class IntervalSettings(StaffRangeSettings):
 intervals = IntervalSettings()
 interval_construction = IntervalSettings()
 
+BEAT_RHYTHM_COMPONENTS = ("Time signature", "Beat and meter")
+beat_rhythm_component = "Time signature"
+BEAT_NOTE_TYPES = (
+    "whole",
+    "dotted-half",
+    "half",
+    "dotted-quarter",
+    "quarter",
+    "eighth",
+    "sixteenth",
+    "thirty_second",
+)
+DEFAULT_BEAT_NOTE_TYPES = {
+    "beatIdentification": {"eighth", "quarter", "dotted-quarter"},
+    "beatConstruction": {
+        "eighth",
+        "quarter",
+        "dotted-quarter",
+        "half",
+        "dotted-half",
+    },
+}
+beat_note_types = {
+    key: values.copy() for key, values in DEFAULT_BEAT_NOTE_TYPES.items()
+}
+beat_tuplets = dict.fromkeys(DEFAULT_BEAT_NOTE_TYPES, False)
+
 RHYTHM_ANSWER_TYPES = {"symbol": "Symbol", "number": "Number"}
 rhythm_answer_types = {"symbol"}
 
@@ -761,6 +790,52 @@ rhythm_ties = False
 rhythm_beams = False
 rhythm_parentheses = False
 RHYTHM_BEAM_COUNTS = {"eighth": 1, "sixteenth": 2, "thirty_second": 3}
+BEAT_TUPLET_RATIOS = {
+    "duplet": (2, 3),
+    "triplet": (3, 2),
+    "quadruplet": (4, 3),
+    "quintuplet": (5, 4),
+    "sextuplet": (6, 4),
+    "septuplet": (7, 4),
+    "nonuplet": (9, 8),
+}
+BEAT_TUPLET_NAMES = {
+    count: kind for kind, (count, _) in BEAT_TUPLET_RATIOS.items()
+}
+
+
+@cache
+def beat_note(value: str) -> tuple[str, int, Fraction]:
+    """
+    Read a rhythm token's written value, tuplet count, and duration.
+
+    Parameters
+    ----------
+    value : str
+        A note or rest, optionally prefixed with a tuplet name.
+
+    Returns
+    -------
+    tuple of str, int, and Fraction
+        Written value, group size (zero for ordinary notes), and exact
+        length in sixteenth notes.
+
+    Examples
+    --------
+    >>> beat_note("triplet-eighth")
+    ('eighth', 3, Fraction(4, 3))
+    """
+    kind, _, written = value.partition("-")
+    if kind in BEAT_TUPLET_RATIOS:
+        count, ordinary = BEAT_TUPLET_RATIOS[kind]
+        duration = (
+            Fraction(RHYTHM_DURATIONS[written.removesuffix("-rest")])
+            * ordinary
+            / count
+        )
+        return written, count, duration
+    return value, 0, Fraction(RHYTHM_DURATIONS[value.removesuffix("-rest")])
+
 
 # Keyboard exercise: the whole piano is A0..C8 (MIDI 21..108); by
 # default it asks C3..C5.

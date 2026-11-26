@@ -71,8 +71,13 @@ from alto.anki_export import (
 )
 from alto.exercises import REGISTRY, Exercise, Question
 from alto.exercises.library import (
+    BEAT_METERS,
+    BeatConstruction,
+    BeatIdentification,
     IntervalConstruction,
     RythmicEquations,
+    beat_meter,
+    beat_positions,
 )
 from alto.exercises.packs import load_packs
 from alto.learning import Database, Learner
@@ -88,6 +93,7 @@ from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.home import category_tree, exercise_icon
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.keyboard_styles import load_style as load_keyboard_style
+from alto.ui.meter_staff import BeatPlacementStaff, MeterStaff
 from alto.ui.notation import load_style as load_notation_style
 from alto.ui.pictures import RHYTHM_SYMBOL_NAMES, rhythm_picture
 from alto.ui.settings_menu import ExerciseSettingsPanel
@@ -246,6 +252,34 @@ def card_fields(
                 circle,
                 folder=folder,
                 label="Completed circle of fifths",
+            ),
+        )
+    if isinstance(exercise, BeatConstruction):
+        placement = BeatPlacementStaff()
+        meter = BEAT_METERS[q.answer]
+        placement.reset(q.rhythm, meter=meter)
+        placement.resize(placement.sizeHint())
+        front.append(
+            _picture(placement, folder=folder, label="Rhythm to mark"),
+        )
+        placement.marks = sorted(beat_positions(meter))
+        placement.feedback = True
+        back.append(
+            _picture(placement, folder=folder, label="Marked beat positions"),
+        )
+    if isinstance(exercise, BeatIdentification):
+        rhythm = MeterStaff()
+        rhythm.show_score(
+            q.rhythm,
+            meter=beat_meter(q.answer),
+            show_signature=q.answer not in BEAT_METERS,
+        )
+        rhythm.resize(rhythm.sizeHint())
+        front.append(
+            _picture(
+                rhythm,
+                folder=folder,
+                label=f"Two measures of {rhythm.accessibleName().lower()}",
             ),
         )
     solution_text = " and ".join(q.required) if q.required else q.answer

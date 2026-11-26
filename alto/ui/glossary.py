@@ -342,7 +342,12 @@ TERMS = {
         guide="Tap at the same speed in both examples. A stronger click marks "
         "each downbeat. Count the taps until the next strong click.",
         examples=(_meter_example(2), _meter_example(3)),
-        exercises=("NotationIdentification", "RythmicEquations"),
+        exercises=(
+            "BeatConstruction",
+            "BeatIdentification",
+            "NotationIdentification",
+            "RythmicEquations",
+        ),
     ),
     "measure": _Term(
         definition="A measure, also called a bar, is a span of music set "
@@ -352,7 +357,12 @@ TERMS = {
         "and tap the same two beats. Adding a sound on each “&” doubles "
         "the number of notes in the measure while its length stays the same.",
         examples=(_meter_example(2), _meter_example(2, divisions=2)),
-        exercises=("NotationIdentification", "RythmicEquations"),
+        exercises=(
+            "BeatConstruction",
+            "BeatIdentification",
+            "NotationIdentification",
+            "RythmicEquations",
+        ),
     ),
     "bar line": _Term(
         definition="A bar line is a vertical line across the staff that "
@@ -389,7 +399,12 @@ TERMS = {
             _meter_example(2, divisions=2),
             _meter_example(2, divisions=3),
         ),
-        exercises=("NotationIdentification", "RythmicEquations"),
+        exercises=(
+            "BeatConstruction",
+            "BeatIdentification",
+            "NotationIdentification",
+            "RythmicEquations",
+        ),
     ),
     "triple meter": _Term(
         definition="Triple means grouped in threes. In triple meter, each "
@@ -400,7 +415,12 @@ TERMS = {
             _meter_example(3, divisions=2),
             _meter_example(3, divisions=3),
         ),
-        exercises=("NotationIdentification", "RythmicEquations"),
+        exercises=(
+            "BeatConstruction",
+            "BeatIdentification",
+            "NotationIdentification",
+            "RythmicEquations",
+        ),
     ),
     "quadruple meter": _Term(
         definition="Quadruple means grouped in fours. In quadruple meter, "
@@ -413,7 +433,12 @@ TERMS = {
             _meter_example(4, divisions=2),
             _meter_example(4, divisions=3),
         ),
-        exercises=("NotationIdentification", "RythmicEquations"),
+        exercises=(
+            "BeatConstruction",
+            "BeatIdentification",
+            "NotationIdentification",
+            "RythmicEquations",
+        ),
     ),
     "metric accent": _Term(
         definition="A metric accent is the emphasis a beat gets from its "

@@ -245,8 +245,8 @@ def test_simple_and_compound_beams_fit_on_the_staff(app: QApplication) -> None:
             staff = page.meter_staff
             with patch.object(
                 engraving,
-                "draw_beamed_eighths",
-                wraps=engraving.draw_beamed_eighths,
+                "draw_beamed_notes",
+                wraps=engraving.draw_beamed_notes,
             ) as beams:
                 staff.grab()
             assert len(beams.call_args_list) == 8

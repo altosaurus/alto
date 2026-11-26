@@ -374,15 +374,6 @@ _SIGNATURE_GAP = 1.0
 _SIGN_GAP = 0.25
 _FIRST_NOTE_GAP = 1.5
 _END_GAP = 2.0
-_NOTE_ADVANCE = {
-    "breve": 6.5,
-    "whole": 5.5,
-    "half": 4.5,
-    "quarter": 3.5,
-    "eighth": 3,
-    "sixteenth": 2.5,
-    "thirty_second": 2,
-}
 
 
 @dataclass
@@ -1045,7 +1036,7 @@ class StaffWidget(QWidget):
         )
         rows = [_LessonSystem(key_x, key_step, empty_end)]
         row = rows[0]
-        advance = _NOTE_ADVANCE[self.value] * gap
+        advance = engraving.NOTE_ADVANCE[self.value] * gap
         column_metrics = []
         for col in self.columns:
             bounds = QRectF()

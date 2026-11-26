@@ -26,6 +26,7 @@ DURATION = Lesson(
     about="Count a steady beat to read how long to play and when to rest.",
     summary="Count note lengths and keep the beat through a rest.",
     exercise="RythmicEquations",
+    related_exercises=("BeatIdentification", "BeatConstruction"),
     icon=_DURATION_ICON,
     steps=(
         Step(

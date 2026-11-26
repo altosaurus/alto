@@ -855,7 +855,7 @@ def play_notes(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.play_notes" line=2134 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.play_notes" line=2135 %}{% raw %}
 
 </div>
 
@@ -897,7 +897,7 @@ more there are.
 def stop_sample(on_step: Callable[[int | None], object]) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.stop_sample" line=2219 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.stop_sample" line=2220 %}{% raw %}
 
 </div>
 
@@ -929,7 +929,7 @@ def play_sample(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.play_sample" line=2235 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.play_sample" line=2236 %}{% raw %}
 
 </div>
 
@@ -968,7 +968,7 @@ None
 def play_correct(streak: int) -> None
 ```
 
-{% endraw %}{% include api-source.html name="Sounds.play_correct" line=2311 %}{% raw %}
+{% endraw %}{% include api-source.html name="Sounds.play_correct" line=2312 %}{% raw %}
 
 </div>
 

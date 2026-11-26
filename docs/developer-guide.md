@@ -37,13 +37,19 @@ On the first launch, the main window opens to the exercise tiles. The toolbar an
 
 {% include component-shot.html screen="home" width=1100 height=720 alt="Alto’s main window with the navigation toolbar, search field, and exercise tiles." %}
 
+## Exercise view
+
+Follow a note from the staff to the graded answer, then turn on **Octave** to trace how the settings rebuild the question. [Exercise view walkthrough]({{ '/developer-guide/exercise-view/' | relative_url }})
+
+## Exercises
+
+The [exercise class tree]({{ '/developer-guide/exercises/' | relative_url }}) maps each catalog exercise to its Python class and shows where answer choices, constructed answers, and instrument packs get their behavior.
+
 ## Screens reached from the main window
 
 ### Exercise workspace
 
 Choosing **Note Identification** calls `MainWindow.open_exercise()`. It opens an `ExerciseView` for the exercise and connects it to the active learner. The staff is a separate widget. When tracing a misplaced note, start with `StaffWidget`. For a click on an answer button, start with `ExerciseView`.
-
-Follow a note from the staff to the graded answer, then turn on **Octave** to trace how the settings rebuild the question. [Exercise view walkthrough]({{ '/developer-guide/exercise-view/' | relative_url }})
 
 {% include component-shot.html screen="note-identification" width=1100 height=720 alt="Note Identification with the exercise list on the left and a note on the staff above the letter buttons." %}
 

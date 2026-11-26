@@ -1814,31 +1814,32 @@ class Sounds(QObject):
         self.stop_all()
         if not step_ms:
             return
-        if not (self.enabled or force):
-            self._sample_step = on_step
-            self._walk(
-                len(step_ms),
-                gap_ms=step_ms,
-                run=self._sequence_run,
-                on_step=on_step,
-            )
-            return
-        key = (self.metronome_click, step_ms, levels)
-        try:
-            effect = self._preview_effects.get(key)
-            if effect is None:
-                path = self._rhythm_file(step_ms, levels=levels)
-                effect = QSoundEffect()
-                effect.setSource(QUrl.fromLocalFile(str(path)))
-                self._preview_effects[key] = effect
-            self._start_preview(
-                effect,
-                count=len(step_ms),
-                step_ms=step_ms,
-                on_step=on_step,
-            )
-        except (OSError, wave.Error) as exc:
-            print(f"audio unavailable: {exc}")
+        if self.enabled or force:
+            key = (self.metronome_click, step_ms, levels)
+            try:
+                effect = self._preview_effects.get(key)
+                if effect is None:
+                    path = self._rhythm_file(step_ms, levels=levels)
+                    effect = QSoundEffect()
+                    effect.setSource(QUrl.fromLocalFile(str(path)))
+                    self._preview_effects[key] = effect
+                self._start_preview(
+                    effect,
+                    count=len(step_ms),
+                    step_ms=step_ms,
+                    on_step=on_step,
+                )
+                return
+            except (OSError, wave.Error) as exc:
+                print(f"audio unavailable: {exc}")
+        # Keep visual timing when sound is muted or unavailable.
+        self._sample_step = on_step
+        self._walk(
+            len(step_ms),
+            gap_ms=step_ms,
+            run=self._sequence_run,
+            on_step=on_step,
+        )
 
     def _play_column(
         self,

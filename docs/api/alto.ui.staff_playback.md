@@ -19,7 +19,7 @@ StaffPlayback(
 )
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback" line=15 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback" line=16 %}{% raw %}
 
 </div>
 
@@ -52,7 +52,7 @@ def play(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback.play" line=49 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback.play" line=50 %}{% raw %}
 
 </div>
 
@@ -71,10 +71,14 @@ Play the displayed notes in order.
 <div class="api-signature" markdown="1">
 
 ```python
-def play_rhythm(values: Sequence[str]) -> None
+def play_rhythm(
+    values: Sequence[str],
+    *,
+    quarter_ms: int = 600,
+) -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback.play_rhythm" line=85 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback.play_rhythm" line=86 %}{% raw %}
 
 </div>
 
@@ -82,7 +86,8 @@ Click at each note onset and leave rests silent.
 
 **Parameters**
 
-- `values` (*sequence of str*): Written note and rest values. A quarter note gets one beat.
+- `values` (*sequence of str*): Written note and rest values.
+- `quarter_ms` (*int*): The length of a quarter note in milliseconds.
 
 ### StaffPlayback.stop
 
@@ -92,7 +97,7 @@ Click at each note onset and leave rests silent.
 def stop() -> None
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback.stop" line=104 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback.stop" line=114 %}{% raw %}
 
 </div>
 
@@ -109,7 +114,7 @@ def eventFilter(
 ) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="StaffPlayback.eventFilter" line=110 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffPlayback.eventFilter" line=120 %}{% raw %}
 
 </div>
 

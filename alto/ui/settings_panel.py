@@ -49,6 +49,8 @@ from alto.exercises.base import (
 )
 from alto.exercises.library import (
     ArpeggioNames,
+    BeatConstruction,
+    BeatIdentification,
     CircleOfFifths,
     ClefBasics,
     IntervalConstruction,
@@ -134,6 +136,7 @@ from alto.ui.settings_menu import (
     subpage,
 )
 from alto.ui.store import (
+    save_bool,
     store,
     text_value,
 )
@@ -3891,22 +3894,77 @@ def settings_panel_for(
         assert menu is not None
         layout = menu.layout()
         assert isinstance(layout, QVBoxLayout)
+    if isinstance(exercise, BeatIdentification):
+
+        def save_component(value: str) -> None:
+            """
+            Apply the rhythm component to practice and future sessions.
+
+            Parameters
+            ----------
+            value : str
+                Selected answer format.
+
+            Examples
+            --------
+            Choosing Beat and meter opens a classification question.
+            """
+            settings.beat_rhythm_component = value
+            store().setValue("beatIdentification/rhythmComponent", value)
+            panel.changed.emit()
+
+        _add_radio_option(
+            panel,
+            layout=layout,
+            title="Rhythm Component",
+            choices=settings.BEAT_RHYTHM_COMPONENTS,
+            selected=settings.beat_rhythm_component,
+            changed=save_component,
+        )
     if isinstance(exercise, RythmicEquations):
         _add_rhythm_options(panel, layout=layout)
+    if isinstance(exercise, (BeatIdentification, BeatConstruction)):
+        prefix = (
+            "beatIdentification"
+            if isinstance(exercise, BeatIdentification)
+            else "beatConstruction"
+        )
+        _add_beat_note_types(panel, layout=layout, prefix=prefix)
+        tuplets = ToggleRow("Tuplets")
+        tuplets.setOn(settings.beat_tuplets[prefix])
+        tuplets.setToolTip(
+            "Occasionally include numbered groups, most often triplets"
+            if prefix == "beatIdentification"
+            else "Include simple-meter triplets and compound-meter duplets",
+        )
+        layout.insertWidget(layout.count() - 1, tuplets)
+
+        def save_tuplets(on: bool) -> None:
+            """
+            Save this exercise's tuplet switch and refresh its rhythm.
+
+            Parameters
+            ----------
+            on : bool
+                Whether numbered tuplet groups can appear.
+
+            Examples
+            --------
+            Turning Tuplets on allows three eighths in one quarter beat.
+            """
+            settings.beat_tuplets[prefix] = on
+            save_bool(store(), key=f"{prefix}/tuplets", value=on)
+            panel.changed.emit()
+
+        tuplets.switched.connect(save_tuplets)
     if isinstance(exercise, ChoiceExercise):
         _add_choice_buttons(panel, exercise=exercise, layout=layout)
 
-    row = panel.next_question_row = MenuRow("Next Question")
-    layout.insertWidget(layout.count() - 1, row)
-    body = panel.next_question_choices = QWidget()
-    choices = QVBoxLayout(body)
-    choices.setContentsMargins(0, 0, 0, 0)
     key = f"nextQuestion/{type(exercise).__name__}"
     modes = ("Immediately", "Wait", "After Animation")
     saved_mode = text_value(store(), key=key, default=panel.next_question_mode)
     if saved_mode in modes:
         panel.next_question_mode = saved_mode
-    row.value.setText(panel.next_question_mode)
 
     def select(mode: str) -> None:
         """
@@ -3923,18 +3981,16 @@ def settings_panel_for(
         review.
         """
         panel.next_question_mode = mode
-        row.value.setText(mode)
         store().setValue(key, mode)
 
-    for mode in modes:
-        radio = QRadioButton(mode)
-        choices.addWidget(radio)
-        radio.setChecked(mode == panel.next_question_mode)
-        radio.clicked.connect(lambda _checked=False, value=mode: select(value))
-    page = stack.addWidget(
-        subpage("Next Question", body=body, back=lambda: stack.slide_to(0)),
+    panel.next_question_row, panel.next_question_choices = _add_radio_option(
+        panel,
+        layout=layout,
+        title="Next Question",
+        choices=modes,
+        selected=panel.next_question_mode,
+        changed=select,
     )
-    row.clicked.connect(lambda: stack.slide_to(page))
     if learner is not None:
         panel.limits_editor = DailyLimitsEditor(
             learner,
@@ -3962,6 +4018,145 @@ def settings_panel_for(
     stack.insertWidget(0, scrolling(menu))
     stack.setCurrentIndex(0)
     return panel
+
+
+def _add_beat_note_types(
+    panel: ExerciseSettingsPanel,
+    *,
+    layout: QVBoxLayout,
+    prefix: str,
+) -> None:
+    """
+    Add an illustrated checklist of durations used in written rhythms.
+
+    Parameters
+    ----------
+    panel : ExerciseSettingsPanel
+        Settings panel for the exercise.
+    layout : QVBoxLayout
+        Main settings menu.
+    prefix : str
+        Preference key for the exercise.
+
+    Examples
+    --------
+    Selecting only Whole gives one whole note or rest per measure.
+    """
+    row = MenuRow("Note Type", tall=True)
+    selected = settings.beat_note_types[prefix]
+    types = settings.BEAT_NOTE_TYPES
+    choices = ChoiceChecklist(
+        [("", [(v, RHYTHM_SYMBOL_NAMES[v]) for v in types])],
+        selected=selected,
+    )
+    preview = ValuePictures([v for v in types if v in selected])
+    row.attach(preview)
+    for value in types:
+        ValuePictures([value], scale=1.25, center_stemless=True).label_button(
+            choices.boxes[value],
+        )
+    row.value.setText(f"{len(selected)} selected")
+    layout.insertWidget(layout.count() - 1, row)
+    page = panel.stack.addWidget(
+        subpage(
+            "Note Type",
+            body=scrolling(choices),
+            back=lambda: panel.stack.slide_to(0),
+            fill=True,
+        ),
+    )
+    row.clicked.connect(lambda: panel.stack.slide_to(page))
+
+    def save() -> None:
+        """
+        Apply the checked durations and remember them for next time.
+
+        Examples
+        --------
+        Checking Half makes half notes available in this exercise.
+        """
+        values = choices.selected()
+        settings.beat_note_types[prefix] = values
+        preview.set_values([v for v in types if v in values])
+        store().setValue(f"{prefix}/noteTypes", ",".join(sorted(values)))
+        row.value.setText(f"{len(values)} selected")
+        panel.changed.emit()
+
+    choices.changed.connect(save)
+
+
+def _add_radio_option(
+    panel: ExerciseSettingsPanel,
+    *,
+    layout: QVBoxLayout,
+    title: str,
+    choices: tuple[str, ...],
+    selected: str,
+    changed: Callable[[str], None],
+) -> tuple[MenuRow, QWidget]:
+    """
+    Add a settings row and a submenu of mutually exclusive choices.
+
+    Parameters
+    ----------
+    panel : ExerciseSettingsPanel
+        Panel that owns the submenu.
+    layout : QVBoxLayout
+        Main settings menu.
+    title : str
+        Label for the row and submenu.
+    choices : tuple of str
+        Radio button labels in display order.
+    selected : str
+        Current choice shown on the row.
+    changed : callable
+        Apply the newly selected choice.
+
+    Returns
+    -------
+    tuple of MenuRow and QWidget
+        The menu row and the group of radio buttons.
+
+    Examples
+    --------
+    Next Question uses this submenu to choose the pace of practice.
+    """
+    stack = panel.stack
+    row = MenuRow(title)
+    row.value.setText(selected)
+    layout.insertWidget(layout.count() - 1, row)
+    body = QWidget()
+    options = QVBoxLayout(body)
+    options.setContentsMargins(0, 0, 0, 0)
+
+    def select(value: str) -> None:
+        """
+        Update the summary and apply the selected option.
+
+        Parameters
+        ----------
+        value : str
+            Selected radio button label.
+
+        Examples
+        --------
+        Choosing Wait also displays Wait on the Next Question row.
+        """
+        row.value.setText(value)
+        changed(value)
+
+    for choice in choices:
+        radio = QRadioButton(choice)
+        options.addWidget(radio)
+        radio.setChecked(choice == selected)
+        radio.toggled.connect(
+            lambda on, value=choice: on and select(value),
+        )
+    page = stack.addWidget(
+        subpage(title, body=body, back=lambda: stack.slide_to(0)),
+    )
+    row.clicked.connect(lambda: stack.slide_to(page))
+    return row, body
 
 
 def _rhythm_operator_summary() -> str:

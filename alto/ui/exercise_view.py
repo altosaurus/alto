@@ -79,7 +79,10 @@ from alto.exercises.base import (
     Question,
 )
 from alto.exercises.library import (
+    BEAT_METERS,
     INTERVAL_INVERSION_PROMPTS,
+    BeatConstruction,
+    BeatIdentification,
     IntervalConstruction,
     IntervalNames,
     KeyboardIntervals,
@@ -89,6 +92,8 @@ from alto.exercises.library import (
     RythmicEquations,
     ScaleConstruction,
     ScaleIdentification,
+    beat_meter,
+    beat_positions,
 )
 from alto.exercises.packs import PackExercise
 from alto.learning import Learner
@@ -128,6 +133,7 @@ from alto.ui.key_fork import (
     KeyFork,
 )
 from alto.ui.keyboard import KeyboardWidget
+from alto.ui.meter_staff import BeatPlacementStaff, MeterButton, MeterStaff
 from alto.ui.midi_input import MidiInput
 from alto.ui.pictures import (
     RHYTHM_SYMBOL_NAMES,
@@ -902,6 +908,7 @@ class ExerciseView(QWidget):
         prompt_row.addWidget(self.prompt, 100)
         prompt_row.addStretch(1)
         lay.addLayout(prompt_row)
+        rhythm_widget: QWidget | None = None
         if isinstance(self.exercise, RythmicEquations):
             self.rhythm_equation = QFrame()
             self.rhythm_equation.setObjectName("rhythmEquation")
@@ -929,15 +936,34 @@ class ExerciseView(QWidget):
             self.rhythm_terms.setSizeConstraint(
                 QLayout.SizeConstraint.SetFixedSize,
             )
+            rhythm_widget = self.rhythm_equation
+        elif isinstance(self.exercise, (BeatConstruction, BeatIdentification)):
+            if isinstance(self.exercise, BeatConstruction):
+                self.beat_placement = BeatPlacementStaff()
+                self.beat_placement.changed.connect(self._show_placement_rows)
+                self.beat_placement.cursor_moved.connect(
+                    lambda p: self.rhythm_scroll.ensureVisible(
+                        round(p.x()),
+                        round(p.y()),
+                    ),
+                )
+                self.beat_staff = self.beat_placement
+            else:
+                self.beat_staff = MeterStaff()
+            rhythm_widget = self.beat_staff
+        if rhythm_widget is not None:
             self.rhythm_scroll = QScrollArea()
             self.rhythm_scroll.setFrameShape(QFrame.Shape.NoFrame)
             self.rhythm_scroll.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.rhythm_scroll.setVerticalScrollBarPolicy(
                 Qt.ScrollBarPolicy.ScrollBarAlwaysOff,
             )
-            self.rhythm_scroll.setWidget(self.rhythm_equation)
+            self.rhythm_scroll.setWidgetResizable(
+                isinstance(rhythm_widget, MeterStaff),
+            )
+            self.rhythm_scroll.setWidget(rhythm_widget)
             self.rhythm_scroll.viewport().setAutoFillBackground(False)
-            self.rhythm_equation.installEventFilter(self)
+            rhythm_widget.installEventFilter(self)
             self.rhythm_scroll.installEventFilter(self)
             lay.addWidget(self.rhythm_scroll)
         placement_layout = lay
@@ -1732,6 +1758,27 @@ class ExerciseView(QWidget):
                         alignment=Qt.AlignmentFlag.AlignVCenter,
                     )
                 self.rhythm_scroll.horizontalScrollBar().setValue(0)
+        named_meter = (
+            isinstance(self.exercise, BeatIdentification)
+            and q.answer not in BEAT_METERS
+        )
+        if isinstance(self.exercise, BeatConstruction):
+            self.beat_placement.setVisible(bool(q.rhythm))
+            if q.rhythm:
+                self.beat_placement.reset(
+                    q.rhythm,
+                    meter=BEAT_METERS[q.answer],
+                )
+        elif isinstance(self.exercise, BeatIdentification):
+            self.beat_staff.setVisible(bool(q.rhythm))
+            if q.rhythm:
+                self.beat_staff.show_score(
+                    q.rhythm,
+                    meter=beat_meter(q.answer),
+                    show_signature=named_meter,
+                )
+        if isinstance(self.exercise, (BeatConstruction, BeatIdentification)):
+            self.rhythm_scroll.horizontalScrollBar().setValue(0)
         construct = q.construct is not None
         scale = q.places_sequence
         clef = bool(q.place_clef)
@@ -1860,6 +1907,7 @@ class ExerciseView(QWidget):
             interval_bank = len(q.choices) > 6 and (
                 not q.grid or isinstance(self.exercise, NotationIdentification)
             )
+            interval_bank = interval_bank or named_meter
             self.interval_answers.setAccessibleName("Answer choices")
         compact_intervals = isinstance(
             self.exercise,
@@ -1883,7 +1931,15 @@ class ExerciseView(QWidget):
             else choice_keys(q.choices)
         )
         for i, c in enumerate(q.choices):
-            b = DegreeButton(c)
+            if (
+                isinstance(self.exercise, BeatIdentification)
+                and not named_meter
+            ):
+                b = MeterButton(c, meter=BEAT_METERS[c])
+                b.setMinimumHeight(px(50))
+            else:
+                b = DegreeButton(c)
+                b.setMinimumHeight(px(40))
             if (
                 isinstance(self.exercise, RythmicEquations)
                 and c in RHYTHM_SYMBOL_NAMES
@@ -1898,7 +1954,6 @@ class ExerciseView(QWidget):
             ):
                 b.setText(INTERVAL_QUALITY_SYMBOLS[c])
                 b.setAccessibleName(c)
-            b.setMinimumHeight(px(40))
             for function in app_settings.DEGREE_FUNCTIONS:
                 if c.endswith(function):
                     prefix = c[: -len(function)].rstrip()
@@ -2618,7 +2673,9 @@ class ExerciseView(QWidget):
         >>> view._advance.stop()
         """
         q = self.question
-        if q and q.build_key:
+        if q and isinstance(self.exercise, BeatConstruction):
+            self._check_beats()
+        elif q and q.build_key:
             self._check_built()
         elif q and q.place_clef:
             self.clef_input.place_caret()
@@ -2660,6 +2717,37 @@ class ExerciseView(QWidget):
             self._update_score()
         elif q and q.construct_scale is not None:
             self._check_scale()
+
+    def _check_beats(self) -> None:
+        """
+        Grade the marked beat positions using the shared feedback flow.
+
+        Examples
+        --------
+        >>> view = ExerciseView(
+        ...     BeatConstruction(), rng=random.Random(1)
+        ... )
+        >>> view._check_beats()  # an empty response is not submitted
+        >>> view.answered
+        False
+        """
+        q = self.question
+        score = self.beat_placement
+        if not q or not self.answer_button.isEnabled() or self.answered:
+            return
+        ok = set(score.marks) == beat_positions(BEAT_METERS[q.answer])
+        self._record(
+            ok,
+            choice=" ".join(str(slot) for slot in sorted(score.marks)),
+        )
+        score.feedback = ok
+        score.update()
+        if ok:
+            self._finish_answer(self.answer_button)
+        else:
+            self._after_miss()
+        self._show_placement_rows()
+        self._update_score()
 
     def _scale_changed(self) -> None:
         """
@@ -2727,6 +2815,7 @@ class ExerciseView(QWidget):
             q.build_key,
         )
         clef = bool(q.place_clef)
+        beats = isinstance(self.exercise, BeatConstruction) and bool(q.rhythm)
         staff = self._input()
         placing_notes = note or (sequence and not self.scale_input.complete)
         steps_turn = sequence and self.scale_input.placing_steps
@@ -2740,8 +2829,8 @@ class ExerciseView(QWidget):
             button.setVisible(clef and symbol in self.clef_input.options)
             button.setChecked(symbol == self.clef_input.selected)
             button.setEnabled(live)
-        self.answer_row.setVisible(note or sequence or fork or clef)
-        self.place_status.setVisible(note or sequence)
+        self.answer_row.setVisible(note or sequence or fork or clef or beats)
+        self.place_status.setVisible(note or sequence or beats)
         self.pitch_row.setVisible(placing_notes and not q.place_signature)
         self.accidental_buttons[0].setVisible(not q.place_signature)
         self.accidental_row.setEnabled(live and placing_notes)
@@ -2749,7 +2838,7 @@ class ExerciseView(QWidget):
             q.place_signature or (q.accidentals and placing_notes),
         )
         self.step_row.setVisible(steps_turn)
-        self.undo_button.setVisible(sequence)
+        self.undo_button.setVisible(sequence or beats)
         self.place_button.setVisible(note or sequence)
         label = (
             "Place sign"
@@ -2767,12 +2856,30 @@ class ExerciseView(QWidget):
         self.place_button.setEnabled(
             live and not (sequence and self.scale_input.done),
         )
-        self.answer_button.setVisible(sequence or fork or clef)
+        self.answer_button.setVisible(sequence or fork or clef or beats)
         self.answer_button.setEnabled(
             live
             and (fork or clef or q.place_signature or self.scale_input.done),
         )
         self.undo_button.setEnabled(live and bool(self.scale_input.notes))
+        if beats:
+            score = self.beat_placement
+            score.setEnabled(live)
+            self.answer_button.setEnabled(
+                live and bool(score.marks) and score.feedback is not False,
+            )
+            self.undo_button.setEnabled(live and bool(score.marks))
+            count = len(score.marks)
+            if score.feedback is False:
+                self.place_status.setText("Check where each beat begins.")
+            elif score.feedback is True:
+                self.place_status.setText("Correct.")
+            elif count:
+                self.place_status.setText(f"Beats marked: {count}")
+            else:
+                self.place_status.setText(
+                    "Mark each beat, including the start of each measure.",
+                )
         for key in self._arrow_keys:
             key.setEnabled(note or sequence or fork or clef)
         for key in self._letter_keys:
@@ -3149,7 +3256,10 @@ class ExerciseView(QWidget):
         []
         """
         if not self.answered and not self._busy:
-            self.scale_input.undo()
+            if isinstance(self.exercise, BeatConstruction):
+                self.beat_placement.undo()
+            else:
+                self.scale_input.undo()
 
     def _check_scale(self) -> None:
         """
@@ -3286,11 +3396,16 @@ class ExerciseView(QWidget):
         """
         if (
             event.type() == QEvent.Type.Resize
-            and isinstance(self.exercise, RythmicEquations)
-            and watched in (self.rhythm_equation, self.rhythm_scroll)
+            and isinstance(
+                self.exercise,
+                (RythmicEquations, BeatConstruction, BeatIdentification),
+            )
+            and watched in (self.rhythm_scroll.widget(), self.rhythm_scroll)
         ):
-            height = self.rhythm_equation.height()
-            if self.rhythm_equation.width() > self.rhythm_scroll.width():
+            content = self.rhythm_scroll.widget()
+            assert content is not None
+            height = content.height()
+            if content.width() > self.rhythm_scroll.width():
                 height += (
                     self.rhythm_scroll.horizontalScrollBar()
                     .sizeHint()
@@ -3330,7 +3445,11 @@ class ExerciseView(QWidget):
                 return True
         return super().eventFilter(watched, event)
 
-    def _place_clef(self, symbol: str, step: int) -> None:  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
+    def _place_clef(  # noqa: PLR0917 (Qt passes both signal arguments positionally)
+        self,
+        symbol: str,
+        step: int,
+    ) -> None:
         """
         Check a clef symbol that was put on the staff against the clef
         asked for.
@@ -4059,6 +4178,16 @@ class ExerciseView(QWidget):
                 self._flash(choice)
             if q.circle is not None:
                 self.circle.reveal()
+        if isinstance(self.exercise, BeatConstruction):
+            playback = (
+                self._immediate_playback
+                if immediate
+                else self._answer_playback
+            )
+            # Keep the main beat at 600 ms in every meter.
+            quarter_ms = 600 if BEAT_METERS[q.answer][1] == 4 else 400
+            playback.play_rhythm(q.rhythm, quarter_ms=quarter_ms)
+            return
         if notes and self.exercise.has_sound:
             scale = q.construct_scale is not None or isinstance(
                 self.exercise,
@@ -4189,6 +4318,16 @@ class ExerciseView(QWidget):
         """
         q = self.question
         if q is None or not self.answered:
+            return
+        if isinstance(self.exercise, BeatConstruction):
+            column = (
+                index
+                if index is not None and not q.rhythm[index].endswith("-rest")
+                else None
+            )
+            self.beat_placement.highlight_column(column)
+            if index is None:
+                self._advance_after_feedback(0)
             return
         green = QColor(CORRECT_ANSWER_COLOR)
         if q.fingerboard or q.picture:

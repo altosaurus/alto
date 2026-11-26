@@ -3,12 +3,13 @@ Connect a displayed music sample to the notes sounding on its staff.
 """
 
 from collections.abc import Callable, Sequence
+from fractions import Fraction
 
 from PySide6.QtCore import QEvent, QObject, Signal
 from PySide6.QtWidgets import QWidget
 
 from alto.audio import DEFAULT_NOTE_GAP_MS, sounds
-from alto.settings import RHYTHM_DURATIONS
+from alto.settings import beat_note
 from alto.theory.pitch import Note
 
 
@@ -82,21 +83,30 @@ class StaffPlayback(QObject):
             instrument=instrument,
         )
 
-    def play_rhythm(self, values: Sequence[str]) -> None:
+    def play_rhythm(
+        self,
+        values: Sequence[str],
+        *,
+        quarter_ms: int = 600,
+    ) -> None:
         """
         Click at each note onset and leave rests silent.
 
         Parameters
         ----------
         values : sequence of str
-            Written note and rest values. A quarter note gets one beat.
+            Written note and rest values.
+        quarter_ms : int
+            The length of a quarter note in milliseconds.
         """
-        beat_ms = 600
-        quarter = RHYTHM_DURATIONS["quarter"]
+        quarter = beat_note("quarter")[2]
+        elapsed = Fraction(0)
+        ends = [0]
+        for value in values:
+            elapsed += quarter_ms * beat_note(value)[2] / quarter
+            ends.append(round(elapsed))
         sounds.play_rhythm(
-            tuple(
-                round(beat_ms * RHYTHM_DURATIONS[v] / quarter) for v in values
-            ),
+            tuple(end - start for start, end in zip(ends, ends[1:])),
             levels=tuple(0.0 if v.endswith("-rest") else 1.0 for v in values),
             on_step=self._notify,
         )

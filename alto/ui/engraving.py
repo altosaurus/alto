@@ -98,6 +98,17 @@ STEM_LENGTH = {
     "thirty_second": 4.5,
 }  # staff spaces
 
+# Natural distances between notehead centers, measured in staff spaces.
+NOTE_ADVANCE = {
+    "breve": 6.5,
+    "whole": 5.5,
+    "half": 4.5,
+    "quarter": 3.5,
+    "eighth": 3.0,
+    "sixteenth": 2.5,
+    "thirty_second": 2.0,
+}
+
 _family: dict[str, str] = {}
 
 
@@ -608,7 +619,7 @@ def draw_note(
         )
 
 
-def draw_beamed_eighths(
+def draw_beamed_notes(
     p: QPainter,
     *,
     font: str,
@@ -617,9 +628,10 @@ def draw_beamed_eighths(
     gap: float,
     middle: float,
     ink: QColor,
+    beams: int = 1,
 ) -> None:
     """
-    Draw one beat of eighth notes with stems joined to a common beam.
+    Draw a group with one beam for eighths or more for shorter notes.
 
     Parameters
     ----------
@@ -636,13 +648,15 @@ def draw_beamed_eighths(
     middle : float
         Height of the middle staff line, for choosing stem direction.
     ink : QColor
-        Color of the shared beam.
+        Color of the shared beams.
+    beams : int
+        Number of beams for the written duration.
 
     Examples
     --------
     >>> from PySide6.QtGui import QPicture
     >>> with QPainter(QPicture()) as painter:  # doctest: +SKIP
-    ...     draw_beamed_eighths(
+    ...     draw_beamed_notes(
     ...         painter, font="bravura", gap=8, middle=40,
     ...         heads=[QPointF(20, 48), QPointF(40, 44)],
     ...         colors=[QColor("black")] * 2, ink=QColor("black"),
@@ -664,7 +678,7 @@ def draw_beamed_eighths(
     direction = 1 if down else -1
     tilt = max(-gap / 2, min(gap / 2, (heads[-1].y() - heads[0].y()) / 4))
     span = heads[-1].x() - heads[0].x()
-    slope = tilt / span
+    slope = tilt / span if span else 0.0
     intercepts = [pt.y() - slope * (pt.x() - heads[0].x()) for pt in heads]
     beam_y = (
         max(intercepts) if down else min(intercepts)
@@ -691,7 +705,15 @@ def draw_beamed_eighths(
     beam.lineTo(x2, beam_y + tilt - direction * gap / 2)
     beam.lineTo(x1, beam_y - direction * gap / 2)
     beam.closeSubpath()
-    fill_path(p, path=beam, color=ink)
+    for level in range(beams):
+        fill_path(
+            p,
+            path=beam.translated(0, -direction * level * gap * 0.8),
+            color=ink,
+        )
+
+
+draw_beamed_eighths = draw_beamed_notes
 
 
 # Each clef's SMuFL glyph and how many gaps above the bottom staff line
