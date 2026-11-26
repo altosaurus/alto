@@ -10,11 +10,26 @@ Open **Note Identification** from the exercise catalog. You’ll follow one writ
 
 ## The first question
 
+{% include first-question-c4.html %}
+
 Start in `MainWindow.open_exercise()`. On the first visit, the selected tile supplies the exercise class, `NoteNames`. The window constructs `ExerciseView(cls(), learner=self.learner)`. The view builds its staff, controls, and settings pane, then calls `next_question()`. [MainWindow.open_exercise]({{ '/api/alto.ui.main_window/#mainwindowopen_exercise' | relative_url }}) · [ExerciseView.next_question]({{ '/api/alto.ui.exercise_view/#exerciseviewnext_question' | relative_url }})
+
+### ExerciseView components
+
+Open **Exercise settings** with the sliders button to see the layout below. The capture shows just `ExerciseView`. In its constructor, `outer = QHBoxLayout(self)` puts the main exercise area on the left and the settings frame on the right. Inside the main area, a vertical layout orders the toolbar, music, and answer controls.
+
+{% include component-shot.html screen="exercise-view-anatomy" labels=true width=982 height=614 alt="Note Identification with the staff on the left, the exercise toolbar above it, letter-name answer controls below it, and the settings pane open on the right." %}
+
+1. **Staff.** In `ExerciseView.__init__()`, find `self.staff = StaffWidget(max_step=MAX_STEP)`. The constructor adds this widget to `self._music_layout`. When a question arrives, `next_question()` passes its pitches, clef, key, and note value to `self.staff.show_notes(...)`. Follow that call into `StaffWidget`: it stores the pitches in `self.columns`, fits the widget to the music, and calls `update()`. On the next paint event, `paintEvent()` opens a `QPainter` and calls `_draw_score()` to draw the paper, staff lines, clef, and note. [StaffWidget.show_notes]({{ '/api/alto.ui.staff/#staffwidgetshow_notes' | relative_url }}) · [StaffWidget.paintEvent]({{ '/api/alto.ui.staff/#staffwidgetpaintevent' | relative_url }})
+2. **Toolbar.** Find `top = QHBoxLayout()` in the view constructor. It adds the score label, help, and other exercise tools, then places this row at the top of the main area with `lay.addLayout(top)`. The sliders button is `self.gear`, a checkable `QToolButton`. Its `toggled` signal opens or closes the pane labeled **4**. [ExerciseView constructor]({{ '/api/alto.ui.exercise_view/#exerciseview' | relative_url }})
+3. **Answer controls.** The constructor creates an empty grid, `self.choice_box`. In `next_question()`, find `for i, c in enumerate(q.choices)`. For the letter names shown here, each iteration creates a `DegreeButton(c)`, connects its click to `self.submit(choice, button=btn)`, and inserts the button at the row and column from `q.grid`. With **Octave** off, clicking a letter submits it immediately. On the next question the view retires the old buttons and fills the grid again. [DegreeButton]({{ '/api/alto.ui.degree_text/#degreebutton' | relative_url }}) · [ExerciseView.submit]({{ '/api/alto.ui.exercise_view/#exerciseviewsubmit' | relative_url }})
+4. **Settings pane.** Follow `settings_panel_for(exercise, learner=self.learner)` into `settings_panel.py`. For `NoteNames`, the factory selects `NoteNameSettingsPanel(settings.note_names)`. Its constructor builds the settings menu and rows such as **Clefs** and **Range**. Back in the view, `pane_lay.addWidget(self.settings_panel, 1)` puts that panel inside `self.pane`, an initially hidden `QFrame`. When the sliders button is checked, `_toggle_pane()` shows the frame and animates its maximum width. Changing a question option emits `changed`, which the view connects to `next_question()`. [Settings panel factory]({{ '/api/alto.ui.settings_panel/#settings_panel_for' | relative_url }}) · [NoteNameSettingsPanel]({{ '/api/alto.ui.settings_panel/#notenamesettingspanel' | relative_url }})
+
+### Question selection
 
 Inside `next_question()`, follow `q = self._pick_question()`. With a profile open, this calls `Learner.pick()`. The profile’s scheduler decides which eligible question to show, so a question can be a review of a note the learner has seen before. To trace a freshly generated note, follow `ChoiceExercise.generate()` into `NoteNames.make_question()`. It chooses a clef, key signature, and note value from the enabled settings, then draws a pitch within that clef’s range. `NoteNames._question_for()` turns that pitch into a `Question` with both the notation and the accepted answer. [Learner.pick]({{ '/api/alto.learning.learner/#learnerpick' | relative_url }}) · [NoteNames.make_question]({{ '/api/alto.exercises.library/#notenamesmake_question' | relative_url }})
 
-To see how that one object drives the screen, put a breakpoint on `self.question = q` in `alto/ui/exercise_view.py`. Inspect these expressions in your debugger:
+To see how that one object drives the screen, put a breakpoint on `self.question = q` in `alto/ui/exercise_view.py`. A few lines below, the view clears the attempt count and starts the response timer. Inspect these expressions in your debugger:
 
 ```python
 str(q.staff[0][0])  # The written pitch, for example "C4"
@@ -23,7 +38,13 @@ q.choices, q.answer  # The button labels and the expected answer
 q.octaves  # None while Octave is off
 ```
 
-For middle C with letter names, `q.answer` is `"C"`. Continue through `next_question()` to `self.staff.show_notes(...)`, which draws the question, then to the loop over `q.choices`, which creates the buttons. The view also clears the previous attempt count and starts the response timer. [Question fields]({{ '/api/alto.exercises.base/#question' | relative_url }})
+For middle C with letter names, `q.answer` is `"C"`. Step to the end of `next_question()` and compare the live widgets with the question you inspected above. With the settings shown, all three expressions should return `True`. [Question fields]({{ '/api/alto.exercises.base/#question' | relative_url }})
+
+```python
+self.staff.columns == q.staff
+[button.text() for button in self.buttons] == q.choices
+self.settings_panel.parentWidget() is self.pane
+```
 
 ## An answer from click to feedback
 

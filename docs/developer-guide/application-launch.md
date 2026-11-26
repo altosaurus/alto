@@ -107,6 +107,6 @@ The first two assignments keep references to the active learner and window on th
 
 In the running app, click **Note Identification**. The catalog emits `exercise_chosen` with the exercise class. The connection you saw in `_build()` sends it to `MainWindow.open_exercise()`, which opens an `ExerciseView` in the stack. The toolbar stays in place as the catalog gives way to the staff and answer buttons. [ExerciseView API]({{ '/api/alto.ui.exercise_view/#exerciseview' | relative_url }})
 
-{% include component-shot.html screen="note-identification" width=1100 height=720 alt="The same window after a click on Note Identification, with a staff and a row of answer buttons." %}
+{% include component-shot.html screen="note-identification" width=1100 height=720 highlight="ExerciseView" alt="ExerciseView is outlined on the right below the toolbar. It contains the score counter, staff, and answer buttons. The exercise list is on the left." %}
 
 Close the window. Qt’s event loop returns, and its exit code travels back through `main()` to the terminal. In the same shell, run `ALTO_HOME="$practice_dir" python -m alto` again. This time you should go straight to the catalog. To watch the difference in a debugger, set a breakpoint on `profile = startup_profile(db)` and step over it. On the second launch, the call returns Ada’s profile without waiting for a dialog.
