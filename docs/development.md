@@ -637,7 +637,7 @@ and open `http://127.0.0.1:8000/alto/`. `tests/test_docs_site.py` checks the scr
 
 The excerpt step reads the ExerciseView methods in your checkout. It uses the anchors in `docs/_data/exercise_view_excerpts.json` to find each statement and its line numbers. Rerun it after editing the view to refresh a local preview. Published docs extract from the commit they link to.
 
-### Sphinx theme preview
+### Sphinx documentation preview
 
 From the repository root, build the Sphinx preview with the locked documentation dependencies and serve it locally:
 
@@ -647,11 +647,10 @@ uv run --isolated --locked --only-group docs sphinx-build -W -b dirhtml \
 python -m http.server 43220 --bind 127.0.0.1 --directory work/sphinx-preview/www
 ```
 
-Open the [Exercise view walkthrough](http://127.0.0.1:43220/alto/dev/developer-guide/exercise-view/), its
-[generated class reference](http://127.0.0.1:43220/alto/dev/api/alto.ui.exercise_view/class-exerciseview/), or
-[License and credits](http://127.0.0.1:43220/alto/dev/credits/). The walkthrough and class reference read the
-Python source in the checkout. For committed source, line numbers link to the last commit that changed the file.
-Other API classes and practice guides link to the published development docs during the migration.
+Open the [API reference](http://127.0.0.1:43220/alto/dev/api/) to browse packages, modules, and components.
+Sphinx reads the Python source during the build. A docstring edit appears the next time you run the build command.
+The [Exercise view walkthrough](http://127.0.0.1:43220/alto/dev/developer-guide/exercise-view/) links to the local API pages.
+For committed source, its line numbers and the API signatures link to the last commit that changed the file.
 
 ## Keeping the docs and screenshots current
 

@@ -13,19 +13,24 @@ extensions = [
     "myst_parser",
     "sphinx.ext.napoleon",
     "autoapi.extension",
+    "api_reference",
     "walkthrough",
 ]
 autoapi_dirs = ["../alto"]
-# The preview documents one module. AutoAPI cannot follow its imports
-# into modules outside this selection.
-autoapi_file_patterns = ["exercise_view.py"]
-suppress_warnings = ["autoapi.python_import_resolution"]
 autoapi_generate_api_docs = False
 autoapi_add_toctree_entry = False
+autoapi_member_order = "bysource"
 autoapi_options = ["members"]
-autoapi_python_class_content = "both"
+# AutoAPI cannot resolve tuple-assigned constants imported by the UI.
+# Component pages only document definitions owned by each module.
+suppress_warnings = ["autoapi.python_import_resolution"]
 autodoc_member_order = "bysource"
 myst_title_to_header = True
+source_suffix = {
+    ".api.rst": "restructuredtext",
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
 
 # Expand this list as pages move to Sphinx. Both builders read the same
 # Markdown, with the existing front matter supplying each page title.
@@ -33,7 +38,7 @@ include_patterns = [
     "index.rst",
     "credits.md",
     "developer-guide/exercise-view.md",
-    "api/alto.ui.exercise_view/class-exerciseview.rst",
+    "api/**.api.rst",
 ]
 templates_path = ["templates", "../_includes"]
 html_theme_path = ["themes"]

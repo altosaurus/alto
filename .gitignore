@@ -18,6 +18,7 @@ build/
 
 # The docs, built locally (see "Building the docs" in docs/development.md)
 docs/_site/
+docs/api/**/*.api.rst
 docs/_data/exercise_view_lines.json
 docs/.jekyll-cache/
 docs/.bundle/
