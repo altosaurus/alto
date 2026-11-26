@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -762,7 +765,7 @@ engraving.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/anki_exporter.py#L130" aria-label="Source for card_fields">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/anki_exporter.py#L136" aria-label="Source for card_fields">[Source]</a></p>
 
 </div>
 
@@ -787,7 +790,7 @@ engraving.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/anki_exporter.py#L796" aria-label="Source for AnkiExporter">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/anki_exporter.py#L830" aria-label="Source for AnkiExporter">[Source]</a></p>
 
 </div>
 
@@ -807,7 +810,7 @@ settings.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">changeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/anki_exporter.py#L972" aria-label="Source for AnkiExporter.changeEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/anki_exporter.py#L1006" aria-label="Source for AnkiExporter.changeEvent">[Source]</a></p>
 
 </div>
 
@@ -820,7 +823,7 @@ settings.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/anki_exporter.py#L1122" aria-label="Source for AnkiExporter.reject">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/anki_exporter.py#L1156" aria-label="Source for AnkiExporter.reject">[Source]</a></p>
 
 </div>
 
@@ -834,7 +837,7 @@ close.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ExporterSession</span><span class="p">()</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/anki_exporter.py#L1134" aria-label="Source for ExporterSession">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/anki_exporter.py#L1168" aria-label="Source for ExporterSession">[Source]</a></p>
 
 </div>
 
@@ -856,7 +859,7 @@ settings store.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/anki_exporter.py#L1145" aria-label="Source for ExporterSession.open">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/anki_exporter.py#L1179" aria-label="Source for ExporterSession.open">[Source]</a></p>
 
 </div>
 
@@ -883,7 +886,7 @@ profile.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sync_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/anki_exporter.py#L1218" aria-label="Source for ExporterSession.sync_theme">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/anki_exporter.py#L1252" aria-label="Source for ExporterSession.sync_theme">[Source]</a></p>
 
 </div>
 
@@ -897,7 +900,7 @@ exporter.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">close</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/anki_exporter.py#L1235" aria-label="Source for ExporterSession.close">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/anki_exporter.py#L1269" aria-label="Source for ExporterSession.close">[Source]</a></p>
 
 </div>
 
@@ -905,6 +908,8 @@ exporter.</p>
 write and exit normally.</p>
 
 
+          
+          
           
           
           
@@ -1119,10 +1124,10 @@ write and exit normally.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

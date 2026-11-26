@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -760,7 +763,7 @@
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/staff_playback.py#L15" aria-label="Source for StaffPlayback">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/staff_playback.py#L16" aria-label="Source for StaffPlayback">[Source]</a></p>
 
 </div>
 
@@ -794,7 +797,7 @@ closes.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/staff_playback.py#L49" aria-label="Source for StaffPlayback.play">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/staff_playback.py#L50" aria-label="Source for StaffPlayback.play">[Source]</a></p>
 
 </div>
 
@@ -814,10 +817,14 @@ closes.</p>
 
 <div class="api-signature">
 
-  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_rhythm</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_rhythm</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">quarter_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">600</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/staff_playback.py#L85" aria-label="Source for StaffPlayback.play_rhythm">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/staff_playback.py#L86" aria-label="Source for StaffPlayback.play_rhythm">[Source]</a></p>
 
 </div>
 
@@ -826,7 +833,8 @@ closes.</p>
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">values</code> (<em>sequence of str</em>): Written note and rest values. A quarter note gets one beat.</li>
+  <li><code class="language-plaintext highlighter-rouge">values</code> (<em>sequence of str</em>): Written note and rest values.</li>
+  <li><code class="language-plaintext highlighter-rouge">quarter_ms</code> (<em>int</em>): The length of a quarter note in milliseconds.</li>
 </ul>
 
 <h3 id="staffplaybackstop">StaffPlayback.stop</h3>
@@ -836,7 +844,7 @@ closes.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/staff_playback.py#L104" aria-label="Source for StaffPlayback.stop">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/staff_playback.py#L114" aria-label="Source for StaffPlayback.stop">[Source]</a></p>
 
 </div>
 
@@ -852,7 +860,7 @@ closes.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/staff_playback.py#L110" aria-label="Source for StaffPlayback.eventFilter">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/staff_playback.py#L120" aria-label="Source for StaffPlayback.eventFilter">[Source]</a></p>
 
 </div>
 
@@ -872,6 +880,8 @@ closes.</p>
 </ul>
 
 
+          
+          
           
           
           
@@ -1182,10 +1192,10 @@ closes.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

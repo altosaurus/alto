@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -750,7 +753,7 @@
 
 <h2 id="source-checkout">Source checkout</h2>
 
-<p>You’ll need Git and uv. If you’re installing uv for the first time, follow the instructions for your operating system, then open a new terminal and run <code class="language-plaintext highlighter-rouge">uv --version</code>. <a href="https://docs.astral.sh/uv/getting-started/installation/">uv installation instructions</a></p>
+<p>You’ll need Git to clone the repository and uv to manage the Python environment. After installing them, open a new terminal and run <code class="language-plaintext highlighter-rouge">git --version</code> and <code class="language-plaintext highlighter-rouge">uv --version</code> to check that both are available. <a href="https://git-scm.com/install/">Install Git</a> · <a href="https://docs.astral.sh/uv/getting-started/installation/">Install uv</a></p>
 
 <p>Clone Alto and enter the repository. If you already have a checkout, open a terminal in the folder that contains <code class="language-plaintext highlighter-rouge">pyproject.toml</code>.</p>
 
@@ -790,6 +793,102 @@ python <span class="nt">-m</span> pytest <span class="nt">-q</span> tests/test_t
 </code></pre></div></div>
 
 <p>If you’ll be contributing changes, run <code class="language-plaintext highlighter-rouge">pre-commit install</code> once in this checkout to enable the repository’s Git hooks. Keep the environment active for the <a href="/alto/dev/developer-guide/application-launch/">Application launch walkthrough</a>.</p>
+
+<h2 id="dependencies">Dependencies</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">uv sync</code> command above installs the application libraries and the <code class="language-plaintext highlighter-rouge">dev</code> tools. Alto declares its direct Python dependencies and supported versions in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>. The lockfile records the exact versions for each supported environment.</p>
+
+<h3 id="application-libraries">Application libraries</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>Use in Alto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PySide6</td>
+      <td>Provides the Qt windows and controls, draws notation, and plays exercise audio.</td>
+    </tr>
+    <tr>
+      <td>fsrs</td>
+      <td>Schedules the next review of a practice item based on the learner’s ratings.</td>
+    </tr>
+    <tr>
+      <td>genanki</td>
+      <td>Writes Anki decks so learners can export exercises as <code class="language-plaintext highlighter-rouge">.apkg</code> files.</td>
+    </tr>
+    <tr>
+      <td>certifi</td>
+      <td>Supplies trusted certificates for HTTPS connections to Alto’s update server.</td>
+    </tr>
+    <tr>
+      <td>PyNaCl</td>
+      <td>Verifies the digital signature on a release’s checksum list before Alto installs an update.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="development-tools">Development tools</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>Use in Alto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>pytest</td>
+      <td>Runs the test suite, including executable examples in docstrings.</td>
+    </tr>
+    <tr>
+      <td>pytest-xdist</td>
+      <td>Runs tests across multiple worker processes to shorten the suite’s runtime.</td>
+    </tr>
+    <tr>
+      <td>pytest-cov</td>
+      <td>Measures which lines of code the tests execute.</td>
+    </tr>
+    <tr>
+      <td>diff-cover</td>
+      <td>Checks test coverage on lines changed by a patch.</td>
+    </tr>
+    <tr>
+      <td>Ruff</td>
+      <td>Formats Python and flags lint issues.</td>
+    </tr>
+    <tr>
+      <td>Pylint</td>
+      <td>Detects duplicated code across application modules.</td>
+    </tr>
+    <tr>
+      <td>Pyright</td>
+      <td>Checks Python type annotations and reports type errors.</td>
+    </tr>
+    <tr>
+      <td>pre-commit</td>
+      <td>Runs repository checks through Git hooks.</td>
+    </tr>
+    <tr>
+      <td>asv</td>
+      <td>Benchmarks performance across revisions.</td>
+    </tr>
+    <tr>
+      <td>NumPy</td>
+      <td>Supports image and audio checks in tests and helps map notes to clickable regions in score excerpts.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="build-tools">Build tools</h3>
+
+<p>Setuptools builds Alto as a Python package, including the editable installation used during development. The <code class="language-plaintext highlighter-rouge">package</code> extra adds PyInstaller to bundle desktop releases. The Windows and macOS build scripts also use Pillow to convert Alto’s PNG icon to the platform’s icon format.</p>
+
+<p>For documentation work, Bundler installs the Ruby gems listed in <code class="language-plaintext highlighter-rouge">docs/Gemfile</code>. The <code class="language-plaintext highlighter-rouge">github-pages</code> gem supplies Jekyll and the plugins used to render the site. WEBrick serves the local preview. <a href="/alto/dev/development/#building-the-docs">Building the docs</a></p>
 
           
           
@@ -889,10 +988,10 @@ python <span class="nt">-m</span> pytest <span class="nt">-q</span> tests/test_t
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

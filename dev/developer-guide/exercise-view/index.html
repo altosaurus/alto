@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/" aria-current="page">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -753,11 +756,21 @@
     <img class="for-light" src="/alto/dev/assets/img/note-identification.png" alt="Note Identification with the written question on the staff and its answer buttons below." width="1100" height="720" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/note-identification-dark.png" alt="Note Identification with the written question on the staff and its answer buttons below." width="1100" height="720" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.main_window/#mainwindow" aria-label="Exercise list (MainWindow)" title="Exercise list (MainWindow)" style="left: 1%; top: 15%; width: 30%; height: 77%"><span aria-hidden="true">1</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.staff/#staffwidget" aria-label="Notated question (StaffWidget)" title="Notated question (StaffWidget)" style="left: 42.8%; top: 20.5%; width: 45.5%; height: 47%"><span aria-hidden="true">2</span></a>
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.exercise_view/#exerciseview" aria-label="Answer buttons (ExerciseView)" title="Answer buttons (ExerciseView)" style="left: 34.5%; top: 68%; width: 62%; height: 7%"><span aria-hidden="true">3</span></a>
+    
+    
+    
+    <a class="component-region component-group" href="/alto/dev/api/alto.ui.exercise_view/#exerciseview" aria-label="Right-hand exercise pane (ExerciseView)" title="Right-hand exercise pane (ExerciseView)" style="left: 31.5%; top: 14%; width: 67.7%; height: 85%"><span aria-hidden="true">4</span></a>
     
   </div>
   <figcaption>
@@ -769,17 +782,124 @@
       
       <li><a href="/alto/dev/api/alto.ui.exercise_view/#exerciseview">Answer buttons</a> · <code>ExerciseView</code></li>
       
+      <li><a href="/alto/dev/api/alto.ui.exercise_view/#exerciseview">Right-hand exercise pane</a> · <code>ExerciseView</code></li>
+      
     </ol>
   </figcaption>
 </figure>
 
 <h2 id="the-first-question">The first question</h2>
 
+<figure class="first-question-c4">
+  <div class="drawing" tabindex="0" role="region" aria-label="First question diagram, scroll horizontally on small screens">
+    <svg viewBox="0 0 900 420" role="img" aria-labelledby="c4-title c4-desc">
+      <title id="c4-title">C4 dynamic diagram for opening Note Identification in Alto</title>
+      <desc id="c4-desc">The exercise catalog sends the selected class to the main window, which creates the exercise workspace. The workspace asks the practice scheduler for a question.</desc>
+      <defs>
+        <marker id="c4-tip" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto">
+          <path d="M0 0 10 5 0 10Z" class="tip" />
+        </marker>
+      </defs>
+      <rect class="boundary" x="12" y="14" width="876" height="394" rx="6" />
+      <text x="32" y="41" class="type" style="text-anchor:start">Alto desktop application · Python / Qt</text>
+      <g transform="translate(38 62)">
+        <rect class="node" width="260" height="108" rx="5" />
+        <text class="name" x="130" y="33">Exercise catalog</text>
+        <text class="type" x="130" y="56">Component · HomePage · PySide6</text>
+        <text x="130" y="83">Offers exercise tiles.</text>
+      </g>
+      <g transform="translate(602 62)">
+        <rect class="node" width="260" height="108" rx="5" />
+        <text class="name" x="130" y="33">Main window</text>
+        <text class="type" x="130" y="56">Component · MainWindow · PySide6</text>
+        <text x="130" y="83">Opens the selected workspace.</text>
+      </g>
+      <g transform="translate(602 274)">
+        <rect class="node" width="260" height="108" rx="5" />
+        <text class="name" x="130" y="33">Exercise workspace</text>
+        <text class="type" x="130" y="56">Component · ExerciseView · PySide6</text>
+        <text x="130" y="80">Builds the staff and controls.</text>
+        <text x="130" y="99">Displays the question.</text>
+      </g>
+      <g transform="translate(38 274)">
+        <rect class="node" width="260" height="108" rx="5" />
+        <text class="name" x="130" y="33">Practice scheduler</text>
+        <text class="type" x="130" y="56">Component · Learner · Python</text>
+        <text x="130" y="83">Selects a question for the profile.</text>
+      </g>
+      <path class="edge" d="M298 123H599" marker-end="url(#c4-tip)" />
+      <circle class="badge" cx="450" cy="75" r="12" />
+      <text class="digit" x="450" y="80">1</text>
+      <text x="450" y="108">Signals selection of NoteNames</text>
+      <path class="edge" d="M732 170V271" marker-end="url(#c4-tip)" />
+      <circle class="badge" cx="505" cy="210" r="12" />
+      <text class="digit" x="505" y="215">2</text>
+      <text x="626" y="215">Creates workspace with</text>
+      <text x="626" y="237">exercise and active learner</text>
+      <path class="edge" d="M602 341H301" marker-end="url(#c4-tip)" />
+      <circle class="badge" cx="450" cy="294" r="12" />
+      <text class="digit" x="450" y="299">3</text>
+      <text x="450" y="326">Requests the first question</text>
+    </svg>
+  </div>
+  <figcaption><strong>C4 dynamic diagram.</strong> Opening Note Identification with an active profile. Boxes represent components in the desktop application. Follow the numbered arrows in order.</figcaption>
+</figure>
+
 <p>Start in <code class="language-plaintext highlighter-rouge">MainWindow.open_exercise()</code>. On the first visit, the selected tile supplies the exercise class, <code class="language-plaintext highlighter-rouge">NoteNames</code>. The window constructs <code class="language-plaintext highlighter-rouge">ExerciseView(cls(), learner=self.learner)</code>. The view builds its staff, controls, and settings pane, then calls <code class="language-plaintext highlighter-rouge">next_question()</code>. <a href="/alto/dev/api/alto.ui.main_window/#mainwindowopen_exercise">MainWindow.open_exercise</a> · <a href="/alto/dev/api/alto.ui.exercise_view/#exerciseviewnext_question">ExerciseView.next_question</a></p>
+
+<h3 id="exerciseview-components">ExerciseView components</h3>
+
+<p>Open <strong>Exercise settings</strong> with the sliders button to see the layout below. The capture shows just <code class="language-plaintext highlighter-rouge">ExerciseView</code>. In its constructor, <code class="language-plaintext highlighter-rouge">outer = QHBoxLayout(self)</code> puts the main exercise area on the left and the settings frame on the right. Inside the main area, a vertical layout orders the toolbar, music, and answer controls.</p>
+
+<figure class="shot component-shot component-labeled">
+  <div class="component-map">
+    <img class="for-light" src="/alto/dev/assets/img/exercise-view-anatomy.png" alt="Note Identification with the staff on the left, the exercise toolbar above it, letter-name answer controls below it, and the settings pane open on the right." width="982" height="614" loading="lazy" />
+    <img class="for-dark" src="/alto/dev/assets/img/exercise-view-anatomy-dark.png" alt="Note Identification with the staff on the left, the exercise toolbar above it, letter-name answer controls below it, and the settings pane open on the right." width="982" height="614" loading="lazy" />
+    
+    
+    
+    <a class="component-region" href="/alto/dev/api/alto.ui.staff/#staffwidget" aria-label="Staff (StaffWidget)" title="Staff (StaffWidget)" style="left: 9.5%; top: 8.1%; width: 50.9%; height: 53.8%"><span aria-hidden="true">1 · Staff</span></a>
+    
+    
+    
+    <a class="component-region" href="/alto/dev/api/alto.ui.exercise_view/#exerciseview" aria-label="Toolbar (ExerciseView)" title="Toolbar (ExerciseView)" style="left: 0.9%; top: 1.1%; width: 68%; height: 6.3%"><span aria-hidden="true">2 · Toolbar</span></a>
+    
+    
+    
+    <a class="component-region label-below" href="/alto/dev/api/alto.ui.degree_text/#degreebutton" aria-label="Answer controls (DegreeButton)" title="Answer controls (DegreeButton)" style="left: 3.1%; top: 63.9%; width: 63.6%; height: 7.1%"><span aria-hidden="true">3 · Answer controls</span></a>
+    
+    
+    
+    <a class="component-region" href="/alto/dev/api/alto.ui.settings_panel/#notenamesettingspanel" aria-label="Settings pane (NoteNameSettingsPanel)" title="Settings pane (NoteNameSettingsPanel)" style="left: 69.5%; top: 1.4%; width: 29.6%; height: 97.1%"><span aria-hidden="true">4 · Settings pane</span></a>
+    
+  </div>
+  <figcaption>
+    <ol class="component-key">
+      
+      <li><a href="/alto/dev/api/alto.ui.staff/#staffwidget">Staff</a> · <code>StaffWidget</code></li>
+      
+      <li><a href="/alto/dev/api/alto.ui.exercise_view/#exerciseview">Toolbar</a> · <code>ExerciseView</code></li>
+      
+      <li><a href="/alto/dev/api/alto.ui.degree_text/#degreebutton">Answer controls</a> · <code>DegreeButton</code></li>
+      
+      <li><a href="/alto/dev/api/alto.ui.settings_panel/#notenamesettingspanel">Settings pane</a> · <code>NoteNameSettingsPanel</code></li>
+      
+    </ol>
+  </figcaption>
+</figure>
+
+<ol>
+  <li><strong>Staff.</strong> In <code class="language-plaintext highlighter-rouge">ExerciseView.__init__()</code>, find <code class="language-plaintext highlighter-rouge">self.staff = StaffWidget(max_step=MAX_STEP)</code>. The constructor adds this widget to <code class="language-plaintext highlighter-rouge">self._music_layout</code>. When a question arrives, <code class="language-plaintext highlighter-rouge">next_question()</code> passes its pitches, clef, key, and note value to <code class="language-plaintext highlighter-rouge">self.staff.show_notes(...)</code>. Follow that call into <code class="language-plaintext highlighter-rouge">StaffWidget</code>: it stores the pitches in <code class="language-plaintext highlighter-rouge">self.columns</code>, fits the widget to the music, and calls <code class="language-plaintext highlighter-rouge">update()</code>. On the next paint event, <code class="language-plaintext highlighter-rouge">paintEvent()</code> opens a <code class="language-plaintext highlighter-rouge">QPainter</code> and calls <code class="language-plaintext highlighter-rouge">_draw_score()</code> to draw the paper, staff lines, clef, and note. <a href="/alto/dev/api/alto.ui.staff/#staffwidgetshow_notes">StaffWidget.show_notes</a> · <a href="/alto/dev/api/alto.ui.staff/#staffwidgetpaintevent">StaffWidget.paintEvent</a></li>
+  <li><strong>Toolbar.</strong> Find <code class="language-plaintext highlighter-rouge">top = QHBoxLayout()</code> in the view constructor. It adds the score label, help, and other exercise tools, then places this row at the top of the main area with <code class="language-plaintext highlighter-rouge">lay.addLayout(top)</code>. The sliders button is <code class="language-plaintext highlighter-rouge">self.gear</code>, a checkable <code class="language-plaintext highlighter-rouge">QToolButton</code>. Its <code class="language-plaintext highlighter-rouge">toggled</code> signal opens or closes the pane labeled <strong>4</strong>. <a href="/alto/dev/api/alto.ui.exercise_view/#exerciseview">ExerciseView constructor</a></li>
+  <li><strong>Answer controls.</strong> The constructor creates an empty grid, <code class="language-plaintext highlighter-rouge">self.choice_box</code>. In <code class="language-plaintext highlighter-rouge">next_question()</code>, find <code class="language-plaintext highlighter-rouge">for i, c in enumerate(q.choices)</code>. For the letter names shown here, each iteration creates a <code class="language-plaintext highlighter-rouge">DegreeButton(c)</code>, connects its click to <code class="language-plaintext highlighter-rouge">self.submit(choice, button=btn)</code>, and inserts the button at the row and column from <code class="language-plaintext highlighter-rouge">q.grid</code>. With <strong>Octave</strong> off, clicking a letter submits it immediately. On the next question the view retires the old buttons and fills the grid again. <a href="/alto/dev/api/alto.ui.degree_text/#degreebutton">DegreeButton</a> · <a href="/alto/dev/api/alto.ui.exercise_view/#exerciseviewsubmit">ExerciseView.submit</a></li>
+  <li><strong>Settings pane.</strong> Follow <code class="language-plaintext highlighter-rouge">settings_panel_for(exercise, learner=self.learner)</code> into <code class="language-plaintext highlighter-rouge">settings_panel.py</code>. For <code class="language-plaintext highlighter-rouge">NoteNames</code>, the factory selects <code class="language-plaintext highlighter-rouge">NoteNameSettingsPanel(settings.note_names)</code>. Its constructor builds the settings menu and rows such as <strong>Clefs</strong> and <strong>Range</strong>. Back in the view, <code class="language-plaintext highlighter-rouge">pane_lay.addWidget(self.settings_panel, 1)</code> puts that panel inside <code class="language-plaintext highlighter-rouge">self.pane</code>, an initially hidden <code class="language-plaintext highlighter-rouge">QFrame</code>. When the sliders button is checked, <code class="language-plaintext highlighter-rouge">_toggle_pane()</code> shows the frame and animates its maximum width. Changing a question option emits <code class="language-plaintext highlighter-rouge">changed</code>, which the view connects to <code class="language-plaintext highlighter-rouge">next_question()</code>. <a href="/alto/dev/api/alto.ui.settings_panel/#settings_panel_for">Settings panel factory</a> · <a href="/alto/dev/api/alto.ui.settings_panel/#notenamesettingspanel">NoteNameSettingsPanel</a></li>
+</ol>
+
+<h3 id="question-selection">Question selection</h3>
 
 <p>Inside <code class="language-plaintext highlighter-rouge">next_question()</code>, follow <code class="language-plaintext highlighter-rouge">q = self._pick_question()</code>. With a profile open, this calls <code class="language-plaintext highlighter-rouge">Learner.pick()</code>. The profile’s scheduler decides which eligible question to show, so a question can be a review of a note the learner has seen before. To trace a freshly generated note, follow <code class="language-plaintext highlighter-rouge">ChoiceExercise.generate()</code> into <code class="language-plaintext highlighter-rouge">NoteNames.make_question()</code>. It chooses a clef, key signature, and note value from the enabled settings, then draws a pitch within that clef’s range. <code class="language-plaintext highlighter-rouge">NoteNames._question_for()</code> turns that pitch into a <code class="language-plaintext highlighter-rouge">Question</code> with both the notation and the accepted answer. <a href="/alto/dev/api/alto.learning.learner/#learnerpick">Learner.pick</a> · <a href="/alto/dev/api/alto.exercises.library/#notenamesmake_question">NoteNames.make_question</a></p>
 
-<p>To see how that one object drives the screen, put a breakpoint on <code class="language-plaintext highlighter-rouge">self.question = q</code> in <code class="language-plaintext highlighter-rouge">alto/ui/exercise_view.py</code>. Inspect these expressions in your debugger:</p>
+<p>To see how that one object drives the screen, put a breakpoint on <code class="language-plaintext highlighter-rouge">self.question = q</code> in <code class="language-plaintext highlighter-rouge">alto/ui/exercise_view.py</code>. A few lines below, the view clears the attempt count and starts the response timer. Inspect these expressions in your debugger:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># The written pitch, for example "C4"
 </span><span class="n">q</span><span class="p">.</span><span class="n">clef</span><span class="p">,</span> <span class="n">q</span><span class="p">.</span><span class="n">key</span>  <span class="c1"># How to draw and read the staff
@@ -787,7 +907,12 @@
 </span><span class="n">q</span><span class="p">.</span><span class="n">octaves</span>  <span class="c1"># None while Octave is off
 </span></code></pre></div></div>
 
-<p>For middle C with letter names, <code class="language-plaintext highlighter-rouge">q.answer</code> is <code class="language-plaintext highlighter-rouge">"C"</code>. Continue through <code class="language-plaintext highlighter-rouge">next_question()</code> to <code class="language-plaintext highlighter-rouge">self.staff.show_notes(...)</code>, which draws the question, then to the loop over <code class="language-plaintext highlighter-rouge">q.choices</code>, which creates the buttons. The view also clears the previous attempt count and starts the response timer. <a href="/alto/dev/api/alto.exercises.base/#question">Question fields</a></p>
+<p>For middle C with letter names, <code class="language-plaintext highlighter-rouge">q.answer</code> is <code class="language-plaintext highlighter-rouge">"C"</code>. Step to the end of <code class="language-plaintext highlighter-rouge">next_question()</code> and compare the live widgets with the question you inspected above. With the settings shown, all three expressions should return <code class="language-plaintext highlighter-rouge">True</code>. <a href="/alto/dev/api/alto.exercises.base/#question">Question fields</a></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="bp">self</span><span class="p">.</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span> <span class="o">==</span> <span class="n">q</span><span class="p">.</span><span class="n">staff</span>
+<span class="p">[</span><span class="n">button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="k">for</span> <span class="n">button</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">buttons</span><span class="p">]</span> <span class="o">==</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="bp">self</span><span class="p">.</span><span class="n">settings_panel</span><span class="p">.</span><span class="n">parentWidget</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">self</span><span class="p">.</span><span class="n">pane</span>
+</code></pre></div></div>
 
 <h2 id="an-answer-from-click-to-feedback">An answer from click to feedback</h2>
 
@@ -878,7 +1003,7 @@
           
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/developer-guide/application-launch/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Application launch</span></a>
-            <a class="next" href="/alto/dev/developer-guide/database/" rel="next"><span class="np-label">Next</span><span class="np-title">Database<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
+            <a class="next" href="/alto/dev/developer-guide/exercises/" rel="next"><span class="np-label">Next</span><span class="np-title">Exercises<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
         </article>
@@ -936,10 +1061,10 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

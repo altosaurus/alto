@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -769,7 +772,7 @@ Construction']
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNames</span><span class="p">(</span><span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L250" aria-label="Source for NoteNames">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L251" aria-label="Source for NoteNames">[Source]</a></p>
 
 </div>
 
@@ -807,7 +810,7 @@ Construction']
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L266" aria-label="Source for NoteNames.card_prompt">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L267" aria-label="Source for NoteNames.card_prompt">[Source]</a></p>
 
 </div>
 
@@ -841,7 +844,7 @@ solfège or a scale degree, with the octave if it counts.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L290" aria-label="Source for NoteNames.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L291" aria-label="Source for NoteNames.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -868,7 +871,7 @@ solfège or a scale degree, with the octave if it counts.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L313" aria-label="Source for NoteNames.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L314" aria-label="Source for NoteNames.instructions">[Source]</a></p>
 
 </div>
 
@@ -896,7 +899,7 @@ solfège or a scale degree, with the octave if it counts.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L368" aria-label="Source for NoteNames.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L369" aria-label="Source for NoteNames.make_question">[Source]</a></p>
 
 </div>
 
@@ -938,7 +941,7 @@ key.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L416" aria-label="Source for NoteNames.card_count">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L422" aria-label="Source for NoteNames.card_count">[Source]</a></p>
 
 </div>
 
@@ -964,7 +967,7 @@ signatures.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L445" aria-label="Source for NoteNames.daily_candidates">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L451" aria-label="Source for NoteNames.daily_candidates">[Source]</a></p>
 
 </div>
 
@@ -1006,7 +1009,7 @@ signatures.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L499" aria-label="Source for NoteNames.review_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L505" aria-label="Source for NoteNames.review_question">[Source]</a></p>
 
 </div>
 
@@ -1043,7 +1046,7 @@ eligible.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">IntervalNames</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L770" aria-label="Source for IntervalNames">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L776" aria-label="Source for IntervalNames">[Source]</a></p>
 
 </div>
 
@@ -1068,7 +1071,7 @@ eligible.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L792" aria-label="Source for IntervalNames.card_prompt">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L798" aria-label="Source for IntervalNames.card_prompt">[Source]</a></p>
 
 </div>
 
@@ -1106,7 +1109,7 @@ its inversion.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L830" aria-label="Source for IntervalNames.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L836" aria-label="Source for IntervalNames.instructions">[Source]</a></p>
 
 </div>
 
@@ -1134,7 +1137,7 @@ its inversion.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L871" aria-label="Source for IntervalNames.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L877" aria-label="Source for IntervalNames.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -1159,7 +1162,7 @@ its inversion.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L927" aria-label="Source for IntervalNames.refresh">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L933" aria-label="Source for IntervalNames.refresh">[Source]</a></p>
 
 </div>
 
@@ -1196,7 +1199,7 @@ numbers in columns.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L971" aria-label="Source for IntervalNames.generate">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L977" aria-label="Source for IntervalNames.generate">[Source]</a></p>
 
 </div>
 
@@ -1232,7 +1235,7 @@ numbers in columns.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">IntervalConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1275" aria-label="Source for IntervalConstruction">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1281" aria-label="Source for IntervalConstruction">[Source]</a></p>
 
 </div>
 
@@ -1257,7 +1260,7 @@ note.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1299" aria-label="Source for IntervalConstruction.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1305" aria-label="Source for IntervalConstruction.instructions">[Source]</a></p>
 
 </div>
 
@@ -1282,7 +1285,7 @@ harmonic placement.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1324" aria-label="Source for IntervalConstruction.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1330" aria-label="Source for IntervalConstruction.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -1308,7 +1311,7 @@ eligible.
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1343" aria-label="Source for IntervalConstruction.generate">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1349" aria-label="Source for IntervalConstruction.generate">[Source]</a></p>
 
 </div>
 
@@ -1339,7 +1342,7 @@ placements.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardIntervals</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1370" aria-label="Source for KeyboardIntervals">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1376" aria-label="Source for KeyboardIntervals">[Source]</a></p>
 
 </div>
 
@@ -1371,7 +1374,7 @@ placements.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1399" aria-label="Source for KeyboardIntervals.card_prompt">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1405" aria-label="Source for KeyboardIntervals.card_prompt">[Source]</a></p>
 
 </div>
 
@@ -1404,7 +1407,7 @@ placements.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1423" aria-label="Source for KeyboardIntervals.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1429" aria-label="Source for KeyboardIntervals.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -1432,7 +1435,7 @@ stored-question reviews.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1442" aria-label="Source for KeyboardIntervals.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1448" aria-label="Source for KeyboardIntervals.instructions">[Source]</a></p>
 
 </div>
 
@@ -1457,7 +1460,7 @@ stored-question reviews.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1476" aria-label="Source for KeyboardIntervals.generate">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1482" aria-label="Source for KeyboardIntervals.generate">[Source]</a></p>
 
 </div>
 
@@ -1494,7 +1497,7 @@ chosen range.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeySignatures</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1625" aria-label="Source for KeySignatures">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1631" aria-label="Source for KeySignatures">[Source]</a></p>
 
 </div>
 
@@ -1517,7 +1520,7 @@ to.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1645" aria-label="Source for KeySignatures.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1651" aria-label="Source for KeySignatures.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -1544,7 +1547,7 @@ to.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1664" aria-label="Source for KeySignatures.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1670" aria-label="Source for KeySignatures.instructions">[Source]</a></p>
 
 </div>
 
@@ -1572,7 +1575,7 @@ to.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1697" aria-label="Source for KeySignatures.refresh">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1703" aria-label="Source for KeySignatures.refresh">[Source]</a></p>
 
 </div>
 
@@ -1611,7 +1614,7 @@ older versions did not write.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1759" aria-label="Source for KeySignatures.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1765" aria-label="Source for KeySignatures.make_question">[Source]</a></p>
 
 </div>
 
@@ -1645,7 +1648,7 @@ older versions did not write.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeySignatureConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1893" aria-label="Source for KeySignatureConstruction">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1899" aria-label="Source for KeySignatureConstruction">[Source]</a></p>
 
 </div>
 
@@ -1668,7 +1671,7 @@ fork.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1913" aria-label="Source for KeySignatureConstruction.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1919" aria-label="Source for KeySignatureConstruction.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -1695,7 +1698,7 @@ fork.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1931" aria-label="Source for KeySignatureConstruction.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1937" aria-label="Source for KeySignatureConstruction.instructions">[Source]</a></p>
 
 </div>
 
@@ -1723,7 +1726,7 @@ fork.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L1966" aria-label="Source for KeySignatureConstruction.generate">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L1972" aria-label="Source for KeySignatureConstruction.generate">[Source]</a></p>
 
 </div>
 
@@ -1767,7 +1770,7 @@ fork.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">OrderOfKeys</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2024" aria-label="Source for OrderOfKeys">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2030" aria-label="Source for OrderOfKeys">[Source]</a></p>
 
 </div>
 
@@ -1788,7 +1791,7 @@ fork.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2042" aria-label="Source for OrderOfKeys.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2048" aria-label="Source for OrderOfKeys.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -1813,7 +1816,7 @@ fork.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2071" aria-label="Source for OrderOfKeys.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2077" aria-label="Source for OrderOfKeys.instructions">[Source]</a></p>
 
 </div>
 
@@ -1838,7 +1841,7 @@ fork.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2097" aria-label="Source for OrderOfKeys.generate">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2103" aria-label="Source for OrderOfKeys.generate">[Source]</a></p>
 
 </div>
 
@@ -1871,7 +1874,7 @@ it in a selected clef.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleIdentification</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2274" aria-label="Source for ScaleIdentification">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2280" aria-label="Source for ScaleIdentification">[Source]</a></p>
 
 </div>
 
@@ -1893,7 +1896,7 @@ it in a selected clef.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2292" aria-label="Source for ScaleIdentification.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2298" aria-label="Source for ScaleIdentification.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -1921,7 +1924,7 @@ in force.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2325" aria-label="Source for ScaleIdentification.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2331" aria-label="Source for ScaleIdentification.instructions">[Source]</a></p>
 
 </div>
 
@@ -1950,7 +1953,7 @@ different signature.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2360" aria-label="Source for ScaleIdentification.generate">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2366" aria-label="Source for ScaleIdentification.generate">[Source]</a></p>
 
 </div>
 
@@ -1987,7 +1990,7 @@ the answer on the staff.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2454" aria-label="Source for ScaleConstruction">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2460" aria-label="Source for ScaleConstruction">[Source]</a></p>
 
 </div>
 
@@ -2014,7 +2017,7 @@ another.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2477" aria-label="Source for ScaleConstruction.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2483" aria-label="Source for ScaleConstruction.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -2041,7 +2044,7 @@ another.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2503" aria-label="Source for ScaleConstruction.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2509" aria-label="Source for ScaleConstruction.instructions">[Source]</a></p>
 
 </div>
 
@@ -2066,7 +2069,7 @@ another.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2594" aria-label="Source for ScaleConstruction.generate">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2600" aria-label="Source for ScaleConstruction.generate">[Source]</a></p>
 
 </div>
 
@@ -2105,7 +2108,7 @@ another.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CircleOfFifths</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2762" aria-label="Source for CircleOfFifths">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2768" aria-label="Source for CircleOfFifths">[Source]</a></p>
 
 </div>
 
@@ -2128,7 +2131,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2784" aria-label="Source for CircleOfFifths.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2790" aria-label="Source for CircleOfFifths.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -2155,7 +2158,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2802" aria-label="Source for CircleOfFifths.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2808" aria-label="Source for CircleOfFifths.instructions">[Source]</a></p>
 
 </div>
 
@@ -2180,7 +2183,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L2867" aria-label="Source for CircleOfFifths.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L2873" aria-label="Source for CircleOfFifths.make_question">[Source]</a></p>
 
 </div>
 
@@ -2218,7 +2221,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ChordQualities</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3062" aria-label="Source for ChordQualities">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3068" aria-label="Source for ChordQualities">[Source]</a></p>
 
 </div>
 
@@ -2243,7 +2246,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3084" aria-label="Source for ChordQualities.card_prompt">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3090" aria-label="Source for ChordQualities.card_prompt">[Source]</a></p>
 
 </div>
 
@@ -2276,7 +2279,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3108" aria-label="Source for ChordQualities.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3114" aria-label="Source for ChordQualities.instructions">[Source]</a></p>
 
 </div>
 
@@ -2301,7 +2304,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3130" aria-label="Source for ChordQualities.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3136" aria-label="Source for ChordQualities.make_question">[Source]</a></p>
 
 </div>
 
@@ -2335,7 +2338,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArpeggioNames</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3191" aria-label="Source for ArpeggioNames">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3197" aria-label="Source for ArpeggioNames">[Source]</a></p>
 
 </div>
 
@@ -2357,7 +2360,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3209" aria-label="Source for ArpeggioNames.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3215" aria-label="Source for ArpeggioNames.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -2384,7 +2387,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3228" aria-label="Source for ArpeggioNames.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3234" aria-label="Source for ArpeggioNames.instructions">[Source]</a></p>
 
 </div>
 
@@ -2409,7 +2412,7 @@ minor, or the Roman numeral of a chord.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3258" aria-label="Source for ArpeggioNames.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3264" aria-label="Source for ArpeggioNames.make_question">[Source]</a></p>
 
 </div>
 
@@ -2450,7 +2453,7 @@ position.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardNotes</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3580" aria-label="Source for KeyboardNotes">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3586" aria-label="Source for KeyboardNotes">[Source]</a></p>
 
 </div>
 
@@ -2472,7 +2475,7 @@ position.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3598" aria-label="Source for KeyboardNotes.card_prompt">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3604" aria-label="Source for KeyboardNotes.card_prompt">[Source]</a></p>
 
 </div>
 
@@ -2511,7 +2514,7 @@ it counts, and follow the key signature if one is shown.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3637" aria-label="Source for KeyboardNotes.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3643" aria-label="Source for KeyboardNotes.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -2538,7 +2541,7 @@ it counts, and follow the key signature if one is shown.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3659" aria-label="Source for KeyboardNotes.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3665" aria-label="Source for KeyboardNotes.instructions">[Source]</a></p>
 
 </div>
 
@@ -2563,7 +2566,7 @@ it counts, and follow the key signature if one is shown.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3721" aria-label="Source for KeyboardNotes.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3727" aria-label="Source for KeyboardNotes.make_question">[Source]</a></p>
 
 </div>
 
@@ -2600,7 +2603,7 @@ it counts, and follow the key signature if one is shown.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NoteConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3892" aria-label="Source for NoteConstruction">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3898" aria-label="Source for NoteConstruction">[Source]</a></p>
 
 </div>
 
@@ -2624,7 +2627,7 @@ it counts, and follow the key signature if one is shown.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3912" aria-label="Source for NoteConstruction.card_prompt">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3918" aria-label="Source for NoteConstruction.card_prompt">[Source]</a></p>
 
 </div>
 
@@ -2666,7 +2669,7 @@ words it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L3951" aria-label="Source for NoteConstruction.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L3957" aria-label="Source for NoteConstruction.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -2693,7 +2696,7 @@ words it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4000" aria-label="Source for NoteConstruction.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4006" aria-label="Source for NoteConstruction.instructions">[Source]</a></p>
 
 </div>
 
@@ -2718,7 +2721,7 @@ words it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4070" aria-label="Source for NoteConstruction.generate">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4076" aria-label="Source for NoteConstruction.generate">[Source]</a></p>
 
 </div>
 
@@ -2752,7 +2755,7 @@ words it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4255" aria-label="Source for NoteConstruction.card_count">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4261" aria-label="Source for NoteConstruction.card_count">[Source]</a></p>
 
 </div>
 
@@ -2777,7 +2780,7 @@ words it.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4274" aria-label="Source for NoteConstruction.daily_candidates">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4280" aria-label="Source for NoteConstruction.daily_candidates">[Source]</a></p>
 
 </div>
 
@@ -2816,7 +2819,7 @@ words it.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4337" aria-label="Source for NoteConstruction.review_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4343" aria-label="Source for NoteConstruction.review_question">[Source]</a></p>
 
 </div>
 
@@ -2853,7 +2856,7 @@ construction catalog.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefBasics</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4574" aria-label="Source for ClefBasics">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4580" aria-label="Source for ClefBasics">[Source]</a></p>
 
 </div>
 
@@ -2877,7 +2880,7 @@ put it on the line that makes the clef asked for.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4595" aria-label="Source for ClefBasics.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4601" aria-label="Source for ClefBasics.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -2902,7 +2905,7 @@ with buttons.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4615" aria-label="Source for ClefBasics.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4621" aria-label="Source for ClefBasics.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -2929,7 +2932,7 @@ with buttons.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4633" aria-label="Source for ClefBasics.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4639" aria-label="Source for ClefBasics.instructions">[Source]</a></p>
 
 </div>
 
@@ -2955,7 +2958,7 @@ that is being asked.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4683" aria-label="Source for ClefBasics.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4689" aria-label="Source for ClefBasics.make_question">[Source]</a></p>
 
 </div>
 
@@ -3002,7 +3005,7 @@ that is being asked.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NotationIdentification</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4755" aria-label="Source for NotationIdentification">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4761" aria-label="Source for NotationIdentification">[Source]</a></p>
 
 </div>
 
@@ -3026,7 +3029,7 @@ that is being asked.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4780" aria-label="Source for NotationIdentification.settings_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4786" aria-label="Source for NotationIdentification.settings_signature">[Source]</a></p>
 
 </div>
 
@@ -3051,7 +3054,7 @@ with buttons.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4800" aria-label="Source for NotationIdentification.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4806" aria-label="Source for NotationIdentification.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -3076,7 +3079,7 @@ with buttons.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4823" aria-label="Source for NotationIdentification.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4829" aria-label="Source for NotationIdentification.instructions">[Source]</a></p>
 
 </div>
 
@@ -3101,7 +3104,7 @@ with buttons.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4918" aria-label="Source for NotationIdentification.refresh">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4924" aria-label="Source for NotationIdentification.refresh">[Source]</a></p>
 
 </div>
 
@@ -3135,7 +3138,7 @@ replay.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L4947" aria-label="Source for NotationIdentification.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L4953" aria-label="Source for NotationIdentification.make_question">[Source]</a></p>
 
 </div>
 
@@ -3169,7 +3172,7 @@ replay.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_groups</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L5230" aria-label="Source for NotationIdentification.card_groups">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5236" aria-label="Source for NotationIdentification.card_groups">[Source]</a></p>
 
 </div>
 
@@ -3195,7 +3198,7 @@ being practiced.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L5252" aria-label="Source for NotationIdentification.daily_candidates">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5258" aria-label="Source for NotationIdentification.daily_candidates">[Source]</a></p>
 
 </div>
 
@@ -3234,7 +3237,7 @@ being practiced.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L5323" aria-label="Source for NotationIdentification.review_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5329" aria-label="Source for NotationIdentification.review_question">[Source]</a></p>
 
 </div>
 
@@ -3264,6 +3267,271 @@ button selections.</p>
 <span class="go">True
 </span></code></pre></div></div>
 
+<h2 id="beat_meter">beat_meter</h2>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">beat_meter</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5406" aria-label="Source for beat_meter">[Source]</a></p>
+
+</div>
+
+<p>Look up the written time signature for either kind of answer.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">answer</code> (<em>str</em>): A time signature or meter classification from the exercise.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of int</em>: Numerator and denominator for engraving the rhythm.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">beat_meter</span><span class="p">(</span><span class="s">"Compound duple"</span><span class="p">)</span>
+<span class="go">(6, 8)
+</span></code></pre></div></div>
+
+<h2 id="beatidentification">BeatIdentification</h2>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BeatIdentification</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5431" aria-label="Source for BeatIdentification">[Source]</a></p>
+
+</div>
+
+<p>Identify the time signature or classify the meter of a rhythm.</p>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">BeatIdentification</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">rhythm</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
+
+<h3 id="beatidentificationpractice_signature">BeatIdentification.practice_signature</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5447" aria-label="Source for BeatIdentification.practice_signature">[Source]</a></p>
+
+</div>
+
+<p>Keep separate review settings for the two rhythm components.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The original empty signature for time signature practice, or the selected component for classification practice.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BeatIdentification</span><span class="p">().</span><span class="n">practice_signature</span><span class="p">()</span>
+<span class="go">''
+</span></code></pre></div></div>
+
+<h3 id="beatidentificationinstructions">BeatIdentification.instructions</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5471" aria-label="Source for BeatIdentification.instructions">[Source]</a></p>
+
+</div>
+
+<p>Explain how to answer from the two written measures.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The task and its keyboard shortcut directions.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"keys"</span> <span class="ow">in</span> <span class="n">BeatIdentification</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
+
+<h3 id="beatidentificationmake_question">BeatIdentification.make_question</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5505" aria-label="Source for BeatIdentification.make_question">[Source]</a></p>
+
+</div>
+
+<p>Generate two complete measures in a randomly chosen meter.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Chooses the time signature and how each beat is written.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The rhythm and the answers for the selected component.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">BeatIdentification</span><span class="p">().</span><span class="n">make_question</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">prompt</span>
+<span class="go">'What is the time signature?'
+</span></code></pre></div></div>
+
+<h2 id="beat_positions">beat_positions</h2>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">beat_positions</span><span class="p">(</span><span class="n">meter</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5841" aria-label="Source for beat_positions">[Source]</a></p>
+
+</div>
+
+<p>Get the main beat starts in two measures, measured in eighth notes.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">meter</code> (<em>tuple of int</em>): One of the supported time signatures.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>frozenset of int</em>: Zero-based positions from the start of the first measure.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">beat_positions</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">)))</span>
+<span class="go">[0, 3, 6, 9]
+</span></code></pre></div></div>
+
+<h2 id="beatconstruction">BeatConstruction</h2>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BeatConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5866" aria-label="Source for BeatConstruction">[Source]</a></p>
+
+</div>
+
+<p>Mark where the main beats begin in two written measures.</p>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">BeatConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">BEAT_METERS</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
+
+<h3 id="beatconstructionsettings_signature">BeatConstruction.settings_signature</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5882" aria-label="Source for BeatConstruction.settings_signature">[Source]</a></p>
+
+</div>
+
+<p>Identify the note types used in a saved construction question.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Empty for the original selection, otherwise its signature.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BeatConstruction</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">()</span>
+<span class="go">''
+</span></code></pre></div></div>
+
+<h3 id="beatconstructioninstructions">BeatConstruction.instructions</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5903" aria-label="Source for BeatConstruction.instructions">[Source]</a></p>
+
+</div>
+
+<p>Explain how to place and submit the beats.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Counting guidance and keyboard controls.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"arrow keys"</span> <span class="ow">in</span> <span class="n">BeatConstruction</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
+
+<h3 id="beatconstructiongenerate">BeatConstruction.generate</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5930" aria-label="Source for BeatConstruction.generate">[Source]</a></p>
+
+</div>
+
+<p>Choose a time signature and write two measures to mark.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Chooses the meter and the written rhythm.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The rhythm and its time signature, without answer choices.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BeatConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)).</span><span class="n">prompt</span>
+<span class="go">'Place the beats in both measures.'
+</span></code></pre></div></div>
+
 <h2 id="rythmicequations">RythmicEquations</h2>
 
 <div class="api-signature">
@@ -3271,7 +3539,7 @@ button selections.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">RythmicEquations</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L5371" aria-label="Source for RythmicEquations">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5964" aria-label="Source for RythmicEquations">[Source]</a></p>
 
 </div>
 
@@ -3293,7 +3561,7 @@ button selections.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L5393" aria-label="Source for RythmicEquations.instructions">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L5986" aria-label="Source for RythmicEquations.instructions">[Source]</a></p>
 
 </div>
 
@@ -3319,7 +3587,7 @@ shortcut.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L5414" aria-label="Source for RythmicEquations.card_prompt">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L6007" aria-label="Source for RythmicEquations.card_prompt">[Source]</a></p>
 
 </div>
 
@@ -3352,7 +3620,7 @@ shortcut.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L5441" aria-label="Source for RythmicEquations.practice_signature">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L6034" aria-label="Source for RythmicEquations.practice_signature">[Source]</a></p>
 
 </div>
 
@@ -3377,7 +3645,7 @@ shortcut.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/exercises/library.py#L5515" aria-label="Source for RythmicEquations.make_question">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/exercises/library.py#L6108" aria-label="Source for RythmicEquations.make_question">[Source]</a></p>
 
 </div>
 
@@ -3404,6 +3672,8 @@ shortcut.</p>
 </span></code></pre></div></div>
 
 
+          
+          
           
           
           
@@ -3570,10 +3840,10 @@ shortcut.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

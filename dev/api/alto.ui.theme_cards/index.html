@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -768,7 +771,7 @@ desktop is) and the squares of its colors.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">colors_of</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/theme_cards.py#L86" aria-label="Source for colors_of">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/theme_cards.py#L86" aria-label="Source for colors_of">[Source]</a></p>
 
 </div>
 
@@ -809,7 +812,7 @@ desktop is) and the squares of its colors.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/theme_cards.py#L116" aria-label="Source for ThemeThumb">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/theme_cards.py#L116" aria-label="Source for ThemeThumb">[Source]</a></p>
 
 </div>
 
@@ -867,7 +870,7 @@ theme.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/theme_cards.py#L191" aria-label="Source for ThemeThumb.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/theme_cards.py#L191" aria-label="Source for ThemeThumb.paintEvent">[Source]</a></p>
 
 </div>
 
@@ -900,7 +903,7 @@ with an outline that is heavier when it is chosen.</p>
 <span class="p">)</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/theme_cards.py#L337" aria-label="Source for ThemeCard">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/theme_cards.py#L337" aria-label="Source for ThemeCard">[Source]</a></p>
 
 </div>
 
@@ -955,7 +958,7 @@ because that version is light or dark as the desktop is.</p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_current</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/theme_cards.py#L549" aria-label="Source for ThemeCard.show_current">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/theme_cards.py#L549" aria-label="Source for ThemeCard.show_current">[Source]</a></p>
 
 </div>
 
@@ -981,6 +984,8 @@ card that has it.</p>
 </span></code></pre></div></div>
 
 
+          
+          
           
           
           
@@ -1301,10 +1306,10 @@ card that has it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

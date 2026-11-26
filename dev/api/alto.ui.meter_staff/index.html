@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -749,6 +752,73 @@
           
 <p>Staffless rhythm notation for lesson and glossary examples.</p>
 
+<h2 id="meterbutton">MeterButton</h2>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MeterButton</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">meter</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L110" aria-label="Source for MeterButton">[Source]</a></p>
+
+</div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
+
+<p>Draw a stacked time signature in a standard answer button.</p>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MeterButton</span><span class="p">(</span><span class="s">"12/8"</span><span class="p">,</span> <span class="n">meter</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">)).</span><span class="n">accessibleName</span><span class="p">()</span>
+<span class="go">'12/8'
+</span></code></pre></div></div>
+
+<p><strong>Constructor</strong></p>
+
+<p>Keep the plain signature as the text and accessible name.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): The time signature written with a slash.</li>
+  <li><code class="language-plaintext highlighter-rouge">meter</code> (<em>tuple of int</em>): The numerator and denominator to engrave.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MeterButton</span><span class="p">(</span><span class="s">"3/4"</span><span class="p">,</span> <span class="n">meter</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)).</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'3/4'
+</span></code></pre></div></div>
+
+<h3 id="meterbuttonpaintevent">MeterButton.paintEvent</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L140" aria-label="Source for MeterButton.paintEvent">[Source]</a></p>
+
+</div>
+
+<p>Draw the styled button chrome and engrave its label.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QPaintEvent</em>): The paint request.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MeterButton</span><span class="p">(</span><span class="s">"6/8"</span><span class="p">,</span> <span class="n">meter</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">)).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
+
 <h2 id="meterstaff">MeterStaff</h2>
 
 <div class="api-signature">
@@ -756,7 +826,7 @@
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MeterStaff</span><span class="p">()</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/meter_staff.py#L36" aria-label="Source for MeterStaff">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L217" aria-label="Source for MeterStaff">[Source]</a></p>
 
 </div>
 
@@ -778,10 +848,11 @@
     <span class="n">meter</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
     <span class="n">counts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">bar_line</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">show_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/meter_staff.py#L52" aria-label="Source for MeterStaff.show_score">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L240" aria-label="Source for MeterStaff.show_score">[Source]</a></p>
 
 </div>
 
@@ -794,6 +865,7 @@
   <li><code class="language-plaintext highlighter-rouge">meter</code> (<em>tuple of int</em>): Numerator and denominator of the time signature.</li>
   <li><code class="language-plaintext highlighter-rouge">counts</code> (<em>tuple of str</em>): Optional spoken labels for each onset.</li>
   <li><code class="language-plaintext highlighter-rouge">bar_line</code> (<em>str</em>): Single or double bar line to emphasize in the glossary.</li>
+  <li><code class="language-plaintext highlighter-rouge">show_signature</code> (<em>bool</em>): Draw and announce the time signature.</li>
 </ul>
 
 <h3 id="meterstaffset_counts_visible">MeterStaff.set_counts_visible</h3>
@@ -803,7 +875,7 @@
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_counts_visible</span><span class="p">(</span><span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/meter_staff.py#L133" aria-label="Source for MeterStaff.set_counts_visible">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L418" aria-label="Source for MeterStaff.set_counts_visible">[Source]</a></p>
 
 </div>
 
@@ -816,7 +888,7 @@
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">highlight_column</span><span class="p">(</span><span class="n">column</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/meter_staff.py#L139" aria-label="Source for MeterStaff.highlight_column">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L424" aria-label="Source for MeterStaff.highlight_column">[Source]</a></p>
 
 </div>
 
@@ -829,7 +901,7 @@
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sizeHint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSize</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/meter_staff.py#L144" aria-label="Source for MeterStaff.sizeHint">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L429" aria-label="Source for MeterStaff.sizeHint">[Source]</a></p>
 
 </div>
 
@@ -841,6 +913,25 @@
   <li><em>QSize</em>: Preferred size for one line.</li>
 </ul>
 
+<h3 id="meterstaffminimumsizehint">MeterStaff.minimumSizeHint</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">minimumSizeHint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSize</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L461" aria-label="Source for MeterStaff.minimumSizeHint">[Source]</a></p>
+
+</div>
+
+<p>Keep dense subdivisions legible when measures wrap.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QSize</em>: Width for one bar at a readable scale and one row of music.</li>
+</ul>
+
 <h3 id="meterstaffresizeevent">MeterStaff.resizeEvent</h3>
 
 <div class="api-signature">
@@ -848,7 +939,7 @@
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/meter_staff.py#L178" aria-label="Source for MeterStaff.resizeEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L518" aria-label="Source for MeterStaff.resizeEvent">[Source]</a></p>
 
 </div>
 
@@ -861,13 +952,305 @@
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/meter_staff.py#L197" aria-label="Source for MeterStaff.paintEvent">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L607" aria-label="Source for MeterStaff.paintEvent">[Source]</a></p>
 
 </div>
 
 <p>Draw the time signature and a line at each bar boundary.</p>
 
+<h2 id="beatplacementstaff">BeatPlacementStaff</h2>
 
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BeatPlacementStaff</span><span class="p">()</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L802" aria-label="Source for BeatPlacementStaff">[Source]</a></p>
+
+</div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">MeterStaff</code></p>
+
+<p>Let a learner toggle beat markers at eighth-note positions.</p>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BeatPlacementStaff</span><span class="p">().</span><span class="n">marks</span>
+<span class="go">[]
+</span></code></pre></div></div>
+
+<p><strong>Constructor</strong></p>
+
+<p>Start with no selected or graded positions.</p>
+
+<p><strong>Constructor examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BeatPlacementStaff</span><span class="p">().</span><span class="n">active_slot</span>
+<span class="go">0
+</span></code></pre></div></div>
+
+<h3 id="beatplacementstaffreset">BeatPlacementStaff.reset</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">meter</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L834" aria-label="Source for BeatPlacementStaff.reset">[Source]</a></p>
+
+</div>
+
+<p>Replace the score and clear the learner’s marks.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">values</code> (<em>tuple of str</em>): The rhythm to engrave.</li>
+  <li><code class="language-plaintext highlighter-rouge">meter</code> (<em>tuple of int</em>): The time signature.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">BeatPlacementStaff</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">((</span><span class="s">"quarter"</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">meter</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">slots_per_bar</span>
+<span class="go">4
+</span></code></pre></div></div>
+
+<h3 id="beatplacementstaffslots_per_bar">BeatPlacementStaff.slots_per_bar</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">slots_per_bar</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L864" aria-label="Source for BeatPlacementStaff.slots_per_bar">[Source]</a></p>
+
+</div>
+
+<p>Count eighth-note positions per measure.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The number of subdivisions selectable in each measure.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BeatPlacementStaff</span><span class="p">().</span><span class="n">slots_per_bar</span>
+<span class="go">8
+</span></code></pre></div></div>
+
+<h3 id="beatplacementstaffbeat_numbers">BeatPlacementStaff.beat_numbers</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">beat_numbers</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L897" aria-label="Source for BeatPlacementStaff.beat_numbers">[Source]</a></p>
+
+</div>
+
+<p>Return beat numbers in reading order within each measure.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of int to int</em>: The beat number shown at each selected eighth-note position.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">BeatPlacementStaff</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">marks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">beat_numbers</span><span class="p">()</span>
+<span class="go">{0: 1, 4: 2, 8: 1, 10: 2}
+</span></code></pre></div></div>
+
+<h3 id="beatplacementstaffposition">BeatPlacementStaff.position</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPointF</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L922" aria-label="Source for BeatPlacementStaff.position">[Source]</a></p>
+
+</div>
+
+<p>Locate a selectable position below its corresponding rhythm.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">slot</code> (<em>int</em>): Zero-based eighth-note position across the score.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QPointF</em>: The center of the marker.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BeatPlacementStaff</span><span class="p">().</span><span class="n">position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">y</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True
+</span></code></pre></div></div>
+
+<h3 id="beatplacementstaffundo">BeatPlacementStaff.undo</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">undo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L992" aria-label="Source for BeatPlacementStaff.undo">[Source]</a></p>
+
+</div>
+
+<p>Remove the most recently added beat marker.</p>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">BeatPlacementStaff</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">_toggle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">undo</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">marks</span>
+<span class="go">[]
+</span></code></pre></div></div>
+
+<h3 id="beatplacementstaffmousepressevent">BeatPlacementStaff.mousePressEvent</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L1008" aria-label="Source for BeatPlacementStaff.mousePressEvent">[Source]</a></p>
+
+</div>
+
+<p>Toggle the nearest subdivision in the clicked measure.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QMouseEvent</em>): The click in local coordinates.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Tested with clicks on notes and beneath sustained notes.
+</code></pre></div></div>
+
+<h3 id="beatplacementstaffkeypressevent">BeatPlacementStaff.keyPressEvent</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QKeyEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L1040" aria-label="Source for BeatPlacementStaff.keyPressEvent">[Source]</a></p>
+
+</div>
+
+<p>Move the active position with arrows and toggle it with Space.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QKeyEvent</em>): The key pressed while the rhythm has focus.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Keyboard input reaches the same subdivisions as a click.
+</code></pre></div></div>
+
+<h3 id="beatplacementstafffocusinevent">BeatPlacementStaff.focusInEvent</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">focusInEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QFocusEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L1076" aria-label="Source for BeatPlacementStaff.focusInEvent">[Source]</a></p>
+
+</div>
+
+<p>Repaint the keyboard cursor when the rhythm receives focus.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QFocusEvent</em>): The focus change.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The focused score outlines the current selectable position.
+</code></pre></div></div>
+
+<h3 id="beatplacementstafffocusoutevent">BeatPlacementStaff.focusOutEvent</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">focusOutEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QFocusEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L1092" aria-label="Source for BeatPlacementStaff.focusOutEvent">[Source]</a></p>
+
+</div>
+
+<p>Hide the keyboard cursor when focus leaves the rhythm.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QFocusEvent</em>): The focus change.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Placed beats remain visible when focus moves to Answer.
+</code></pre></div></div>
+
+<h3 id="beatplacementstaffpaintevent">BeatPlacementStaff.paintEvent</h3>
+
+<div class="api-signature">
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div>  </div>
+
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/meter_staff.py#L1108" aria-label="Source for BeatPlacementStaff.paintEvent">[Source]</a></p>
+
+</div>
+
+<p>Draw the subdivision blanks, beat numbers, and keyboard focus.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QPaintEvent</em>): The paint request.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BeatPlacementStaff</span><span class="p">().</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
+
+
+          
+          
           
           
           
@@ -1136,10 +1519,10 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

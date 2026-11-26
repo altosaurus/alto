@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -767,6 +770,8 @@
     <img class="for-light" src="/alto/dev/assets/img/profile-create.png" alt="Welcome to Alto with a name field and a Create profile button." width="380" height="234" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/profile-create-dark.png" alt="Welcome to Alto with a name field and a Create profile button." width="380" height="234" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.profile_dialog/#profiledialog" aria-label="Name field and Create profile button (ProfileDialog)" title="Name field and Create profile button (ProfileDialog)" style="left: 2%; top: 47%; width: 96%; height: 15%"><span aria-hidden="true">1</span></a>
     
   </div>
@@ -787,6 +792,8 @@
   <div class="component-map">
     <img class="for-light" src="/alto/dev/assets/img/profile-picker.png" alt="The profile chooser lists Ada and Sam and offers a field for a new profile." width="380" height="407" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/profile-picker-dark.png" alt="The profile chooser lists Ada and Sam and offers a field for a new profile." width="380" height="407" loading="lazy" />
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.profile_dialog/#profiledialog" aria-label="Saved profile list (ProfileDialog)" title="Saved profile list (ProfileDialog)" style="left: 3%; top: 17%; width: 94%; height: 47%"><span aria-hidden="true">1</span></a>
     
@@ -811,11 +818,19 @@
     <img class="for-light" src="/alto/dev/assets/img/home.png" alt="Alto’s main window with the navigation toolbar, search field, and exercise tiles." width="1100" height="720" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/home-dark.png" alt="Alto’s main window with the navigation toolbar, search field, and exercise tiles." width="1100" height="720" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.widgets/#segmentedcontrol" aria-label="Exercise and lesson switch (SegmentedControl)" title="Exercise and lesson switch (SegmentedControl)" style="left: 5.5%; top: 1%; width: 9%; height: 5%"><span aria-hidden="true">1</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.main_window/#mainwindow" aria-label="Search field (MainWindow)" title="Search field (MainWindow)" style="left: 1%; top: 7.5%; width: 30%; height: 5%"><span aria-hidden="true">2</span></a>
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.home/#exercisecard" aria-label="Note Identification tile (ExerciseCard)" title="Note Identification tile (ExerciseCard)" style="left: 13.5%; top: 15%; width: 17.3%; height: 26%"><span aria-hidden="true">3</span></a>
+    
+    
     
     <a class="component-region component-group" href="/alto/dev/api/alto.ui.home/#homepage" aria-label="Exercise catalog (HomePage)" title="Exercise catalog (HomePage)" style="left: 13%; top: 14.5%; width: 74%; height: 84.5%"><span aria-hidden="true">4</span></a>
     
@@ -835,24 +850,40 @@
   </figcaption>
 </figure>
 
+<h2 id="exercise-view">Exercise view</h2>
+
+<p>Follow a note from the staff to the graded answer, then turn on <strong>Octave</strong> to trace how the settings rebuild the question. <a href="/alto/dev/developer-guide/exercise-view/">Exercise view walkthrough</a></p>
+
+<h2 id="exercises">Exercises</h2>
+
+<p>The <a href="/alto/dev/developer-guide/exercises/">exercise class tree</a> maps each catalog exercise to its Python class and shows where answer choices, constructed answers, and instrument packs get their behavior.</p>
+
 <h2 id="screens-reached-from-the-main-window">Screens reached from the main window</h2>
 
 <h3 id="exercise-workspace">Exercise workspace</h3>
 
 <p>Choosing <strong>Note Identification</strong> calls <code class="language-plaintext highlighter-rouge">MainWindow.open_exercise()</code>. It opens an <code class="language-plaintext highlighter-rouge">ExerciseView</code> for the exercise and connects it to the active learner. The staff is a separate widget. When tracing a misplaced note, start with <code class="language-plaintext highlighter-rouge">StaffWidget</code>. For a click on an answer button, start with <code class="language-plaintext highlighter-rouge">ExerciseView</code>.</p>
 
-<p>Follow a note from the staff to the graded answer, then turn on <strong>Octave</strong> to trace how the settings rebuild the question. <a href="/alto/dev/developer-guide/exercise-view/">Exercise view walkthrough</a></p>
-
 <figure class="shot component-shot">
   <div class="component-map">
     <img class="for-light" src="/alto/dev/assets/img/note-identification.png" alt="Note Identification with the exercise list on the left and a note on the staff above the letter buttons." width="1100" height="720" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/note-identification-dark.png" alt="Note Identification with the exercise list on the left and a note on the staff above the letter buttons." width="1100" height="720" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.main_window/#mainwindow" aria-label="Exercise list (MainWindow)" title="Exercise list (MainWindow)" style="left: 1%; top: 15%; width: 30%; height: 77%"><span aria-hidden="true">1</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.staff/#staffwidget" aria-label="Notated question (StaffWidget)" title="Notated question (StaffWidget)" style="left: 42.8%; top: 20.5%; width: 45.5%; height: 47%"><span aria-hidden="true">2</span></a>
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.exercise_view/#exerciseview" aria-label="Answer buttons (ExerciseView)" title="Answer buttons (ExerciseView)" style="left: 34.5%; top: 68%; width: 62%; height: 7%"><span aria-hidden="true">3</span></a>
+    
+    
+    
+    <a class="component-region component-group" href="/alto/dev/api/alto.ui.exercise_view/#exerciseview" aria-label="Right-hand exercise pane (ExerciseView)" title="Right-hand exercise pane (ExerciseView)" style="left: 31.5%; top: 14%; width: 67.7%; height: 85%"><span aria-hidden="true">4</span></a>
     
   </div>
   <figcaption>
@@ -863,6 +894,8 @@
       <li><a href="/alto/dev/api/alto.ui.staff/#staffwidget">Notated question</a> · <code>StaffWidget</code></li>
       
       <li><a href="/alto/dev/api/alto.ui.exercise_view/#exerciseview">Answer buttons</a> · <code>ExerciseView</code></li>
+      
+      <li><a href="/alto/dev/api/alto.ui.exercise_view/#exerciseview">Right-hand exercise pane</a> · <code>ExerciseView</code></li>
       
     </ol>
   </figcaption>
@@ -877,9 +910,15 @@
     <img class="for-light" src="/alto/dev/assets/img/lesson-tiles.png" alt="The lesson catalog with Pitches and Notes, Clef Basics, Intervals, and other lesson tiles." width="1100" height="720" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/lesson-tiles-dark.png" alt="The lesson catalog with Pitches and Notes, Clef Basics, Intervals, and other lesson tiles." width="1100" height="720" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.main_window/#mainwindow" aria-label="Lesson search (MainWindow)" title="Lesson search (MainWindow)" style="left: 1%; top: 7.5%; width: 30%; height: 5%"><span aria-hidden="true">1</span></a>
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.home/#tilecard" aria-label="Pitches and Notes tile (TileCard)" title="Pitches and Notes tile (TileCard)" style="left: 14%; top: 14%; width: 17%; height: 27%"><span aria-hidden="true">2</span></a>
+    
+    
     
     <a class="component-region component-group" href="/alto/dev/api/alto.ui.home/#homepage" aria-label="Lesson catalog (HomePage)" title="Lesson catalog (HomePage)" style="left: 13.5%; top: 14%; width: 73.5%; height: 55%"><span aria-hidden="true">3</span></a>
     
@@ -904,11 +943,19 @@
     <img class="for-light" src="/alto/dev/assets/img/lesson-workspace.png" alt="The first pitch lesson shows two black keys under a bracket and a C on the white key just to their left." width="1100" height="720" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/lesson-workspace-dark.png" alt="The first pitch lesson shows two black keys under a bracket and a C on the white key just to their left." width="1100" height="720" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.lesson_nav/#lessonnav" aria-label="Lesson outline (LessonNav)" title="Lesson outline (LessonNav)" style="left: 1%; top: 14.5%; width: 29%; height: 66%"><span aria-hidden="true">1</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.lesson/#lessonspage" aria-label="Leave lesson and Start over (LessonsPage)" title="Leave lesson and Start over (LessonsPage)" style="left: 32.5%; top: 13%; width: 66%; height: 5.5%"><span aria-hidden="true">2</span></a>
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.lesson/#lessonview" aria-label="Step title and progress (LessonView)" title="Step title and progress (LessonView)" style="left: 33%; top: 19.5%; width: 65%; height: 6.5%"><span aria-hidden="true">3</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.keyboard/#keyboardwidget" aria-label="Annotated keyboard example (KeyboardWidget)" title="Annotated keyboard example (KeyboardWidget)" style="left: 34.5%; top: 38%; width: 27.5%; height: 39%"><span aria-hidden="true">4</span></a>
     
@@ -937,9 +984,15 @@
     <img class="for-light" src="/alto/dev/assets/img/glossary.png" alt="The harmonic minor scale glossary entry with a term list, a staff example, and related exercise tiles." width="1100" height="720" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/glossary-dark.png" alt="The harmonic minor scale glossary entry with a term list, a staff example, and related exercise tiles." width="1100" height="720" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.glossary/#glossarypage" aria-label="Term search and list (GlossaryPage)" title="Term search and list (GlossaryPage)" style="left: 2.5%; top: 14.5%; width: 19%; height: 82%"><span aria-hidden="true">1</span></a>
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.staff/#staffwidget" aria-label="Harmonic minor scale example (StaffWidget)" title="Harmonic minor scale example (StaffWidget)" style="left: 62.5%; top: 15.5%; width: 34.5%; height: 19.5%"><span aria-hidden="true">2</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.home/#exercisecard" aria-label="Related exercise tiles (ExerciseCard)" title="Related exercise tiles (ExerciseCard)" style="left: 24%; top: 70%; width: 35.5%; height: 26%"><span aria-hidden="true">3</span></a>
     
@@ -966,13 +1019,23 @@
     <img class="for-light" src="/alto/dev/assets/img/stats.png" alt="Statistics with filters, six summary tiles, and charts for question volume, accuracy, and speed." width="1100" height="720" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/stats-dark.png" alt="Statistics with filters, six summary tiles, and charts for question volume, accuracy, and speed." width="1100" height="720" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.stats_dialog/#statspage" aria-label="Profile and filters (StatsPage)" title="Profile and filters (StatsPage)" style="left: 2.5%; top: 13%; width: 34%; height: 5%"><span aria-hidden="true">1</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.stats_dialog/#tile" aria-label="Summary tiles (Tile)" title="Summary tiles (Tile)" style="left: 2.5%; top: 22.5%; width: 94%; height: 21%"><span aria-hidden="true">2</span></a>
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.charts/#stackedbarchart" aria-label="Weekly question counts (StackedBarChart)" title="Weekly question counts (StackedBarChart)" style="left: 2.5%; top: 46%; width: 45.5%; height: 23%"><span aria-hidden="true">3</span></a>
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.charts/#linechart" aria-label="Daily accuracy (LineChart)" title="Daily accuracy (LineChart)" style="left: 50%; top: 46%; width: 46%; height: 23%"><span aria-hidden="true">4</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.charts/#hbarchart" aria-label="Accuracy by exercise (HBarChart)" title="Accuracy by exercise (HBarChart)" style="left: 50%; top: 72%; width: 46%; height: 26%"><span aria-hidden="true">5</span></a>
     
@@ -1005,7 +1068,11 @@
     <img class="for-light" src="/alto/dev/assets/img/database.png" alt="The database browser with Answers selected, a search field, and rows of recorded attempts." width="1100" height="720" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/database-dark.png" alt="The database browser with Answers selected, a search field, and rows of recorded attempts." width="1100" height="720" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.database_page/#databasepage" aria-label="Table selection and search (DatabasePage)" title="Table selection and search (DatabasePage)" style="left: 2.5%; top: 13%; width: 96%; height: 5.5%"><span aria-hidden="true">1</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.database_page/#rowsmodel" aria-label="Table data (RowsModel)" title="Table data (RowsModel)" style="left: 2.5%; top: 21.5%; width: 95%; height: 76%"><span aria-hidden="true">2</span></a>
     
@@ -1028,7 +1095,11 @@
     <img class="for-light" src="/alto/dev/assets/img/question-preview.png" alt="A saved Chord Quality question with its staff, correct answer, and recorded response time." width="560" height="519" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/question-preview-dark.png" alt="A saved Chord Quality question with its staff, correct answer, and recorded response time." width="560" height="519" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.staff/#staffwidget" aria-label="Saved notation (StaffWidget)" title="Saved notation (StaffWidget)" style="left: 5.5%; top: 8%; width: 89%; height: 63.5%"><span aria-hidden="true">1</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.question_preview/#questionpreview" aria-label="Answer and timing details (QuestionPreview)" title="Answer and timing details (QuestionPreview)" style="left: 2%; top: 73.5%; width: 94%; height: 17%"><span aria-hidden="true">2</span></a>
     
@@ -1053,7 +1124,11 @@
     <img class="for-light" src="/alto/dev/assets/img/settings.png" alt="Application settings showing the category list and the notation font cards." width="1000" height="640" loading="lazy" />
     <img class="for-dark" src="/alto/dev/assets/img/settings-dark.png" alt="Application settings showing the category list and the notation font cards." width="1000" height="640" loading="lazy" />
     
+    
+    
     <a class="component-region" href="/alto/dev/api/alto.ui.app_settings/#appsettingsdialog" aria-label="Settings categories (AppSettingsDialog)" title="Settings categories (AppSettingsDialog)" style="left: 1%; top: 2%; width: 17%; height: 89%"><span aria-hidden="true">1</span></a>
+    
+    
     
     <a class="component-region" href="/alto/dev/api/alto.ui.app_settings/#stylecard" aria-label="Notation font cards (StyleCard)" title="Notation font cards (StyleCard)" style="left: 20%; top: 7%; width: 72%; height: 74%"><span aria-hidden="true">2</span></a>
     
@@ -1169,10 +1244,10 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

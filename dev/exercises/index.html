@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -821,6 +824,48 @@ dynamics, ornaments, octave signs, and instrumental techniques. For example, you
 quarter-tone accidentals, or practice bowing and pedal marks. For advanced markings, Alto uses the selected music font
 when it contains the symbol and the bundled Bravura font otherwise. Glyph codes follow the
 <a href="https://github.com/w3c/smufl/blob/gh-pages/metadata/glyphnames.json">Standard Music Font Layout index</a>.</p>
+
+<h2 id="beat-identification">Beat Identification</h2>
+
+<p>Under <strong>Rhythm Component</strong>, choose what to identify in two measures of rhythm.</p>
+
+<ul>
+  <li><strong>Time signature</strong> (default). Identify the hidden time signature. Choose <strong>2/4</strong>, <strong>3/4</strong>, <strong>4/4</strong>, <strong>6/8</strong>,
+<strong>9/8</strong>, or <strong>12/8</strong>.</li>
+  <li><strong>Beat and meter</strong>. Read the time signature at the start of the rhythm and look at how ordinary eighth notes divide
+the beat. Groups of two are <strong>simple</strong> and groups of three are <strong>compound</strong>. Then count the main beats in one
+measure, including rests. Two beats are <strong>duple</strong>, three are <strong>triple</strong>, and four are <strong>quadruple</strong>.</li>
+</ul>
+
+<p>For example, 3/4 and 6/8 both fit six eighth notes per measure. In 3/4, three groups of two make <strong>simple triple</strong>.
+In 6/8, two groups of three make <strong>compound duple</strong>.</p>
+
+<p>Under <strong>Note Type</strong>, check the values you want to read. Dotted half and dotted quarter are separate choices.
+Eighth notes can also appear as eighth rests. Alto chooses meters that fit your selection. For example,
+selecting only <strong>Whole note</strong> gives one whole note in each measure of 4/4.</p>
+
+<p>Turn on <strong>Tuplets</strong> for occasional numbered groups. Alto uses the frequencies measured in score openings
+published from 1700 to 1899, targeting about one tuplet group per 148 ordinary notes or rests. Most questions
+contain only ordinary rhythms. About 91% of the sampled groups were triplets and 6% were sextuplets.
+Quadruplets, quintuplets, septuplets, and nonuplets can also appear when they fit the measure and your selected
+note types. For example, three triplet eighth notes last one quarter beat.</p>
+
+<p>Use <strong>Buttons</strong> to show <strong>All</strong> answers or a <strong>Limited</strong> set with the <strong>Button count</strong> you choose.</p>
+
+<h2 id="beat-construction">Beat Construction</h2>
+
+<p>Read the time signature and click the start of each main beat in both measures. Place a mark even if a note is still
+sounding or there is a rest. In 2/4, 3/4, and 4/4, mark every quarter-note beat. In 6/8, 9/8, and 12/8, mark the start
+of each group of three eighth notes.</p>
+
+<p>Each new rhythm includes at least one rest. Use <strong>Note Type</strong> to choose the durations of both notes and rests.
+Turn on <strong>Tuplets</strong> to practice placing the main beats through triplets and duplets.
+Beat Construction remembers both settings independently of Beat Identification.</p>
+
+<p>Click a blank to fill it with a beat number. Numbers start at 1 in each measure and follow the written order. Click a
+number again to clear it, or use <strong>Undo</strong> to remove your last mark. Use the arrow keys and <strong>Space</strong> to fill or clear a blank
+with the keyboard. Choose <strong>Answer</strong> or press <strong>Return</strong> when both measures are marked. After a correct answer,
+listen to the written rhythm. Alto taps each note once and keeps rests silent.</p>
 
 <h2 id="rythmic-equations">Rythmic Equations</h2>
 
@@ -1471,10 +1516,10 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

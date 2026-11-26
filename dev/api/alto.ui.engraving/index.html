@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795666567">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795704570">
   
 </head>
 <body>
@@ -263,6 +263,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/exercise-view/">Exercise view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/exercises/">Exercises</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
@@ -777,7 +780,7 @@ so they are flipped on screen.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPainterPath</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L351" aria-label="Source for notation_glyph">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L362" aria-label="Source for notation_glyph">[Source]</a></p>
 
 </div>
 
@@ -816,7 +819,7 @@ em.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L383" aria-label="Source for staff_line_width">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L394" aria-label="Source for staff_line_width">[Source]</a></p>
 
 </div>
 
@@ -852,7 +855,7 @@ em.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L411" aria-label="Source for ledger_width">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L422" aria-label="Source for ledger_width">[Source]</a></p>
 
 </div>
 
@@ -889,7 +892,7 @@ em.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L439" aria-label="Source for fill_path">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L450" aria-label="Source for fill_path">[Source]</a></p>
 
 </div>
 
@@ -942,7 +945,7 @@ em.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L484" aria-label="Source for draw_note">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L495" aria-label="Source for draw_note">[Source]</a></p>
 
 </div>
 
@@ -988,11 +991,11 @@ the font’s anchors.</p>
 <span class="go">True
 </span></code></pre></div></div>
 
-<h2 id="draw_beamed_eighths">draw_beamed_eighths</h2>
+<h2 id="draw_beamed_notes">draw_beamed_notes</h2>
 
 <div class="api-signature">
 
-  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_beamed_eighths</span><span class="p">(</span>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_beamed_notes</span><span class="p">(</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1001,14 +1004,15 @@ the font’s anchors.</p>
     <span class="n">gap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">middle</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">ink</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
+    <span class="n">beams</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L611" aria-label="Source for draw_beamed_eighths">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L622" aria-label="Source for draw_beamed_notes">[Source]</a></p>
 
 </div>
 
-<p>Draw one beat of eighth notes with stems joined to a common beam.</p>
+<p>Draw a group with one beam for eighths or more for shorter notes.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1019,14 +1023,15 @@ the font’s anchors.</p>
   <li><code class="language-plaintext highlighter-rouge">colors</code> (<em>list of QColor</em>): Ink for each notehead and its stem.</li>
   <li><code class="language-plaintext highlighter-rouge">gap</code> (<em>float</em>): Staff space in pixels.</li>
   <li><code class="language-plaintext highlighter-rouge">middle</code> (<em>float</em>): Height of the middle staff line, for choosing stem direction.</li>
-  <li><code class="language-plaintext highlighter-rouge">ink</code> (<em>QColor</em>): Color of the shared beam.</li>
+  <li><code class="language-plaintext highlighter-rouge">ink</code> (<em>QColor</em>): Color of the shared beams.</li>
+  <li><code class="language-plaintext highlighter-rouge">beams</code> (<em>int</em>): Number of beams for the written duration.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QPicture</span>
 <span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">with</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">QPicture</span><span class="p">())</span> <span class="k">as</span> <span class="n">painter</span><span class="p">:</span>  <span class="c1"># doctest: +SKIP
-</span><span class="gp">...</span><span class="w">     </span><span class="n">draw_beamed_eighths</span><span class="p">(</span>
+</span><span class="gp">...</span><span class="w">     </span><span class="n">draw_beamed_notes</span><span class="p">(</span>
 <span class="gp">...</span><span class="w">         </span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">middle</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
 <span class="gp">...</span><span class="w">         </span><span class="n">heads</span><span class="o">=</span><span class="p">[</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">48</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">44</span><span class="p">)],</span>
 <span class="gp">...</span><span class="w">         </span><span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ink</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span>
@@ -1049,7 +1054,7 @@ the font’s anchors.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L716" aria-label="Source for draw_clef">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L738" aria-label="Source for draw_clef">[Source]</a></p>
 
 </div>
 
@@ -1107,7 +1112,7 @@ the font’s anchors.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L788" aria-label="Source for accidental_width">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L810" aria-label="Source for accidental_width">[Source]</a></p>
 
 </div>
 
@@ -1155,7 +1160,7 @@ placed beside other things.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L827" aria-label="Source for draw_accidental">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L849" aria-label="Source for draw_accidental">[Source]</a></p>
 
 </div>
 
@@ -1228,7 +1233,7 @@ placed beside other things.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>  </div>
 
-  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/522a2e046f5b42108992b895baac598233c1898e/alto/ui/engraving.py#L916" aria-label="Source for draw_brace">[Source]</a></p>
+  <p><a class="api-source" href="https://github.com/altosaurus/alto/blob/ad14d09cc0793d9440f337009da625a8bb3a2a41/alto/ui/engraving.py#L938" aria-label="Source for draw_brace">[Source]</a></p>
 
 </div>
 
@@ -1275,6 +1280,8 @@ staff.</p>
 </span></code></pre></div></div>
 
 
+          
+          
           
           
           
@@ -1513,10 +1520,10 @@ staff.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/search.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/copy-code.js?v=1795666567" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795666567" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/search.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/copy-code.js?v=1795704570" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795704570" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
