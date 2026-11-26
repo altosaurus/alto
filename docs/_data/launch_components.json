@@ -14,7 +14,14 @@
   "note-identification": [
     {"label": "Exercise list", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,15,30,77]},
     {"label": "Notated question", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [42.8,20.5,45.5,47]},
-    {"label": "Answer buttons", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/#exerciseview", "rect": [34.5,68,62,7]}
+    {"label": "Answer buttons", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/#exerciseview", "rect": [34.5,68,62,7]},
+    {"label": "Right-hand exercise pane", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/#exerciseview", "rect": [31.5,14,67.7,85], "group": true}
+  ],
+  "exercise-view-anatomy": [
+    {"label": "Staff", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [9.5,8.1,50.9,53.8]},
+    {"label": "Toolbar", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/#exerciseview", "rect": [0.9,1.1,68,6.3]},
+    {"label": "Answer controls", "type": "DegreeButton", "href": "/api/alto.ui.degree_text/#degreebutton", "rect": [3.1,63.9,63.6,7.1], "label_below": true},
+    {"label": "Settings pane", "type": "NoteNameSettingsPanel", "href": "/api/alto.ui.settings_panel/#notenamesettingspanel", "rect": [69.5,1.4,29.6,97.1]}
   ],
   "lesson-tiles": [
     {"label": "Lesson search", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,7.5,30,5]},

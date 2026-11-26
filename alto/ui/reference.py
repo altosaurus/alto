@@ -43,6 +43,8 @@ from PySide6.QtWidgets import (
 from alto import settings
 from alto.exercises.library import (
     CLEF_FACTS,
+    BeatConstruction,
+    BeatIdentification,
     CircleOfFifths,
     ClefBasics,
     IntervalConstruction,
@@ -769,6 +771,22 @@ class ScaleReferencePanel(QWidget):
 
 
 _READING_HINTS = {
+    BeatConstruction: (
+        "<p>Start at the beginning of each measure. In 2/4, 3/4, and 4/4, "
+        "move one quarter note at a time. In 6/8, 9/8, and 12/8, move "
+        "three eighth notes at a time. Mark the beat even if a note is "
+        "still sounding or a rest starts there.</p>"
+    ),
+    BeatIdentification: (
+        "<p>Count the time from one bar line to the next, including rests. "
+        "Look for beams, the thick lines that join short notes: pairs of "
+        "eighth notes fill a quarter-note beat, and groups of three fill "
+        "a dotted-quarter-note beat. A dotted quarter lasts as long as "
+        "three ordinary eighth notes. A numbered bracket changes the "
+        "division. A 3 fits three notes into the time of two, and a 2 "
+        "fits two into the time of three. Two main beats per measure are "
+        "duple, three are triple, and four are quadruple.</p>"
+    ),
     RythmicEquations: (
         "<p>Count each side in the same units. With a quarter note as "
         "one beat, a half note counts as two and a whole note as four. "

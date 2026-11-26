@@ -37,7 +37,7 @@ def spell(
 ) -> str
 ```
 
-{% endraw %}{% include api-source.html name="spell" line=203 %}{% raw %}
+{% endraw %}{% include api-source.html name="spell" line=205 %}{% raw %}
 
 </div>
 
@@ -106,7 +106,7 @@ its octave.
 def diatonic_name(d: int) -> str
 ```
 
-{% endraw %}{% include api-source.html name="diatonic_name" line=305 %}{% raw %}
+{% endraw %}{% include api-source.html name="diatonic_name" line=307 %}{% raw %}
 
 </div>
 
@@ -135,7 +135,7 @@ Return the name and octave of the natural note on a staff step.
 class ClefChoice
 ```
 
-{% endraw %}{% include api-source.html name="ClefChoice" line=328 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefChoice" line=330 %}{% raw %}
 
 </div>
 
@@ -164,7 +164,7 @@ same order.
 def active_clefs() -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="ClefChoice.active_clefs" line=353 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefChoice.active_clefs" line=355 %}{% raw %}
 
 </div>
 
@@ -197,7 +197,7 @@ Return the clefs to use, in canonical order.
 class KeyChoice
 ```
 
-{% endraw %}{% include api-source.html name="KeyChoice" line=379 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyChoice" line=381 %}{% raw %}
 
 </div>
 
@@ -222,7 +222,7 @@ Settings with a set of chosen key signatures.
 def active_keys() -> list[int]
 ```
 
-{% endraw %}{% include api-source.html name="KeyChoice.active_keys" line=398 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyChoice.active_keys" line=400 %}{% raw %}
 
 </div>
 
@@ -258,7 +258,7 @@ StaffRangeSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="StaffRangeSettings" line=423 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffRangeSettings" line=425 %}{% raw %}
 
 </div>
 
@@ -281,7 +281,7 @@ Selected clefs and inclusive pitch limits for each staff.
 def active_values() -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="StaffRangeSettings.active_values" line=445 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffRangeSettings.active_values" line=447 %}{% raw %}
 
 </div>
 
@@ -308,7 +308,7 @@ Return the note values to draw, from longest to shortest.
 def range_for(clef: str) -> tuple[int, int]
 ```
 
-{% endraw %}{% include api-source.html name="StaffRangeSettings.range_for" line=464 %}{% raw %}
+{% endraw %}{% include api-source.html name="StaffRangeSettings.range_for" line=466 %}{% raw %}
 
 </div>
 
@@ -350,7 +350,7 @@ NoteNameSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="NoteNameSettings" line=495 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNameSettings" line=497 %}{% raw %}
 
 </div>
 
@@ -386,7 +386,7 @@ The settings of the note identification exercise.
 def active_keys() -> list[int]
 ```
 
-{% endraw %}{% include api-source.html name="NoteNameSettings.active_keys" line=544 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNameSettings.active_keys" line=546 %}{% raw %}
 
 </div>
 
@@ -426,7 +426,7 @@ PackExerciseSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="PackExerciseSettings" line=573 %}{% raw %}
+{% endraw %}{% include api-source.html name="PackExerciseSettings" line=575 %}{% raw %}
 
 </div>
 
@@ -482,7 +482,7 @@ IntervalSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="IntervalSettings" line=662 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalSettings" line=664 %}{% raw %}
 
 </div>
 
@@ -506,7 +506,7 @@ for Interval Identification.
 def staff_span(clef: str) -> int
 ```
 
-{% endraw %}{% include api-source.html name="IntervalSettings.staff_span" line=695 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalSettings.staff_span" line=697 %}{% raw %}
 
 </div>
 
@@ -530,6 +530,36 @@ including both endpoints.
 3
 ```
 
+## beat_note
+
+<div class="api-signature" markdown="1">
+
+```python
+@cache
+def beat_note(value: str) -> tuple[str, int, Fraction]
+```
+
+{% endraw %}{% include api-source.html name="beat_note" line=808 %}{% raw %}
+
+</div>
+
+Read a rhythm token's written value, tuplet count, and duration.
+
+**Parameters**
+
+- `value` (*str*): A note or rest, optionally prefixed with a tuplet name.
+
+**Returns**
+
+- *tuple of str, int, and Fraction*: Written value, group size (zero for ordinary notes), and exact length in sixteenth notes.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> beat_note("triplet-eighth")
+('eighth', 3, Fraction(4, 3))
+```
+
 ## key_name
 
 <div class="api-signature" markdown="1">
@@ -538,7 +568,7 @@ including both endpoints.
 def key_name(midi: int) -> str
 ```
 
-{% endraw %}{% include api-source.html name="key_name" line=785 %}{% raw %}
+{% endraw %}{% include api-source.html name="key_name" line=860 %}{% raw %}
 
 </div>
 
@@ -577,7 +607,7 @@ KeyboardSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardSettings" line=809 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardSettings" line=884 %}{% raw %}
 
 </div>
 
@@ -611,7 +641,7 @@ The settings of the keyboard identification exercise.
 def keyboard_interval_name(distance: int) -> str
 ```
 
-{% endraw %}{% include api-source.html name="keyboard_interval_name" line=887 %}{% raw %}
+{% endraw %}{% include api-source.html name="keyboard_interval_name" line=962 %}{% raw %}
 
 </div>
 
@@ -658,7 +688,7 @@ KeyboardIntervalSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervalSettings" line=936 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettings" line=1011 %}{% raw %}
 
 </div>
 
@@ -689,7 +719,7 @@ identification.
 def answer_button_limit() -> int
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.answer_button_limit" line=973 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.answer_button_limit" line=1048 %}{% raw %}
 
 </div>
 
@@ -719,7 +749,7 @@ buttons.
 def bounds() -> tuple[int, int]
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.bounds" line=995 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.bounds" line=1070 %}{% raw %}
 
 </div>
 
@@ -746,7 +776,7 @@ Return a piano range containing at least two distinct keys.
 def active_intervals() -> list[int]
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.active_intervals" line=1023 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervalSettings.active_intervals" line=1098 %}{% raw %}
 
 </div>
 
@@ -790,7 +820,7 @@ ConstructionSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ConstructionSettings" line=1058 %}{% raw %}
+{% endraw %}{% include api-source.html name="ConstructionSettings" line=1133 %}{% raw %}
 
 </div>
 
@@ -836,7 +866,7 @@ ArpeggioSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioSettings" line=1168 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioSettings" line=1243 %}{% raw %}
 
 </div>
 
@@ -867,7 +897,7 @@ The settings of the arpeggio identification exercise.
 def active_types() -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioSettings.active_types" line=1222 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioSettings.active_types" line=1297 %}{% raw %}
 
 </div>
 
@@ -895,7 +925,7 @@ chords.
 def active_inversions() -> list[int]
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioSettings.active_inversions" line=1242 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioSettings.active_inversions" line=1317 %}{% raw %}
 
 </div>
 
@@ -922,7 +952,7 @@ Return the inversions to ask, root position first.
 def inversions_for(chord_type: str) -> list[int]
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioSettings.inversions_for" line=1261 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioSettings.inversions_for" line=1336 %}{% raw %}
 
 </div>
 
@@ -968,7 +998,7 @@ KeySignatureSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatureSettings" line=1326 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatureSettings" line=1401 %}{% raw %}
 
 </div>
 
@@ -998,7 +1028,7 @@ The settings of the key signature identification exercise.
 def active_modes() -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatureSettings.active_modes" line=1358 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatureSettings.active_modes" line=1433 %}{% raw %}
 
 </div>
 
@@ -1026,7 +1056,7 @@ OrderOfKeysSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="OrderOfKeysSettings" line=1379 %}{% raw %}
+{% endraw %}{% include api-source.html name="OrderOfKeysSettings" line=1454 %}{% raw %}
 
 </div>
 
@@ -1055,7 +1085,7 @@ range(-2, 5)
 def available_starts() -> range
 ```
 
-{% endraw %}{% include api-source.html name="OrderOfKeysSettings.available_starts" line=1400 %}{% raw %}
+{% endraw %}{% include api-source.html name="OrderOfKeysSettings.available_starts" line=1475 %}{% raw %}
 
 </div>
 
@@ -1084,7 +1114,7 @@ Return starting counts that fit at least one selected signature.
 KeyConstructionSettings()
 ```
 
-{% endraw %}{% include api-source.html name="KeyConstructionSettings" line=1427 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyConstructionSettings" line=1502 %}{% raw %}
 
 </div>
 
@@ -1123,7 +1153,7 @@ ScaleIdentificationSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ScaleIdentificationSettings" line=1455 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleIdentificationSettings" line=1530 %}{% raw %}
 
 </div>
 
@@ -1159,7 +1189,7 @@ signatures for identification.
 def active_staff_keys() -> list[int]
 ```
 
-{% endraw %}{% include api-source.html name="ScaleIdentificationSettings.active_staff_keys" line=1500 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleIdentificationSettings.active_staff_keys" line=1575 %}{% raw %}
 
 </div>
 
@@ -1194,7 +1224,7 @@ ScaleConstructionSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ScaleConstructionSettings" line=1524 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleConstructionSettings" line=1599 %}{% raw %}
 
 </div>
 
@@ -1243,7 +1273,7 @@ otherwise flatten the notes.
 def active_staff_keys() -> list[int]
 ```
 
-{% endraw %}{% include api-source.html name="ScaleConstructionSettings.active_staff_keys" line=1590 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleConstructionSettings.active_staff_keys" line=1665 %}{% raw %}
 
 </div>
 
@@ -1279,7 +1309,7 @@ ClefBasicsSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasicsSettings" line=1634 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasicsSettings" line=1709 %}{% raw %}
 
 </div>
 
@@ -1316,7 +1346,7 @@ on the second line. The three symbols can always be chosen from.
 def active_type() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasicsSettings.active_type" line=1671 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasicsSettings.active_type" line=1746 %}{% raw %}
 
 </div>
 
@@ -1347,7 +1377,7 @@ Return the kind of question to ask.
 def answer_clefs() -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasicsSettings.answer_clefs" line=1698 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasicsSettings.answer_clefs" line=1773 %}{% raw %}
 
 </div>
 
@@ -1382,7 +1412,7 @@ NotationSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="NotationSettings" line=1734 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationSettings" line=1809 %}{% raw %}
 
 </div>
 
@@ -1407,7 +1437,7 @@ CircleSettings(
 )
 ```
 
-{% endraw %}{% include api-source.html name="CircleSettings" line=1765 %}{% raw %}
+{% endraw %}{% include api-source.html name="CircleSettings" line=1840 %}{% raw %}
 
 </div>
 
@@ -1440,7 +1470,7 @@ The settings of the circle of fifths exercise.
 def active_questions() -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="CircleSettings.active_questions" line=1799 %}{% raw %}
+{% endraw %}{% include api-source.html name="CircleSettings.active_questions" line=1874 %}{% raw %}
 
 </div>
 
@@ -1472,7 +1502,7 @@ listed.
 def active_scheme() -> Scheme
 ```
 
-{% endraw %}{% include api-source.html name="CircleSettings.active_scheme" line=1824 %}{% raw %}
+{% endraw %}{% include api-source.html name="CircleSettings.active_scheme" line=1899 %}{% raw %}
 
 </div>
 

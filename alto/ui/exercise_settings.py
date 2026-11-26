@@ -1376,6 +1376,30 @@ def load_exercise_settings() -> None:
     """
     load_choice_buttons()
     saved = store()
+    component = text_value(
+        saved,
+        key="beatIdentification/rhythmComponent",
+        default="Time signature",
+    )
+    settings.beat_rhythm_component = (
+        component
+        if component in settings.BEAT_RHYTHM_COMPONENTS
+        else "Time signature"
+    )
+    for prefix, default in settings.DEFAULT_BEAT_NOTE_TYPES.items():
+        settings.beat_tuplets[prefix] = bool_value(
+            saved,
+            key=f"{prefix}/tuplets",
+            default=False,
+        )
+        settings.beat_note_types[prefix] = (
+            choices_value(
+                saved,
+                key=f"{prefix}/noteTypes",
+                allowed=settings.BEAT_NOTE_TYPES,
+            )
+            or default.copy()
+        )
     shared_signs = (
         choices_value(
             saved,

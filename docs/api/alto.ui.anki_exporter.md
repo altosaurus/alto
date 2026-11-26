@@ -21,7 +21,7 @@ def card_fields(
 ) -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="card_fields" line=130 %}{% raw %}
+{% endraw %}{% include api-source.html name="card_fields" line=136 %}{% raw %}
 
 </div>
 
@@ -45,7 +45,7 @@ AnkiExporter(
 )
 ```
 
-{% endraw %}{% include api-source.html name="AnkiExporter" line=796 %}{% raw %}
+{% endraw %}{% include api-source.html name="AnkiExporter" line=830 %}{% raw %}
 
 </div>
 
@@ -66,7 +66,7 @@ settings.
 def changeEvent(event: QEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="AnkiExporter.changeEvent" line=972 %}{% raw %}
+{% endraw %}{% include api-source.html name="AnkiExporter.changeEvent" line=1006 %}{% raw %}
 
 </div>
 
@@ -80,7 +80,7 @@ Refresh palette-dependent artwork when Qt applies a new theme.
 def reject() -> None
 ```
 
-{% endraw %}{% include api-source.html name="AnkiExporter.reject" line=1122 %}{% raw %}
+{% endraw %}{% include api-source.html name="AnkiExporter.reject" line=1156 %}{% raw %}
 
 </div>
 
@@ -95,7 +95,7 @@ close.
 ExporterSession()
 ```
 
-{% endraw %}{% include api-source.html name="ExporterSession" line=1134 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExporterSession" line=1168 %}{% raw %}
 
 </div>
 
@@ -118,7 +118,7 @@ def open(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExporterSession.open" line=1145 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExporterSession.open" line=1179 %}{% raw %}
 
 </div>
 
@@ -142,7 +142,7 @@ profile.
 def sync_theme(key: str) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExporterSession.sync_theme" line=1218 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExporterSession.sync_theme" line=1252 %}{% raw %}
 
 </div>
 
@@ -157,7 +157,7 @@ exporter.
 def close() -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExporterSession.close" line=1235 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExporterSession.close" line=1269 %}{% raw %}
 
 </div>
 

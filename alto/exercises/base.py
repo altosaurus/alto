@@ -257,6 +257,8 @@ class Question:
     notation_excerpt : str or None
         Versioned score containing the target. Its position is an index
         into the excerpt manifest. Keyword-only.
+    rhythm : tuple of str, default ()
+        Written rhythm values in reading order. Keyword-only.
     place_clef : str, default ""
         The clef to put on a blank staff: the answer is a clef symbol
         (G, C or F) and a place on the staff, not a button.
@@ -385,6 +387,7 @@ class Question:
     fingerboard: FingerboardPosition | None = None
     notation_target: tuple[str, int] | None = None
     notation_excerpt: str | None = None
+    rhythm: tuple[str, ...] = ()
 
     def check_placed(self, note: Note) -> bool:
         """
@@ -844,6 +847,8 @@ class Question:
             data.append(self.notation_target)
         if self.notation_excerpt is not None:
             data.append(self.notation_excerpt)
+        if self.rhythm:
+            data.append(["rhythm", self.rhythm])
         if self.keyboard_notes:
             data.append([spelled(n) for n in self.keyboard_notes])
         if self.notes_only:
@@ -966,6 +971,7 @@ class Question:
             d["keyboard_range"] = tuple(d["keyboard_range"])
         d["accept"] = tuple(d.get("accept", ()))
         d["required"] = tuple(d.get("required", ()))
+        d["rhythm"] = tuple(d.get("rhythm", ()))
         return cls(**d)
 
 

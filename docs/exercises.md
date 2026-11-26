@@ -75,6 +75,46 @@ quarter-tone accidentals, or practice bowing and pedal marks. For advanced marki
 when it contains the symbol and the bundled Bravura font otherwise. Glyph codes follow the
 [Standard Music Font Layout index](https://github.com/w3c/smufl/blob/gh-pages/metadata/glyphnames.json).
 
+## Beat Identification
+
+Under **Rhythm Component**, choose what to identify in two measures of rhythm.
+
+- **Time signature** (default). Identify the hidden time signature. Choose **2/4**, **3/4**, **4/4**, **6/8**,
+  **9/8**, or **12/8**.
+- **Beat and meter**. Read the time signature at the start of the rhythm and look at how ordinary eighth notes divide
+  the beat. Groups of two are **simple** and groups of three are **compound**. Then count the main beats in one
+  measure, including rests. Two beats are **duple**, three are **triple**, and four are **quadruple**.
+
+For example, 3/4 and 6/8 both fit six eighth notes per measure. In 3/4, three groups of two make **simple triple**.
+In 6/8, two groups of three make **compound duple**.
+
+Under **Note Type**, check the values you want to read. Dotted half and dotted quarter are separate choices.
+Eighth notes can also appear as eighth rests. Alto chooses meters that fit your selection. For example,
+selecting only **Whole note** gives one whole note in each measure of 4/4.
+
+Turn on **Tuplets** for occasional numbered groups. Alto uses the frequencies measured in score openings
+published from 1700 to 1899, targeting about one tuplet group per 148 ordinary notes or rests. Most questions
+contain only ordinary rhythms. About 91% of the sampled groups were triplets and 6% were sextuplets.
+Quadruplets, quintuplets, septuplets, and nonuplets can also appear when they fit the measure and your selected
+note types. For example, three triplet eighth notes last one quarter beat.
+
+Use **Buttons** to show **All** answers or a **Limited** set with the **Button count** you choose.
+
+## Beat Construction
+
+Read the time signature and click the start of each main beat in both measures. Place a mark even if a note is still
+sounding or there is a rest. In 2/4, 3/4, and 4/4, mark every quarter-note beat. In 6/8, 9/8, and 12/8, mark the start
+of each group of three eighth notes.
+
+Each new rhythm includes at least one rest. Use **Note Type** to choose the durations of both notes and rests.
+Turn on **Tuplets** to practice placing the main beats through triplets and duplets.
+Beat Construction remembers both settings independently of Beat Identification.
+
+Click a blank to fill it with a beat number. Numbers start at 1 in each measure and follow the written order. Click a
+number again to clear it, or use **Undo** to remove your last mark. Use the arrow keys and **Space** to fill or clear a blank
+with the keyboard. Choose **Answer** or press **Return** when both measures are marked. After a correct answer,
+listen to the written rhythm. Alto taps each note once and keeps rests silent.
+
 ## Rythmic Equations
 
 Use **Answer Type** to choose what fills the blank. **Symbol** (the default) asks for a note or rest. **Number** shows numbered buttons. A number can be a missing factor, as in “half note ÷ □ = quarter note,” or a duration. For a duration, the question gives the counting unit: with **Count in eighth notes**, a quarter note plus a quarter note equals **4**. Check both types to practice a mix.

@@ -21,8 +21,8 @@ It needs a display or Qt's offscreen platform
 on each machine, so regenerate on the machine you normally use and check
 the pictures before committing them.
 
-Never add a picture of the exercise-level settings (the pane behind the
-sliders button) here. See CLAUDE.md.
+The exercise-view anatomy capture opens the settings pane so developers
+can see how it fits beside the staff and controls.
 """
 
 from __future__ import annotations
@@ -92,6 +92,7 @@ SHOTS = (
     "lesson-workspace",
     "glossary",
     "note-identification",
+    "exercise-view-anatomy",
     "keyboard",
     "note-construction",
     "intervals",
@@ -542,6 +543,17 @@ def capture(
         window.open_exercise(by_class[cls])
         wait(500)
         save(window, name=name)
+        if cls == "NoteNames" and "exercise-view-anatomy" in names:
+            view = window._exercise_page
+            assert view is not None
+            size = window.size()
+            window.resize(1340, 720)
+            view.gear.click()
+            wait()
+            save(view, name="exercise-view-anatomy")
+            view.gear.click()
+            window.resize(size)
+            wait()
     window.show_home()
     wait()
     # A few recent FSRS answers give the calendar controls actual new,

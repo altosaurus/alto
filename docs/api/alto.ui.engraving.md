@@ -37,7 +37,7 @@ def notation_glyph(
 ) -> QPainterPath
 ```
 
-{% endraw %}{% include api-source.html name="notation_glyph" line=351 %}{% raw %}
+{% endraw %}{% include api-source.html name="notation_glyph" line=362 %}{% raw %}
 
 </div>
 
@@ -74,7 +74,7 @@ def staff_line_width(
 ) -> float
 ```
 
-{% endraw %}{% include api-source.html name="staff_line_width" line=383 %}{% raw %}
+{% endraw %}{% include api-source.html name="staff_line_width" line=394 %}{% raw %}
 
 </div>
 
@@ -108,7 +108,7 @@ def ledger_width(
 ) -> float
 ```
 
-{% endraw %}{% include api-source.html name="ledger_width" line=411 %}{% raw %}
+{% endraw %}{% include api-source.html name="ledger_width" line=422 %}{% raw %}
 
 </div>
 
@@ -143,7 +143,7 @@ def fill_path(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="fill_path" line=439 %}{% raw %}
+{% endraw %}{% include api-source.html name="fill_path" line=450 %}{% raw %}
 
 </div>
 
@@ -196,7 +196,7 @@ def draw_note(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="draw_note" line=484 %}{% raw %}
+{% endraw %}{% include api-source.html name="draw_note" line=495 %}{% raw %}
 
 </div>
 
@@ -241,12 +241,12 @@ True
 True
 ```
 
-## draw_beamed_eighths
+## draw_beamed_notes
 
 <div class="api-signature" markdown="1">
 
 ```python
-def draw_beamed_eighths(
+def draw_beamed_notes(
     p: QPainter,
     *,
     font: str,
@@ -255,14 +255,15 @@ def draw_beamed_eighths(
     gap: float,
     middle: float,
     ink: QColor,
+    beams: int = 1,
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="draw_beamed_eighths" line=611 %}{% raw %}
+{% endraw %}{% include api-source.html name="draw_beamed_notes" line=622 %}{% raw %}
 
 </div>
 
-Draw one beat of eighth notes with stems joined to a common beam.
+Draw a group with one beam for eighths or more for shorter notes.
 
 **Parameters**
 
@@ -272,14 +273,15 @@ Draw one beat of eighth notes with stems joined to a common beam.
 - `colors` (*list of QColor*): Ink for each notehead and its stem.
 - `gap` (*float*): Staff space in pixels.
 - `middle` (*float*): Height of the middle staff line, for choosing stem direction.
-- `ink` (*QColor*): Color of the shared beam.
+- `ink` (*QColor*): Color of the shared beams.
+- `beams` (*int*): Number of beams for the written duration.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QPicture
 >>> with QPainter(QPicture()) as painter:  # doctest: +SKIP
-...     draw_beamed_eighths(
+...     draw_beamed_notes(
 ...         painter, font="bravura", gap=8, middle=40,
 ...         heads=[QPointF(20, 48), QPointF(40, 44)],
 ...         colors=[QColor("black")] * 2, ink=QColor("black"),
@@ -303,7 +305,7 @@ def draw_clef(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="draw_clef" line=716 %}{% raw %}
+{% endraw %}{% include api-source.html name="draw_clef" line=738 %}{% raw %}
 
 </div>
 
@@ -361,7 +363,7 @@ def accidental_width(
 ) -> float
 ```
 
-{% endraw %}{% include api-source.html name="accidental_width" line=788 %}{% raw %}
+{% endraw %}{% include api-source.html name="accidental_width" line=810 %}{% raw %}
 
 </div>
 
@@ -407,7 +409,7 @@ def draw_accidental(
 ) -> float
 ```
 
-{% endraw %}{% include api-source.html name="draw_accidental" line=827 %}{% raw %}
+{% endraw %}{% include api-source.html name="draw_accidental" line=849 %}{% raw %}
 
 </div>
 
@@ -478,7 +480,7 @@ def draw_brace(
 ) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="draw_brace" line=916 %}{% raw %}
+{% endraw %}{% include api-source.html name="draw_brace" line=938 %}{% raw %}
 
 </div>
 

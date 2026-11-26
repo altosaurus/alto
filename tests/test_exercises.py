@@ -15,6 +15,8 @@ from alto.exercises.base import (
     register,
 )
 from alto.exercises.library import (
+    BEAT_METERS,
+    BeatConstruction,
     KeyboardNotes,
     NoteConstruction,
     NoteNames,
@@ -141,6 +143,9 @@ def test_every_exercise_generates_valid_questions() -> None:
         ex = cls()
         for _ in range(300):
             q = ex.generate(rng)
+            if isinstance(ex, BeatConstruction):
+                assert not q.choices and q.rhythm and q.answer in BEAT_METERS
+                continue
             if (
                 q.construct
             ):  # answered by clicking the staff, so there are no buttons

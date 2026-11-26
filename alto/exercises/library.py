@@ -20,6 +20,7 @@ import random
 from collections.abc import Iterator
 from dataclasses import asdict, replace
 from functools import lru_cache, partial
+from itertools import accumulate
 
 from alto import settings
 from alto.exercises.base import (
@@ -409,9 +410,14 @@ class NoteNames(ChoiceExercise):
             with_accidentals and rng.random() < 0.5
         ):  # an explicit sign that differs from the key signature
             acc = rng.choice([a for a in (-1, 0, 1) if a != in_key])
-        note = Note.from_diatonic(letter_pos, accidental=acc)
+        note = Note.from_diatonic(diatonic=letter_pos, accidental=acc)
 
-        return self._question_for(note, clef=clef, key=key, value=value)
+        return self._question_for(
+            note=note,
+            clef=clef,
+            key=key,
+            value=value,
+        )
 
     def card_count(self) -> int:
         """
@@ -5364,6 +5370,593 @@ class NotationIdentification(ChoiceExercise):
                 question,
                 rng=random.Random(question.item_key()),
             )
+        )
+
+
+_BEAT_CLASSIFICATIONS = {
+    "Simple duple": (2, 4),
+    "Simple triple": (3, 4),
+    "Simple quadruple": (4, 4),
+    "Compound duple": (6, 8),
+    "Compound triple": (9, 8),
+    "Compound quadruple": (12, 8),
+}
+_TUPLET_HINT = (
+    "A bracket marked 3 fits three notes into the time of two. "
+    "A bracket marked 2 fits two notes into the time of three."
+)
+# RISM first openings, 1700–1899 (studies/time-signatures/tuplets.csv
+# and tuplet-prevalence.csv). One group is a single generator choice.
+_IDENTIFICATION_TUPLETS = {
+    "triplet": 611,
+    "quadruplet": 2,
+    "quintuplet": 11,
+    "sextuplet": 40,
+    "septuplet": 5,
+    "nonuplet": 2,
+}
+_TUPLET_GROUPS = sum(_IDENTIFICATION_TUPLETS.values())
+_TUPLET_CHANCE = _TUPLET_GROUPS / (99_078 + _TUPLET_GROUPS)
+BEAT_METERS = {
+    f"{top}/{bottom}": (top, bottom)
+    for top, bottom in _BEAT_CLASSIFICATIONS.values()
+}
+
+
+def beat_meter(answer: str) -> tuple[int, int]:
+    """
+    Look up the written time signature for either kind of answer.
+
+    Parameters
+    ----------
+    answer : str
+        A time signature or meter classification from the exercise.
+
+    Returns
+    -------
+    tuple of int
+        Numerator and denominator for engraving the rhythm.
+
+    Examples
+    --------
+    >>> beat_meter("Compound duple")
+    (6, 8)
+    """
+    if answer in BEAT_METERS:
+        return BEAT_METERS[answer]
+    return _BEAT_CLASSIFICATIONS[answer]
+
+
+@register
+class BeatIdentification(ChoiceExercise):
+    """
+    Identify the time signature or classify the meter of a rhythm.
+
+    Examples
+    --------
+    >>> q = BeatIdentification().generate(random.Random(2))
+    >>> q.answer in q.choices and bool(q.rhythm)
+    True
+    """
+
+    name = "Beat Identification"
+    category = "Rhythm"
+    description = "Read two measures and identify the time signature or meter."
+    has_sound = False
+
+    def practice_signature(self) -> str:
+        """
+        Keep separate review settings for the two rhythm components.
+
+        Returns
+        -------
+        str
+            The original empty signature for time signature practice,
+            or the selected component for classification practice.
+
+        Examples
+        --------
+        >>> BeatIdentification().practice_signature()
+        ''
+        """
+        component = settings.beat_rhythm_component
+        original = "" if component == "Time signature" else component
+        values = settings.beat_note_types["beatIdentification"]
+        if settings.beat_tuplets["beatIdentification"]:
+            return signature(original, values, "tuplets")
+        if values == settings.DEFAULT_BEAT_NOTE_TYPES["beatIdentification"]:
+            return original
+        return signature(original, values)
+
+    def instructions(self) -> str:
+        """
+        Explain how to answer from the two written measures.
+
+        Returns
+        -------
+        str
+            The task and its keyboard shortcut directions.
+
+        Examples
+        --------
+        >>> "keys" in BeatIdentification().instructions()
+        True
+        """
+        if settings.beat_rhythm_component == "Beat and meter":
+            task = (
+                "Read the time signature. A simple beat divides into two "
+                "equal parts, and a compound beat divides into three. "
+                "Count the main beats in "
+                "one measure. Two beats are duple, three are triple, and "
+                "four are quadruple."
+            )
+        else:
+            task = (
+                "Choose the time signature that fits both measures. Count the "
+                "note and rest lengths and look at which notes share a beam."
+            )
+        if settings.beat_tuplets["beatIdentification"]:
+            task += (
+                " A numbered bracket groups notes into a tuplet. For "
+                "example, three triplet eighths last one quarter beat."
+            )
+        return f"{task} Click an answer or use the keys shown when you hover."
+
+    def make_question(self, rng: random.Random) -> Question:
+        """
+        Generate two complete measures in a randomly chosen meter.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Chooses the time signature and how each beat is written.
+
+        Returns
+        -------
+        Question
+            The rhythm and the answers for the selected component.
+
+        Examples
+        --------
+        >>> q = BeatIdentification().make_question(random.Random(0))
+        >>> q.prompt
+        'What is the time signature?'
+        """
+        classify = settings.beat_rhythm_component == "Beat and meter"
+        meters = _BEAT_CLASSIFICATIONS if classify else BEAT_METERS
+        answer, rhythm = _beat_example(
+            rng,
+            prefix="beatIdentification",
+            classify=classify,
+        )
+        if settings.beat_tuplets["beatIdentification"]:
+            rhythm = _identification_tuplets(rng, answer=answer, rhythm=rhythm)
+        return Question(
+            "What are the beat and meter?"
+            if classify
+            else "What is the time signature?",
+            choices=list(meters),
+            answer=answer,
+            rhythm=rhythm,
+        )
+
+
+def _identification_tuplets(
+    rng: random.Random,
+    *,
+    answer: str,
+    rhythm: tuple[str, ...],
+) -> tuple[str, ...]:
+    """
+    Substitute complete tuplet groups at the study's event frequency.
+
+    Parameters
+    ----------
+    rng : random.Random
+        Draws group opportunities, types, and placements.
+    answer : str
+        The meter or classification, with a visible cue for hidden
+        signatures of equal length.
+    rhythm : tuple of str
+        Two measures of ordinary notes and rests in this meter.
+
+    Returns
+    -------
+    tuple of str
+        Two measures with the original durations and opening meter cue.
+
+    Examples
+    --------
+    >>> rhythm = ("whole", "whole")
+    >>> _identification_tuplets(
+    ...     random.Random(1), answer="4/4", rhythm=rhythm
+    ... )
+    ('whole', 'whole')
+    """
+    remaining = len(rhythm)
+    replacements: dict[int, tuple[int, tuple[str, ...]]] = {}
+    top, bottom = beat_meter(answer)
+    bar = top * settings.RHYTHM_DURATIONS["whole"] / bottom
+    beat = 4 if bottom == 4 else 6
+    # Keep the opening beam that distinguishes the two hidden meters.
+    cue = beat if answer in ("3/4", "6/8") else 0
+    durations = (settings.RHYTHM_DURATIONS[value] for value in rhythm)
+    offsets = list(accumulate(durations, initial=0.0))
+    indices = {offset: i for i, offset in enumerate(offsets)}
+    while remaining > 0:
+        remaining -= 1
+        if rng.random() >= _TUPLET_CHANCE:
+            continue
+        # Draw the kind before considering placements. Having more
+        # ways to write a particular tuplet should not favor its type.
+        kind = rng.choices(
+            list(_IDENTIFICATION_TUPLETS),
+            weights=list(_IDENTIFICATION_TUPLETS.values()),
+        )[0]
+        count, ordinary = settings.BEAT_TUPLET_RATIOS[kind]
+        placements = []
+        for value in settings.BEAT_NOTE_TYPES:
+            if (
+                value.startswith("dotted-")
+                or value not in settings.beat_note_types["beatIdentification"]
+            ):
+                continue
+            span = ordinary * settings.RHYTHM_DURATIONS[value]
+            for start, offset in enumerate(offsets[:-1]):
+                end = indices.get(offset + span)
+                in_bar = offset % bar
+                if (
+                    end is None
+                    or offset < cue
+                    or in_bar + span > bar
+                    or in_bar % min(beat, span) != 0
+                ):
+                    continue
+                if all(
+                    end <= left or start >= right
+                    for left, (right, _) in replacements.items()
+                ):
+                    placements.append((start, end, value))
+        if placements:
+            start, end, value = rng.choice(placements)
+            replacements[start] = (end, (f"{kind}-{value}",) * count)
+            # This group took the place of multiple ordinary decisions.
+            remaining -= end - start - 1
+    if not replacements:
+        return rhythm
+    result = list(rhythm)
+    for start in sorted(replacements, reverse=True):
+        end, group = replacements[start]
+        result[start:end] = group
+    return tuple(result)
+
+
+def _beat_rhythm(
+    rng: random.Random,
+    *,
+    meter: tuple[int, int],
+    sustained: bool = False,
+) -> tuple[str, ...]:
+    """
+    Compose two measures with a full beam group in the opening beat.
+
+    Parameters
+    ----------
+    rng : random.Random
+        Chooses how to write the remaining beats.
+    meter : tuple of int
+        One of the supported time signatures.
+    sustained : bool
+        Start measure two with a note that spans two beats.
+
+    Returns
+    -------
+    tuple of str
+        Written rhythms from the start of the first measure to the end
+        of the second.
+
+    Examples
+    --------
+    >>> _beat_rhythm(random.Random(1), meter=(2, 4), sustained=True)[-1]
+    'half'
+    """
+    numerator, denominator = meter
+    if denominator == 4:
+        group = ("eighth", "eighth")
+        patterns = (group, ("quarter",), ("eighth-rest", "eighth"))
+        beats = numerator
+        long_note = "half"
+    else:
+        group = ("eighth", "eighth", "eighth")
+        patterns = (group, ("dotted-quarter",), ("quarter", "eighth"))
+        beats = numerator // 3
+        long_note = "dotted-half"
+    if not sustained:
+        return group + tuple(
+            value
+            for _ in range(2 * beats - 1)
+            for value in rng.choice(patterns)
+        )
+    first = tuple(
+        value for _ in range(beats - 1) for value in rng.choice(patterns)
+    )
+    second = tuple(
+        value for _ in range(beats - 2) for value in rng.choice(patterns)
+    )
+    return group + first + (long_note,) + second
+
+
+@lru_cache(maxsize=512)
+def _beat_fills(
+    meter: tuple[int, int],
+    *,
+    values: frozenset[str],
+    tuplets: bool = False,
+) -> list[list[tuple[int, tuple[str, ...]]]]:
+    """
+    Find patterns that leave the rest of a measure fillable.
+
+    Parameters
+    ----------
+    meter : tuple of int
+        Time signature for the measure.
+    values : frozenset of str
+        Permitted written note values.
+    tuplets : bool
+        Include triplets in simple meter and duplets in compound meter.
+
+    Returns
+    -------
+    list of list of tuple
+        For each number of beats remaining, the playable patterns
+        and their lengths in beats.
+
+    Examples
+    --------
+    >>> _beat_fills((4, 4), values=frozenset({"whole"}))[-1]
+    [(4, ('whole',))]
+    """
+    top, bottom = meter
+    beats, unit = (top, 4) if bottom == 4 else (top // 3, 6)
+    patterns = []
+    for value in settings.BEAT_NOTE_TYPES:
+        if value not in values:
+            continue
+        duration = settings.RHYTHM_DURATIONS[value]
+        if duration % unit == 0:
+            patterns.append((int(duration / unit), (value,)))
+        elif unit % duration == 0:
+            patterns.append((1, (value,) * int(unit / duration)))
+        if tuplets and not value.startswith("dotted-"):
+            kind = "triplet" if bottom == 4 else "duplet"
+            count, ordinary = settings.BEAT_TUPLET_RATIOS[kind]
+            group = (f"{kind}-{value}",) * count
+            span = ordinary * duration
+            if span % unit == 0:
+                patterns.append((int(span / unit), group))
+            elif unit % span == 0:
+                patterns.append((1, group * int(unit / span)))
+    if "eighth" in values:
+        if bottom == 4:
+            patterns.append((1, ("eighth-rest", "eighth")))
+        elif "quarter" in values:
+            patterns.append((1, ("quarter", "eighth")))
+    fills: list[list[tuple[int, tuple[str, ...]]]] = [[]]
+    for remaining in range(1, beats + 1):
+        fills.append(
+            [
+                (length, pattern)
+                for length, pattern in patterns
+                if length == remaining
+                or (length < remaining and fills[remaining - length])
+            ],
+        )
+    return fills
+
+
+def _beat_example(
+    rng: random.Random,
+    *,
+    prefix: str,
+    classify: bool = False,
+) -> tuple[str, tuple[str, ...]]:
+    """
+    Choose a compatible meter and fill two measures with enabled values.
+
+    Parameters
+    ----------
+    rng : random.Random
+        Source of meter and note choices.
+    prefix : str
+        Exercise whose note types apply.
+    classify : bool
+        Use the meter classification as the answer.
+
+    Returns
+    -------
+    tuple of str and tuple of str
+        Answer and written rhythm.
+
+    Examples
+    --------
+    >>> _beat_example(random.Random(1), prefix="beatConstruction")[0]
+    '3/4'
+    """
+    meters = _BEAT_CLASSIFICATIONS if classify else BEAT_METERS
+    construction = prefix == "beatConstruction"
+    values = frozenset(settings.beat_note_types[prefix])
+    tuplets = construction and settings.beat_tuplets[prefix]
+    if not tuplets and values == settings.DEFAULT_BEAT_NOTE_TYPES[prefix]:
+        answer = rng.choice(list(meters))
+        return answer, _beat_rhythm(
+            rng,
+            meter=meters[answer],
+            sustained=construction,
+        )
+
+    short_notes = values.intersection(settings.RHYTHM_BEAM_COUNTS)
+    eligible = []
+    for answer, meter in meters.items():
+        # 3/4 and 6/8 have the same bar length. A hidden signature needs
+        # a visible beat group to distinguish them.
+        if answer in ("3/4", "6/8") and not construction and not short_notes:
+            continue
+        if _beat_fills(meter, values=values, tuplets=tuplets)[-1]:
+            eligible.append(answer)
+    answer = rng.choice(eligible)
+    fills = _beat_fills(meters[answer], values=values, tuplets=tuplets)
+    rhythm = []
+    needs_tuplet = tuplets
+    for bar in range(2):
+        remaining = len(fills) - 1
+        while remaining:
+            options = fills[remaining]
+            if remaining == len(fills) - 1:
+                if bar == 0 and not construction and answer in ("3/4", "6/8"):
+                    options = [
+                        pair for pair in options if pair[1][0] in short_notes
+                    ]
+                elif bar == 1 and construction:
+                    holds = [
+                        pair
+                        for pair in options
+                        if pair[0] > 1 and len(pair[1]) == 1
+                    ]
+                    options = holds or options
+            if needs_tuplet:
+                groups = [
+                    pair
+                    for pair in options
+                    if settings.beat_note(pair[1][0])[1]
+                ]
+                if groups:
+                    options = groups
+                    needs_tuplet = False
+            length, pattern = rng.choice(options)
+            rhythm.extend(pattern)
+            remaining -= length
+    return answer, tuple(rhythm)
+
+
+def beat_positions(meter: tuple[int, int]) -> frozenset[int]:
+    """
+    Get the main beat starts in two measures, measured in eighth notes.
+
+    Parameters
+    ----------
+    meter : tuple of int
+        One of the supported time signatures.
+
+    Returns
+    -------
+    frozenset of int
+        Zero-based positions from the start of the first measure.
+
+    Examples
+    --------
+    >>> sorted(beat_positions((6, 8)))
+    [0, 3, 6, 9]
+    """
+    numerator, denominator = meter
+    span = numerator * (8 // denominator)
+    return frozenset(range(0, 2 * span, 2 if denominator == 4 else 3))
+
+
+@register
+class BeatConstruction(Exercise):
+    """
+    Mark where the main beats begin in two written measures.
+
+    Examples
+    --------
+    >>> q = BeatConstruction().generate(random.Random(2))
+    >>> q.answer in BEAT_METERS and not q.choices
+    True
+    """
+
+    name = "Beat Construction"
+    category = "Rhythm"
+    description = "Place the beats in two measures of written rhythm."
+    has_sound = True
+
+    def settings_signature(self) -> str:
+        """
+        Identify the note types used in a saved construction question.
+
+        Returns
+        -------
+        str
+            Empty for the original selection, otherwise its signature.
+
+        Examples
+        --------
+        >>> BeatConstruction().settings_signature()
+        ''
+        """
+        values = settings.beat_note_types["beatConstruction"]
+        if settings.beat_tuplets["beatConstruction"]:
+            return signature(values, "tuplets")
+        if values == settings.DEFAULT_BEAT_NOTE_TYPES["beatConstruction"]:
+            return ""
+        return signature(values)
+
+    def instructions(self) -> str:
+        """
+        Explain how to place and submit the beats.
+
+        Returns
+        -------
+        str
+            Counting guidance and keyboard controls.
+
+        Examples
+        --------
+        >>> "arrow keys" in BeatConstruction().instructions()
+        True
+        """
+        task = (
+            "Mark where each main beat starts, even if a note is still "
+            "sounding or there is a rest. In meters like 3/4, each beat "
+            "lasts a quarter note. In 6/8, 9/8, and 12/8, each beat lasts "
+            "a dotted quarter, or three ordinary eighth notes."
+        )
+        if settings.beat_tuplets["beatConstruction"]:
+            task = f"{task} {_TUPLET_HINT}"
+        return (
+            f"{task} Click a blank to fill or "
+            "clear it, or use the arrow keys and Space. Press Return to check."
+        )
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Choose a time signature and write two measures to mark.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Chooses the meter and the written rhythm.
+
+        Returns
+        -------
+        Question
+            The rhythm and its time signature, without answer choices.
+
+        Examples
+        --------
+        >>> BeatConstruction().generate(random.Random(1)).prompt
+        'Place the beats in both measures.'
+        """
+        answer, rhythm = _beat_example(rng, prefix="beatConstruction")
+        if not any(value.endswith("-rest") for value in rhythm):
+            index = rng.randrange(len(rhythm))
+            values = list(rhythm)
+            values[index] += "-rest"
+            rhythm = tuple(values)
+        return Question(
+            "Place the beats in both measures.",
+            choices=[],
+            answer=answer,
+            rhythm=rhythm,
         )
 
 

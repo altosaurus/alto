@@ -1555,4 +1555,6 @@ def test_metronome_missing_sample_and_empty_phrase(
     player.play_rhythm((), levels=(), force=True, on_step=steps.append)
     assert not steps and not capsys.readouterr().out
     player.play_rhythm((500,), levels=(1.0,), force=True, on_step=steps.append)
-    assert not steps and "audio unavailable" in capsys.readouterr().out
+    assert steps == [0] and "audio unavailable" in capsys.readouterr().out
+    player.stop_sample(steps.append)
+    assert steps == [0, None]

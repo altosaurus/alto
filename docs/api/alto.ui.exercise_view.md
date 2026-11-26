@@ -35,7 +35,7 @@ True
 def choice_keys(choices: list[str]) -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="choice_keys" line=176 %}{% raw %}
+{% endraw %}{% include api-source.html name="choice_keys" line=182 %}{% raw %}
 
 </div>
 
@@ -87,7 +87,7 @@ def second_row_keys(
 ) -> list[str]
 ```
 
-{% endraw %}{% include api-source.html name="second_row_keys" line=264 %}{% raw %}
+{% endraw %}{% include api-source.html name="second_row_keys" line=270 %}{% raw %}
 
 </div>
 
@@ -139,7 +139,7 @@ def note_name(
 ) -> str
 ```
 
-{% endraw %}{% include api-source.html name="note_name" line=314 %}{% raw %}
+{% endraw %}{% include api-source.html name="note_name" line=320 %}{% raw %}
 
 </div>
 
@@ -175,7 +175,7 @@ def note_words(
 ) -> str
 ```
 
-{% endraw %}{% include api-source.html name="note_words" line=357 %}{% raw %}
+{% endraw %}{% include api-source.html name="note_words" line=363 %}{% raw %}
 
 </div>
 
@@ -216,7 +216,7 @@ ExerciseView(
 )
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView" line=425 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView" line=431 %}{% raw %}
 
 </div>
 
@@ -295,7 +295,7 @@ True
 def hideEvent(event: QHideEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.hideEvent" line=1169 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.hideEvent" line=1195 %}{% raw %}
 
 </div>
 
@@ -325,7 +325,7 @@ False
 def showEvent(event: QShowEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.showEvent" line=1198 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.showEvent" line=1224 %}{% raw %}
 
 </div>
 
@@ -356,7 +356,7 @@ True
 def settings_state() -> tuple[bool, int, int] | None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.settings_state" line=1332 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.settings_state" line=1358 %}{% raw %}
 
 </div>
 
@@ -385,7 +385,7 @@ position before a theme rebuild.
 def restore_settings_state(state: tuple[bool, int, int]) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.restore_settings_state" line=1363 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.restore_settings_state" line=1389 %}{% raw %}
 
 </div>
 
@@ -416,7 +416,7 @@ rebuilding the view.
 def scheduling_changed() -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.scheduling_changed" line=1535 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.scheduling_changed" line=1561 %}{% raw %}
 
 </div>
 
@@ -438,7 +438,7 @@ previously opened exercise.
 def next_question() -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.next_question" line=1600 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.next_question" line=1626 %}{% raw %}
 
 </div>
 
@@ -473,7 +473,7 @@ def eventFilter(
 ) -> bool
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.eventFilter" line=3242 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.eventFilter" line=3352 %}{% raw %}
 
 </div>
 
@@ -531,7 +531,7 @@ def submit(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="ExerciseView.submit" line=3784 %}{% raw %}
+{% endraw %}{% include api-source.html name="ExerciseView.submit" line=3903 %}{% raw %}
 
 </div>
 

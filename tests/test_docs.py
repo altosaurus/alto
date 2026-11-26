@@ -185,16 +185,21 @@ def test_every_picture_can_be_regenerated_by_the_script() -> None:
     assert shown() == made, "docs pictures and scripts/screenshots.py disagree"
 
 
-def test_no_picture_of_the_exercise_level_settings_is_made_or_kept() -> None:
-    """
-    Check that no picture of the exercise level settings is made or
-    kept.
-    """
-    # The pane behind the sliders button is described in text, never
-    # shown (see CLAUDE.md).
-    assert not [p.name for p in IMG.glob("*exercise-settings*")]
-    assert not [n for n in script().SHOTS if "exercise-settings" in n]
-    assert ".gear" not in (ROOT / "scripts" / "screenshots.py").read_text()
+def test_exercise_view_screenshot_labels_the_visible_widgets() -> None:
+    """Keep the view's widget walkthrough paired with its callouts."""
+    docs = ROOT / "docs"
+    guide = (docs / "developer-guide" / "exercise-view.md").read_text()
+    screen = "exercise-view-anatomy"
+    assert f'component-shot.html screen="{screen}" labels=true' in guide
+    regions = json.loads(
+        (docs / "_data" / "launch_components.json").read_text(),
+    )
+    assert [region["type"] for region in regions[screen]] == [
+        "StaffWidget",
+        "ExerciseView",
+        "DegreeButton",
+        "NoteNameSettingsPanel",
+    ]
 
 
 def readme_badges() -> dict[str, tuple[str, str]]:

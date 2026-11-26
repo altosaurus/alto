@@ -14,6 +14,7 @@ build/
 .package-build/
 .asv/
 /work/
+/studies/
 
 # The docs, built locally (see "Building the docs" in docs/development.md)
 docs/_site/

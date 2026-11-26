@@ -29,7 +29,7 @@ Construction']
 NoteNames(accidentals: bool = False)
 ```
 
-{% endraw %}{% include api-source.html name="NoteNames" line=250 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNames" line=251 %}{% raw %}
 
 </div>
 
@@ -68,7 +68,7 @@ True
 def card_prompt(question: Question) -> str
 ```
 
-{% endraw %}{% include api-source.html name="NoteNames.card_prompt" line=266 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNames.card_prompt" line=267 %}{% raw %}
 
 </div>
 
@@ -100,7 +100,7 @@ solfège or a scale degree, with the octave if it counts.
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="NoteNames.practice_signature" line=290 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNames.practice_signature" line=291 %}{% raw %}
 
 </div>
 
@@ -127,7 +127,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="NoteNames.instructions" line=313 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNames.instructions" line=314 %}{% raw %}
 
 </div>
 
@@ -155,7 +155,7 @@ True
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="NoteNames.make_question" line=368 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNames.make_question" line=369 %}{% raw %}
 
 </div>
 
@@ -195,7 +195,7 @@ True
 def card_count() -> int
 ```
 
-{% endraw %}{% include api-source.html name="NoteNames.card_count" line=416 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNames.card_count" line=422 %}{% raw %}
 
 </div>
 
@@ -221,7 +221,7 @@ True
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
 
-{% endraw %}{% include api-source.html name="NoteNames.daily_candidates" line=445 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNames.daily_candidates" line=451 %}{% raw %}
 
 </div>
 
@@ -261,7 +261,7 @@ def review_question(
 ) -> Question | None
 ```
 
-{% endraw %}{% include api-source.html name="NoteNames.review_question" line=499 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteNames.review_question" line=505 %}{% raw %}
 
 </div>
 
@@ -296,7 +296,7 @@ True
 class IntervalNames(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="IntervalNames" line=770 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalNames" line=776 %}{% raw %}
 
 </div>
 
@@ -323,7 +323,7 @@ Name the interval between two written notes.
 def card_prompt(question: Question) -> str
 ```
 
-{% endraw %}{% include api-source.html name="IntervalNames.card_prompt" line=792 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalNames.card_prompt" line=798 %}{% raw %}
 
 </div>
 
@@ -359,7 +359,7 @@ its inversion.
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="IntervalNames.instructions" line=830 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalNames.instructions" line=836 %}{% raw %}
 
 </div>
 
@@ -387,7 +387,7 @@ True
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="IntervalNames.settings_signature" line=871 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalNames.settings_signature" line=877 %}{% raw %}
 
 </div>
 
@@ -412,7 +412,7 @@ True
 def refresh(question: Question) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="IntervalNames.refresh" line=927 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalNames.refresh" line=933 %}{% raw %}
 
 </div>
 
@@ -447,7 +447,7 @@ numbers in columns.
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="IntervalNames.generate" line=971 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalNames.generate" line=977 %}{% raw %}
 
 </div>
 
@@ -481,7 +481,7 @@ True
 class IntervalConstruction(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="IntervalConstruction" line=1275 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalConstruction" line=1281 %}{% raw %}
 
 </div>
 
@@ -508,7 +508,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="IntervalConstruction.instructions" line=1299 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalConstruction.instructions" line=1305 %}{% raw %}
 
 </div>
 
@@ -533,7 +533,7 @@ harmonic placement.
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="IntervalConstruction.settings_signature" line=1324 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalConstruction.settings_signature" line=1330 %}{% raw %}
 
 </div>
 
@@ -559,7 +559,7 @@ eligible.
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="IntervalConstruction.generate" line=1343 %}{% raw %}
+{% endraw %}{% include api-source.html name="IntervalConstruction.generate" line=1349 %}{% raw %}
 
 </div>
 
@@ -588,7 +588,7 @@ A harmonic question asks for a note above its starting note.
 class KeyboardIntervals(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervals" line=1370 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervals" line=1376 %}{% raw %}
 
 </div>
 
@@ -620,7 +620,7 @@ Identify the ascending interval between two highlighted piano keys.
 def card_prompt(question: Question) -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervals.card_prompt" line=1399 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervals.card_prompt" line=1405 %}{% raw %}
 
 </div>
 
@@ -651,7 +651,7 @@ Say what to name on a flashcard.
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervals.settings_signature" line=1423 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervals.settings_signature" line=1429 %}{% raw %}
 
 </div>
 
@@ -679,7 +679,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervals.instructions" line=1442 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervals.instructions" line=1448 %}{% raw %}
 
 </div>
 
@@ -704,7 +704,7 @@ True
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardIntervals.generate" line=1476 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardIntervals.generate" line=1482 %}{% raw %}
 
 </div>
 
@@ -739,7 +739,7 @@ True
 class KeySignatures(ChoiceExercise)
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatures" line=1625 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatures" line=1631 %}{% raw %}
 
 </div>
 
@@ -764,7 +764,7 @@ True
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatures.practice_signature" line=1645 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatures.practice_signature" line=1651 %}{% raw %}
 
 </div>
 
@@ -791,7 +791,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatures.instructions" line=1664 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatures.instructions" line=1670 %}{% raw %}
 
 </div>
 
@@ -819,7 +819,7 @@ True
 def refresh(question: Question) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatures.refresh" line=1697 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatures.refresh" line=1703 %}{% raw %}
 
 </div>
 
@@ -856,7 +856,7 @@ older versions did not write.
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatures.make_question" line=1759 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatures.make_question" line=1765 %}{% raw %}
 
 </div>
 
@@ -888,7 +888,7 @@ True
 class KeySignatureConstruction(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatureConstruction" line=1893 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatureConstruction" line=1899 %}{% raw %}
 
 </div>
 
@@ -913,7 +913,7 @@ fork.
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatureConstruction.settings_signature" line=1913 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatureConstruction.settings_signature" line=1919 %}{% raw %}
 
 </div>
 
@@ -940,7 +940,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatureConstruction.instructions" line=1931 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatureConstruction.instructions" line=1937 %}{% raw %}
 
 </div>
 
@@ -968,7 +968,7 @@ True
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="KeySignatureConstruction.generate" line=1966 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeySignatureConstruction.generate" line=1972 %}{% raw %}
 
 </div>
 
@@ -1010,7 +1010,7 @@ True
 class OrderOfKeys(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="OrderOfKeys" line=2024 %}{% raw %}
+{% endraw %}{% include api-source.html name="OrderOfKeys" line=2030 %}{% raw %}
 
 </div>
 
@@ -1033,7 +1033,7 @@ True
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="OrderOfKeys.settings_signature" line=2042 %}{% raw %}
+{% endraw %}{% include api-source.html name="OrderOfKeys.settings_signature" line=2048 %}{% raw %}
 
 </div>
 
@@ -1058,7 +1058,7 @@ Identify the selections used to generate a practice question.
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="OrderOfKeys.instructions" line=2071 %}{% raw %}
+{% endraw %}{% include api-source.html name="OrderOfKeys.instructions" line=2077 %}{% raw %}
 
 </div>
 
@@ -1083,7 +1083,7 @@ True
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="OrderOfKeys.generate" line=2097 %}{% raw %}
+{% endraw %}{% include api-source.html name="OrderOfKeys.generate" line=2103 %}{% raw %}
 
 </div>
 
@@ -1114,7 +1114,7 @@ True
 class ScaleIdentification(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="ScaleIdentification" line=2274 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleIdentification" line=2280 %}{% raw %}
 
 </div>
 
@@ -1138,7 +1138,7 @@ Identify the tonic and type of a scale drawn on a staff.
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ScaleIdentification.settings_signature" line=2292 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleIdentification.settings_signature" line=2298 %}{% raw %}
 
 </div>
 
@@ -1166,7 +1166,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ScaleIdentification.instructions" line=2325 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleIdentification.instructions" line=2331 %}{% raw %}
 
 </div>
 
@@ -1195,7 +1195,7 @@ True
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="ScaleIdentification.generate" line=2360 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleIdentification.generate" line=2366 %}{% raw %}
 
 </div>
 
@@ -1230,7 +1230,7 @@ True
 class ScaleConstruction(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="ScaleConstruction" line=2454 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleConstruction" line=2460 %}{% raw %}
 
 </div>
 
@@ -1259,7 +1259,7 @@ another.
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ScaleConstruction.settings_signature" line=2477 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleConstruction.settings_signature" line=2483 %}{% raw %}
 
 </div>
 
@@ -1286,7 +1286,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ScaleConstruction.instructions" line=2503 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleConstruction.instructions" line=2509 %}{% raw %}
 
 </div>
 
@@ -1311,7 +1311,7 @@ True
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="ScaleConstruction.generate" line=2594 %}{% raw %}
+{% endraw %}{% include api-source.html name="ScaleConstruction.generate" line=2600 %}{% raw %}
 
 </div>
 
@@ -1348,7 +1348,7 @@ True
 class CircleOfFifths(ChoiceExercise)
 ```
 
-{% endraw %}{% include api-source.html name="CircleOfFifths" line=2762 %}{% raw %}
+{% endraw %}{% include api-source.html name="CircleOfFifths" line=2768 %}{% raw %}
 
 </div>
 
@@ -1373,7 +1373,7 @@ True
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="CircleOfFifths.practice_signature" line=2784 %}{% raw %}
+{% endraw %}{% include api-source.html name="CircleOfFifths.practice_signature" line=2790 %}{% raw %}
 
 </div>
 
@@ -1400,7 +1400,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="CircleOfFifths.instructions" line=2802 %}{% raw %}
+{% endraw %}{% include api-source.html name="CircleOfFifths.instructions" line=2808 %}{% raw %}
 
 </div>
 
@@ -1425,7 +1425,7 @@ True
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="CircleOfFifths.make_question" line=2867 %}{% raw %}
+{% endraw %}{% include api-source.html name="CircleOfFifths.make_question" line=2873 %}{% raw %}
 
 </div>
 
@@ -1461,7 +1461,7 @@ Pick a kind of question that is switched on, and ask it.
 class ChordQualities(ChoiceExercise)
 ```
 
-{% endraw %}{% include api-source.html name="ChordQualities" line=3062 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChordQualities" line=3068 %}{% raw %}
 
 </div>
 
@@ -1488,7 +1488,7 @@ True
 def card_prompt(question: Question) -> str
 ```
 
-{% endraw %}{% include api-source.html name="ChordQualities.card_prompt" line=3084 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChordQualities.card_prompt" line=3090 %}{% raw %}
 
 </div>
 
@@ -1519,7 +1519,7 @@ Say what to name on a flashcard.
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ChordQualities.instructions" line=3108 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChordQualities.instructions" line=3114 %}{% raw %}
 
 </div>
 
@@ -1544,7 +1544,7 @@ True
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="ChordQualities.make_question" line=3130 %}{% raw %}
+{% endraw %}{% include api-source.html name="ChordQualities.make_question" line=3136 %}{% raw %}
 
 </div>
 
@@ -1576,7 +1576,7 @@ True
 class ArpeggioNames(ChoiceExercise)
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioNames" line=3191 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioNames" line=3197 %}{% raw %}
 
 </div>
 
@@ -1600,7 +1600,7 @@ True
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioNames.practice_signature" line=3209 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioNames.practice_signature" line=3215 %}{% raw %}
 
 </div>
 
@@ -1627,7 +1627,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioNames.instructions" line=3228 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioNames.instructions" line=3234 %}{% raw %}
 
 </div>
 
@@ -1652,7 +1652,7 @@ True
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="ArpeggioNames.make_question" line=3258 %}{% raw %}
+{% endraw %}{% include api-source.html name="ArpeggioNames.make_question" line=3264 %}{% raw %}
 
 </div>
 
@@ -1689,7 +1689,7 @@ True
 class KeyboardNotes(ChoiceExercise)
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardNotes" line=3580 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardNotes" line=3586 %}{% raw %}
 
 </div>
 
@@ -1713,7 +1713,7 @@ True
 def card_prompt(question: Question) -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardNotes.card_prompt" line=3598 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardNotes.card_prompt" line=3604 %}{% raw %}
 
 </div>
 
@@ -1750,7 +1750,7 @@ it counts, and follow the key signature if one is shown.
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardNotes.practice_signature" line=3637 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardNotes.practice_signature" line=3643 %}{% raw %}
 
 </div>
 
@@ -1777,7 +1777,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardNotes.instructions" line=3659 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardNotes.instructions" line=3665 %}{% raw %}
 
 </div>
 
@@ -1802,7 +1802,7 @@ True
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="KeyboardNotes.make_question" line=3721 %}{% raw %}
+{% endraw %}{% include api-source.html name="KeyboardNotes.make_question" line=3727 %}{% raw %}
 
 </div>
 
@@ -1837,7 +1837,7 @@ True
 class NoteConstruction(Exercise)
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstruction" line=3892 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstruction" line=3898 %}{% raw %}
 
 </div>
 
@@ -1863,7 +1863,7 @@ True
 def card_prompt(question: Question) -> str
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstruction.card_prompt" line=3912 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstruction.card_prompt" line=3918 %}{% raw %}
 
 </div>
 
@@ -1903,7 +1903,7 @@ words it.
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstruction.settings_signature" line=3951 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstruction.settings_signature" line=3957 %}{% raw %}
 
 </div>
 
@@ -1930,7 +1930,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstruction.instructions" line=4000 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstruction.instructions" line=4006 %}{% raw %}
 
 </div>
 
@@ -1955,7 +1955,7 @@ True
 def generate(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstruction.generate" line=4070 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstruction.generate" line=4076 %}{% raw %}
 
 </div>
 
@@ -1987,7 +1987,7 @@ True
 def card_count() -> int
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstruction.card_count" line=4255 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstruction.card_count" line=4261 %}{% raw %}
 
 </div>
 
@@ -2012,7 +2012,7 @@ True
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstruction.daily_candidates" line=4274 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstruction.daily_candidates" line=4280 %}{% raw %}
 
 </div>
 
@@ -2049,7 +2049,7 @@ def review_question(
 ) -> Question | None
 ```
 
-{% endraw %}{% include api-source.html name="NoteConstruction.review_question" line=4337 %}{% raw %}
+{% endraw %}{% include api-source.html name="NoteConstruction.review_question" line=4343 %}{% raw %}
 
 </div>
 
@@ -2084,7 +2084,7 @@ True
 class ClefBasics(ChoiceExercise)
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasics" line=4574 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasics" line=4580 %}{% raw %}
 
 </div>
 
@@ -2110,7 +2110,7 @@ True
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasics.settings_signature" line=4595 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasics.settings_signature" line=4601 %}{% raw %}
 
 </div>
 
@@ -2135,7 +2135,7 @@ Changing Button count leaves staff-placement reviews available.
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasics.practice_signature" line=4615 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasics.practice_signature" line=4621 %}{% raw %}
 
 </div>
 
@@ -2162,7 +2162,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasics.instructions" line=4633 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasics.instructions" line=4639 %}{% raw %}
 
 </div>
 
@@ -2188,7 +2188,7 @@ True
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="ClefBasics.make_question" line=4683 %}{% raw %}
+{% endraw %}{% include api-source.html name="ClefBasics.make_question" line=4689 %}{% raw %}
 
 </div>
 
@@ -2233,7 +2233,7 @@ True
 class NotationIdentification(ChoiceExercise)
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification" line=4755 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification" line=4761 %}{% raw %}
 
 </div>
 
@@ -2259,7 +2259,7 @@ True
 def settings_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification.settings_signature" line=4780 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification.settings_signature" line=4786 %}{% raw %}
 
 </div>
 
@@ -2284,7 +2284,7 @@ Changing Button count leaves staff-placement reviews available.
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification.practice_signature" line=4800 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification.practice_signature" line=4806 %}{% raw %}
 
 </div>
 
@@ -2309,7 +2309,7 @@ Identify the terms eligible for review.
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification.instructions" line=4823 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification.instructions" line=4829 %}{% raw %}
 
 </div>
 
@@ -2334,7 +2334,7 @@ True
 def refresh(question: Question) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification.refresh" line=4918 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification.refresh" line=4924 %}{% raw %}
 
 </div>
 
@@ -2366,7 +2366,7 @@ True
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification.make_question" line=4947 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification.make_question" line=4953 %}{% raw %}
 
 </div>
 
@@ -2398,7 +2398,7 @@ True
 def card_groups() -> dict[str, str]
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification.card_groups" line=5230 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification.card_groups" line=5236 %}{% raw %}
 
 </div>
 
@@ -2424,7 +2424,7 @@ True
 def daily_candidates(rng: random.Random) -> Iterator[Question]
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification.daily_candidates" line=5252 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification.daily_candidates" line=5258 %}{% raw %}
 
 </div>
 
@@ -2461,7 +2461,7 @@ def review_question(
 ) -> Question | None
 ```
 
-{% endraw %}{% include api-source.html name="NotationIdentification.review_question" line=5323 %}{% raw %}
+{% endraw %}{% include api-source.html name="NotationIdentification.review_question" line=5329 %}{% raw %}
 
 </div>
 
@@ -2488,6 +2488,267 @@ button selections.
 True
 ```
 
+## beat_meter
+
+<div class="api-signature" markdown="1">
+
+```python
+def beat_meter(answer: str) -> tuple[int, int]
+```
+
+{% endraw %}{% include api-source.html name="beat_meter" line=5406 %}{% raw %}
+
+</div>
+
+Look up the written time signature for either kind of answer.
+
+**Parameters**
+
+- `answer` (*str*): A time signature or meter classification from the exercise.
+
+**Returns**
+
+- *tuple of int*: Numerator and denominator for engraving the rhythm.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> beat_meter("Compound duple")
+(6, 8)
+```
+
+## BeatIdentification
+
+<div class="api-signature" markdown="1">
+
+```python
+class BeatIdentification(ChoiceExercise)
+```
+
+{% endraw %}{% include api-source.html name="BeatIdentification" line=5431 %}{% raw %}
+
+</div>
+
+Identify the time signature or classify the meter of a rhythm.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> q = BeatIdentification().generate(random.Random(2))
+>>> q.answer in q.choices and bool(q.rhythm)
+True
+```
+
+### BeatIdentification.practice_signature
+
+<div class="api-signature" markdown="1">
+
+```python
+def practice_signature() -> str
+```
+
+{% endraw %}{% include api-source.html name="BeatIdentification.practice_signature" line=5447 %}{% raw %}
+
+</div>
+
+Keep separate review settings for the two rhythm components.
+
+**Returns**
+
+- *str*: The original empty signature for time signature practice, or the selected component for classification practice.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> BeatIdentification().practice_signature()
+''
+```
+
+### BeatIdentification.instructions
+
+<div class="api-signature" markdown="1">
+
+```python
+def instructions() -> str
+```
+
+{% endraw %}{% include api-source.html name="BeatIdentification.instructions" line=5471 %}{% raw %}
+
+</div>
+
+Explain how to answer from the two written measures.
+
+**Returns**
+
+- *str*: The task and its keyboard shortcut directions.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> "keys" in BeatIdentification().instructions()
+True
+```
+
+### BeatIdentification.make_question
+
+<div class="api-signature" markdown="1">
+
+```python
+def make_question(rng: random.Random) -> Question
+```
+
+{% endraw %}{% include api-source.html name="BeatIdentification.make_question" line=5505 %}{% raw %}
+
+</div>
+
+Generate two complete measures in a randomly chosen meter.
+
+**Parameters**
+
+- `rng` (*random.Random*): Chooses the time signature and how each beat is written.
+
+**Returns**
+
+- *Question*: The rhythm and the answers for the selected component.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> q = BeatIdentification().make_question(random.Random(0))
+>>> q.prompt
+'What is the time signature?'
+```
+
+## beat_positions
+
+<div class="api-signature" markdown="1">
+
+```python
+def beat_positions(meter: tuple[int, int]) -> frozenset[int]
+```
+
+{% endraw %}{% include api-source.html name="beat_positions" line=5841 %}{% raw %}
+
+</div>
+
+Get the main beat starts in two measures, measured in eighth notes.
+
+**Parameters**
+
+- `meter` (*tuple of int*): One of the supported time signatures.
+
+**Returns**
+
+- *frozenset of int*: Zero-based positions from the start of the first measure.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> sorted(beat_positions((6, 8)))
+[0, 3, 6, 9]
+```
+
+## BeatConstruction
+
+<div class="api-signature" markdown="1">
+
+```python
+class BeatConstruction(Exercise)
+```
+
+{% endraw %}{% include api-source.html name="BeatConstruction" line=5866 %}{% raw %}
+
+</div>
+
+Mark where the main beats begin in two written measures.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> q = BeatConstruction().generate(random.Random(2))
+>>> q.answer in BEAT_METERS and not q.choices
+True
+```
+
+### BeatConstruction.settings_signature
+
+<div class="api-signature" markdown="1">
+
+```python
+def settings_signature() -> str
+```
+
+{% endraw %}{% include api-source.html name="BeatConstruction.settings_signature" line=5882 %}{% raw %}
+
+</div>
+
+Identify the note types used in a saved construction question.
+
+**Returns**
+
+- *str*: Empty for the original selection, otherwise its signature.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> BeatConstruction().settings_signature()
+''
+```
+
+### BeatConstruction.instructions
+
+<div class="api-signature" markdown="1">
+
+```python
+def instructions() -> str
+```
+
+{% endraw %}{% include api-source.html name="BeatConstruction.instructions" line=5903 %}{% raw %}
+
+</div>
+
+Explain how to place and submit the beats.
+
+**Returns**
+
+- *str*: Counting guidance and keyboard controls.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> "arrow keys" in BeatConstruction().instructions()
+True
+```
+
+### BeatConstruction.generate
+
+<div class="api-signature" markdown="1">
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+{% endraw %}{% include api-source.html name="BeatConstruction.generate" line=5930 %}{% raw %}
+
+</div>
+
+Choose a time signature and write two measures to mark.
+
+**Parameters**
+
+- `rng` (*random.Random*): Chooses the meter and the written rhythm.
+
+**Returns**
+
+- *Question*: The rhythm and its time signature, without answer choices.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> BeatConstruction().generate(random.Random(1)).prompt
+'Place the beats in both measures.'
+```
+
 ## RythmicEquations
 
 <div class="api-signature" markdown="1">
@@ -2496,7 +2757,7 @@ True
 class RythmicEquations(ChoiceExercise)
 ```
 
-{% endraw %}{% include api-source.html name="RythmicEquations" line=5371 %}{% raw %}
+{% endraw %}{% include api-source.html name="RythmicEquations" line=5964 %}{% raw %}
 
 </div>
 
@@ -2520,7 +2781,7 @@ True
 def instructions() -> str
 ```
 
-{% endraw %}{% include api-source.html name="RythmicEquations.instructions" line=5393 %}{% raw %}
+{% endraw %}{% include api-source.html name="RythmicEquations.instructions" line=5986 %}{% raw %}
 
 </div>
 
@@ -2546,7 +2807,7 @@ True
 def card_prompt(question: Question) -> str
 ```
 
-{% endraw %}{% include api-source.html name="RythmicEquations.card_prompt" line=5414 %}{% raw %}
+{% endraw %}{% include api-source.html name="RythmicEquations.card_prompt" line=6007 %}{% raw %}
 
 </div>
 
@@ -2577,7 +2838,7 @@ Ask for the missing symbol or number on an exported card.
 def practice_signature() -> str
 ```
 
-{% endraw %}{% include api-source.html name="RythmicEquations.practice_signature" line=5441 %}{% raw %}
+{% endraw %}{% include api-source.html name="RythmicEquations.practice_signature" line=6034 %}{% raw %}
 
 </div>
 
@@ -2602,7 +2863,7 @@ Keep review questions tied to the options that generated them.
 def make_question(rng: random.Random) -> Question
 ```
 
-{% endraw %}{% include api-source.html name="RythmicEquations.make_question" line=5515 %}{% raw %}
+{% endraw %}{% include api-source.html name="RythmicEquations.make_question" line=6108 %}{% raw %}
 
 </div>
 
