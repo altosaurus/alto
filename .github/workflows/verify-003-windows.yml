@@ -1,0 +1,43 @@
+name: Windows 0.0.3 upgrade verification
+on:
+  push:
+    branches: [verify-0.0.3-windows]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  upgrade:
+    runs-on: windows-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.0.2
+          path: old-source
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Select exact installers
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download v0.0.2 -p '*windows-x64-setup.exe' -p SHA256SUMS -p SHA256SUMS.sig -D old
+          if ($LASTEXITCODE) { throw 'Previous release download failed' }
+          if ($env:GITHUB_RUN_ATTEMPT -eq '1' -or !(gh release list --limit 3 --json tagName --jq '.[].tagName' | Select-String '^v0\.0\.3$')) {
+            gh run download 45733423981 --name windows-signed --dir candidate
+            if ($LASTEXITCODE) { throw 'Windows rehearsal download failed' }
+            $file = Get-Item candidate/alto-0.0.3-windows-x64-setup.exe
+            if ((Get-FileHash $file).Hash -ne '77794c34715f595cf7e522a79f8fb6807d20b1d08d7cffdacf0546c674c6b981') { throw 'Wrong rehearsal installer' }
+          } else {
+            gh release download v0.0.3 -p '*windows-x64-setup.exe' -p SHA256SUMS -p SHA256SUMS.sig -D candidate
+            if ($LASTEXITCODE) { throw 'Published installer download failed' }
+          }
+          $signature = Get-AuthenticodeSignature candidate/alto-0.0.3-windows-x64-setup.exe
+          if ($signature.Status -ne 'Valid' -or !$signature.TimeStamperCertificate) { throw 'Invalid Windows signature or timestamp' }
+          python -m pip install --quiet certifi pynacl psutil pywin32
+      - name: Exercise old updater, installer consent, and library replacement
+        env:
+          PYTHONPATH: ${{ github.workspace }}/old-source
+        run: python -u .github/rehearsals/verify-003-windows.py
