@@ -19,7 +19,7 @@ MeterButton(
 )
 ```
 
-{% endraw %}{% include api-source.html name="MeterButton" line=104 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterButton" line=110 %}{% raw %}
 
 </div>
 
@@ -58,7 +58,7 @@ Keep the plain signature as the text and accessible name.
 def paintEvent(event: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MeterButton.paintEvent" line=134 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterButton.paintEvent" line=140 %}{% raw %}
 
 </div>
 
@@ -83,7 +83,7 @@ False
 MeterStaff()
 ```
 
-{% endraw %}{% include api-source.html name="MeterStaff" line=215 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterStaff" line=217 %}{% raw %}
 
 </div>
 
@@ -110,7 +110,7 @@ def show_score(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MeterStaff.show_score" line=238 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterStaff.show_score" line=240 %}{% raw %}
 
 </div>
 
@@ -132,7 +132,7 @@ Show the rhythm. Tilde-joined notes share a playback step.
 def set_counts_visible(visible: bool) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MeterStaff.set_counts_visible" line=416 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterStaff.set_counts_visible" line=418 %}{% raw %}
 
 </div>
 
@@ -146,7 +146,7 @@ Show or hide the counts below the notes.
 def highlight_column(column: int | None) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MeterStaff.highlight_column" line=422 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterStaff.highlight_column" line=424 %}{% raw %}
 
 </div>
 
@@ -160,7 +160,7 @@ Highlight the symbols that share a sounding onset.
 def sizeHint() -> QSize
 ```
 
-{% endraw %}{% include api-source.html name="MeterStaff.sizeHint" line=427 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterStaff.sizeHint" line=429 %}{% raw %}
 
 </div>
 
@@ -178,7 +178,7 @@ Prefer one line at the natural rhythmic spacing.
 def minimumSizeHint() -> QSize
 ```
 
-{% endraw %}{% include api-source.html name="MeterStaff.minimumSizeHint" line=459 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterStaff.minimumSizeHint" line=461 %}{% raw %}
 
 </div>
 
@@ -196,7 +196,7 @@ Keep dense subdivisions legible when measures wrap.
 def resizeEvent(event: QResizeEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MeterStaff.resizeEvent" line=516 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterStaff.resizeEvent" line=518 %}{% raw %}
 
 </div>
 
@@ -210,7 +210,7 @@ Reflow whole measures at the available width.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="MeterStaff.paintEvent" line=605 %}{% raw %}
+{% endraw %}{% include api-source.html name="MeterStaff.paintEvent" line=607 %}{% raw %}
 
 </div>
 
@@ -224,7 +224,7 @@ Draw the time signature and a line at each bar boundary.
 BeatPlacementStaff()
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff" line=800 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff" line=802 %}{% raw %}
 
 </div>
 
@@ -262,7 +262,7 @@ def reset(
 ) -> None
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.reset" line=832 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.reset" line=834 %}{% raw %}
 
 </div>
 
@@ -291,7 +291,7 @@ Replace the score and clear the learner's marks.
 def slots_per_bar() -> int
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.slots_per_bar" line=862 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.slots_per_bar" line=864 %}{% raw %}
 
 </div>
 
@@ -316,7 +316,7 @@ Count eighth-note positions per measure.
 def beat_numbers() -> dict[int, int]
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.beat_numbers" line=895 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.beat_numbers" line=897 %}{% raw %}
 
 </div>
 
@@ -343,7 +343,7 @@ Return beat numbers in reading order within each measure.
 def position(slot: int) -> QPointF
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.position" line=920 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.position" line=922 %}{% raw %}
 
 </div>
 
@@ -372,7 +372,7 @@ True
 def undo() -> None
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.undo" line=990 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.undo" line=992 %}{% raw %}
 
 </div>
 
@@ -396,7 +396,7 @@ Remove the most recently added beat marker.
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.mousePressEvent" line=1006 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.mousePressEvent" line=1008 %}{% raw %}
 
 </div>
 
@@ -420,7 +420,7 @@ Tested with clicks on notes and beneath sustained notes.
 def keyPressEvent(event: QKeyEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.keyPressEvent" line=1038 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.keyPressEvent" line=1040 %}{% raw %}
 
 </div>
 
@@ -444,7 +444,7 @@ Keyboard input reaches the same subdivisions as a click.
 def focusInEvent(event: QFocusEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.focusInEvent" line=1074 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.focusInEvent" line=1076 %}{% raw %}
 
 </div>
 
@@ -468,7 +468,7 @@ The focused score outlines the current selectable position.
 def focusOutEvent(event: QFocusEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.focusOutEvent" line=1090 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.focusOutEvent" line=1092 %}{% raw %}
 
 </div>
 
@@ -492,7 +492,7 @@ Placed beats remain visible when focus moves to Answer.
 def paintEvent(event: QPaintEvent) -> None
 ```
 
-{% endraw %}{% include api-source.html name="BeatPlacementStaff.paintEvent" line=1106 %}{% raw %}
+{% endraw %}{% include api-source.html name="BeatPlacementStaff.paintEvent" line=1108 %}{% raw %}
 
 </div>
 

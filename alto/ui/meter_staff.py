@@ -19,7 +19,13 @@ from PySide6.QtGui import (
     QPen,
     QResizeEvent,
 )
-from PySide6.QtWidgets import QPushButton, QStyle, QStyleOptionButton, QWidget
+from PySide6.QtWidgets import (
+    QPushButton,
+    QStyle,
+    QStyleOptionButton,
+    QStylePainter,
+    QWidget,
+)
 
 from alto.settings import (
     BEAT_TUPLET_NAMES,
@@ -148,13 +154,9 @@ class MeterButton(QPushButton):
         option = QStyleOptionButton()
         self.initStyleOption(option)
         option.text = ""
-        with QPainter(self) as painter:
-            self.style().drawControl(
-                QStyle.ControlElement.CE_PushButton,
-                option,
-                painter,
-                self,
-            )
+        painter = QStylePainter(self)
+        with painter:
+            painter.drawControl(QStyle.ControlElement.CE_PushButton, option)
             rect = self.style().subElementRect(
                 QStyle.SubElement.SE_PushButtonContents,
                 option,

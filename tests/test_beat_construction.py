@@ -88,11 +88,13 @@ def test_generated_rhythm_has_rests_and_spans_two_bars() -> None:
 
 
 @pytest.mark.parametrize(("seed", "count"), [(7, 3), (5, 2)])
+@pytest.mark.parametrize("note_type", ["eighth", "sixteenth"])
 def test_tuplets_share_exact_beats_in_notation_and_playback(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
     seed: int,
     count: int,
+    note_type: str,
 ) -> None:
     """
     Engrave full tuplet groups, align their markers, and time every tap.
@@ -107,10 +109,13 @@ def test_tuplets_share_exact_beats_in_notation_and_playback(
         Selects a simple or compound meter.
     count : int
         Expected tuplet number for the meter.
+    note_type : str
+        Eighths fill a beat in one group. Sixteenths take two groups.
     """
     settings.beat_tuplets["beatConstruction"] = True
-    settings.beat_note_types["beatConstruction"] = {"eighth"}
+    settings.beat_note_types["beatConstruction"] = {note_type}
     exercise = BeatConstruction()
+    assert "A bracket marked 2" in exercise.instructions()
     view = ExerciseView(exercise, rng=random.Random(seed))
     view.show()
     app.processEvents()
@@ -148,7 +153,8 @@ def test_tuplets_share_exact_beats_in_notation_and_playback(
     ms = 0
     for token, duration in zip(q.rhythm, play.call_args.args[0], strict=True):
         value, tuplet, length = settings.beat_note(token)
-        assert value.removesuffix("-rest") == "eighth" and tuplet in (0, count)
+        assert value.removesuffix("-rest") == note_type
+        assert tuplet in (0, count)
         end += 601 * length / 4
         ms += duration
         assert ms == round(end)

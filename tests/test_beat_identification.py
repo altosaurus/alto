@@ -304,6 +304,7 @@ def test_tuplet_switch_persists_independently(app: QApplication) -> None:
     switch.click()
     assert view.question is not None and view.question is not original
     assert settings.beat_tuplets["beatIdentification"]
+    assert "three triplet eighths" in exercise.instructions()
     assert exercise.settings_signature() != ""
     settings.beat_tuplets["beatIdentification"] = False
     load_exercise_settings()
@@ -317,6 +318,7 @@ def test_tuplet_switch_persists_independently(app: QApplication) -> None:
         assert restored.isOn() == enabled
     switch.click()
     assert exercise.settings_signature() == ""
+    assert "three triplet eighths" not in exercise.instructions()
     assert view.question is not None
     assert all(settings.beat_note(v)[1] == 0 for v in view.question.rhythm)
     view.close()
