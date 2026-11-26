@@ -23,6 +23,7 @@ kramdown:
   input: GFM
   hard_wrap: false
 exclude:
+  - index.rst
   - README.md
   - site-root
   - Gemfile

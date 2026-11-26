@@ -331,6 +331,10 @@ def test_top_bar_version_then_theme_then_github_and_theme_only() -> None:
     of its own, and that the words are in its menu.
     """
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    actions = (DOCS / "_includes" / "header-actions.html").read_text(
+        encoding="utf-8",
+    )
+    layout = layout.replace("{% include header-actions.html %}", actions)
     bar = layout[
         layout.index('<div class="top-actions">') : layout.index("</header>")
     ]
@@ -1038,7 +1042,11 @@ def test_every_page_in_sidebar_ends_with_links_to_previous_and() -> None:
         and 'rel="prev"' in layout
         and 'rel="next"' in layout
     )
-    assert 'id="i-prev"' in layout and 'id="i-next"' in layout
+    icons = (DOCS / "_includes" / "theme-icons.html").read_text(
+        encoding="utf-8",
+    )
+    assert "{% include theme-icons.html %}" in layout
+    assert 'id="i-prev"' in icons and 'id="i-next"' in icons
     assert (
         'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout
         and 'where: "parent", p.children' in layout

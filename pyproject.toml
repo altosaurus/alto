@@ -248,3 +248,9 @@ extraPaths = [
 ]
 reportOptionalMemberAccess = false
 reportOptionalSubscript = false
+
+[dependency-groups]
+docs = [
+    "myst-parser>=4",
+    "sphinx>=8.2",
+]

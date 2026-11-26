@@ -22,19 +22,24 @@
     used[name] = true;
     return name;
   }
-  heads.forEach(function (h) {
-    if (!h.id) { h.id = slug(h.textContent); } else { used[h.id] = true; }
+  var targets = heads.map(function (h) {
+    // Sphinx puts the fragment on the enclosing section. Jekyll puts it on the heading.
+    var section = h.parentElement;
+    var id = h.id || (section.matches("section[id]") && section.firstElementChild === h && section.id);
+    if (!id) { h.id = id = slug(h.textContent); }
+    used[id] = true;
+    return id;
   });
 
   function links() {
     var list = document.createElement("ul");
-    heads.forEach(function (h) {
+    heads.forEach(function (h, i) {
       var item = document.createElement("li");
       var a = document.createElement("a");
-      a.href = "#" + h.id;
+      a.href = "#" + targets[i];
       a.textContent = h.textContent;
       if (h.tagName === "H3") { a.className = "sub"; }
-      a.setAttribute("data-toc-for", h.id);
+      a.setAttribute("data-toc-for", targets[i]);
       item.appendChild(a);
       list.appendChild(item);
     });
@@ -61,7 +66,7 @@
   var first = article.querySelector("h1");
   var anchor = first ? (first.closest(".hero") || first) : null;  // on the home page the title is inside the hero
   anchor = article.querySelector(".os-picker") || anchor;
-  if (anchor && anchor.nextSibling) { article.insertBefore(inline, anchor.nextSibling); } else { article.insertBefore(inline, article.firstChild); }
+  if (anchor) { anchor.after(inline); } else { article.prepend(inline); }
   inline.addEventListener("click", function (event) { if (event.target.closest("a")) { inline.open = false; } });
 
   grid.classList.add("has-toc");
@@ -73,7 +78,7 @@
     heads.forEach(function (h, i) { if (h.getBoundingClientRect().top <= 96) { current = i; } });
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) { current = heads.length - 1; }
     Array.prototype.forEach.call(document.querySelectorAll("[data-toc-for]"), function (a) {
-      a.classList.toggle("on", a.getAttribute("data-toc-for") === heads[current].id);
+      a.classList.toggle("on", a.getAttribute("data-toc-for") === targets[current]);
     });
     here.textContent = heads[current].textContent;
   }

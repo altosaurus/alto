@@ -637,6 +637,18 @@ and open `http://127.0.0.1:8000/alto/`. `tests/test_docs_site.py` checks the scr
 
 The excerpt step reads the ExerciseView methods in your checkout. It uses the anchors in `docs/_data/exercise_view_excerpts.json` to find each statement and its line numbers. Rerun it after editing the view to refresh a local preview. Published docs extract from the commit they link to.
 
+### Sphinx theme preview
+
+From the repository root, build the Sphinx preview with the locked documentation dependencies and serve it locally:
+
+```bash
+uv run --isolated --locked --only-group docs sphinx-build -W -b dirhtml \
+  -d work/sphinx-preview/doctrees -c docs/_sphinx docs work/sphinx-preview/www/alto/dev
+python -m http.server 43220 --bind 127.0.0.1 --directory work/sphinx-preview/www
+```
+
+Open [License and credits](http://127.0.0.1:43220/alto/dev/credits/) to see the existing Markdown rendered with MyST and the Alto theme.
+
 ## Keeping the docs and screenshots current
 
 The current app screenshots in `docs/assets/img/` come in light and dark pairs. Regenerate them with `scripts/screenshots.py`:
