@@ -1,61 +1,61 @@
 {
   "profile-create": [
-    {"label": "Name field and Create profile button", "type": "ProfileDialog", "href": "/api/alto.ui.profile_dialog/#profiledialog", "rect": [2,47,96,15]}
+    {"label": "Name field and Create profile button", "type": "ProfileDialog", "href": "/api/alto.ui.profile_dialog/class-profiledialog/", "rect": [2,47,96,15]}
   ],
   "profile-picker": [
-    {"label": "Saved profile list", "type": "ProfileDialog", "href": "/api/alto.ui.profile_dialog/#profiledialog", "rect": [3,17,94,47]}
+    {"label": "Saved profile list", "type": "ProfileDialog", "href": "/api/alto.ui.profile_dialog/class-profiledialog/", "rect": [3,17,94,47]}
   ],
   "home": [
-    {"label": "Exercise and lesson switch", "type": "SegmentedControl", "href": "/api/alto.ui.widgets/#segmentedcontrol", "rect": [5.5,1,9,5]},
-    {"label": "Search field", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,7.5,30,5]},
-    {"label": "Note Identification tile", "type": "ExerciseCard", "href": "/api/alto.ui.home/#exercisecard", "rect": [13.5,15,17.3,26]},
-    {"label": "Exercise catalog", "type": "HomePage", "href": "/api/alto.ui.home/#homepage", "rect": [13,14.5,74,84.5], "group": true}
+    {"label": "Exercise and lesson switch", "type": "SegmentedControl", "href": "/api/alto.ui.widgets/class-segmentedcontrol/", "rect": [5.5,1,9,5]},
+    {"label": "Search field", "type": "MainWindow", "href": "/api/alto.ui.main_window/class-mainwindow/", "rect": [1,7.5,30,5]},
+    {"label": "Note Identification tile", "type": "ExerciseCard", "href": "/api/alto.ui.home/class-exercisecard/", "rect": [13.5,15,17.3,26]},
+    {"label": "Exercise catalog", "type": "HomePage", "href": "/api/alto.ui.home/class-homepage/", "rect": [13,14.5,74,84.5], "group": true}
   ],
   "note-identification": [
-    {"label": "Exercise list", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,15,30,77]},
-    {"label": "Notated question", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [42.8,20.5,45.5,47]},
-    {"label": "Answer buttons", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/#exerciseview", "rect": [34.5,68,62,7]},
-    {"label": "Right-hand exercise pane", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/#exerciseview", "rect": [31.5,14,67.7,85], "group": true}
+    {"label": "Exercise list", "type": "MainWindow", "href": "/api/alto.ui.main_window/class-mainwindow/", "rect": [1,15,30,77]},
+    {"label": "Notated question", "type": "StaffWidget", "href": "/api/alto.ui.staff/class-staffwidget/", "rect": [42.8,20.5,45.5,47]},
+    {"label": "Answer buttons", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/class-exerciseview/", "rect": [34.5,68,62,7]},
+    {"label": "Right-hand exercise pane", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/class-exerciseview/", "rect": [31.5,14,67.7,85], "group": true}
   ],
   "exercise-view-anatomy": [
-    {"label": "Staff", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [9.5,8.1,50.9,53.8]},
-    {"label": "Toolbar", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/#exerciseview", "rect": [0.9,1.1,68,6.3]},
-    {"label": "Answer controls", "type": "DegreeButton", "href": "/api/alto.ui.degree_text/#degreebutton", "rect": [3.1,63.9,63.6,7.1], "label_below": true},
-    {"label": "Settings pane", "type": "NoteNameSettingsPanel", "href": "/api/alto.ui.settings_panel/#notenamesettingspanel", "rect": [69.5,1.4,29.6,97.1]}
+    {"label": "Staff", "type": "StaffWidget", "href": "/api/alto.ui.staff/class-staffwidget/", "rect": [9.5,8.1,50.9,53.8]},
+    {"label": "Toolbar", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/class-exerciseview/", "rect": [0.9,1.1,68,6.3]},
+    {"label": "Answer controls", "type": "DegreeButton", "href": "/api/alto.ui.degree_text/class-degreebutton/", "rect": [3.1,63.9,63.6,7.1], "label_below": true},
+    {"label": "Settings pane", "type": "NoteNameSettingsPanel", "href": "/api/alto.ui.settings_panel/class-notenamesettingspanel/", "rect": [69.5,1.4,29.6,97.1]}
   ],
   "lesson-tiles": [
-    {"label": "Lesson search", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,7.5,30,5]},
-    {"label": "Pitches and Notes tile", "type": "TileCard", "href": "/api/alto.ui.home/#tilecard", "rect": [14,14,17,27]},
-    {"label": "Lesson catalog", "type": "HomePage", "href": "/api/alto.ui.home/#homepage", "rect": [13.5,14,73.5,55], "group": true}
+    {"label": "Lesson search", "type": "MainWindow", "href": "/api/alto.ui.main_window/class-mainwindow/", "rect": [1,7.5,30,5]},
+    {"label": "Pitches and Notes tile", "type": "TileCard", "href": "/api/alto.ui.home/class-tilecard/", "rect": [14,14,17,27]},
+    {"label": "Lesson catalog", "type": "HomePage", "href": "/api/alto.ui.home/class-homepage/", "rect": [13.5,14,73.5,55], "group": true}
   ],
   "lesson-workspace": [
-    {"label": "Lesson outline", "type": "LessonNav", "href": "/api/alto.ui.lesson_nav/#lessonnav", "rect": [1,14.5,29,66]},
-    {"label": "Leave lesson and Start over", "type": "LessonsPage", "href": "/api/alto.ui.lesson/#lessonspage", "rect": [32.5,13,66,5.5]},
-    {"label": "Step title and progress", "type": "LessonView", "href": "/api/alto.ui.lesson/#lessonview", "rect": [33,19.5,65,6.5]},
-    {"label": "Annotated keyboard example", "type": "KeyboardWidget", "href": "/api/alto.ui.keyboard/#keyboardwidget", "rect": [34.5,38,27.5,39]}
+    {"label": "Lesson outline", "type": "LessonNav", "href": "/api/alto.ui.lesson_nav/class-lessonnav/", "rect": [1,14.5,29,66]},
+    {"label": "Leave lesson and Start over", "type": "LessonsPage", "href": "/api/alto.ui.lesson/class-lessonspage/", "rect": [32.5,13,66,5.5]},
+    {"label": "Step title and progress", "type": "LessonView", "href": "/api/alto.ui.lesson/class-lessonview/", "rect": [33,19.5,65,6.5]},
+    {"label": "Annotated keyboard example", "type": "KeyboardWidget", "href": "/api/alto.ui.keyboard/class-keyboardwidget/", "rect": [34.5,38,27.5,39]}
   ],
   "glossary": [
-    {"label": "Term search and list", "type": "GlossaryPage", "href": "/api/alto.ui.glossary/#glossarypage", "rect": [2.5,14.5,19,82]},
-    {"label": "Harmonic minor scale example", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [62.5,15.5,34.5,19.5]},
-    {"label": "Related exercise tiles", "type": "ExerciseCard", "href": "/api/alto.ui.home/#exercisecard", "rect": [24,70,35.5,26]}
+    {"label": "Term search and list", "type": "GlossaryPage", "href": "/api/alto.ui.glossary/class-glossarypage/", "rect": [2.5,14.5,19,82]},
+    {"label": "Harmonic minor scale example", "type": "StaffWidget", "href": "/api/alto.ui.staff/class-staffwidget/", "rect": [62.5,15.5,34.5,19.5]},
+    {"label": "Related exercise tiles", "type": "ExerciseCard", "href": "/api/alto.ui.home/class-exercisecard/", "rect": [24,70,35.5,26]}
   ],
   "stats": [
-    {"label": "Profile and filters", "type": "StatsPage", "href": "/api/alto.ui.stats_dialog/#statspage", "rect": [2.5,13,34,5]},
-    {"label": "Summary tiles", "type": "Tile", "href": "/api/alto.ui.stats_dialog/#tile", "rect": [2.5,22.5,94,21]},
-    {"label": "Weekly question counts", "type": "StackedBarChart", "href": "/api/alto.ui.charts/#stackedbarchart", "rect": [2.5,46,45.5,23]},
-    {"label": "Daily accuracy", "type": "LineChart", "href": "/api/alto.ui.charts/#linechart", "rect": [50,46,46,23]},
-    {"label": "Accuracy by exercise", "type": "HBarChart", "href": "/api/alto.ui.charts/#hbarchart", "rect": [50,72,46,26]}
+    {"label": "Profile and filters", "type": "StatsPage", "href": "/api/alto.ui.stats_dialog/class-statspage/", "rect": [2.5,13,34,5]},
+    {"label": "Summary tiles", "type": "Tile", "href": "/api/alto.ui.stats_dialog/class-tile/", "rect": [2.5,22.5,94,21]},
+    {"label": "Weekly question counts", "type": "StackedBarChart", "href": "/api/alto.ui.charts/class-stackedbarchart/", "rect": [2.5,46,45.5,23]},
+    {"label": "Daily accuracy", "type": "LineChart", "href": "/api/alto.ui.charts/class-linechart/", "rect": [50,46,46,23]},
+    {"label": "Accuracy by exercise", "type": "HBarChart", "href": "/api/alto.ui.charts/class-hbarchart/", "rect": [50,72,46,26]}
   ],
   "database": [
-    {"label": "Table selection and search", "type": "DatabasePage", "href": "/api/alto.ui.database_page/#databasepage", "rect": [2.5,13,96,5.5]},
-    {"label": "Table data", "type": "RowsModel", "href": "/api/alto.ui.database_page/#rowsmodel", "rect": [2.5,21.5,95,76]}
+    {"label": "Table selection and search", "type": "DatabasePage", "href": "/api/alto.ui.database_page/class-databasepage/", "rect": [2.5,13,96,5.5]},
+    {"label": "Table data", "type": "RowsModel", "href": "/api/alto.ui.database_page/class-rowsmodel/", "rect": [2.5,21.5,95,76]}
   ],
   "question-preview": [
-    {"label": "Saved notation", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [5.5,8,89,63.5]},
-    {"label": "Answer and timing details", "type": "QuestionPreview", "href": "/api/alto.ui.question_preview/#questionpreview", "rect": [2,73.5,94,17]}
+    {"label": "Saved notation", "type": "StaffWidget", "href": "/api/alto.ui.staff/class-staffwidget/", "rect": [5.5,8,89,63.5]},
+    {"label": "Answer and timing details", "type": "QuestionPreview", "href": "/api/alto.ui.question_preview/class-questionpreview/", "rect": [2,73.5,94,17]}
   ],
   "settings": [
-    {"label": "Settings categories", "type": "AppSettingsDialog", "href": "/api/alto.ui.app_settings/#appsettingsdialog", "rect": [1,2,17,89]},
-    {"label": "Notation font cards", "type": "StyleCard", "href": "/api/alto.ui.app_settings/#stylecard", "rect": [20,7,72,74]}
+    {"label": "Settings categories", "type": "AppSettingsDialog", "href": "/api/alto.ui.app_settings/class-appsettingsdialog/", "rect": [1,2,17,89]},
+    {"label": "Notation font cards", "type": "StyleCard", "href": "/api/alto.ui.app_settings/class-stylecard/", "rect": [20,7,72,74]}
   ]
 }

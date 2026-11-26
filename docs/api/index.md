@@ -6,10 +6,10 @@ children: api
 permalink: /api/
 ---
 
-Every public module, class and function in Alto, with its signature and docstring. Names that begin with an underscore are internal and are left out. The pages are written from the docstrings by `scripts/api_docs.py`, so they match the code.
+Choose a module to see its public classes and functions. Each has a page with its signature, documentation, and examples. Class pages also list their public methods. Names that begin with an underscore are internal and are left out. The pages are written from the docstrings by `scripts/api_docs.py`, so they match the code.
 
 
-## alto
+## [alto](alto/)
 
 Alto: a music theory trainer that learns what you find hard and asks it more often.
 
@@ -29,7 +29,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.terms](alto.terms/) | Glossary entries that an installed plugin supplies, kept apart from the built-in ones. |
 | [alto.updates](alto.updates/) | What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves. |
 
-## alto.exercises
+## [alto.exercises](alto.exercises/)
 
 The exercises and the framework they are built on.
 
@@ -40,7 +40,7 @@ The exercises and the framework they are built on.
 | [alto.exercises.packs](alto.exercises.packs/) | Load third-party instrument packs from ZIP archives and authoring folders. |
 | [alto.exercises.rhythm_equations](alto.exercises.rhythm_equations/) | Build balanced rhythm equations with exact operator counts. |
 
-## alto.learning
+## [alto.learning](alto.learning/)
 
 Spaced repetition: who is learning (profiles), what they answered (a database) and what to ask next.
 
@@ -55,7 +55,7 @@ Spaced repetition: who is learning (profiles), what they answered (a database) a
 | [alto.learning.scheduler](alto.learning.scheduler/) | How a question's history turns into how soon it comes back. Pure Python, no database and no Qt. |
 | [alto.learning.stats](alto.learning.stats/) | Numbers and series for the statistics screen, worked out from the answers in the database. Pure Python, no Qt. |
 
-## alto.lessons
+## [alto.lessons](alto.lessons/)
 
 The lessons: guided walks through a topic, with small exercises along the way.
 
@@ -71,7 +71,7 @@ The lessons: guided walks through a topic, with small exercises along the way.
 | [alto.lessons.pitches_and_notes](alto.lessons.pitches_and_notes/) | A first lesson connecting a sound, a piano key, and a written note. |
 | [alto.lessons.scale_identification](alto.lessons.scale_identification/) | Reading scales and recognizing their interval patterns. |
 
-## alto.theory
+## [alto.theory](alto.theory/)
 
 Music theory, with no user interface.
 
@@ -82,7 +82,7 @@ Music theory, with no user interface.
 | [alto.theory.pitch](alto.theory.pitch/) | Pitches and intervals, spelled correctly (C# is not Db). |
 | [alto.theory.scales](alto.theory.scales/) | Scales, modes, key signatures and chords, built from spelled intervals. |
 
-## alto.ui
+## [alto.ui](alto.ui/)
 
 The windows, widgets and drawing code. Everything that needs Qt is in here.
 

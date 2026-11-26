@@ -2,165 +2,22 @@
 title: alto.ui.anki_exporter
 parent: api
 package: alto.ui
+api_components: [{"title": "AnkiExporter", "url": "/api/alto.ui.anki_exporter/class-ankiexporter/"}, {"title": "ExporterSession", "url": "/api/alto.ui.anki_exporter/class-exportersession/"}, {"title": "card_fields", "url": "/api/alto.ui.anki_exporter/function-card_fields/"}]
 permalink: /api/alto.ui.anki_exporter/
 ---
 {% raw %}
 Modeless Anki deck exporter using Alto's exercise controls and music
 engraving.
 
-## card_fields
+## Classes
 
-<div class="api-signature" markdown="1">
+- [`AnkiExporter`](class-ankiexporter/) — Select exercise decks, preview cards, and export an Anki package.
+- [`ExporterSession`](class-exportersession/) — Manage a modeless Qt window with its own exercise settings and Qt settings store.
 
-```python
-def card_fields(
-    question: Question,
-    *,
-    folder: Path,
-    exercise: Exercise,
-) -> list[str]
-```
+## Functions
 
-{% endraw %}{% include api-source.html name="card_fields" line=136 %}{% raw %}
-
-</div>
-
-Render an exercise as a reveal-and-grade card.
-
-**Returns**
-
-- *list of str*: The prompt, illustrations, answer, and explanation fields as HTML.
-
-## AnkiExporter
-
-<div class="api-signature" markdown="1">
-
-```python
-AnkiExporter(
-    learner: Learner | None,
-    *,
-    reviews: dict[str, list[Review]],
-    selected: str = '',
-    parent: QWidget | None = None,
-)
-```
-
-{% endraw %}{% include api-source.html name="AnkiExporter" line=830 %}{% raw %}
-
-</div>
-
-Bases: `QDialog`
-
-Select exercise decks, preview cards, and export an Anki package.
-
-**Constructor**
-
-Build the deck navigation, card preview, and private exercise
-settings.
-
-### AnkiExporter.changeEvent
-
-<div class="api-signature" markdown="1">
-
-```python
-def changeEvent(event: QEvent) -> None
-```
-
-{% endraw %}{% include api-source.html name="AnkiExporter.changeEvent" line=1006 %}{% raw %}
-
-</div>
-
-Refresh palette-dependent artwork when Qt applies a new theme.
-
-### AnkiExporter.reject
-
-<div class="api-signature" markdown="1">
-
-```python
-def reject() -> None
-```
-
-{% endraw %}{% include api-source.html name="AnkiExporter.reject" line=1156 %}{% raw %}
-
-</div>
-
-Keep the export process alive until the destination dialog can
-close.
-
-## ExporterSession
-
-<div class="api-signature" markdown="1">
-
-```python
-ExporterSession()
-```
-
-{% endraw %}{% include api-source.html name="ExporterSession" line=1168 %}{% raw %}
-
-</div>
-
-Manage a modeless Qt window with its own exercise settings and Qt
-settings store.
-
-**Constructor**
-
-Start with no exporter open.
-
-### ExporterSession.open
-
-<div class="api-signature" markdown="1">
-
-```python
-def open(
-    learner: Learner | None,
-    *,
-    selected: str,
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="ExporterSession.open" line=1179 %}{% raw %}
-
-</div>
-
-Raise the existing exporter or spawn a window for the active
-profile.
-
-**Parameters**
-
-- `learner` (*Learner or None*): Active profile whose review dates and practice limits are available.
-- `selected` (*str*): Class name of the exercise to select when opening.
-
-**Raises**
-
-- *OSError*: If the system cannot start the exporter.
-
-### ExporterSession.sync_theme
-
-<div class="api-signature" markdown="1">
-
-```python
-def sync_theme(key: str) -> None
-```
-
-{% endraw %}{% include api-source.html name="ExporterSession.sync_theme" line=1252 %}{% raw %}
-
-</div>
-
-Forward the selected palette and any custom colors to an open
-exporter.
-
-### ExporterSession.close
-
-<div class="api-signature" markdown="1">
-
-```python
-def close() -> None
-```
-
-{% endraw %}{% include api-source.html name="ExporterSession.close" line=1269 %}{% raw %}
-
-</div>
-
-Close the command pipe so the exporter can finish its current
-write and exit normally.
+- [`card_fields`](function-card_fields/) — Render an exercise as a reveal-and-grade card.
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"card_fields": "function-card_fields/", "ankiexporter": "class-ankiexporter/", "ankiexporterchangeevent": "class-ankiexporter/#ankiexporterchangeevent", "ankiexporterreject": "class-ankiexporter/#ankiexporterreject", "exportersession": "class-exportersession/", "exportersessionopen": "class-exportersession/#exportersessionopen", "exportersessionsync_theme": "class-exportersession/#exportersessionsync_theme", "exportersessionclose": "class-exportersession/#exportersessionclose"}</script>
+{% include api-fragments.html %}

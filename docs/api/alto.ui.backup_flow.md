@@ -2,11 +2,24 @@
 title: alto.ui.backup_flow
 parent: api
 package: alto.ui
+api_components: [{"title": "counted", "url": "/api/alto.ui.backup_flow/function-counted/"}, {"title": "default_name", "url": "/api/alto.ui.backup_flow/function-default_name/"}, {"title": "describe", "url": "/api/alto.ui.backup_flow/function-describe/"}, {"title": "export_backup", "url": "/api/alto.ui.backup_flow/function-export_backup/"}, {"title": "import_backup", "url": "/api/alto.ui.backup_flow/function-import_backup/"}, {"title": "safety_copy", "url": "/api/alto.ui.backup_flow/function-safety_copy/"}]
 permalink: /api/alto.ui.backup_flow/
 ---
 {% raw %}
 Exporting a backup and importing one: the file dialogs, the questions
 asked, and the safety copy made before anything is replaced.
+
+## Functions
+
+- [`default_name`](function-default_name/) — Suggest a file name for a backup made now.
+- [`counted`](function-counted/) — Write a count with its noun, in the plural unless there is one.
+- [`describe`](function-describe/) — Say what a backup holds and when it was made, for the question asked before importing it.
+- [`export_backup`](function-export_backup/) — Ask where to save a backup, and write it.
+- [`safety_copy`](function-safety_copy/) — Save a backup of what the database holds now, beside it, before it is replaced.
+- [`import_backup`](function-import_backup/) — Ask for a backup file and, once the user has agreed, replace everything with what it holds.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 Everything Alto keeps goes into a backup (the database and the saved
 preferences), and importing one replaces everything, so an
@@ -23,231 +36,8 @@ saved next to the database, so a wrong choice can be undone.
 True
 ```
 
-## default_name
-
-<div class="api-signature" markdown="1">
-
-```python
-def default_name(
-    *,
-    now: float | None = None,
-) -> str
-```
-
-{% endraw %}{% include api-source.html name="default_name" line=49 %}{% raw %}
-
-</div>
-
-Suggest a file name for a backup made now.
-
-**Parameters**
-
-- `now` (*float or None, default None*): The time as a timestamp; the clock is used if None. Keyword-only.
-
-**Returns**
-
-- *str*: For example `alto-backup-2026-11-13.altobackup`.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> default_name(
-...     now=datetime(
-...         2026, 11, 13, 12
-...     ).timestamp()
-... )
-'alto-backup-2026-11-13.altobackup'
-```
-
-## counted
-
-<div class="api-signature" markdown="1">
-
-```python
-def counted(
-    number: int,
-    *,
-    noun: str,
-) -> str
-```
-
-{% endraw %}{% include api-source.html name="counted" line=77 %}{% raw %}
-
-</div>
-
-Write a count with its noun, in the plural unless there is one.
-
-**Parameters**
-
-- `number` (*int*): The count.
-- `noun` (*str*): The singular noun. Keyword-only.
-
-**Returns**
-
-- *str*: For example "1 profile" or "12,345 answers".
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> (
-...     counted(1, noun="profile"),
-...     counted(12345, noun="answer"),
-... )
-('1 profile', '12,345 answers')
-```
-
-## describe
-
-<div class="api-signature" markdown="1">
-
-```python
-def describe(info: BackupInfo) -> str
-```
-
-{% endraw %}{% include api-source.html name="describe" line=108 %}{% raw %}
-
-</div>
-
-Say what a backup holds and when it was made, for the question asked
-before importing it.
-
-**Parameters**
-
-- `info` (*BackupInfo*): What the backup says about itself.
-
-**Returns**
-
-- *str*: A sentence or two.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> text = describe(
-...     BackupInfo(
-...         datetime(
-...             2026, 11, 13, 9, 30
-...         ).timestamp(),
-...         app_version="0.1.0",
-...         schema_version=1,
-...         profiles=2,
-...         attempts=1500,
-...     )
-... )
->>> text
-'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles
-and 1,500 answers.'
-```
-
-## export_backup
-
-<div class="api-signature" markdown="1">
-
-```python
-def export_backup(
-    parent: QWidget,
-    *,
-    db: Database,
-) -> Path | None
-```
-
-{% endraw %}{% include api-source.html name="export_backup" line=151 %}{% raw %}
-
-</div>
-
-Ask where to save a backup, and write it.
-
-**Parameters**
-
-- `parent` (*QWidget*): The window the dialogs belong to.
-- `db` (*Database*): The database to back up. Keyword-only.
-
-**Returns**
-
-- *Path or None*: The file that was written, or None if the user canceled or the backup could not be written (which is explained).
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> export_backup(
-...     QWidget(), db=Database()
-... )  # doctest: +SKIP
-PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
-```
-
-## safety_copy
-
-<div class="api-signature" markdown="1">
-
-```python
-def safety_copy(db: Database) -> Path | None
-```
-
-{% endraw %}{% include api-source.html name="safety_copy" line=208 %}{% raw %}
-
-</div>
-
-Save a backup of what the database holds now, beside it, before it
-is replaced.
-
-**Parameters**
-
-- `db` (*Database*): The database about to be replaced.
-
-**Returns**
-
-- *Path or None*: The file written, or None for a throwaway in-memory database, which has no folder to keep a copy in.
-
-**Raises**
-
-- *BackupError*: If the copy cannot be written.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> safety_copy(Database()) is None
-True
-```
-
-## import_backup
-
-<div class="api-signature" markdown="1">
-
-```python
-def import_backup(
-    parent: QWidget,
-    *,
-    db: Database,
-) -> bool
-```
-
-{% endraw %}{% include api-source.html name="import_backup" line=242 %}{% raw %}
-
-</div>
-
-Ask for a backup file and, once the user has agreed, replace
-everything with what it holds.
-
-The file is read and checked completely first, so a damaged or
-foreign file changes nothing. After the user agrees, a
-backup of the current data is saved beside the database, then the
-database and the saved preferences are replaced. The
-caller has to reload what is on screen afterwards.
-
-**Parameters**
-
-- `parent` (*QWidget*): The window the dialogs belong to.
-- `db` (*Database*): The database to replace the contents of. Keyword-only.
-
-**Returns**
-
-- *bool*: True if the backup was applied; False if the user canceled or the file was refused (which is explained).
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> import_backup(
-...     QWidget(), db=Database()
-... )  # doctest: +SKIP
-True
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"default_name": "function-default_name/", "counted": "function-counted/", "describe": "function-describe/", "export_backup": "function-export_backup/", "safety_copy": "function-safety_copy/", "import_backup": "function-import_backup/"}</script>
+{% include api-fragments.html %}

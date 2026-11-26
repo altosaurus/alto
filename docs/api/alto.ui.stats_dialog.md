@@ -2,11 +2,26 @@
 title: alto.ui.stats_dialog
 parent: api
 package: alto.ui
+api_components: [{"title": "StatsPage", "url": "/api/alto.ui.stats_dialog/class-statspage/"}, {"title": "Tile", "url": "/api/alto.ui.stats_dialog/class-tile/"}, {"title": "format_duration", "url": "/api/alto.ui.stats_dialog/function-format_duration/"}, {"title": "period_title", "url": "/api/alto.ui.stats_dialog/function-period_title/"}, {"title": "since_for", "url": "/api/alto.ui.stats_dialog/function-since_for/"}]
 permalink: /api/alto.ui.stats_dialog/
 ---
 {% raw %}
 The statistics screen: a few numbers and charts about how practice is
 going.
+
+## Classes
+
+- [`Tile`](class-tile/) — One headline number with its caption.
+- [`StatsPage`](class-statspage/) — The statistics, as a page of the main window.
+
+## Functions
+
+- [`since_for`](function-since_for/) — Return the timestamp a timeframe starts from.
+- [`format_duration`](function-format_duration/) — Write a length of time the way the statistics show it.
+- [`period_title`](function-period_title/) — Name a chart period in words, for the heading of its list of answers.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 It shows the active profile's own answers, filterable by exercise and by
 timeframe.
@@ -22,311 +37,8 @@ True
 '1 h 00 min'
 ```
 
-## since_for
-
-<div class="api-signature" markdown="1">
-
-```python
-def since_for(
-    span: str | int | None,
-    *,
-    now: float,
-) -> float | None
-```
-
-{% endraw %}{% include api-source.html name="since_for" line=86 %}{% raw %}
-
-</div>
-
-Return the timestamp a timeframe starts from.
-
-**Parameters**
-
-- `span` (*str or int or None*): "today", a number of days back, or None for all time.
-- `now` (*float*): The current time as a timestamp. Keyword-only.
-
-**Returns**
-
-- *float or None*: Midnight for "today", `now` less that many days for a number, and None for all time.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> since_for(7, now=864000.0)
-259200.0
->>> since_for(None, now=864000.0) is None
-True
->>> 0 <= 864000.0 - since_for(
-...     "today", now=864000.0
-... ) < 90000  # within a day of now
-True
-```
-
-## format_duration
-
-<div class="api-signature" markdown="1">
-
-```python
-def format_duration(seconds: float) -> str
-```
-
-{% endraw %}{% include api-source.html name="format_duration" line=132 %}{% raw %}
-
-</div>
-
-Write a length of time the way the statistics show it.
-
-**Parameters**
-
-- `seconds` (*float*): The time in seconds.
-
-**Returns**
-
-- *str*: Seconds under half a minute, then minutes, then hours and minutes.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> (
-...     format_duration(5),
-...     format_duration(90),
-...     format_duration(3000),
-... )
-('5 s', '2 min', '50 min')
->>> format_duration(3 * 3600 + 7 * 60)
-'3 h 07 min'
-```
-
-## period_title
-
-<div class="api-signature" markdown="1">
-
-```python
-def period_title(
-    start: datetime,
-    *,
-    granularity: str,
-) -> str
-```
-
-{% endraw %}{% include api-source.html name="period_title" line=168 %}{% raw %}
-
-</div>
-
-Name a chart period in words, for the heading of its list of
-answers.
-
-**Parameters**
-
-- `start` (*datetime*): The start of the period.
-- `granularity` (*str*): "hour", "day", "week" or "month", as `Stats.granularity` says. Keyword-only.
-
-**Returns**
-
-- *str*: For example "Mon 5 Jan 2026", "Week of Mon 5 Jan 2026" or "January 2026".
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> period_title(
-...     datetime(2026, 1, 5, 14),
-...     granularity="hour",
-... )
-'Mon 5 Jan 2026, 14:00'
->>> period_title(
-...     datetime(2026, 1, 5), granularity="day"
-... )
-'Mon 5 Jan 2026'
->>> period_title(
-...     datetime(2026, 1, 5), granularity="week"
-... )
-'Week of Mon 5 Jan 2026'
->>> period_title(
-...     datetime(2026, 1, 1),
-...     granularity="month",
-... )
-'January 2026'
-```
-
-## Tile
-
-<div class="api-signature" markdown="1">
-
-```python
-Tile(
-    caption: str,
-    *,
-    parent: QWidget | None = None,
-)
-```
-
-{% endraw %}{% include api-source.html name="Tile" line=229 %}{% raw %}
-
-</div>
-
-Bases: `QFrame`
-
-One headline number with its caption.
-
-**Attributes**
-
-- `value` (*QLabel*): The big number.
-- `caption` (*QLabel*): What the number is.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> tile = Tile("Questions answered")
->>> tile.value.text()
-'–'
->>> tile.show_value("12")
->>> tile.value.text()
-'12'
-```
-
-**Constructor**
-
-Create a tile showing a dash until it is given a value.
-
-**Parameters**
-
-- `caption` (*str*): What the number is, shown under it.
-- `parent` (*QWidget or None, default None*): The widget that owns the tile. Keyword-only.
-
-**Constructor examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> tile = Tile("Days practiced")
->>> tile.caption.text()
-'Days practiced'
-```
-
-### Tile.show_value
-
-<div class="api-signature" markdown="1">
-
-```python
-def show_value(text: str) -> None
-```
-
-{% endraw %}{% include api-source.html name="Tile.show_value" line=285 %}{% raw %}
-
-</div>
-
-Show a number (or any text) in the tile.
-
-**Parameters**
-
-- `text` (*str*): What to show.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> tile = Tile("Typical first answer")
->>> tile.show_value("7.6 s")
->>> tile.value.text()
-'7.6 s'
-```
-
-## StatsPage
-
-<div class="api-signature" markdown="1">
-
-```python
-StatsPage(
-    learner: Learner,
-    *,
-    parent: QWidget | None = None,
-)
-```
-
-{% endraw %}{% include api-source.html name="StatsPage" line=304 %}{% raw %}
-
-</div>
-
-Bases: `QWidget`
-
-The statistics, as a page of the main window.
-
-**Attributes**
-
-- `back` (*Signal*): Emitted by Escape; the main window provides the shared Back button.
-- `learner` (*Learner*): Whose answers are shown; only the active profile's own.
-- `exercise` (*FieldComboBox*): The exercise filter.
-- `timeframe` (*FieldComboBox*): The timeframe filter.
-- `tiles` (*dict of str to Tile*): The headline numbers, by name.
-- `detail` (*QFrame*): The panel under the charts that lists the answers behind a clicked bar, point, row or day. Hidden until one is clicked.
-- `answers` (*AnswerList*): The table in the detail panel.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.learning import Database
->>> db = Database()
->>> page = StatsPage(
-...     Learner(
-...         db, profile=db.add_profile("Ada")
-...     )
-... )
->>> page.note.text().startswith(
-...     "No answers recorded for Ada"
-... )
-True
-```
-
-**Constructor**
-
-Build the page and fill it for the current filters.
-
-**Parameters**
-
-- `learner` (*Learner*): Whose statistics to show.
-- `parent` (*QWidget or None, default None*): The widget that owns the page. Keyword-only.
-
-**Constructor examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.learning import Database
->>> db = Database()
->>> page = StatsPage(
-...     Learner(
-...         db, profile=db.add_profile("Ada")
-...     )
-... )
->>> # the last 30 days, until another is chosen
->>> page.timeframe.currentText()
-'Last 30 days'
-```
-
-### StatsPage.refresh
-
-<div class="api-signature" markdown="1">
-
-```python
-def refresh() -> None
-```
-
-{% endraw %}{% include api-source.html name="StatsPage.refresh" line=620 %}{% raw %}
-
-</div>
-
-Recalculate everything for the chosen exercise and timeframe and
-show it.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> from alto.learning import Database
->>> db = Database()
->>> page = StatsPage(
-...     Learner(
-...         db, profile=db.add_profile("Ada")
-...     )
-... )
->>> page.refresh()
->>> page.tiles[
-...     "questions"
-... ].value.text()  # nothing answered yet
-'0'
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"since_for": "function-since_for/", "format_duration": "function-format_duration/", "period_title": "function-period_title/", "tile": "class-tile/", "tileshow_value": "class-tile/#tileshow_value", "statspage": "class-statspage/", "statspagerefresh": "class-statspage/#statspagerefresh"}</script>
+{% include api-fragments.html %}

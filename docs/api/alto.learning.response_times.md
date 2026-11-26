@@ -2,131 +2,16 @@
 title: alto.learning.response_times
 parent: api
 package: alto.learning
+api_components: [{"title": "ResponseTimes", "url": "/api/alto.learning.response_times/class-responsetimes/"}]
 permalink: /api/alto.learning.response_times/
 ---
 {% raw %}
 Rolling response times for one learner and exercise.
 
-## ResponseTimes
+## Classes
 
-<div class="api-signature" markdown="1">
-
-```python
-ResponseTimes(
-    times: tuple[int, ...],
-    easy_percent: int,
-    hard_percent: int,
-)
-```
-
-{% endraw %}{% include api-source.html name="ResponseTimes" line=14 %}{% raw %}
-
-</div>
-
-Sorted millisecond timings and the profile's fastest and slowest
-tail percentages.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> sample = ResponseTimes(
-...     tuple(range(1, 101)), 15, 15
-... )
->>> (
-...     sample.grade(1).name,
-...     sample.grade(50).name,
-...     sample.grade(100).name,
-... )
-('Easy', 'Good', 'Hard')
-```
-
-### ResponseTimes.ready
-
-<div class="api-signature" markdown="1">
-
-```python
-@property
-def ready() -> bool
-```
-
-{% endraw %}{% include api-source.html name="ResponseTimes.ready" line=37 %}{% raw %}
-
-</div>
-
-Check whether this exercise has enough eligible answers.
-
-**Returns**
-
-- *bool*: True once at least 40 previous answers are available.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> ResponseTimes((), 15, 15).ready
-False
-```
-
-### ResponseTimes.percentile
-
-<div class="api-signature" markdown="1">
-
-```python
-def percentile(percent: int) -> float
-```
-
-{% endraw %}{% include api-source.html name="ResponseTimes.percentile" line=53 %}{% raw %}
-
-</div>
-
-Interpolate a percentile between adjacent observations in a
-nonempty sample.
-
-**Parameters**
-
-- `percent` (*int*): Percentile from zero to 100.
-
-**Returns**
-
-- *float*: Elapsed milliseconds at the requested percentile.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> ResponseTimes(
-...     (1000, 2000), 15, 15
-... ).percentile(25)
-1250.0
-```
-
-### ResponseTimes.grade
-
-<div class="api-signature" markdown="1">
-
-```python
-def grade(milliseconds: int) -> Rating
-```
-
-{% endraw %}{% include api-source.html name="ResponseTimes.grade" line=84 %}{% raw %}
-
-</div>
-
-Grade a correct first answer against earlier answers to this
-exercise.
-
-**Parameters**
-
-- `milliseconds` (*int*): Eligible duration, or zero if the timing is unavailable.
-
-**Returns**
-
-- *Rating*: Hard for slow answers, Easy for fast answers, and Good for ties or missing timings.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> ResponseTimes((1000,) * 40, 15, 15).grade(
-...     1000
-... ).name
-'Good'
-```
+- [`ResponseTimes`](class-responsetimes/) — Sorted millisecond timings and the profile's fastest and slowest tail percentages.
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"responsetimes": "class-responsetimes/", "responsetimesready": "class-responsetimes/#responsetimesready", "responsetimespercentile": "class-responsetimes/#responsetimespercentile", "responsetimesgrade": "class-responsetimes/#responsetimesgrade"}</script>
+{% include api-fragments.html %}

@@ -2,10 +2,24 @@
 title: alto.theory.scales
 parent: api
 package: alto.theory
+api_components: [{"title": "all_tonics", "url": "/api/alto.theory.scales/function-all_tonics/"}, {"title": "arpeggio", "url": "/api/alto.theory.scales/function-arpeggio/"}, {"title": "build", "url": "/api/alto.theory.scales/function-build/"}, {"title": "format_key_signature", "url": "/api/alto.theory.scales/function-format_key_signature/"}, {"title": "key_signature", "url": "/api/alto.theory.scales/function-key_signature/"}, {"title": "major_key_tonic", "url": "/api/alto.theory.scales/function-major_key_tonic/"}, {"title": "mode_tonic", "url": "/api/alto.theory.scales/function-mode_tonic/"}]
 permalink: /api/alto.theory.scales/
 ---
 {% raw %}
 Scales, modes, key signatures and chords, built from spelled intervals.
+
+## Functions
+
+- [`major_key_tonic`](function-major_key_tonic/) — Return the tonic of the major key with a given number of sharps or flats.
+- [`mode_tonic`](function-mode_tonic/) — Return the note a scale in a given mode starts on, for a given key signature.
+- [`arpeggio`](function-arpeggio/) — Return a chord broken and rising from its lowest note, then that note again an octave higher.
+- [`build`](function-build/) — Build the notes of a scale or chord above a tonic.
+- [`key_signature`](function-key_signature/) — Return the key signature of a scale as a signed count of accidentals.
+- [`format_key_signature`](function-format_key_signature/) — Describe a key signature in words.
+- [`all_tonics`](function-all_tonics/) — Return every spelled tonic in octave 4, within a limit on accidentals.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 `SCALES` and `CHORDS` map a name to the list of intervals above the
 tonic or root. `build` turns such a list into notes,
@@ -33,290 +47,8 @@ arpeggios from them.
 ['C4', 'E♭4', 'G4', 'B♭4']
 ```
 
-## major_key_tonic
-
-<div class="api-signature" markdown="1">
-
-```python
-def major_key_tonic(count: int) -> Note
-```
-
-{% endraw %}{% include api-source.html name="major_key_tonic" line=90 %}{% raw %}
-
-</div>
-
-Return the tonic of the major key with a given number of sharps or
-flats.
-
-**Parameters**
-
-- `count` (*int*): Sharps (positive) or flats (negative) in the key signature, from -7 to 7.
-
-**Returns**
-
-- *Note*: The tonic, in octave 4.
-
-**Raises**
-
-- *KeyError*: If `count` is outside -7..7.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> str(
-...     major_key_tonic(2)
-... )  # two sharps: D major
-'D4'
->>> str(
-...     major_key_tonic(-3)
-... )  # three flats: E♭ major
-'E♭4'
-```
-
-## mode_tonic
-
-<div class="api-signature" markdown="1">
-
-```python
-def mode_tonic(
-    count: int,
-    *,
-    mode: str,
-) -> Note
-```
-
-{% endraw %}{% include api-source.html name="mode_tonic" line=131 %}{% raw %}
-
-</div>
-
-Return the note a scale in a given mode starts on, for a given key
-signature.
-
-The notes of a mode are those of a major scale started from another
-degree. D Dorian, for example, has the key
-signature of C major, started from its second note.
-
-**Parameters**
-
-- `count` (*int*): Sharps (positive) or flats (negative) in the key signature, from -7 to 7.
-- `mode` (*str*): A key of `MODE_DEGREE`, such as "Dorian" or "Natural minor (Aeolian)". Keyword-only.
-
-**Returns**
-
-- *Note*: The tonic of that mode, in octave 4 or 5.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> str(
-...     mode_tonic(0, mode="Dorian")
-... )  # no sharps or flats: D Dorian
-'D4'
->>> str(
-...     mode_tonic(
-...         2, mode="Natural minor (Aeolian)"
-...     )
-... )  # two sharps: B minor
-'B4'
-```
-
-## arpeggio
-
-<div class="api-signature" markdown="1">
-
-```python
-def arpeggio(
-    root: Note,
-    *,
-    intervals: list[Interval],
-    inversion: int = 0,
-) -> list[Note]
-```
-
-{% endraw %}{% include api-source.html name="arpeggio" line=185 %}{% raw %}
-
-</div>
-
-Return a chord broken and rising from its lowest note, then that
-note again an octave higher.
-
-**Parameters**
-
-- `root` (*Note*): The root of the chord.
-- `intervals` (*list of Interval*): The intervals above the root that make the chord, such as `CHORDS["major"]`. Keyword-only.
-- `inversion` (*int, default 0*): How many of the lowest chord tones are moved up an octave first: 0 is root position, 1 puts the third at the bottom, 2 the fifth. Keyword-only.
-
-**Returns**
-
-- *list of Note*: The chord tones from the lowest up, ending on the lowest note an octave higher.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> [
-...     str(n)
-...     for n in arpeggio(
-...         Note.parse("C4"),
-...         intervals=CHORDS["major"],
-...     )
-... ]
-['C4', 'E4', 'G4', 'C5']
->>> [
-...     str(n)
-...     for n in arpeggio(
-...         Note.parse("C4"),
-...         intervals=CHORDS["major"],
-...         inversion=1,
-...     )
-... ]
-['E4', 'G4', 'C5', 'E5']
-```
-
-## build
-
-<div class="api-signature" markdown="1">
-
-```python
-def build(
-    tonic: Note,
-    *,
-    intervals: list[Interval],
-) -> list[Note]
-```
-
-{% endraw %}{% include api-source.html name="build" line=239 %}{% raw %}
-
-</div>
-
-Build the notes of a scale or chord above a tonic.
-
-**Parameters**
-
-- `tonic` (*Note*): The first note.
-- `intervals` (*list of Interval*): The intervals above the tonic, including the unison, such as a value of `SCALES` or `CHORDS`. Keyword-only.
-
-**Returns**
-
-- *list of Note*: The tonic transposed by each interval, in order.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> [
-...     str(n)
-...     for n in build(
-...         Note.parse("G4"),
-...         intervals=SCALES["Major (Ionian)"],
-...     )
-... ]
-['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F♯5']
-```
-
-## key_signature
-
-<div class="api-signature" markdown="1">
-
-```python
-def key_signature(
-    tonic_name: str,
-    *,
-    scale: str = 'Major (Ionian)',
-) -> int
-```
-
-{% endraw %}{% include api-source.html name="key_signature" line=274 %}{% raw %}
-
-</div>
-
-Return the key signature of a scale as a signed count of
-accidentals.
-
-**Parameters**
-
-- `tonic_name` (*str*): The tonic in plain text without an octave, such as 'G', 'Eb' or 'F#'.
-- `scale` (*str, default "Major (Ionian)"*): A key of `SCALES`. Keyword-only.
-
-**Returns**
-
-- *int*: The sum of the accidentals of the scale's notes: positive for sharps, negative for flats.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> key_signature("G")  # G major has one sharp
-1
->>> key_signature(
-...     "Eb"
-... )  # E♭ major has three flats
--3
->>> key_signature(
-...     "A", scale="Natural minor (Aeolian)"
-... )  # A minor has none
-0
-```
-
-## format_key_signature
-
-<div class="api-signature" markdown="1">
-
-```python
-def format_key_signature(count: int) -> str
-```
-
-{% endraw %}{% include api-source.html name="format_key_signature" line=315 %}{% raw %}
-
-</div>
-
-Describe a key signature in words.
-
-**Parameters**
-
-- `count` (*int*): Sharps (positive) or flats (negative).
-
-**Returns**
-
-- *str*: For example '1 sharp', '3 flats' or 'no sharps or flats'.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> format_key_signature(0)
-'no sharps or flats'
->>> format_key_signature(1)
-'1 sharp'
->>> format_key_signature(-3)
-'3 flats'
-```
-
-## all_tonics
-
-<div class="api-signature" markdown="1">
-
-```python
-def all_tonics(max_accidentals: int = 1) -> list[Note]
-```
-
-{% endraw %}{% include api-source.html name="all_tonics" line=348 %}{% raw %}
-
-</div>
-
-Return every spelled tonic in octave 4, within a limit on
-accidentals.
-
-**Parameters**
-
-- `max_accidentals` (*int, default 1*): The most sharps or flats a tonic may have, so 1 allows C♭ through B♯ but not double sharps.
-
-**Returns**
-
-- *list of Note*: Each letter with each accidental from `-max_accidentals` to `max_accidentals`, letters in the order C to B.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> len(all_tonics())
-21
->>> [str(n) for n in all_tonics(0)]
-['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4']
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"major_key_tonic": "function-major_key_tonic/", "mode_tonic": "function-mode_tonic/", "arpeggio": "function-arpeggio/", "build": "function-build/", "key_signature": "function-key_signature/", "format_key_signature": "function-format_key_signature/", "all_tonics": "function-all_tonics/"}</script>
+{% include api-fragments.html %}

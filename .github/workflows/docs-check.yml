@@ -52,6 +52,7 @@ jobs:
             "$host" "$root" "$root" "${release#v}" > version.yml
           printf 'preview_pr: %s\n' "$PR" >> version.yml
           printf 'source_revision: "%s"\n' "$(git rev-parse HEAD)" >> version.yml
+          python3 scripts/docs_excerpts.py
           bundle exec jekyll build --source docs --destination site/dev --config docs/_config.yml,version.yml
           bundle exec ruby scripts/docs_search.rb site/dev
           printf '%s\n' "$HEAD_SHA" > site/dev/commit.txt

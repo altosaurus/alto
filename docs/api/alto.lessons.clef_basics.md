@@ -2,10 +2,20 @@
 title: alto.lessons.clef_basics
 parent: api
 package: alto.lessons
+api_components: [{"title": "identify_task", "url": "/api/alto.lessons.clef_basics/function-identify_task/"}, {"title": "line_task", "url": "/api/alto.lessons.clef_basics/function-line_task/"}, {"title": "symbol_task", "url": "/api/alto.lessons.clef_basics/function-symbol_task/"}]
 permalink: /api/alto.lessons.clef_basics/
 ---
 {% raw %}
 The lesson on clefs, taught from nothing.
+
+## Functions
+
+- [`symbol_task`](function-symbol_task/) — Ask which of the three symbols a clef is made with.
+- [`identify_task`](function-identify_task/) — Ask which clef is drawn on a staff.
+- [`line_task`](function-line_task/) — Ask which line of a blank staff a named clef is written on.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 It covers what a clef does, the three symbols (the G, C and F clef) and
 the line each clef puts them on, the way every C clef
@@ -20,95 +30,8 @@ points at middle C, and the rarer clefs.
 ('G clef', 'C clef', 'F clef')
 ```
 
-## symbol_task
-
-<div class="api-signature" markdown="1">
-
-```python
-def symbol_task(rng: random.Random) -> Task
-```
-
-{% endraw %}{% include api-source.html name="symbol_task" line=60 %}{% raw %}
-
-</div>
-
-Ask which of the three symbols a clef is made with.
-
-**Parameters**
-
-- `rng` (*random.Random*): Chooses the clef.
-
-**Returns**
-
-- *Task*: A clef drawn on a staff, and a button for each symbol.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> task = symbol_task(random.Random(2))
->>> task.correct == CLEF_SYMBOL_NAMES[
-...     SYMBOLS[task.clef]
-... ]
-True
-```
-
-## identify_task
-
-<div class="api-signature" markdown="1">
-
-```python
-def identify_task(rng: random.Random) -> Task
-```
-
-{% endraw %}{% include api-source.html name="identify_task" line=103 %}{% raw %}
-
-</div>
-
-Ask which clef is drawn on a staff.
-
-**Parameters**
-
-- `rng` (*random.Random*): Chooses the clef.
-
-**Returns**
-
-- *Task*: A clef drawn on a staff, and a button for each of the four everyday clefs.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> task = identify_task(random.Random(3))
->>> task.correct in task.choices and task.clef != ""
-True
-```
-
-## line_task
-
-<div class="api-signature" markdown="1">
-
-```python
-def line_task(rng: random.Random) -> Task
-```
-
-{% endraw %}{% include api-source.html name="line_task" line=146 %}{% raw %}
-
-</div>
-
-Ask which line of a blank staff a named clef is written on.
-
-**Parameters**
-
-- `rng` (*random.Random*): Chooses the clef.
-
-**Returns**
-
-- *Task*: A blank staff, and a button for each line.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> task = line_task(random.Random(4))
->>> task.correct in LINES and task.clef == ""
-True
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"symbol_task": "function-symbol_task/", "identify_task": "function-identify_task/", "line_task": "function-line_task/"}</script>
+{% include api-fragments.html %}

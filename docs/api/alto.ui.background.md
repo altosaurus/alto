@@ -2,11 +2,19 @@
 title: alto.ui.background
 parent: api
 package: alto.ui
+api_components: [{"title": "run_in_background", "url": "/api/alto.ui.background/function-run_in_background/"}]
 permalink: /api/alto.ui.background/
 ---
 {% raw %}
 Run slow work, such as a download, on another thread, and hear how it
 went on the window's thread.
+
+## Functions
+
+- [`run_in_background`](function-run_in_background/) — Run work on another thread, then call `done` with its result, or `failed` with its exception, on the owner's thread.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 **Examples**
 
@@ -30,65 +38,8 @@ went on the window's thread.
 [42]
 ```
 
-## run_in_background
-
-<div class="api-signature" markdown="1">
-
-```python
-def run_in_background(
-    work: Callable[[], T],
-    *,
-    owner: QObject,
-    done: Callable[[T], None],
-    failed: Callable[[Exception], None],
-) -> threading.Thread
-```
-
-{% endraw %}{% include api-source.html name="run_in_background" line=204 %}{% raw %}
-
-</div>
-
-Run work on another thread, then call `done` with its result, or
-`failed` with its exception, on the owner's thread.
-
-The window stays responsive while the work runs. If the owner is
-deleted before the work ends, neither is called. The thread
-does not keep Alto from quitting.
-
-**Parameters**
-
-- `work` (*callable*): The slow part. It must not touch widgets.
-- `owner` (*QObject*): The object the work is for, such as the dialog that started it. Keyword-only.
-- `done` (*callable*): Called with what `work` returned. Keyword-only.
-- `failed` (*callable*): Called with the exception `work` raised. Keyword-only.
-
-**Returns**
-
-- *threading.Thread*: The thread doing the work, already started. Callers need not keep it.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> import time
->>> heard = []
->>> owner = QObject()
->>> def broken():
-...     raise OSError("offline")
->>> _ = run_in_background(
-...     broken,
-...     owner=owner,
-...     done=heard.append,
-...     failed=lambda error: heard.append(
-...         str(error)
-...     ),
-... )
->>> deadline = time.monotonic() + 5
->>> while (
-...     not heard
-...     and time.monotonic() < deadline
-... ):
-...     app.processEvents()
->>> heard
-['offline']
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"run_in_background": "function-run_in_background/"}</script>
+{% include api-fragments.html %}

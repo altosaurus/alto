@@ -2,11 +2,22 @@
 title: alto.location
 parent: api
 package: alto
+api_components: [{"title": "alto_home", "url": "/api/alto.location/function-alto_home/"}, {"title": "database_path", "url": "/api/alto.location/function-database_path/"}, {"title": "desktop_name", "url": "/api/alto.location/function-desktop_name/"}, {"title": "settings_folder", "url": "/api/alto.location/function-settings_folder/"}]
 permalink: /api/alto.location/
 ---
 {% raw %}
 Where Alto keeps its practice history and its settings, and how to keep
 them somewhere else with `ALTO_HOME`.
+
+## Functions
+
+- [`alto_home`](function-alto_home/) — Give the folder named by `ALTO_HOME`, if there is one.
+- [`database_path`](function-database_path/) — Give the file that holds the practice history.
+- [`settings_folder`](function-settings_folder/) — Give the folder that holds the settings when `ALTO_HOME` moves them.
+- [`desktop_name`](function-desktop_name/) — Give the name the desktop uses to match Alto's window to its menu entry, and so to its icon in the dock.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 Without `ALTO_HOME` they are in the usual places for the system. With
 it, both are in that folder instead, so a copy of Alto
@@ -22,165 +33,8 @@ from the copy that is used for practicing.
 '/tmp/alto-dev/data/alto.db'
 ```
 
-## alto_home
-
-<div class="api-signature" markdown="1">
-
-```python
-def alto_home(
-    *,
-    environ: Mapping[str, str] = os.environ,
-) -> Path | None
-```
-
-{% endraw %}{% include api-source.html name="alto_home" line=29 %}{% raw %}
-
-</div>
-
-Give the folder named by `ALTO_HOME`, if there is one.
-
-**Parameters**
-
-- `environ` (*mapping of str to str*): The environment to read. Keyword-only.
-
-**Returns**
-
-- *Path or None*: The folder, with `~` expanded and made absolute, or None if `ALTO_HOME` is not set or is empty.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> alto_home(environ={}) is None
-True
->>> alto_home(environ={"ALTO_HOME": ""}) is None
-True
->>> str(
-...     alto_home(
-...         environ={
-...             "ALTO_HOME": "/tmp/alto-dev"
-...         }
-...     )
-... )
-'/tmp/alto-dev'
->>> alto_home(
-...     environ={"ALTO_HOME": "~/alto-dev"}
-... ) == Path.home() / "alto-dev"
-True
-```
-
-## database_path
-
-<div class="api-signature" markdown="1">
-
-```python
-def database_path(
-    *,
-    environ: Mapping[str, str] = os.environ,
-) -> Path
-```
-
-{% endraw %}{% include api-source.html name="database_path" line=67 %}{% raw %}
-
-</div>
-
-Give the file that holds the practice history.
-
-**Parameters**
-
-- `environ` (*mapping of str to str*): The environment to read. Keyword-only.
-
-**Returns**
-
-- *Path*: `data/alto.db` in the `ALTO_HOME` folder if there is one, otherwise `alto.db` in the system's data folder for Alto. The folder need not exist yet.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> database_path(
-...     environ={"ALTO_HOME": "/tmp/alto-dev"}
-... ).as_posix()
-'/tmp/alto-dev/data/alto.db'
->>> database_path(environ={}).name
-'alto.db'
-```
-
-## settings_folder
-
-<div class="api-signature" markdown="1">
-
-```python
-def settings_folder(
-    *,
-    environ: Mapping[str, str] = os.environ,
-) -> Path | None
-```
-
-{% endraw %}{% include api-source.html name="settings_folder" line=105 %}{% raw %}
-
-</div>
-
-Give the folder that holds the settings when `ALTO_HOME` moves them.
-
-**Parameters**
-
-- `environ` (*mapping of str to str*): The environment to read. Keyword-only.
-
-**Returns**
-
-- *Path or None*: `config` in the `ALTO_HOME` folder, or None if the settings are in the system's usual place.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> settings_folder(environ={}) is None
-True
->>> str(
-...     settings_folder(
-...         environ={
-...             "ALTO_HOME": "/tmp/alto-dev"
-...         }
-...     )
-... )
-'/tmp/alto-dev/config'
-```
-
-## desktop_name
-
-<div class="api-signature" markdown="1">
-
-```python
-def desktop_name(
-    *,
-    environ: Mapping[str, str] = os.environ,
-) -> str
-```
-
-{% endraw %}{% include api-source.html name="desktop_name" line=137 %}{% raw %}
-
-</div>
-
-Give the name the desktop uses to match Alto's window to its menu
-entry, and so to its icon in the dock.
-
-**Parameters**
-
-- `environ` (*mapping of str to str*): The environment to read. Keyword-only.
-
-**Returns**
-
-- *str*: "alto", or "alto-dev" when `ALTO_HOME` keeps a second copy apart, so that the two copies are separate in the dock.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> (
-...     desktop_name(environ={}),
-...     desktop_name(
-...         environ={
-...             "ALTO_HOME": "/tmp/alto-dev"
-...         }
-...     ),
-... )
-('alto', 'alto-dev')
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"alto_home": "function-alto_home/", "database_path": "function-database_path/", "settings_folder": "function-settings_folder/", "desktop_name": "function-desktop_name/"}</script>
+{% include api-fragments.html %}

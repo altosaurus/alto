@@ -5,7 +5,9 @@ written from.
 
 from __future__ import annotations
 
+import ast
 import importlib.util
+import json
 import re
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -71,11 +73,82 @@ def test_every_module_has_a_page_with_its_public_names(
     """
     pages = api_docs.build()
     for path in api_docs.module_files():
-        assert f"{api_docs.dotted(path)}.md" in pages
-        assert f"[{api_docs.dotted(path)}]" in pages["index.md"]
-    assert "## Learner" in pages["alto.learning.learner.md"]
-    assert "## _Chart" not in pages["alto.ui.charts.md"]
-    assert "## StackedBarChart" in pages["alto.ui.charts.md"]
+        module = api_docs.dotted(path)
+        overview = pages[f"{module}.md"]
+        assert f"[{module}]" in pages["index.md"]
+        package = api_docs.package_of(path)
+        assert f"[{package}]({package}/)" in pages["index.md"]
+        assert f"[{module}](../{module}/)" in pages[f"{package}.md"]
+        assert 'class="api-signature"' not in overview
+        for node in ast.parse(path.read_text()).body:
+            if not isinstance(node, (ast.ClassDef, ast.FunctionDef)):
+                continue
+            if node.name.startswith("_"):
+                continue
+            kind = "class" if isinstance(node, ast.ClassDef) else "function"
+            slug = f"{kind}-{node.name.lower()}"
+            assert f"[`{node.name}`]({slug}/)" in overview
+            component = pages[f"{module}/{slug}.md"]
+            assert f"parent: {module}\n" in component
+            assert f"permalink: /api/{module}/{slug}/\n" in component
+            if isinstance(node, ast.ClassDef):
+                for method in node.body:
+                    if isinstance(method, ast.FunctionDef):
+                        heading = f"## {node.name}.{method.name}\n"
+                        assert (heading in component) == (
+                            not method.name.startswith("_")
+                        )
+    assert "alto.ui.charts/class-_chart.md" not in pages
+
+
+def test_return_tables_preserve_names_and_literal_pipes(
+    api_docs: ModuleType,
+) -> None:
+    """
+    Keep optional return names and union types in their own cells.
+
+    Parameters
+    ----------
+    api_docs : ModuleType
+        The API generator.
+    """
+    table = api_docs.field_table(
+        "Returns",
+        text="value : int | None\n    Use `x | y` or a | b.\nbool\n    Valid.",
+    )
+    assert table.splitlines() == [
+        "| Name | Type | Description |",
+        "| --- | --- | --- |",
+        r"| `value` | `int | None` | Use `x | y` or a \| b. |",
+        "|  | `bool` | Valid. |",
+    ]
+    unnamed = api_docs.field_table("Returns", text="int\n    The count.")
+    assert unnamed.startswith("| Type | Description |")
+
+
+def test_module_bookmarks_resolve_to_the_original_components(
+    api_docs: ModuleType,
+) -> None:
+    """
+    Distinguish a class, its method, and a similarly named function.
+
+    Parameters
+    ----------
+    api_docs : ModuleType
+        The API generator.
+    """
+    name = "alto.instrument_info"
+    pages = api_docs.render_module(api_docs.SOURCE / "instrument_info.py")
+    mapping = re.search(
+        r'id="api-fragments">(.*?)</script>',
+        pages[f"{name}.md"],
+    )
+    assert mapping is not None
+    targets = json.loads(mapping[1])
+    assert targets["coverage"] == "class-coverage/"
+    assert targets["coverage-1"] == "function-coverage/"
+    assert targets["coverageinstalled"] == "class-coverage/#coverageinstalled"
+    assert "## Coverage.installed" in pages[f"{name}/class-coverage.md"]
 
 
 def test_a_page_has_the_front_matter_the_site_needs(
@@ -90,12 +163,12 @@ def test_a_page_has_the_front_matter_the_site_needs(
     api_docs : ModuleType
         The script that writes the pages.
     """
-    page = api_docs.build()["alto.theory.pitch.md"]
+    page = api_docs.build()["alto.theory.pitch/class-note.md"]
     head, _, body = page.removeprefix("---\n").partition("---\n")
     assert (
-        "title: alto.theory.pitch" in head
-        and "parent: api" in head
-        and "permalink: /api/alto.theory.pitch/" in head
+        "title: Note" in head
+        and "parent: alto.theory.pitch" in head
+        and "permalink: /api/alto.theory.pitch/class-note/" in head
     )
     assert body.startswith("{% raw %}") and body.rstrip().endswith(
         "{% endraw %}",
@@ -161,9 +234,9 @@ def test_the_check_reports_what_is_missing_or_stale(
     assert api_docs.problems(out=tmp_path) == []
     (tmp_path / "alto.audio.md").write_text("old")
     (tmp_path / "alto.settings.md").unlink()
-    (tmp_path / "gone.md").write_text("x")
+    (tmp_path / "alto.audio" / "gone.md").write_text("x")
     assert sorted(api_docs.problems(out=tmp_path)) == [
         "missing: alto.settings.md",
-        "no longer wanted: gone.md",
+        "no longer wanted: alto.audio/gone.md",
         "out of date: alto.audio.md",
     ]
