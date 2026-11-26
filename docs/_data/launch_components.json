@@ -19,7 +19,7 @@
   "lesson-tiles": [
     {"label": "Lesson search", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,7.5,30,5]},
     {"label": "Pitches and Notes tile", "type": "TileCard", "href": "/api/alto.ui.home/#tilecard", "rect": [14,14,17,27]},
-    {"label": "Lesson catalog", "type": "HomePage", "href": "/api/alto.ui.home/#homepage", "rect": [32,14,55,54]}
+    {"label": "Lesson catalog", "type": "HomePage", "href": "/api/alto.ui.home/#homepage", "rect": [13.5,14,73.5,55], "group": true}
   ],
   "lesson-workspace": [
     {"label": "Lesson outline", "type": "LessonNav", "href": "/api/alto.ui.lesson_nav/#lessonnav", "rect": [1,14.5,29,66]},

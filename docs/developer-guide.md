@@ -55,7 +55,7 @@ The graduation-cap button switches the catalog to lessons. `HomePage` uses a `Ti
 
 Opening **Pitches and Notes** puts the lesson outline on the left. On the right, `LessonsPage` supplies **Leave lesson** and **Start over**. Inside it, `LessonView` tracks the current step and `StepView` displays that step’s text, example, and question.
 
-{% include component-shot.html screen="lesson-workspace" width=1400 height=917 alt="The first pitch lesson shows two black keys under a bracket and a C on the white key just to their left." %}
+{% include component-shot.html screen="lesson-workspace" width=1100 height=720 alt="The first pitch lesson shows two black keys under a bracket and a C on the white key just to their left." %}
 
 ### Glossary
 

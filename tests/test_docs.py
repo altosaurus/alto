@@ -20,7 +20,7 @@ from html import unescape
 from pathlib import Path
 from urllib.parse import unquote
 
-from PySide6.QtGui import QImage
+from PySide6.QtGui import QColor, QImage
 
 ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / "docs" / "assets" / "img"
@@ -158,6 +158,23 @@ def test_every_picture_a_page_shows_exists_in_both_themes() -> None:
             assert (image.pixelColor(10, 10).lightness() < 128) == (
                 suffix == "-dark"
             ), path.name
+
+
+def test_screenshot_comparison_uses_decoded_pixels_and_dimensions() -> None:
+    """
+    Count visible pixel changes across image formats.
+    """
+    compare = script().changed_fraction
+    before = QImage(10, 10, QImage.Format.Format_RGB32)
+    before.fill(QColor(100, 100, 100))
+    after = before.convertToFormat(QImage.Format.Format_RGBA8888)
+    assert compare(before, after=after) == 0
+    after.setPixelColor(0, 0, QColor(116, 100, 100))
+    assert compare(before, after=after) == 0
+    after.setPixelColor(0, 0, QColor(117, 100, 100))
+    assert compare(before, after=after) == 0.01
+    assert compare(QImage(), after=after) == 1
+    assert compare(before, after=after.copy(0, 0, 5, 5)) == 1
 
 
 def test_every_picture_can_be_regenerated_by_the_script() -> None:

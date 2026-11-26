@@ -1,6 +1,6 @@
 name: Release
 
-# Pushing a tag such as v0.1.0 builds the Linux download and the Windows installer and publishes them as a GitHub release, with the
+# Pushing a tag such as v0.1.0 builds the Linux download, Windows installer, and Apple Silicon disk image and publishes them as a GitHub release, with the
 # notes of that version from CHANGELOG.md. Run by hand (workflow_dispatch) it only builds, to rehearse a release without publishing.
 #
 # The release is a normal one, not a pre-release: the update check inside Alto asks GitHub for the latest release, which leaves
@@ -112,8 +112,21 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
+  macos:
+    needs: check
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    uses: ./.github/workflows/package.yml
+    with:
+      macos_notarize: true
+    secrets:
+      MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
+      MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+
   publish:
-    needs: sign-windows
+    needs: [sign-windows, macos]
     if: github.event_name == 'push' && github.ref_type == 'tag'
     runs-on: ubuntu-latest
     permissions:
@@ -124,13 +137,37 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           pattern: '{linux,*-sources-*}'
-          path: dist
-          merge-multiple: true
+          path: packages
 
       - uses: actions/download-artifact@v4
         with:
           name: windows-signed
           path: dist
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: alto-macos-arm64-notarized
+          path: packages/macos
+
+      - name: Assemble verified desktop downloads and matching source archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=${GITHUB_REF_NAME#v}
+          (cd packages/macos && sha256sum --strict --check MACOS-SHA256SUMS)
+          mv "packages/macos/alto-$version-macos-arm64.dmg" dist/
+          mv "packages/linux/alto-$version-linux-x86_64.tar.gz" dist/
+          mv "packages/library-sources-linux/alto-$version-linux-x86_64-library-sources.tar" dist/
+          for dir in packages/qt-sources-linux packages/qt-sources-windows packages/macos/qt-sources; do
+            for source in "$dir"/*-everywhere-src-*.tar.xz; do
+              target="dist/${source##*/}"
+              if [[ -f "$target" ]]; then
+                cmp "$source" "$target"
+              else
+                mv "$source" "$target"
+              fi
+            done
+          done
 
       - uses: actions/setup-python@v5
         with:
@@ -153,6 +190,7 @@ jobs:
 
           - **Linux:** `alto-*-linux-x86_64.tar.gz`. Unpack it and run `sh install.sh install`. `sh install.sh uninstall` removes it and keeps your data; add `--purge` to delete that too.
           - **Windows:** `alto-*-windows-x64-setup.exe`. To inspect the publisher signature, right-click the installer and open **Properties → Digital Signatures**.
+          - **macOS (Apple Silicon):** Open `alto-*-macos-arm64.dmg` and drag Alto into Applications.
           - Qt and PySide/Shiboken source archives (`*-everywhere-src-*.tar.xz`) correspond to the Qt libraries in the installers. Versions and checksums are listed in the installed `licenses/Qt/README.txt`.
           - `alto-*-linux-x86_64-library-sources.tar` has the Ubuntu source packages of the LGPL and GPL system libraries in the Linux download. They are listed in the installed `licenses/Linux/README.txt`.
           - `SHA256SUMS` has the checksum of each file, and `SHA256SUMS.sig` is its signature. A copy of Alto that updates itself checks the signature first.
@@ -162,5 +200,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" dist/alto-*.tar.gz dist/alto-*-setup.exe dist/*-everywhere-src-*.tar.xz dist/alto-*-library-sources.tar dist/SHA256SUMS dist/SHA256SUMS.sig \
+          gh release create "${GITHUB_REF_NAME}" dist/alto-*.tar.gz dist/alto-*-setup.exe dist/alto-*-macos-arm64.dmg dist/*-everywhere-src-*.tar.xz dist/alto-*-library-sources.tar dist/SHA256SUMS dist/SHA256SUMS.sig \
             --title "Alto ${GITHUB_REF_NAME#v}" --notes-file notes.md --verify-tag

@@ -1,5 +1,5 @@
 title: Alto
-description: Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.
+description: Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.
 plugins:
   - jekyll-sitemap
 url: https://altosaurus.github.io

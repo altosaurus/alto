@@ -16,6 +16,22 @@ on:
       - "alto/assets/**"
       - ".github/workflows/build-packages.yml"
       - ".github/workflows/package.yml"
+  workflow_call:
+    inputs:
+      macos_notarize:
+        required: true
+        type: boolean
+    secrets:
+      MACOS_CERTIFICATE_BASE64:
+        required: true
+      MACOS_CERTIFICATE_PASSWORD:
+        required: true
+      APPLE_TEAM_ID:
+        required: true
+      APPLE_ID:
+        required: true
+      APPLE_APP_SPECIFIC_PASSWORD:
+        required: true
   workflow_dispatch:
     inputs:
       macos_test:
@@ -50,7 +66,7 @@ jobs:
           python-version: "3.13"
           architecture: arm64
       - name: Import Developer ID signing identity
-        if: github.event_name == 'workflow_dispatch' && inputs.macos_notarize
+        if: inputs.macos_notarize && (github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v'))
         env:
           P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
@@ -99,7 +115,7 @@ jobs:
           retention-days: 7
           if-no-files-found: error
       - name: Notarize and verify the disk image
-        if: github.event_name == 'workflow_dispatch' && inputs.macos_notarize
+        if: inputs.macos_notarize && (github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v'))
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}

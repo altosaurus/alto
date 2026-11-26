@@ -646,7 +646,15 @@ The current app screenshots in `docs/assets/img/` come in light and dark pairs. 
 .venv/bin/python scripts/screenshots.py --out /tmp/shots   # somewhere else, to look before replacing
 ```
 
-It runs against a made-up profile and a temporary settings folder, so it never touches your own history or settings. It
+For a release, start with `.venv/bin/python scripts/screenshots.py --review /tmp/alto-shot-review` using an empty directory.
+The script compares decoded pixels with the checked-in PNGs. It writes new or resized captures and those where at least
+0.5% of pixels differ by more than 16 levels in any 8-bit color channel. Each line reports the changed percentage.
+Review the candidates beside the existing screenshots and copy only those that show a change readers need to see.
+A different sample question, chart value, or row of practice data can cross the threshold without changing the instructions.
+For a small important detail, such as the version in Settings, use `--only settings-updates --force` to capture it regardless
+of the percentage. An empty `--out` folder gives you every capture for inspection.
+
+The sample profile uses fixed random seeds, a fixed date, and UTC. Each theme gets its own temporary settings folder. The script
 needs a display or `QT_QPA_PLATFORM=offscreen`. Fonts render slightly differently on each machine, so regenerate on the
 machine you normally use and look at the pictures before committing them. To add a picture, include it in a docs page
 with `shot.html`, and add its name to `SHOTS` in the script. `tests/test_docs.py` checks that both match and that both themes
@@ -693,19 +701,20 @@ fixed bug) adds a line under **Unreleased** in the same pull request. Internal t
 4. Check that every user-facing feature in the release has a guide entry explaining where to find it and how to use it.
    Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed
    feature, follow the documented steps in the release candidate and add or correct instructions in the release PR.
-5. With the release candidate installed in `.venv`, run `.venv/bin/python scripts/screenshots.py` to refresh every
-   screenshot in `docs/assets/img/` in both themes. Review the light and dark images against their captions and alt text.
+5. With the release candidate installed in `.venv`, run the [screenshot comparison](#keeping-the-docs-and-screenshots-current) for both themes.
+   Review the changed images against their captions and alt text, including small release-specific details such as the displayed version.
    Exclude the [UI style guide]({{ '/developer-guide/ui-style-guide/' | relative_url }}) and its versioned screenshots in
    `docs/assets/ui-reference/` from this check. Update that baseline only for an explicitly requested visual change.
    For screenshots using `component-shot.html`, check that the image dimensions match the captures and each clickable region covers its component.
    Run `sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py` and include the
    updated images and any caption or region corrections in the release PR.
-6. Build all three desktop downloads from the same versioned candidate commit. Run the **Release** workflow manually
-   for Linux and Windows. For macOS, run the **Package** workflow with `macos_notarize` enabled.
+6. Build all three desktop downloads from the same versioned candidate commit. The release PR builds unsigned Linux and Windows
+   candidates. Run **Package** on that branch with `macos_test` enabled for the Apple Silicon test ZIP. For signing rehearsals,
+   run **Release** on the approved `main` commit for Windows and **Package** on that same commit with `macos_notarize` enabled for the Mac.
    Complete the [license compliance check](#license-compliance) on the Linux tarball, Windows installer, and final
    stapled macOS DMG. Record the results and artifact checksums for each platform in the release PR. Resolve any findings
    before tagging.
-7. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
+7. After reviewing the PR and completing the signing rehearsals on the approved merge commit, tag that commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
    the tag starts the **Release** workflow (see below), which publishes the downloads.
 
 Publish a release as a normal release, not a pre-release: the update check asks GitHub for the latest release, which leaves
@@ -827,8 +836,8 @@ Three GitHub workflows do the building:
 - **Package** runs it on a pull request that changes `packaging/`, the build scripts, `pyproject.toml` or the assets, so a break
   shows before a release. It publishes nothing.
 - **Release** runs when a tag such as `v0.1.0` is pushed. It first checks that the tag is `v` plus the version in `pyproject.toml` and
-  that `CHANGELOG.md` has notes for it; then builds both packages; then creates the GitHub release with both files, a `SHA256SUMS`
-  file and the changelog notes. A manual run on `main` also signs and verifies the Windows installer and keeps it as a rehearsal artifact.
+  that `CHANGELOG.md` has notes for it. It builds Linux, signs Windows, and calls **Package** to sign and notarize the Apple Silicon DMG.
+  It publishes all three downloads, the matching source archives, signed checksums, and changelog notes. A manual run on `main` also signs and verifies the Windows installer and keeps it as a rehearsal artifact.
 
 The release is a normal one and never a pre-release, because Alto's update check asks GitHub for the latest release.
 

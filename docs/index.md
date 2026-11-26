@@ -82,6 +82,7 @@ The [roadmap]({{ '/roadmap/' | relative_url }}) lists current features and plann
 {% assign base = "https://github.com/altosaurus/alto/releases/download/v" | append: v | append: "/" %}
 {% assign source = '/getting-started/#running-from-a-source-checkout' | relative_url %}
 {% assign mac_source = '/getting-started/#mac-source-installation' | relative_url %}
+{% capture mac_file %}{% include macos-download.html %}{% endcapture %}
 {% if v != "" %}
 <section class="dl" id="download" data-version="{{ v }}" data-source="{{ source }}">
   <h2>Download Alto</h2>
@@ -99,11 +100,19 @@ The [roadmap]({{ '/roadmap/' | relative_url }}) lists current features and plann
       <div class="dl-txt"><span class="dl-name">Windows</span><span class="dl-file">alto-{{ v }}-windows-x64-setup.exe</span></div>
       <div class="dl-act"><a class="dl-pill" href="{{ base }}alto-{{ v }}-windows-x64-setup.exe"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-download"/></svg>Download</a></div>
     </div>
+    {% if mac_file != empty %}
+    <div class="dl-os" data-os="macos" data-name="macOS" data-req="Apple Silicon" data-file="{{ mac_file }}" data-url="{{ base }}{{ mac_file }}">
+      <span class="dl-logo" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24"><use href="#os-apple"/></svg></span>
+      <div class="dl-txt"><span class="dl-name">macOS · Apple Silicon</span><span class="dl-file">{{ mac_file }}</span></div>
+      <div class="dl-act"><a class="dl-pill" href="{{ base }}{{ mac_file }}"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-download"/></svg>Download</a></div>
+    </div>
+    {% else %}
     <div class="dl-os" data-os="macos" data-name="macOS" data-url="{{ mac_source }}">
       <span class="dl-logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40"><use href="#os-apple"/></svg></span>
       <div class="dl-txt"><span class="dl-name">macOS</span><span class="dl-note">There is no installer yet. You can <a href="{{ mac_source }}">run Alto from its source code</a>.</span></div>
       <div class="dl-act"><a class="dl-pill" href="{{ mac_source }}">Run from source</a></div>
     </div>
+    {% endif %}
   </div>
   <p class="dl-more"><a href="{{ '/release-notes/' | relative_url }}">Release notes</a> &middot; <a href="https://github.com/altosaurus/alto/releases">Older releases</a> &middot; <a href="{{ '/getting-started/' | relative_url }}">Getting started</a></p>
 </section>
