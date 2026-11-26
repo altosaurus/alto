@@ -10,7 +10,7 @@
   if (grid.hasAttribute("data-no-toc")) { return; }  // a page can opt out with `toc: false` in its front matter
 
   var heads = Array.prototype.slice.call(article.querySelectorAll("h2, h3, dl.py.method > dt.sig[id]")).filter(function (h) {
-    return !h.classList.contains("no-toc");  // a heading can opt out with `{: .no-toc}` under it
+    return !h.classList.contains("no-toc") && !h.parentElement.matches("section.no-toc");  // a heading can opt out with `{: .no-toc}` under it
   });
   if (heads.length < 2) { return; }
 

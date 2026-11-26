@@ -40,7 +40,7 @@
       </nav>
     </aside>
     <main id="content" class="content" role="main">
-      <div class="page-grid" id="page-grid">
+      <div class="page-grid" id="page-grid"{% if pagename in (root_doc, "plugins/detail") %} data-no-toc{% endif %}>
         <article>{% block body %}{% endblock %}</article>
         <nav class="toc" id="toc" aria-label="On this page" hidden></nav>
       </div>

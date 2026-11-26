@@ -639,15 +639,17 @@ The excerpt step reads the ExerciseView methods in your checkout. It uses the an
 
 ### Sphinx documentation preview
 
-From the repository root, build the Sphinx preview with the locked documentation dependencies and serve it locally:
+From the repository root, import the plugin tutorials, build the preview with the locked documentation dependencies, and serve it locally. Repeat the import to refresh the tutorial sources.
 
 ```bash
+python scripts/tutorial_docs.py all
 uv run --isolated --locked --only-group docs sphinx-build -W -b dirhtml \
   -d work/sphinx-preview/doctrees -c docs/_sphinx docs work/sphinx-preview/www/alto/dev
 python -m http.server 43220 --bind 127.0.0.1 --directory work/sphinx-preview/www
 ```
 
-Open the [API reference](http://127.0.0.1:43220/alto/dev/api/) to browse packages, modules, and components.
+Open the [local documentation](http://127.0.0.1:43220/alto/dev/) or the [API reference](http://127.0.0.1:43220/alto/dev/api/).
+The download buttons use the version in `pyproject.toml`. Pass `-D alto_app_version=VERSION` to preview another release.
 Sphinx reads the Python source during the build. A docstring edit appears the next time you run the build command.
 The [Exercise view walkthrough](http://127.0.0.1:43220/alto/dev/developer-guide/exercise-view/) links to the local API pages.
 For committed source, its line numbers and the API signatures link to the last commit that changed the file.
