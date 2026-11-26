@@ -13,15 +13,13 @@
     a { color: var(--accent); }
   </style>
   <script>
-    // The docs used to be one copy at the root of the site. An old address such as /alto/getting-started/ now lives under /latest/.
+    // Handle old stable links that do not have a generated redirect page.
     (function () {
-      var root = "@SITE_PATH@";
-      var path = location.pathname;
-      if (path.indexOf(root + "/") !== 0) { return; }
-      var rest = path.slice(root.length + 1);
-      var first = rest.split("/")[0];
-      if (first === "" || first === "dev" || first === "latest" || /^v[0-9]/.test(first)) { return; }
-      location.replace(root + "/latest/" + rest + location.search + location.hash);
+      var prefix = "@SITE_PATH@/latest/";
+      if (location.pathname.indexOf(prefix) !== 0) { return; }
+      var rest = location.pathname.slice(prefix.length);
+      if (rest === "latest" || rest.indexOf("latest/") === 0) { return; }
+      location.replace("@SITE_PATH@/" + rest + location.search + location.hash);
     })();
   </script>
 </head>
@@ -29,7 +27,7 @@
   <main>
     <h1>Page not found</h1>
     <p>There is no such page in these docs. It may have moved, or it may not exist in this version.</p>
-    <p><a href="@SITE_PATH@/latest/">Go to the latest docs</a> or <a href="@SITE_PATH@/dev/">the development docs</a>.</p>
+    <p><a href="@SITE_PATH@/">Go to the latest docs</a> or <a href="@SITE_PATH@/dev/">the development docs</a>.</p>
   </main>
 </body>
 </html>

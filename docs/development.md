@@ -542,18 +542,17 @@ A page of an old release says so in a banner, and links to the same page in the 
 ```
 /alto/dev/        the development version, rebuilt when a change to docs/ is merged into main
 /alto/v0.1.0/     one folder for each release, built once when its tag is pushed and not changed after that
-/alto/latest/     the newest release again, built with its own address so that its links and its sitemap say /latest/
-/alto/            goes to latest (to dev until there is a release); also versions.json, version-switcher.js, 404.html, robots.txt
+/alto/            the newest stable release (redirects to dev until there is a release) and shared files
+/alto/latest/     compatibility redirects to the same pages at /alto/
 ```
 
 The Docs workflow (`.github/workflows/docs.yml`) builds them with Jekyll and keeps the result on the branch `gh-pages`, which
-GitHub Pages serves. `scripts/docs_site.py` writes what sits around the versions: `versions.json`, the home page that goes to the
-latest, and the sitemap. The files that belong to the whole site and not to one version are in `docs/site-root/`. One of them,
+GitHub Pages serves. `scripts/docs_site.py` installs the stable build at the root without replacing the version folders and writes `versions.json` and the compatibility redirects. The files that belong to the whole site and not to one version are in `docs/site-root/`. One of them,
 `version-switcher.js`, fills the dropdown from `versions.json` at run time, so a release made years ago still offers the newest
 versions, and a fix to the dropdown reaches all of them. The dev entry shows the short Git hash recorded when those docs were built.
 
-Search engines are told to prefer the latest version: every page has a `canonical` address under `/latest/`, `dev` is `noindex`, and
-only `latest` is in the sitemap. A page that existed at the root before the docs had versions is sent to `/latest/` by `404.html`.
+Search engines are told to prefer the latest version: every page has a `canonical` address under `/alto/`, `dev` is `noindex`, and
+only the stable build is in the root sitemap.
 
 To add a docs-only fix to an old release, there is nothing to do but publish a new release: a version is built once from its tag.
 To build a release that was tagged before it had a dropdown, run the Docs workflow by hand with `ref` set to its tag. It puts the
