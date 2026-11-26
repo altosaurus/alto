@@ -15,6 +15,7 @@ permalink: /getting-started/
 
 {% assign release = 'https://github.com/altosaurus/alto/releases' %}
 {% assign v = site.app_version %}
+{% capture mac_file %}{% include macos-download.html %}{% endcapture %}
 {% if v != empty and v %}
 {% assign assets = release | append: '/download/v' | append: v | append: '/' %}
 {% assign linux_download = assets | append: 'alto-' | append: v | append: '-linux-x86_64.tar.gz' %}
@@ -58,10 +59,19 @@ The installer includes Python and Qt and installs Alto for your account.
 
 <div data-platforms="macos" markdown="1">
 
+{% if mac_file != empty %}
+### Apple Silicon disk image
+{: .no-toc}
+
+1. In **Apple menu → About This Mac**, check the **Chip** field. The disk image runs on Macs with an Apple M-series chip.
+2. [Download the disk image]({{ assets }}{{ mac_file }}) and double-click it in Finder.
+3. Drag **Alto** into **Applications**, eject the disk image, and open **Alto** from Applications.
+
+{% endif %}
 ### Mac source installation
 {: .no-toc}
 
-On Mac, you can try Alto from source. macOS is currently untested.
+You can also run Alto from source, including on Intel Macs.
 With Git and Python 3.11 or newer installed, open **Terminal** and run:
 
 {% include source-install-unix.md %}
@@ -70,7 +80,7 @@ To open Alto again, run `.venv/bin/python -m alto` from the same `alto` folder.
 
 </div>
 
-<div data-platforms="linux windows" markdown="1">
+<div data-platforms="linux windows{% if mac_file != empty %} macos{% endif %}" markdown="1">
 
 ### Check your download
 {: .no-toc}
@@ -86,6 +96,12 @@ sha256sum --check --ignore-missing SHA256SUMS
 
 Look for `OK` after the archive name.
 </div>
+
+{% if mac_file != empty %}
+<div data-platforms="macos" markdown="1">
+In Terminal, run `shasum -a 256 "{{ mac_file }}"` in the download folder. Compare the result with the line for the disk image in `SHA256SUMS`.
+</div>
+{% endif %}
 
 <div data-platforms="windows" markdown="1">
 Open PowerShell in the folder containing the installer. Use the exact name of the file you downloaded:
@@ -195,7 +211,11 @@ You can also run a newer Windows installer to update your copy.
 </div>
 
 <div data-platforms="macos" markdown="1">
-Close Alto and run these commands in Terminal from your `alto` folder to update the source and its dependencies:
+{% if mac_file != empty %}
+For the Apple Silicon app, quit Alto and drag the app from the new disk image into **Applications**. Choose **Replace** when prompted.
+
+{% endif %}
+For a source installation, quit Alto and run these commands in Terminal from your `alto` folder:
 
 ```bash
 git pull
@@ -218,7 +238,7 @@ practice history and settings.
 </div>
 
 <div data-platforms="macos" markdown="1">
-Quit Alto. If you no longer need the source checkout, move the cloned `alto` folder, including its `.venv`, to the Trash.
+Quit Alto. {% if mac_file != empty %}For a disk image installation, move **Alto** from **Applications** to the Trash. {% endif %}For a source installation, move the cloned `alto` folder, including its `.venv`, to the Trash.
 Your practice history is stored separately in `~/Library/Application Support/Alto/alto.db`.
 </div>
 

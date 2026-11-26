@@ -5,7 +5,14 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-11-25
+
 ### Added
+
+- Alto now has a signed and notarized disk image for Apple Silicon Macs. Open the disk image and drag Alto into Applications.
+- On Linux, play answers in supported note, interval, and scale exercises with a USB MIDI keyboard or the Virtual MIDI Piano Keyboard.
+- In Statistics, use the diagonal arrows beside the review heatmap to switch between a continuous calendar and one with gaps between months.
+- Search the documentation from the header and press Enter for all results. Code examples have a copy button, and API signatures link to their source.
 
 - A new **Duration** lesson under **Rhythm** introduces quarter, half, and whole notes and quarter rests with counted listening examples. Its icon shows an eighth note beamed to two sixteenth notes. Rhythm examples in lessons and the glossary show a time signature, upward stems, bar lines, and optional counts on staffless notation paper.
 
@@ -241,7 +248,8 @@ The first release.
 
 - A documentation site, a developer guide, an API reference generated from the docstrings, and `ARCHITECTURE.md`.
 
-[Unreleased]: https://github.com/altosaurus/alto/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/altosaurus/alto/compare/v0.0.3...HEAD
+[0.0.3]: https://github.com/altosaurus/alto/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/altosaurus/alto/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/altosaurus/alto/compare/v0.0.0...v0.0.1
 [0.0.0]: https://github.com/altosaurus/alto/releases/tag/v0.0.0

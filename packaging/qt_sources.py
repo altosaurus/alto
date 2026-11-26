@@ -199,7 +199,7 @@ def _install(frozen: Path, *, sources: Path) -> None:
     download = (
         f"https://github.com/altosaurus/alto/releases/tag/v{version('alto')}"
     )
-    if sys.platform == "darwin":
+    if sys.platform == "darwin" and os.environ.get("GITHUB_REF_TYPE") != "tag":
         download = "The two .tar.xz files accompany this Mac download."
         if run := os.environ.get("GITHUB_RUN_ID"):
             download += f" See https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{run}"

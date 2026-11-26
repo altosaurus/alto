@@ -84,7 +84,7 @@
 
   var os = detect();
   var main;
-  if (os === "windows" || os === "linux") {
+  if (systems[os] && systems[os].file) {
     var s = systems[os];
     main = { logo: s.logo, title: "Download for " + s.name, note: s.file + " · " + s.req, url: s.url };
   } else if (os === "macos") {

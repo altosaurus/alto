@@ -19,7 +19,7 @@
   {% if page.url == '/' and site.docs_version == 'latest' %}
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Alto", "applicationCategory": "EducationalApplication",
-   "operatingSystem": "Linux, Windows", "description": {{ site.description | jsonify }}, "url": "{{ '/' | absolute_url }}",
+   "operatingSystem": "Linux, Windows, macOS", "description": {{ site.description | jsonify }}, "url": "{{ '/' | absolute_url }}",
    "downloadUrl": "https://github.com/altosaurus/alto/releases/latest", "license": "https://opensource.org/licenses/MIT",
    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}
   </script>

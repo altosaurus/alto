@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alto"
-version = "0.0.2"
+version = "0.0.3"
 maintainers = [
     { name = "Gene Dan", email = "genedan@gmail.com" },  # Project lead
 ]
@@ -29,6 +29,7 @@ classifiers = [
     "Intended Audience :: Education",
     "License :: OSI Approved :: MIT License",
     "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python :: 3",
     "Topic :: Education",

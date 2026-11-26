@@ -123,12 +123,12 @@ music fonts, recordings, and score transcriptions are listed in [THIRD_PARTY_NOT
 
 Linux is Alto's main platform. It is developed and tested there, follows your desktop's light or dark setting, and keeps
 its files in the usual places (`~/.local/share/Alto` and `~/.config/alto`). It is a native Qt application, not a web
-page in a wrapper. There is also a Windows installer, which is built and checked automatically but has had much less testing than
-the Linux version. Alto may run on macOS too, but there is no package for it and it is not tested.
+page in a wrapper. Alto also runs on Windows and Apple Silicon Macs.
 
 ## Download
 
-Each release on the [Releases page](https://github.com/altosaurus/alto/releases) has a Linux download and a Windows installer. They
+The [Releases page](https://github.com/altosaurus/alto/releases) offers downloads for Linux and Windows, plus an Apple Silicon
+disk image starting with 0.0.3. These packages
 carry their own Python and Qt. On Windows the installer also makes sure Microsoft's Visual C++ Runtime is installed. See
 [Getting started](https://altosaurus.github.io/alto/latest/getting-started/) for how to install, update and uninstall them.
 

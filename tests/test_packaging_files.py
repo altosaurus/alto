@@ -67,7 +67,9 @@ def test_release_made_only_for_tag_exists_and_only_publisher_can() -> None:
         "github.event_name == 'push' && github.ref_type == 'tag'"
     )
     assert (
-        data["jobs"]["publish"]["needs"] == "sign-windows"
+        set(data["jobs"]["publish"]["needs"]) == {"sign-windows", "macos"}
+        and data["jobs"]["macos"]["needs"] == "check"
+        and data["jobs"]["macos"]["with"] == {"macos_notarize": True}
         and data["jobs"]["sign-windows"]["needs"] == "build"
         and data["jobs"]["build"]["needs"] == "check"
     )
@@ -102,10 +104,10 @@ def test_release_publishes_the_verified_windows_installer() -> None:
     assert downloads == [
         {
             "pattern": "{linux,*-sources-*}",
-            "path": "dist",
-            "merge-multiple": True,
+            "path": "packages",
         },
         {"name": "windows-signed", "path": "dist"},
+        {"name": "alto-macos-arm64-notarized", "path": "packages/macos"},
     ]
 
 
@@ -168,7 +170,8 @@ def test_installer_and_workflows_agree_on_names_of_what_built() -> None:
     assert "path: dist/alto-*-library-sources.tar" in BUILD
     release_files = (
         "dist/alto-*.tar.gz dist/alto-*-setup.exe "
-        "dist/*-everywhere-src-*.tar.xz dist/alto-*-library-sources.tar"
+        "dist/alto-*-macos-arm64.dmg dist/*-everywhere-src-*.tar.xz "
+        "dist/alto-*-library-sources.tar"
     )
     assert release_files + " dist/SHA256SUMS" in RELEASE
     assert "sha256sum alto-* *-everywhere-src-*.tar.xz > SHA256SUMS" in RELEASE

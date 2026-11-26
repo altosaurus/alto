@@ -1,0 +1,6 @@
+{%- assign source_only_versions = '0.0.0,0.0.1,0.0.2' | split: ',' -%}
+{%- if v and v != empty -%}
+  {%- unless source_only_versions contains v -%}
+    {{- 'alto-' | append: v | append: '-macos-arm64.dmg' -}}
+  {%- endunless -%}
+{%- endif -%}

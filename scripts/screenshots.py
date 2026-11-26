@@ -40,9 +40,13 @@ import subprocess
 import sys
 import tempfile
 import time
+from datetime import UTC, datetime
 from pathlib import Path
+from unittest.mock import patch
 
+import numpy as np
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QImage
 from PySide6.QtWidgets import (
     QApplication,
     QScrollArea,
@@ -119,6 +123,41 @@ SHOTS = (
 )
 
 
+def changed_fraction(before: QImage, *, after: QImage) -> float:
+    """
+    Measure the fraction of pixels with a visible channel difference.
+
+    Parameters
+    ----------
+    before : QImage
+        Existing screenshot.
+    after : QImage
+        New capture.
+
+    Returns
+    -------
+    float
+        Fraction from zero to one. New or resized images return one.
+
+    Examples
+    --------
+    >>> changed_fraction(QImage(), after=QImage())
+    1.0
+    """
+    if before.isNull() or before.size() != after.size():
+        return 1.0
+    pixels = []
+    for image in (before, after):
+        rgba = image.convertToFormat(QImage.Format.Format_RGBA8888)
+        pixels.append(
+            np.frombuffer(rgba.constBits(), dtype=np.uint8)
+            .astype(np.int16)
+            .reshape(-1, 4),
+        )
+    delta = np.abs(pixels[0] - pixels[1])
+    return float(np.any(delta > 16, axis=1).mean())
+
+
 def main() -> int:
     """
     Parse the command line and make the pictures, one process for each
@@ -132,7 +171,7 @@ def main() -> int:
     Examples
     --------
     >>> main()  # doctest: +SKIP
-    wrote 26 pictures to docs/assets/img
+    Finished comparing screenshots in docs/assets/img
     0
     """
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
@@ -153,29 +192,55 @@ def main() -> int:
         metavar="NAME",
         help=f"only these pictures: {', '.join(SHOTS)}",
     )
-    ap.add_argument(
+    output = ap.add_mutually_exclusive_group()
+    output.add_argument(
         "--out",
         type=Path,
         default=OUT,
         help="folder to write to (default: docs/assets/img)",
     )
+    output.add_argument(
+        "--review",
+        type=Path,
+        metavar="DIR",
+        help="save changed captures in an empty folder for review",
+    )
+    ap.add_argument(
+        "--force",
+        action="store_true",
+        help="write selected captures even for small visual changes",
+    )
+    ap.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     args = ap.parse_args()
     names = tuple(args.only or SHOTS)
-    args.out.mkdir(parents=True, exist_ok=True)
-    if args.theme:
+    destination = (args.review or args.out).resolve()
+    if (
+        args.review
+        and not args.worker
+        and destination.exists()
+        and any(destination.iterdir())
+    ):
+        ap.error("--review needs an empty folder")
+    destination.mkdir(parents=True, exist_ok=True)
+    if args.worker:
         capture(
             args.theme,
             names=names,
-            out=args.out,
+            out=destination,
+            baseline=OUT if args.review else destination,
+            force=args.force,
             require_native_theme=args.require_native_theme,
         )
         return 0
     # One process for each theme, each with its own throwaway settings
     # and data folder.
-    for theme in THEMES:
+    for theme in (args.theme,) if args.theme else THEMES:
         with tempfile.TemporaryDirectory() as tmp:
             env = dict(
                 os.environ,
+                PYTHONHASHSEED="5",
+                TZ="UTC",
+                ALTO_HOME=tmp,
                 XDG_CONFIG_HOME=f"{tmp}/config",
                 XDG_DATA_HOME=f"{tmp}/data",
             )
@@ -186,30 +251,39 @@ def main() -> int:
             cmd = [
                 sys.executable,
                 str(Path(__file__).resolve()),
+                "--worker",
                 "--theme",
                 theme,
+                *(["--force"] if args.force else []),
                 *(
                     ["--require-native-theme"]
                     if args.require_native_theme
                     else []
                 ),
-                "--out",
-                str(args.out),
+                "--review" if args.review else "--out",
+                str(destination),
                 "--only",
                 *names,
             ]
             if subprocess.run(cmd, env=env, cwd=ROOT).returncode:
                 return 1
-    print(f"wrote {len(names) * len(THEMES)} pictures to {args.out}")
+    print(f"Finished comparing screenshots in {destination}")
     return 0
 
 
+# Hold the sample history, scheduler, and calendar on the same day.
+CAPTURE_TIME = datetime(2026, 11, 25, 18, tzinfo=UTC).timestamp()
+
+
+@patch("time.time", lambda: CAPTURE_TIME)
 def capture(
     theme: str,
     *,
     names: tuple[str, ...],
     out: Path,
+    baseline: Path | None = None,
     require_native_theme: bool = False,
+    force: bool = False,
 ) -> None:
     """
     Take the pictures of one theme, in this process, using a made-up
@@ -223,6 +297,10 @@ def capture(
         The pictures to make, from `SHOTS`.
     out : Path
         The folder to write them to.
+    baseline : Path, optional
+        Compare with this folder. Defaults to the output folder.
+    force : bool, default False
+        Write even small differences in the selected pictures.
     require_native_theme : bool, default False
         Require the requested default palette for a UI style guide
         comparison.
@@ -240,8 +318,10 @@ def capture(
     ...     out=Path("/tmp/shots"),
     ... )  # doctest: +SKIP
     """
+    random.seed(5)
     suffix = "" if theme == "light" else "-dark"
     app = QApplication([])
+    app.setCursorFlashTime(0)
     apply_theme(theme)
     app.processEvents()
     if (app.palette().window().color().lightness() < 128) != (theme == "dark"):
@@ -285,8 +365,8 @@ def capture(
         --------
         >>> wait(250)  # doctest: +SKIP
         """
-        end = time.time() + ms / 1000
-        while time.time() < end:
+        end = time.monotonic() + ms / 1000
+        while time.monotonic() < end:
             app.processEvents()
 
     # noinspection PyShadowingNames
@@ -312,6 +392,8 @@ def capture(
         ------
         RuntimeError
             If the captured window uses the wrong theme.
+        OSError
+            If Qt cannot write the PNG.
 
         Examples
         --------
@@ -336,11 +418,23 @@ def capture(
                 width,
                 Qt.TransformationMode.SmoothTransformation,
             )
-        pixmap.save(str(out / f"{name}{suffix}.png"), "PNG")
+        path = out / f"{name}{suffix}.png"
+        changed = changed_fraction(
+            QImage(str((baseline or out) / path.name)),
+            after=pixmap.toImage(),
+        )
+        if changed < 0.005 and not force:
+            print(f"Kept {path.name} ({changed:.2%} changed)")
+            return
+        if not pixmap.save(str(path), "PNG"):
+            raise OSError(f"Could not save {path}")
+        print(f"Wrote {path.name} ({changed:.2%} changed)")
 
     # A made-up profile: five weeks of answers that slowly get better,
     # after about a year of lighter practice.
     db = Database()
+    sql_rng = random.Random(5)
+    db.conn.create_function("random", 0, lambda: sql_rng.getrandbits(63))
     learner = Learner(db, profile=db.add_profile("Ada"))
     rng = random.Random(11)
     now = time.time()
@@ -415,6 +509,7 @@ def capture(
         # off
         # in a picture
     )
+    store().setValue("updates/lastReleaseCheck", int(now))
     window = MainWindow(learner)
     window.resize(1100, 720)
     window.show()

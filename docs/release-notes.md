@@ -13,12 +13,17 @@ All notable changes to Alto, newest first. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and Alto uses [semantic versioning](https://semver.org/).
 Each release's downloads are on its GitHub release.
 
-## Unreleased
+## 0.0.3
 
-Changes that are in the development docs and not in a release yet.
+Released 2026-11-25. [GitHub release](https://github.com/altosaurus/alto/releases/tag/v0.0.3)
 
 ### Added
 {: .no-toc}
+
+- Alto now has a signed and notarized disk image for Apple Silicon Macs. Open the disk image and drag Alto into Applications.
+- On Linux, play answers in supported note, interval, and scale exercises with a USB MIDI keyboard or the Virtual MIDI Piano Keyboard.
+- In Statistics, use the diagonal arrows beside the review heatmap to switch between a continuous calendar and one with gaps between months.
+- Search the documentation from the header and press Enter for all results. Code examples have a copy button, and API signatures link to their source.
 
 - A new **Duration** lesson under **Rhythm** introduces quarter, half, and whole notes and quarter rests with counted listening examples. Its icon shows an eighth note beamed to two sixteenth notes. Rhythm examples in lessons and the glossary show a time signature, upward stems, bar lines, and optional counts on staffless notation paper.
 
