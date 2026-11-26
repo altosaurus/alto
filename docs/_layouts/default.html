@@ -6,7 +6,7 @@
   <title>{% if page.url != '/' %}{{ page.title }} · {{ site.title }}{% else %}Alto: a free music theory trainer for the desktop{% endif %}</title>
   <meta name="description" content="{{ page.description | default: site.description | escape }}">
   {% comment %} Every version says that the latest release's page is the real one, and the development docs stay out of search. {% endcomment %}
-  {% assign canonical = page.url | replace: 'index.html', '' | prepend: '/latest' | prepend: site.site_root | prepend: site.url %}
+  {% assign canonical = page.url | replace: 'index.html', '' | prepend: site.site_root | prepend: site.url %}
   <link rel="canonical" href="{{ canonical }}">
   {% if site.docs_version == 'dev' %}<meta name="robots" content="noindex">{% endif %}
   <meta property="og:type" content="website">

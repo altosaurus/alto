@@ -12,12 +12,9 @@ to write what sits around them:
     python scripts/docs_site.py latest v0.0.0 v0.1.0 v0.1.1-rc1     #
     prints v0.1.0, the newest release that is not a pre-release
 
-`finish` writes `versions.json` (which the version dropdown reads in
-every page, old ones included), the home page that sends a
-visitor to the latest release (or to the development docs until there is
-one), the sitemap of the latest release, and copies the
-files in `--root-files` (`robots.txt`, the dropdown's script and so on)
-with their `@SITE@` and `@SITE_PATH@` filled in.
+`finish` installs a staged stable build at the site root and writes the
+version list and shared files. Old `latest/` page URLs redirect to the
+root copy.
 """
 
 from __future__ import annotations
@@ -27,20 +24,26 @@ import json
 import re
 import shutil
 import sys
+from html import escape
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 VERSION = re.compile(r"^v(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$")
 DEV = "dev"
 LATEST = "latest"
+STABLE_MANIFEST = ".stable-docs.json"
 REDIRECT = """<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Alto</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url={target}">
   <link rel="canonical" href="{canonical}">
+  <script>
+    var target = document.querySelector('link[rel="canonical"]').href;
+    location.replace(target + location.search + location.hash);
+  </script>
+  <meta http-equiv="refresh" content="0; url={target}">
 </head>
 <body>
   <p>Going to the <a href="{target}">{what}</a>.</p>
@@ -222,7 +225,79 @@ def redirect_page(
     ... )
     True
     """
-    return REDIRECT.format(target=target, canonical=canonical, what=what)
+    return REDIRECT.format(
+        target=escape(target),
+        canonical=escape(canonical),
+        what=escape(what),
+    )
+
+
+def _install_stable(site: Path, *, stable: Path, site_url: str) -> None:
+    """
+    Replace only the root entries owned by the stable docs build.
+
+    Parameters
+    ----------
+    site : Path
+        The published site directory.
+    stable : Path
+        The staging directory containing the new stable docs.
+    site_url : str
+        The canonical site URL without a trailing slash.
+
+    Raises
+    ------
+    ValueError
+        The staged build has no home page or uses a reserved root name.
+
+    Examples
+    --------
+    >>> import tempfile
+    >>> with tempfile.TemporaryDirectory() as folder:
+    ...     site = Path(folder, "site")
+    ...     stable = Path(folder, "stable")
+    ...     stable.mkdir()
+    ...     _ = (stable / "index.html").write_text("Stable docs")
+    ...     _install_stable(
+    ...         site, stable=stable, site_url="https://example.org/alto"
+    ...     )
+    ...     (site / "index.html").read_text()
+    'Stable docs'
+    """
+    manifest = site / STABLE_MANIFEST
+    entries = sorted(entry.name for entry in stable.iterdir())
+    if not (stable / "index.html").is_file() or any(
+        name.startswith(".")
+        or name in (DEV, LATEST, "versions.json")
+        or parse_version(name) is not None
+        for name in entries
+    ):
+        raise ValueError("Unexpected stable docs output")
+    if manifest.is_file():
+        for name in json.loads(manifest.read_text(encoding="utf-8")):
+            path = site / name
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink(missing_ok=True)
+
+    legacy = site / LATEST
+    if legacy.is_dir():
+        shutil.rmtree(legacy)
+    shutil.copytree(stable, site, dirs_exist_ok=True)
+    for page in sorted(stable.rglob("*.html")):
+        relative = page.relative_to(stable)
+        suffix = relative.as_posix()
+        if relative.name == "index.html":
+            suffix = suffix.removesuffix("index.html")
+        target = f"{site_url}/{quote(suffix)}"
+        alias = legacy / relative
+        alias.parent.mkdir(parents=True, exist_ok=True)
+        alias.write_text(
+            redirect_page(target=target, canonical=target, what="latest docs"),
+            encoding="utf-8",
+        )
+    manifest.write_text(json.dumps(entries) + "\n", encoding="utf-8")
 
 
 def finish(
@@ -230,6 +305,7 @@ def finish(
     *,
     root_files: Path,
     site_url: str,
+    stable: Path | None = None,
 ) -> dict[str, object]:
     """
     Write everything around the versions in a site: their list, the home
@@ -248,6 +324,8 @@ def finish(
         The address of the site's root, such as
         "https://altosaurus.github.io/alto", without a slash at the end.
         Keyword-only.
+    stable : Path or None
+        A staged stable build, if this run is publishing one.
 
     Returns
     -------
@@ -289,6 +367,9 @@ def finish(
     'Sitemap: https://example.org/alto/sitemap.xml'
     """
     site_url = site_url.rstrip("/")
+    if stable is not None:
+        _install_stable(site, stable=stable, site_url=site_url)
+    stable_at_root = (site / STABLE_MANIFEST).is_file()
     site_path = urlparse(site_url).path
     versions = versions_in(site)
     latest = latest_release(versions)
@@ -311,30 +392,31 @@ def finish(
             )
             (site / source.name).write_text(text, encoding="utf-8")
 
-    if (site / LATEST).is_dir():
-        target, what = f"{LATEST}/", "latest docs"
-    elif (site / DEV).is_dir():
-        target, what = f"{DEV}/", "development docs"
-    else:
-        target, what = "", ""
-    home = site / "index.html"
-    if target:
-        home.write_text(
-            redirect_page(
-                target=target,
-                canonical=f"{site_url}/{target}",
-                what=what,
-            ),
-            encoding="utf-8",
-        )
-    else:
-        home.unlink(missing_ok=True)
+    if not stable_at_root:
+        if (site / LATEST).is_dir():
+            target, what = f"{LATEST}/", "latest docs"
+        elif (site / DEV).is_dir():
+            target, what = f"{DEV}/", "development docs"
+        else:
+            target, what = "", ""
+        home = site / "index.html"
+        if target:
+            home.write_text(
+                redirect_page(
+                    target=target,
+                    canonical=f"{site_url}/{target}",
+                    what=what,
+                ),
+                encoding="utf-8",
+            )
+        else:
+            home.unlink(missing_ok=True)
 
-    sitemap = site / LATEST / "sitemap.xml"
-    if sitemap.is_file():
-        shutil.copyfile(sitemap, site / "sitemap.xml")
-    else:
-        (site / "sitemap.xml").unlink(missing_ok=True)
+        sitemap = site / LATEST / "sitemap.xml"
+        if sitemap.is_file():
+            shutil.copyfile(sitemap, site / "sitemap.xml")
+        else:
+            (site / "sitemap.xml").unlink(missing_ok=True)
     (site / ".nojekyll").write_text(
         "",
         encoding="utf-8",
@@ -402,6 +484,11 @@ def main(argv: list[str] | None = None) -> int:
         required=True,
         help="the address of the site's root",
     )
+    end.add_argument(
+        "--stable",
+        type=Path,
+        help="the staged stable docs build",
+    )
     arguments = parser.parse_args(argv)
     if arguments.command == "latest":
         print(latest_release(arguments.tags) or "")
@@ -413,6 +500,7 @@ def main(argv: list[str] | None = None) -> int:
         arguments.site,
         root_files=arguments.root_files,
         site_url=arguments.site_url,
+        stable=arguments.stable,
     )
     return 0
 

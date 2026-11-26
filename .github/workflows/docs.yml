@@ -5,8 +5,8 @@ name: Docs
 #
 #   /alto/dev/         the development version, rebuilt when a change to the docs is merged into main
 #   /alto/v0.1.0/      one folder for each release, built once when its tag is pushed and never changed afterwards
-#   /alto/latest/      a second build of the newest release, so that links and the sitemap point at /latest/
-#   /alto/             a redirect to latest, versions.json for the dropdown, version-switcher.js, robots.txt, sitemap.xml, 404.html
+#   /alto/             the newest stable docs, plus shared site files
+#   /alto/latest/      redirects for old stable docs links
 #
 # By hand, `ref` builds (or rebuilds) one release, for a tag made before the docs had a dropdown: the layout, includes and styles
 # of main are laid over that tag's docs, and the words stay the tag's own.
@@ -104,18 +104,6 @@ jobs:
       - name: Bring in the plugin tutorials
         run: python3 tooling/scripts/tutorial_docs.py all --docs source/docs
 
-      - name: Lay the current layout over a release made before it had a dropdown
-        if: steps.what.outputs.overlay == 'true'
-        run: |
-          cp -R tooling/docs/_layouts/. source/docs/_layouts/
-          mkdir -p source/docs/_includes source/docs/assets/css
-          cp -R tooling/docs/_includes/. source/docs/_includes/
-          cp tooling/docs/assets/css/site.css source/docs/assets/css/site.css
-          mkdir -p source/docs/assets/js
-          cp tooling/docs/assets/js/{copy-code,nav,search}.js source/docs/assets/js/
-          cp tooling/docs/{about.md,contents.md,using-alto.md,search.html} source/docs/
-          cp tooling/docs/_config.yml source/docs/_config.yml
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
@@ -138,31 +126,53 @@ jobs:
       - name: Build the version
         env:
           VERSION: ${{ steps.what.outputs.version }}
+          OVERLAY: ${{ steps.what.outputs.overlay }}
           BUNDLE_GEMFILE: ${{ github.workspace }}/tooling/docs/Gemfile
         run: |
-          # The release the download section offers: a release's own version, and for dev the newest release (empty if there is none).
-          if [ "$VERSION" = dev ]; then
-            APP_VERSION=$(python3 tooling/scripts/docs_site.py latest $(git -C source tag --list 'v*') | sed 's/^v//')
-          else
-            APP_VERSION="${VERSION#v}"
-          fi
-          build() { # build FOLDER LABEL: the docs in source/ into site/FOLDER, which a page knows as LABEL
-            rm -rf "site/$1"
-            printf 'baseurl: %s/%s\ndocs_version: %s\napp_version: "%s"\n' "$SITE_PATH" "$1" "$2" "$APP_VERSION" > version.yml
-            printf 'source_revision: "%s"\n' "$(git -C source rev-parse HEAD)" >> version.yml
-            bundle exec jekyll build --source source/docs --destination "site/$1" --config "source/docs/_config.yml,version.yml"
-            bundle exec ruby tooling/scripts/docs_search.rb "site/$1"
+          overlay() {
+            cp -R tooling/docs/_layouts/. "$1/_layouts/"
+            mkdir -p "$1/_includes" "$1/assets/css" "$1/assets/js"
+            cp -R tooling/docs/_includes/. "$1/_includes/"
+            cp tooling/docs/assets/css/site.css "$1/assets/css/site.css"
+            cp tooling/docs/assets/js/{copy-code,nav,search,toc}.js "$1/assets/js/"
+            cp tooling/docs/{about.md,contents.md,using-alto.md,search.html,_config.yml} "$1/"
           }
-          build "$VERSION" "$VERSION"
-          if [ "$VERSION" = dev ]; then git -C source rev-parse --short HEAD > site/dev/commit.txt; fi
-          # The newest release is built a second time as latest, with the addresses of latest in its links and its sitemap.
-          if [ "$VERSION" != dev ]; then
-            newest=$(python3 tooling/scripts/docs_site.py latest $(git -C source tag --list 'v*'))
-            if [ "$newest" = "$VERSION" ]; then build latest latest; fi
-          fi
+          build() { # build DOCS DESTINATION BASEURL LABEL APP_VERSION REVISION
+            rm -rf "$2"
+            printf 'baseurl: %s\ndocs_version: %s\napp_version: "%s"\nsource_revision: "%s"\n' \
+              "$3" "$4" "$5" "$6" > version.yml
+            bundle exec jekyll build --source "$1" --destination "$2" --config "$1/_config.yml,version.yml"
+            bundle exec ruby tooling/scripts/docs_search.rb "$2"
+          }
 
-      - name: Write the list of versions, the home page and the shared files
-        run: python3 tooling/scripts/docs_site.py finish site --root-files tooling/docs/site-root --site-url "$SITE_URL"
+          newest=$(python3 tooling/scripts/docs_site.py latest $(git -C source tag --list 'v*'))
+          if [ "$VERSION" = dev ]; then APP_VERSION="${newest#v}"; else APP_VERSION="${VERSION#v}"; fi
+          if [ "$OVERLAY" = true ]; then overlay source/docs; fi
+          build source/docs "site/$VERSION" "$SITE_PATH/$VERSION" "$VERSION" "$APP_VERSION" "$(git -C source rev-parse HEAD)"
+          if [ "$VERSION" = dev ]; then git -C source rev-parse --short HEAD > site/dev/commit.txt; fi
+
+          # Publish the newest stable release at the root. On the first run after migration,
+          # rebuild the already published stable release even if this run only builds dev.
+          stable=""
+          if [ "$VERSION" != dev ] && [ "$VERSION" = "$newest" ]; then
+            stable="$VERSION"
+            stable_docs=source/docs
+          elif [ ! -f site/.stable-docs.json ] && [ -f site/latest/index.html ]; then
+            stable=$(jq -r '.latest // empty' site/versions.json)
+            if [ -n "$stable" ]; then
+              mkdir -p stable-source
+              git -C source archive "$stable" docs | tar -x -C stable-source
+              stable_docs=stable-source/docs
+              python3 tooling/scripts/tutorial_docs.py all --docs "$stable_docs"
+            fi
+          fi
+          if [ -n "$stable" ]; then
+            overlay "$stable_docs"
+            build "$stable_docs" stable-build "$SITE_PATH" latest "${stable#v}" "$(git -C source rev-parse "$stable^{commit}")"
+            python3 tooling/scripts/docs_site.py finish site --stable stable-build --root-files tooling/docs/site-root --site-url "$SITE_URL"
+          else
+            python3 tooling/scripts/docs_site.py finish site --root-files tooling/docs/site-root --site-url "$SITE_URL"
+          fi
 
       - name: Keep the site
         run: |

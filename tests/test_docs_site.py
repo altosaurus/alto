@@ -165,7 +165,7 @@ def test_finishing_a_site_lists_dev_and_the_releases_and_names_the_latest(
     }
 
 
-def test_the_home_page_goes_to_latest_and_to_dev_until_there_is_a_release(
+def test_home_fallbacks_before_a_stable_root_build(
     tmp_path: Path,
 ) -> None:
     """
@@ -302,7 +302,7 @@ def test_command_line_prints_latest_and_refuses_site_not_there(
 def test_layout_dropdown_slot_and_sends_search_engines_to_latest() -> None:
     """
     Check the layout: a slot the dropdown fills, the canonical address
-    under /latest/, noindex for dev, and the script.
+    at the site root, noindex for dev, and the script.
     """
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
     assert (
@@ -311,7 +311,8 @@ def test_layout_dropdown_slot_and_sends_search_engines_to_latest() -> None:
         and 'data-root="{{ site.site_root }}"' in layout
     )
     assert (
-        "prepend: '/latest'" in layout
+        "prepend: '/latest'" not in layout
+        and "prepend: site.site_root | prepend: site.url" in layout
         and '<link rel="canonical" href="{{ canonical }}">' in layout
     )
     assert (
@@ -462,24 +463,78 @@ def test_shared_files_in_site_root_and_google_file_exactly_as() -> None:
     assert not list(DOCS.glob("google*.html"))
     robots = (SITE_ROOT / "robots.txt").read_text(encoding="utf-8")
     assert "Sitemap: @SITE@/sitemap.xml" in robots
-    assert "@SITE@/latest/" in (SITE_ROOT / "llms.txt").read_text(
+    assert "@SITE@/getting-started/" in (SITE_ROOT / "llms.txt").read_text(
         encoding="utf-8",
     )
 
 
-def test_old_address_sent_to_same_page_in_latest_by_404_page() -> None:
-    """
-    Check that the 404 page moves a visitor of /alto/getting-started/ to
-    /alto/latest/getting-started/, and does not loop.
-    """
+def test_404_redirects_only_old_latest_paths() -> None:
+    """Handle old latest URLs that do not have a redirect page."""
     page = (SITE_ROOT / "404.html").read_text(encoding="utf-8")
-    assert (
-        'var root = "@SITE_PATH@"' in page
-        and 'location.replace(root + "/latest/" + rest' in page
+    assert 'var prefix = "@SITE_PATH@/latest/"' in page
+    assert "location.pathname.indexOf(prefix) !== 0" in page
+    assert 'location.replace("@SITE_PATH@/" + rest' in page
+    assert "location.search + location.hash" in page
+
+
+def test_stable_build_replaces_only_its_own_root_files(tmp_path: Path) -> None:
+    """
+    Keep versioned builds and shared files during stable updates.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Temporary directory for the published site and staged builds.
+    """
+    site, shared = make_site(tmp_path, folders=("dev", "latest", "v0.0.0"))
+    (site / "dev" / "index.html").write_text("dev docs", encoding="utf-8")
+    (site / "v0.0.0" / "index.html").write_text(
+        "tagged docs",
+        encoding="utf-8",
     )
-    assert (
-        'first === "latest"' in page and 'first === "dev"' in page
-    )  # a missing page inside a version is not sent around again
+    (site / "latest" / "index.html").write_text("old docs", encoding="utf-8")
+    (site / "CNAME").write_text("example.org", encoding="utf-8")
+
+    stable = tmp_path / "stable"
+    guide = stable / "getting-started"
+    guide.mkdir(parents=True)
+    (guide / "index.html").write_text("guide", encoding="utf-8")
+    (stable / "index.html").write_text("stable docs", encoding="utf-8")
+    (stable / "sitemap.xml").write_text(
+        f"<loc>{SITE_URL}/</loc>",
+        encoding="utf-8",
+    )
+    docs_site.finish(site, root_files=shared, site_url=SITE_URL, stable=stable)
+
+    assert (site / "index.html").read_text(encoding="utf-8") == "stable docs"
+    assert (site / "sitemap.xml").read_text(
+        encoding="utf-8",
+    ) == f"<loc>{SITE_URL}/</loc>"
+    redirect = (site / "latest" / "getting-started" / "index.html").read_text(
+        encoding="utf-8",
+    )
+    assert f"url={SITE_URL}/getting-started/" in redirect
+    assert "location.search + location.hash" in redirect
+    assert f'url={SITE_URL}/"' in (site / "latest" / "index.html").read_text(
+        encoding="utf-8",
+    )
+
+    docs_site.finish(site, root_files=shared, site_url=SITE_URL)
+    assert (site / "index.html").read_text(encoding="utf-8") == "stable docs"
+    assert (site / "sitemap.xml").is_file()
+
+    (guide / "index.html").unlink()
+    guide.rmdir()
+    docs_site.finish(site, root_files=shared, site_url=SITE_URL, stable=stable)
+    assert not (site / "getting-started").exists()
+    assert not (site / "latest" / "getting-started").exists()
+    assert (site / "CNAME").is_file()
+    assert (site / "dev" / "index.html").read_text(
+        encoding="utf-8",
+    ) == "dev docs"
+    assert (site / "v0.0.0" / "index.html").read_text(
+        encoding="utf-8",
+    ) == "tagged docs"
 
 
 def test_dropdown_reads_list_of_versions_from_site_and_warns_on() -> None:
@@ -521,9 +576,12 @@ def test_docs_workflow_builds_each_version_into_own_folder_and() -> None:
         and data["concurrency"]["cancel-in-progress"] is False
     )
     assert (
-        "--baseurl" not in text and "baseurl: %s/%s" in text
+        "--baseurl" not in text and "baseurl: %s" in text
     )  # the address of each version is given in a config file
-    assert "build latest latest" in text and "docs_site.py latest" in text
+    assert (
+        'stable-build "$SITE_PATH" latest' in text
+        and "docs_site.py latest" in text
+    )
     assert (
         "docs_site.py finish site" in text
         and "git push --quiet origin HEAD:gh-pages" in text

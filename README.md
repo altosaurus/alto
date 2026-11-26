@@ -130,7 +130,7 @@ page in a wrapper. Alto also runs on Windows and Apple Silicon Macs.
 The [Releases page](https://github.com/altosaurus/alto/releases) offers downloads for Linux and Windows, plus an Apple Silicon
 disk image starting with 0.0.3. These packages
 carry their own Python and Qt. On Windows the installer also makes sure Microsoft's Visual C++ Runtime is installed. See
-[Getting started](https://altosaurus.github.io/alto/latest/getting-started/) for how to install, update and uninstall them.
+[Getting started](https://altosaurus.github.io/alto/getting-started/) for how to install, update and uninstall them.
 
 ## Get started from the source
 
