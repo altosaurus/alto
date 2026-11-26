@@ -2,11 +2,20 @@
 title: alto.ui.notes
 parent: api
 package: alto.ui
+api_components: [{"title": "draw_note", "url": "/api/alto.ui.notes/function-draw_note/"}, {"title": "note_shape", "url": "/api/alto.ui.notes/function-note_shape/"}]
 permalink: /api/alto.ui.notes/
 ---
 {% raw %}
 Engraved notes built from the Noto Music font's glyphs, the way notation
 software draws them.
+
+## Functions
+
+- [`note_shape`](function-note_shape/) — Return the outline of a note of a value, with the stem up or down.
+- [`draw_note`](function-draw_note/) — Draw a note with its head centered on a point, in Noto Music.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 The font only has stem-up notes. A stem-down note is made from the same
 glyph turned half a turn (which puts the stem on
@@ -30,111 +39,8 @@ False
 True
 ```
 
-## note_shape
-
-<div class="api-signature" markdown="1">
-
-```python
-def note_shape(
-    value: str,
-    *,
-    stem_down: bool = False,
-) -> QPainterPath
-```
-
-{% endraw %}{% include api-source.html name="note_shape" line=317 %}{% raw %}
-
-</div>
-
-Return the outline of a note of a value, with the stem up or down.
-
-Half notes and shorter values have stems, so a double whole note or
-whole note looks the same either way.
-Shapes are cached after their first use.
-
-**Parameters**
-
-- `value` (*str*): "breve", "whole", "half", "quarter", "eighth", "sixteenth" or "thirty_second".
-- `stem_down` (*bool, default False*): Turn the stem down. Keyword-only.
-
-**Returns**
-
-- *QPainterPath*: The outline, in glyph units.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> up, down = (
-...     note_shape("quarter"),
-...     note_shape("quarter", stem_down=True),
-... )
->>> up == down
-False
-```
-
-## draw_note
-
-<div class="api-signature" markdown="1">
-
-```python
-def draw_note(
-    p: QPainter,
-    *,
-    value: str,
-    x: float,
-    y: float,
-    gap: float,
-    color: QColor,
-    stem_down: bool = False,
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="draw_note" line=358 %}{% raw %}
-
-</div>
-
-Draw a note with its head centered on a point, in Noto Music.
-
-The note is drawn from the Noto Music font, so it is only drawn as
-it should be where that font is installed. The staff
-draws with Bravura, which comes with Alto, wherever Noto Music is
-missing.
-
-**Parameters**
-
-- `p` (*QPainter*): The painter to draw with.
-- `value` (*str*): The note value. Keyword-only.
-- `x` (*float*): The head's center, in pixels. Keyword-only.
-- `y` (*float*): The head's center, in pixels. Keyword-only.
-- `gap` (*float*): The distance between staff lines, which is also the head's height. Keyword-only.
-- `color` (*QColor*): The color to draw in. Keyword-only.
-- `stem_down` (*bool, default False*): Draw the stem down. Keyword-only.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> from PySide6.QtGui import QImage
->>> image = QImage(
-...     100, 100, QImage.Format.Format_ARGB32
-... )
->>> image.fill(QColor("white"))
->>> painter = QPainter(image)
->>> draw_note(
-...     painter,
-...     value="quarter",
-...     x=50,
-...     y=50,
-...     gap=16,
-...     color=QColor("black"),
-... )
->>> painter.end()
-True
->>> from PySide6.QtGui import QFontDatabase
->>> not QFontDatabase.hasFamily(
-...     "Noto Music"
-... ) or image.pixelColor(
-...     50, 50
-... ).lightness() < 128  # the head is at the point
-True
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"note_shape": "function-note_shape/", "draw_note": "function-draw_note/"}</script>
+{% include api-fragments.html %}

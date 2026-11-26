@@ -19,19 +19,19 @@ On a normal launch, `main()` creates the Qt `QApplication`, applies the saved th
 
 ### First launch
 
-An empty database opens the welcome dialog. **Create profile** passes the name to `Database.add_profile()`. A valid name closes the dialog with the new profile selected. Closing this dialog without creating a profile exits Alto before it opens the main window. [Database API]({{ '/api/alto.learning.database/#database' | relative_url }})
+An empty database opens the welcome dialog. **Create profile** passes the name to `Database.add_profile()`. A valid name closes the dialog with the new profile selected. Closing this dialog without creating a profile exits Alto before it opens the main window. [Database API]({{ '/api/alto.learning.database/class-database/' | relative_url }})
 
 {% include component-shot.html screen="profile-create" width=380 height=234 alt="Welcome to Alto with a name field and a Create profile button." %}
 
 ### Returning profiles
 
-`startup_profile()` first looks for the last-used profile. If it finds one, Alto opens it directly. If there is no remembered match, Alto uses the only profile in the database or, when there are several, opens the chooser shown below. Both the welcome screen and the chooser come from `ProfileDialog`. [Profile selection code]({{ '/api/alto.ui.profile_dialog/#startup_profile' | relative_url }})
+`startup_profile()` first looks for the last-used profile. If it finds one, Alto opens it directly. If there is no remembered match, Alto uses the only profile in the database or, when there are several, opens the chooser shown below. Both the welcome screen and the chooser come from `ProfileDialog`. [Profile selection code]({{ '/api/alto.ui.profile_dialog/function-startup_profile/' | relative_url }})
 
 {% include component-shot.html screen="profile-picker" width=380 height=407 alt="The profile chooser lists Ada and Sam and offers a field for a new profile." %}
 
 ### The main window
 
-Once a profile is selected, `main()` constructs a `Learner` for it, passes the learner to `MainWindow`, calls `window.show()`, and enters Qt’s event loop with `app.exec()`. From here a click on a tile or toolbar button determines what code runs next. [Learner API]({{ '/api/alto.learning.learner/#learner' | relative_url }})
+Once a profile is selected, `main()` constructs a `Learner` for it, passes the learner to `MainWindow`, calls `window.show()`, and enters Qt’s event loop with `app.exec()`. From here a click on a tile or toolbar button determines what code runs next. [Learner API]({{ '/api/alto.learning.learner/class-learner/' | relative_url }})
 
 On the first launch, the main window opens to the exercise tiles. The toolbar and search field belong to `MainWindow`. The catalog beneath them is a `HomePage`, which lays out the tiles and emits `exercise_chosen` when a learner picks one. Alto remembers whether the catalog last showed exercises or lessons.
 
@@ -96,3 +96,7 @@ Double-clicking an answer opens a separate `QuestionPreview` dialog. It recreate
 ## UI style guide
 
 Compare the colors of these screens and their controls across releases using the paired light and dark screenshots in the [UI style guide]({{ '/developer-guide/ui-style-guide/' | relative_url }}).
+
+## Releases
+
+Follow the Python code from Alto’s launcher through PyInstaller into the Linux archive, Windows installer, and macOS disk image. [Releases]({{ '/developer-guide/releases/' | relative_url }})

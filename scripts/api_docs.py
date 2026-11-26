@@ -6,11 +6,10 @@ Write the API reference pages in docs/api from the docstrings in alto/.
     python scripts/api_docs.py --check    # fail if docs/api is out of
     date, changing nothing
 
-Every public module gets a page with its public classes, methods and
-functions: the signature, then the NumPy-style
-docstring turned into Markdown. The source is read as text and never
-imported, so the script needs neither Qt nor a
-display. GitHub Pages cannot run this script, so the pages are
+Each module indexes its public classes and functions. Each component
+page contains its signature and docstring, including class methods.
+The script reads source text without importing Alto or starting Qt.
+GitHub Pages cannot run this script, so the pages are
 committed, and `tests/test_api_docs.py` fails when they are
 out of date.
 """
@@ -20,6 +19,7 @@ from __future__ import annotations
 import argparse
 import ast
 import inspect
+import json
 import re
 import sys
 from pathlib import Path
@@ -28,7 +28,11 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "alto"
 OUT = ROOT / "docs" / "api"
 SECTION = re.compile(r"^(?P<title>[A-Z][A-Za-z ]+)\n-{3,}$", re.MULTILINE)
-LIST_SECTIONS = ("Parameters", "Attributes", "Returns", "Yields", "Raises")
+TABLE_SECTIONS = {
+    "Parameters": "Parameter",
+    "Attributes": "Attribute",
+    "Returns": "Name",
+}
 
 
 def module_files() -> list[Path]:
@@ -182,6 +186,51 @@ def entries(text: str) -> list[tuple[str, str, str]]:
     return out
 
 
+def field_table(title: str, *, text: str) -> str:
+    r"""
+    Format the fields in a NumPy-style API section as a Markdown table.
+
+    Parameters
+    ----------
+    title : str
+        Parameters, Attributes, or Returns.
+    text : str
+        The section body.
+
+    Returns
+    -------
+    str
+        A header and one row per documented entry.
+
+    Examples
+    --------
+    >>> print(field_table("Returns", text="int\n    Beat count."))
+    | Type | Description |
+    | --- | --- |
+    | `int` | Beat count. |
+    """
+    fields = entries(text)
+    named = title != "Returns" or any(name for name, _, _ in fields)
+    headers = ["Type", "Description"]
+    if named:
+        headers.insert(0, TABLE_SECTIONS[title])
+    rows = [headers, ["---"] * len(headers)]
+    for name, kind, description in fields:
+        if title != "Returns" and not name:
+            name, kind = kind, ""
+        # Kramdown keeps pipes inside code spans in the same cell.
+        description = re.sub(
+            r"(`+).*?\1|\|",
+            lambda match: r"\|" if match[0] == "|" else match[0],
+            description,
+        )
+        cells = [f"`{kind}`" if kind else "", description]
+        if named:
+            cells.insert(0, f"`{name}`" if name else "")
+        rows.append(cells)
+    return "\n".join("| " + " | ".join(row) + " |" for row in rows)
+
+
 def render_doc(doc: str | None) -> str:
     r"""
     Turn a docstring into Markdown.
@@ -209,7 +258,9 @@ def render_doc(doc: str | None) -> str:
     <BLANKLINE>
     **Parameters**
     <BLANKLINE>
-    - `n` (*int*): How many.
+    | Parameter | Type | Description |
+    | --- | --- | --- |
+    | `n` | `int` | How many. |
     """
     if not doc:
         return ""
@@ -227,7 +278,9 @@ def render_doc(doc: str | None) -> str:
                 else "text"
             )
             out.append(f"**Examples**\n\n```{lexer}\n{text}\n```")
-        elif title in LIST_SECTIONS:
+        elif title in TABLE_SECTIONS:
+            out.append(f"**{title}**\n\n{field_table(title, text=text)}")
+        elif title in ("Yields", "Raises"):
             lines = []
             for name, kind, desc in entries(text):
                 label = (
@@ -448,8 +501,7 @@ def signature_box(code: str, *, name: str, line: int) -> str:
 def render_function(
     node: ast.FunctionDef,
     *,
-    level: int,
-    prefix: str = "",
+    owner: str = "",
 ) -> str:
     r"""
     Write the section for one function or method.
@@ -458,11 +510,8 @@ def render_function(
     ----------
     node : ast.FunctionDef
         The function.
-    level : int
-        The heading level, 2 for a function and 3 for a method.
-        Keyword-only.
-    prefix : str, default ""
-        The class name and a dot, for a method. Keyword-only.
+    owner : str, default ""
+        The class name when rendering a method. Keyword-only.
 
     Returns
     -------
@@ -475,7 +524,7 @@ def render_function(
     ...     "def f(n: int) -> int:\n    '''Double it.'''\n    return n"
     ...     " * 2"
     ... )
-    >>> section = render_function(tree.body[0], level=2)
+    >>> section = render_function(tree.body[0])
     >>> "def f(n: int) -> int" in section
     True
     """
@@ -487,9 +536,10 @@ def render_function(
     )
     if head:
         sig = sig.replace("```python\n", f"```python\n{head}\n", 1)
+    name = f"{owner}.{node.name}" if owner else node.name
     parts = [
-        f"{'#' * level} {prefix}{node.name}",
-        signature_box(sig, name=f"{prefix}{node.name}", line=node.lineno),
+        f"## {name}" if owner else "",
+        signature_box(sig, name=name, line=node.lineno),
         render_doc(ast.get_docstring(node, clean=False)),
     ]
     return "\n\n".join(p for p in parts if p)
@@ -561,12 +611,8 @@ def render_class(node: ast.ClassDef) -> str:
     ...     "class C(Base):\n    '''A thing.'''\n    def go(self) -> "
     ...     "None:\n        '''Go.'''"
     ... )
-    >>> print(
-    ...     render_class(tree.body[0]).splitlines()[
-    ...         0
-    ...     ]
-    ... )
-    ## C
+    >>> "## C.go" in render_class(tree.body[0])
+    True
     """
     init: ast.FunctionDef | None = None
     methods: list[ast.FunctionDef] = []
@@ -587,18 +633,17 @@ def render_class(node: ast.ClassDef) -> str:
     else:
         params = None
     bases = ", ".join(ast.unparse(b) for b in node.bases)
-    parts = [
-        f"## {node.name}",
-        fence(
+    signature = (
+        fence(node.name, params=params)
+        if params is not None
+        else fence(
             f"class {node.name}" + (f"({bases})" if bases else ""),
             params=None,
-        ),
-    ]
-    if params is not None:
-        parts[1] = fence(node.name, params=params)
-        if bases:
-            parts.append(f"Bases: `{bases}`")
-    parts[1] = signature_box(parts[1], name=node.name, line=node.lineno)
+        )
+    )
+    parts = [signature_box(signature, name=node.name, line=node.lineno)]
+    if params is not None and bases:
+        parts.append(f"Bases: `{bases}`")
     parts.append(render_doc(ast.get_docstring(node, clean=False)))
     if init is not None and ast.get_docstring(init):
         built = render_doc(ast.get_docstring(init, clean=False)).replace(
@@ -607,8 +652,7 @@ def render_class(node: ast.ClassDef) -> str:
         )
         parts.append(f"**Constructor**\n\n{built}")
     parts.extend(
-        render_function(method, level=3, prefix=f"{node.name}.")
-        for method in methods
+        render_function(method, owner=node.name) for method in methods
     )
     return "\n\n".join(p for p in parts if p)
 
@@ -640,77 +684,115 @@ def summary(doc: str | None) -> str:
     )
 
 
-def render_module(path: Path) -> str:
-    r"""
-    Write the page for one module.
+def render_module(path: Path) -> dict[str, str]:
+    """
+    Build the module overview and the pages linked from its index.
 
     Parameters
     ----------
     path : Path
-        The source file.
+        The Python module to document.
 
     Returns
     -------
-    str
-        The whole page: front matter and body. The body is wrapped in
-        Liquid's `raw` tags so that braces in a docstring
-        cannot be taken for template code.
+    dict of str to str
+        Markdown pages keyed by path relative to the API reference.
 
     Examples
     --------
-    >>> page = render_module(
-    ...     SOURCE / "theory" / "pitch.py"
-    ... )
-    >>> page.startswith(
-    ...     "---\ntitle: alto.theory.pitch\n"
-    ... )
-    True
-    >>> "## Note" in page
+    >>> pages = render_module(SOURCE / "theory" / "pitch.py")
+    >>> "alto.theory.pitch/class-note.md" in pages
     True
     """
     tree = ast.parse(path.read_text(encoding="utf-8"))
     name = dotted(path)
-    front = (
-        "---\ntitle: "
-        f"{name}"
-        "\nparent: api\npackage: "
-        f"{package_of(path)}"
-        "\npermalink: /api/"
-        f"{name}"
-        "/\n---\n"
-    )
-    parts = [render_doc(ast.get_docstring(tree, clean=False))]
+    package = package_of(path)
+    pages = {}
+    groups: dict[str, list[str]] = {"Classes": [], "Functions": []}
+    components = []
+    fragments: dict[str, str] = {}
     for node in tree.body:
-        if isinstance(node, ast.ClassDef) and not node.name.startswith("_"):
-            parts.append(render_class(node))
-        elif isinstance(node, ast.FunctionDef) and not node.name.startswith(
-            "_",
-        ):
-            parts.append(render_function(node, level=2))
-    body = "\n\n".join(p for p in parts if p)
-    return f"{front}{{% raw %}}\n{body}\n{{% endraw %}}\n"
+        if not isinstance(node, (ast.ClassDef, ast.FunctionDef)):
+            continue
+        if node.name.startswith("_"):
+            continue
+        if isinstance(node, ast.ClassDef):
+            kind, group = "class", "Classes"
+            detail = render_class(node)
+        else:
+            kind, group = "function", "Functions"
+            detail = render_function(node)
+        slug = f"{kind}-{node.name.lower()}"
+        url = f"/api/{name}/{slug}/"
+        components.append({"title": node.name, "url": url})
+        pages[f"{name}/{slug}.md"] = (
+            f"---\ntitle: {node.name}\nparent: {name}\napi_module: {name}\n"
+            f"package: {package}\npermalink: {url}\n---\n"
+            f"{{% raw %}}\n{detail}\n{{% endraw %}}\n"
+        )
+        about = summary(ast.get_docstring(node))
+        entry = f"- [`{node.name}`]({slug}/)"
+        groups[group].append(f"{entry} — {about}" if about else entry)
+        # Kramdown numbered duplicate headings, such as the class
+        # Coverage and the function coverage in alto.instrument_info.
+        anchor = node.name.lower()
+        if anchor in fragments:
+            anchor += "-1"
+        fragments[anchor] = f"{slug}/"
+        if isinstance(node, ast.ClassDef):
+            for method in node.body:
+                if not isinstance(method, ast.FunctionDef):
+                    continue
+                if not method.name.startswith("_"):
+                    anchor = (node.name + method.name).lower()
+                    fragments[anchor] = f"{slug}/#{anchor}"
+
+    doc = render_doc(ast.get_docstring(tree, clean=False))
+    intro, _, notes = doc.partition("\n\n")
+    parts = [intro]
+    for group, entries in groups.items():
+        if entries:
+            parts.extend([f"## {group}", "\n".join(entries)])
+    if notes:
+        parts.append(
+            '<details markdown="1">\n'
+            "<summary>Module notes and examples</summary>"
+            f"\n\n{notes}\n\n</details>",
+        )
+    body = "\n\n".join(parts)
+    components.sort(key=lambda component: component["title"])
+    pages[f"{name}.md"] = (
+        f"---\ntitle: {name}\nparent: api\npackage: {package}\n"
+        f"api_components: {json.dumps(components)}\n"
+        f"permalink: /api/{name}/\n---\n{{% raw %}}\n{body}\n{{% endraw %}}\n"
+    )
+    if fragments:
+        pages[f"{name}.md"] += (
+            f'\n<script type="application/json" id="api-fragments">'
+            f"{json.dumps(fragments)}</script>\n"
+            "{% include api-fragments.html %}\n"
+        )
+    return pages
 
 
-def render_index(files: list[Path]) -> str:
+def render_indexes(files: list[Path]) -> dict[str, str]:
     """
-    Write the front page of the reference: what it covers and a list of
-    every module.
+    Write the API index and an overview for each package.
 
     Parameters
     ----------
     files : list of Path
-        The modules, in the order they are listed.
+        Public modules in sidebar order.
 
     Returns
     -------
-    str
-        The page.
+    dict of str to str
+        The index and package pages, keyed by Markdown file name.
 
     Examples
     --------
-    >>> page = render_index(module_files())
-    >>> "[alto.audio](alto.audio/)" in page
-    True
+    >>> sorted(render_indexes([SOURCE / "theory" / "pitch.py"]))
+    ['alto.theory.md', 'index.md']
     """
     out = [
         (
@@ -718,46 +800,51 @@ def render_index(files: list[Path]) -> str:
             "developers\nchildren: api\npermalink: /api/\n---\n"
         ),
         (
-            "Every public module, class and function in Alto, with its "
-            "signature and docstring. Names that begin with an "
+            "Choose a module to see its public classes and functions. "
+            "Each has a page with its signature, documentation, and "
+            "examples. Class pages also list their public methods. "
+            "Names that begin with an "
             "underscore are internal and are left out. The pages are "
             "written from the docstrings by `scripts/api_docs.py`, so "
             "they match the code.\n"
         ),
     ]
-    last = ""
+    packages: dict[str, list[Path]] = {}
     for path in files:
-        pkg = package_of(path)
-        if pkg != last:
-            init = path.parent / "__init__.py"
-            blurb = (
-                summary(
-                    ast.get_docstring(
-                        ast.parse(init.read_text(encoding="utf-8")),
-                    ),
-                )
-                if init.exists()
-                else ""
-            )
-            out.append(
-                f"\n## {pkg}\n"
-                + (f"\n{blurb}\n" if blurb else "")
-                + "\n| Module | What it is |\n|---|---|",
-            )
-            last = pkg
-        about = summary(
-            ast.get_docstring(ast.parse(path.read_text(encoding="utf-8"))),
+        packages.setdefault(package_of(path), []).append(path)
+    pages = {}
+    for name, modules in packages.items():
+        init = modules[0].parent / "__init__.py"
+        about = (
+            summary(ast.get_docstring(ast.parse(init.read_text("utf-8"))))
+            if init.exists()
+            else ""
         )
-        out.append(
-            "| ["
-            f"{dotted(path)}"
-            "]("
-            f"{dotted(path)}"
-            "/) | "
-            f"{about.replace('|', chr(92) + '|')}"
-            " |",
-        )
-    return "\n".join(out) + "\n"
+        out.extend([f"\n## [{name}]({name}/)\n", about])
+        body = [
+            (
+                f"---\ntitle: {name}\nparent: api\npackage: {name}\n"
+                f"api_package: true\npermalink: /api/{name}/\n---\n"
+            ),
+            about,
+        ]
+        subpackages = [
+            pkg for pkg in packages if pkg.rpartition(".")[0] == name
+        ]
+        if subpackages:
+            body.extend(["", "## Subpackages", ""])
+            body.extend(f"- [{pkg}](../{pkg}/)" for pkg in subpackages)
+        body.extend(["", "## Modules"])
+        for page in (out, body):
+            page.extend(["", "| Module | What it is |", "|---|---|"])
+        for path in modules:
+            module = dotted(path)
+            tree = ast.parse(path.read_text("utf-8"))
+            doc = summary(ast.get_docstring(tree)).replace("|", r"\|")
+            out.append(f"| [{module}]({module}/) | {doc} |")
+            body.append(f"| [{module}](../{module}/) | {doc} |")
+        pages[f"{name}.md"] = "\n".join(body) + "\n"
+    return {"index.md": "\n".join(out) + "\n", **pages}
 
 
 def build() -> dict[str, str]:
@@ -776,9 +863,9 @@ def build() -> dict[str, str]:
     True
     """
     files = module_files()
-    pages = {"index.md": render_index(files)}
+    pages = render_indexes(files)
     for path in files:
-        pages[f"{dotted(path)}.md"] = render_module(path)
+        pages.update(render_module(path))
     return pages
 
 
@@ -803,7 +890,7 @@ def problems(*, out: Path = OUT) -> list[str]:
     'missing: index.md'
     """
     wanted = build()
-    found = {p.name for p in out.glob("*.md")} if out.is_dir() else set()
+    found = {p.relative_to(out).as_posix() for p in out.rglob("*.md")}
     out_of_date = [
         f"out of date: {n}"
         for n, text in wanted.items()
@@ -840,11 +927,13 @@ def write(*, out: Path = OUT) -> int:
     """
     pages = build()
     out.mkdir(parents=True, exist_ok=True)
-    for stale in out.glob("*.md"):
-        if stale.name not in pages:
+    for stale in out.rglob("*.md"):
+        if stale.relative_to(out).as_posix() not in pages:
             stale.unlink()
     for name, text in pages.items():
-        (out / name).write_text(text, encoding="utf-8")
+        dest = out / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(text, encoding="utf-8")
     return len(pages)
 
 

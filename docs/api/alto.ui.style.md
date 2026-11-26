@@ -2,11 +2,20 @@
 title: alto.ui.style
 parent: api
 package: alto.ui
+api_components: [{"title": "app_style", "url": "/api/alto.ui.style/function-app_style/"}, {"title": "navigation_heading_style", "url": "/api/alto.ui.style/function-navigation_heading_style/"}]
 permalink: /api/alto.ui.style/
 ---
 {% raw %}
 Application-wide stylesheet: rounded corners on buttons, panes, lists
 and scroll bars.
+
+## Functions
+
+- [`navigation_heading_style`](function-navigation_heading_style/) — Style category headings in the navigation pane and tile filters.
+- [`app_style`](function-app_style/) — Build the stylesheet for a palette.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 Colors come from the palette so it follows the system light/dark theme.
 
@@ -17,74 +26,8 @@ Colors come from the palette so it follows the system light/dark theme.
 10
 ```
 
-## navigation_heading_style
-
-<div class="api-signature" markdown="1">
-
-```python
-def navigation_heading_style(palette: QPalette) -> tuple[QFont, QColor]
-```
-
-{% endraw %}{% include api-source.html name="navigation_heading_style" line=22 %}{% raw %}
-
-</div>
-
-Style category headings in the navigation pane and tile filters.
-
-**Parameters**
-
-- `palette` (*QPalette*): The pane's current palette.
-
-**Returns**
-
-- *tuple of QFont and QColor*: The small, spaced capitals and muted foreground used for section headings.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> navigation_heading_style(QPalette())[
-...     0
-... ].bold()
-True
-```
-
-## app_style
-
-<div class="api-signature" markdown="1">
-
-```python
-def app_style(
-    palette: QPalette,
-    *,
-    paper_palette: QPalette | None = None,
-) -> str
-```
-
-{% endraw %}{% include api-source.html name="app_style" line=92 %}{% raw %}
-
-</div>
-
-Build the stylesheet for a palette.
-
-Push buttons use rounded hairline borders. In dark mode, exercise
-tiles have near-black outlines and
-other standard buttons have graphite-gray outlines.
-
-**Parameters**
-
-- `palette` (*QPalette*): The palette to take colors from, so the style follows the light or dark theme.
-- `paper_palette` (*QPalette or None, default None*): The theme's light variant for playback on white staff paper. Dark desktop themes use Qt light colors with the desktop accent when no light variant is supplied.
-
-**Returns**
-
-- *str*: Qt style sheet text.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> from PySide6.QtWidgets import QApplication
->>> sheet = app_style(QApplication.palette())
->>> "QPushButton" in sheet and "border-radius" in sheet
-True
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"navigation_heading_style": "function-navigation_heading_style/", "app_style": "function-app_style/"}</script>
+{% include api-fragments.html %}

@@ -953,9 +953,9 @@ def test_sidebar_opens_whatever_holds_current_page_and_groups() -> None:
     """
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
     assert (
-        "page.parent == p.children" in layout
-        and "page.package == a.package" in layout
-        and "include nav-category.html" in layout
+        "title=a.package url=package_url controls=package_id" in layout
+        and "title=label url=a.url controls=module_id" in layout
+        and "title=p.title url=p.url controls=section_id" in layout
     )
     script = (DOCS / "assets" / "js" / "nav.js").read_text(encoding="utf-8")
     assert (

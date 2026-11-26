@@ -2,11 +2,24 @@
 title: alto.instrument_info
 parent: api
 package: alto
+api_components: [{"title": "Coverage", "url": "/api/alto.instrument_info/class-coverage/"}, {"title": "InstrumentInfo", "url": "/api/alto.instrument_info/class-instrumentinfo/"}, {"title": "coverage", "url": "/api/alto.instrument_info/function-coverage/"}]
 permalink: /api/alto.instrument_info/
 ---
 {% raw %}
 What is known about each instrument's recordings, for the summary shown
 in the instrument settings.
+
+## Classes
+
+- [`InstrumentInfo`](class-instrumentinfo/) — The facts about where an instrument's recordings came from.
+- [`Coverage`](class-coverage/) — Which notes an instrument has recordings for.
+
+## Functions
+
+- [`coverage`](function-coverage/) — Summarize the notes that have a recording.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 The facts here come from the sources' own pages (the University of Iowa
 Musical Instrument Samples, and the Salamander
@@ -21,176 +34,8 @@ shown, not stored here. Pure Python, no Qt.
 '13 notes, C4 to C5, every semitone'
 ```
 
-## InstrumentInfo
-
-<div class="api-signature" markdown="1">
-
-```python
-InstrumentInfo(
-    summary: str,
-    *,
-    source: str,
-    source_url: str,
-    performer: str = '',
-    recorded: str = '',
-    includes: str = '',
-    terms: str = IOWA_TERMS,
-    note: str = '',
-)
-```
-
-{% endraw %}{% include api-source.html name="InstrumentInfo" line=43 %}{% raw %}
-
-</div>
-
-The facts about where an instrument's recordings came from.
-
-**Attributes**
-
-- `summary` (*str*): One sentence on what the sound is.
-- `source` (*str*): Who made the recordings. Keyword-only.
-- `source_url` (*str*): Where the source describes them. Keyword-only.
-- `performer` (*str, default ""*): Who played. Keyword-only.
-- `recorded` (*str, default ""*): When and where it was recorded. Keyword-only.
-- `includes` (*str, default ""*): The articulation and dynamic that were used. Keyword-only.
-- `terms` (*str*): The terms the recordings may be used under. Keyword-only.
-- `note` (*str, default ""*): Anything a user should know about how Alto prepared the recordings. Keyword-only.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> info = InstrumentInfo(
-...     "A flute.",
-...     source=IOWA,
-...     source_url="https://example.org/flute",
-... )
->>> info.terms == IOWA_TERMS
-True
-```
-
-## Coverage
-
-<div class="api-signature" markdown="1">
-
-```python
-Coverage(
-    count: int,
-    *,
-    lowest: int | None = None,
-    highest: int | None = None,
-    gaps: int = 0,
-)
-```
-
-{% endraw %}{% include api-source.html name="Coverage" line=192 %}{% raw %}
-
-</div>
-
-Which notes an instrument has recordings for.
-
-**Attributes**
-
-- `count` (*int*): How many notes have a recording.
-- `lowest` (*int or None*): The lowest recorded note, as a MIDI number. Keyword-only.
-- `highest` (*int or None*): The highest recorded note, as a MIDI number. Keyword-only.
-- `gaps` (*int, default 0*): How many semitones inside the range have no recording. Keyword-only.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> Coverage(0).describe()
-'None installed'
-```
-
-### Coverage.installed
-
-<div class="api-signature" markdown="1">
-
-```python
-@property
-def installed() -> bool
-```
-
-{% endraw %}{% include api-source.html name="Coverage.installed" line=221 %}{% raw %}
-
-</div>
-
-Report whether any recordings are on disk.
-
-**Returns**
-
-- *bool*: True if at least one note has a recording.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> (
-...     Coverage(0).installed,
-...     coverage([60]).installed,
-... )
-(False, True)
-```
-
-### Coverage.describe
-
-<div class="api-signature" markdown="1">
-
-```python
-def describe() -> str
-```
-
-{% endraw %}{% include api-source.html name="Coverage.describe" line=240 %}{% raw %}
-
-</div>
-
-Describe the coverage in a sentence for the instrument settings.
-
-**Returns**
-
-- *str*: The number of notes, the range, and how complete it is (the spacing, when the notes are well apart). Missing notes are shifted from a neighbor.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> coverage(range(60, 73)).describe()
-'13 notes, C4 to C5, every semitone'
->>> coverage([60, 62, 64, 65]).describe()
-'4 notes, C4 to F4, almost every semitone. The few missing notes
-are shifted from a neighbor.'
->>> coverage(range(48, 73, 2)).describe()
-'13 notes, C3 to C5, about every second semitone. The other
-notes are shifted from a neighbor.'
->>> coverage(range(21, 109, 3)).describe()
-'30 notes, A0 to C8, about every third semitone. The other notes
-are shifted from a neighbor.'
-```
-
-## coverage
-
-<div class="api-signature" markdown="1">
-
-```python
-def coverage(midis: Iterable[int]) -> Coverage
-```
-
-{% endraw %}{% include api-source.html name="coverage" line=292 %}{% raw %}
-
-</div>
-
-Summarize the notes that have a recording.
-
-**Parameters**
-
-- `midis` (*iterable of int*): The MIDI numbers of the recorded notes, in any order and with repeats allowed.
-
-**Returns**
-
-- *Coverage*: The count, the range and the number of gaps.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> coverage([64, 60, 62])
-Coverage(count=3, lowest=60, highest=64, gaps=2)
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"instrumentinfo": "class-instrumentinfo/", "coverage": "class-coverage/", "coverageinstalled": "class-coverage/#coverageinstalled", "coveragedescribe": "class-coverage/#coveragedescribe", "coverage-1": "function-coverage/"}</script>
+{% include api-fragments.html %}

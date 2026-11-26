@@ -1,0 +1,11 @@
+<script>
+  // Follow bookmarks to the class, function or method on its component page.
+  function followApiFragment() {
+    const key = location.hash.slice(1);
+    if (!key) return;
+    const targets = JSON.parse(document.getElementById("api-fragments").textContent);
+    if (Object.hasOwn(targets, key)) location.replace(targets[key]);
+  }
+  followApiFragment();
+  window.addEventListener("hashchange", followApiFragment);
+</script>

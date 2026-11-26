@@ -2,11 +2,21 @@
 title: alto.lessons.packs
 parent: api
 package: alto.lessons
+api_components: [{"title": "inline", "url": "/api/alto.lessons.packs/function-inline/"}, {"title": "read_lessons", "url": "/api/alto.lessons.packs/function-read_lessons/"}, {"title": "read_picture", "url": "/api/alto.lessons.packs/function-read_picture/"}]
 permalink: /api/alto.lessons.packs/
 ---
 {% raw %}
 Turn the lessons that an instrument plugin declares into `Lesson`s that
 Alto lists and shows.
+
+## Functions
+
+- [`inline`](function-inline/) — Escape plain text for a lesson page, turning ``**word**`` into bold type for a term being defined.
+- [`read_lessons`](function-read_lessons/) — Validate the optional ``lessons`` list of a plugin manifest and build its lessons.
+- [`read_picture`](function-read_picture/) — Build a step's instrument picture: a note on a string, or a marked place on the picture.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 A plugin describes each lesson in its manifest as plain text and small
 objects: paragraphs, an optional picture of its own
@@ -22,122 +32,8 @@ nothing about any particular plugin or instrument.
 'A <b>scroll</b> is the carved end.'
 ```
 
-## inline
-
-<div class="api-signature" markdown="1">
-
-```python
-def inline(text: str) -> str
-```
-
-{% endraw %}{% include api-source.html name="inline" line=87 %}{% raw %}
-
-</div>
-
-Escape plain text for a lesson page, turning ``**word**`` into bold
-type for a term being defined.
-
-**Parameters**
-
-- `text` (*str*): Plain text from a manifest.
-
-**Returns**
-
-- *str*: Simple HTML.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> inline("The **nut** & the bridge.")
-'The <b>nut</b> &amp; the bridge.'
-```
-
-## read_lessons
-
-<div class="api-signature" markdown="1">
-
-```python
-def read_lessons(
-    value: object,
-    *,
-    pack_id: str,
-    pack_name: str,
-    instruments: Mapping[str, PackInstrument],
-    exercises: Mapping[str, str],
-    icons: Mapping[str, str] | None = None,
-) -> tuple[Lesson, ...]
-```
-
-{% endraw %}{% include api-source.html name="read_lessons" line=114 %}{% raw %}
-
-</div>
-
-Validate the optional ``lessons`` list of a plugin manifest and
-build its lessons.
-
-**Parameters**
-
-- `value` (*object*): The manifest's ``lessons`` entry, or None when the plugin has no lessons.
-- `pack_id` (*str*): The plugin's id, which qualifies each lesson's key. Keyword-only.
-- `pack_name` (*str*): The plugin's display name, used as a lesson's category when it names none. Keyword-only.
-- `instruments` (*mapping of str to PackInstrument*): The plugin's instruments by qualified key, which pictures and sounds refer to. Keyword-only.
-- `exercises` (*mapping of str to str*): The plugin's exercises, from the id the manifest uses to the key Alto registers it under. Keyword-only.
-- `icons` (*mapping of str to str or None, default None*): The plugin's icons by the file name the manifest uses, already read. Keyword-only.
-
-**Returns**
-
-- *tuple of Lesson*: The lessons, in the order the manifest lists them.
-
-**Raises**
-
-- *ValueError*: If a lesson, step, picture, or question is malformed, or refers to something the plugin does not declare.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> read_lessons(
-...     None,
-...     pack_id="demo",
-...     pack_name="Demo",
-...     instruments={},
-...     exercises={},
-... )
-()
-```
-
-## read_picture
-
-<div class="api-signature" markdown="1">
-
-```python
-def read_picture(
-    spec: object,
-    *,
-    where: str,
-    pack_id: str,
-    instruments: Mapping[str, PackInstrument],
-) -> PicturePosition | FingerboardPosition
-```
-
-{% endraw %}{% include api-source.html name="read_picture" line=480 %}{% raw %}
-
-</div>
-
-Build a step's instrument picture: a note on a string, or a marked
-place on the picture.
-
-**Parameters**
-
-- `spec` (*object*): The picture's manifest object. Give ``string`` and ``note`` for a note on a string, or ``point`` for a place.
-- `where` (*str*): Which lesson and step this is, for messages. Keyword-only.
-- `pack_id` (*str*): The plugin's id. Keyword-only.
-- `instruments` (*mapping of str to PackInstrument*): The plugin's instruments by qualified key. Keyword-only.
-
-**Returns**
-
-- *PicturePosition or FingerboardPosition*: What the step's picture shows.
-
-**Raises**
-
-- *ValueError*: If the picture is malformed or refers to something the plugin does not declare.
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"inline": "function-inline/", "read_lessons": "function-read_lessons/", "read_picture": "function-read_picture/"}</script>
+{% include api-fragments.html %}

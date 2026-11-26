@@ -2,11 +2,23 @@
 title: alto.learning.scheduler
 parent: api
 package: alto.learning
+api_components: [{"title": "arts_priority", "url": "/api/alto.learning.scheduler/function-arts_priority/"}, {"title": "choose", "url": "/api/alto.learning.scheduler/function-choose/"}, {"title": "speed_term", "url": "/api/alto.learning.scheduler/function-speed_term/"}, {"title": "update_strain", "url": "/api/alto.learning.scheduler/function-update_strain/"}, {"title": "weight", "url": "/api/alto.learning.scheduler/function-weight/"}]
 permalink: /api/alto.learning.scheduler/
 ---
 {% raw %}
 How a question's history turns into how soon it comes back. Pure Python,
 no database and no Qt.
+
+## Functions
+
+- [`arts_priority`](function-arts_priority/) — Score a previously answered item for Adaptive Response-Time-based Sequencing.
+- [`speed_term`](function-speed_term/) — Return the strain change for how long the first answer took.
+- [`update_strain`](function-update_strain/) — Return the question's strain after one more answer.
+- [`weight`](function-weight/) — Return how likely a question is to be picked, relative to the others.
+- [`choose`](function-choose/) — Pick one option at random, in proportion to its weight.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 Every question carries a *strain*: how much practice it needs. A new
 question starts at NEW_STRAIN. Each answer moves
@@ -45,248 +57,8 @@ or removes strain on top: very quick
 2.8
 ```
 
-## arts_priority
-
-<div class="api-signature" markdown="1">
-
-```python
-def arts_priority(
-    intervening: int,
-    *,
-    correct: bool,
-    duration_ms: int,
-) -> float
-```
-
-{% endraw %}{% include api-source.html name="arts_priority" line=66 %}{% raw %}
-
-</div>
-
-Score a previously answered item for Adaptive Response-Time-based
-Sequencing.
-
-**Parameters**
-
-- `intervening` (*int*): Other first submissions since the last first submission to this item.
-- `correct` (*bool*): Whether the last first submission was correct.
-- `duration_ms` (*int*): Response time of that submission, in milliseconds.
-
-**Returns**
-
-- *float*: Priority for the next trial. A new item starts at 1.0.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> arts_priority(
-...     1, correct=False, duration_ms=200
-... )
-2.0
->>> arts_priority(
-...     0, correct=True, duration_ms=3000
-... )
-0.0
-```
-
-## speed_term
-
-<div class="api-signature" markdown="1">
-
-```python
-def speed_term(
-    seconds: float,
-    *,
-    par_seconds: float,
-) -> float
-```
-
-{% endraw %}{% include api-source.html name="speed_term" line=110 %}{% raw %}
-
-</div>
-
-Return the strain change for how long the first answer took.
-
-**Parameters**
-
-- `seconds` (*float*): How long the first answer took.
-- `par_seconds` (*float*): How long a good first answer takes for this exercise. Keyword-only.
-
-**Returns**
-
-- *float*: Negative when the answer was quick (down to `-FAST_BONUS`), zero at par, and positive when it was slow (up to `SLOW_PENALTY`).
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> speed_term(
-...     1.0, par_seconds=10.0
-... )  # at or under half of par: the full bonus
--0.6
->>> round(speed_term(7.5, par_seconds=10.0), 2)
--0.3
->>> round(speed_term(25.0, par_seconds=10.0), 2)
-0.5
->>> speed_term(
-...     100.0, par_seconds=10.0
-... )  # four times par or more: the full penalty
-1.0
-```
-
-## update_strain
-
-<div class="api-signature" markdown="1">
-
-```python
-def update_strain(
-    strain: float,
-    *,
-    correct: bool,
-    attempt_no: int,
-    seconds: float,
-    par_seconds: float,
-) -> float
-```
-
-{% endraw %}{% include api-source.html name="update_strain" line=156 %}{% raw %}
-
-</div>
-
-Return the question's strain after one more answer.
-
-**Parameters**
-
-- `strain` (*float*): The strain before this answer.
-- `correct` (*bool*): Whether the answer was right. Keyword-only.
-- `attempt_no` (*int*): 1 for the first answer to this showing of the question, 2 for the second and so on. Keyword-only.
-- `seconds` (*float*): How long the answer took. Only the first attempt's speed matters. Keyword-only.
-- `par_seconds` (*float*): How long a good first answer takes for this exercise. Keyword-only.
-
-**Returns**
-
-- *float*: The new strain, kept between 0 and `STRAIN_MAX`.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> update_strain(
-...     1.5,
-...     correct=False,
-...     attempt_no=1,
-...     seconds=5.0,
-...     par_seconds=5.0,
-... )
-3.0
->>> round(
-...     update_strain(
-...         1.5,
-...         correct=True,
-...         attempt_no=1,
-...         seconds=1.0,
-...         par_seconds=5.0,
-...     ),
-...     2,
-... )  # right, and quick
-0.4
->>> update_strain(
-...     5.9,
-...     correct=False,
-...     attempt_no=1,
-...     seconds=5.0,
-...     par_seconds=5.0,
-... )  # capped
-6.0
-```
-
-## weight
-
-<div class="api-signature" markdown="1">
-
-```python
-def weight(
-    strain: float | None,
-    *,
-    last_seen: float | None,
-    now: float,
-) -> float
-```
-
-{% endraw %}{% include api-source.html name="weight" line=230 %}{% raw %}
-
-</div>
-
-Return how likely a question is to be picked, relative to the
-others.
-
-A question just seen is held back for a while, long for an easy one
-and short for a hard one, so what you have
-learned is not repeated right away but what you struggle with
-returns within the minute.
-
-**Parameters**
-
-- `strain` (*float or None*): The question's strain, or None for one never answered.
-- `last_seen` (*float or None*): When it was last answered (a timestamp), or None if never. Keyword-only.
-- `now` (*float*): The current time (a timestamp). Keyword-only.
-
-**Returns**
-
-- *float*: A positive number; a larger one means the question is more likely to come up.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> round(
-...     weight(None, last_seen=None, now=0.0), 2
-... )  # a new question
-2.46
->>> round(
-...     weight(3.0, last_seen=0.0, now=1e9), 2
-... )  # a hard question, long unseen
-6.05
->>> round(
-...     weight(3.0, last_seen=100.0, now=100.0),
-...     3,
-... )  # the same, just seen: held back
-0.121
-```
-
-## choose
-
-<div class="api-signature" markdown="1">
-
-```python
-def choose(
-    options: Sequence[T],
-    *,
-    weights: Sequence[float],
-    rng: random.Random,
-) -> T
-```
-
-{% endraw %}{% include api-source.html name="choose" line=284 %}{% raw %}
-
-</div>
-
-Pick one option at random, in proportion to its weight.
-
-**Parameters**
-
-- `options` (*sequence of T*): The things to choose from.
-- `weights` (*sequence of float*): One weight per option; a larger weight makes it more likely. Keyword-only.
-- `rng` (*random.Random*): The random number generator to draw with. Keyword-only.
-
-**Returns**
-
-- *T*: The chosen option.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> choose(
-...     ["a", "b"],
-...     weights=[1.0, 0.0],
-...     rng=random.Random(0),
-... )
-'a'
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"arts_priority": "function-arts_priority/", "speed_term": "function-speed_term/", "update_strain": "function-update_strain/", "weight": "function-weight/", "choose": "function-choose/"}</script>
+{% include api-fragments.html %}

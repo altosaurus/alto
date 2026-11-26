@@ -2,11 +2,24 @@
 title: alto.ui.profile_dialog
 parent: api
 package: alto.ui
+api_components: [{"title": "ProfileDialog", "url": "/api/alto.ui.profile_dialog/class-profiledialog/"}, {"title": "remember_profile", "url": "/api/alto.ui.profile_dialog/function-remember_profile/"}, {"title": "startup_profile", "url": "/api/alto.ui.profile_dialog/function-startup_profile/"}]
 permalink: /api/alto.ui.profile_dialog/
 ---
 {% raw %}
 Choosing who is practicing. There is no password: a profile is just a
 name that keeps its own history.
+
+## Classes
+
+- [`ProfileDialog`](class-profiledialog/) — Ask who is practicing: a first name on launch, then a list to switch between.
+
+## Functions
+
+- [`remember_profile`](function-remember_profile/) — Remember which profile was used, so the next launch can open with it.
+- [`startup_profile`](function-startup_profile/) — Return the profile to open with: the one used last time, else ask.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 **Examples**
 
@@ -20,127 +33,8 @@ name that keeps its own history.
 'Ada'
 ```
 
-## ProfileDialog
-
-<div class="api-signature" markdown="1">
-
-```python
-ProfileDialog(
-    db: Database,
-    *,
-    current: Profile | None = None,
-    parent: QWidget | None = None,
-)
-```
-
-{% endraw %}{% include api-source.html name="ProfileDialog" line=43 %}{% raw %}
-
-</div>
-
-Bases: `QDialog`
-
-Ask who is practicing: a first name on launch, then a list to switch
-between.
-
-On first launch (no profiles yet) it asks for a name. Afterwards it
-lists the profiles to switch between and lets you add
-another.
-
-**Attributes**
-
-- `db` (*Database*): Where the profiles are kept.
-- `chosen` (*Profile or None*): The profile that was picked or created, once the dialog is accepted.
-- `list` (*QListWidget*): The existing profiles.
-- `name` (*QLineEdit*): Where a new name is typed.
-- `error` (*QLabel*): Says why a name was refused.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> db = Database()
->>> dialog = ProfileDialog(db)
->>> dialog.windowTitle()  # nobody has a profile yet
-'Welcome'
-```
-
-**Constructor**
-
-Build the dialog for the profiles in a database.
-
-**Parameters**
-
-- `db` (*Database*): The database whose profiles are listed and added to.
-- `current` (*Profile or None, default None*): The profile to select in the list at first. Keyword-only.
-- `parent` (*QWidget or None, default None*): The widget that owns the dialog. Keyword-only.
-
-**Constructor examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> database = Database()
->>> _ = database.add_profile("Ada")
->>> ProfileDialog(database).windowTitle()
-'Profile'
-```
-
-## remember_profile
-
-<div class="api-signature" markdown="1">
-
-```python
-def remember_profile(profile: Profile) -> None
-```
-
-{% endraw %}{% include api-source.html name="remember_profile" line=220 %}{% raw %}
-
-</div>
-
-Remember which profile was used, so the next launch can open with
-it.
-
-**Parameters**
-
-- `profile` (*Profile*): The profile in use.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> remember_profile(Profile(7, name="Ada"))
->>> int_value(
-...     store(), key="profile/last", default=-1
-... )
-7
-```
-
-## startup_profile
-
-<div class="api-signature" markdown="1">
-
-```python
-def startup_profile(db: Database) -> Profile | None
-```
-
-{% endraw %}{% include api-source.html name="startup_profile" line=241 %}{% raw %}
-
-</div>
-
-Return the profile to open with: the one used last time, else ask.
-
-**Parameters**
-
-- `db` (*Database*): The database of profiles.
-
-**Returns**
-
-- *Profile or None*: The profile, or None if the person closed the dialog without choosing one.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> database = Database()
->>> ada = database.add_profile("Ada")
->>> remember_profile(ada)
->>> # noinspection PyUnresolvedReferences
->>> startup_profile(database).name
-'Ada'
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"profiledialog": "class-profiledialog/", "remember_profile": "function-remember_profile/", "startup_profile": "function-startup_profile/"}</script>
+{% include api-fragments.html %}

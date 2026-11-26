@@ -1,0 +1,16 @@
+{% assign source = site.data.exercise_view_lines %}
+{% assign snippet = source.excerpts[include.name] %}
+{% if snippet %}
+{% assign url = 'https://github.com/altosaurus/alto/blob/' | append: source.revision | append: '/alto/ui/exercise_view.py#L' %}
+<div class="view-source" markdown="0">
+<div class="view-source-header">
+{% if source.revision %}<a href="{{ url }}{{ snippet.start }}-L{{ snippet.end }}" aria-label="Open alto/ui/exercise_view.py, lines {{ snippet.start }} to {{ snippet.end }} on GitHub">alto/ui/exercise_view.py</a>{% else %}<span>alto/ui/exercise_view.py · working copy</span>{% endif %}
+</div>
+<div class="view-source-grid">
+<div class="view-source-lines">{% for number in (snippet.start..snippet.end) %}{% if source.revision %}<a href="{{ url }}{{ number }}" aria-label="Source line {{ number }}">{{ number }}</a>{% else %}<span>{{ number }}</span>{% endif %}{% endfor %}</div>
+{% highlight python %}{{ snippet.code }}{% endhighlight %}
+</div>
+</div>
+{% else %}
+<p>To include this excerpt in a local build, run <code>python3 scripts/docs_excerpts.py</code> from the repository root before building the docs.</p>
+{% endif %}

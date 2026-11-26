@@ -1,4 +1,4 @@
-// Category links navigate normally. Their adjacent buttons control only the named list.
+// Folder titles navigate. Only their adjacent buttons toggle the child list.
 (function () {
   "use strict";
   const key = "alto-docs-nav";
@@ -8,7 +8,11 @@
   document.querySelectorAll(".nav-toggle").forEach(button => {
     const list = document.getElementById(button.getAttribute("aria-controls"));
     const name = button.dataset.category;
-    const holdsCurrent = button.closest(".nav-group")?.querySelector('[aria-current="page"]');
+    const row = button.parentElement;
+    const title = row.querySelector("a");
+    const category = row.classList.contains("nav-head");
+    const stateKey = category ? name : list.id;
+    const holdsCurrent = list.querySelector('[aria-current="page"]');
 
     function setOpen(open) {
       list.hidden = !open;
@@ -16,13 +20,19 @@
       button.setAttribute("aria-label", (open ? "Collapse " : "Expand ") + name);
     }
 
-    setOpen(!closed[name] || !!holdsCurrent);
+    function remember() {
+      closed[stateKey] = list.hidden;
+      try { localStorage.setItem(key, JSON.stringify(closed)); } catch (e) { /* Navigation still works. */ }
+    }
+
+    const defaultOpen = category || title?.hasAttribute("aria-current");
+    setOpen(!!holdsCurrent || (stateKey in closed ? !closed[stateKey] : !!defaultOpen));
     button.hidden = false;
+    // If a closed folder's title is followed, keep it closed on its overview.
+    title?.addEventListener("click", remember);
     button.addEventListener("click", () => {
       setOpen(list.hidden);
-      if (list.hidden) closed[name] = true;
-      else delete closed[name];
-      try { localStorage.setItem(key, JSON.stringify(closed)); } catch (e) { /* The control still works. */ }
+      remember();
     });
   });
 })();

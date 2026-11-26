@@ -58,7 +58,7 @@ if profile is None:
     return 0
 ```
 
-For this run, `database_path()` resolves to `data/alto.db` inside the temporary directory. `Database` opens SQLite and creates the tables for a new database. `startup_profile(db)` looks up the available profiles. An empty table leads to the welcome dialog you left open. [Database API]({{ '/api/alto.learning.database/#database' | relative_url }}) · [Profile selection code]({{ '/api/alto.ui.profile_dialog/#startup_profile' | relative_url }})
+For this run, `database_path()` resolves to `data/alto.db` inside the temporary directory. `Database` opens SQLite and creates the tables for a new database. `startup_profile(db)` looks up the available profiles. An empty table leads to the welcome dialog you left open. [Database API]({{ '/api/alto.learning.database/class-database/' | relative_url }}) · [Profile selection code]({{ '/api/alto.ui.profile_dialog/function-startup_profile/' | relative_url }})
 
 {% include component-shot.html screen="profile-create" width=380 height=234 alt="The welcome dialog is waiting for a name while main is inside startup_profile." %}
 
@@ -75,7 +75,7 @@ learner = Learner(db, profile=profile)
 window = MainWindow(learner)
 ```
 
-The first line pairs Ada’s profile with the open database. An exercise can now ask the learner for a question or record an answer against that profile. The second line passes the same learner into the window. To find the code behind the screen you now see, step into `MainWindow.__init__()` in `alto/ui/main_window.py`. It stores the learner, sets the starting size, restores saved window geometry if available, and calls `_build()`. [Learner API]({{ '/api/alto.learning.learner/#learner' | relative_url }}) · [MainWindow API]({{ '/api/alto.ui.main_window/#mainwindow' | relative_url }})
+The first line pairs Ada’s profile with the open database. An exercise can now ask the learner for a question or record an answer against that profile. The second line passes the same learner into the window. To find the code behind the screen you now see, step into `MainWindow.__init__()` in `alto/ui/main_window.py`. It stores the learner, sets the starting size, restores saved window geometry if available, and calls `_build()`. [Learner API]({{ '/api/alto.learning.learner/class-learner/' | relative_url }}) · [MainWindow API]({{ '/api/alto.ui.main_window/class-mainwindow/' | relative_url }})
 
 Inside `_build()`, look for these lines:
 
@@ -105,7 +105,7 @@ return app.exec()
 
 The first two assignments keep references to the active learner and window on the application. `window.show()` makes the constructed window visible. `app.exec()` runs Qt’s main event loop, which delivers input and paint events. `main()` stays at that call while you use Alto.
 
-In the running app, click **Note Identification**. The catalog emits `exercise_chosen` with the exercise class. The connection you saw in `_build()` sends it to `MainWindow.open_exercise()`, which opens an `ExerciseView` in the stack. The toolbar stays in place as the catalog gives way to the staff and answer buttons. [ExerciseView API]({{ '/api/alto.ui.exercise_view/#exerciseview' | relative_url }})
+In the running app, click **Note Identification**. The catalog emits `exercise_chosen` with the exercise class. The connection you saw in `_build()` sends it to `MainWindow.open_exercise()`, which opens an `ExerciseView` in the stack. The toolbar stays in place as the catalog gives way to the staff and answer buttons. [ExerciseView API]({{ '/api/alto.ui.exercise_view/class-exerciseview/' | relative_url }})
 
 {% include component-shot.html screen="note-identification" width=1100 height=720 highlight="ExerciseView" alt="ExerciseView is outlined on the right below the toolbar. It contains the score counter, staff, and answer buttons. The exercise list is on the left." %}
 

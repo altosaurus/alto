@@ -13,6 +13,8 @@ root.glob("**/*.html").sort.each do |file|
   url = file.relative_path_from(root).to_s.delete_suffix("index.html")
   title = url.empty? ? "Home" : article.at_css("h1")&.text&.strip
   next unless title
+  mod = article.at_css('nav[aria-label="Module"] a')
+  title = "#{mod.text.strip}.#{title}" if mod
 
   article.css("nav, script, style, template, svg, noscript").remove
   entry = {title: title, section: "", url: "./#{url}", text: +""}

@@ -2,11 +2,26 @@
 title: alto.ui.motion
 parent: api
 package: alto.ui
+api_components: [{"title": "busy", "url": "/api/alto.ui.motion/function-busy/"}, {"title": "instant", "url": "/api/alto.ui.motion/function-instant/"}, {"title": "later", "url": "/api/alto.ui.motion/function-later/"}, {"title": "play", "url": "/api/alto.ui.motion/function-play/"}, {"title": "set_instant", "url": "/api/alto.ui.motion/function-set_instant/"}, {"title": "set_shortcut", "url": "/api/alto.ui.motion/function-set_shortcut/"}, {"title": "settle", "url": "/api/alto.ui.motion/function-settle/"}, {"title": "start_timer", "url": "/api/alto.ui.motion/function-start_timer/"}]
 permalink: /api/alto.ui.motion/
 ---
 {% raw %}
 Animations and feedback delays, run in one place so that tests decide
 when they happen.
+
+## Functions
+
+- [`instant`](function-instant/) — Say whether motion waits for `settle`, as it does in tests.
+- [`set_instant`](function-set_instant/) — Make motion wait for `settle`, for tests, or give it back its real time.
+- [`later`](function-later/) — Run a step after a delay, such as clearing wrong-answer feedback so the learner can try again.
+- [`start_timer`](function-start_timer/) — Start a single-shot timer whose timeout is part of the interface's motion, such as moving on to the next question.
+- [`play`](function-play/) — Start an animation. With instant motion it holds still at its start until `settle` moves it to its end.
+- [`busy`](function-busy/) — Say whether any motion is still to come: a delayed step, an active timer or a running animation.
+- [`settle`](function-settle/) — Let every piece of motion happen: delayed steps run, timers fire and animations reach their end.
+- [`set_shortcut`](function-set_shortcut/) — Give a button a key that presses it. In the app Qt handles the key; with instant motion it clicks the button at once.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 The interface moves: pages slide, feedback stays on screen for a moment
 and the next question follows. Each of those goes
@@ -45,312 +60,8 @@ since its pressed look is all there is to see in the meantime.
 >>> set_instant(False)
 ```
 
-## instant
-
-<div class="api-signature" markdown="1">
-
-```python
-def instant() -> bool
-```
-
-{% endraw %}{% include api-source.html name="instant" line=192 %}{% raw %}
-
-</div>
-
-Say whether motion waits for `settle`, as it does in tests.
-
-**Returns**
-
-- *bool*: True if animations and delays hold until a test settles them.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> instant()
-False
-```
-
-## set_instant
-
-<div class="api-signature" markdown="1">
-
-```python
-def set_instant(on: bool) -> None
-```
-
-{% endraw %}{% include api-source.html name="set_instant" line=209 %}{% raw %}
-
-</div>
-
-Make motion wait for `settle`, for tests, or give it back its real
-time.
-
-**Parameters**
-
-- `on` (*bool*): True for instant motion.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> set_instant(True)
->>> instant()
-True
->>> set_instant(False)
-```
-
-## later
-
-<div class="api-signature" markdown="1">
-
-```python
-def later(
-    delay: int,
-    *,
-    owner: QObject,
-    step: Callable[[], object],
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="later" line=253 %}{% raw %}
-
-</div>
-
-Run a step after a delay, such as clearing wrong-answer feedback so
-the learner can try again.
-
-**Parameters**
-
-- `delay` (*int*): How long to wait, in milliseconds. With instant motion the step waits for `settle` instead.
-- `owner` (*QObject*): The object the step belongs to. If it is deleted first, the step does not run. Keyword-only.
-- `step` (*callable*): What to run. Keyword-only.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> set_instant(True)
->>> owner = QObject()
->>> done = []
->>> later(
-...     450,
-...     owner=owner,
-...     step=lambda: done.append("retry"),
-... )
->>> settle()
->>> done
-['retry']
->>> set_instant(False)
-```
-
-## start_timer
-
-<div class="api-signature" markdown="1">
-
-```python
-def start_timer(
-    timer: QTimer,
-    *,
-    delay: int,
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="start_timer" line=295 %}{% raw %}
-
-</div>
-
-Start a single-shot timer whose timeout is part of the interface's
-motion, such as moving on to the next question.
-
-The timer can be stopped as usual, and then it does not fire.
-
-**Parameters**
-
-- `timer` (*QTimer*): The timer, which fires once.
-- `delay` (*int*): Its interval, in milliseconds. With instant motion it waits for `settle` instead. Keyword-only.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> set_instant(True)
->>> timer = QTimer()
->>> timer.setSingleShot(True)
->>> fired = []
->>> _ = timer.timeout.connect(
-...     lambda: fired.append(1)
-... )
->>> start_timer(timer, delay=1200)
->>> timer.isActive(), busy()
-(True, True)
->>> settle()
->>> fired, timer.isActive()
-([1], False)
->>> start_timer(timer, delay=1200)
->>> timer.stop()  # a stopped timer does not fire
->>> settle()
->>> fired
-[1]
->>> set_instant(False)
-```
-
-## play
-
-<div class="api-signature" markdown="1">
-
-```python
-def play(animation: QAbstractAnimation) -> None
-```
-
-{% endraw %}{% include api-source.html name="play" line=357 %}{% raw %}
-
-</div>
-
-Start an animation. With instant motion it holds still at its start
-until `settle` moves it to its end.
-
-**Parameters**
-
-- `animation` (*QAbstractAnimation*): The animation, or a group of them. It finishes as usual, with its `finished` signal.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> from PySide6.QtCore import QVariantAnimation
->>> set_instant(True)
->>> animation = QVariantAnimation()
->>> animation.setDuration(220)
->>> animation.setStartValue(0.0)
->>> animation.setEndValue(1.0)
->>> play(animation)
->>> (
-...     animation.state()
-...     == QAbstractAnimation.State.Stopped,
-...     busy(),
-... )
-(False, True)
->>> settle()
->>> (
-...     animation.currentValue(),
-...     animation.state()
-...     == QAbstractAnimation.State.Stopped,
-... )
-(1.0, True)
->>> set_instant(False)
-```
-
-## busy
-
-<div class="api-signature" markdown="1">
-
-```python
-def busy() -> bool
-```
-
-{% endraw %}{% include api-source.html name="busy" line=403 %}{% raw %}
-
-</div>
-
-Say whether any motion is still to come: a delayed step, an active
-timer or a running animation.
-
-**Returns**
-
-- *bool*: True if `settle` would run something.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> busy()
-False
-```
-
-## settle
-
-<div class="api-signature" markdown="1">
-
-```python
-def settle(
-    *,
-    rounds: int = 1000,
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="settle" line=421 %}{% raw %}
-
-</div>
-
-Let every piece of motion happen: delayed steps run, timers fire and
-animations reach their end.
-
-With instant motion they happen at once, in the order they were
-asked for, and motion they start (feedback that leads to
-the next question, which slides in) happens too. In the app's real
-time this waits for them instead.
-
-**Parameters**
-
-- `rounds` (*int, default 1000*): The most pieces of motion to go through or, in real time, about how many milliseconds to wait. Keyword-only.
-
-**Raises**
-
-- *RuntimeError*: If motion is still going after that many, such as a step that keeps asking for itself again.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> settle()
->>> busy()
-False
-
-A step that always asks for itself again never settles:
-
->>> set_instant(True)
->>> owner = QObject()
->>> def again():
-...     later(10, owner=owner, step=again)
->>> later(10, owner=owner, step=again)
->>> settle(rounds=3)
-Traceback (most recent call last):
-    ...
-RuntimeError: Motion is still going after 3 rounds.
->>> set_instant(False)
-```
-
-## set_shortcut
-
-<div class="api-signature" markdown="1">
-
-```python
-def set_shortcut(
-    button: QAbstractButton,
-    *,
-    key: QKeySequence | str,
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="set_shortcut" line=572 %}{% raw %}
-
-</div>
-
-Give a button a key that presses it. In the app Qt handles the key;
-with instant motion it clicks the button at once.
-
-**Parameters**
-
-- `button` (*QAbstractButton*): The button.
-- `key` (*QKeySequence or str*): The key, such as "Return" or "Shift+C". Keyword-only.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> from PySide6.QtWidgets import QPushButton
->>> button = QPushButton("Undo")
->>> set_shortcut(button, key="Backspace")
->>> button.shortcut().toString()
-'Backspace'
->>> set_instant(True)
->>> held = QPushButton("Answer")
->>> set_shortcut(
-...     held, key="Return"
-... )  # in a test: the key clicks it at once
->>> set_instant(False)
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"instant": "function-instant/", "set_instant": "function-set_instant/", "later": "function-later/", "start_timer": "function-start_timer/", "play": "function-play/", "busy": "function-busy/", "settle": "function-settle/", "set_shortcut": "function-set_shortcut/"}</script>
+{% include api-fragments.html %}

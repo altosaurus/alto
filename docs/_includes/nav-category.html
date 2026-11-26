@@ -1,5 +1,5 @@
-<div class="nav-head">
-  {% if include.url %}<a href="{{ include.url | relative_url }}"{% if page.url == include.url %} aria-current="page"{% endif %}>{{ include.title }}</a>{% else %}<span>{{ include.title }}</span>{% endif %}
+<div class="{{ include.row_class | default: 'nav-head' }}">
+  {% if include.url %}<a class="row" href="{{ include.url | relative_url }}"{% if page.url == include.url %} aria-current="page"{% endif %}>{{ include.title }}</a>{% else %}<span>{{ include.title }}</span>{% endif %}
   {% if include.controls %}
   <button type="button" class="nav-toggle" data-category="{{ include.title }}" aria-controls="{{ include.controls }}"
           aria-expanded="true" aria-label="Collapse {{ include.title }}" hidden>

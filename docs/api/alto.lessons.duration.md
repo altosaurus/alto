@@ -2,6 +2,7 @@
 title: alto.lessons.duration
 parent: api
 package: alto.lessons
+api_components: []
 permalink: /api/alto.lessons.duration/
 ---
 {% raw %}

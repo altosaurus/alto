@@ -49,7 +49,7 @@ jobs:
           build=true
           if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
             if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && ! git diff --name-only "${BEFORE}" "${GITHUB_SHA}" \
-              | grep -qE '^(docs/|scripts/(docs_site|check_plugin_registry|tutorial_docs)\.py$|scripts/docs_search\.rb$|\.github/workflows/docs\.yml$)'; then
+              | grep -qE '^(docs/|alto/ui/exercise_view\.py$|scripts/(docs_site|docs_excerpts|check_plugin_registry|tutorial_docs)\.py$|scripts/docs_search\.rb$|\.github/workflows/docs\.yml$)'; then
               build=false
             fi
           fi
@@ -139,6 +139,7 @@ jobs:
           }
           build() { # build DOCS DESTINATION BASEURL LABEL APP_VERSION REVISION
             rm -rf "$2"
+            python3 tooling/scripts/docs_excerpts.py --docs "$1" --repo source --revision "$6"
             printf 'baseurl: %s\ndocs_version: %s\napp_version: "%s"\nsource_revision: "%s"\n' \
               "$3" "$4" "$5" "$6" > version.yml
             bundle exec jekyll build --source "$1" --destination "$2" --config "$1/_config.yml,version.yml"

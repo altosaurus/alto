@@ -573,8 +573,7 @@ The sidebar and the "On this page" list are built from the pages themselves. A p
 | `nav_group` | The heading it goes under (Using Alto, For developers, About). The headings open and close, and the pages of one heading must be next to each other in `nav_order`. Home has none. |
 | `children`, `parent` | A page with `children: name` opens the pages with `parent: name`. Guide chapters use `order` for their reading sequence. The API reference lists packages alphabetically and sorts modules by title within each package. |
 
-A heading that is also the title of a page (For developers) is that page's link, and the page is not listed again under it. Whatever holds
-the page you are on is open. Which headings you closed is remembered in the browser.
+Select a folder title to open its overview. In the API reference, a package overview summarizes its modules, and a module overview lists its classes and functions. The chevron beside each title expands or collapses its children. The sidebar opens the path to the current page and remembers your choices in the browser.
 
 On a wide screen a page with two or more `##` or `###` headings gets an "On this page" list beside it, made in the browser from those
 headings, and on a narrower one a box above the text. Nothing needs to be written for it. A page that should not have one, such as the
@@ -625,6 +624,7 @@ You need Ruby and Bundler. In `docs/`, `bundle install` once, then build one ver
 
 ```bash
 cd docs
+python3 ../scripts/docs_excerpts.py
 printf 'baseurl: /alto/dev\ndocs_version: dev\n' > /tmp/version.yml
 bundle exec jekyll build --destination /tmp/site/dev --config _config.yml,/tmp/version.yml
 bundle exec ruby ../scripts/docs_search.rb /tmp/site/dev
@@ -634,6 +634,8 @@ python ../scripts/docs_site.py finish /tmp/site --root-files site-root --site-ur
 
 then serve `/tmp/site` under a folder called `alto` (for example `mkdir /tmp/www && ln -s /tmp/site /tmp/www/alto && python -m http.server -d /tmp/www`)
 and open `http://127.0.0.1:8000/alto/`. `tests/test_docs_site.py` checks the script and the files without needing Ruby.
+
+The excerpt step reads the ExerciseView methods in your checkout. It uses the anchors in `docs/_data/exercise_view_excerpts.json` to find each statement and its line numbers. Rerun it after editing the view to refresh a local preview. Published docs extract from the commit they link to.
 
 ## Keeping the docs and screenshots current
 
@@ -670,7 +672,8 @@ were last updated. It only warns; set `ALTO_DOCS_STRICT=1` to make it fail.
 ## The API reference
 
 The pages under [API reference](../api/) (`docs/api/`) are written from the docstrings by `scripts/api_docs.py`. Each module
-has a page with its public classes, methods and functions: the signature, then the NumPy-style docstring as Markdown. Names
+has an overview that links to one page per public class or module-level function. A class page also documents its constructor
+and public methods. Each component page includes its signature, docstring, and links to its Python source. Names
 that begin with an underscore are left out. The script reads the source as text, so it needs neither Qt nor a display.
 
 ```bash

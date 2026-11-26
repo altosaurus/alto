@@ -2,10 +2,18 @@
 title: alto.ui.scale_explorer
 parent: api
 package: alto.ui
+api_components: [{"title": "ScaleExplorer", "url": "/api/alto.ui.scale_explorer/class-scaleexplorer/"}]
 permalink: /api/alto.ui.scale_explorer/
 ---
 {% raw %}
 Interactive notation and step patterns for learning scales.
+
+## Classes
+
+- [`ScaleExplorer`](class-scaleexplorer/) — Compare scales on a staff and hear individual steps.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 **Examples**
 
@@ -15,129 +23,8 @@ Interactive notation and step patterns for learning scales.
 8
 ```
 
-## ScaleExplorer
-
-<div class="api-signature" markdown="1">
-
-```python
-ScaleExplorer(
-    *,
-    scale: str = 'Major (Ionian)',
-    tonic: str = 'C4',
-    editable: bool = True,
-    lesson_layout: bool = False,
-)
-```
-
-{% endraw %}{% include api-source.html name="ScaleExplorer" line=30 %}{% raw %}
-
-</div>
-
-Bases: `QWidget`
-
-Compare scales on a staff and hear individual steps.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> ScaleExplorer().mode.currentText()
-'Major (Ionian)'
-```
-
-**Constructor**
-
-Build the scale diagram and its controls.
-
-**Parameters**
-
-- `scale` (*str*): Initial scale type.
-- `tonic` (*str*): Initial tonic with octave.
-- `editable` (*bool*): Allow changing the example; false keeps a lesson question fixed.
-- `lesson_layout` (*bool*): Use content-sized staff lines in the lesson pane.
-
-**Constructor examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> ScaleExplorer(
-...     scale="Dorian", tonic="D4"
-... ).notes[0].name
-'D'
-```
-
-### ScaleExplorer.refresh
-
-<div class="api-signature" markdown="1">
-
-```python
-def refresh() -> None
-```
-
-{% endraw %}{% include api-source.html name="ScaleExplorer.refresh" line=170 %}{% raw %}
-
-</div>
-
-Rebuild the notation and gap labels for the selected example.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> explorer = ScaleExplorer()
->>> explorer.mode.setCurrentText(
-...     "Harmonic minor"
-... )
->>> explorer.steps[5].text()
-'3H'
-```
-
-### ScaleExplorer.select_gap
-
-<div class="api-signature" markdown="1">
-
-```python
-def select_gap(index: int) -> None
-```
-
-{% endraw %}{% include api-source.html name="ScaleExplorer.select_gap" line=210 %}{% raw %}
-
-</div>
-
-Highlight and play the notes around a gap.
-
-**Parameters**
-
-- `index` (*int*): Gap index, from zero to six.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> explorer = ScaleExplorer()
->>> explorer.select_gap(2)  # doctest: +SKIP
-```
-
-### ScaleExplorer.hear
-
-<div class="api-signature" markdown="1">
-
-```python
-def hear(
-    *,
-    force: bool = True,
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="ScaleExplorer.hear" line=249 %}{% raw %}
-
-</div>
-
-Play the example using the selected instrument.
-
-**Parameters**
-
-- `force` (*bool*): Audition the scale while muted. The lesson's main Hear button follows its sound setting.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> ScaleExplorer().hear()  # doctest: +SKIP
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"scaleexplorer": "class-scaleexplorer/", "scaleexplorerrefresh": "class-scaleexplorer/#scaleexplorerrefresh", "scaleexplorerselect_gap": "class-scaleexplorer/#scaleexplorerselect_gap", "scaleexplorerhear": "class-scaleexplorer/#scaleexplorerhear"}</script>
+{% include api-fragments.html %}

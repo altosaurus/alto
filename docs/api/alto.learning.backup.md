@@ -2,11 +2,30 @@
 title: alto.learning.backup
 parent: api
 package: alto.learning
+api_components: [{"title": "Backup", "url": "/api/alto.learning.backup/class-backup/"}, {"title": "BackupError", "url": "/api/alto.learning.backup/class-backuperror/"}, {"title": "BackupInfo", "url": "/api/alto.learning.backup/class-backupinfo/"}, {"title": "app_version", "url": "/api/alto.learning.backup/function-app_version/"}, {"title": "decode_value", "url": "/api/alto.learning.backup/function-decode_value/"}, {"title": "encode_value", "url": "/api/alto.learning.backup/function-encode_value/"}, {"title": "read_backup", "url": "/api/alto.learning.backup/function-read_backup/"}, {"title": "restore_database", "url": "/api/alto.learning.backup/function-restore_database/"}, {"title": "write_backup", "url": "/api/alto.learning.backup/function-write_backup/"}]
 permalink: /api/alto.learning.backup/
 ---
 {% raw %}
 Backup files: everything Alto keeps, in one file that can be read back
 into a clean install. Pure Python (no Qt).
+
+## Classes
+
+- [`BackupError`](class-backuperror/) — A backup file could not be written or read: it is damaged, is not a backup, or was made by a newer Alto.
+- [`BackupInfo`](class-backupinfo/) — What a backup says about itself.
+- [`Backup`](class-backup/) — A backup that has been read and checked, ready to be applied.
+
+## Functions
+
+- [`app_version`](function-app_version/) — Return the version of Alto that is running.
+- [`encode_value`](function-encode_value/) — Turn a saved preference into something JSON can hold.
+- [`decode_value`](function-decode_value/) — Undo `encode_value`.
+- [`write_backup`](function-write_backup/) — Write a backup of the database and the saved preferences to a file.
+- [`read_backup`](function-read_backup/) — Read a backup file and check it all the way through, without changing anything.
+- [`restore_database`](function-restore_database/) — Replace everything in the database with what a backup holds.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 A backup is a zip file holding three things: the whole database
 (profiles, every answer, what is known about each question),
@@ -39,350 +58,8 @@ instead of half applied.
 {'ui/theme': 'dark'}
 ```
 
-## BackupError
-
-<div class="api-signature" markdown="1">
-
-```python
-class BackupError(Exception)
-```
-
-{% endraw %}{% include api-source.html name="BackupError" line=62 %}{% raw %}
-
-</div>
-
-A backup file could not be written or read: it is damaged, is not a
-backup, or was made by a newer Alto.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> str(
-...     BackupError(
-...         "This is not an Alto backup."
-...     )
-... )
-'This is not an Alto backup.'
-```
-
-## BackupInfo
-
-<div class="api-signature" markdown="1">
-
-```python
-BackupInfo(
-    created: float,
-    app_version: str,
-    schema_version: int,
-    profiles: int,
-    attempts: int,
-)
-```
-
-{% endraw %}{% include api-source.html name="BackupInfo" line=79 %}{% raw %}
-
-</div>
-
-What a backup says about itself.
-
-**Attributes**
-
-- `created` (*float*): When it was made, as a timestamp.
-- `app_version` (*str*): The version of Alto that made it.
-- `schema_version` (*int*): The version of the database layout it holds.
-- `profiles` (*int*): How many profiles it holds.
-- `attempts` (*int*): How many answers it holds.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> BackupInfo(
-...     100.0,
-...     app_version="0.1.0",
-...     schema_version=1,
-...     profiles=2,
-...     attempts=30,
-... ).profiles
-2
-```
-
-## Backup
-
-<div class="api-signature" markdown="1">
-
-```python
-Backup(
-    info: BackupInfo,
-    settings: dict[str, object],
-    database: bytes,
-)
-```
-
-{% endraw %}{% include api-source.html name="Backup" line=116 %}{% raw %}
-
-</div>
-
-A backup that has been read and checked, ready to be applied.
-
-**Attributes**
-
-- `info` (*BackupInfo*): What the backup says about itself.
-- `settings` (*dict of str to object*): The saved preferences, by key.
-- `database` (*bytes*): The database, as `Database.snapshot` returns it.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> Backup(
-...     BackupInfo(
-...         1.0,
-...         app_version="0.1.0",
-...         schema_version=1,
-...         profiles=0,
-...         attempts=0,
-...     ),
-...     settings={},
-...     database=b"",
-... ).settings
-{}
-```
-
-## app_version
-
-<div class="api-signature" markdown="1">
-
-```python
-def app_version() -> str
-```
-
-{% endraw %}{% include api-source.html name="app_version" line=150 %}{% raw %}
-
-</div>
-
-Return the version of Alto that is running.
-
-**Returns**
-
-- *str*: The installed version, or "unknown" if Alto was not installed as a package.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> app_version().count(".") >= 1
-True
-```
-
-## encode_value
-
-<div class="api-signature" markdown="1">
-
-```python
-def encode_value(value: object) -> object
-```
-
-{% endraw %}{% include api-source.html name="encode_value" line=172 %}{% raw %}
-
-</div>
-
-Turn a saved preference into something JSON can hold.
-
-Text, numbers, true and false and lists of them are kept as they
-are. Bytes, which Qt settings can hold, become a small
-dictionary with the bytes in base64, so `decode_value` can bring
-them back.
-
-**Parameters**
-
-- `value` (*object*): The value of a preference.
-
-**Returns**
-
-- *object*: The same value, or its encoded form.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> (
-...     encode_value("dark"),
-...     encode_value(5),
-...     encode_value(["a", "b"]),
-... )
-('dark', 5, ['a', 'b'])
->>> encode_value(b"\x00\x01")
-{'bytes': 'AAE='}
-```
-
-## decode_value
-
-<div class="api-signature" markdown="1">
-
-```python
-def decode_value(value: object) -> object
-```
-
-{% endraw %}{% include api-source.html name="decode_value" line=209 %}{% raw %}
-
-</div>
-
-Undo `encode_value`.
-
-**Parameters**
-
-- `value` (*object*): A value read from a backup.
-
-**Returns**
-
-- *object*: The preference's value, with bytes restored.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> decode_value({"bytes": "AAE="})
-b'\x00\x01'
->>> decode_value([1, 2])
-[1, 2]
-```
-
-## write_backup
-
-<div class="api-signature" markdown="1">
-
-```python
-def write_backup(
-    db: Database,
-    *,
-    settings: Mapping[str, object],
-    path: Path,
-    now: float | None = None,
-) -> BackupInfo
-```
-
-{% endraw %}{% include api-source.html name="write_backup" line=259 %}{% raw %}
-
-</div>
-
-Write a backup of the database and the saved preferences to a file.
-
-**Parameters**
-
-- `db` (*Database*): The database to back up. It is not changed.
-- `settings` (*mapping of str to object*): The saved preferences, by key. Keyword-only.
-- `path` (*Path*): The file to write; it is replaced if it exists. Keyword-only.
-- `now` (*float or None, default None*): The time to record, as a timestamp; the clock is used if None. Keyword-only.
-
-**Returns**
-
-- *BackupInfo*: What the backup says about itself.
-
-**Raises**
-
-- *BackupError*: If the file cannot be written. Nothing is left at `path` in that case.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> import tempfile
->>> from alto.learning.database import Database
->>> folder = Path(tempfile.mkdtemp())
->>> write_backup(
-...     Database(),
-...     settings={},
-...     path=folder / "empty.altobackup",
-...     now=5.0,
-... ).created
-5.0
-```
-
-## read_backup
-
-<div class="api-signature" markdown="1">
-
-```python
-def read_backup(path: Path) -> Backup
-```
-
-{% endraw %}{% include api-source.html name="read_backup" line=350 %}{% raw %}
-
-</div>
-
-Read a backup file and check it all the way through, without
-changing anything.
-
-**Parameters**
-
-- `path` (*Path*): The file.
-
-**Returns**
-
-- *Backup*: The backup, ready to be applied.
-
-**Raises**
-
-- *BackupError*: If the file cannot be read, is not an Alto backup, is damaged (a part does not match its checksum, or the database is not intact), or was made by a newer version of Alto.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> import tempfile
->>> folder = Path(tempfile.mkdtemp())
->>> (folder / "x.altobackup").write_bytes(
-...     b"not a zip"
-... )
-9
->>> read_backup(folder / "x.altobackup")
-Traceback (most recent call last):
-    ...
-alto.learning.backup.BackupError: This is not an Alto backup.
-```
-
-## restore_database
-
-<div class="api-signature" markdown="1">
-
-```python
-def restore_database(
-    db: Database,
-    *,
-    backup: Backup,
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="restore_database" line=445 %}{% raw %}
-
-</div>
-
-Replace everything in the database with what a backup holds.
-
-**Parameters**
-
-- `db` (*Database*): The database to replace the contents of.
-- `backup` (*Backup*): A backup, as `read_backup` returns it. Keyword-only.
-
-**Raises**
-
-- *BackupError*: If the database in the backup cannot be loaded. The database is not changed.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> import tempfile
->>> from alto.learning.database import Database
->>> source = Database()
->>> _ = source.add_profile("Ada")
->>> folder = Path(tempfile.mkdtemp())
->>> _ = write_backup(
-...     source,
-...     settings={},
-...     path=folder / "a.altobackup",
-... )
->>> clean = Database()
->>> restore_database(
-...     clean,
-...     backup=read_backup(
-...         folder / "a.altobackup"
-...     ),
-... )
->>> [p.name for p in clean.profiles()]
-['Ada']
-```
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"backuperror": "class-backuperror/", "backupinfo": "class-backupinfo/", "backup": "class-backup/", "app_version": "function-app_version/", "encode_value": "function-encode_value/", "decode_value": "function-decode_value/", "write_backup": "function-write_backup/", "read_backup": "function-read_backup/", "restore_database": "function-restore_database/"}</script>
+{% include api-fragments.html %}

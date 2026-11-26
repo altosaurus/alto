@@ -21,6 +21,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from PySide6.QtGui import QColor, QImage
+from scripts.docs_excerpts import excerpts
 
 ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / "docs" / "assets" / "img"
@@ -135,12 +136,10 @@ def test_launch_screens_link_visible_regions_to_api_classes() -> None:
                 screen,
                 region,
             )
-            module, anchor = region["href"].removeprefix("/api/").split("/#")
-            api = (ROOT / "docs" / "api" / f"{module}.md").read_text()
-            assert (
-                anchor == region["type"].lower()
-                and f"## {region['type']}\n" in api
-            )
+            target = region["href"].removeprefix("/api/").rstrip("/")
+            api = (ROOT / "docs" / "api" / f"{target}.md").read_text()
+            assert f"title: {region['type']}\n" in api
+            assert f"permalink: {region['href']}\n" in api
 
 
 def test_every_picture_a_page_shows_exists_in_both_themes() -> None:
@@ -200,6 +199,24 @@ def test_exercise_view_screenshot_labels_the_visible_widgets() -> None:
         "DegreeButton",
         "NoteNameSettingsPanel",
     ]
+
+
+def test_exercise_view_excerpts_follow_their_source_lines() -> None:
+    """A multiline excerpt moves with its source."""
+    source = """class ExerciseView:
+    def next_question(self):
+        self.staff.show_notes(
+            q.staff,
+        )
+"""
+    selections = {"staff": ["next_question", "self.staff.show_notes("]}
+    for extra in (0, 5):
+        snippet = excerpts("\n" * extra + source, selections=selections)
+        assert snippet["staff"] == {
+            "start": 3 + extra,
+            "end": 5 + extra,
+            "code": "self.staff.show_notes(\n    q.staff,\n)",
+        }
 
 
 def readme_badges() -> dict[str, tuple[str, str]]:

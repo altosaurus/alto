@@ -2,11 +2,20 @@
 title: alto.ui.package_update
 parent: api
 package: alto.ui
+api_components: [{"title": "PackageUpdateDialog", "url": "/api/alto.ui.package_update/class-packageupdatedialog/"}, {"title": "UpdatePreparer", "url": "/api/alto.ui.package_update/class-updatepreparer/"}]
 permalink: /api/alto.ui.package_update/
 ---
 {% raw %}
 The window that updates a packaged copy of Alto: the download and its
 checks with their progress, then what happens next.
+
+## Classes
+
+- [`UpdatePreparer`](class-updatepreparer/) — Download and check an update on another thread, and report how it goes through signals.
+- [`PackageUpdateDialog`](class-packageupdatedialog/) — The window that downloads and checks an update for a packaged copy, and then says what happens next.
+
+<details markdown="1">
+<summary>Module notes and examples</summary>
 
 The work is in `alto.selfupdate`, which has no Qt, and runs on another
 thread here so that the window keeps moving. Until the
@@ -23,201 +32,8 @@ OK hands over; the caller starts the installer and quits.
 <class '...PackageUpdateDialog'>
 ```
 
-## UpdatePreparer
-
-<div class="api-signature" markdown="1">
-
-```python
-UpdatePreparer(parent: QObject | None = None)
-```
-
-{% endraw %}{% include api-source.html name="UpdatePreparer" line=96 %}{% raw %}
-
-</div>
-
-Bases: `QObject`
-
-Download and check an update on another thread, and report how it
-goes through signals.
-
-**Attributes**
-
-- `status` (*Signal*): Emitted with what is being done ("Checking the signature…").
-- `progress` (*Signal*): Emitted with the bytes received so far and the total (0 if it is not known), while the file downloads.
-- `done` (*Signal*): Emitted once at the end, with 0 if the update is ready (see `prepared`) or 1 if it failed, and the reason. Nothing is emitted if the person canceled.
-- `prepared` (*Prepared or None*): The checked update, once it is ready.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> UpdatePreparer().prepared is None
-True
-```
-
-**Constructor**
-
-Make a preparer that has not started.
-
-**Parameters**
-
-- `parent` (*QObject or None, default None*): The object that owns it.
-
-### UpdatePreparer.start
-
-<div class="api-signature" markdown="1">
-
-```python
-def start(
-    *,
-    release: Release,
-    target: Target,
-    work: Path,
-    keys: tuple[str, ...],
-) -> None
-```
-
-{% endraw %}{% include api-source.html name="UpdatePreparer.start" line=144 %}{% raw %}
-
-</div>
-
-Start downloading and checking.
-
-**Parameters**
-
-- `release` (*Release*): The release to install.
-- `target` (*Target*): The copy that will be replaced.
-- `work` (*Path*): An empty folder to work in.
-- `keys` (*tuple of str*): The public keys (base64) a signature may be made with.
-
-### UpdatePreparer.cancel
-
-<div class="api-signature" markdown="1">
-
-```python
-def cancel() -> None
-```
-
-{% endraw %}{% include api-source.html name="UpdatePreparer.cancel" line=180 %}{% raw %}
-
-</div>
-
-Stop, at the next chance, and say nothing more.
-
-### UpdatePreparer.is_canceled
-
-<div class="api-signature" markdown="1">
-
-```python
-def is_canceled() -> bool
-```
-
-{% endraw %}{% include api-source.html name="UpdatePreparer.is_canceled" line=184 %}{% raw %}
-
-</div>
-
-Say whether the person has canceled.
-
-**Returns**
-
-- *bool*: True once `cancel` has been called.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> UpdatePreparer().is_canceled()
-False
-```
-
-## PackageUpdateDialog
-
-<div class="api-signature" markdown="1">
-
-```python
-PackageUpdateDialog(
-    parent: QWidget | None,
-    *,
-    release: Release,
-    target: Target,
-)
-```
-
-{% endraw %}{% include api-source.html name="PackageUpdateDialog" line=327 %}{% raw %}
-
-</div>
-
-Bases: `QDialog`
-
-The window that downloads and checks an update for a packaged copy,
-and then says what happens next.
-
-**Attributes**
-
-- `status` (*QLabel*): What is happening.
-- `bar` (*QProgressBar*): The progress of the download; a bar that keeps moving while the size is not known.
-- `button` (*QPushButton*): Cancel while the update is being prepared, then OK if it is ready or Close if it failed.
-- `ended` (*bool*): Whether the preparing has ended, ready, failed or canceled.
-- `ready` (*bool*): Whether the update is downloaded and checked.
-- `canceled` (*bool*): Whether the person canceled.
-- `error` (*str*): Why it failed, if it did.
-- `preparer` (*UpdatePreparer*): What does the work.
-
-**Constructor**
-
-Build the window; nothing is downloaded until `run` is called.
-
-**Parameters**
-
-- `parent` (*QWidget or None*): The window it belongs to.
-- `release` (*Release*): The release to install. Keyword-only.
-- `target` (*Target*): The copy that will be replaced. Keyword-only.
-
-### PackageUpdateDialog.run
-
-<div class="api-signature" markdown="1">
-
-```python
-def run() -> Prepared | None
-```
-
-{% endraw %}{% include api-source.html name="PackageUpdateDialog.run" line=397 %}{% raw %}
-
-</div>
-
-Download and check the update, showing the window until the
-person has read how it went.
-
-**Returns**
-
-- *Prepared or None*: The update, if it is ready and OK was pressed; None if it failed or was canceled, in which case nothing is left behind.
-
-**Examples**
-
-```console?lang=python&prompt=%3E%3E%3E,...
->>> here = Target(
-...     "linux", folder=Path("/x"), prefix=None
-... )
->>> # noinspection PyTypeChecker
->>> PackageUpdateDialog(
-...     None,
-...     release=Release(
-...         "0.1.0", tag="v0.1.0", url=""
-...     ),
-...     target=here,
-... ).ready
-False
-```
-
-### PackageUpdateDialog.reject
-
-<div class="api-signature" markdown="1">
-
-```python
-def reject() -> None
-```
-
-{% endraw %}{% include api-source.html name="PackageUpdateDialog.reject" line=439 %}{% raw %}
-
-</div>
-
-Close the window; before the update is ready that cancels it.
+</details>
 {% endraw %}
+
+<script type="application/json" id="api-fragments">{"updatepreparer": "class-updatepreparer/", "updatepreparerstart": "class-updatepreparer/#updatepreparerstart", "updatepreparercancel": "class-updatepreparer/#updatepreparercancel", "updateprepareris_canceled": "class-updatepreparer/#updateprepareris_canceled", "packageupdatedialog": "class-packageupdatedialog/", "packageupdatedialogrun": "class-packageupdatedialog/#packageupdatedialogrun", "packageupdatedialogreject": "class-packageupdatedialog/#packageupdatedialogreject"}</script>
+{% include api-fragments.html %}

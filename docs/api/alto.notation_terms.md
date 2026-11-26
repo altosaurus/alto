@@ -2,6 +2,7 @@
 title: alto.notation_terms
 parent: api
 package: alto
+api_components: []
 permalink: /api/alto.notation_terms/
 ---
 {% raw %}
