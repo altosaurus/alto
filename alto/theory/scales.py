@@ -28,6 +28,8 @@ Examples
 
 from __future__ import annotations
 
+from types import MappingProxyType
+
 from alto.theory.pitch import (
     LETTERS,
     MAJOR_KEYS,
@@ -376,7 +378,16 @@ def all_tonics(max_accidentals: int = 1) -> list[Note]:
     ]
 
 
+MINOR_KEYS = MappingProxyType(
+    {
+        count: mode_tonic(count, mode="Natural minor (Aeolian)").name
+        for count in MAJOR_KEYS
+    },
+)
+
+
 __all__ = [
+    "MINOR_KEYS",
     "SCALES",
     "CHORDS",
     "MODE_DEGREE",

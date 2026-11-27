@@ -505,13 +505,22 @@ class NoteNameSettings(StaffRangeSettings):
     ranges : dict of str to tuple of (int, int)
         Overrides of `DEFAULT_RANGES`, as inclusive staff-step ranges.
         Keyword-only.
+    staff_keys : set of int
+        Signatures drawn beside the clef, independent of the question.
     key_signatures : set of int
-        The keys to use, as sharps (positive) or flats (negative).
+        Signatures for note naming, as sharps (positive) or flats
+        (negative).
         Keyword-only.
     note_values : set of str
         The note values to draw, from `NOTE_VALUES`. Keyword-only.
     naming : str, default "letters"
         A key of `NAMINGS`. Keyword-only.
+    scale_answer : bool
+        Ask for the key given a note, mode and scale degree.
+    scale_keys, scale_minor_keys : set of int
+        Major and minor keys for Scale answers in the four minor forms.
+    minor_keys : set of int
+        Natural minor reference keys for note and degree answers.
     accidentals : bool, default False
         Also ask notes with explicit sharps, flats and naturals.
         Keyword-only.
@@ -529,13 +538,15 @@ class NoteNameSettings(StaffRangeSettings):
     """
 
     _: KW_ONLY
+    staff_keys: set[int] = field(default_factory=lambda: {0})
     key_signatures: set[int] = field(
         default_factory=lambda: {0},
     )  # sharps (+) / flats (-) of the keys to use
     naming: str = "letters"  # key of NAMINGS
-    minor_degrees: bool = (
-        False  # Use the relative natural minor for degree answers.
-    )
+    scale_answer: bool = False
+    scale_keys: set[int] = field(default_factory=lambda: set(range(-7, 8)))
+    minor_keys: set[int] = field(default_factory=set)
+    scale_minor_keys: set[int] = field(default_factory=set)
     accidentals: bool = (
         False  # also ask notes with explicit sharps/flats/naturals
     )
@@ -565,7 +576,51 @@ class NoteNameSettings(StaffRangeSettings):
         ... ).active_keys()
         [-1, 2]
         """
-        return sorted(self.key_signatures) or [0]
+        major, minor = self.key_selections()
+        return sorted(major | minor) or [0]
+
+    def key_selections(self) -> tuple[set[int], set[int]]:
+        """
+        Return the two selections shown in the Scale Key picker.
+
+        Returns
+        -------
+        tuple of set of int and set of int
+            Major and natural minor signatures for this answer type.
+
+        Examples
+        --------
+        >>> NoteNameSettings().key_selections()
+        ({0}, set())
+        """
+        if self.scale_answer:
+            return self.scale_keys, self.scale_minor_keys
+        return self.key_signatures, self.minor_keys
+
+    def question_keys(self) -> list[tuple[int, bool]]:
+        """
+        Enumerate distinct reference keys for the current question type.
+
+        Returns
+        -------
+        list of tuple of int and bool
+            Each signature and whether to count degrees from its minor
+            tonic. Letters and solfège share the same spelling in
+            relative major and minor keys.
+
+        Examples
+        --------
+        >>> cfg = NoteNameSettings(naming="degrees", minor_keys={0})
+        >>> cfg.question_keys()
+        [(0, False), (0, True)]
+        """
+        if not self.scale_answer and self.naming not in DEGREE_NAMINGS:
+            return [(key, False) for key in self.active_keys()]
+        major, minor = self.key_selections()
+        return (
+            [(key, False) for key in sorted(major)]
+            + [(key, True) for key in sorted(minor)]
+        ) or [(0, False)]
 
 
 note_names = NoteNameSettings()

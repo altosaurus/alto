@@ -1728,6 +1728,7 @@ class ExerciseView(QWidget):
         if (
             isinstance(self.exercise, NoteNames)
             and q.staff
+            and not q.identify_scale
             and app_settings.note_names.naming in app_settings.DEGREE_NAMINGS
         ):
             prompt = self.exercise.card_prompt(q)
@@ -1809,10 +1810,11 @@ class ExerciseView(QWidget):
                 list(app_settings.CLEF_SYMBOLS),
                 caption=q.caption,
             )
+        staff_key = q.written_key
         if construct:
             self.input_staff.reset(
                 q.clef,
-                key=q.key if q.staff_signature is None else q.staff_signature,
+                key=staff_key,
                 caption=q.caption,
                 placement=q,
             )
@@ -1864,9 +1866,7 @@ class ExerciseView(QWidget):
         self.staff.show_notes(
             q.staff,
             clef=q.clef,
-            key=0
-            if q.build_key
-            else q.key,  # a signature to build starts from a blank staff
+            key=0 if q.build_key else staff_key,
             value=q.value,
             notation_excerpt=q.notation_excerpt,
             notation_target=q.notation_target,
@@ -1908,7 +1908,7 @@ class ExerciseView(QWidget):
             interval_bank = len(q.choices) > 6 and (
                 not q.grid or isinstance(self.exercise, NotationIdentification)
             )
-            interval_bank = interval_bank or named_meter
+            interval_bank = interval_bank or named_meter or q.identify_scale
             self.interval_answers.setAccessibleName("Answer choices")
         compact_intervals = isinstance(
             self.exercise,
@@ -1925,12 +1925,18 @@ class ExerciseView(QWidget):
             not interval_bank and not self.staff.locate_notation,
         )
         self.interval_answers.setVisible(interval_bank and bool(q.choices))
-        keys = (
-            q.choices
-            if isinstance(self.exercise, RythmicEquations)
-            and q.answer.isdecimal()
-            else choice_keys(q.choices)
+        labels = (
+            [choice.partition(" ")[0] for choice in q.choices]
+            if q.identify_scale
+            else q.choices
         )
+        if (
+            isinstance(self.exercise, RythmicEquations)
+            and q.answer.isdecimal()
+        ):
+            keys = q.choices
+        else:
+            keys = choice_keys(labels)
         for i, c in enumerate(q.choices):
             if (
                 isinstance(self.exercise, BeatIdentification)
@@ -1939,7 +1945,7 @@ class ExerciseView(QWidget):
                 b = MeterButton(c, meter=BEAT_METERS[c])
                 b.setMinimumHeight(px(50))
             else:
-                b = DegreeButton(c)
+                b = DegreeButton(labels[i])
                 b.setMinimumHeight(px(40))
             if (
                 isinstance(self.exercise, RythmicEquations)
@@ -2501,7 +2507,12 @@ class ExerciseView(QWidget):
             return
         if q is None or self.answered or self._busy:
             return
-        if isinstance(self.exercise, NoteNames) and q.staff and q.staff[0]:
+        if (
+            isinstance(self.exercise, NoteNames)
+            and not q.identify_scale
+            and q.staff
+            and q.staff[0]
+        ):
             self._identify_midi(pitch, question=q)
         elif q.construct_scale and not self.scale_input.complete:
             spelling = next(

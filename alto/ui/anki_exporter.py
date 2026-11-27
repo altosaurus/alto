@@ -150,7 +150,7 @@ def card_fields(
     """
     q = question
     front, back = [], []
-    key = q.key if q.staff_signature is None else q.staff_signature
+    key = q.written_key
     locate = q.notation_target is not None and not q.choices
     if (
         q.staff

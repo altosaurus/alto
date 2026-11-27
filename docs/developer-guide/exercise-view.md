@@ -6,7 +6,7 @@ myst:
   all_links_external: true
 permalink: /developer-guide/exercise-view/
 ---
-Open **Note Identification** from the exercise catalog. You’ll follow one written note from the exercise that chooses it to the button that grades it. Then you’ll turn on **Octave** and watch the same view switch to a two-part answer. For the first pass, open the **Exercise settings** gear, choose **Note names → Letters (C D E)**, and leave **Octave** off.
+Open **Note Identification** from the exercise catalog. You’ll follow one written note from the exercise that chooses it to the button that grades it. Then you’ll turn on **Octave** and watch the same view switch to a two-part answer. For the first pass, open the **Exercise settings** gear, choose **Answer Type → Letters (C D E)**, and leave **Octave** off.
 
 {% include component-shot.html screen="note-identification" width=1100 height=720 alt="Note Identification with the written question on the staff and its answer buttons below." %}
 
@@ -54,7 +54,7 @@ The constructor places the panel inside a frame to the right of the main area an
 
 ### Question selection
 
-Inside `next_question()`, follow `q = self._pick_question()`. With a profile open, this calls `Learner.pick()`. The profile’s scheduler decides which eligible question to show, so a question can be a review of a note the learner has seen before. To trace a freshly generated note, follow `ChoiceExercise.generate()` into `NoteNames.make_question()`. It chooses a clef, key signature, and note value from the enabled settings, then draws a pitch within that clef’s range. `NoteNames._question_for()` turns that pitch into a `Question` with both the notation and the accepted answer. [Learner.pick]({{ '/api/alto.learning.learner/class-learner/#learnerpick' | relative_url }}) · [NoteNames.make_question]({{ '/api/alto.exercises.library/class-notenames/#notenamesmake_question' | relative_url }})
+Inside `next_question()`, follow `q = self._pick_question()`. With a profile open, this calls `Learner.pick()`. The profile’s scheduler decides which eligible question to show, so a question can be a review of a note the learner has seen before. To trace a freshly generated note, follow `ChoiceExercise.generate()` into `NoteNames.make_question()`. It chooses a pitch within the enabled clef and range, spells it in the question key, and selects the staff signature independently. `NoteNames._question_for()` turns that pitch into a `Question` with both the notation and the accepted answer. [Learner.pick]({{ '/api/alto.learning.learner/class-learner/#learnerpick' | relative_url }}) · [NoteNames.make_question]({{ '/api/alto.exercises.library/class-notenames/#notenamesmake_question' | relative_url }})
 
 To see how that one object drives the screen, put a breakpoint on `self.question = q` in `alto/ui/exercise_view.py`. A few lines below, the view clears the attempt count and starts the response timer. Inspect these expressions in your debugger:
 

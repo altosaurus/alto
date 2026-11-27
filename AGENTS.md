@@ -28,6 +28,10 @@
 
 ## UI consistency
 
+- Write numeric scale degrees with a circumflex (hat) centered directly above the digit, as in **3̂** and **♭3̂**.
+  Put any accidental before the digit. In Qt, use the shared renderer in `alto/ui/degree_text.py` for staff captions,
+  labels, and buttons so the hat stays centered across fonts.
+
 - Use `CORRECT_ANSWER_COLOR` from `alto/ui/colors.py` for correct-answer feedback, including animations on sounding notes.
   Correct-answer animations default to green in every theme. Use another color only when explicitly requested.
 - When a correct answer plays notes, use the playback step callback to highlight exactly the pitches sounding at each onset.

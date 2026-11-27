@@ -163,7 +163,8 @@ def test_identify_played_note(
         Whether the written octave is required.
     """
     cfg = settings.note_names
-    cfg.naming, cfg.require_octave, cfg.minor_degrees = naming, octave, True
+    cfg.naming, cfg.require_octave = naming, octave
+    cfg.key_signatures, cfg.minor_keys = set(), {0}
     view = ExerciseView(NoteNames(), rng=random.Random(5))
     view.settings_panel.next_question_mode = "Wait"
     view.show()
