@@ -1,6 +1,6 @@
 name: Docs
 
-# Builds the docs with Jekyll, one folder for each version, and keeps them on the branch gh-pages, which GitHub Pages serves
+# Builds the docs with Sphinx, one folder for each version, and keeps them on the branch gh-pages, which GitHub Pages serves
 # (Settings -> Pages -> Deploy from a branch -> gh-pages, / (root)). The site then looks like this:
 #
 #   /alto/dev/         the development version, rebuilt when a change to the docs is merged into main
@@ -8,8 +8,7 @@ name: Docs
 #   /alto/             the newest stable docs, plus shared site files
 #   /alto/latest/      redirects for old stable docs links
 #
-# By hand, `ref` builds (or rebuilds) one release, for a tag made before the docs had a dropdown: the layout, includes and styles
-# of main are laid over that tag's docs, and the words stay the tag's own.
+# A manual run can publish a missing release. Existing release archives keep their original HTML.
 on:
   push:
     branches: [main]
@@ -18,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: "A release tag to build, such as v0.0.0 (default: the development docs, from main)"
+        description: "A release tag to build, such as v0.0.0 (default: the development docs from the selected revision)"
         required: false
         default: ""
 
@@ -48,8 +47,9 @@ jobs:
         run: |
           build=true
           if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
-            if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && ! git diff --name-only "${BEFORE}" "${GITHUB_SHA}" \
-              | grep -qE '^(docs/|alto/ui/exercise_view\.py$|scripts/(docs_site|docs_excerpts|check_plugin_registry|tutorial_docs)\.py$|scripts/docs_search\.rb$|\.github/workflows/docs\.yml$)'; then
+            if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && git diff --quiet "${BEFORE}" "${GITHUB_SHA}" -- \
+              docs ':(glob)alto/**/*.py' CHANGELOG.md pyproject.toml uv.lock \
+              scripts/{docs_site,check_plugin_registry,tutorial_docs}.py .github/workflows/docs.yml; then
               build=false
             fi
           fi
@@ -65,7 +65,7 @@ jobs:
       SITE_URL: https://altosaurus.github.io/alto
       SITE_PATH: /alto
     steps:
-      # What is built: the tag that was pushed, the tag asked for by hand, or main.
+      # Select the requested release or the revision that triggered the run.
       - name: Say what to build
         id: what
         env:
@@ -74,21 +74,19 @@ jobs:
           version=dev
           if [ "${GITHUB_REF_TYPE}" = "tag" ]; then version="${GITHUB_REF_NAME}"; fi
           if [ -n "${INPUT_REF}" ]; then version="${INPUT_REF}"; fi
-          if [ "${version}" != dev ] && ! echo "${version}" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+          if [ "${version}" != dev ] && ! [[ "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
             echo "${version} is not a release tag such as v0.1.0." >&2
             exit 1
           fi
           echo "version=${version}" >> "$GITHUB_OUTPUT"
-          if [ -n "${INPUT_REF}" ]; then echo "overlay=true" >> "$GITHUB_OUTPUT"; else echo "overlay=false" >> "$GITHUB_OUTPUT"; fi
 
-      # The docs to build: those of the version (main for dev).
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ steps.what.outputs.version == 'dev' && 'main' || steps.what.outputs.version }}
+          ref: ${{ inputs.ref && inputs.ref != 'dev' && format('refs/tags/{0}', inputs.ref) || github.sha }}
           path: source
 
-      # The tools and the layout always come from main, so that a fix reaches every build from now on.
+      # The publisher and shared files serve every version. The renderer and lockfile belong to the selected source.
       - uses: actions/checkout@v4
         with:
           ref: main
@@ -98,17 +96,6 @@ jobs:
       - name: Check plugin registrations before publication
         working-directory: tooling
         run: python3 scripts/check_plugin_registry.py
-
-      # The plugin tutorials live in repositories of their own. Only the page and the files it shows are copied in, and every build
-      # takes the tutorial as it is on its default branch, so a release's docs get a fixed copy only if they are built again.
-      - name: Bring in the plugin tutorials
-        run: python3 tooling/scripts/tutorial_docs.py all --docs source/docs
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
-          bundler-cache: true
-          working-directory: tooling/docs
 
       - name: Get the site as it is
         env:
@@ -123,57 +110,70 @@ jobs:
             git -C site remote add origin "$url"
           fi
 
-      - name: Build the version
+      - name: Check for an existing release archive
+        id: archive
         env:
           VERSION: ${{ steps.what.outputs.version }}
-          OVERLAY: ${{ steps.what.outputs.overlay }}
-          BUNDLE_GEMFILE: ${{ github.workspace }}/tooling/docs/Gemfile
         run: |
-          overlay() {
-            cp -R tooling/docs/_layouts/. "$1/_layouts/"
-            mkdir -p "$1/_includes" "$1/assets/css" "$1/assets/js"
-            cp -R tooling/docs/_includes/. "$1/_includes/"
-            cp tooling/docs/assets/css/site.css "$1/assets/css/site.css"
-            cp tooling/docs/assets/js/{copy-code,nav,search,toc}.js "$1/assets/js/"
-            cp tooling/docs/{about.md,contents.md,using-alto.md,search.html,_config.yml} "$1/"
-          }
-          build() { # build DOCS DESTINATION BASEURL LABEL APP_VERSION REVISION
-            rm -rf "$2"
-            python3 tooling/scripts/docs_excerpts.py --docs "$1" --repo source --revision "$6"
-            printf 'baseurl: %s\ndocs_version: %s\napp_version: "%s"\nsource_revision: "%s"\n' \
-              "$3" "$4" "$5" "$6" > version.yml
-            bundle exec jekyll build --source "$1" --destination "$2" --config "$1/_config.yml,version.yml"
-            bundle exec ruby tooling/scripts/docs_search.rb "$2"
-          }
-
-          newest=$(python3 tooling/scripts/docs_site.py latest $(git -C source tag --list 'v*'))
-          if [ "$VERSION" = dev ]; then APP_VERSION="${newest#v}"; else APP_VERSION="${VERSION#v}"; fi
-          if [ "$OVERLAY" = true ]; then overlay source/docs; fi
-          build source/docs "site/$VERSION" "$SITE_PATH/$VERSION" "$VERSION" "$APP_VERSION" "$(git -C source rev-parse HEAD)"
-          if [ "$VERSION" = dev ]; then git -C source rev-parse --short HEAD > site/dev/commit.txt; fi
-
-          # Publish the newest stable release at the root. On the first run after migration,
-          # rebuild the already published stable release even if this run only builds dev.
-          stable=""
-          if [ "$VERSION" != dev ] && [ "$VERSION" = "$newest" ]; then
-            stable="$VERSION"
-            stable_docs=source/docs
-          elif [ ! -f site/.stable-docs.json ] && [ -f site/latest/index.html ]; then
-            stable=$(jq -r '.latest // empty' site/versions.json)
-            if [ -n "$stable" ]; then
-              mkdir -p stable-source
-              git -C source archive "$stable" docs | tar -x -C stable-source
-              stable_docs=stable-source/docs
-              python3 tooling/scripts/tutorial_docs.py all --docs "$stable_docs"
-            fi
+          archived=false
+          if [[ "$VERSION" != dev && -e "site/$VERSION" ]]; then
+            test -s "site/$VERSION/index.html"
+            archived=true
           fi
-          if [ -n "$stable" ]; then
-            overlay "$stable_docs"
-            build "$stable_docs" stable-build "$SITE_PATH" latest "${stable#v}" "$(git -C source rev-parse "$stable^{commit}")"
-            python3 tooling/scripts/docs_site.py finish site --stable stable-build --root-files tooling/docs/site-root --site-url "$SITE_URL"
+          echo "exists=$archived" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        if: steps.archive.outputs.exists == 'false'
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        if: steps.archive.outputs.exists == 'false'
+        run: python -m pip install uv==0.11.11
+
+      - name: Bring in the plugin tutorials
+        if: steps.archive.outputs.exists == 'false'
+        working-directory: source
+        run: python scripts/tutorial_docs.py all
+
+      - name: Build the version
+        if: steps.archive.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.what.outputs.version }}
+        run: |
+          revision=$(git -C source rev-parse HEAD)
+          stage=$(mktemp -d "$RUNNER_TEMP/alto-docs.XXXXXXXX")
+          build() (
+            cd source
+            uv run --isolated --locked --only-group docs --python 3.13 sphinx-build -W -b dirhtml \
+              -d "$stage/doctrees-$1" -c docs/_sphinx -D version="$1" -D alto_app_version="$app_version" \
+              -D alto_source_revision="$revision" -D alto_site_root="$SITE_PATH" -D html_baseurl="$SITE_URL/" \
+              docs "$stage/$1"
+            rm "$stage/$1/.buildinfo"
+          )
+
+          if [[ "$VERSION" == dev ]]; then
+            newest=$(python tooling/scripts/docs_site.py latest $(git -C source tag --list 'v*'))
+            app_version="${newest#v}"
           else
-            python3 tooling/scripts/docs_site.py finish site --root-files tooling/docs/site-root --site-url "$SITE_URL"
+            app_version="${VERSION#v}"
           fi
+          build "$VERSION"
+          if [[ "$VERSION" == dev ]]; then
+            git -C source rev-parse --short HEAD > "$stage/dev/commit.txt"
+            rm -rf site/dev
+          fi
+          mv "$stage/$VERSION" "site/$VERSION"
+
+          # Promote the newest published stable tag, including when releases arrive out of order.
+          stable_args=()
+          newest=$(cd site && python ../tooling/scripts/docs_site.py latest v*)
+          if [[ "$VERSION" == "$newest" ]]; then
+            build latest
+            stable_args=(--stable "$stage/latest")
+          fi
+          python tooling/scripts/docs_site.py finish site "${stable_args[@]}" \
+            --root-files tooling/docs/site-root --site-url "$SITE_URL"
 
       - name: Keep the site
         run: |

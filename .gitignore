@@ -18,6 +18,8 @@ build/
 
 # The docs, built locally (see "Building the docs" in docs/development.md)
 docs/_site/
+docs/api/**/*.api.rst
+# Local artifacts left by the former Jekyll build
 docs/_data/exercise_view_lines.json
 docs/.jekyll-cache/
 docs/.bundle/
@@ -26,6 +28,7 @@ docs/vendor/
 # The plugin tutorials, brought into the docs from their own repositories by scripts/tutorial_docs.py (see "Building the docs")
 docs/plugins/viola.md
 docs/assets/plugins/viola/
+docs/assets/plugins/viola-correct-answer.gif
 docs/assets/plugins/viola.zip
 docs/assets/plugins/viola-fingerboard.png
 docs/assets/plugins/viola-fingerboard-detail.png

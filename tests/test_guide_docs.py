@@ -1,6 +1,6 @@
 """
 The Resources section in docs/guide lists every chapter, has working
-links, and renders with Jekyll.
+links, and uses supported template expressions.
 """
 
 from __future__ import annotations
@@ -49,9 +49,13 @@ def permalinks() -> set[str]:
     pages = [
         *DOCS.glob("*.md"),
         *GUIDE.glob("*.md"),
-        *(DOCS / "api").glob("*.md"),
     ]
-    return {front_matter(p)["permalink"] for p in pages}
+    modules = {
+        "/api/" + ".".join(path.relative_to(ROOT).with_suffix("").parts) + "/"
+        for path in (ROOT / "alto").rglob("*.py")
+        if not path.name.startswith("_")
+    }
+    return {front_matter(p)["permalink"] for p in pages} | modules | {"/api/"}
 
 
 def chapters() -> list[Path]:
@@ -119,12 +123,11 @@ def test_every_link_in_a_guide_page_goes_to_a_page_that_exists(
     [GUIDE / "index.md", *chapters()],
     ids=lambda p: p.name,
 )
-def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(
+def test_guide_pages_use_supported_template_expressions(
     page: Path,
 ) -> None:
     """
-    Allow relative links and screenshot includes in the guide, and flag
-    other Liquid delimiters.
+    Allow site links, revision-specific source links, and screenshots.
 
     Parameters
     ----------
@@ -132,6 +135,11 @@ def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(
         The guide page, supplied by the parametrisation.
     """
     text = LINK.sub("", page.read_text(encoding="utf-8"))
+    text = text.replace(
+        "https://github.com/altosaurus/alto/blob/"
+        "{{ site.source_revision | default: 'main' }}/",
+        "",
+    )
     text = re.sub(
         (
             '^{% include shot\\.html src="[\\w-]+\\.png" alt="[^"{}\\n]+"(?: '
@@ -142,7 +150,7 @@ def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(
         flags=re.MULTILINE,
     )
     assert "{{" not in text and "{%" not in text, (
-        f"{page.name} has braces that Jekyll would read as template code"
+        f"{page.name} contains an unsupported template expression"
     )
 
 

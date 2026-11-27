@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from types import ModuleType
 
+import ast
 import base64
 import importlib.util
 import json
@@ -20,8 +21,8 @@ from html import unescape
 from pathlib import Path
 from urllib.parse import unquote
 
+from docs._sphinx.docs_excerpts import excerpts
 from PySide6.QtGui import QColor, QImage
-from scripts.docs_excerpts import excerpts
 
 ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / "docs" / "assets" / "img"
@@ -136,10 +137,14 @@ def test_launch_screens_link_visible_regions_to_api_classes() -> None:
                 screen,
                 region,
             )
-            target = region["href"].removeprefix("/api/").rstrip("/")
-            api = (ROOT / "docs" / "api" / f"{target}.md").read_text()
-            assert f"title: {region['type']}\n" in api
-            assert f"permalink: {region['href']}\n" in api
+            module, slug = region["href"].strip("/").split("/")[1:]
+            name = region["type"]
+            assert slug == f"class-{name.lower()}"
+            source = ROOT.joinpath(*module.split(".")).with_suffix(".py")
+            assert any(
+                isinstance(node, ast.ClassDef) and node.name == name
+                for node in ast.parse(source.read_text(encoding="utf-8")).body
+            )
 
 
 def test_every_picture_a_page_shows_exists_in_both_themes() -> None:

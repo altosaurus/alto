@@ -1,0 +1,117 @@
+{% extends "basic/layout.html" %}
+
+{% set page_title = "Alto: a free music theory trainer for the desktop" if pagename == root_doc else (title|striptags ~ " · " ~ project) %}
+{% set description = "Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures." %}
+{% block htmltitle %}<title>{{ page_title|e }}</title>{% endblock %}
+{% block extrahead %}
+  {{ super() }}
+  <meta name="description" content="{{ description|e }}">
+  {% if pageurl %}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ project|e }}">
+  <meta property="og:title" content="{{ page_title|e }}">
+  <meta property="og:description" content="{{ description|e }}">
+  <meta property="og:url" content="{{ pageurl|e }}">
+  <meta property="og:image" content="{{ canonical_root|e }}/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  {% if pagename == root_doc and version == 'latest' %}
+  <script type="application/ld+json">
+    {{ {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": project,
+        "applicationCategory": "EducationalApplication", "operatingSystem": "Linux, Windows, macOS",
+        "description": description, "url": pageurl, "downloadUrl": "https://github.com/altosaurus/alto/releases/latest",
+        "license": "https://opensource.org/licenses/MIT", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}|tojson }}
+  </script>
+  {% endif %}
+  {% endif %}
+  {% if (preview_pr or version == "dev") and pagename != "search" %}<meta name="robots" content="noindex">{% endif %}
+{% endblock %}
+{% block css %}
+  {% include "theme-init.html" %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {% include "theme-icons.html" %}
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="{{ pathto(root_doc) }}"><img src="{{ favicon_url }}" alt="" width="30" height="30"><span>{{ project }}</span></a>
+    <div class="top-actions">
+      <form class="docs-search" role="search" action="{{ pathto('search') }}" method="get">
+        <div class="search-field">
+          <svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5.5 5.5"/></svg>
+          <input name="q" type="search" enterkeyhint="search" placeholder="Search docs" aria-label="Search documentation">
+        </div>
+      </form>
+      {% if preview_pr %}
+      <a class="dd-btn pr-link" href="{{ pathto(root_doc) }}" aria-label="Documentation preview for PR #{{ preview_pr|e }}">
+        <svg class="i" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M6 7v10m7-12h1a4 4 0 0 1 4 4v8M15 2l-3 3 3 3"/></svg>
+        pr #{{ preview_pr|e }}
+      </a>
+      {% else %}
+      <div class="version"{% if site_root is not none %} id="version-slot" data-version="{{ version|e }}" data-root="{{ site_root|e }}"{% endif %}><span class="version-name">{{ version }}</span></div>
+      {% endif %}
+      {% include "header-actions.html" %}
+    </div>
+  </header>
+  {% if version == 'dev' and not preview_pr and site_root is none %}
+    <div class="version-banner" role="note">This is the development version, which has changes that are not in a release.</div>
+  {% endif %}
+{% endblock %}
+
+{% block relbar1 %}{% endblock %}
+{% block relbar2 %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+  <div class="layout">
+    <aside class="sidebar">
+      <nav class="menu" aria-label="Documentation">
+        <details class="mobile-contents"><summary aria-controls="docs-navigation">Contents</summary></details>
+        <div class="nav" id="docs-navigation">{% include "sidebar.html" %}</div>
+      </nav>
+    </aside>
+    <main id="content" class="content" role="main">
+      <div class="page-grid body" id="page-grid"{% if no_toc %} data-no-toc{% endif %}>
+        <article>
+          {% if pagename != root_doc %}
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="{{ pathto(root_doc) }}">{{ sidebar_tree[root_doc][0]|e }}</a></li>
+              {% for parent in parents %}<li><a href="{{ parent.link }}">{{ parent.title }}</a></li>{% endfor %}
+              <li aria-current="page">{{ title|striptags|e }}</li>
+            </ol>
+          </nav>
+          {% endif %}
+          {% block body %}{% endblock %}
+          {% if prev or next %}
+          <nav class="page-nav" aria-label="Previous and next pages">
+            {% for relation, page, label in [('prev', prev, 'Previous'), ('next', next, 'Next')] if page %}
+            <a class="{{ relation }}" rel="{{ relation }}" href="{{ page.link }}">
+              <span class="np-label">{{ label }}</span>
+              <span class="np-title">
+                {% if relation == 'prev' %}<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>{% endif %}
+                {{ page.title }}
+                {% if relation == 'next' %}<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg>{% endif %}
+              </span>
+            </a>
+            {% endfor %}
+          </nav>
+          {% endif %}
+        </article>
+        <nav class="toc" id="toc" aria-label="On this page" hidden></nav>
+      </div>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // Sphinx wraps text matches in new elements. Keep diagram labels,
+    // accessible SVG descriptions, formulas, and embedded data intact.
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".body :is(svg *, math *, script, style)").forEach(node => node.classList.add("nohighlight"));
+    });
+  </script>
+  {% if site_root is not none and not preview_pr %}<script src="{{ site_root|e }}/version-switcher.js" defer></script>{% endif %}
+  <script src="{{ pathto('_static/nav.js', 1) }}" defer></script>
+  <script src="{{ pathto('_static/copy-code.js', 1) }}" defer></script>
+  <script src="{{ pathto('_static/toc.js', 1) }}" defer></script>
+{% endblock %}

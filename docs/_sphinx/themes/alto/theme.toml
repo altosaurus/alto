@@ -1,0 +1,3 @@
+[theme]
+inherit = "basic"
+stylesheets = ["site.css", "api.css", "navigation.css"]

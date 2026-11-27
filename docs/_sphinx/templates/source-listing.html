@@ -1,0 +1,11 @@
+<div class="view-source">
+  <div class="view-source-header">
+    {% if url %}<a href="{{ url }}#L{{ start }}-L{{ end }}">{{ path }}</a>{% else %}<span>{{ path }} · working copy</span>{% endif %}
+  </div>
+  <div class="view-source-grid">
+    <div class="view-source-lines">
+      {% for n in range(start, end + 1) %}{% if url %}<a href="{{ url }}#L{{ n }}" aria-label="Source line {{ n }}">{{ n }}</a>{% else %}<span>{{ n }}</span>{% endif %}{% endfor %}
+    </div>
+    <div class="highlight"><pre><code>{{ highlighted }}</code></pre></div>
+  </div>
+</div>

@@ -72,7 +72,7 @@ enforce a rule, follow it anyway in every line you write or touch.
 
 ## Validation checkpoints
 
-If you changed a docstring or a public signature, run `python scripts/api_docs.py` so `docs/api` matches.
+Sphinx rebuilds the API reference from public signatures and docstrings. See the local build instructions in `docs/development.md`.
 
 During development, format and lint the changed Python files and run the tests directly affected by the change. Use
 type checking when signatures or types change, and PyCharm inspections on changed Python files. Documentation-only

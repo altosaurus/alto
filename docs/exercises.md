@@ -427,6 +427,7 @@ staff can be clicked on. A bass clef G2 Major, which starts on the bottom line, 
 the top of the ledger lines cannot.
 
 ### The staff's key signature
+{: #the-staffs-key-signature}
 
 The key signature on the staff and the key signature of the scale are two separate settings, so a scale can be asked on a
 staff whose signature is not its own. Each question picks one of each. For example, with two flats on the staff (the

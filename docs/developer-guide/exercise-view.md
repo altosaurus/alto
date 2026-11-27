@@ -2,6 +2,8 @@
 title: Exercise view
 parent: developer-guide
 order: 2
+myst:
+  all_links_external: true
 permalink: /developer-guide/exercise-view/
 ---
 Open **Note Identification** from the exercise catalog. You’ll follow one written note from the exercise that chooses it to the button that grades it. Then you’ll turn on **Octave** and watch the same view switch to a two-part answer. For the first pass, open the **Exercise settings** gear, choose **Note names → Letters (C D E)**, and leave **Octave** off.

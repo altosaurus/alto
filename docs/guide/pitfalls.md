@@ -111,11 +111,9 @@ use, look at the pictures, and commit only intended changes.
 ## The docs site
 
 **Symptom: a page on the website is blank, or shows Liquid errors, after adding a code sample.**
-Jekyll runs the Liquid template language over every page, and two opening curly braces in a row, or an opening brace followed by a percent sign, in a code block is taken
-as template code. *Fix:* wrap the page or the block in `raw` and `endraw` tags, as the generated API pages do, or avoid the braces.
+Python Liquid processes guide templates before MyST reads the Markdown. Surround examples of Liquid syntax with Liquid’s raw and endraw tags so the example renders literally.
 
-**Symptom: `tests/test_api_docs.py` fails.** The generated API pages are out of date. Run `python scripts/api_docs.py` and commit the
-result.
+**Symptom: a public signature looks out of date.** Rebuild the [local preview]({{ '/development/' | relative_url }}#sphinx-documentation-preview) and check the class or function page for the selected revision.
 
 ## Finding a problem you do not recognize
 

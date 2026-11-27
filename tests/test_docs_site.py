@@ -2,7 +2,7 @@
 Tests for the versioned docs: the script that puts the site together,
 and the files that make the dropdown and the search rules.
 
-The Jekyll builds and the push to `gh-pages` happen on GitHub, so these
+The Sphinx builds and the push to `gh-pages` happen on GitHub, so these
 tests cover what can be checked without them: the logic
 of which release is the latest and what is written around the versions,
 and that the layout, the workflow and the shared files
@@ -299,77 +299,6 @@ def test_command_line_prints_latest_and_refuses_site_not_there(
     assert (site / "versions.json").is_file()
 
 
-def test_layout_dropdown_slot_and_sends_search_engines_to_latest() -> None:
-    """
-    Check the layout: a slot the dropdown fills, the canonical address
-    at the site root, noindex for dev, and the script.
-    """
-    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert (
-        'id="version-slot"' in layout
-        and 'data-version="{{ site.docs_version }}"' in layout
-        and 'data-root="{{ site.site_root }}"' in layout
-    )
-    assert (
-        "prepend: '/latest'" not in layout
-        and "prepend: site.site_root | prepend: site.url" in layout
-        and '<link rel="canonical" href="{{ canonical }}">' in layout
-    )
-    assert (
-        "site.docs_version == 'dev'" in layout
-        and 'content="noindex"' in layout
-    )
-    assert "version-switcher.js" in layout
-    assert (
-        "site.docs_version == 'latest'" in layout
-    )  # the structured data is for the latest release only
-
-
-def test_top_bar_version_then_theme_then_github_and_theme_only() -> None:
-    """
-    Check the order of the top bar, that the theme button has no words
-    of its own, and that the words are in its menu.
-    """
-    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    bar = layout[
-        layout.index('<div class="top-actions">') : layout.index("</header>")
-    ]
-    assert (
-        bar.index('id="docs-search-input"')
-        < bar.index('id="version-slot"')
-        < bar.index('id="theme-button"')
-        < bar.index('class="icon-link"')
-    )
-    button = bar[
-        bar.index('id="theme-button"') : bar.index(
-            "</button>",
-            bar.index('id="theme-button"'),
-        )
-    ]
-    assert (
-        'aria-label="Color theme"' in button
-        and 'aria-haspopup="menu"' in button
-    )
-    assert (
-        ">Light<" not in button and ">Dark<" not in button
-    )  # no words on the button itself
-    menu = bar[bar.index('id="theme-menu"') : bar.index('class="icon-link"')]
-    assert (
-        "hidden>" in menu
-        and ">Light<" in menu
-        and ">Dark<" in menu
-        and ">System<" in menu
-    )
-    assert "theme-toggle" not in layout  # the old button with words is gone
-    assert "Match your computer" not in layout  # System has no note under it
-    assert (
-        layout.count('class="dd-ico"') == 3
-    )  # an icon tile beside each of Light, Dark and System
-    assert (
-        'removeAttribute("data-theme")' in layout and "Escape" in layout
-    )  # System forgets the choice; Escape closes the menu
-
-
 def test_version_dropdown_uses_icon_tiles_and_lists_dev_with() -> None:
     """
     Check that the dev label includes the build commit while its
@@ -430,19 +359,6 @@ def test_version_dropdown_brings_own_styles_because_versions() -> None:
     assert (
         "dd-" not in script
     )  # none of the classes of the page's own stylesheet
-
-
-def test_config_builds_dev_by_default_and_keeps_shared_files_out() -> None:
-    """
-    Check that a plain build is the dev docs, at the address GitHub
-    Pages used before, and that root files are not built in.
-    """
-    config = (DOCS / "_config.yml").read_text(encoding="utf-8")
-    assert "docs_version: dev" in config and "site_root: /alto" in config
-    assert "- site-root" in config and "- Gemfile" in config
-    assert (DOCS / "Gemfile").read_text(encoding="utf-8").count(
-        "github-pages",
-    ) >= 1
 
 
 def test_shared_files_in_site_root_and_google_file_exactly_as() -> None:
@@ -575,20 +491,16 @@ def test_docs_workflow_builds_each_version_into_own_folder_and() -> None:
         data["concurrency"]["group"] == "docs"
         and data["concurrency"]["cancel-in-progress"] is False
     )
+    assert "sphinx-build -W -b dirhtml" in text
+    assert ":(glob)alto/**/*.py" in text and "pyproject.toml uv.lock" in text
+    assert '-D html_baseurl="$SITE_URL/"' in text
+    assert '-D alto_source_revision="$revision"' in text
     assert (
-        "--baseurl" not in text and "baseurl: %s" in text
-    )  # the address of each version is given in a config file
-    assert (
-        'stable-build "$SITE_PATH" latest' in text
-        and "docs_site.py latest" in text
-    )
-    assert (
-        "docs_site.py finish site" in text
+        "build latest" in text
+        and "steps.archive.outputs.exists == 'false'" in text
+        and "docs_site.py finish site" in text
         and "git push --quiet origin HEAD:gh-pages" in text
     )
-    assert (
-        "cp -R tooling/docs/_layouts/." in text
-    )  # a release without the dropdown gets the current layout
 
 
 def test_the_examples_in_the_script_run() -> None:
@@ -677,8 +589,8 @@ def test_each_build_says_which_release_to_offer_and_build() -> None:
         encoding="utf-8",
     )
     assert (
-        'app_version: "%s"' in workflow
-        and 'APP_VERSION="${VERSION#v}"' in workflow
+        '-D alto_app_version="$app_version"' in workflow
+        and 'app_version="${VERSION#v}"' in workflow
     )
     assert (
         "docs_site.py latest $(git -C source tag --list" in workflow
@@ -688,7 +600,6 @@ def test_each_build_says_which_release_to_offer_and_build() -> None:
         '{% if site.app_version != "" %}' in home
         and '{% if v != "" %}' in home
     )
-    assert "app_version:" in (DOCS / "_config.yml").read_text(encoding="utf-8")
 
 
 def test_download_script_detects_system_and_keeps_and_sends() -> None:
@@ -753,7 +664,9 @@ def test_every_icon_size_written_on_and_files_needs_stamped_with() -> None:
     changes with every build, so a new page does not meet an old file.
     """
     pages = {
-        "layout": (DOCS / "_layouts" / "default.html").read_text(
+        "layout": (
+            DOCS / "_sphinx" / "themes" / "alto" / "layout.html"
+        ).read_text(
             encoding="utf-8",
         ),
         "home": (DOCS / "index.md").read_text(encoding="utf-8"),
@@ -769,7 +682,6 @@ def test_every_icon_size_written_on_and_files_needs_stamped_with() -> None:
             assert "width=" in tag and "height=" in tag, (
                 f"an icon in the {name} has no size: {tag}"
             )
-    assert "site.css' | relative_url }}?v={{ site.time" in pages["layout"]
     assert "downloads.js' | relative_url }}?v={{ site.time" in pages["home"]
 
 
@@ -865,10 +777,8 @@ def _nav_pages() -> list[dict[str, str]]:
         (empty if it has none), by `nav_order`.
     """
     pages = []
-    for path in (
-        sorted(DOCS.glob("*.md"))
-        + sorted((DOCS / "guide").glob("index.md"))
-        + sorted((DOCS / "api").glob("index.md"))
+    for path in sorted(DOCS.glob("*.md")) + sorted(
+        (DOCS / "guide").glob("index.md"),
     ):
         text = path.read_text(encoding="utf-8")
         found = re.match(r"---\n(.*?)\n---\n", text, re.DOTALL)
@@ -928,22 +838,6 @@ def test_no_page_listed_twice_and_heading_page_pages_link() -> None:
         "For developers",
         "About",
     ]
-    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert (
-        'where: "title", group' in layout
-        and 'unless group != "" and p.title == group' in layout
-    )
-    category = (DOCS / "_includes" / "nav-category.html").read_text()
-    summary = '<summary aria-controls="docs-navigation">Contents</summary>'
-    assert summary in layout
-    assert 'class="nav" id="docs-navigation"' in layout
-    assert 'nav-category.html title="Contents"' not in layout
-    assert "{% if include.controls %}" in category
-    assert category.index("</a>") < category.index("<button")
-    assert 'aria-controls="{{ include.controls }}"' in category
-    assert 'class="count"' not in layout and "count" not in layout.split(
-        "<nav",
-    )[1].split("</nav>")[0].replace("account", "")
 
 
 def test_sidebar_opens_whatever_holds_current_page_and_groups() -> None:
@@ -951,12 +845,6 @@ def test_sidebar_opens_whatever_holds_current_page_and_groups() -> None:
     Check that the current page's group, section and package are open,
     and that the script keeps only what you closed.
     """
-    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert (
-        "title=a.package url=package_url controls=package_id" in layout
-        and "title=label url=a.url controls=module_id" in layout
-        and "title=p.title url=p.url controls=section_id" in layout
-    )
     script = (DOCS / "assets" / "js" / "nav.js").read_text(encoding="utf-8")
     assert (
         "localStorage" in script
@@ -973,14 +861,16 @@ def test_on_this_page_list_made_from_headings_and_only_for_pages() -> None:
     """
     script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
     assert (
-        '"h2, h3"' in script
+        '"h2, h3, dl.py.method > dt.sig[id]"' in script
         and "heads.length < 2" in script
         and "On this page" in script
     )
     assert (
         "scroll" in script and "toc-inline" in script and "has-toc" in script
     )
-    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    layout = (DOCS / "_sphinx" / "themes" / "alto" / "layout.html").read_text(
+        encoding="utf-8",
+    )
     assert (
         'id="toc"' in layout
         and 'id="page-grid"' in layout
@@ -1032,28 +922,6 @@ def test_every_page_in_sidebar_ends_with_links_to_previous_and() -> None:
     Check the layout's links: previous bottom left, next bottom right,
     in the sidebar's order, children included.
     """
-    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert (
-        'class="page-nav"' in layout
-        and 'rel="prev"' in layout
-        and 'rel="next"' in layout
-    )
-    assert 'id="i-prev"' in layout and 'id="i-next"' in layout
-    assert (
-        'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout
-        and 'where: "parent", p.children' in layout
-    )
-    assert (
-        'sort: "title" | group_by: "package" | sort: "name"' in layout
-        and 'child_pages | sort: "order"' in layout
-    )
-    assert (
-        "reading_order | concat: child_pages" in layout
-        and "reading_order[forloop.index]" in layout
-    )
-    assert (
-        "unless forloop.first" in layout and "reading_order[before]" in layout
-    )
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     assert ".page-nav { display: flex; justify-content: space-between;" in css
     assert (
@@ -1091,8 +959,10 @@ def test_home_page_no_on_this_page_list_and_page_can_opt_out() -> None:
         r"---\n(?:[^\n]*\n)*?toc: false\n(?:[^\n]*\n)*?---\n",
         home,
     )
-    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
-    assert "{% if page.toc == false %} data-no-toc{% endif %}" in layout
+    layout = (DOCS / "_sphinx" / "themes" / "alto" / "layout.html").read_text(
+        encoding="utf-8",
+    )
+    assert "{% if no_toc %} data-no-toc{% endif %}" in layout
     script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
     assert 'grid.hasAttribute("data-no-toc")' in script
     for path in DOCS.glob("*.md"):
@@ -1228,7 +1098,7 @@ def test_first_picture_on_home_page_circle_of_fifths_with_list() -> None:
 
 def _notes_script() -> ModuleType:
     """
-    Load `scripts/release_notes.py` as a module, without running it.
+    Load the Sphinx release notes renderer.
 
     Returns
     -------
@@ -1237,7 +1107,7 @@ def _notes_script() -> ModuleType:
     """
     spec = importlib.util.spec_from_file_location(
         "release_notes",
-        ROOT / "scripts" / "release_notes.py",
+        DOCS / "_sphinx" / "release_notes.py",
     )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
@@ -1247,22 +1117,13 @@ def _notes_script() -> ModuleType:
 
 def test_the_release_notes_page_is_the_changelog_and_is_up_to_date() -> None:
     """
-    Check that the page is what `scripts/release_notes.py` makes of
-    `CHANGELOG.md`, with a heading per version.
+    Check that every released version has a heading.
     """
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    page = (DOCS / "release-notes.md").read_text(encoding="utf-8")
-    assert page == _notes_script().render(
-        changelog,
-    )  # run scripts/release_notes.py after a change to the changelog
+    page = _notes_script().render(changelog)
     for name, _date, _notes in _notes_script().sections(changelog):
         if name != "Unreleased":
-            assert f"\n## {name}\n" in page, f"no heading for {name}"
-    assert (
-        "[Unreleased]:" not in page
-        and "{% raw %}" in page
-        and "{% endraw %}" in page
-    )
+            assert f"## {name}" in page.splitlines(), f"no heading for {name}"
 
 
 def test_release_notes_in_sidebar_under_about_and_linked_from() -> None:
@@ -1272,7 +1133,7 @@ def test_release_notes_in_sidebar_under_about_and_linked_from() -> None:
     """
     page = (DOCS / "release-notes.md").read_text(encoding="utf-8")
     assert "nav_group: About" in page and "permalink: /release-notes/" in page
-    assert "{: .no-toc}" in page
+    assert "{: .no-toc}" in _notes_script().untitled("### Fixed")
     home = (DOCS / "index.md").read_text(encoding="utf-8")
     assert (
         "<a href=\"{{ '/release-notes/' | relative_url }}\">Release notes</a>"
@@ -1284,7 +1145,7 @@ def test_release_notes_in_sidebar_under_about_and_linked_from() -> None:
 def test_release_notes_script_shows_unreleased_only_while_notes() -> None:
     """
     Check that an empty Unreleased section is left out, and that the
-    developer guide tells a releaser to run the script.
+    developer guide names the source of the release notes.
     """
     script = _notes_script()
     empty = (
@@ -1297,7 +1158,7 @@ def test_release_notes_script_shows_unreleased_only_while_notes() -> None:
     assert "## Unreleased" not in script.render(
         empty,
     ) and "## Unreleased" in script.render(full)
-    assert "scripts/release_notes.py" in (DOCS / "development.md").read_text(
+    assert "CHANGELOG.md" in (DOCS / "development.md").read_text(
         encoding="utf-8",
     )
 

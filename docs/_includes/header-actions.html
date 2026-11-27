@@ -1,0 +1,60 @@
+<div class="dd" id="theme-dd">
+  <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+  <div class="dd-menu" id="theme-menu" role="menu" hidden>
+    <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
+    <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
+    <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="system"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-monitor"/></svg></span><span class="dd-text">System</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
+  </div>
+</div>
+<a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+  <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+</a>
+<script>
+  // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+  // remembered; System forgets it, and the page then follows the system again.
+  var root = document.documentElement, button = document.getElementById("theme-button");
+  var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+  var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+  function chosen() { return root.getAttribute("data-theme") || "system"; }
+  function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+  function show() {
+    button.querySelector("use").setAttribute("href", effective() === "dark" ? "#i-moon" : "#i-sun");
+    for (var i = 0; i < items.length; i++) {
+      items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+    }
+  }
+  function open(isOpen) {
+    menu.hidden = !isOpen;
+    button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    if (isOpen) {
+      var checked = menu.querySelector('[aria-checked="true"]') || items[0];
+      checked.focus();
+    }
+  }
+  button.addEventListener("click", function () { open(menu.hidden); });
+  for (var i = 0; i < items.length; i++) {
+    items[i].addEventListener("click", function (event) {
+      var choice = event.currentTarget.getAttribute("data-theme-choice");
+      if (choice === "system") {
+        root.removeAttribute("data-theme");
+        try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+      } else {
+        root.setAttribute("data-theme", choice);
+        try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+      }
+      show();
+      open(false);
+      button.focus();
+    });
+  }
+  document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest("#theme-dd")) { open(false); } });
+  document.addEventListener("keydown", function (event) {
+    if (menu.hidden) { return; }
+    if (event.key === "Escape") { open(false); button.focus(); }
+    var at = Array.prototype.indexOf.call(items, document.activeElement);
+    if (event.key === "ArrowDown") { event.preventDefault(); items[(at + 1) % items.length].focus(); }
+    if (event.key === "ArrowUp") { event.preventDefault(); items[(at + items.length - 1) % items.length].focus(); }
+  });
+  if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+  show();
+</script>
