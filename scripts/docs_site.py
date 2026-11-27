@@ -3,7 +3,7 @@
 Put together the published docs: one folder for each release, one for
 the development version, and the files that belong to none.
 
-The Docs workflow builds each version with Jekyll into its own folder of
+The Docs workflow builds each version with Sphinx into its own folder of
 a checkout of the `gh-pages` branch, and then runs this
 to write what sits around them:
 

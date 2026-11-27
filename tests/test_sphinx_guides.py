@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 import shutil
 import subprocess
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pytest
@@ -84,3 +85,32 @@ def test_interactive_pages(tmp_path: Path) -> None:
     detail = (out / "plugins/detail/index.html").read_text("utf-8")
     assert detail.count('id="plugin-details"') == 1
     assert 'data-registry="../../_static/plugins.json"' in detail
+    subprocess.run(
+        [
+            sphinx,
+            "-W",
+            "-b",
+            "dirhtml",
+            "-c",
+            str(DOCS / "_sphinx"),
+            "-D",
+            "version=latest",
+            "-D",
+            "alto_site_root=/alto",
+            "-D",
+            "html_baseurl=https://example.org/alto/",
+            str(docs),
+            str(out),
+        ],
+        check=True,
+    )
+    published = (out / "plugins/detail/index.html").read_text("utf-8")
+    assert 'data-registry="/alto/plugins.json"' in published
+    assert 'data-version="latest" data-root="/alto"' in published
+    assert 'src="/alto/version-switcher.js"' in published
+    locations = {
+        loc.text for loc in ET.parse(out / "sitemap.xml").findall(".//{*}loc")
+    }
+    assert "https://example.org/alto/getting-started/" in locations
+    assert "https://example.org/alto/plugins/detail/" not in locations
+    assert "https://example.org/alto/search/" not in locations

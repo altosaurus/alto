@@ -3,7 +3,7 @@
 {% block htmltitle %}<title>{{ title|striptags|e }} · {{ project|e }}</title>{% endblock %}
 {% block extrahead %}
   {{ super() }}
-  {% if preview_pr and pagename != "search" %}<meta name="robots" content="noindex">{% endif %}
+  {% if (preview_pr or version == "dev") and pagename != "search" %}<meta name="robots" content="noindex">{% endif %}
 {% endblock %}
 {% block css %}
   {% include "theme-init.html" %}
@@ -28,12 +28,12 @@
         pr #{{ preview_pr|e }}
       </a>
       {% else %}
-      <div class="version"><span class="version-name">{{ version }}</span></div>
+      <div class="version"{% if site_root is not none %} id="version-slot" data-version="{{ version|e }}" data-root="{{ site_root|e }}"{% endif %}><span class="version-name">{{ version }}</span></div>
       {% endif %}
       {% include "header-actions.html" %}
     </div>
   </header>
-  {% if version == 'dev' and not preview_pr %}
+  {% if version == 'dev' and not preview_pr and site_root is none %}
     <div class="version-banner" role="note">This is the development version, which has changes that are not in a release.</div>
   {% endif %}
 {% endblock %}
@@ -90,6 +90,7 @@
       document.querySelectorAll(".body :is(svg *, math *, script, style)").forEach(node => node.classList.add("nohighlight"));
     });
   </script>
+  {% if site_root is not none and not preview_pr %}<script src="{{ site_root|e }}/version-switcher.js" defer></script>{% endif %}
   <script src="{{ pathto('_static/nav.js', 1) }}" defer></script>
   <script src="{{ pathto('_static/copy-code.js', 1) }}" defer></script>
   <script src="{{ pathto('_static/toc.js', 1) }}" defer></script>

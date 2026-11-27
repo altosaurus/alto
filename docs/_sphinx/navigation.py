@@ -113,6 +113,7 @@ def page_context(
     doctree: nodes.document | None,
 ) -> None:
     """Expose the resolved Sphinx tree to page and search templates."""
+    context["site_root"] = app.config.alto_site_root
     context["sidebar_tree"] = app.env.alto_sidebar
     if pagename == "plugins/detail" and "plugins" in app.builder.relations:
         # This page needs a plugin ID from the catalog to show content.

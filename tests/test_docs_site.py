@@ -579,20 +579,16 @@ def test_docs_workflow_builds_each_version_into_own_folder_and() -> None:
         data["concurrency"]["group"] == "docs"
         and data["concurrency"]["cancel-in-progress"] is False
     )
+    assert "sphinx-build -W -b dirhtml" in text
+    assert ":(glob)alto/**/*.py" in text and "pyproject.toml uv.lock" in text
+    assert '-D html_baseurl="$SITE_URL/"' in text
+    assert '-D alto_source_revision="$revision"' in text
     assert (
-        "--baseurl" not in text and "baseurl: %s" in text
-    )  # the address of each version is given in a config file
-    assert (
-        'stable-build "$SITE_PATH" latest' in text
-        and "docs_site.py latest" in text
-    )
-    assert (
-        "docs_site.py finish site" in text
+        "build latest" in text
+        and "steps.archive.outputs.exists == 'false'" in text
+        and "docs_site.py finish site" in text
         and "git push --quiet origin HEAD:gh-pages" in text
     )
-    assert (
-        "cp -R tooling/docs/_layouts/." in text
-    )  # a release without the dropdown gets the current layout
 
 
 def test_the_examples_in_the_script_run() -> None:
@@ -681,8 +677,8 @@ def test_each_build_says_which_release_to_offer_and_build() -> None:
         encoding="utf-8",
     )
     assert (
-        'app_version: "%s"' in workflow
-        and 'APP_VERSION="${VERSION#v}"' in workflow
+        '-D alto_app_version="$app_version"' in workflow
+        and 'app_version="${VERSION#v}"' in workflow
     )
     assert (
         "docs_site.py latest $(git -C source tag --list" in workflow

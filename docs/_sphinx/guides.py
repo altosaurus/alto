@@ -10,7 +10,9 @@ import posixpath
 import re
 import subprocess
 import tomllib
+import xml.etree.ElementTree as ET
 from typing import TYPE_CHECKING
+from urllib.parse import urljoin
 
 import yaml
 from docutils import nodes
@@ -75,7 +77,11 @@ def render_liquid(app: Sphinx, page: dict, body: str) -> str:
     site = {
         "app_version": app.config.alto_app_version,
         "source_revision": app.config.alto_source_revision,
-        "site_root": relative_url(route, "/_static"),
+        "site_root": (
+            app.config.alto_site_root
+            if app.config.alto_site_root is not None
+            else relative_url(route, "/_static")
+        ),
     }
     if "site.time" in body:
         script = app.srcdir / "assets/js/downloads.js"
@@ -256,6 +262,33 @@ def copy_assets(app: Sphinx, exception: Exception | None) -> None:
         copy_asset(app.srcdir / "assets", app.outdir / "assets", force=True)
 
 
+def stable_sitemap(app: Sphinx, exception: Exception | None) -> None:
+    """List the stable pages at their canonical URLs."""
+    if (
+        exception
+        or app.builder.name != "dirhtml"
+        or app.config.version != "latest"
+    ):
+        return
+    urls = ET.Element(
+        "urlset",
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9",
+    )
+    for doc in sorted(app.env.found_docs):
+        if "orphan" in app.env.metadata[doc]:
+            continue
+        entry = ET.SubElement(urls, "url")
+        ET.SubElement(entry, "loc").text = urljoin(
+            app.config.html_baseurl,
+            app.builder.get_target_uri(doc),
+        )
+    ET.ElementTree(urls).write(
+        app.outdir / "sitemap.xml",
+        encoding="utf-8",
+        xml_declaration=True,
+    )
+
+
 def setup(app: Sphinx) -> dict:
     """
     Register the content conversion and release inputs.
@@ -286,8 +319,15 @@ def setup(app: Sphinx) -> dict:
         revision.stdout.strip() or "main",
         "env",
     )
+    app.add_config_value(
+        "alto_site_root",
+        None,
+        "env",
+        types={str, type(None)},
+    )
     app.add_directive("platform", Platform)
     app.connect("source-read", prepare_guide)
     app.connect("doctree-resolved", home_title)
     app.connect("build-finished", copy_assets)
+    app.connect("build-finished", stable_sitemap)
     return {"parallel_read_safe": True, "parallel_write_safe": True}

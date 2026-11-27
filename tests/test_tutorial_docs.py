@@ -282,11 +282,8 @@ def test_the_workflows_bring_the_tutorials_in_before_they_build() -> None:
     Check that the docs build and the pull request check both run the
     script before rendering the site.
     """
-    for name, builder in (
-        ("docs.yml", "jekyll build"),
-        ("docs-check.yml", "sphinx-build"),
-    ):
+    for name in ("docs.yml", "docs-check.yml"):
         workflow = (ROOT / ".github/workflows" / name).read_text()
         assert workflow.index("tutorial_docs.py all") < workflow.index(
-            builder,
+            "sphinx-build",
         ), name

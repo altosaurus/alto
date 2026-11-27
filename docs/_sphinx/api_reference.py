@@ -88,7 +88,7 @@ def field_tables(
 
 
 def configure_source_urls(app: Sphinx, config: Config) -> None:
-    """Link clean files to the PR merge or their last local revision."""
+    """Pin source links to the published revision or last local edit."""
     repo = app.srcdir.parent
     tracked = subprocess.run(
         ["git", "ls-files", "--", "alto"],
@@ -104,9 +104,10 @@ def configure_source_urls(app: Sphinx, config: Config) -> None:
         cwd=repo,
         text=True,
     ).splitlines()
-    merge = (
+    published_revision = (
         config.alto_source_revision
         if config.html_context.get("preview_pr")
+        or config.alto_site_root is not None
         else ""
     )
     urls = {}
@@ -114,7 +115,7 @@ def configure_source_urls(app: Sphinx, config: Config) -> None:
         if not path.endswith(".py"):
             continue
         revision = (
-            merge
+            published_revision
             or subprocess.check_output(
                 ["git", "log", "-1", "--format=%H", "HEAD", "--", path],
                 cwd=repo,

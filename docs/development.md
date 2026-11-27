@@ -540,13 +540,13 @@ The docs exist in one copy for each release and one for the development version,
 A page of an old release says so in a banner, and links to the same page in the latest one.
 
 ```
-/alto/dev/        the development version, rebuilt when a change to docs/ is merged into main
+/alto/dev/        the development version, rebuilt when docs, API source, or build inputs change on main
 /alto/v0.1.0/     one folder for each release, built once when its tag is pushed and not changed after that
 /alto/            the newest stable release (redirects to dev until there is a release) and shared files
 /alto/latest/     compatibility redirects to the same pages at /alto/
 ```
 
-The Docs workflow (`.github/workflows/docs.yml`) builds them with Jekyll and keeps the result on the branch `gh-pages`, which
+The Docs workflow (`.github/workflows/docs.yml`) builds them with Sphinx and keeps the result on the branch `gh-pages`, which
 GitHub Pages serves. `scripts/docs_site.py` installs the stable build at the root without replacing the version folders and writes `versions.json` and the compatibility redirects. The files that belong to the whole site and not to one version are in `docs/site-root/`. One of them,
 `version-switcher.js`, fills the dropdown from `versions.json` at run time, so a release made years ago still offers the newest
 versions, and a fix to the dropdown reaches all of them. The dev entry shows the short Git hash recorded when those docs were built.
@@ -554,9 +554,9 @@ versions, and a fix to the dropdown reaches all of them. The dev entry shows the
 Search engines are told to prefer the latest version: every page has a `canonical` address under `/alto/`, `dev` is `noindex`, and
 only the stable build is in the root sitemap.
 
-To add a docs-only fix to an old release, there is nothing to do but publish a new release: a version is built once from its tag.
-To build a release that was tagged before it had a dropdown, run the Docs workflow by hand with `ref` set to its tag. It puts the
-current layout over that tag's docs, and the words stay as they were.
+A release archive keeps the HTML from its first publication. To publish a missing Sphinx release, run the Docs workflow with `ref` set to the tag.
+The build reads the guides, Python source, and locked dependencies from that tag. A prerelease gets a version folder. The newest published stable release also gets a build at the site root.
+Earlier releases retain their original renderer’s output and read the current version list and plugin registry from the shared site root.
 
 **Switching a copy of the repository to this**, once: after the first run has created the `gh-pages` branch, set Settings, Pages,
 Source to "Deploy from a branch", `gh-pages`, `/ (root)`. Until then GitHub builds a single copy from `main:/docs` as before. Do this
