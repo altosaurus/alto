@@ -32,6 +32,7 @@ from alto.exercises.library import (
     NoteNames,
     RythmicEquations,
 )
+from alto.learning import Database, Learner
 from alto.theory.pitch import Note
 from alto.ui import motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR
@@ -48,7 +49,6 @@ if TYPE_CHECKING:
         Exercise,
         Question,
     )
-    from alto.learning import Learner
 
 
 def view_of(
@@ -939,7 +939,9 @@ def test_a_second_submit_after_the_question_is_answered_is_ignored(
     app : QApplication
         The shared Qt application.
     """
-    view = view_of(KeySignatures(), seed=2)
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    view = view_of(KeySignatures(), seed=2, learner=learner)
     q = asked(view)
     right = next(b for b in view.buttons if b.text() == q.answer)
     right.click()
@@ -947,6 +949,10 @@ def test_a_second_submit_after_the_question_is_answered_is_ignored(
         q.answer,
         button=right,
     )  # the button is disabled and the question answered
+    # The shared recording path also rejects a duplicate graded answer.
+    view._record(True, choice=q.answer)
+    assert db.conn.execute("SELECT COUNT(*) FROM attempts").fetchone()[0] == 1
+    assert view.session.attempts == 1
     assert (view.correct, view.total) == (1, 1)
     view._advance.stop()
 
