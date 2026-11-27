@@ -197,7 +197,7 @@
       <button type="button" class="nav-toggle" data-category="rhythm_equations" aria-controls="nav-api/alto.exercises.rhythm_equations" aria-expanded="true" aria-label="Collapse rhythm_equations" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-api/alto.exercises.rhythm_equations"><li><a class="row" href="../../alto.exercises.rhythm_equations/function-equation_tokens/">equation_tokens</a></li><li><a class="row" href="../../alto.exercises.rhythm_equations/function-counted_operands/">counted_operands</a></li><li><a class="row" href="../../alto.exercises.rhythm_equations/function-number_question/">number_question</a></li></ul></li></ul></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-api/alto.exercises.rhythm_equations"><li><a class="row" href="../../alto.exercises.rhythm_equations/function-equation_tokens/">equation_tokens</a></li><li><a class="row" href="../../alto.exercises.rhythm_equations/function-counted_operands/">counted_operands</a></li><li><a class="row" href="../../alto.exercises.rhythm_equations/function-number_question/">number_question</a></li><li><a class="row" href="../../alto.exercises.rhythm_equations/function-equation_question/">equation_question</a></li></ul></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.learning/">learning</a>
       <button type="button" class="nav-toggle" data-category="learning" aria-controls="nav-api/alto.learning" aria-expanded="true" aria-label="Collapse learning" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -273,6 +273,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.theory"><li><div class="nav-row">
+      <a class="row" href="../../alto.theory.beat_placement/">beat_placement</a>
+      <button type="button" class="nav-toggle" data-category="beat_placement" aria-controls="nav-api/alto.theory.beat_placement" aria-expanded="true" aria-label="Collapse beat_placement" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.theory.beat_placement"><li><a class="row" href="../../alto.theory.beat_placement/function-toggle_beat/">toggle_beat</a></li><li><a class="row" href="../../alto.theory.beat_placement/function-number_beats/">number_beats</a></li><li><a class="row" href="../../alto.theory.beat_placement/function-grade_beat_marks/">grade_beat_marks</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.theory.fifths/">fifths</a>
       <button type="button" class="nav-toggle" data-category="fifths" aria-controls="nav-api/alto.theory.fifths" aria-expanded="true" aria-label="Collapse fifths" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -688,7 +693,7 @@
 <h1>KeyboardBuilder</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="alto.ui.app_settings.KeyboardBuilder">
-<span id="keyboardbuilder"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.app_settings.</span></span><span class="sig-name descname"><span class="pre">KeyboardBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtWidgets.QWidget</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/527c10c0d711d1390b953b77af0fca6727d69867/alto/ui/app_settings.py#L649"><span class="pre">Source</span></a></dt>
+<span id="keyboardbuilder"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.app_settings.</span></span><span class="sig-name descname"><span class="pre">KeyboardBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtWidgets.QWidget</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/229afeacd3676711f522c6f2b9ed6d7976f85d93/alto/ui/app_settings.py#L649"><span class="pre">Source</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide6.QtWidgets.QFrame</span></code></p>
 <p>Rows for coloring each part of a keyboard.</p>
 <p>Each has a swatch that opens the color picker, and chips for colors
@@ -745,7 +750,7 @@ the Custom style.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.app_settings.KeyboardBuilder.refresh">
-<span id="keyboardbuilderrefresh"></span><span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/527c10c0d711d1390b953b77af0fca6727d69867/alto/ui/app_settings.py#L795"><span class="pre">Source</span></a></dt>
+<span id="keyboardbuilderrefresh"></span><span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/229afeacd3676711f522c6f2b9ed6d7976f85d93/alto/ui/app_settings.py#L795"><span class="pre">Source</span></a></dt>
 <dd><p>Show each part’s current color on its swatch.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="n">KeyboardBuilder</span><span class="p">()</span>
