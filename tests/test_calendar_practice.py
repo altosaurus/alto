@@ -2678,6 +2678,7 @@ def test_unselected_notation_cards_keep_their_schedule(
         now=later,
     ) == (0, ex.card_count())
     cfg.terms = set()
+    assert ex.review_question(q, same_settings=False) is None
     assert learner.calendar.counts(
         ex,
         profile=learner.profile.id,
