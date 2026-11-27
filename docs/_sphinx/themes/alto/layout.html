@@ -36,17 +36,50 @@
     <aside class="sidebar">
       <nav class="menu" aria-label="Documentation">
         <details class="mobile-contents"><summary aria-controls="docs-navigation">Contents</summary></details>
-        <div class="nav" id="docs-navigation">{{ toctree(titles_only=true, includehidden=true) }}</div>
+        <div class="nav" id="docs-navigation">{% include "sidebar.html" %}</div>
       </nav>
     </aside>
     <main id="content" class="content" role="main">
-      <div class="page-grid" id="page-grid"{% if pagename in (root_doc, "plugins/detail") %} data-no-toc{% endif %}>
-        <article>{% block body %}{% endblock %}</article>
+      <div class="page-grid body" id="page-grid"{% if pagename in (root_doc, "plugins/detail") %} data-no-toc{% endif %}>
+        <article>
+          {% if pagename != root_doc %}
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="{{ pathto(root_doc) }}">{{ sidebar_tree[root_doc][0]|e }}</a></li>
+              {% for parent in parents %}<li><a href="{{ parent.link }}">{{ parent.title }}</a></li>{% endfor %}
+              <li aria-current="page">{{ title|striptags|e }}</li>
+            </ol>
+          </nav>
+          {% endif %}
+          {% block body %}{% endblock %}
+          {% if prev or next %}
+          <nav class="page-nav" aria-label="Previous and next pages">
+            {% for relation, page, label in [('prev', prev, 'Previous'), ('next', next, 'Next')] if page %}
+            <a class="{{ relation }}" rel="{{ relation }}" href="{{ page.link }}">
+              <span class="np-label">{{ label }}</span>
+              <span class="np-title">
+                {% if relation == 'prev' %}<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>{% endif %}
+                {{ page.title }}
+                {% if relation == 'next' %}<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg>{% endif %}
+              </span>
+            </a>
+            {% endfor %}
+          </nav>
+          {% endif %}
+        </article>
         <nav class="toc" id="toc" aria-label="On this page" hidden></nav>
       </div>
       <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
     </main>
   </div>
+  <script>
+    // Sphinx wraps text matches in new elements. Keep diagram labels,
+    // accessible SVG descriptions, formulas, and embedded data intact.
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".body :is(svg *, math *, script, style)").forEach(node => node.classList.add("nohighlight"));
+    });
+  </script>
+  <script src="{{ pathto('_static/nav.js', 1) }}" defer></script>
   <script src="{{ pathto('_static/copy-code.js', 1) }}" defer></script>
   <script src="{{ pathto('_static/toc.js', 1) }}" defer></script>
 {% endblock %}

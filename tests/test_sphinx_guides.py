@@ -27,6 +27,9 @@ def test_interactive_pages(tmp_path: Path) -> None:
     docs = tmp_path / "docs"
     for name in (
         "getting-started.md",
+        "using-alto.md",
+        "api/index.md",
+        "_includes/category-pages.html",
         "plugins/detail.html",
         "assets/js/downloads.js",
         "_includes/macos-download.html",
@@ -37,9 +40,8 @@ def test_interactive_pages(tmp_path: Path) -> None:
         target = docs / name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(DOCS / name, target)
-    (docs / "index.rst").write_text(
-        "Alto\n====\n\n.. toctree::\n\n"
-        "   getting-started\n   plugins/detail\n   api/index\n",
+    (docs / "index.md").write_text(
+        "---\ntitle: Home\npermalink: /\n---\nWelcome to Alto.\n",
         encoding="utf-8",
     )
     package = tmp_path / "alto"
@@ -63,6 +65,12 @@ def test_interactive_pages(tmp_path: Path) -> None:
             check=True,
         )
         guide = (out / "getting-started/index.html").read_text("utf-8")
+        assert 'href="#" aria-current="page">Getting started</a>' in guide
+        breadcrumbs = guide.split('aria-label="Breadcrumb">')[1].split(
+            "</nav>",
+        )[0]
+        assert '<a href="../using-alto/">Using Alto</a>' in breadcrumbs
+        assert 'rel="prev" href="../using-alto/"' in guide
         assert re.search(
             r'<div data-platforms="windows">\s*'
             r'<h3 [^>]*id="windows-installer"',

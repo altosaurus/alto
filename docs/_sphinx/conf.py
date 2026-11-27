@@ -15,6 +15,7 @@ extensions = [
     "autoapi.extension",
     "api_reference",
     "guides",
+    "navigation",
 ]
 autoapi_dirs = ["../alto"]
 autoapi_generate_api_docs = False

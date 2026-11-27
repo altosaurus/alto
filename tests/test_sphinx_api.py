@@ -67,6 +67,10 @@ def result(value: int | None) -> int | None:
     subprocess.run(build, check=True)
     overview = out / "api/alto.example/index.html"
     detail = overview.parent / "function-result/index.html"
+    home = out / "index.html"
+    assert 'href="api/alto.example/function-result/"' in home.read_text(
+        "utf-8",
+    )
     html = detail.read_text(encoding="utf-8")
     table = ET.fromstring(
         html[html.index("<table") : html.index("</table>") + len("</table>")],
@@ -89,4 +93,5 @@ def result(value: int | None) -> int | None:
     module.write_text(intro, encoding="utf-8")
     subprocess.run(build, check=True)
     assert "function-result" not in overview.read_text(encoding="utf-8")
+    assert "function-result" not in home.read_text("utf-8")
     assert not detail.exists()

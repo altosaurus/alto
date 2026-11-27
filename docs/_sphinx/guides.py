@@ -83,23 +83,7 @@ def render_liquid(app: Sphinx, page: dict, body: str) -> str:
         digest = hashlib.sha256(script.read_bytes()).hexdigest()[:12]
         body = body.replace("site.time | date: '%s'", "'" + digest + "'")
     if "category-pages.html" in templates:
-        site["pages"] = []
-        pages = [
-            app.env.doc2path(doc)
-            for doc in app.env.found_docs
-            if not doc.startswith("api/")
-            and app.env.doc2path(doc).suffix in {".md", ".html"}
-        ]
-        # During the parallel builds the API index still supplies its
-        # shared navigation title and order in Jekyll front matter.
-        pages.append(app.srcdir / "api/index.md")
-        for path in sorted(pages):
-            app.env.note_dependency(path)
-            meta = yaml.safe_load(
-                path.read_text(encoding="utf-8").split("---", 2)[1],
-            )
-            if "nav_order" in meta:
-                site["pages"].append({**meta, "url": meta["permalink"]})
+        site["pages"] = app.env.alto_nav_index
         body = body.replace(' | where_exp: "p", "p.nav_order"', "")
     if "component-shot.html" in templates:
         data = app.srcdir / "_data/launch_components.json"
@@ -244,20 +228,18 @@ def prepare_guide(app: Sphinx, docname: str, source: list[str]) -> None:
         lambda m: "\n```{raw} html\n" + m[0] + "\n```\n",
         body,
     )
-    if docname == "index":
-        children = sorted(
-            p
-            for p in app.env.found_docs
-            if p != "index" and not p.startswith("api/")
-        )
+    children = app.env.alto_guide_children.get(docname, [])
+    if children:
         body += (
-            "\n\n```{toctree}\n:hidden:\n:glob:\n\n"
-            + "\n".join([*children, "api/index"])
+            "\n\n```{toctree}\n:hidden:\n\n"
+            + "\n".join("/" + child for child in children)
             + "\n```\n"
         )
     # Keep the section ID independent of IDs used by interactive HTML,
     # including the plugin-details element populated by the catalog.
-    label = "{#plugin-detail-page}\n" if docname == "plugins/detail" else ""
+    label = ""
+    if docname == "plugins/detail":
+        label = "---\norphan: true\n---\n{#plugin-detail-page}\n"
     source[0] = label + "# " + page["title"] + "\n\n" + body
 
 

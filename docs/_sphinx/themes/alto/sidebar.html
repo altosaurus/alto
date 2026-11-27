@@ -1,0 +1,24 @@
+{% macro page_link(doc, label) -%}
+<a class="row" href="{{ pathto(doc) }}"{% if doc == pagename %} aria-current="page"{% endif %}>{{ label|e }}</a>
+{%- endmacro %}
+
+{% macro entry(doc, parent) -%}
+  {%- set title, children = sidebar_tree[doc] -%}
+  {%- set label = title.removeprefix(sidebar_tree[parent][0] ~ '.') if doc.startswith('api/') else title -%}
+  {%- if children -%}
+    <li><div class="{{ 'nav-head' if parent == root_doc else 'nav-row' }}">
+      {{ page_link(doc, label) }}
+      <button type="button" class="nav-toggle" data-category="{{ label|e }}" aria-controls="nav-{{ doc|e }}" aria-expanded="true" aria-label="Collapse {{ label|e }}" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-{{ doc|e }}">
+      {%- for child in children %}{{ entry(child, doc) }}{% endfor -%}
+    </ul></li>
+  {%- else -%}
+    <li>{{ page_link(doc, label) }}</li>
+  {%- endif -%}
+{%- endmacro %}
+<ul class="nav-list">
+  <li>{{ page_link(root_doc, sidebar_tree[root_doc][0]) }}</li>
+  {% for doc in sidebar_tree[root_doc][1] %}{{ entry(doc, root_doc) }}{% endfor %}
+</ul>
