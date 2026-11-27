@@ -18,6 +18,7 @@ from PySide6.QtCore import (
     Qt,
 )
 from PySide6.QtGui import (
+    QColor,
     QKeyEvent,
     QMouseEvent,
     QWheelEvent,
@@ -40,7 +41,8 @@ from alto.theory.scales import format_key_signature
 from alto.ui import exercise_settings as es
 from alto.ui import motion
 from alto.ui import settings_panel as sp
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.colors import CORRECT_ANSWER_COLOR
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.home import (
     EXERCISE_ICONS,
     ExerciseCard,
@@ -481,7 +483,7 @@ def test_the_wheel_over_the_music_or_the_answer_button_moves_the_circle(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(1))
+    view = ExercisePage(KeySignatureConstruction(), rng=random.Random(1))
     fork = view.question_view.editor
     assert isinstance(fork, KeyFork)
     view.show()
@@ -499,7 +501,10 @@ def test_the_wheel_over_the_music_or_the_answer_button_moves_the_circle(
     assert view.question_view.staff is not None
     assert view.eventFilter(view.question_view.staff, turn) and fork.value == 1
     assert (
-        view.eventFilter(view.answer_controls.placement.answer_button, turn)
+        view.eventFilter(
+            view.control_area.answers.placement.answer_button,
+            turn,
+        )
         and fork.value == 2
     )
     fork.hide()
@@ -639,7 +644,7 @@ def test_the_screen_shows_a_blank_staff_with_the_key_name_and_the_fork(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    view = ExercisePage(KeySignatureConstruction(), rng=random.Random(4))
     fork = view.question_view.editor
     assert isinstance(fork, KeyFork)
     view.resize(900, 700)
@@ -653,16 +658,16 @@ def test_the_screen_shows_a_blank_staff_with_the_key_name_and_the_fork(
     )
     assert (
         view.question_view.staff.caption == q.caption
-        and view.prompt.isHidden()
+        and view.question_view.prompt.isHidden()
     )  # the name is in the music, not above it
     assert (
         fork.isVisibleTo(view)
         and fork.value == 0
-        and view.answer_controls.placement.answer_button.isVisibleTo(view)
+        and view.control_area.answers.placement.answer_button.isVisibleTo(view)
     )
-    assert view.answer_controls.placement.answer_button.text() == "Answer"
+    assert view.control_area.answers.placement.answer_button.text() == "Answer"
     assert (
-        view.answer_controls.buttons == []
+        view.control_area.answers.buttons == []
         and view.question_view.editor is not None
     )
 
@@ -677,10 +682,12 @@ def test_other_exercises_do_not_show_the_fork(app: QApplication) -> None:
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(KeySignatures(), rng=random.Random(4))
+    view = ExercisePage(KeySignatures(), rng=random.Random(4))
     view.show()
     assert view.findChild(KeyFork) is None
-    assert not view.answer_controls.placement.answer_button.isVisibleTo(view)
+    assert not view.control_area.answers.placement.answer_button.isVisibleTo(
+        view,
+    )
 
 
 def test_fork_follows_the_question_type(
@@ -697,12 +704,12 @@ def test_fork_follows_the_question_type(
     monkeypatch : pytest.MonkeyPatch
         Supply alternating construction and identification questions.
     """
-    view = ExerciseView(KeySignatures(), rng=random.Random(4))
+    view = ExercisePage(KeySignatures(), rng=random.Random(4))
     choice = view.question
     assert choice is not None and view.findChild(KeyFork) is None
     build = KeySignatureConstruction().generate(random.Random(1))
     questions = iter((build, choice, build))
-    monkeypatch.setattr(view, "_pick_question", questions.__next__)
+    monkeypatch.setattr(view.controller, "_pick_question", questions.__next__)
     view.next_question()
     fork = view.question_view.editor
     assert isinstance(fork, KeyFork)
@@ -724,7 +731,7 @@ def test_the_staff_follows_the_fork(app: QApplication) -> None:
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    view = ExercisePage(KeySignatureConstruction(), rng=random.Random(4))
     fork = view.question_view.editor
     assert isinstance(fork, KeyFork)
     q = view.question
@@ -750,7 +757,7 @@ def test_the_staff_keeps_its_width_whatever_signature_is_picked(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    view = ExercisePage(KeySignatureConstruction(), rng=random.Random(4))
     fork = view.question_view.editor
     assert isinstance(fork, KeyFork)
     view.resize(1400, 800)
@@ -767,7 +774,7 @@ def test_the_staff_keeps_its_width_whatever_signature_is_picked(
             ),
         )
     assert len(widths) == 1
-    other = ExerciseView(KeySignatures(), rng=random.Random(4))
+    other = ExercisePage(KeySignatures(), rng=random.Random(4))
     assert other.question_view.staff.key_room == 0
 
 
@@ -790,21 +797,21 @@ def test_a_right_signature_is_scored_and_moves_on_with_no_sound(
     played = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(
-        "alto.ui.exercise_view.sounds.play_notes",
+        "alto.ui.exercise_feedback.sounds.play_notes",
         lambda notes: played.append(notes),
     )
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(
-        "alto.ui.exercise_view.sounds.play_correct",
+        "alto.ui.exercise_feedback.sounds.play_correct",
         lambda streak: played.append(streak),
     )
-    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    view = ExercisePage(KeySignatureConstruction(), rng=random.Random(4))
     fork = view.question_view.editor
     assert isinstance(fork, KeyFork)
     first = view.question
     assert first is not None
     fork.set_value(first.key)
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     assert (
         view.session.answered
         and (view.session.correct, view.session.total, view.session.streak)
@@ -812,9 +819,9 @@ def test_a_right_signature_is_scored_and_moves_on_with_no_sound(
         and fork.locked
     )
     # A second press does not score again.
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     assert view.session.total == 1
-    view._advance.stop()
+    view.controller._advance.stop()
     view.next_question()
     assert (
         view.question is not first
@@ -837,13 +844,13 @@ def test_wrong_signature_counts_against_first_try_and_fork(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    view = ExercisePage(KeySignatureConstruction(), rng=random.Random(4))
     fork = view.question_view.editor
     assert isinstance(fork, KeyFork)
     q = view.question
     assert q is not None
     fork.set_value(q.key + 1 if q.key < 7 else q.key - 1)
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     assert (
         view.session.missed
         and not view.session.answered
@@ -859,13 +866,13 @@ def test_wrong_signature_counts_against_first_try_and_fork(
         and view.question_view.staff.key == 0
     )
     fork.set_value(q.key)
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     assert (
         view.session.answered
         and view.session.total == 1
         and view.session.correct == 0
     )  # only the first try counts toward the score
-    view._advance.stop()
+    view.controller._advance.stop()
 
 
 def test_every_try_is_recorded_with_the_signature_that_was_built(
@@ -882,7 +889,7 @@ def test_every_try_is_recorded_with_the_signature_that_was_built(
     """
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
-    view = ExerciseView(
+    view = ExercisePage(
         KeySignatureConstruction(),
         rng=random.Random(4),
         learner=learner,
@@ -893,11 +900,11 @@ def test_every_try_is_recorded_with_the_signature_that_was_built(
     assert q is not None
     wrong = q.key + 1 if q.key < 7 else q.key - 1
     fork.set_value(wrong)
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     motion.settle()
     fork.set_value(q.key)
-    view.answer_controls.placement.answer_button.click()
-    view._advance.stop()
+    view.control_area.answers.placement.answer_button.click()
+    view.controller._advance.stop()
     rows = db.conn.execute(
         "SELECT answer, correct FROM attempts ORDER BY id",
     ).fetchall()
@@ -919,7 +926,7 @@ def test_a_changed_setting_gives_a_fresh_blank_question(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    view = ExercisePage(KeySignatureConstruction(), rng=random.Random(4))
     fork = view.question_view.editor
     assert isinstance(fork, KeyFork)
     fork.set_value(5)
@@ -960,7 +967,7 @@ def test_the_settings_pane_saves_under_its_own_name(app: QApplication) -> None:
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    view = ExercisePage(KeySignatureConstruction(), rng=random.Random(4))
     pane = view.settings_panel
     assert (
         isinstance(pane, sp.KeySignatureSettingsPanel)
@@ -987,3 +994,12 @@ def test_the_settings_pane_saves_under_its_own_name(app: QApplication) -> None:
         and -6 not in settings.key_construction.keys
     )
     assert settings.key_signatures.keys == set(range(-7, 8))
+
+
+@pytest.mark.usefixtures("app")
+def test_standalone_fork_flash_reaches_feedback_color() -> None:
+    """Finish the fade on the feedback color."""
+    fork = KeyFork()
+    animation = fork.flash()
+    animation.setCurrentTime(animation.duration())
+    assert fork._marker_color == QColor(CORRECT_ANSWER_COLOR)

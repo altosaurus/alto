@@ -28,7 +28,7 @@ from alto.theory.beat_placement import (
 )
 from alto.theory.pitch import Note
 from alto.ui.anki_exporter import card_fields
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.meter_staff import BeatPlacementStaff, MeterStaff
 from alto.ui.staff import StaffWidget
 
@@ -136,13 +136,13 @@ def test_tuplets_share_exact_beats_in_notation_and_playback(
     settings.beat_note_types["beatConstruction"] = {note_type}
     exercise = BeatConstruction()
     assert "A bracket marked 2" in exercise.instructions()
-    view = ExerciseView(exercise, rng=random.Random(seed))
+    view = ExercisePage(exercise, rng=random.Random(seed))
     view.show()
     app.processEvents()
     q = view.question
     assert q is not None and exercise.settings_signature() != ""
     assert Question.from_dict(q.to_dict()).item_key() == q.item_key()
-    score = view.beat_placement
+    score = view.question_view.beat_placement
     kind = "triplet" if count == 3 else "duplet"
     assert kind in score.accessibleDescription()
     bracket = Mock(wraps=score._draw_tuplet)
@@ -168,7 +168,7 @@ def test_tuplets_share_exact_beats_in_notation_and_playback(
                 ).x() == score._measure_geometry(bar).x(symbol.space)
     play = Mock()
     monkeypatch.setattr(sounds, "play_rhythm", play)
-    view._answer_playback.play_rhythm(q.rhythm, quarter_ms=601)
+    view.feedback.playback.play_rhythm(q.rhythm, quarter_ms=601)
     end = Fraction(0)
     ms = 0
     for token, duration in zip(q.rhythm, play.call_args.args[0], strict=True):
@@ -195,8 +195,8 @@ def test_tuplet_and_dotted_rests_keep_their_written_durations(
     monkeypatch : pytest.MonkeyPatch
         Capture the bracket and timed playback.
     """
-    view = ExerciseView(BeatConstruction(), rng=random.Random(1))
-    score = view.beat_placement
+    view = ExercisePage(BeatConstruction(), rng=random.Random(1))
+    score = view.question_view.beat_placement
     rhythm = (
         "triplet-eighth",
         "triplet-eighth-rest",
@@ -214,7 +214,7 @@ def test_tuplet_and_dotted_rests_keep_their_written_durations(
     assert "Dotted quarter rest" in score.accessibleDescription()
     playback = Mock()
     monkeypatch.setattr(sounds, "play_rhythm", playback)
-    view._answer_playback.play_rhythm(rhythm, quarter_ms=600)
+    view.feedback.playback.play_rhythm(rhythm, quarter_ms=600)
     assert playback.call_args.args[0] == (200, 200, 200, 1200, 900, 900)
     assert playback.call_args.kwargs["levels"] == (1, 0, 1, 1, 0, 1)
     view.close()
@@ -347,20 +347,20 @@ def test_view_rejects_extra_marks_and_grades_a_correct_set(
     app : QApplication
         Qt event loop used by the exercise.
     """
-    view = ExerciseView(BeatConstruction(), rng=random.Random(19))
+    view = ExercisePage(BeatConstruction(), rng=random.Random(19))
     view.show()
     app.processEvents()
     question = view.question
     assert question is not None
-    score = view.beat_placement
+    score = view.question_view.beat_placement
     assert score._signature_visible
     assert len(score._measures) == 2
-    controls = view.answer_controls.placement
+    controls = view.control_area.answers.placement
     assert controls.answer_button.parentWidget() is controls
     assert not controls.answer_button.isEnabled()
     assert (
-        not view.answer_controls.buttons
-        and view.answer_controls.placement.place_button.isHidden()
+        not view.control_area.answers.buttons
+        and view.control_area.answers.placement.place_button.isHidden()
     )
     for slot in sorted(beat_positions(BEAT_METERS[question.answer]) | {1}):
         QTest.mouseClick(
@@ -368,10 +368,10 @@ def test_view_rejects_extra_marks_and_grades_a_correct_set(
             Qt.MouseButton.LeftButton,
             pos=score.position(slot).toPoint(),
         )
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     assert view.session.missed and score.feedback is False
     assert not score.grab().isNull()
-    assert not view.answer_controls.placement.answer_button.isEnabled()
+    assert not view.control_area.answers.placement.answer_button.isEnabled()
     view.next_question()
     question = view.question
     assert question is not None
@@ -382,7 +382,7 @@ def test_view_rejects_extra_marks_and_grades_a_correct_set(
             Qt.MouseButton.LeftButton,
             pos=score.position(slot).toPoint(),
         )
-    view.answer_controls.placement.undo_button.click()
+    view.control_area.answers.placement.undo_button.click()
     last = max(beat_positions(BEAT_METERS[question.answer]))
     assert last not in score.marks
     QTest.mouseClick(
@@ -459,29 +459,29 @@ def test_correct_answer_taps_the_written_rhythm(
     """
     playback = Mock()
     monkeypatch.setattr(sounds, "play_rhythm", playback)
-    view = ExerciseView(BeatConstruction(), rng=random.Random(seed))
+    view = ExercisePage(BeatConstruction(), rng=random.Random(seed))
     view.show()
     app.processEvents()
     assert view.settings_panel is not None
     view.settings_panel.next_question_mode = mode
     assert view.question is not None and view.question.answer == answer
-    score = view.beat_placement
+    score = view.question_view.beat_placement
     QTest.mouseClick(
         score,
         Qt.MouseButton.LeftButton,
         pos=score.position(1).toPoint(),
     )
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     playback.assert_not_called()
     view.next_question()
     # Restore the seeded question before grading.
-    view.rng.seed(seed)
+    view.controller.rng.seed(seed)
     view.next_question()
     assert view.question is not None and view.question.answer == answer
     strong = beat_positions(BEAT_METERS[answer])
     score.marks = sorted(strong)
     score.changed.emit()
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     playback.assert_called_once()
     durations = playback.call_args.args[0]
     levels = playback.call_args.kwargs["levels"]
@@ -501,11 +501,11 @@ def test_correct_answer_taps_the_written_rhythm(
         audible = mode != "Immediately" and not value.endswith("-rest")
         assert score.playback_column == (index if audible else None)
     if mode == "After Animation":
-        assert not view._advance.isActive()
+        assert not view.controller._advance.isActive()
     step(None)
     assert score.playback_column is None
-    assert view.next_button.isVisible() == (mode == "Wait")
-    assert view._advance.isActive() == (mode != "Wait")
+    assert view.control_area.next_button.isVisible() == (mode == "Wait")
+    assert view.controller._advance.isActive() == (mode != "Wait")
     view.close()
 
 
@@ -520,22 +520,26 @@ def test_note_highlights_skip_rests_and_cross_the_barline(
     app : QApplication
         Qt application used by rhythm notation.
     """
-    view = ExerciseView(BeatConstruction(), rng=random.Random(1))
+    view = ExercisePage(BeatConstruction(), rng=random.Random(1))
     assert view.question is not None
     rhythm = ("quarter", "half", "half", "eighth-rest", "eighth")
-    view.question = replace(view.question, answer="3/4", rhythm=rhythm)
-    score = view.beat_placement
-    score.reset(rhythm, meter=(3, 4))
+    view.controller.question = replace(
+        view.question,
+        answer="3/4",
+        rhythm=rhythm,
+    )
+    view.show_question(view.controller.question)
+    score = view.question_view.beat_placement
     score.marks = sorted(beat_positions(BEAT_METERS["3/4"]))
     score.changed.emit()
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     assert view.session.answered
     columns = []
     for index in range(len(rhythm)):
-        view._light_answer_notes(index)
+        view.question_view.light_answer_notes(index)
         columns.append(score.playback_column)
     assert columns == [0, 1, 2, None, 4]
-    view._light_answer_notes(None)
+    view.question_view.light_answer_notes(None)
     assert score.playback_column is None
     view.close()
 
@@ -555,14 +559,14 @@ def test_muted_rhythm_still_highlights_and_clears_on_exit(
         Temporarily mute exercise sounds.
     """
     monkeypatch.setattr(sounds, "enabled", False)
-    view = ExerciseView(BeatConstruction(), rng=random.Random(19))
+    view = ExercisePage(BeatConstruction(), rng=random.Random(19))
     view.show()
     app.processEvents()
     assert view.question is not None
-    score = view.beat_placement
+    score = view.question_view.beat_placement
     score.marks = sorted(beat_positions(BEAT_METERS[view.question.answer]))
     score.changed.emit()
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     assert score.playback_column == 0
     view.hide()
     assert score.playback_column is None

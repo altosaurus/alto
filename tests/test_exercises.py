@@ -21,6 +21,7 @@ from alto.exercises.library import (
     NoteConstruction,
     NoteNames,
 )
+from alto.theory.note_naming import spell
 from alto.theory.pitch import (
     Note,
     key_accidental,
@@ -274,7 +275,7 @@ def test_note_names_key_signature_values_and_naming() -> None:
                 assert q.answer in q.choices and len(set(q.choices)) == len(
                     q.choices,
                 )
-                assert q.answer == settings.spell(note, naming=naming)
+                assert q.answer == spell(note, naming=naming)
                 # with no explicit signs the key signature decides the
                 # accidental
                 if not accidentals:

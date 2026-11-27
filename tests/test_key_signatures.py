@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings
+from alto.audio import sounds
 from alto.exercises.base import Question
 from alto.exercises.library import (
     KeySignatures,
@@ -39,10 +40,7 @@ from alto.theory.scales import (
 from alto.ui import exercise_settings as es
 from alto.ui import motion
 from alto.ui import settings_panel as sp
-from alto.ui.exercise_view import (
-    ExerciseView,
-    sounds,
-)
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.store import store
 
@@ -281,15 +279,15 @@ def test_a_signature_is_drawn_and_a_right_answer_makes_no_sound(
     played = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(
-        "alto.ui.exercise_view.sounds.play_notes",
+        "alto.ui.exercise_feedback.sounds.play_notes",
         lambda notes: played.append(notes),
     )
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(
-        "alto.ui.exercise_view.sounds.play_correct",
+        "alto.ui.exercise_feedback.sounds.play_correct",
         lambda streak: played.append(streak),
     )
-    view = ExerciseView(KeySignatures(), rng=random.Random(3))
+    view = ExercisePage(KeySignatures(), rng=random.Random(3))
     q = view.question
     assert q is not None
     assert (
@@ -298,10 +296,10 @@ def test_a_signature_is_drawn_and_a_right_answer_makes_no_sound(
         and view.question_view.staff.clef == q.clef
     )
     next(
-        b for b in view.answer_controls.buttons if b.text() == q.answer
+        b for b in view.control_area.answers.buttons if b.text() == q.answer
     ).click()
     assert view.session.answered
-    view._advance.stop()
+    view.controller._advance.stop()
     assert played == []  # neither a tone nor the ordinary chime
 
 
@@ -325,26 +323,29 @@ def test_the_sound_button_is_a_global_mute_that_works_in_every_exercise(
     monkeypatch.setattr(sounds, "enabled", True)
     assert KeySignatures.has_sound is False and NoteNames.has_sound is True
     for exercise in (KeySignatures(), NoteNames()):
-        view = ExerciseView(exercise, rng=random.Random(3))
+        view = ExercisePage(exercise, rng=random.Random(3))
         assert (
-            view.sound_btn.isEnabled()
-            and view.sound_btn.toolTip().startswith("Sound on")
+            view.toolbar.sound_btn.isEnabled()
+            and view.toolbar.sound_btn.toolTip().startswith("Sound on")
         )
-        view.sound_btn.click()
-        assert not sounds.enabled and view.sound_btn.toolTip().startswith(
-            "Muted",
+        view.toolbar.sound_btn.click()
+        assert (
+            not sounds.enabled
+            and view.toolbar.sound_btn.toolTip().startswith(
+                "Muted",
+            )
         )
-        view.sound_btn.click()
+        view.toolbar.sound_btn.click()
         assert sounds.enabled
-    muted = ExerciseView(
+    muted = ExercisePage(
         KeySignatures(),
         rng=random.Random(3),
     )  # one exercise sees a mute made in another
     sounds.enabled = False
-    muted._show_sound_state()
+    muted.toolbar.set_sound_enabled(sounds.enabled)
     assert (
-        muted.sound_btn.toolTip().startswith("Muted")
-        and muted.sound_btn.isEnabled()
+        muted.toolbar.sound_btn.toolTip().startswith("Muted")
+        and muted.toolbar.sound_btn.isEnabled()
     )
 
 
@@ -541,7 +542,7 @@ def test_the_kind_of_scale_is_written_under_the_staff_not_above_it(
     """
     asked = questions(200)
     assert {q.caption for q in asked} == {"_ Major", "_ minor"}
-    view = ExerciseView(KeySignatures(), rng=random.Random(1))
+    view = ExercisePage(KeySignatures(), rng=random.Random(1))
     view.resize(900, 600)
     view.show()
     for _ in range(30):
@@ -549,7 +550,8 @@ def test_the_kind_of_scale_is_written_under_the_staff_not_above_it(
         assert q is not None
         assert (
             view.question_view.staff.caption == q.caption
-            and view.prompt.isHidden() == bool(q.caption or not q.prompt)
+            and view.question_view.prompt.isHidden()
+            == bool(q.caption or not q.prompt)
         )
         view.next_question()
 

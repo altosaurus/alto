@@ -42,7 +42,7 @@ from alto.ui.circle import (
     wedge_middle,
 )
 from alto.ui.circle_colors import SchemeEditor
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.store import store
 
 MINE = record_of(
@@ -371,7 +371,7 @@ def test_colors_page_chooses_creates_edits_and_deletes_and_all(
         """
         return settings.circle.scheme
 
-    view = ExerciseView(CircleOfFifths(), rng=random.Random(4))
+    view = ExercisePage(CircleOfFifths(), rng=random.Random(4))
     pane = view.settings_panel
     assert (
         isinstance(pane, sp.CircleSettingsPanel)
@@ -470,15 +470,18 @@ def test_opening_colors_pages_never_makes_exercise_or_window(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(CircleOfFifths(), rng=random.Random(4))
+    view = ExercisePage(CircleOfFifths(), rng=random.Random(4))
     pane = view.settings_panel
-    assert isinstance(pane, sp.CircleSettingsPanel) and view.gear is not None
+    assert (
+        isinstance(pane, sp.CircleSettingsPanel)
+        and view.toolbar.gear is not None
+    )
     view.resize(900, 600)
     view.show()
     app.processEvents()
     smallest = view.minimumSizeHint().height()
     size = view.size()
-    view.gear.setChecked(True)
+    view.toolbar.gear.setChecked(True)
     app.processEvents()
     for page in (0, 1, 2, 3):
         pane.stack.setCurrentIndex(page)

@@ -77,6 +77,7 @@ from alto.settings import (
     NoteNameSettings,
     key_name,
 )
+from alto.theory.note_naming import DEGREE_NAMINGS
 from alto.theory.pitch import ACCIDENTAL_SYMBOLS
 from alto.theory.scales import INVERSION_NAMES
 from alto.ui.circle_colors import (
@@ -228,7 +229,7 @@ def _note_naming_page(
         radio.toggled.connect(
             lambda checked, n=naming: select(checked, naming=n),
         )
-        target = degree_layout if naming in settings.DEGREE_NAMINGS else layout
+        target = degree_layout if naming in DEGREE_NAMINGS else layout
         target.addWidget(radio)
     if isinstance(cfg, NoteNameSettings):
         scale = radios["scale"] = QRadioButton("Scale")

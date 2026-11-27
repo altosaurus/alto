@@ -85,10 +85,10 @@ and to see it in a window:
 
 ```python
 from PySide6.QtWidgets import QApplication
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 
 app = QApplication([])
-view = ExerciseView(SharpsAndFlats(), rng=random.Random(1))
+view = ExercisePage(SharpsAndFlats(), rng=random.Random(1))
 view.show()
 app.exec()
 ```
@@ -179,7 +179,7 @@ Write the tests that the existing exercises have:
   question for G major shows one sharp).
 - **A settings test:** change a setting in the test (tests start from the defaults and restore them afterwards) and check the
   questions follow it.
-- **A screen test:** build an `ExerciseView(YourExercise(), rng=random.Random(1))`, click an answer, and check the score. The
+- **A screen test:** build an `ExercisePage(YourExercise(), rng=random.Random(1))`, click an answer, and check the score. The
   `tests/test_exercise_view.py` helpers `view_of` and `asked` do the work; set `sounds.enabled = False` in any test that submits
   an answer, or it will try to play.
 - **A docstring** with an example for every function, which `tests/test_docstrings.py` demands and `pytest` then runs.

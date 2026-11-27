@@ -52,8 +52,8 @@ from alto.learning.backup import app_version
 from alto.ui import icons, motion
 from alto.ui import main_window as mw
 from alto.ui.colors import blend_name
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import save_keyboard_intervals
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
     CARD_W,
     EXERCISE_ICONS,
@@ -786,7 +786,10 @@ def test_without_profile_nothing_recorded_and_history_buttons(
     assert w._overlay is None  # all three need a profile
     w.open_exercise(REGISTRY[0])
     current = w.stack.currentWidget()
-    assert isinstance(current, ExerciseView) and current.learner is None
+    assert (
+        isinstance(current, ExercisePage)
+        and current.controller.learner is None
+    )
     w.close()
 
 
@@ -808,7 +811,10 @@ def test_choosing_an_exercise_shows_it_opens_the_list_and_titles_the_window(
     for cls in REGISTRY[:3]:
         window.open_exercise(cls)
         view = window.stack.currentWidget()
-        assert isinstance(view, ExerciseView) and type(view.exercise) is cls
+        assert (
+            isinstance(view, ExercisePage)
+            and type(view.controller.exercise) is cls
+        )
         assert (
             window.title_label.text() == cls.name
             and window.nav.currentItem().data(Qt.ItemDataRole.UserRole) is cls
@@ -1064,7 +1070,7 @@ def test_switching_profile_changes_who_is_practicing_and_goes_home(
     window.switch_profile()
     assert isinstance(
         window.stack.currentWidget(),
-        ExerciseView,
+        ExercisePage,
     )  # the same profile again: stay where you are
 
 
@@ -1507,7 +1513,7 @@ def test_the_exercise_list_item_is_a_list_widget_entry(
         if window.nav.item(i).data(Qt.ItemDataRole.UserRole)
     )
     window.nav.itemClicked.emit(row)
-    assert isinstance(window.stack.currentWidget(), ExerciseView)
+    assert isinstance(window.stack.currentWidget(), ExercisePage)
 
 
 # -- starting the app
@@ -1720,7 +1726,7 @@ def test_the_app_quits_quietly_if_no_profile_is_chosen(
     assert entry.main() == 0
 
 
-def retained_exercise_page(window: MainWindow) -> ExerciseView:
+def retained_exercise_page(window: MainWindow) -> ExercisePage:
     """
     Return the retained exercise view for a window under test.
 
@@ -1731,12 +1737,12 @@ def retained_exercise_page(window: MainWindow) -> ExerciseView:
 
     Returns
     -------
-    ExerciseView
+    ExercisePage
         The retained exercise view.
     """
     # noinspection PyProtectedMember
     page = window._exercise_page
-    assert isinstance(page, ExerciseView)
+    assert isinstance(page, ExercisePage)
     return page
 
 
@@ -1770,11 +1776,11 @@ def test_theme_changes_preserve_the_exercise_settings_pane(
     save_keyboard_intervals(cfg)
     window.open_exercise(KeyboardIntervals)
     view = retained_exercise_page(window)
-    assert isinstance(view, ExerciseView) and view.gear is not None
+    assert isinstance(view, ExercisePage) and view.toolbar.gear is not None
     panel = view.settings_panel
     assert isinstance(panel, KeyboardIntervalSettingsPanel)
     panel.stack.setCurrentIndex(page_index)
-    view.gear.setChecked(opened)
+    view.toolbar.gear.setChecked(opened)
     if opened:
         view._pane_anim.setCurrentTime(view._pane_anim.duration())
     app.processEvents()
@@ -1796,10 +1802,13 @@ def test_theme_changes_preserve_the_exercise_settings_pane(
             fresh = retained_exercise_page(window)
             assert fresh is not view
             assert fresh.settings_state() == before
-            assert fresh.gear is not None and fresh.gear.isChecked() == opened
-            assert fresh.pane.isVisible() == opened
-            assert fresh.pane.maximumWidth() == (
-                fresh.PANE_WIDTH if opened else 0
+            assert (
+                fresh.toolbar.gear is not None
+                and fresh.toolbar.gear.isChecked() == opened
+            )
+            assert fresh.settings_pane.isVisible() == opened
+            assert fresh.settings_pane.maximumWidth() == (
+                fresh.settings_panel.PANE_WIDTH if opened else 0
             )
             view = fresh
     finally:

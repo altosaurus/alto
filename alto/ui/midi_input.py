@@ -6,6 +6,7 @@ import re
 import subprocess
 
 from PySide6.QtCore import QProcess, Signal
+from PySide6.QtGui import QHideEvent
 from PySide6.QtWidgets import QMenu, QToolButton
 
 _PORT = re.compile(r"\s*(\d+:\d+)\s+(.+)")
@@ -146,3 +147,15 @@ class MidiInput(QToolButton):
             self._process.waitForFinished(1000)
         if self._process.isOpen():
             self._process.readAllStandardOutput()
+
+    def hideEvent(self, event: QHideEvent) -> None:
+        """
+        Release the MIDI connection when its input control disappears.
+
+        Parameters
+        ----------
+        event : QHideEvent
+            Notification that the control is hidden.
+        """
+        self.disconnect_port()
+        super().hideEvent(event)

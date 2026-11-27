@@ -24,8 +24,8 @@ from alto.exercises.library import IntervalNames
 from alto.theory.pitch import QUALITY_NAMES, Interval, key_accidental
 from alto.ui import motion
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import load_intervals
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.settings_panel import IntervalSettingsPanel
 from alto.ui.staff import StaffWidget
@@ -196,12 +196,15 @@ def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
     cfg = settings.intervals
     cfg.intervals = {"M3", "P5", "A4"}
     cfg.button_count = 2
-    view = ExerciseView(IntervalNames(), rng=random.Random(3))
+    view = ExercisePage(IntervalNames(), rng=random.Random(3))
     view.setStyleSheet(app_style(view.palette()))
     view.show()
     panel = view.settings_panel
-    assert isinstance(panel, IntervalSettingsPanel) and view.gear is not None
-    view.gear.click()
+    assert (
+        isinstance(panel, IntervalSettingsPanel)
+        and view.toolbar.gear is not None
+    )
+    view.toolbar.gear.click()
     view._pane_anim.setCurrentTime(view._pane_anim.duration())
     row = panel.inversions_row
     assert not row.isOn()
@@ -213,25 +216,29 @@ def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
             and row.switch.isVisibleTo(panel)
             and row.width() >= row.minimumSizeHint().width()
         )
-    original = view.exercise.settings_signature()
+    original = view.controller.exercise.settings_signature()
     assert "inversions" not in original
     row.click()
-    assert cfg.inversions and view.exercise.settings_signature() != original
+    assert (
+        cfg.inversions
+        and view.controller.exercise.settings_signature() != original
+    )
     q = view.question
     assert (
         q is not None
         and len(q.choices) == 2
         and set(q.choices) <= {"m6", "P4", "d5"}
     )
-    assert view.prompt.text() == q.prompt
-    view.answer_controls.buttons[q.choices.index(q.answer)].click()
+    assert view.question_view.prompt.text() == q.prompt
+    view.control_area.answers.buttons[q.choices.index(q.answer)].click()
     assert view.session.answered
     cfg.inversions = False
     load_intervals()
     assert cfg.inversions and Question.from_dict(q.to_dict()).check(q.answer)
     row.click()
     assert (
-        not cfg.inversions and view.exercise.settings_signature() == original
+        not cfg.inversions
+        and view.controller.exercise.settings_signature() == original
     )
     assert set(view.question.choices) <= cfg.intervals
     view.close()
@@ -267,7 +274,7 @@ def test_interval_playback_spacing(
     settings.intervals.intervals = {"M3"}
     settings.intervals.displays = {display}
     settings.intervals.directions = {"descending"}
-    view = ExerciseView(IntervalNames())
+    view = ExercisePage(IntervalNames())
     q = view.question
     assert q is not None
     feedback = q.staff
@@ -288,13 +295,13 @@ def test_interval_playback_spacing(
     with patch.object(sounds, "_play_sequence") as play:
         next(
             button
-            for button in view.answer_controls.buttons
+            for button in view.control_area.answers.buttons
             if button.text() == q.answer
         ).click()
         on_step = play.call_args.kwargs["on_step"]
         assert (
             not view.question_view.staff.column_colors
-            and not view._advance.isActive()
+            and not view.controller._advance.isActive()
         )
         for index, notes in enumerate(feedback):
             on_step(index)
@@ -305,12 +312,12 @@ def test_interval_playback_spacing(
             )
             assert (
                 view.question_view.staff.note_color is None
-                and not view._advance.isActive()
+                and not view.controller._advance.isActive()
             )
         on_step(None)
         assert (
             not view.question_view.staff.column_colors
-            and view._advance.isActive()
+            and view.controller._advance.isActive()
         )
         next(
             button
@@ -343,13 +350,13 @@ def test_new_interval_question_stops_previous_highlight(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(IntervalNames())
+    view = ExercisePage(IntervalNames())
     q = view.question
     assert q is not None
     with patch.object(sounds, "_play_sequence") as play:
         next(
             button
-            for button in view.answer_controls.buttons
+            for button in view.control_area.answers.buttons
             if button.text() == q.answer
         ).click()
         play.call_args.kwargs["on_step"](0)
@@ -360,7 +367,9 @@ def test_new_interval_question_stops_previous_highlight(
     assert (
         view.question is not q and not view.question_view.staff.column_colors
     )
-    assert not view._advance.isActive() and not view.session.answered
+    assert (
+        not view.controller._advance.isActive() and not view.session.answered
+    )
     view.close()
 
 
@@ -376,13 +385,16 @@ def test_display_choices_stay_together_as_the_exercise_grows(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(IntervalNames())
+    view = ExercisePage(IntervalNames())
     view.setStyleSheet(app_style(view.palette()))
     view.resize(900, 480)
     view.show()
     panel = view.settings_panel
-    assert isinstance(panel, IntervalSettingsPanel) and view.gear is not None
-    view.gear.click()
+    assert (
+        isinstance(panel, IntervalSettingsPanel)
+        and view.toolbar.gear is not None
+    )
+    view.toolbar.gear.click()
     view._pane_anim.setCurrentTime(view._pane_anim.duration())
     panel.display_row.click()
     assert panel.stack._slide is not None
@@ -497,10 +509,10 @@ def test_accidental_picker_persistence_and_impossible_interval(
     cfg = settings.intervals
     cfg.clefs, cfg.ranges = {"treble"}, {"treble": (28, 30)}  # C4 through E4
     cfg.intervals, cfg.button_mode = {"m3", "M3"}, "all"
-    view = ExerciseView(IntervalNames())
+    view = ExercisePage(IntervalNames())
     view.setStyleSheet(app_style(view.palette()))
     view.show()
-    view.gear.click()
+    view.toolbar.gear.click()
     view._pane_anim.setCurrentTime(view._pane_anim.duration())
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
@@ -544,7 +556,7 @@ def test_accidental_picker_persistence_and_impossible_interval(
     load_intervals()
     assert (
         cfg.accidentals == {0, -1, -2}
-        and "accidentals" in view.exercise.settings_signature()
+        and "accidentals" in view.controller.exercise.settings_signature()
     )
     page = panel.stack.currentWidget()
     next(
@@ -567,7 +579,7 @@ def test_inline_melodic_direction_and_review_history(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(IntervalNames())
+    view = ExercisePage(IntervalNames())
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
     panel.display_row.click()
@@ -581,15 +593,15 @@ def test_inline_melodic_direction_and_review_history(
     assert (
         ascending.isChecked()
         and not ascending.isEnabled()
-        and view.exercise.settings_signature() == ""
+        and view.controller.exercise.settings_signature() == ""
     )
     descending.click()
-    mixed = view.exercise.settings_signature()
+    mixed = view.controller.exercise.settings_signature()
     assert ascending.isChecked() and descending.isChecked() and mixed
     load_intervals()
     assert settings.intervals.directions == {"ascending", "descending"}
     rng = random.Random(8)
-    questions = [view.exercise.generate(rng) for _ in range(20)]
+    questions = [view.controller.exercise.generate(rng) for _ in range(20)]
     assert {
         q.staff[0][0].diatonic < q.staff[1][0].diatonic for q in questions
     } == {False, True}
@@ -599,7 +611,7 @@ def test_inline_melodic_direction_and_review_history(
         and descending.isChecked()
         and not descending.isEnabled()
     )
-    descending_history = view.exercise.settings_signature()
+    descending_history = view.controller.exercise.settings_signature()
     assert (
         '"motion": "descending"' in descending_history
         and descending_history != mixed
@@ -608,9 +620,9 @@ def test_inline_melodic_direction_and_review_history(
     panel.display.boxes["Harmonic"].click()
     panel.display.boxes["Melodic"].click()
     assert not descending.isVisibleTo(display_page)
-    harmonic_history = view.exercise.settings_signature()
+    harmonic_history = view.controller.exercise.settings_signature()
     settings.intervals.directions = {"ascending"}
-    assert view.exercise.settings_signature() == harmonic_history
+    assert view.controller.exercise.settings_signature() == harmonic_history
     load_intervals()
     assert settings.intervals.directions == {"descending"}
     panel.display.boxes["Melodic"].click()
@@ -629,12 +641,12 @@ def test_settings_menu_and_saved_interval_question(app: QApplication) -> None:
         The shared Qt application.
     """
     exercise = IntervalNames()
-    view = ExerciseView(exercise, rng=random.Random(4))
+    view = ExercisePage(exercise, rng=random.Random(4))
     view.show()
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
-    assert view.gear is not None
-    view.gear.click()
+    assert view.toolbar.gear is not None
+    view.toolbar.gear.click()
     motion.settle()
     rows = (
         panel.clefs_row,
@@ -748,7 +760,7 @@ def test_quality_submenu_and_saved_switch(app: QApplication) -> None:
     cfg = settings.intervals
     cfg.button_mode = "all"
     cfg.intervals = {"A4", "M3", "P5", "d5", "m3", "m6"}
-    view = ExerciseView(IntervalNames())
+    view = ExercisePage(IntervalNames())
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
     original = view.question
@@ -765,7 +777,7 @@ def test_quality_submenu_and_saved_switch(app: QApplication) -> None:
     radios[2].click()
     assert [radio.isChecked() for radio in radios] == [False, False, True]
     assert view.question.prompt == "What is the interval quality?"
-    assert [b.text() for b in view.answer_controls.buttons] == [
+    assert [b.text() for b in view.control_area.answers.buttons] == [
         "A",
         "M",
         "P",
@@ -774,11 +786,11 @@ def test_quality_submenu_and_saved_switch(app: QApplication) -> None:
     ]
     assert all(
         b.accessibleName() == QUALITY_NAMES[b.text()]
-        for b in view.answer_controls.buttons
+        for b in view.control_area.answers.buttons
     )
     next(
         b
-        for b in view.answer_controls.buttons
+        for b in view.control_area.answers.buttons
         if QUALITY_NAMES[b.text()] == view.question.answer
     ).click()
     assert view.session.answered
@@ -794,17 +806,18 @@ def test_quality_submenu_and_saved_switch(app: QApplication) -> None:
     load_intervals()
     assert (
         cfg.quality_mode == "quality"
-        and '"quality_mode": "quality"' in view.exercise.settings_signature()
+        and '"quality_mode": "quality"'
+        in view.controller.exercise.settings_signature()
     )
     cfg.button_mode, cfg.button_count = "limited", 2
     view.next_question()
-    assert len(view.answer_controls.buttons) == 2
+    assert len(view.control_area.answers.buttons) == 2
     assert [
-        QUALITY_NAMES[b.text()] for b in view.answer_controls.buttons
+        QUALITY_NAMES[b.text()] for b in view.control_area.answers.buttons
     ] == view.question.choices
     next(
         b
-        for b in view.answer_controls.buttons
+        for b in view.control_area.answers.buttons
         if QUALITY_NAMES[b.text()] == view.question.answer
     ).click()
     assert view.session.answered
@@ -860,7 +873,7 @@ def test_interval_picker_tracks_active_staff_ranges(app: QApplication) -> None:
     cfg.ranges = {"treble": (28, 30), "bass": (21, 29)}
     cfg.intervals = {"M3", "M9", "P15"}
     cfg.button_mode = "all"
-    view = ExerciseView(IntervalNames())
+    view = ExercisePage(IntervalNames())
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
     boxes = panel.interval_list.boxes
@@ -918,12 +931,12 @@ def test_limited_interval_buttons_use_quality_rows(app: QApplication) -> None:
         The shared Qt application.
     """
     settings.intervals.intervals = {"A3", "M3", "m3", "d3", "P4"}
-    view = ExerciseView(IntervalNames(), rng=random.Random(6))
+    view = ExercisePage(IntervalNames(), rng=random.Random(6))
     view.show()
     app.processEvents()
     positions = {
         button.text(): (button.y(), button.x())
-        for button in view.answer_controls.buttons
+        for button in view.control_area.answers.buttons
     }
     assert list(positions) == ["A3", "M3", "P4", "m3", "d3"]
     assert list(positions.values()) == sorted(positions.values())
@@ -948,16 +961,22 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
     cfg.clefs = {"treble"}
     cfg.ranges = {"treble": (28, 35)}
     cfg.intervals = set(settings.WRITTEN_INTERVALS)
-    view = ExerciseView(IntervalNames(), rng=random.Random(15))
+    view = ExercisePage(IntervalNames(), rng=random.Random(15))
     view.show()
     panel = view.settings_panel
-    assert isinstance(panel, IntervalSettingsPanel) and view.gear is not None
-    view.gear.click()
+    assert (
+        isinstance(panel, IntervalSettingsPanel)
+        and view.toolbar.gear is not None
+    )
+    view.toolbar.gear.click()
     motion.settle()
     original = view.question
     panel.buttons_row.click()
     motion.settle()
-    assert view.question is original and len(view.answer_controls.buttons) == 6
+    assert (
+        view.question is original
+        and len(view.control_area.answers.buttons) == 6
+    )
     page = panel.stack.currentWidget()
     assert page is not None
     modes = {b.text(): b for b in page.findChildren(QRadioButton)}
@@ -969,7 +988,7 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
     )
     count.setCurrentIndex(count.findData(3))
     assert (
-        len(view.answer_controls.buttons) == 3
+        len(view.control_area.answers.buttons) == 3
         and view.question.answer in view.question.choices
     )
     modes["All"].click()
@@ -980,7 +999,7 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
         ["m2", "m3", "m6", "m7"],
         ["d2", "d3", "d4", "d5", "d6", "d7", "d8"],
     ]
-    bank = view.answer_controls.interval_answers
+    bank = view.control_area.answers.interval_answers
     assert bank.isVisible() and [b.text() for b in bank.buttons] == [
         name for group in groups for name in group
     ]
@@ -994,23 +1013,23 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
             for upper, lower in pairwise(groups)
         )
         assert bank.horizontalScrollBar().maximum() == 0
-    view.answer_controls.buttons[
+    view.control_area.answers.buttons[
         view.question.choices.index(view.question.answer)
     ].click()
     assert view.session.answered
     cfg.__init__()
     load_intervals()
     assert (cfg.button_mode, cfg.button_count) == ("all", 3)
-    all_signature = view.exercise.settings_signature()
+    all_signature = view.controller.exercise.settings_signature()
     panel.quality_modes["interval"].click()
     assert view.question.choices == [str(n) for n in range(2, 9)]
     modes["Limited"].click()
     assert (
         count.isVisible()
         and count.currentData() == 3
-        and len(view.answer_controls.buttons) == 3
+        and len(view.control_area.answers.buttons) == 3
     )
-    assert view.exercise.settings_signature() != all_signature
+    assert view.controller.exercise.settings_signature() != all_signature
     view.close()
 
 
@@ -1032,7 +1051,7 @@ def test_note_value_picker_and_saved_interval_staff(
     """
     cfg = settings.intervals
     cfg.displays = {display}
-    view = ExerciseView(IntervalNames(), rng=random.Random(4))
+    view = ExercisePage(IntervalNames(), rng=random.Random(4))
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
     panel.values_row.click()
@@ -1045,7 +1064,9 @@ def test_note_value_picker_and_saved_interval_staff(
     assert cfg.active_values() == ["whole", "eighth"]
     assert panel.value_pictures.values == cfg.active_values()
     rng = random.Random(3)
-    assert {view.exercise.generate(rng).value for _ in range(24)} == {
+    assert {
+        view.controller.exercise.generate(rng).value for _ in range(24)
+    } == {
         "whole",
         "eighth",
     }
@@ -1092,17 +1113,17 @@ def test_consonance_switch_grades_both_choices_and_saves(
     """
     cfg = settings.intervals
     cfg.intervals = {"M3", "A4"}
-    view = ExerciseView(IntervalNames(), rng=random.Random(1))
+    view = ExercisePage(IntervalNames(), rng=random.Random(1))
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
-    signature = view.exercise.settings_signature()
+    signature = view.controller.exercise.settings_signature()
     panel.consonance_row.click()
     assert cfg.consonance and not panel.quality_row.isEnabled()
-    assert view.exercise.settings_signature() != signature
+    assert view.controller.exercise.settings_signature() != signature
     rng = random.Random(5)
     seen = set()
     for _ in range(20):
-        q = view.exercise.generate(rng)
+        q = view.controller.exercise.generate(rng)
         low, high = q.staff[0]
         expected = (
             "Consonant"
@@ -1117,5 +1138,5 @@ def test_consonance_switch_grades_both_choices_and_saves(
     assert cfg.consonance
     panel.consonance_row.click()
     assert not cfg.consonance and panel.quality_row.isEnabled()
-    assert view.exercise.settings_signature() == signature
+    assert view.controller.exercise.settings_signature() == signature
     view.close()

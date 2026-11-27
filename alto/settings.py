@@ -11,8 +11,6 @@ Examples
 --------
 >>> NoteNameSettings().active_clefs()
 ['treble', 'bass']
->>> spell(Note.parse("F#4"))
-'F♯'
 """
 
 from __future__ import annotations
@@ -33,12 +31,10 @@ from alto.circle_schemes import (
     resolve,
 )
 from alto.notation_terms import MARKS
+from alto.theory.note_naming import DEGREE_NAMINGS
 from alto.theory.pitch import (
-    ACCIDENTAL_SYMBOLS,
-    LETTERS,
     Interval,
     Note,
-    key_accidental,
 )
 
 # The clefs with a single staff. The C clefs differ only in the line the
@@ -144,32 +140,6 @@ NAMINGS = {
     "degrees": "Caret (1̂ 2̂ 3̂)",
     "functions": "Function (Tonic, Supertonic, Mediant)",
 }
-DEGREE_NAMINGS = ("degrees", "functions")
-FUNCTION_ALTERATIONS = {
-    -2: "Doubly lowered ",
-    -1: "Lowered ",
-    0: "",
-    1: "Raised ",
-    2: "Doubly raised ",
-}
-DEGREE_FUNCTIONS = (
-    "Tonic",
-    "Supertonic",
-    "Mediant",
-    "Subdominant",
-    "Dominant",
-    "Submediant",
-    "Leading tone",
-)
-SOLFEGE = (
-    "Do",
-    "Re",
-    "Mi",
-    "Fa",
-    "Sol",
-    "La",
-    "Si",
-)
 
 
 # The note on the bottom line of each single staff. The range arrows may
@@ -200,108 +170,6 @@ RANGE_LIMITS = {
     "treble": DEFAULT_RANGES["treble"],
     "bass": DEFAULT_RANGES["bass"],
 }
-
-
-def spell(
-    note: Note,
-    *,
-    naming: str = "letters",
-    key: int = 0,
-    octave: bool = False,
-    minor: bool = False,
-) -> str:
-    """
-    Return a note name in the chosen naming system, optionally including
-    its octave.
-
-    Parameters
-    ----------
-    note : Note
-        The note.
-    naming : str, default "letters"
-        "letters" for C D E, "solfege" for Do Re Mi, "degrees" for caret
-        scale degrees, or "functions" for function names.
-        Keyword-only.
-    key : int, default 0
-        The major key signature for scale degrees: sharps if positive,
-        flats if negative. Zero means C major. Keyword-only.
-    octave : bool, default False
-        Include the note's octave, separated from a scale degree by " /
-        ". Keyword-only.
-
-    minor : bool, default False
-        Use the relative natural minor as the scale degree reference.
-        Keyword-only.
-
-    Returns
-    -------
-    str
-        The name and, if requested, octave. Carets use accidental
-        prefixes; function names use Raised or Lowered prefixes.
-
-    Examples
-    --------
-    >>> spell(Note.parse("F#4"))
-    'F♯'
-    >>> spell(Note.parse("F#4"), naming="solfege")
-    'Fa♯'
-    >>> spell(
-    ...     Note.parse("F#4"),
-    ...     naming="degrees",
-    ...     key=1,
-    ... )
-    '7̂'
-    >>> spell(
-    ...     Note.parse("F4"),
-    ...     naming="degrees",
-    ...     key=1,
-    ... )
-    '♭7̂'
-    >>> spell(Note.parse("Eb4"), naming="degrees")
-    '♭3̂'
-    >>> spell(
-    ...     Note.parse("G4"),
-    ...     naming="functions",
-    ...     key=1,
-    ... )
-    'Tonic'
-    >>> spell(
-    ...     Note.parse("F4"),
-    ...     naming="functions",
-    ...     key=1,
-    ... )
-    'Lowered Leading tone'
-    >>> spell(
-    ...     Note.parse("G4"),
-    ...     naming="degrees",
-    ...     key=1,
-    ...     octave=True,
-    ... )
-    '1̂ / 4'
-    """
-    if naming in DEGREE_NAMINGS:
-        degree = (note.letter - 4 * key - (5 if minor else 0)) % 7 + 1
-        alteration = note.accidental - key_accidental(note.letter, count=key)
-        if naming == "functions":
-            if minor and degree == 7:
-                name = (
-                    "Leading tone"
-                    if alteration == 1
-                    else FUNCTION_ALTERATIONS[alteration] + "Subtonic"
-                )
-            else:
-                name = (
-                    FUNCTION_ALTERATIONS[alteration]
-                    + DEGREE_FUNCTIONS[degree - 1]
-                )
-        else:
-            name = f"{ACCIDENTAL_SYMBOLS[alteration]}{degree}̂"
-        return f"{name} / {note.octave}" if octave else name
-    base = (
-        SOLFEGE[note.letter] if naming == "solfege" else LETTERS[note.letter]
-    )
-    name = base + ACCIDENTAL_SYMBOLS[note.accidental]
-    return f"{name}{note.octave}" if octave else name
 
 
 def diatonic_name(d: int) -> str:

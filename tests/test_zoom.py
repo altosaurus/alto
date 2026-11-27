@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 
 from alto.exercises.library import KeyboardNotes, NoteNames
 from alto.ui import charts, main_window, zoom
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.icons import PLAY, svg_icon
 from alto.ui.instrument_picker import InstrumentPicker
 from alto.ui.keyboard import KeyboardWidget
@@ -512,7 +512,7 @@ def test_an_open_exercise_still_works_at_any_zoom(
     del app
     zoom.set_percent(percent)
     for exercise in (NoteNames, KeyboardNotes):
-        view = ExerciseView(exercise(), rng=random.Random(1))
+        view = ExercisePage(exercise(), rng=random.Random(1))
         view.resize(900, 600)
         view.show()
         assert view.question is not None and not view.grab().isNull()

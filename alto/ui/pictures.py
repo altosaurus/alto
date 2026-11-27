@@ -41,7 +41,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import QAbstractButton, QWidget
 
 from alto import settings
-from alto.settings import SOLFEGE
+from alto.theory.note_naming import SOLFEGE
 from alto.theory.pitch import (
     MAJOR_KEYS,
     Note,

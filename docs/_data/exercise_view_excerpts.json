@@ -1,7 +1,7 @@
 {
-  "staff": ["next_question", "self.question_view.show_question("],
-  "toolbar": ["__init__", "self.toolbar = ExerciseToolbar(", "lay.addWidget(self.toolbar)"],
-  "answer": ["next_question", "self.answer_controls.show_question("],
-  "panel": ["__init__", "self.settings_panel = settings_panel_for("],
-  "signals": ["__init__", "self.gear.toggled.connect(", "self.settings_panel.changed.connect("]
+  "staff": ["show_question", "self.question_view.show_question("],
+  "toolbar": ["_create_toolbar", "return ExerciseToolbar("],
+  "answer": ["show_question", "self.control_area.show_question("],
+  "panel": ["__init__", "self.settings_panel = settings_panel or settings_panel_for("],
+  "signals": ["_create_settings_pane", "self.toolbar.gear.toggled.connect(", "self.settings_panel.restyled.connect("]
 }

@@ -26,8 +26,8 @@ from alto.notation_excerpts import excerpts
 from alto.notation_terms import CATALOG, MARKS, SIMILAR_MARKS
 from alto.ui import motion
 from alto.ui.engraving import notation_glyph
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import load_notation_terms
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.notation import BY_KEY, STYLES
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.score_excerpt import score_artwork
@@ -122,7 +122,7 @@ def test_notation_question_in_the_exercise(
         The component to practice.
     """
     settings.notation.terms = {term}
-    view = ExerciseView(NotationIdentification(), rng=random.Random(7))
+    view = ExercisePage(NotationIdentification(), rng=random.Random(7))
     question = view.question
     assert (
         question is not None
@@ -134,10 +134,10 @@ def test_notation_question_in_the_exercise(
         .toImage()
         .convertToFormat(QImage.Format.Format_RGBA8888)
     )
-    view.answer_controls.buttons[question.choices.index(term)].click()
+    view.control_area.answers.buttons[question.choices.index(term)].click()
     assert view.session.answered and view.session.correct == 1
-    view._advance.stop()
-    animation = view._anims[-1]
+    view.controller._advance.stop()
+    animation = view.controller.animations.tracked[-1]
     animation.setCurrentTime(animation.duration())
     after = (
         view.question_view.staff.grab()
@@ -174,10 +174,10 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(
         The shared Qt application.
     """
     exercise = NotationIdentification()
-    view = ExerciseView(exercise, rng=random.Random(17))
+    view = ExercisePage(exercise, rng=random.Random(17))
     view.show()
-    assert view.gear is not None
-    view.gear.click()
+    assert view.toolbar.gear is not None
+    view.toolbar.gear.click()
     panel = view.settings_panel
     assert isinstance(panel, NotationSettingsPanel) and panel.isVisible()
     assert (
@@ -229,7 +229,7 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(
     assert view.question is not None and view.question.answer == "Notehead"
     assert (
         view.question.choices == ["Notehead"]
-        and len(view.answer_controls.buttons) == 1
+        and len(view.control_area.answers.buttons) == 1
     )
     assert panel.terms.boxes["Notehead"].isEnabled()
     assert exercise.settings_signature() != pair_signature
@@ -270,7 +270,7 @@ def test_select_none_clears_and_restores_notation_terms(
     settings.notation.question_type = mode
     original = {"Fermata", "Arpeggio sign"}
     settings.notation.terms = original.copy()
-    view = ExerciseView(NotationIdentification(), rng=random.Random(11))
+    view = ExercisePage(NotationIdentification(), rng=random.Random(11))
     panel = view.settings_panel
     assert isinstance(panel, NotationSettingsPanel)
     changes = QSignalSpy(panel.changed)
@@ -282,18 +282,18 @@ def test_select_none_clears_and_restores_notation_terms(
     assert (
         view.question
         and not view.question.answer
-        and "Select a notation term" in view.prompt.text()
+        and "Select a notation term" in view.question_view.prompt.text()
     )
     assert (
         view.question_view.staff is None
-        and not view.answer_controls.buttons
-        and not view._advance.isActive()
+        and not view.control_area.answers.buttons
+        and not view.controller._advance.isActive()
         and view.session.total == 0
     )
 
     settings.notation.terms = set(settings.NOTATION_TERMS)
     load_notation_terms()
-    reopened = ExerciseView(NotationIdentification(), rng=random.Random(12))
+    reopened = ExercisePage(NotationIdentification(), rng=random.Random(12))
     panel = reopened.settings_panel
     assert (
         isinstance(panel, NotationSettingsPanel)
@@ -458,7 +458,7 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     """
     settings.notation.terms = {term}
     exercise = NotationIdentification()
-    view = ExerciseView(exercise, rng=random.Random(14))
+    view = ExercisePage(exercise, rng=random.Random(14))
     panel = view.settings_panel
     assert isinstance(panel, NotationSettingsPanel)
     button_signature = exercise.settings_signature()
@@ -468,8 +468,8 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     assert q is not None and q.answer == term and q.notation_target
     assert term.lower() in q.prompt and q.prompt.startswith("Click")
     assert (
-        not view.answer_controls.buttons
-        and view.answer_controls.choice_area.isHidden()
+        not view.control_area.answers.buttons
+        and view.control_area.answers.choice_area.isHidden()
     )
     assert exercise.settings_signature() != button_signature
     assert "click" in exercise.instructions()
@@ -521,12 +521,12 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     assert (
         view.session.missed
         and not view.session.answered
-        and "Try again" in view.prompt.text()
+        and "Try again" in view.question_view.prompt.text()
     )
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=target)
     assert (
         view.session.answered
-        and view._advance.isActive()
+        and view.controller._advance.isActive()
         and view.session.total == 1
         and view.session.correct == 0
     )
@@ -534,11 +534,11 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     panel.types["button"].click()
     assert (
         exercise.settings_signature() == button_signature
-        and len(view.answer_controls.buttons) == 1
+        and len(view.control_area.answers.buttons) == 1
     )
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=target)
     assert not view.session.answered
-    view.answer_controls.buttons[0].click()
+    view.control_area.answers.buttons[0].click()
     assert view.session.answered and view.session.correct == 1
 
 
@@ -556,7 +556,7 @@ def test_hover_previews_the_component_that_a_staff_click_would_select(
     """
     settings.notation.terms = {"Segno"}
     settings.notation.question_type = "staff"
-    view = ExerciseView(NotationIdentification(), rng=random.Random(9))
+    view = ExercisePage(NotationIdentification(), rng=random.Random(9))
     view.resize(800, 600)
     view.show()
     app.processEvents()
@@ -618,8 +618,9 @@ def test_hover_previews_the_component_that_a_staff_click_would_select(
     assert not blue_ink(staff).any()
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=point)
     assert view.session.answered and view.session.correct == 1
-    view._advance.stop()
-    view._anims[-1].setCurrentTime(view._anims[-1].duration())
+    view.controller._advance.stop()
+    animation = view.controller.animations.tracked[-1]
+    animation.setCurrentTime(animation.duration())
     QTest.mouseMove(staff, point)
     assert not blue_ink(staff).any()
 
@@ -777,7 +778,7 @@ def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
     """
     settings.notation.terms = {"Accent"}
     settings.notation.question_type = "staff"
-    view = ExerciseView(NotationIdentification(), rng=random.Random(11))
+    view = ExercisePage(NotationIdentification(), rng=random.Random(11))
     question = view.question
     assert (
         question
@@ -816,8 +817,9 @@ def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
         assert not staff.hits_notation(QPoint(0, 0))
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=point)
     assert view.session.answered and view.session.correct == 1
-    view._advance.stop()
-    view._anims[-1].setCurrentTime(view._anims[-1].duration())
+    view.controller._advance.stop()
+    animation = view.controller.animations.tracked[-1]
+    animation.setCurrentTime(animation.duration())
     assert staff._clicked_component == ("Accent", target)
     after = staff.grab().toImage()
     QTest.mouseMove(staff, QPoint(2, 2))

@@ -15,14 +15,14 @@ from PySide6.QtWidgets import (
 )
 
 from alto.exercises.base import Exercise
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 
 
 def opened(
     exercise: Exercise,
     *,
     seed: int = 4,
-) -> ExerciseView:
+) -> ExercisePage:
     """
     Open an exercise on a window that is shown and active, with the
     keyboard on it, as when it is opened for use.
@@ -36,10 +36,10 @@ def opened(
 
     Returns
     -------
-    ExerciseView
+    ExercisePage
         The screen.
     """
-    view = ExerciseView(exercise, rng=random.Random(seed))
+    view = ExercisePage(exercise, rng=random.Random(seed))
     view.resize(1000, 800)
     view.show()
     view.activateWindow()

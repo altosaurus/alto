@@ -23,7 +23,7 @@ from alto.learning import (
     scheduler,
 )
 from alto.theory.pitch import Note
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -580,14 +580,14 @@ def test_exercise_view_records_each_answer_with_its_timing() -> None:
         [],
     )  # kept alive for the widgets below
     learner, _ = make_learner()
-    view = ExerciseView(KeySignatures(), rng=random.Random(7), learner=learner)
+    view = ExercisePage(KeySignatures(), rng=random.Random(7), learner=learner)
     q = view.question
     assert q is not None
     wrong = next(
-        b for b in view.answer_controls.buttons if b.text() != q.answer
+        b for b in view.control_area.answers.buttons if b.text() != q.answer
     )
     right = next(
-        b for b in view.answer_controls.buttons if b.text() == q.answer
+        b for b in view.control_area.answers.buttons if b.text() == q.answer
     )
     wrong.click()
     right.click()
@@ -600,7 +600,7 @@ def test_exercise_view_records_each_answer_with_its_timing() -> None:
         item_key=q.item_key(),
     )
     assert item is not None and item.wrong_attempts == 1
-    view._advance.stop()
+    view.controller._advance.stop()
     view.next_question()
     assert (
         view.question is not None and view.question.item_key() != q.item_key()

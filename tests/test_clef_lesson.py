@@ -25,7 +25,7 @@ from alto.lessons.clef_basics import (
     line_task,
     symbol_task,
 )
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.home import (
     HomePage,
     lesson_card,
@@ -315,13 +315,13 @@ def test_the_exercise_has_a_reference_pane_that_opens_the_lesson(
     window.show()
     window.open_exercise(ClefBasics)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView) and view.toolbar.book_btn is not None
+    assert isinstance(view, ExercisePage) and view.toolbar.book_btn is not None
     view.toolbar.book_btn.setChecked(True)
     assert (
-        isinstance(view._reference, ClefReferencePanel)
-        and not view._reference.lesson_button.isHidden()
+        isinstance(view.reference_panel, ClefReferencePanel)
+        and not view.reference_panel.lesson_button.isHidden()
     )
-    view._reference.lesson_button.click()
+    view.reference_panel.lesson_button.click()
     opened = window.stack.currentWidget()
     assert (
         isinstance(opened, LessonsPage)
