@@ -18,6 +18,7 @@ from alto.exercises.library import (
     NoteConstruction,
     NoteNames,
 )
+from alto.theory.note_naming import note_name, note_words, spell
 from alto.theory.pitch import (
     MAJOR_KEYS,
     Note,
@@ -27,18 +28,16 @@ from alto.theory.scales import (
     build,
 )
 from alto.ui import motion
+from alto.ui.answer_controls import (
+    choice_keys,
+    second_row_keys,
+)
 from alto.ui.degree_text import DegreeCheckBox
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import (
     load_keyboard,
     load_note_names,
     save_note_names,
-)
-from alto.ui.exercise_view import (
-    ExerciseView,
-    choice_keys,
-    note_name,
-    note_words,
-    second_row_keys,
 )
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.settings_panel import KeyboardSettingsPanel, NoteNameSettingsPanel
@@ -67,9 +66,9 @@ def test_diatonic_degrees_follow_the_major_scale(key: int) -> None:
         f"{MAJOR_KEYS[key].replace('♭', 'b').replace('♯', '#')}4",
     )
     notes = build(tonic, intervals=SCALES["Major (Ionian)"])
-    assert [
-        settings.spell(n, naming="degrees", key=key) for n in notes[:7]
-    ] == [f"{i}̂" for i in range(1, 8)]
+    assert [spell(n, naming="degrees", key=key) for n in notes[:7]] == [
+        f"{i}̂" for i in range(1, 8)
+    ]
     for index, note in enumerate(notes[:7], start=1):
         lowered = Note(
             note.octave,
@@ -81,10 +80,8 @@ def test_diatonic_degrees_follow_the_major_scale(key: int) -> None:
             letter=note.letter,
             accidental=note.accidental + 1,
         )
-        assert (
-            settings.spell(lowered, naming="degrees", key=key) == f"♭{index}̂"
-        )
-        assert settings.spell(raised, naming="degrees", key=key) == f"♯{index}̂"
+        assert spell(lowered, naming="degrees", key=key) == f"♭{index}̂"
+        assert spell(raised, naming="degrees", key=key) == f"♯{index}̂"
 
 
 @pytest.mark.parametrize("accidentals", [False, True])
@@ -151,7 +148,7 @@ def test_keyboard_degree_answers_include_enharmonics_and_octaves(
         question = KeyboardNotes().generate(rng)
         assert question.keyboard is not None
         assert question.check(question.answer)
-        assert question.answer == settings.spell(
+        assert question.answer == spell(
             question.keyboard,
             naming="degrees",
             key=question.key,
@@ -194,6 +191,7 @@ def test_construction_degree_prompt_and_accessible_caret() -> None:
         assert question.check_placed(question.construct)
         assert question.answer == note_name(
             question.construct,
+            naming="degrees",
             key=question.key,
         )
         assert question.caption == question.prompt
@@ -203,10 +201,12 @@ def test_construction_degree_prompt_and_accessible_caret() -> None:
         )
         assert question.prompt == f"GM {degree}{subscript}"
     note = Note.parse("F4")
-    assert note_name(note, key=1) == "♭7̂ / 4"
-    assert note_words(note, key=1) == "flat degree 7, octave 4"
+    assert note_name(note, naming="degrees", key=1) == "♭7̂ / 4"
     assert (
-        note_name(note) == "F4"
+        note_words(note, naming="degrees", key=1) == "flat degree 7, octave 4"
+    )
+    assert (
+        note_name(note, naming="degrees") == "F4"
     )  # scale construction has no degree reference
 
 
@@ -326,11 +326,11 @@ def test_construction_degree_caption_is_shown_on_the_staff(
     settings.note_names.naming = "degrees"
     settings.construction.key_signature = True
     settings.construction.keys = {-2}
-    view = ExerciseView(NoteConstruction(), rng=random.Random(4))
+    view = ExercisePage(NoteConstruction(), rng=random.Random(4))
     assert view.question is not None
     assert view.question_view.note_input.caption == view.question.prompt
     assert view.question_view.note_input.caption == "B♭M 6̂₃"
-    assert view.prompt.isHidden()
+    assert view.question_view.prompt.isHidden()
     preview = QuestionPreview("Note Construction", question=view.question)
     # noinspection PyProtectedMember
     assert preview._answer_text() == view.question.answer
@@ -411,7 +411,7 @@ def test_function_names_and_exercise_answers(key: int) -> None:
     )
     notes = build(tonic, intervals=SCALES["Major (Ionian)"])
     assert [
-        settings.spell(n, naming="functions", key=key) for n in notes[:7]
+        spell(n, naming="functions", key=key) for n in notes[:7]
     ] == functions
     settings.note_names.naming = "functions"
     settings.note_names.key_signatures = {key}
@@ -432,13 +432,17 @@ def test_function_names_and_exercise_answers(key: int) -> None:
         assert question.answer.split(" / ")[0] in question.choices
         question = NoteConstruction().generate(rng)
         assert question.construct is not None
-        assert question.answer == settings.spell(
+        assert question.answer == spell(
             question.construct,
             naming="functions",
             key=key,
             octave=True,
         )
-        assert question.answer == note_name(question.construct, key=key)
+        assert question.answer == note_name(
+            question.construct,
+            naming="functions",
+            key=key,
+        )
 
 
 def test_function_notation_uses_degree_shortcuts_and_accessible_names(
@@ -462,7 +466,8 @@ def test_function_notation_uses_degree_shortcuts_and_accessible_names(
     press(view, "A")
     assert view.session.answered and not view.session.missed
     assert (
-        note_words(Note.parse("F4"), key=1) == "lowered leading tone, octave 4"
+        note_words(Note.parse("F4"), naming="functions", key=1)
+        == "lowered leading tone, octave 4"
     )
     view.close()
 
@@ -492,7 +497,7 @@ def test_altered_functions_use_words(
     expected : str
         The full function label. Keyword-only.
     """
-    assert settings.spell(Note.parse(note), naming="functions") == expected
+    assert spell(Note.parse(note), naming="functions") == expected
 
 
 def test_function_buttons_fit_the_answer_area(app: QApplication) -> None:
@@ -514,18 +519,20 @@ def test_function_buttons_fit_the_answer_area(app: QApplication) -> None:
     assert max(col for _, col in question.grid.values()) == 3
     assert all(
         button.width() >= button.minimumSizeHint().width()
-        for button in view.answer_controls.buttons
+        for button in view.control_area.answers.buttons
     )
     assert all(
         button.height() >= button.minimumSizeHint().height()
-        for button in view.answer_controls.buttons
+        for button in view.control_area.answers.buttons
     )
     assert all(
-        button.geometry().right() < view.answer_controls.choice_area.width()
-        for button in view.answer_controls.buttons
+        button.geometry().right()
+        < view.control_area.answers.choice_area.width()
+        for button in view.control_area.answers.buttons
     )
     assert any(
-        "Lowered\n" in button.text() for button in view.answer_controls.buttons
+        "Lowered\n" in button.text()
+        for button in view.control_area.answers.buttons
     )
     keys = choice_keys(question.choices)
     assert len(set(keys)) == len(keys)
@@ -556,7 +563,7 @@ def test_minor_degree_selection_and_notes_only_preview(
         assert q.construct is not None and q.construct.name == "G"
         assert "Subtonic" in q.answer
     assert (
-        settings.spell(
+        spell(
             Note.parse("G#4"),
             naming="functions",
             key=0,
@@ -663,19 +670,19 @@ def test_scale_answer_setting_and_buttons(app: QApplication) -> None:
         view.question_view.staff.key == 0
         and view.question_view.staff.caption == q.caption
     )
-    assert {b.text() for b in view.answer_controls.buttons} == {
+    assert {b.text() for b in view.control_area.answers.buttons} == {
         "B♭",
         "D",
         "F♯",
     }
     assert all(
-        button.icon().isNull() for button in view.answer_controls.buttons
+        button.icon().isNull() for button in view.control_area.answers.buttons
     )
     view._place_midi(q.staff[0][0].midi)
     assert not view.session.answered
     next(
         b
-        for b in view.answer_controls.buttons
+        for b in view.control_area.answers.buttons
         if b.text() == q.answer.split()[0]
     ).click()
     assert view.session.answered
@@ -701,7 +708,11 @@ def test_different_staff_and_question_keys_in_the_exercise(
     cfg.staff_keys, cfg.key_signatures, cfg.naming = {2}, {1}, "degrees"
     view = opened(NoteNames())
     q = view.question
-    assert q and q.answer == "7̂" and "in G major" in view.prompt.text()
+    assert (
+        q
+        and q.answer == "7̂"
+        and "in G major" in view.question_view.prompt.text()
+    )
     assert (
         view.question_view.staff.key == 2
         and view.question_view.staff.columns
@@ -710,7 +721,7 @@ def test_different_staff_and_question_keys_in_the_exercise(
         ]
     )
     assert all(
-        button.icon().isNull() for button in view.answer_controls.buttons
+        button.icon().isNull() for button in view.control_area.answers.buttons
     )
     view._place_midi(q.staff[0][0].midi)
     assert view.session.answered
@@ -729,7 +740,7 @@ def test_different_staff_and_question_keys_in_the_exercise(
             [Note.parse("F#4")],
         ]
     )
-    assert view.answer_controls.buttons[0].icon().isNull()
+    assert view.control_area.answers.buttons[0].icon().isNull()
     view.close()
 
 
@@ -862,10 +873,10 @@ def test_mixed_keys_and_minor_scale_buttons(app: QApplication) -> None:
     view = opened(exercise)
     q = view.question
     assert q and q.minor and view.question_view.staff.caption == q.caption
-    assert view.prompt.isHidden()
-    assert {b.text() for b in view.answer_controls.buttons} == {"A", "E"}
-    assert all(b.icon().isNull() for b in view.answer_controls.buttons)
-    view.answer_controls.buttons[q.choices.index(q.answer)].click()
+    assert view.question_view.prompt.isHidden()
+    assert {b.text() for b in view.control_area.answers.buttons} == {"A", "E"}
+    assert all(b.icon().isNull() for b in view.control_area.answers.buttons)
+    view.control_area.answers.buttons[q.choices.index(q.answer)].click()
     assert view.session.answered
     view.close()
     panel.close()

@@ -100,8 +100,8 @@ from alto.ui import (
 from alto.ui.anki_exporter import ExporterSession
 from alto.ui.app_settings import AppSettingsDialog, load_metronome_click
 from alto.ui.database_page import DatabasePage
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import load_exercise_settings
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.glossary import GlossaryPage
 from alto.ui.home import HomePage
 from alto.ui.icons import set_svg_icon, svg_icon
@@ -501,9 +501,9 @@ class MainWindow(QMainWindow):
         )
         self._pane_view = False
         self._grid_return_available = False
-        self._exercise_page: ExerciseView | None = None
+        self._exercise_page: ExercisePage | None = None
         self._lesson_page: LessonsPage | None = None
-        self._workspace_page: ExerciseView | LessonsPage | None = None
+        self._workspace_page: ExercisePage | LessonsPage | None = None
         self._lesson_return: tuple[QWidget | None, str] | None = None
         self._settings: AppSettingsDialog | None = (
             None  # the settings, while they are open
@@ -1332,7 +1332,7 @@ class MainWindow(QMainWindow):
             current is self.home and self.home.mode == "exercises"
         )
         self.shuffle_button.setVisible(
-            on_exercise_grid or isinstance(current, ExerciseView),
+            on_exercise_grid or isinstance(current, ExercisePage),
         )
         active = self.shuffle_button.isChecked()
         if active:
@@ -1352,9 +1352,13 @@ class MainWindow(QMainWindow):
         choices = self._shuffle_choices()
         self.shuffle_button.setEnabled(active or bool(choices))
         if self._exercise_page is not None:
-            self._exercise_page.shuffle_answers = active and choices != [
-                type(self._exercise_page.exercise),
-            ]
+            self._exercise_page.controller.shuffle_answers = (
+                active
+                and choices
+                != [
+                    type(self._exercise_page.controller.exercise),
+                ]
+            )
         if active:
             tip = "Turn off exercise shuffle"
         elif choices:
@@ -1374,13 +1378,13 @@ class MainWindow(QMainWindow):
         >>> window._shuffle_exercise()
         >>> isinstance(
         ...     window.stack.currentWidget(),
-        ...     ExerciseView,
+        ...     ExercisePage,
         ... )
         True
         """
         choices = self._shuffle_choices()
         view = self._exercise_page
-        current = type(view.exercise) if view is not None else None
+        current = type(view.controller.exercise) if view is not None else None
         groups: dict[str, list[type[Exercise]]] = {}
         for cls in choices:
             if cls is not current:
@@ -1450,19 +1454,22 @@ class MainWindow(QMainWindow):
         old = self._exercise_page
         view = (
             old
-            if old is not None and type(old.exercise) is cls
-            else ExerciseView(cls(), learner=self.learner)
+            if old is not None and type(old.controller.exercise) is cls
+            else ExercisePage(cls(), learner=self.learner)
         )
         if view is not old:
-            view.shuffle_requested.connect(self._shuffle_exercise)
-            view.lesson_requested.connect(lambda key: self.open_lessons(key))
-            view.lesson_back_button.clicked.connect(
+            view.controller.shuffle_requested.connect(self._shuffle_exercise)
+            if view.reference_panel is not None:
+                view.reference_panel.lesson_requested.connect(
+                    self.open_lessons,
+                )
+            view.toolbar.lesson_back_button.clicked.connect(
                 self._back_to_practice_lesson,
             )
             self.stack.addWidget(view)
         if self._lesson_return is not None and self._lesson_return[0] is old:
             self._lesson_return = (view, cls.name)
-        view.lesson_back_button.hide()
+        view.toolbar.lesson_back_button.hide()
         self._exercise_page = view
         self._workspace_page = view
         self.home.set_mode("exercises", animate=False)
@@ -1512,7 +1519,7 @@ class MainWindow(QMainWindow):
         the exercise open.
         """
         selected = (
-            type(self._exercise_page.exercise).__name__
+            type(self._exercise_page.controller.exercise).__name__
             if self._exercise_page is not None
             else ""
         )
@@ -1571,7 +1578,7 @@ class MainWindow(QMainWindow):
         >>> MainWindow()._scheduler_changed()
         """
         if self._exercise_page is not None:
-            self._exercise_page.scheduling_changed()
+            self._exercise_page.controller.scheduling_changed()
         if isinstance(self._overlay, DatabasePage):
             for tab in ("answers", "questions"):
                 if self._overlay.tabs[tab].isChecked():
@@ -1814,7 +1821,7 @@ class MainWindow(QMainWindow):
         """
         parent = self._lesson_return[0] if self._lesson_return else self.home
         return _PageState(
-            exercise=type(self._exercise_page.exercise)
+            exercise=type(self._exercise_page.controller.exercise)
             if self._exercise_page is not None
             else None,
             exercise_settings=self._exercise_page.settings_state()
@@ -1832,7 +1839,7 @@ class MainWindow(QMainWindow):
             if self._workspace_page
             else "empty",
             lesson_parent="exercise"
-            if isinstance(parent, ExerciseView)
+            if isinstance(parent, ExercisePage)
             else "empty"
             if parent is self.empty_page
             else "home",
@@ -2120,7 +2127,7 @@ class MainWindow(QMainWindow):
         activity = self._workspace_page
         activity_section = (
             "exercises"
-            if isinstance(activity, ExerciseView)
+            if isinstance(activity, ExercisePage)
             else "lessons"
             if activity
             else None
@@ -2128,7 +2135,7 @@ class MainWindow(QMainWindow):
         current = self.stack.currentWidget()
         self.home.set_filter_available(
             current in (self.home, self.empty_page)
-            or isinstance(current, ExerciseView),
+            or isinstance(current, ExercisePage),
         )
         self._update_shuffle_button()
         show_back = (
@@ -2228,8 +2235,8 @@ class MainWindow(QMainWindow):
         )
         self._update_empty_page()
         self.title_label.setText(
-            page.exercise.name
-            if isinstance(page, ExerciseView)
+            page.controller.exercise.name
+            if isinstance(page, ExercisePage)
             else page.view.lesson.title
             if isinstance(page, LessonsPage)
             else self.APP_TITLE,
@@ -2328,7 +2335,7 @@ class MainWindow(QMainWindow):
             self.title_label.text(),
         )
         if self._exercise_page is not None:
-            self._exercise_page.lesson_back_button.hide()
+            self._exercise_page.toolbar.lesson_back_button.hide()
         self._lesson_page = page
         self._workspace_page = page
         self.home.set_mode("lessons", animate=False)
@@ -2352,10 +2359,10 @@ class MainWindow(QMainWindow):
         """
         self.close_overlay()
         page = self.stack.currentWidget()
-        self._workspace_page = page if isinstance(page, ExerciseView) else None
+        self._workspace_page = page if isinstance(page, ExercisePage) else None
         if page is self.home:
             self.show_home()
-        elif isinstance(page, ExerciseView):
+        elif isinstance(page, ExercisePage):
             self.home.set_mode("exercises", animate=False)
             self._show_workspace()
         else:
@@ -2492,7 +2499,9 @@ class MainWindow(QMainWindow):
         if cls is not None:
             self.open_exercise(cls)
             if self._exercise_page is not None:
-                self._exercise_page.lesson_back_button.setVisible(from_lesson)
+                self._exercise_page.toolbar.lesson_back_button.setVisible(
+                    from_lesson,
+                )
 
     def _back_to_practice_lesson(self) -> None:
         """
@@ -2513,7 +2522,7 @@ class MainWindow(QMainWindow):
         if page is None:
             return
         if self._exercise_page is not None:
-            self._exercise_page.lesson_back_button.hide()
+            self._exercise_page.toolbar.lesson_back_button.hide()
         self._workspace_page = page
         self.home.set_mode("lessons", animate=False)
         self._show_workspace()
@@ -2794,7 +2803,7 @@ class MainWindow(QMainWindow):
         if not isinstance(self._overlay, LessonsPage):
             self.close_overlay()
         current = self.stack.currentWidget()
-        if isinstance(current, (ExerciseView, LessonsPage)):
+        if isinstance(current, (ExercisePage, LessonsPage)):
             self._workspace_page = current
         self._overlay = None
         self._overlay_return = None

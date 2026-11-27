@@ -509,6 +509,30 @@ class ExplorableCircle(FifthsCircle):
             super().keyPressEvent(event)
 
 
+class ReferencePane(QFrame):
+    """
+    Collapsible frame shared by the exercise reference panels.
+
+    Attributes
+    ----------
+    REFERENCE_WIDTH : int
+        Width of the open pane at 100% zoom, in pixels.
+
+    Examples
+    --------
+    The book button opens this pane to display the exercise reference.
+    """
+
+    REFERENCE_WIDTH = 400
+
+    def __init__(self) -> None:
+        """Prepare the styled frame at its collapsed width."""
+        super().__init__()
+        self.setObjectName("settingsPane")
+        self.setFrameShape(QFrame.Shape.StyledPanel)
+        self.setFixedWidth(0)
+
+
 class ReferencePanel(QWidget):
     """
     The reference for the circle of fifths: a short description, the

@@ -22,11 +22,11 @@ from alto.exercises.packs import PackExercise, load_packs, read_pack
 from alto.instrument_packs import PackKeyboard, read_keyboard_style
 from alto.theory.pitch import Note
 from alto.ui.colors import CORRECT_ANSWER_COLOR
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import (
     load_pack_options,
     save_pack_options,
 )
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.pack_settings_panel import PackKeyboardSettingsPanel
 from alto.ui.store import store
@@ -420,17 +420,19 @@ def test_answering_plays_both_keys(
     exercise = _intervals()
     assert exercise.has_sound
     card = exercise.cards[0]
-    view = ExerciseView(exercise, rng=random.Random(1))
-    view.question = card
-    view.question_view.fingerboard.show_position(card.picture)
+    view = ExercisePage(exercise, rng=random.Random(1))
+    view.controller.question = card
+    view.show_question(card)
     view.settings_panel.next_question_mode = "Wait"
     played = Mock()
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(view._answer_playback, "play", played)
+    monkeypatch.setattr(view.feedback.playback, "play", played)
     view.submit(
         card.answer,
         button=next(
-            b for b in view.answer_controls.buttons if b.text() == card.answer
+            b
+            for b in view.control_area.answers.buttons
+            if b.text() == card.answer
         ),
     )
     notes = played.call_args.args[0]
@@ -732,7 +734,7 @@ def test_manuals_follow_the_range_while_it_is_dragged(
     exercise = _intervals()
     cls = type(exercise)
     settings.pack_exercises.pop(cls.__name__, None)
-    view = ExerciseView(exercise, rng=random.Random(1))
+    view = ExercisePage(exercise, rng=random.Random(1))
     view.show()
     panel = view.settings_panel
     assert isinstance(panel, PackKeyboardSettingsPanel)
@@ -929,21 +931,23 @@ def test_changing_the_sound_applies_to_the_question_on_screen(
     exercise = _intervals()
     cls = type(exercise)
     settings.pack_exercises.pop(cls.__name__, None)
-    view = ExerciseView(exercise, rng=random.Random(1))
+    view = ExercisePage(exercise, rng=random.Random(1))
     view.next_question()
     view.settings_panel.next_question_mode = "Wait"
     played = Mock()
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(view._answer_playback, "play", played)
+    monkeypatch.setattr(view.feedback.playback, "play", played)
     cls.options().sound = "horn"
     # the live redraw runs before the new question does
-    view._redraw_keyboards()
+    view.question_view.redraw_keyboards()
     card = view.question
     assert card is not None
     view.submit(
         card.answer,
         button=next(
-            b for b in view.answer_controls.buttons if b.text() == card.answer
+            b
+            for b in view.control_area.answers.buttons
+            if b.text() == card.answer
         ),
     )
     assert played.call_args.kwargs["instrument"] == "horn"

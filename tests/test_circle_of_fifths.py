@@ -68,6 +68,9 @@ from alto.ui import circle as circle_module
 from alto.ui import exercise_settings as es
 from alto.ui import motion
 from alto.ui import settings_panel as sp
+from alto.ui.answer_controls import (
+    choice_keys,
+)
 from alto.ui.circle import (
     WRONG_COLOR,
     WRONG_MS,
@@ -77,10 +80,7 @@ from alto.ui.circle import (
     wedge_path,
     write_text,
 )
-from alto.ui.exercise_view import (
-    ExerciseView,
-    choice_keys,
-)
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.home import (
     EXERCISE_ICONS,
     ExerciseCard,
@@ -153,7 +153,7 @@ def screen(
     kind: str,
     *,
     seed: int = 4,
-) -> tuple[ExerciseView, Question]:
+) -> tuple[ExercisePage, Question]:
     """
     Make an exercise screen that asks one kind of question.
 
@@ -166,33 +166,33 @@ def screen(
 
     Returns
     -------
-    tuple of ExerciseView and Question
+    tuple of ExercisePage and Question
         The screen, and its first question.
     """
     settings.circle.questions = {kind}
-    view = ExerciseView(CircleOfFifths(), rng=random.Random(seed))
+    view = ExercisePage(CircleOfFifths(), rng=random.Random(seed))
     view.resize(900, 900)
     q = view.question
     assert q is not None and q.circle is not None
     return view, q
 
 
-def finish(view: ExerciseView) -> None:
+def finish(view: ExercisePage) -> None:
     """
     Stop the screen from going on to the next question by itself, so
     that a test can look at the one on screen.
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The screen.
     """
     # noinspection PyProtectedMember
-    view._advance.stop()
+    view.controller._advance.stop()
 
 
 def button(
-    view: ExerciseView,
+    view: ExercisePage,
     text: str,
 ) -> QPushButton:
     """
@@ -200,7 +200,7 @@ def button(
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The screen.
     text : str
         The button's text.
@@ -210,14 +210,16 @@ def button(
     QPushButton
         The button.
     """
-    return next(b for b in view.answer_controls.buttons if b.text() == text)
+    return next(
+        b for b in view.control_area.answers.buttons if b.text() == text
+    )
 
 
 def double_name_question(
     kind: str,
     *,
     seed: int = 4,
-) -> tuple[ExerciseView, Question]:
+) -> tuple[ExercisePage, Question]:
     """
     Make a screen whose question is about a wedge that has two names, by
     asking until one comes up.
@@ -231,7 +233,7 @@ def double_name_question(
 
     Returns
     -------
-    tuple of ExerciseView and Question
+    tuple of ExercisePage and Question
         The screen, and its question, whose answer needs two buttons.
 
     Raises
@@ -1137,16 +1139,19 @@ def test_the_screen_shows_the_circle_for_each_kind_with_its_buttons_under_it(
     assert (
         view.question_view.staff is None
         and view.findChild(KeyFork) is None
-        and view.prompt.isHidden()
+        and view.question_view.prompt.isHidden()
     )
-    assert [b.text() for b in view.answer_controls.buttons] == q.choices
+    assert [b.text() for b in view.control_area.answers.buttons] == q.choices
     if q.grid is not None:
         for name, (row, column) in q.grid.items():
-            item = view.answer_controls.choice_box.itemAtPosition(row, column)
+            item = view.control_area.answers.choice_box.itemAtPosition(
+                row,
+                column,
+            )
             assert item is not None
             widget = item.widget()
             assert isinstance(widget, QPushButton) and widget.text() == name
-    other = ExerciseView(NoteNames(), rng=random.Random(4))
+    other = ExercisePage(NoteNames(), rng=random.Random(4))
     other.show()
     assert other.question_view.circle is None
 
@@ -1224,6 +1229,7 @@ def test_a_key_with_two_names_needs_two_buttons(app: QApplication) -> None:
         )  # nothing is scored on a half answer
         assert view.question_view.circle.subtitle == "and its other name"
         button(view, second).click()
+        assert not button(view, second).isEnabled()
         assert (
             view.session.answered
             and not view.session.missed
@@ -1272,7 +1278,9 @@ def test_wrong_name_in_middle_of_two_misses_question_but_keeps(
     first, second = q.required
     button(view, first).click()
     wrong = next(
-        b for b in view.answer_controls.buttons if b.text() not in q.required
+        b
+        for b in view.control_area.answers.buttons
+        if b.text() not in q.required
     )
     wrong.click()
     assert (
@@ -1316,7 +1324,9 @@ def test_a_wrong_first_name_misses_at_once(app: QApplication) -> None:
     """
     view, q = double_name_question("minor")
     wrong = next(
-        b for b in view.answer_controls.buttons if b.text() not in q.required
+        b
+        for b in view.control_area.answers.buttons
+        if b.text() not in q.required
     )
     wrong.click()
     assert (
@@ -1343,7 +1353,7 @@ def test_a_two_name_answer_is_recorded_once_with_both_names(
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     settings.circle.questions = {"major"}
-    view = ExerciseView(
+    view = ExercisePage(
         CircleOfFifths(),
         rng=random.Random(4),
         learner=learner,
@@ -1383,7 +1393,7 @@ def test_numeral_question_flashes_ring_asked_and_shows_all_six(
     """
     view, q = screen("numeral")
     wrong = next(
-        b for b in view.answer_controls.buttons if b.text() != q.answer
+        b for b in view.control_area.answers.buttons if b.text() != q.answer
     )
     wrong.click()
     assert (
@@ -1421,7 +1431,7 @@ def test_a_wrong_answer_flashes_the_cell_and_can_be_tried_again(
     view, q = screen("major")
     wrong = next(
         b
-        for b in view.answer_controls.buttons
+        for b in view.control_area.answers.buttons
         if b.text() not in q.required and b.text() != q.answer
     )
     wrong.click()
@@ -1530,7 +1540,7 @@ def test_the_circle_has_a_settings_panel_with_the_three_kinds(
     app : QApplication
         The shared Qt application.
     """
-    view = ExerciseView(CircleOfFifths(), rng=random.Random(4))
+    view = ExercisePage(CircleOfFifths(), rng=random.Random(4))
     pane = view.settings_panel
     assert isinstance(pane, sp.CircleSettingsPanel) and pane.stack.count() == 6
     assert pane.questions_row.value.text() == "3 of 3"

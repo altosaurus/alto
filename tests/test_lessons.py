@@ -47,7 +47,7 @@ from alto.theory.fifths import (
 from alto.theory.pitch import Note
 from alto.ui import motion
 from alto.ui.app_settings import AppSettingsDialog
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.home import HomePage
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.lesson import (
@@ -423,13 +423,13 @@ def test_the_reference_pane_has_a_button_that_opens_the_lesson(
     window.show()
     window.open_exercise(CircleOfFifths)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView) and view.toolbar.book_btn is not None
+    assert isinstance(view, ExercisePage) and view.toolbar.book_btn is not None
     view.toolbar.book_btn.setChecked(True)
     assert (
-        view._reference is not None
-        and not view._reference.lesson_button.isHidden()
+        view.reference_panel is not None
+        and not view.reference_panel.lesson_button.isHidden()
     )
-    view._reference.lesson_button.click()
+    view.reference_panel.lesson_button.click()
     page = window.stack.currentWidget()
     assert (
         isinstance(page, LessonsPage)
@@ -465,11 +465,11 @@ def test_the_note_references_connect_the_related_exercises(
         window.open_exercise(source)
         exercise = window.stack.currentWidget()
         assert (
-            isinstance(exercise, ExerciseView)
+            isinstance(exercise, ExercisePage)
             and exercise.toolbar.book_btn is not None
         )
         exercise.toolbar.book_btn.click()
-        reference = exercise._reference
+        reference = exercise.reference_panel
         assert reference is not None and reference.isVisible()
         assert any(
             clue in label.text() for label in reference.findChildren(QLabel)
@@ -490,8 +490,8 @@ def test_the_note_references_connect_the_related_exercises(
         )
         button.click()
         practice = window.stack.currentWidget()
-        assert isinstance(practice, ExerciseView) and isinstance(
-            practice.exercise,
+        assert isinstance(practice, ExercisePage) and isinstance(
+            practice.controller.exercise,
             destination,
         )
     window.close()
@@ -539,7 +539,7 @@ def test_key_signature_lesson_matches_note_identification_volume(
     )
     exercise = NoteNames()
     monkeypatch.setattr(exercise, "generate", lambda rng: next(questions))
-    view = ExerciseView(exercise, rng=random.Random(1))
+    view = ExercisePage(exercise, rng=random.Random(1))
     monkeypatch.setattr(sounds, "instrument", instrument)
     monkeypatch.setattr(sounds, "enabled", True)
     played = []
@@ -586,10 +586,10 @@ def test_key_signature_lesson_matches_note_identification_volume(
             view.next_question()
         next(
             button
-            for button in view.answer_controls.buttons
+            for button in view.control_area.answers.buttons
             if button.text() == note.name
         ).click()
-        view._advance.stop()
+        view.controller._advance.stop()
     assert len(played) == 2 and played == lesson_output
     assert played[0][0] != played[1][0]
     assert [volume for _, volume in played] == pytest.approx(
@@ -816,12 +816,12 @@ def test_lesson_and_both_practice_links(
         window.open_exercise(source)
         exercise = window.stack.currentWidget()
         assert (
-            isinstance(exercise, ExerciseView)
+            isinstance(exercise, ExercisePage)
             and exercise.toolbar.book_btn is not None
         )
         exercise.toolbar.book_btn.click()
-        assert exercise._reference is not None
-        exercise._reference.lesson_button.click()
+        assert exercise.reference_panel is not None
+        exercise.reference_panel.lesson_button.click()
         page = window.stack.currentWidget()
         assert isinstance(page, LessonsPage) and page.view.lesson is lesson
         last = len(lesson.steps) - 1
@@ -834,11 +834,11 @@ def test_lesson_and_both_practice_links(
             if button.text() == destination.name
         ).click()
         practice = window.stack.currentWidget()
-        assert isinstance(practice, ExerciseView) and isinstance(
-            practice.exercise,
+        assert isinstance(practice, ExercisePage) and isinstance(
+            practice.controller.exercise,
             destination,
         )
-        practice.lesson_back_button.click()
+        practice.toolbar.lesson_back_button.click()
         returned = window.stack.currentWidget()
         assert (
             isinstance(returned, LessonsPage)
@@ -1205,20 +1205,20 @@ def test_the_last_step_offers_to_practice_the_exercise(
     assert window.title_label.text() == NoteNames.name
     practice = window.stack.currentWidget()
     assert (
-        isinstance(practice, ExerciseView)
-        and practice.lesson_back_button.isVisible()
+        isinstance(practice, ExercisePage)
+        and practice.toolbar.lesson_back_button.isVisible()
     )
     app.processEvents()
-    button = practice.lesson_back_button
+    button = practice.toolbar.lesson_back_button
     assert practice.rect().contains(
         button.mapTo(practice, button.rect().center()),
     )
     QTest.mouseClick(button, Qt.MouseButton.LeftButton)
     assert window.stack.currentWidget() is page
     assert page.view.pages.currentWidget() is step_view
-    assert practice.lesson_back_button.isHidden()
+    assert practice.toolbar.lesson_back_button.isHidden()
     window.open_exercise(NoteNames)
-    assert practice.lesson_back_button.isHidden()
+    assert practice.toolbar.lesson_back_button.isHidden()
 
 
 def test_lesson_mode_has_a_list_on_the_left_that_follows_the_steps(

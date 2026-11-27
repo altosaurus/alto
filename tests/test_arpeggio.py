@@ -37,7 +37,7 @@ from alto.ui import (
     motion,
     settings_panel,
 )
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.settings_panel import ArpeggioSettingsPanel
 
 if TYPE_CHECKING:
@@ -384,7 +384,7 @@ def view(
     app: QApplication,
     cfg: ArpeggioSettings,
     monkeypatch: pytest.MonkeyPatch,
-) -> Iterator[ExerciseView]:
+) -> Iterator[ExercisePage]:
     """
     Provide an arpeggio exercise view with the settings saved nowhere,
     and sounds off.
@@ -400,7 +400,7 @@ def view(
 
     Yields
     ------
-    ExerciseView
+    ExercisePage
         The view; it is closed afterwards.
     """
     # noinspection PyUnresolvedReferences
@@ -418,7 +418,7 @@ def view(
     monkeypatch.setattr(sounds, "play_notes", lambda *args, **kwargs: None)
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(sounds, "play_correct", lambda *args, **kwargs: None)
-    v = ExerciseView(ArpeggioNames(), rng=random.Random(1))
+    v = ExercisePage(ArpeggioNames(), rng=random.Random(1))
     yield v
     # gone before the application, or Qt crashes when Python exits
     v.deleteLater()
@@ -426,7 +426,7 @@ def view(
 
 
 def press(
-    view: ExerciseView,
+    view: ExercisePage,
     *,
     text: str,
 ) -> None:
@@ -435,23 +435,25 @@ def press(
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The view.
     text : str
         The button's text.
     """
-    next(b for b in view.answer_controls.buttons if b.text() == text).click()
+    next(
+        b for b in view.control_area.answers.buttons if b.text() == text
+    ).click()
 
 
 def test_choosing_the_type_and_the_inversion_answers_the_question(
-    view: ExerciseView,
+    view: ExercisePage,
 ) -> None:
     """
     Check that choosing the type and the inversion answers the question.
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The exercise view under test.
     """
     q = view.question
@@ -467,14 +469,14 @@ def test_choosing_the_type_and_the_inversion_answers_the_question(
 
 
 def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(
-    view: ExerciseView,
+    view: ExercisePage,
 ) -> None:
     """
     Check that a wrong pair is a miss and the buttons reset.
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The exercise view under test.
     """
     q = view.question
@@ -491,7 +493,7 @@ def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(
         and view.session.correct == 0
     )
     motion.settle()  # the wrong-answer feedback ends
-    assert view._pending == {} and not view._busy
+    assert view.controller.pending == {} and not view.question_view.busy
     press(view, text=kind)
     press(
         view,
@@ -500,36 +502,39 @@ def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(
     assert view.session.answered and view.session.correct == 0
 
 
-def test_the_inversion_row_is_labeled_inversion(view: ExerciseView) -> None:
+def test_the_inversion_row_is_labeled_inversion(view: ExercisePage) -> None:
     """
     Check that the inversion row is labeled inversion.
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The exercise view under test.
     """
     view.show()
     QApplication.processEvents()
-    assert view.answer_controls.interval_label.text() == "Inversion"
-    assert view.answer_controls.interval_label.isVisible()
-    label_bottom = view.answer_controls.interval_label.mapTo(
+    assert view.control_area.answers.interval_label.text() == "Inversion"
+    assert view.control_area.answers.interval_label.isVisible()
+    label_bottom = view.control_area.answers.interval_label.mapTo(
         view,
-        QPoint(0, view.answer_controls.interval_label.height()),
+        QPoint(0, view.control_area.answers.interval_label.height()),
     ).y()
-    buttons_top = view.answer_controls.octave_row.mapTo(view, QPoint(0, 0)).y()
+    buttons_top = view.control_area.answers.octave_row.mapTo(
+        view,
+        QPoint(0, 0),
+    ).y()
     assert label_bottom <= buttons_top
     assert all(
         not isinstance(
-            view.answer_controls.octave_box.itemAt(i).widget(),
+            view.control_area.answers.octave_box.itemAt(i).widget(),
             QLabel,
         )
-        for i in range(view.answer_controls.octave_box.count())
+        for i in range(view.control_area.answers.octave_box.count())
     )
 
 
 def test_the_settings_panel_edits_and_saves_the_settings(
-    view: ExerciseView,
+    view: ExercisePage,
     cfg: ArpeggioSettings,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -538,7 +543,7 @@ def test_the_settings_panel_edits_and_saves_the_settings(
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The exercise view under test.
     cfg : ArpeggioSettings
         The settings under test.

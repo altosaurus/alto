@@ -26,6 +26,7 @@ from alto.exercises.library import (
     NotationIdentification,
     RythmicEquations,
 )
+from alto.theory.note_naming import DEGREE_FUNCTIONS, FUNCTION_ALTERATIONS
 from alto.theory.pitch import ACCIDENTAL_SYMBOLS, QUALITY_NAMES
 from alto.ui import motion
 from alto.ui.answer_bank import AnswerBank
@@ -90,14 +91,14 @@ def choice_keys(choices: list[str]) -> list[str]:
         return [str(i + 1) for i in range(len(choices))]
     function_degrees = {
         name: str(index)
-        for index, name in enumerate(app_settings.DEGREE_FUNCTIONS, start=1)
+        for index, name in enumerate(DEGREE_FUNCTIONS, start=1)
     }
     degrees = []
     for choice in choices:
         plain = choice.replace("̂", "")
         sign = plain[0] if plain and plain[0] in "♯♭𝄪𝄫" else ""
         label = plain[len(sign) :]
-        for alteration, prefix in app_settings.FUNCTION_ALTERATIONS.items():
+        for alteration, prefix in FUNCTION_ALTERATIONS.items():
             if prefix and plain.startswith(prefix):
                 sign, label = (
                     ACCIDENTAL_SYMBOLS[alteration],
@@ -196,9 +197,9 @@ class AnswerControls(QWidget):
     buttons : list of QPushButton
         Buttons for the first and optional second part, in choice order.
     choice_selected : Signal
-        Emits the answer and its button for a one-part question.
+        Emits the answer value for a one-part question.
     part_selected : Signal
-        Emits the part, choice, and button for a two-part question.
+        Emits the part and choice for a two-part question.
 
     Examples
     --------
@@ -206,8 +207,8 @@ class AnswerControls(QWidget):
     octaves. Either row can be selected first.
     """
 
-    choice_selected = Signal(str, QPushButton)
-    part_selected = Signal(str, str, QPushButton)
+    choice_selected = Signal(str)
+    part_selected = Signal(str, str)
     MAX_WIDTH = 760
 
     def __init__(self, exercise: Exercise) -> None:
@@ -392,19 +393,19 @@ class AnswerControls(QWidget):
 
         Examples
         --------
-        Clicking an octave reports both its number and its button.
+        Clicking octave 4 reports the octave part with value "4".
         """
         if key:
             motion.set_shortcut(button, key=key)
             button.setToolTip(f"Key {key}")
         if part is None:
             button.clicked.connect(
-                lambda: self.choice_selected.emit(text, button),
+                lambda: self.choice_selected.emit(text),
             )
         else:
             button.setCheckable(True)
             button.clicked.connect(
-                lambda: self.part_selected.emit(part, text, button),
+                lambda: self.part_selected.emit(part, text),
             )
 
     def _choice_button(
@@ -455,7 +456,7 @@ class AnswerControls(QWidget):
         ):
             button.setText(INTERVAL_QUALITY_SYMBOLS[choice])
             button.setAccessibleName(choice)
-        for function in app_settings.DEGREE_FUNCTIONS:
+        for function in DEGREE_FUNCTIONS:
             if choice.endswith(function):
                 prefix = choice[: -len(function)].rstrip()
                 if prefix:

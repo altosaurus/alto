@@ -86,7 +86,7 @@ Consequences you will hit:
 - `QLabel("hi").show()` in one expression shows nothing for long: the label has no other reference, so it is deleted at once.
   Keep it in a variable. This bit the doctests more than once.
 - An **animation** or **timer** with no reference may be collected mid-run. Alto passes `self` as its parent (`QVariantAnimation(self)`)
-  and often also keeps a list of live animations (`self._anims`).
+  and tracks exercise feedback fades on the practice controller so it can cancel them when the question changes.
 - `widget.deleteLater()` schedules deletion for when control returns to the event loop. Deleting a widget while one of its own
   handlers is running can crash. In tests, `QApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)` runs the pending
   deletions.

@@ -27,7 +27,7 @@ from alto.learning import (
     Learner,
 )
 from alto.ui import motion
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.glossary import GlossaryPage
 from alto.ui.lesson import LessonsPage
 from alto.ui.main_window import MainWindow
@@ -105,7 +105,7 @@ def test_grid_button_returns_to_the_workspace_after_visiting_tiles(
     """
     window.open_exercise(NoteNames)
     activity = window.stack.currentWidget()
-    assert isinstance(activity, ExerciseView)
+    assert isinstance(activity, ExercisePage)
     question = activity.question
     pane_width = window.sidebar_width()
     window.view_button.click()
@@ -410,16 +410,16 @@ def test_switching_lists_preserves_the_exercise(window: MainWindow) -> None:
     settings.keyboard.require_octave = True
     window.open_exercise(KeyboardNotes)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView) and view.question is not None
+    assert isinstance(view, ExercisePage) and view.question is not None
     question = view.question
-    view.answer_controls.buttons[0].click()
+    view.control_area.answers.buttons[0].click()
     # noinspection PyProtectedMember
-    selected = dict(view._pending)
+    selected = dict(view.controller.pending)
     window.home.mode_control.buttons[1].click()
     assert window.stack.currentWidget() is view and view.question is question
     assert window.nav_stack.currentWidget() is window.lesson_nav
     # noinspection PyProtectedMember
-    assert view._pending == selected
+    assert view.controller.pending == selected
     window.home.mode_control.buttons[0].click()
     assert (
         window.stack.currentWidget() is view
@@ -429,7 +429,7 @@ def test_switching_lists_preserves_the_exercise(window: MainWindow) -> None:
     window.pane_button.click()
     assert window.stack.currentWidget() is view and view.question is question
     # noinspection PyProtectedMember
-    assert view._pending == selected
+    assert view.controller.pending == selected
 
 
 def test_tiles_pause_question_advancement_and_answer_timing(
@@ -446,25 +446,25 @@ def test_tiles_pause_question_advancement_and_answer_timing(
     """
     window.open_exercise(NoteNames)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView) and view.question is not None
+    assert isinstance(view, ExercisePage) and view.question is not None
     question = view.question
-    view.answer_controls.buttons[
+    view.control_area.answers.buttons[
         question.choices.index(question.answer)
     ].click()
     assert view.session.answered
     # noinspection PyProtectedMember
-    clock = view._clock
+    clock = view.controller._clock
     window.view_button.click()
     QTest.qWait(1400)
     assert view.question is question
     window.pane_button.click()
     assert window.stack.currentWidget() is view and view.question is question
     # noinspection PyProtectedMember
-    assert view._clock - clock >= 1.0
+    assert view.controller._clock - clock >= 1.0
     # noinspection PyProtectedMember
-    assert view._advance.isActive()
+    assert view.controller._advance.isActive()
     # noinspection PyProtectedMember
-    view._advance.stop()
+    view.controller._advance.stop()
 
 
 def test_reopening_the_active_exercise_tile_reuses_its_question(
@@ -481,7 +481,7 @@ def test_reopening_the_active_exercise_tile_reuses_its_question(
     """
     window.open_exercise(NoteNames)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView)
+    assert isinstance(view, ExercisePage)
     question = view.question
     window.show_home()
     window.open_exercise(NoteNames)
@@ -544,7 +544,7 @@ def test_navigation_rebuild_preserves_tiles_and_the_selected_list(
     )
     assert window.pane_button.accessibleName() == "Show navigation pane"
     window.pane_button.click()
-    assert isinstance(window.stack.currentWidget(), ExerciseView)
+    assert isinstance(window.stack.currentWidget(), ExercisePage)
     assert window.nav_stack.currentWidget() is window.lesson_nav
 
 
@@ -590,7 +590,7 @@ def test_statistics_over_a_lesson_survive_theme_rebuild(
     lesson = window.stack.currentWidget()
     assert isinstance(lesson, LessonsPage) and lesson.view.current == 3
     lesson.back_button.click()
-    assert isinstance(window.stack.currentWidget(), ExerciseView)
+    assert isinstance(window.stack.currentWidget(), ExercisePage)
 
 
 def test_retained_pages_do_not_accumulate_when_switching_activities(
@@ -654,7 +654,7 @@ def test_sidebar_tooltip_describes_the_selected_list(
     """
     window.open_exercise(NoteNames)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView)
+    assert isinstance(view, ExercisePage)
     motion.settle()
     window.home.mode_control.buttons[1].click()
     assert not hasattr(view, "sidebar_button")
@@ -667,7 +667,7 @@ def test_sidebar_tooltip_describes_the_selected_list(
     assert window.pane_button.toolTip() == "Show navigation pane"
     window.rebuild()
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView)
+    assert isinstance(view, ExercisePage)
     question = view.question
     assert window.sidebar_width() == 0
     assert window.pane_button.toolTip() == "Show navigation pane"
@@ -692,11 +692,11 @@ def test_tiles_have_a_back_button_for_the_current_exercise(
     settings.keyboard.require_octave = True
     window.open_exercise(KeyboardNotes)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView)
+    assert isinstance(view, ExercisePage)
     question = view.question
-    view.answer_controls.buttons[0].click()
+    view.control_area.answers.buttons[0].click()
     # noinspection PyProtectedMember
-    selected = dict(view._pending)
+    selected = dict(view.controller.pending)
     window.view_button.click()
     back = window.home.resume_button
     assert back.isVisible() and back.text() == "←  Back"
@@ -719,7 +719,7 @@ def test_tiles_have_a_back_button_for_the_current_exercise(
     back.click()
     assert window.stack.currentWidget() is view and view.question is question
     # noinspection PyProtectedMember
-    assert view._pending == selected
+    assert view.controller.pending == selected
     assert window.nav_stack.currentWidget() is window.lesson_nav
 
 
@@ -860,7 +860,7 @@ def test_shuffle_uses_matching_exercises_from_another_category(
     assert window.nav.currentItem() is window._items[KeyboardNotes]
     assert shuffle.isVisible() and shuffle.isChecked()
     first = window._exercise_page
-    assert first is not None and not first.shuffle_answers
+    assert first is not None and not first.controller.shuffle_answers
     home.category_filter.click()
     assert (
         home.filter_sidebar.isVisible()
@@ -873,24 +873,25 @@ def test_shuffle_uses_matching_exercises_from_another_category(
     assert {
         cls for cls, row in window._items.items() if not row.isHidden()
     } == {KeyboardNotes, KeyboardIntervals}
-    assert first.shuffle_answers and first.question is not None
+    assert first.controller.shuffle_answers and first.question is not None
     first.settings_panel.next_question_mode = "Wait"
     first.submit(first.question.answer, button=None)
     assert (
-        first.next_button.isVisible() and window.stack.currentWidget() is first
+        first.control_area.next_button.isVisible()
+        and window.stack.currentWidget() is first
     )
-    first.next_button.click()
+    first.control_area.next_button.click()
     second = window._exercise_page
     assert (
         second is not None
         and second.question is not None
-        and second.shuffle_answers
+        and second.controller.shuffle_answers
     )
     assert window.nav.currentItem() is window._items[KeyboardIntervals]
     second.settings_panel.next_question_mode = "Immediately"
     second.submit("wrong", button=None)
-    assert second.session.answered and second._advance.isActive()
-    shuffled = QSignalSpy(second.shuffle_requested)
+    assert second.session.answered and second.controller._advance.isActive()
+    shuffled = QSignalSpy(second.controller.shuffle_requested)
     motion.settle()  # the next question comes, from the other exercise
     assert shuffled.count() == 1
     assert window.nav.currentItem() is window._items[KeyboardNotes]
@@ -900,14 +901,16 @@ def test_shuffle_uses_matching_exercises_from_another_category(
     assert (
         current is not None
         and current.question is not None
-        and not current.shuffle_answers
+        and not current.controller.shuffle_answers
     )
     current.settings_panel.next_question_mode = "Immediately"
     current.submit(current.question.answer, button=None)
     motion.settle()  # the next question comes
     assert window._exercise_page is current and not current.session.answered
     shuffle.click()
-    assert window._exercise_page is current and current.shuffle_answers
+    assert (
+        window._exercise_page is current and current.controller.shuffle_answers
+    )
     window.rebuild()
     shuffle = window.shuffle_button
     assert (
@@ -951,7 +954,7 @@ def test_shuffle_between_two_notation_exercises(window: MainWindow) -> None:
         )
         view.settings_panel.next_question_mode = "Wait"
         view.submit(view.question.answer, button=None)
-        view.next_button.click()
+        view.control_area.next_button.click()
         assert window.nav.currentItem() is window._items[expected]
         shuffle.click()
         assert not shuffle.isChecked() and shuffle.isEnabled()
@@ -995,7 +998,7 @@ def test_shuffle_after_correct_audio_answer(
     view = window._exercise_page
     assert view is not None and view.question is not None
     view.settings_panel.next_question_mode = pace
-    changes = QSignalSpy(view.shuffle_requested)
+    changes = QSignalSpy(view.controller.shuffle_requested)
     view.submit(view.question.answer, button=None)
     assert window.stack.currentWidget() is view
     assert changes.wait(3000)
@@ -1026,16 +1029,16 @@ def test_calendar_shuffle_with_no_other_cards_ready(
     assert view is not None and view.question is None
     learner.calendar.set_limits(
         profile,
-        exercise=type(view.exercise).__name__,
+        exercise=type(view.controller.exercise).__name__,
         new_cards=2,
         reviews=0,
     )
-    view.next_button.click()
+    view.control_area.next_button.click()
     question = view.question
     assert question is not None
     view.settings_panel.next_question_mode = "Wait"
     view.submit(question.answer, button=None)
-    view.next_button.click()
+    view.control_area.next_button.click()
     assert (
         window._exercise_page is view
         and view.question is not None
@@ -1221,11 +1224,11 @@ def test_shuffle_after_filtering_out_the_current_exercise(
     )
     view.settings_panel.next_question_mode = "Wait"
     view.submit(question.answer, button=None)
-    view.next_button.click()
+    view.control_area.next_button.click()
     view = window._exercise_page
     assert (
         view is not None
-        and isinstance(view.exercise, KeyboardNotes)
+        and isinstance(view.controller.exercise, KeyboardNotes)
         and view.question is not None
     )
     home._filter_root.setCheckState(0, Qt.CheckState.Unchecked)
@@ -1234,7 +1237,7 @@ def test_shuffle_after_filtering_out_the_current_exercise(
     )
     view.settings_panel.next_question_mode = "Wait"
     view.submit(view.question.answer, button=None)
-    view.next_button.click()
+    view.control_area.next_button.click()
     assert window.stack.currentWidget() is home and home.no_results.isVisible()
 
 
@@ -1452,7 +1455,7 @@ def test_search_does_not_answer_or_replace_active_question_and(
     """
     window.open_exercise(NoteNames)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView)
+    assert isinstance(view, ExercisePage)
     question = view.question
     window.search_field.setFocus()
     QTest.keyClicks(window.search_field, "clef")
@@ -1569,7 +1572,7 @@ def test_glossary_location_survives_theme_rebuild(window: MainWindow) -> None:
     assert restored.activity_switch.current() == 1
     assert restored._example_index == 1
     window.close_overlay()
-    assert isinstance(window.stack.currentWidget(), ExerciseView)
+    assert isinstance(window.stack.currentWidget(), ExercisePage)
 
 
 def test_sidebar_toggle_follows_the_browsing_section(

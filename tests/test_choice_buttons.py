@@ -6,7 +6,7 @@ stored preferences.
 import random
 
 import pytest
-from PySide6.QtWidgets import QApplication, QPushButton, QRadioButton
+from PySide6.QtWidgets import QApplication, QRadioButton
 
 from alto import settings
 from alto.exercises import REGISTRY
@@ -20,8 +20,8 @@ from alto.exercises.library import (
 from alto.ui import motion
 from alto.ui.answer_controls import AnswerControls
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import load_choice_buttons
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.store import store
 
 
@@ -42,14 +42,14 @@ def test_each_button_answer_has_a_buttons_submenu(
         The registered exercise.
     """
     settings.clef_basics.question_type = "identification"
-    view = ExerciseView(cls(), rng=random.Random(22))
+    view = ExercisePage(cls(), rng=random.Random(22))
     panel = view.settings_panel
     assert panel.next_question_row.value.text() == "After Animation"
     page_titles = [b.text() for b in panel.stack.findChildren(QRadioButton)]
     assert ("Limited" in page_titles and "All" in page_titles) == bool(
         view.question.choices,
     )
-    if isinstance(view.exercise, ChoiceExercise):
+    if isinstance(view.controller.exercise, ChoiceExercise):
         row = panel.choice_buttons_row
         assert row is not None and not row.isHidden()
         row.click()
@@ -69,9 +69,12 @@ def test_each_button_answer_has_a_buttons_submenu(
             settings.notation.question_type = "staff"
             view.next_question()
             assert not view.question.choices and row.isHidden()
-            original_signature = view.exercise.settings_signature()
-            view.exercise.button_settings().button_mode = "limited"
-            assert view.exercise.settings_signature() == original_signature
+            original_signature = view.controller.exercise.settings_signature()
+            view.controller.exercise.button_settings().button_mode = "limited"
+            assert (
+                view.controller.exercise.settings_signature()
+                == original_signature
+            )
     view.close()
 
 
@@ -158,26 +161,26 @@ def test_answer_controls_replace_choices_and_emit_each_answer_part(
         The shared application.
     """
     controls = AnswerControls(KeyboardNotes())
-    choices: list[tuple[str, QPushButton]] = []
-    parts: list[tuple[str, str, QPushButton]] = []
+    choices: list[str] = []
+    parts: list[tuple[str, str]] = []
     controls.choice_selected.connect(
-        lambda choice, button: choices.append((choice, button)),
+        choices.append,
     )
     controls.part_selected.connect(
-        lambda part, choice, button: parts.append((part, choice, button)),
+        lambda part, choice: parts.append((part, choice)),
     )
     single = Question("", choices=["C", "D"], answer="D")
     controls.show_question(single, named_meter=False, locate_notation=False)
     old = controls.buttons[1]
     old.click()
-    assert choices == [("D", old)]
+    assert choices == ["D"]
     pair = Question("", choices=["C"], octaves=["4"], answer="C4")
     controls.show_question(pair, named_meter=False, locate_notation=False)
     assert old.isHidden() and old.shortcut().isEmpty()
     name, octave = controls.buttons
     octave.click()
     name.click()
-    assert parts == [("octave", "4", octave), ("name", "C", name)]
+    assert parts == [("octave", "4"), ("name", "C")]
     assert len(choices) == 1
 
 
@@ -193,16 +196,16 @@ def test_clef_questions_switch_modes_in_one_answer_area(
         The shared application.
     """
     settings.clef_basics.question_type = "identification"
-    view = ExerciseView(ClefBasics(), rng=random.Random(1))
+    view = ExercisePage(ClefBasics(), rng=random.Random(1))
     view.show()
-    controls = view.answer_controls
+    controls = view.control_area.answers
     choices = list(controls.buttons)
     assert choices and all(controls.isAncestorOf(b) for b in choices)
     assert controls.placement.isHidden()
 
     settings.clef_basics.question_type = "construction"
     view.next_question()
-    assert view.answer_controls is controls
+    assert view.control_area.answers is controls
     assert controls.placement.parentWidget() is controls
     assert controls.placement.answer_button.isVisibleTo(view)
     assert controls.choice_area.isHidden() and not controls.buttons
@@ -211,7 +214,9 @@ def test_clef_questions_switch_modes_in_one_answer_area(
     settings.clef_basics.question_type = "identification"
     view.next_question()
     app.processEvents()
-    assert view.answer_controls is controls and controls.placement.isHidden()
+    assert (
+        view.control_area.answers is controls and controls.placement.isHidden()
+    )
     assert controls.buttons and all(
         b.isVisibleTo(view) for b in controls.buttons
     )

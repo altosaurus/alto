@@ -2,7 +2,7 @@
   <div class="drawing" tabindex="0" role="region" aria-label="First question diagram, scroll horizontally on small screens">
     <svg viewBox="0 0 900 420" role="img" aria-labelledby="c4-title c4-desc">
       <title id="c4-title">C4 dynamic diagram for opening Note Identification in Alto</title>
-      <desc id="c4-desc">The exercise catalog sends the selected class to the main window, which creates the exercise workspace. The workspace asks the practice scheduler for a question.</desc>
+      <desc id="c4-desc">The exercise catalog sends the selected class to the main window, which creates the exercise workspace. Its controller asks the practice scheduler for a question.</desc>
       <defs>
         <marker id="c4-tip" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto">
           <path d="M0 0 10 5 0 10Z" class="tip"/>
@@ -25,9 +25,9 @@
       <g transform="translate(602 274)">
         <rect class="node" width="260" height="108" rx="5"/>
         <text class="name" x="130" y="33">Exercise workspace</text>
-        <text class="type" x="130" y="56">Component · ExerciseView · PySide6</text>
-        <text x="130" y="80">Builds the staff and controls.</text>
-        <text x="130" y="99">Displays the question.</text>
+        <text class="type" x="130" y="56">Component · ExercisePage · PySide6</text>
+        <text x="130" y="80">Creates the controller and view.</text>
+        <text x="130" y="99">Starts the practice session.</text>
       </g>
       <g transform="translate(38 274)">
         <rect class="node" width="260" height="108" rx="5"/>
@@ -47,7 +47,7 @@
       <path class="edge" d="M602 341H301" marker-end="url(#c4-tip)"/>
       <circle class="badge" cx="450" cy="294" r="12"/>
       <text class="digit" x="450" y="299">3</text>
-      <text x="450" y="326">Requests the first question</text>
+      <text x="450" y="326">Controller requests first question</text>
     </svg>
   </div>
   <figcaption><strong>C4 dynamic diagram.</strong> Opening Note Identification with an active profile. Boxes represent components in the desktop application. Follow the numbered arrows in order.</figcaption>

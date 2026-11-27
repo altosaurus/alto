@@ -17,7 +17,7 @@ from alto.exercises.library import KeyboardIntervals, KeyboardNotes, NoteNames
 from alto.learning import Database, Learner
 from alto.learning.response_times import ResponseTimes
 from alto.ui.app_settings import AppSettingsDialog
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.response_times import ResponseTimeDialog
 from alto.ui.stats_dialog import StatsPage
 
@@ -247,26 +247,28 @@ def test_distribution_tool_and_timed_feedback(app: QApplication) -> None:
     chart.close()
     stats.close()
     learner.set_speed_thresholds(easy=15, hard=15)
-    view = ExerciseView(NoteNames(), learner=learner)
+    view = ExercisePage(NoteNames(), learner=learner)
     view.show()
     app.processEvents()
     view.settings_panel.next_question_mode = "Wait"
     assert (
-        view.review_interval.isVisible()
-        and view.review_interval.text().startswith("Easy:")
+        view.question_view.review_interval_label.isVisible()
+        and view.question_view.review_interval_label.text().startswith("Easy:")
     )
     assert view.question is not None
-    view._clock = time.monotonic() - 1
+    view.controller._clock = time.monotonic() - 1
     view.submit(view.question.answer, button=None)
     assert (
-        "Easy" in view.review_interval.text()
-        and view.review_interval.isVisible()
+        "Easy" in view.question_view.review_interval_label.text()
+        and view.question_view.review_interval_label.isVisible()
     )
     view.next_question()
-    view._application_state_changed(Qt.ApplicationState.ApplicationInactive)
+    view.controller.application_state_changed(
+        Qt.ApplicationState.ApplicationInactive,
+    )
     assert view.question is not None
     view.submit(view.question.answer, button=None)
-    assert "Good" in view.review_interval.text()
+    assert "Good" in view.question_view.review_interval_label.text()
     assert (
         db.conn.execute(
             "SELECT timing_valid FROM attempts ORDER BY id DESC LIMIT 1",
@@ -347,10 +349,10 @@ def test_passing_intervals_on_the_question(
             buttons == "all",
         )
     seed_times(learner, 100, exercise=exercise.__name__)
-    view = ExerciseView(exercise(), learner=learner)
+    view = ExercisePage(exercise(), learner=learner)
     view.settings_panel.next_question_mode = "Wait"
     view.show()
-    previews = view._speed_previews
+    previews = view.controller._speed_previews
     assert previews is not None and list(previews) == [
         Rating.Hard,
         Rating.Good,
@@ -360,7 +362,7 @@ def test_passing_intervals_on_the_question(
         f"{rating.name}: {interval.duration}"
         for rating, interval in previews.items()
     ]
-    label = view.review_interval
+    label = view.question_view.review_interval_label
     for width in (700, 1300, 700):
         view.resize(width, 700)
         app.processEvents()
@@ -397,7 +399,7 @@ def test_passing_intervals_on_the_question(
     assert view.question is not None
     key = view.question.item_key()
     now += seconds
-    view._clock = time.monotonic() - seconds
+    view.controller._clock = time.monotonic() - seconds
     with monkeypatch.context() as check:
         check.setattr(
             "alto.learning.calendar.review_options",

@@ -51,7 +51,7 @@ from alto.learning.grading import (
 from alto.learning.learner import PracticeComplete
 from alto.theory.pitch import Note
 from alto.ui import motion
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.main_window import MainWindow
 from alto.ui.settings_panel import (
     NotationSettingsPanel,
@@ -91,13 +91,13 @@ def test_correct_review_interval_layout(
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     learner.set_mode(mode)
-    view = ExerciseView(exercise(), learner=learner)
+    view = ExercisePage(exercise(), learner=learner)
     view.show()
-    label = view.review_interval
+    label = view.question_view.review_interval_label
     for width in (700, 1300):
         view.resize(width, 700)
         app.processEvents()
-        assert label.isVisible()
+        assert view.question_view.isAncestorOf(label) and label.isVisible()
         top_left = label.mapTo(view, QPoint())
         if exercise is KeyboardNotes:
             assert (
@@ -118,7 +118,10 @@ def test_correct_review_interval_layout(
             assert abs(top_left.x() + label.width() - right) <= 1
             assert (
                 top_left.y() + label.height()
-                <= view.answer_controls.choice_area.mapTo(view, QPoint()).y()
+                <= view.control_area.answers.choice_area.mapTo(
+                    view,
+                    QPoint(),
+                ).y()
             )
         else:
             assert (
@@ -179,63 +182,74 @@ def test_self_grading_flow(
     learner = Learner(db, profile=db.add_profile("Ada"))
     learner.set_mode(mode)
     learner.set_self_grading(True)
-    view = ExerciseView(NoteNames(), learner=learner)
+    view = ExercisePage(NoteNames(), learner=learner)
+    area = view.control_area
+    assert area.answers.parentWidget() is area
+    assert area.ratings.parentWidget() is area
+    assert area.next_button.parentWidget() is area
     view.settings_panel.next_question_mode = "Wait"
     view.show()
     assert not view.settings_panel.next_question_row.isEnabled()
     assert not view.settings_panel.next_question_choices.isEnabled()
-    assert view.review_interval.isHidden() and view.rating_row.isHidden()
+    assert (
+        view.question_view.review_interval_label.isHidden()
+        and area.ratings.isHidden()
+    )
     first = view.question
     assert first is not None
     view.submit("wrong", button=None)
     assert (
-        view.rating_row.isHidden()
-        and view.next_button.isHidden()
-        and view._advance.isActive()
+        area.ratings.isHidden()
+        and area.next_button.isHidden()
+        and view.controller._advance.isActive()
     )
     assert tuple(
         db.conn.execute(
             "SELECT last_rating, due FROM review_schedules",
         ).fetchone(),
     ) == (Rating.Again, NOW + 60)
-    view._advance.timeout.emit()
+    view.controller._advance.timeout.emit()
     second = view.question
     assert second is not None and second.item_key() != first.item_key()
-    view.shuffle_answers = True
-    shuffled = QSignalSpy(view.shuffle_requested)
+    view.controller.shuffle_answers = True
+    shuffled = QSignalSpy(view.controller.shuffle_requested)
     view.submit(second.answer, button=None)
-    view._light_answer_notes(None)
-    view._advance_question()
-    assert shuffled.count() == 0 and not view._advance.isActive()
+    view.question_view.light_answer_notes(None)
+    view.controller.advance()
+    assert shuffled.count() == 0 and not view.controller._advance.isActive()
     assert (
-        view.rating_row.isVisible()
-        and view.next_button.isHidden()
-        and view.review_interval.isHidden()
+        area.ratings.isVisible()
+        and area.next_button.isHidden()
+        and view.question_view.review_interval_label.isHidden()
     )
     assert (
         db.conn.execute("SELECT count(*) FROM review_schedules").fetchone()[0]
         == 1
     )
-    assert [button.text() for _, button in view.grade_controls.values()] == [
+    assert [button.text() for _, button in area.ratings.choices.values()] == [
         "Hard",
         "Good",
         "Easy",
     ]
-    for rating, (label, button) in view.grade_controls.items():
+    for rating, (label, button) in area.ratings.choices.items():
         assert (
             label.isVisible()
             and label.geometry().bottom() < button.geometry().top()
         )
-        assert label.text() == view._rating_previews[rating].duration
-    assert view.grade_controls[Rating.Hard][0].text() == "5 min 30 s"
-    assert view.grade_controls[Rating.Good][0].text() == "10 min"
-    easy = view._rating_previews[Rating.Easy].seconds / DAY
+        assert (
+            label.text() == view.controller._rating_previews[rating].duration
+        )
+    assert area.ratings.choices[Rating.Hard][0].text() == "5 min 30 s"
+    assert area.ratings.choices[Rating.Good][0].text() == "10 min"
+    easy = view.controller._rating_previews[Rating.Easy].seconds / DAY
     assert 3 <= easy <= 5 if mode == "SM-2" else easy > 5
-    preview = view._rating_previews[grade]
+    preview = view.controller._rating_previews[grade]
     clock[0] += 5
-    view.grade_controls[grade][1].click()
-    view.grade_controls[grade][1].click()
-    assert shuffled.count() == 1 and view.rating_row.isHidden()
+    requested = QSignalSpy(area.ratings.rating_requested)
+    area.ratings.choices[grade][1].click()
+    assert requested.count() == 1 and requested.at(0) == [grade]
+    area.ratings.choices[grade][1].click()
+    assert shuffled.count() == 1 and area.ratings.isHidden()
     due, saved = db.conn.execute(
         "SELECT due, last_rating FROM review_schedules WHERE item_key=?",
         (second.item_key(),),
@@ -246,7 +260,7 @@ def test_self_grading_flow(
         1,
     ]
     assert learner.calendar.study_counts(
-        view.exercise,
+        view.controller.exercise,
         profile=learner.profile.id,
         mode=mode,
         now=clock[0],
@@ -354,22 +368,25 @@ def test_self_graded_learning_step_wakes_the_exercise(
     learner = Learner(db, profile=db.add_profile("Ada"))
     learner.set_mode(mode)
     learner.set_self_grading(True)
-    view = ExerciseView(NoteNames(), learner=learner)
+    view = ExercisePage(NoteNames(), learner=learner)
     view.show()
     q = view.question
     assert q is not None
     view.submit(q.answer, button=None)
-    view.grade_controls[Rating.Good][1].click()
-    assert view.question is None and "Next review at" in view.prompt.text()
-    assert 599_000 <= view._advance.remainingTime() <= 600_000
+    view.control_area.ratings.choices[Rating.Good][1].click()
+    assert (
+        view.question is None
+        and "Next review at" in view.question_view.prompt.text()
+    )
+    assert 599_000 <= view.controller._advance.remainingTime() <= 600_000
     clock[0] += 600
-    view._advance.timeout.emit()
+    view.controller._advance.timeout.emit()
     assert (
         view.question is not None and view.question.item_key() == q.item_key()
     )
     view.submit(q.answer, button=None)
-    assert view.grade_controls[Rating.Hard][0].text() == "10 min"
-    view.grade_controls[Rating.Easy][1].click()
+    assert view.control_area.ratings.choices[Rating.Hard][0].text() == "10 min"
+    view.control_area.ratings.choices[Rating.Easy][1].click()
     assert (
         db.conn.execute("SELECT completed FROM daily_reviews").fetchone()[0]
         == 1
@@ -378,7 +395,10 @@ def test_self_graded_learning_step_wakes_the_exercise(
     due = db.conn.execute("SELECT due FROM review_schedules").fetchone()[0]
     clock[0] = due
     view.next_question()
-    assert view.question is not None and view.review_interval.isVisible()
+    assert (
+        view.question is not None
+        and view.question_view.review_interval_label.isVisible()
+    )
     view.submit(q.answer, button=None)
     assert (
         db.conn.execute("SELECT due FROM review_schedules").fetchone()[0] > due
@@ -666,7 +686,7 @@ def test_missed_calendar_card_returns_in_the_open_exercise(
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     learner.set_mode(mode)
-    view = ExerciseView(NoteNames(), learner=learner)
+    view = ExercisePage(NoteNames(), learner=learner)
     view.settings_panel.next_question_mode = next_mode
     view.show()
     first = view.question
@@ -679,24 +699,24 @@ def test_missed_calendar_card_returns_in_the_open_exercise(
         and db.count_attempts(learner.profile.id) == 1
     )
     if next_mode == "Wait":
-        assert not view._advance.isActive()
-        view.next_button.click()
+        assert not view.controller._advance.isActive()
+        view.control_area.next_button.click()
     else:
-        assert view._advance.isActive()
-        view._advance.timeout.emit()
+        assert view.controller._advance.isActive()
+        view.controller._advance.timeout.emit()
     second = view.question
     assert second is not None and second.item_key() != first.item_key()
     view.submit(second.answer, button=None)
     view.next_question()
     assert (
         view.question is None
-        and "Waiting for a missed card" in view.prompt.text()
+        and "Waiting for a missed card" in view.question_view.prompt.text()
     )
-    assert 59_000 <= view._advance.remainingTime() <= 60_000
-    view.next_button.click()
+    assert 59_000 <= view.controller._advance.remainingTime() <= 60_000
+    view.control_area.next_button.click()
     assert view.question is None
     clock[0] += 60
-    view._advance.timeout.emit()
+    view.controller._advance.timeout.emit()
     assert (
         view.question is not None
         and view.question.item_key() == first.item_key()
@@ -709,7 +729,7 @@ def test_missed_calendar_card_returns_in_the_open_exercise(
         (1, 1),
     ]
     view.next_question()
-    assert view.question is None and not view._advance.isActive()
+    assert view.question is None and not view.controller._advance.isActive()
     view.close()
 
 
@@ -738,26 +758,26 @@ def test_missed_signature_waits_through_navigation(
     db = Database()
     learner = Learner(db, profile=db.add_profile("Ada"))
     learner.set_mode("SM-2")
-    view = ExerciseView(OrderOfKeys(), learner=learner)
+    view = ExercisePage(OrderOfKeys(), learner=learner)
     view.settings_panel.next_question_mode = "Wait"
     view.show()
     first = view.question
     assert first is not None
     # Submit the blank staff for G major.
-    view.answer_controls.placement.answer_button.click()
+    view.control_area.answers.placement.answer_button.click()
     assert (
         view.session.answered
         and view.session.missed
         and view.question_view.scale_input.locked
     )
     assert (
-        not view.answer_controls.placement.answer_button.isEnabled()
-        and "Incorrect" in view.prompt.text()
+        not view.control_area.answers.placement.answer_button.isEnabled()
+        and "Incorrect" in view.question_view.prompt.text()
     )
-    view.next_button.click()
-    assert view.question is None and view._advance.isActive()
+    view.control_area.next_button.click()
+    assert view.question is None and view.controller._advance.isActive()
     view.hide()
-    assert not view._advance.isActive()
+    assert not view.controller._advance.isActive()
     monkeypatch.setattr(time, "time", lambda: NOW + 61)
     view.show()
     assert (
@@ -977,7 +997,7 @@ def test_tile_tracks_missed_card_until_correct(
     window.open_exercise(NoteNames)
     view = window._exercise_page
     assert view is not None and view.question is not None
-    counts = view.queue_counts
+    counts = view.toolbar.queue_counts
     assert counts.isVisible() and counts.text().split(" / ")[0].endswith(
         "<u>1</u></b>",
     )
@@ -2181,8 +2201,22 @@ def test_scheduler_controls(
     q = view.question
     view.submit(q.answer, button=None)
     view.next_question()
-    assert view.question is None and view.next_button.text() == "Check again"
-    assert view.prompt.isVisible() and not view.answer_controls.buttons
+    button = view.control_area.next_button
+    assert view.controller.question is None and button.isVisible()
+    displayed = view.question_view.displayed_question
+    assert (
+        displayed is not None
+        and displayed.prompt == view.question_view.prompt.text()
+    )
+    assert view.question_view.interactive_question is None
+    assert (
+        button.text() == "Check again"
+        and button.shortcut().toString() == "Return"
+    )
+    assert (
+        view.question_view.prompt.isVisible()
+        and not view.control_area.answers.buttons
+    )
     window.show_home()
     assert (
         "0 new cards available, 0 incorrect cards awaiting a correct "
@@ -2199,7 +2233,10 @@ def test_scheduler_controls(
     )
     window._settings.scheduler_list.setCurrentRow(0)
     assert view.question is not None
-    assert view.queue_counts.isHidden() and not view._count_timer.isActive()
+    assert (
+        view.toolbar.queue_counts.isHidden()
+        and not view.controller._count_timer.isActive()
+    )
     window._settings.close()
     window.show_home()
     assert card.counts.isHidden()
@@ -2422,7 +2459,7 @@ def test_adding_a_key_after_finishing_a_note_exercise(
         question = view.question
         assert question is not None and question.key == 0
         learner.record(
-            view.exercise,
+            view.controller.exercise,
             question=question,
             answer=question.answer,
             correct=True,
@@ -2529,11 +2566,11 @@ def test_adding_a_notation_symbol_after_exhausting_the_deck(
         now=time.time(),
     )
     assert counts == (0, 1)
-    view = ExerciseView(ex, learner=learner)
+    view = ExercisePage(ex, learner=learner)
     q = view.question
     assert q is not None and q.answer == "Vertical turn"
     if question_type == "button":
-        view.answer_controls.buttons[0].click()
+        view.control_area.answers.buttons[0].click()
     else:
         view.submit(q.answer, button=None)
     assert view.session.answered

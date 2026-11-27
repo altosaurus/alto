@@ -52,7 +52,7 @@ from PySide6.QtWidgets import (
     QScrollArea,
 )
 
-import alto.ui.exercise_view as ev
+import alto.ui.exercise_page as ev
 from alto import settings
 from alto.audio import sounds
 from alto.exercises import REGISTRY
@@ -338,9 +338,9 @@ def capture(
         # color-scheme request.
         apply_theme("studio_dark" if theme == "dark" else "studio")
 
-    original = ev.ExerciseView.__init__
+    original = ev.ExercisePage.__init__
     # noinspection PyShadowingNames
-    ev.ExerciseView.__init__ = (
+    ev.ExercisePage.__init__ = (
         lambda self, exercise, *, rng=None, parent=None, learner=None: (
             original(
                 self,
@@ -548,10 +548,10 @@ def capture(
             assert view is not None
             size = window.size()
             window.resize(1340, 720)
-            view.gear.click()
+            view.toolbar.gear.click()
             wait()
             save(view, name="exercise-view-anatomy")
-            view.gear.click()
+            view.toolbar.gear.click()
             window.resize(size)
             wait()
     window.show_home()

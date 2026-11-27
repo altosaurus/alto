@@ -92,7 +92,7 @@ and the final state is set in `finished`, not assumed, so the widgets always end
 
 ### Opening and closing a pane: animate a limit
 
-The exercise's settings pane opens by animating `maximumWidth` of the pane from 0 to `PANE_WIDTH` (`QPropertyAnimation(self.pane,
+The exercise's settings pane opens by animating `maximumWidth` of the pane from 0 to the zoom-adjusted `ExerciseSettingsPanel.PANE_WIDTH` (`QPropertyAnimation(self.settings_pane,
 b"maximumWidth", self)`, 220 ms, `OutCubic`). The layout does the rest: as the pane's allowed width grows, the layout gives it
 the room and shrinks its neighbor. This is a common Qt trick: **animate a constraint, not a position**, and let the layout
 move everything. The pane is hidden when it finishes at zero (`_pane_settled`) so it takes no space and cannot be tabbed into.
@@ -120,8 +120,7 @@ make every switch slide.
 `ExerciseView._flash` fades an answer button from black to the correct-answer green in 180 ms. Calling it without a
 target uses `CORRECT_ANSWER_COLOR` from `alto/ui/colors.py`. The wrong-answer handler passes red explicitly.
 The flash uses `QVariantAnimation` with a start of 0.0 and an end of 1.0 and in its callback computes `blend(start, b=end, t=t)`
-and sets the button's style sheet from the result. The animations are kept in a list (`self._anims`) that is cleared when the next
-question appears, so nothing animates a button that no longer exists.
+and sets the button's style sheet from the result. The view requests a fade with a callback that paints each frame. The practice controller runs the animation and cancels outstanding fades before new answers appear. A standalone preview applies the final color immediately.
 
 Pass the answered notes to `ExerciseView._finish_answer`, grouped by onset. In **After Animation** and **Wait**,
 the playback callback colors each sounding staff column or piano key green and clears the highlight at the end.
@@ -173,7 +172,7 @@ the test takes, until the test calls `motion.settle()`. That runs everything wai
 looks like this:
 
 ```python
-view.answer_controls.placement.answer_button.click()
+view.control_area.answers.placement.answer_button.click()
 assert (
     view.session.missed and view.question_view.scale_input.locked
 )  # the wrong-answer feedback is showing

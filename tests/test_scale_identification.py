@@ -25,8 +25,8 @@ from alto.theory.scales import (
 )
 from alto.ui import icons
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import load_scale_identification
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import EXERCISE_ICONS
 from alto.ui.main_window import MainWindow
 from alto.ui.settings_panel import (
@@ -153,10 +153,10 @@ def test_replacement_keeps_the_icon_and_shows_an_answerable_staff(
     assert ScaleIdentification in REGISTRY
     assert all(cls.name != "Scale Spelling" for cls in REGISTRY)
     assert EXERCISE_ICONS["ScaleIdentification"] == icons.EXERCISE_SCALES
-    view = ExerciseView(ScaleIdentification(), rng=random.Random(5))
+    view = ExercisePage(ScaleIdentification(), rng=random.Random(5))
     view.show()
     assert view.question is not None and view.question_view.staff.isVisible()
-    view.answer_controls.buttons[
+    view.control_area.answers.buttons[
         view.question.choices.index(view.question.answer)
     ].click()
     assert view.session.answered
@@ -190,7 +190,7 @@ def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(
     assert settings.scale_identification.button_mode == "all"
     assert settings.scale_identification.button_count == 4
 
-    view = ExerciseView(exercise, rng=random.Random(3))
+    view = ExercisePage(exercise, rng=random.Random(3))
     assert view.question is not None
     assert (
         len(view.question.choices) == 21
@@ -198,7 +198,7 @@ def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(
     )
     tonic, mode = view.question.answer.split(" ", 1)
     buttons = {
-        button.text(): button for button in view.answer_controls.buttons
+        button.text(): button for button in view.control_area.answers.buttons
     }
     buttons[mode].click()
     assert not view.session.answered
@@ -332,15 +332,15 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
 
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(sounds, "play_notes", play)
-    view = ExerciseView(ScaleIdentification(), rng=random.Random(2))
+    view = ExercisePage(ScaleIdentification(), rng=random.Random(2))
     view.show()
     question = view.question
     assert question is not None
-    view.answer_controls.buttons[
+    view.control_area.answers.buttons[
         question.choices.index(question.answer)
     ].click()
     assert played == [column[0].midi for column in question.staff]
-    assert view.session.answered and not view._advance.isActive()
+    assert view.session.answered and not view.controller._advance.isActive()
     assert (
         not view.question_view.staff.column_colors
         and view.question_view.staff.note_color is None
@@ -350,12 +350,12 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
         assert list(view.question_view.staff.column_colors) == [index]
         assert (
             view.question_view.staff.note_color is None
-            and not view._advance.isActive()
+            and not view.controller._advance.isActive()
         )
         assert view.question is question
     callbacks[0](None)
     assert (
-        view._advance.isActive()
+        view.controller._advance.isActive()
         and not view.question_view.staff.column_colors
         and view.question_view.staff.note_color is None
     )
@@ -363,9 +363,9 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
     callbacks[0](
         None,
     )  # a completion delivered while away must leave advancement paused
-    assert not view._advance.isActive()
+    assert not view.controller._advance.isActive()
     view.show()
-    assert view._advance.isActive()
+    assert view.controller._advance.isActive()
     view.next_question()
     callbacks[0](3)
     assert (

@@ -42,7 +42,6 @@ from alto.exercises.rhythm_equations import (  # noqa: F401 (public rhythm helpe
 )
 from alto.notation_excerpts import passages_by_term
 from alto.notation_terms import CATALOG, MARKS, SIMILAR_MARKS
-from alto.settings import spell
 from alto.theory.fifths import (
     MAJORS,
     MINORS,
@@ -54,6 +53,7 @@ from alto.theory.fifths import (
     numeral_chords,
 )
 from alto.theory.key_signatures import written_signature
+from alto.theory.note_naming import DEGREE_NAMINGS, spell
 from alto.theory.pitch import (
     MAJOR_KEYS,
     NATURAL_LETTER_INDEX,
@@ -236,7 +236,7 @@ def _note_card_prompt(q: Question, *, naming: str) -> str:
     prompt = "Identify the note."
     if naming == "solfege":
         prompt += " Use solfège."
-    elif naming in settings.DEGREE_NAMINGS:
+    elif naming in DEGREE_NAMINGS:
         term = (
             "scale degree" if naming == "degrees" else "scale-degree function"
         )
@@ -419,7 +419,7 @@ class NoteNames(ChoiceExercise):
             parts["scale_minor_keys"],
         )
         del parts["minor_keys"]
-        if cfg.naming not in settings.DEGREE_NAMINGS:
+        if cfg.naming not in DEGREE_NAMINGS:
             parts["key_signatures"] = set(cfg.active_keys())
         elif cfg.minor_keys:
             if cfg.key_signatures:
@@ -473,7 +473,7 @@ class NoteNames(ChoiceExercise):
             "Choose whether sharps, flats "
             "and naturals appear, and whether to ask for the octave too."
         )
-        if settings.note_names.naming in settings.DEGREE_NAMINGS:
+        if settings.note_names.naming in DEGREE_NAMINGS:
             text += (
                 "<br><br>Degrees 1–7 start at the tonic of the major or "
                 "natural minor key named in the question. "
@@ -860,13 +860,13 @@ class NoteNames(ChoiceExercise):
                     for step in range(low, high + 1)
                 )
             octaves = [str(octave) for octave in sorted(possible_octaves)]
-            joiner = " / " if cfg.naming in settings.DEGREE_NAMINGS else ""
+            joiner = " / " if cfg.naming in DEGREE_NAMINGS else ""
             answer += f"{joiner}{note.octave}"
         # One button for every name that can be the answer under the
         # current settings.
         if with_accidentals:
             pool = {(l, a) for l in range(7) for a in (-1, 0, 1)}
-        elif cfg.naming in settings.DEGREE_NAMINGS:
+        elif cfg.naming in DEGREE_NAMINGS:
             pool = {(l, key_accidental(l, count=key)) for l in range(7)}
         else:
             pool = {
@@ -874,7 +874,7 @@ class NoteNames(ChoiceExercise):
                 for l in range(7)
                 for k in cfg.active_keys()
             }
-        if cfg.naming in settings.DEGREE_NAMINGS:
+        if cfg.naming in DEGREE_NAMINGS:
             choices, grid = _degree_choices(
                 pool,
                 key=key,
@@ -903,7 +903,7 @@ class NoteNames(ChoiceExercise):
                 grid = {c: (rows[a], l) for c, (l, a) in zip(choices, ordered)}
 
         expl = []
-        if cfg.naming in settings.DEGREE_NAMINGS:
+        if cfg.naming in DEGREE_NAMINGS:
             expl.append(
                 f"{note.name} is scale degree {name} in {tonic} {mode}.",
             )
@@ -3935,7 +3935,7 @@ class KeyboardNotes(ChoiceExercise):
                 "the letter for a flat."
             ),
         ]
-        if cfg.naming in settings.DEGREE_NAMINGS:
+        if cfg.naming in DEGREE_NAMINGS:
             text = [
                 (
                     "<b>Keyboard Note Identification</b><br>Name the "
@@ -4146,7 +4146,7 @@ class KeyboardNotes(ChoiceExercise):
             ]
         else:
             extra = []
-        if naming in settings.DEGREE_NAMINGS:
+        if naming in DEGREE_NAMINGS:
             pool = {(letter, 0) for letter in range(7)} | {
                 (letter, acc) for letter, acc, _row in extra
             }
@@ -4181,7 +4181,7 @@ class KeyboardNotes(ChoiceExercise):
             octaves=octaves,
             key=count or 0,
             key_staff=cfg.key_signature,
-            joiner=" / " if naming in settings.DEGREE_NAMINGS else "",
+            joiner=" / " if naming in DEGREE_NAMINGS else "",
         )
 
 
@@ -4323,7 +4323,7 @@ class NoteConstruction(Exercise):
         ]
         if (
             cfg.question_type == "scale"
-            and settings.note_names.naming in settings.DEGREE_NAMINGS
+            and settings.note_names.naming in DEGREE_NAMINGS
         ):
             text.append(
                 "The question gives a scale degree in the named key. Degree"
@@ -4811,7 +4811,7 @@ class NoteConstruction(Exercise):
         )
         key_name = f"{tonic} {'minor' if minor else 'major'}"
         accidental = note.accidental
-        if notes_only and naming in settings.DEGREE_NAMINGS:
+        if notes_only and naming in DEGREE_NAMINGS:
             naming = "letters"
         name = spell(
             note,
@@ -4821,7 +4821,7 @@ class NoteConstruction(Exercise):
             minor=minor,
         )
         prompt = name if notes_only else f"Place {name} on the staff."
-        if naming in settings.DEGREE_NAMINGS:
+        if naming in DEGREE_NAMINGS:
             degree = spell(note, naming=naming, key=count, minor=minor)
             if naming == "degrees":
                 octave = (
@@ -4868,9 +4868,7 @@ class NoteConstruction(Exercise):
             if staff_signature != count
             else None,
             explanation=explanation,
-            caption=prompt
-            if notes_only or naming in settings.DEGREE_NAMINGS
-            else "",
+            caption=prompt if notes_only or naming in DEGREE_NAMINGS else "",
         )
 
 

@@ -45,11 +45,11 @@ from alto.terms import PLUGIN_TERMS
 from alto.theory.pitch import Note
 from alto.ui import database_page, instrument_picker, main_window
 from alto.ui.anki_exporter import card_fields
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import (
     load_pack_options,
     save_pack_options,
 )
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.fingerboard import (
     FingerboardWidget,
     neck_view,
@@ -872,7 +872,7 @@ def test_author_walkthrough(
     pack.write_text(TUTORIAL.read_text().split("```json\n")[1].split("```")[0])
     assert load_packs(tmp_path) == []
     exercise = REGISTRY[-1]()
-    view = ExerciseView(exercise, rng=random.Random(1))
+    view = ExercisePage(exercise, rng=random.Random(1))
     q = view.question
     assert q is not None and q.answer == "E"
     assert (
@@ -884,23 +884,23 @@ def test_author_walkthrough(
     view.settings_panel.next_question_mode = "Wait"
     played = []
     monkeypatch.setattr(
-        view._answer_playback,
+        view.feedback.playback,
         "play",
         lambda notes, **kwargs: played.append((notes, kwargs["instrument"])),
     )
     view.submit(
         "E",
         button=next(
-            b for b in view.answer_controls.buttons if b.text() == "E"
+            b for b in view.control_area.answers.buttons if b.text() == "E"
         ),
     )
     assert played == [([[Note.parse("E4")]], "pack.my-strings.studio-viola")]
-    view._light_answer_notes(0)
+    view.question_view.light_answer_notes(0)
     assert view.question_view.fingerboard.sounding
-    view._light_answer_notes(None)
+    view.question_view.light_answer_notes(None)
     assert (
         not view.question_view.fingerboard.sounding
-        and not view.next_button.isHidden()
+        and not view.control_area.next_button.isHidden()
     )
     preview = QuestionPreview(exercise.name, question=q)
     board = preview.findChild(FingerboardWidget)
@@ -1235,7 +1235,7 @@ def test_animation_follows_answer_mode(
         if cls.__name__ == "pack.viola.first-position"
     )
     monkeypatch.setattr(sounds, "enabled", False)
-    view = ExerciseView(exercise, rng=random.Random(42))
+    view = ExercisePage(exercise, rng=random.Random(42))
     view.show()
     view.settings_panel.next_question_mode = mode
     board = view.question_view.fingerboard
@@ -1245,7 +1245,7 @@ def test_animation_follows_answer_mode(
         question.answer,
         button=next(
             b
-            for b in view.answer_controls.buttons
+            for b in view.control_area.answers.buttons
             if b.text() == question.answer
         ),
     )
@@ -1328,7 +1328,7 @@ def test_third_party_zip_owns_art_audio_and_exercises(
     exercise = cls()
     model = INSTALLED["pack.test-studio.two-string"]
     assert model.strings[0].point(12) == (150, 25)
-    view = ExerciseView(exercise, rng=random.Random(3))
+    view = ExercisePage(exercise, rng=random.Random(3))
     assert view.question_view.fingerboard.model is model
     view.question_view.fingerboard.resize(300, 155)
     board = view.question_view.fingerboard.grab().toImage()
@@ -1356,7 +1356,7 @@ def test_third_party_zip_owns_art_audio_and_exercises(
     view.submit(
         "D",
         button=next(
-            b for b in view.answer_controls.buttons if b.text() == "D"
+            b for b in view.control_area.answers.buttons if b.text() == "D"
         ),
     )
     assert (
@@ -1958,15 +1958,15 @@ def test_picture_questions_without_strings(
             assert seen.call_args.args == (card.picture.instrument,)
         else:
             assert not buttons
-            view = ExerciseView(exercise, rng=random.Random(1))
-            view.question = card
-            view.question_view.fingerboard.show_position(card.picture)
+            view = ExercisePage(exercise, rng=random.Random(1))
+            view.controller.question = card
+            view.show_question(card)
             view.settings_panel.next_question_mode = "Wait"
             view.submit(
                 card.answer,
                 button=next(
                     b
-                    for b in view.answer_controls.buttons
+                    for b in view.control_area.answers.buttons
                     if b.text() == card.answer
                 ),
             )

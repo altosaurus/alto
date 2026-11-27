@@ -1544,6 +1544,8 @@ class ExerciseSettingsPanel(QWidget):
 
     Attributes
     ----------
+    PANE_WIDTH : int
+        Width of the open settings pane at 100% zoom, in pixels.
     changed : Signal
         Emitted after any setting is edited that changes what is asked,
         so the exercise asks a new question.
@@ -1565,10 +1567,13 @@ class ExerciseSettingsPanel(QWidget):
     [1]
     """
 
+    PANE_WIDTH = 290
+
     stack: SlideStack
     next_question_choices: QWidget
     next_question_row: MenuRow
-    next_question_mode = "After Animation"
+    _next_question_mode = "After Animation"
+    next_question_mode_changed = Signal(str)
     choice_buttons_row: MenuRow | None = None
     changed = Signal()
     restyled = Signal()
@@ -1576,6 +1581,29 @@ class ExerciseSettingsPanel(QWidget):
     limits_row: MenuRow | None = None
     limits_editor: DailyLimitsEditor
     limits_page: int
+
+    @property
+    def next_question_mode(self) -> str:
+        """
+        Return the pacing selected for this exercise.
+
+        Returns
+        -------
+        str
+            The selected Next Question option.
+
+        Examples
+        --------
+        Wait keeps the question on screen after feedback.
+        """
+        return self._next_question_mode
+
+    @next_question_mode.setter
+    def next_question_mode(self, mode: str) -> None:
+        """Publish the new pacing without replacing the question."""
+        if self._next_question_mode != mode:
+            self._next_question_mode = mode
+            self.next_question_mode_changed.emit(mode)
 
     def _build_menu(self) -> tuple[QWidget, QVBoxLayout]:
         """

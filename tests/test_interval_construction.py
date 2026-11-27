@@ -21,8 +21,8 @@ from alto.theory.pitch import Interval, Note
 from alto.ui import motion
 from alto.ui.anki_exporter import card_fields
 from alto.ui.colors import CORRECT_ANSWER_COLOR
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import load_exercise_settings
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.settings_panel import IntervalSettingsPanel
 from alto.ui.staff import BOTTOM_LINE
@@ -61,7 +61,7 @@ def test_placement_and_sounding_notes(
     )
     cfg.ranges = {"alto": (28, 30)}
     cfg.accidentals = {-2, 2}
-    view = ExerciseView(IntervalConstruction(), rng=random.Random(2))
+    view = ExercisePage(IntervalConstruction(), rng=random.Random(2))
     view.settings_panel.next_question_mode = "Wait"
     view.show()
     app.processEvents()
@@ -88,8 +88,8 @@ def test_placement_and_sounding_notes(
     assert staff.columns == (
         [[first]] if display == "Harmonic" else [[first], []]
     )
-    view._cycle_accidental()
-    view.accidental_buttons[target.accidental].click()
+    view.question_view.cycle_accidental()
+    view.question_view.accidental_buttons[target.accidental].click()
     y = (
         staff.staff_bottoms()["alto"]
         - (target.diatonic - BOTTOM_LINE["alto"]) * staff.GAP / 2
@@ -101,7 +101,7 @@ def test_placement_and_sounding_notes(
         assert (
             view.session.answered
             and view.session.correct == 1
-            and view.next_button.isVisible()
+            and view.control_area.next_button.isVisible()
         )
         assert staff.columns == q.staff
         steps = play.call_args.kwargs
@@ -185,7 +185,7 @@ def test_settings_retries_and_export(
         {"treble": (28, 30)},
         {"M3", "m3"},
     )
-    view = ExerciseView(IntervalConstruction(), rng=random.Random(4))
+    view = ExercisePage(IntervalConstruction(), rng=random.Random(4))
     panel = view.settings_panel
     assert (
         isinstance(panel, IntervalSettingsPanel)
@@ -207,12 +207,17 @@ def test_settings_retries_and_export(
         (first, "staff position"),
         (Note.from_diatonic(target.diatonic, accidental=2), "accidental"),
     ):
-        view._place(wrong)
+        view.question_view.note_submitted.emit(wrong)
         assert (
-            hint in view.place_status.text()
+            hint in view.question_view.place_status.text()
             and view.question_view.note_input.columns[0][0] == first
         )
+        assert (
+            view.question_view.note_input.accessibleDescription()
+            == view.question_view.place_status.text()
+        )
         motion.settle()
+        assert hint not in view.question_view.place_status.text()
         assert (
             not view.question_view.note_input.locked
             and view.question_view.note_input.columns
@@ -225,18 +230,18 @@ def test_settings_retries_and_export(
         for a in (-1, 0, 1)
         if str(Note.from_diatonic(target.diatonic, accidental=a)) in q.accept
     )
-    view._place(alternate)
+    view.question_view.note_submitted.emit(alternate)
     assert view.session.answered and view.question_view.note_input.columns == [
         [first, alternate],
     ]
-    preview = QuestionPreview(view.exercise.name, question=q)
+    preview = QuestionPreview(view.controller.exercise.name, question=q)
     assert all(
         name in preview._answer_text() for name in (q.answer, *q.accept)
     )
     prompt, front, back, _ = card_fields(
         q,
         folder=tmp_path,
-        exercise=view.exercise,
+        exercise=view.controller.exercise,
     )
     assert (
         prompt == q.prompt

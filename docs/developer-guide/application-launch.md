@@ -105,7 +105,7 @@ return app.exec()
 
 The first two assignments keep references to the active learner and window on the application. `window.show()` makes the constructed window visible. `app.exec()` runs Qt’s main event loop, which delivers input and paint events. `main()` stays at that call while you use Alto.
 
-In the running app, click **Note Identification**. The catalog emits `exercise_chosen` with the exercise class. The connection you saw in `_build()` sends it to `MainWindow.open_exercise()`, which opens an `ExerciseView` in the stack. The toolbar stays in place as the catalog gives way to the staff and answer buttons. [ExerciseView API]({{ '/api/alto.ui.exercise_view/class-exerciseview/' | relative_url }})
+In the running app, click **Note Identification**. The catalog emits `exercise_chosen` with the exercise class. The connection you saw in `_build()` sends it to `MainWindow.open_exercise()`, which opens an `ExercisePage` in the stack. The page creates the controller for the active learner. The controller connects its question and grading updates to the display. The toolbar stays in place as the catalog gives way to the staff and answer buttons. [ExerciseView API]({{ '/api/alto.ui.exercise_view/class-exerciseview/' | relative_url }})
 
 {% include component-shot.html screen="note-identification" width=1100 height=720 highlight="ExerciseView" alt="ExerciseView is outlined on the right below the toolbar. It contains the score counter, staff, and answer buttons. The exercise list is on the left." %}
 

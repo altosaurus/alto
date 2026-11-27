@@ -25,8 +25,8 @@ from alto.exercises.library import (
 from alto.settings import RHYTHM_DURATIONS
 from alto.ui import engraving, motion
 from alto.ui.anki_exporter import card_fields
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.exercise_settings import load_exercise_settings
-from alto.ui.exercise_view import ExerciseView
 from alto.ui.meter_staff import MeterButton, MeterStaff
 from alto.ui.settings_menu import MenuRow, ToggleRow
 from alto.ui.settings_panel import settings_panel_for
@@ -176,9 +176,9 @@ def test_note_type_picker_saves_each_exercise(app: QApplication) -> None:
         (BeatIdentification(), "Whole note"),
         (BeatConstruction(), "Half note"),
     ):
-        view = ExerciseView(exercise, rng=random.Random(7))
+        view = ExercisePage(exercise, rng=random.Random(7))
         view.show()
-        view.gear.click()
+        view.toolbar.gear.click()
         panel = view.settings_panel
         assert panel is not None
         row = next(
@@ -261,20 +261,20 @@ def test_short_notes_show_beams_and_fit_a_narrow_pane(
     """
     settings.beat_note_types["beatIdentification"] = {value}
     settings.beat_rhythm_component = "Beat and meter"
-    view = ExerciseView(BeatIdentification(), rng=random.Random(19))
+    view = ExercisePage(BeatIdentification(), rng=random.Random(19))
     view.resize(430, 480)
     view.show()
-    view.gear.click()
+    view.toolbar.gear.click()
     motion.settle()
     app.processEvents()
-    score = view.beat_staff
+    score = view.question_view.beat_staff
     draw = Mock(wraps=engraving.draw_beamed_notes)
     monkeypatch.setattr(engraving, "draw_beamed_notes", draw)
     assert not score.grab().isNull()
     assert score.meter == (12, 8)
     assert len(draw.call_args_list) == 8
     assert all(call.kwargs["beams"] == beams for call in draw.call_args_list)
-    assert view.rhythm_scroll.horizontalScrollBar().maximum() > 0
+    assert view.question_view.rhythm_scroll.horizontalScrollBar().maximum() > 0
     assert score.width() >= score.minimumSizeHint().width()
     view.close()
 
@@ -289,9 +289,9 @@ def test_tuplet_switch_persists_independently(app: QApplication) -> None:
         Application for constructing the exercise menus.
     """
     exercise = BeatIdentification()
-    view = ExerciseView(exercise, rng=random.Random(5))
+    view = ExercisePage(exercise, rng=random.Random(5))
     view.show()
-    view.gear.click()
+    view.toolbar.gear.click()
     panel = view.settings_panel
     assert panel is not None
     switch = next(
@@ -452,13 +452,13 @@ def test_nine_eight_stays_centered_after_a_question_change(
         Beat exercise to open at narrow and wide sizes.
     """
     settings.beat_rhythm_component = "Beat and meter"
-    view = ExerciseView(exercise_type(), rng=random.Random(2))
+    view = ExercisePage(exercise_type(), rng=random.Random(2))
     view.resize(820, 520)
     view.show()
     app.processEvents()
-    score = view.beat_staff
+    score = view.question_view.beat_staff
     assert score.meter == (2, 4)
-    view.rng.seed(5)
+    view.controller.rng.seed(5)
     view.next_question()
     for width, rows in ((820, 1), (360, 2), (820, 1)):
         view.resize(width, 520)
@@ -466,7 +466,10 @@ def test_nine_eight_stays_centered_after_a_question_change(
         assert score.meter == (9, 8)
         assert score.height() == rows * score._row_height()
         assert score.minimumHeight() == score.maximumHeight() == score.height()
-        assert view.rhythm_scroll.viewport().height() == score.height()
+        assert (
+            view.question_view.rhythm_scroll.viewport().height()
+            == score.height()
+        )
 
         image = (
             score.grab()
@@ -494,36 +497,43 @@ def test_exercise_view_scores_the_time_signature(app: QApplication) -> None:
         Qt application used to build and open the exercise.
     """
     exercise = BeatIdentification()
-    view = ExerciseView(exercise, rng=random.Random(5))
+    view = ExercisePage(exercise, rng=random.Random(5))
     view.show()
     app.processEvents()
     question = view.question
     assert question is not None
-    assert view.prompt.text() == "What is the time signature?"
-    assert view.beat_staff.isVisible()
-    assert not view.beat_staff._signature_visible
-    assert len(view.beat_staff._measures) == 2
+    prompt = view.question_view.prompt
+    assert prompt.parentWidget() is view.question_view
+    assert (
+        prompt.isVisible() and prompt.text() == "What is the time signature?"
+    )
+    assert prompt.geometry().bottom() < view.question_view.rhythm_scroll.y()
+    assert view.question_view.beat_staff.isVisible()
+    assert not view.question_view.beat_staff._signature_visible
+    assert len(view.question_view.beat_staff._measures) == 2
     assert view.question_view.staff is None
     assert view.settings_panel is not None
     assert view.settings_panel.choice_buttons_row is not None
-    assert {button.text() for button in view.answer_controls.buttons} == set(
+    assert {
+        button.text() for button in view.control_area.answers.buttons
+    } == set(
         question.choices,
     )
     assert all(
         isinstance(button, MeterButton)
-        for button in view.answer_controls.buttons
+        for button in view.control_area.answers.buttons
     )
     assert all(
         button.accessibleName() == button.text()
-        for button in view.answer_controls.buttons
+        for button in view.control_area.answers.buttons
     )
     assert all(
         not button.shortcut().isEmpty()
-        for button in view.answer_controls.buttons
+        for button in view.control_area.answers.buttons
     )
     correct = next(
         button
-        for button in view.answer_controls.buttons
+        for button in view.control_area.answers.buttons
         if button.text() == question.answer
     )
     correct.click()
@@ -542,9 +552,9 @@ def test_rhythm_component_menu_and_review(app: QApplication) -> None:
     """
     app.setStyleSheet(app_style(app.palette()))
     exercise = BeatIdentification()
-    view = ExerciseView(exercise, rng=random.Random(1))
+    view = ExercisePage(exercise, rng=random.Random(1))
     view.show()
-    view.gear.click()
+    view.toolbar.gear.click()
     panel = view.settings_panel
     assert panel is not None
     row = next(
@@ -574,27 +584,35 @@ def test_rhythm_component_menu_and_review(app: QApplication) -> None:
     assert exercise.settings_signature() != ""
     assert exercise.review_question(original, same_settings=False) is None
     question = view.question
-    assert question is not None and question.prompt == view.prompt.text()
+    assert (
+        question is not None
+        and question.prompt == view.question_view.prompt.text()
+    )
     assert question.prompt == "What are the beat and meter?"
     top, bottom = beat_meter(question.answer)
-    assert view.beat_staff.meter == (top, bottom)
-    assert view.beat_staff._signature_visible
-    assert view.beat_staff.accessibleName() == f"{top}/{bottom} rhythm"
+    assert view.question_view.beat_staff.meter == (top, bottom)
+    assert view.question_view.beat_staff._signature_visible
+    assert (
+        view.question_view.beat_staff.accessibleName()
+        == f"{top}/{bottom} rhythm"
+    )
     assert "duple" in exercise.instructions()
     page.findChildren(QToolButton)[0].click()
     motion.settle()
     assert panel.stack.currentIndex() == 0 and view.question is question
-    view.gear.click()
+    view.toolbar.gear.click()
     motion.settle()
-    assert view.answer_controls.interval_answers.isVisible()
+    assert view.control_area.answers.interval_answers.isVisible()
     assert all(
         button.isVisible()
         and not isinstance(button, MeterButton)
         and not button.shortcut().isEmpty()
-        for button in view.answer_controls.buttons
+        for button in view.control_area.answers.buttons
     )
     next(
-        b for b in view.answer_controls.buttons if b.text() == question.answer
+        b
+        for b in view.control_area.answers.buttons
+        if b.text() == question.answer
     ).click()
     assert view.session.answered
 

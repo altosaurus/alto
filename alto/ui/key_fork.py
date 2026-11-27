@@ -20,6 +20,7 @@ Examples
 from __future__ import annotations
 
 import math
+from collections.abc import Callable
 
 from PySide6.QtCore import (
     QAbstractAnimation,
@@ -548,6 +549,31 @@ class KeyFork(QWidget):
             return False
         return True
 
+    def marker_fade(
+        self,
+        target: str = CORRECT_ANSWER_COLOR,
+    ) -> Callable[[float], None]:
+        """
+        Prepare the marker's color update for each step of a fade.
+
+        Parameters
+        ----------
+        target : str
+            Final feedback color.
+
+        Returns
+        -------
+        callable
+            Paints the marker between its normal and feedback colors.
+
+        Examples
+        --------
+        A wrong key signature fades from the highlight color to red.
+        """
+        start = self.palette().color(QPalette.ColorRole.Highlight)
+        end = QColor(target)
+        return lambda t: self.set_marker_color(blend(start, b=end, t=t))
+
     def flash(self, target: str = CORRECT_ANSWER_COLOR) -> QVariantAnimation:
         """
         Fade the marker from its normal highlight to the feedback color.
@@ -560,21 +586,17 @@ class KeyFork(QWidget):
         Returns
         -------
         QVariantAnimation
-            Running animation for the view to cancel on a new question.
+            Running marker fade for the current question.
 
         Examples
         --------
         A wrong signature flashes red before a retry.
         """
-        start = self.palette().color(QPalette.ColorRole.Highlight)
-        end = QColor(target)
         animation = QVariantAnimation(self)
         animation.setDuration(180)
         animation.setStartValue(0.0)
         animation.setEndValue(1.0)
-        animation.valueChanged.connect(
-            lambda t: self.set_marker_color(blend(start, b=end, t=t)),
-        )
+        animation.valueChanged.connect(self.marker_fade(target))
         animation.start()
         return animation
 

@@ -26,7 +26,7 @@ from alto.exercises.library import ClefBasics
 from alto.ui import exercise_settings as es
 from alto.ui import motion
 from alto.ui import settings_panel as sp
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.key_fork import KeyFork
 from alto.ui.staff import (
     StaffWidget,
@@ -276,7 +276,7 @@ def test_baritone_clef_either_f_clef_on_middle_line_or_c_clef_on(
             symbol,
             step,
         )
-        view._advance.stop()
+        view.controller._advance.stop()
     view = clef_view()
     choose(view, "C")
     click(
@@ -284,8 +284,7 @@ def test_baritone_clef_either_f_clef_on_middle_line_or_c_clef_on(
         step=4,
     )  # the C clef on the middle line is the alto clef, not the baritone
     assert not view.session.answered
-    view.question_view.clef_input.locked, view._busy = False, False
-    view.question_view.clef_input.clear_placed()
+    motion.settle()
     choose(view, "F")
     click(
         view.question_view.clef_input,
@@ -411,7 +410,7 @@ def test_the_symbol_is_drawn_where_the_pointer_is_and_where_it_was_placed(
 # ----------------------------------------------------------------------
 
 
-def clef_view(*, seed: int = 2) -> ExerciseView:
+def clef_view(*, seed: int = 2) -> ExercisePage:
     """
     Make the exercise screen on a clef question.
 
@@ -422,21 +421,21 @@ def clef_view(*, seed: int = 2) -> ExerciseView:
 
     Returns
     -------
-    ExerciseView
+    ExercisePage
         The screen, with a question showing.
     """
-    view = ExerciseView(ClefBasics(), rng=random.Random(seed))
+    view = ExercisePage(ClefBasics(), rng=random.Random(seed))
     view.show()
     return view
 
 
-def asked_of(view: ExerciseView) -> Question:
+def asked_of(view: ExercisePage) -> Question:
     """
     Return the question on the screen.
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The screen.
 
     Returns
@@ -448,13 +447,13 @@ def asked_of(view: ExerciseView) -> Question:
     return view.question
 
 
-def choose(view: ExerciseView, symbol: str) -> None:
+def choose(view: ExercisePage, symbol: str) -> None:
     """
     Choose a symbol on the screen's clef staff by turning the wheel.
 
     Parameters
     ----------
-    view : ExerciseView
+    view : ExercisePage
         The screen.
     symbol : str
         "G", "C" or "F".
@@ -482,7 +481,7 @@ def test_screen_shows_clef_staff_buttons_and_question_under(
     assert (
         view.question_view.clef_input.caption == f"Place the {name} clef."
     )  # under the staff, in the white area
-    assert not view.prompt.isVisible()  # and not above the music
+    assert not view.question_view.prompt.isVisible()  # and not above the music
     assert (
         view.question_view.clef_input.isVisible()
         and view.question_view.clef_input.options
@@ -497,26 +496,28 @@ def test_screen_shows_clef_staff_buttons_and_question_under(
         and view.findChild(KeyFork) is None
         and view.question_view.editor is view.question_view.clef_input
     )
-    assert [b.accessibleName() for b in view.symbol_buttons.values()] == [
+    assert [
+        b.accessibleName() for b in view.question_view.symbol_buttons.values()
+    ] == [
         "G clef",
         "C clef",
         "F clef",
     ]
     assert all(
         not b.icon().isNull() and not b.text()
-        for b in view.symbol_buttons.values()
+        for b in view.question_view.symbol_buttons.values()
     )  # a picture of each, not words
     assert (
-        all(b.isVisible() for b in view.symbol_buttons.values())
-        and view.symbol_buttons["G"].isChecked()
+        all(b.isVisible() for b in view.question_view.symbol_buttons.values())
+        and view.question_view.symbol_buttons["G"].isChecked()
     )
     assert (
-        view.answer_controls.placement.answer_button.isVisible()
-        and view.answer_controls.placement.answer_button.isEnabled()
+        view.control_area.answers.placement.answer_button.isVisible()
+        and view.control_area.answers.placement.answer_button.isEnabled()
     )
     assert (
-        not view.answer_controls.placement.place_button.isVisible()
-        and not view.answer_controls.placement.undo_button.isVisible()
+        not view.control_area.answers.placement.place_button.isVisible()
+        and not view.control_area.answers.placement.undo_button.isVisible()
     )
 
 
@@ -533,19 +534,19 @@ def test_the_buttons_choose_the_symbol_and_follow_the_wheel(
         The shared Qt application.
     """
     view = clef_view()
-    view.symbol_buttons["F"].click()
+    view.question_view.symbol_buttons["F"].click()
     assert (
         view.question_view.clef_input.selected == "F"
-        and view.symbol_buttons["F"].isChecked()
+        and view.question_view.symbol_buttons["F"].isChecked()
     )
     view.question_view.clef_input.wheelEvent(turn(120))
     assert (
         view.question_view.clef_input.selected == "G"
-        and view.symbol_buttons["G"].isChecked()
-        and not view.symbol_buttons["F"].isChecked()
+        and view.question_view.symbol_buttons["G"].isChecked()
+        and not view.question_view.symbol_buttons["F"].isChecked()
     )
-    view._key_action("right")
-    assert view.symbol_buttons["C"].isChecked()
+    view.question_view.key_action("right")
+    assert view.question_view.symbol_buttons["C"].isChecked()
 
 
 def test_the_right_symbol_in_the_right_place_is_correct(
@@ -570,7 +571,7 @@ def test_the_right_symbol_in_the_right_place_is_correct(
         view.session.total,
     ) == (True, 1, 1)
     assert view.question_view.clef_input.locked
-    view._advance.stop()
+    view.controller._advance.stop()
 
 
 def test_the_mezzo_soprano_clef_is_the_c_symbol_on_the_second_line(
@@ -594,17 +595,15 @@ def test_the_mezzo_soprano_clef_is_the_c_symbol_on_the_second_line(
         step=4,
     )  # the middle line is the alto clef
     assert not view.session.answered and view.session.missed
-    view.question_view.clef_input.locked, view._busy = False, False
-    view.question_view.clef_input.clear_placed()
+    motion.settle()
     click(view.question_view.clef_input, step=3)  # a space is not the line
     assert not view.session.answered
-    view.question_view.clef_input.locked, view._busy = False, False
-    view.question_view.clef_input.clear_placed()
+    motion.settle()
     click(view.question_view.clef_input, step=2)
     assert (
         view.session.answered and view.session.total == 1
     )  # only the first try counted
-    view._advance.stop()
+    view.controller._advance.stop()
 
 
 def test_a_wrong_place_or_a_wrong_symbol_is_wrong_and_can_be_tried_again(
@@ -636,10 +635,13 @@ def test_a_wrong_place_or_a_wrong_symbol_is_wrong_and_can_be_tried_again(
     )
     assert (
         view.question_view.clef_input.locked
-        and not view.answer_controls.placement.answer_button.isEnabled()
+        and not view.control_area.answers.placement.answer_button.isEnabled()
     )  # the retry has not cleared it yet
     motion.settle()
-    assert not view.question_view.clef_input.locked and not view._busy
+    assert (
+        not view.question_view.clef_input.locked
+        and not view.question_view.busy
+    )
     other = next(s for s in ("G", "C", "F") if s != symbol)
     choose(view, other)
     click(
@@ -689,18 +691,18 @@ def test_the_arrow_keys_and_answer_work_without_the_mouse(
     for _ in range(3):
         if view.question_view.clef_input.selected == symbol:
             break
-        view._key_action("right")
+        view.question_view.key_action("right")
     assert view.question_view.clef_input.selected == symbol
-    view._key_action("up")
+    view.question_view.key_action("up")
     assert view.question_view.clef_input.caret == 5
     for _ in range(
         abs(step - 5),
     ):  # on from the place the Up key reached, to the place asked for
-        view._key_action("up" if step > 5 else "down")
+        view.question_view.key_action("up" if step > 5 else "down")
     assert view.question_view.clef_input.caret == step
-    view._answer()
+    view.control_area.answers.placement.answer_button.click()
     assert view.session.answered
-    view._advance.stop()
+    view.controller._advance.stop()
 
 
 def test_the_wheel_over_answer_chooses_the_symbol(app: QApplication) -> None:
@@ -716,7 +718,7 @@ def test_the_wheel_over_answer_chooses_the_symbol(app: QApplication) -> None:
     view = clef_view()
     first = view.question_view.clef_input.selected
     assert view.eventFilter(
-        view.answer_controls.placement.answer_button,
+        view.control_area.answers.placement.answer_button,
         turn(120),
     )
     assert view.question_view.clef_input.selected != first
@@ -735,11 +737,11 @@ def test_other_exercises_do_not_show_the_clef_staff(app: QApplication) -> None:
     for cls in REGISTRY:
         if cls is ClefBasics:
             continue
-        view = ExerciseView(cls(), rng=random.Random(1))
+        view = ExercisePage(cls(), rng=random.Random(1))
         view.show()
         assert (
             not isinstance(view.question_view.editor, ClefInput)
-            and not view.symbol_row.isVisible()
+            and not view.question_view.symbol_row.isVisible()
         ), cls.name
         view.close()
 
@@ -828,7 +830,7 @@ def test_the_identification_screen_draws_the_clef_and_buttons_name_the_clefs(
     """
     settings.clef_basics.question_type = "identification"
     settings.clef_basics.clefs = {"alto", "tenor", "french"}
-    view = ExerciseView(ClefBasics(), rng=random.Random(2))
+    view = ExercisePage(ClefBasics(), rng=random.Random(2))
     view.show()
     q = asked_of(view)
     assert (
@@ -838,14 +840,14 @@ def test_the_identification_screen_draws_the_clef_and_buttons_name_the_clefs(
     )
     assert (
         not view.question_view.staff.clef_hidden
-        and not view.prompt.isVisible()
+        and not view.question_view.prompt.isVisible()
     )
     assert (
         not isinstance(view.question_view.editor, ClefInput)
-        and not view.symbol_row.isVisible()
-        and not view.answer_controls.placement.isVisible()
+        and not view.question_view.symbol_row.isVisible()
+        and not view.control_area.answers.placement.isVisible()
     )
-    assert [b.text() for b in view.answer_controls.buttons] == [
+    assert [b.text() for b in view.control_area.answers.buttons] == [
         "Alto",
         "Tenor",
         "French violin",
@@ -866,25 +868,25 @@ def test_the_answer_buttons_have_room_around_them_and_a_widest_area(
     """
     settings.clef_basics.question_type = "identification"
     settings.clef_basics.clefs = set(settings.CLEF_BASICS_CLEFS)
-    view = ExerciseView(ClefBasics(), rng=random.Random(2))
+    view = ExercisePage(ClefBasics(), rng=random.Random(2))
     view.resize(1800, 700)
     view.show()
     assert (
-        view.answer_controls.choice_area.width()
-        <= view.answer_controls.maximumWidth()
+        view.control_area.answers.choice_area.width()
+        <= view.control_area.answers.maximumWidth()
     )
-    margins = view.answer_controls.choice_box.contentsMargins()
+    margins = view.control_area.answers.choice_box.contentsMargins()
     assert (
         margins.left() > 0
         and margins.top() > 0
-        and view.answer_controls.choice_box.spacing() > 0
+        and view.control_area.answers.choice_box.spacing() > 0
     )  # padding around them
-    rows = {b.geometry().y() for b in view.answer_controls.buttons}
+    rows = {b.geometry().y() for b in view.control_area.answers.buttons}
     assert (
-        len(view.answer_controls.buttons) == 9 and len(rows) == 2
+        len(view.control_area.answers.buttons) == 9 and len(rows) == 2
     )  # nine clefs in two rows of five and four, not one long row
-    left = view.answer_controls.choice_area.mapTo(view, QPoint()).x()
-    right = view.width() - left - view.answer_controls.choice_area.width()
+    left = view.control_area.answers.choice_area.mapTo(view, QPoint()).x()
+    right = view.width() - left - view.control_area.answers.choice_area.width()
     assert abs(left - right) <= 40  # in the middle
 
 
@@ -902,10 +904,12 @@ def test_pressing_the_right_name_is_correct_and_a_wrong_one_is_not(
     """
     settings.clef_basics.question_type = "identification"
     settings.clef_basics.clefs = {"treble", "bass", "subbass"}
-    view = ExerciseView(ClefBasics(), rng=random.Random(3))
+    view = ExercisePage(ClefBasics(), rng=random.Random(3))
     view.show()
     answer = asked_of(view).answer
-    wrong = next(b for b in view.answer_controls.buttons if b.text() != answer)
+    wrong = next(
+        b for b in view.control_area.answers.buttons if b.text() != answer
+    )
     wrong.click()
     assert (
         not view.session.answered
@@ -913,11 +917,13 @@ def test_pressing_the_right_name_is_correct_and_a_wrong_one_is_not(
         and view.session.total == 1
         and view.session.correct == 0
     )
-    next(b for b in view.answer_controls.buttons if b.text() == answer).click()
+    next(
+        b for b in view.control_area.answers.buttons if b.text() == answer
+    ).click()
     assert (
         view.session.answered and view.session.total == 1
     )  # only the first try counted
-    view._advance.stop()
+    view.controller._advance.stop()
 
 
 def test_every_clef_can_be_drawn_on_a_staff(app: QApplication) -> None:

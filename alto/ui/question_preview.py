@@ -39,7 +39,7 @@ from alto.exercises import (
     Question,
 )
 from alto.exercises.library import RythmicEquations
-from alto.settings import spell
+from alto.theory.note_naming import DEGREE_NAMINGS, spell
 from alto.theory.pitch import Note
 from alto.ui import icons
 from alto.ui.circle import question_circle
@@ -328,7 +328,7 @@ class QuestionPreview(QDialog):
             return " / ".join((q.answer, *q.accept))
         if q.construct is not None:
             naming = app_settings.note_names.naming
-            if q.notes_only and naming in app_settings.DEGREE_NAMINGS:
+            if q.notes_only and naming in DEGREE_NAMINGS:
                 naming = "letters"
             return spell(
                 q.construct,

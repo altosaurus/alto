@@ -17,7 +17,7 @@ from alto.exercises.library import (
     ScaleConstruction,
 )
 from alto.theory.pitch import Note
-from alto.ui.exercise_view import ExerciseView
+from alto.ui.exercise_page import ExercisePage
 from alto.ui.midi_input import MidiInput
 
 
@@ -52,22 +52,22 @@ def test_play_interval(
     )
     program.chmod(0o755)
     monkeypatch.setenv("PATH", str(tmp_path) + os.pathsep + os.environ["PATH"])
-    view = ExerciseView(IntervalConstruction())
+    view = ExercisePage(IntervalConstruction())
     view.settings_panel.next_question_mode = "Wait"
     view.show()
     app.processEvents()
     q = view.question
     q.construct, q.accept = Note.parse("D4"), ("G♭4",)
-    midi = view.midi_input
+    midi = view.toolbar.midi_input
     assert midi is not None
     view.hide()
     view._place_midi(66)
     assert view.session.total == 0
     view.show()
-    view.question = None
+    view.controller.question = None
     view._place_midi(66)
     assert view.session.total == 0
-    view.question = q
+    view.controller.question = q
     view._place_midi(54)
     assert view.session.correct == 0 and view.session.total == 1
     app.processEvents()
@@ -171,21 +171,21 @@ def test_identify_played_note(
     cfg = settings.note_names
     cfg.naming, cfg.require_octave = naming, octave
     cfg.key_signatures, cfg.minor_keys = set(), {0}
-    view = ExerciseView(NoteNames(), rng=random.Random(5))
+    view = ExercisePage(NoteNames(), rng=random.Random(5))
     view.settings_panel.next_question_mode = "Wait"
     view.show()
-    midi, q = view.midi_input, view.question
+    midi, q = view.toolbar.midi_input, view.question
     assert midi is not None and q is not None
     target = q.staff[0][0]
     if octave:
-        view.answer_controls.buttons[
+        view.control_area.answers.buttons[
             -1
         ].click()  # MIDI replaces an unfinished mouse answer.
     midi.note_pressed.emit(target.midi + (12 if octave else 1))
     assert (
         view.session.total == 1
         and view.session.missed
-        and "Try again" in view.prompt.text()
+        and "Try again" in view.question_view.prompt.text()
     )
     midi.note_pressed.emit(target.midi + (0 if octave else 12))
     midi.note_pressed.emit(target.midi)
@@ -195,7 +195,7 @@ def test_identify_played_note(
         and (view.session.correct, view.session.total) == (0, 1)
     )
     if octave:
-        assert view._pending["octave"][0] == str(target.octave)
+        assert view.controller.pending["octave"] == str(target.octave)
     view.close()
 
 
@@ -216,10 +216,10 @@ def test_play_scale(app: QApplication, steps: bool) -> None:
     cfg = settings.scale_construction
     cfg.motion, cfg.keys, cfg.modes = "descending", {-6}, {"Major (Ionian)"}
     cfg.steps, cfg.octave = steps, steps
-    view = ExerciseView(ScaleConstruction(), rng=random.Random(5))
+    view = ExercisePage(ScaleConstruction(), rng=random.Random(5))
     view.settings_panel.next_question_mode = "Wait"
     view.show()
-    midi, q = view.midi_input, view.question
+    midi, q = view.toolbar.midi_input, view.question
     assert midi is not None and q is not None and q.construct_scale
     scale = q.construct_scale
     foreign = next(
@@ -229,7 +229,7 @@ def test_play_scale(app: QApplication, steps: bool) -> None:
     )
     midi.note_pressed.emit(foreign)
     assert view.question_view.scale_input.notes[-1].midi == foreign
-    view.answer_controls.placement.undo_button.click()
+    view.control_area.answers.placement.undo_button.click()
     assert not view.question_view.scale_input.notes
     for note in scale:
         midi.note_pressed.emit(note.midi + (0 if steps else 12))
@@ -241,9 +241,9 @@ def test_play_scale(app: QApplication, steps: bool) -> None:
         midi.note_pressed.emit(60)
         assert not view.question_view.scale_input.steps
         for step in q.construct_steps:
-            view.step_buttons[step].click()
-            view.answer_controls.placement.place_button.click()
-        view.answer_controls.placement.answer_button.click()
+            view.question_view.step_buttons[step].click()
+            view.control_area.answers.placement.place_button.click()
+        view.control_area.answers.placement.answer_button.click()
     assert (
         view.session.answered
         and view.session.total == view.session.correct == 1

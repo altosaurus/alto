@@ -46,7 +46,7 @@ from alto.learning import (  # noqa: E402
     Learner,
 )
 from alto.learning.database import ItemRecord  # noqa: E402
-from alto.ui.exercise_view import ExerciseView  # noqa: E402
+from alto.ui.exercise_page import ExercisePage  # noqa: E402
 from alto.ui.lesson import LessonsPage  # noqa: E402
 from alto.ui.main_window import MainWindow  # noqa: E402
 from alto.ui.reference import ExplorableCircle  # noqa: E402
@@ -221,17 +221,17 @@ class Workbench:
                     ),
                 )
 
-    def _view(self) -> ExerciseView:
+    def _view(self) -> ExercisePage:
         """
         Give the exercise screen that is open.
 
         Returns
         -------
-        ExerciseView
+        ExercisePage
             The current page, which must be an exercise.
         """
         view = self.window.stack.currentWidget()
-        assert isinstance(view, ExerciseView)
+        assert isinstance(view, ExercisePage)
         return view
 
     def _open(
@@ -435,7 +435,7 @@ class Workbench:
         for cls in self.exercises:
             self.window.open_exercise(cls)
             view = self._view()
-            if view.answer_controls.buttons:
+            if view.control_area.answers.buttons:
                 return
 
     def _answer_right(self) -> None:
@@ -445,12 +445,12 @@ class Workbench:
         assert question is not None
         button = next(
             b
-            for b in view.answer_controls.buttons
+            for b in view.control_area.answers.buttons
             if b.text() == question.answer
         )
         view.submit(question.answer, button=button)
         # noinspection PyProtectedMember
-        view._advance.stop()
+        view.controller._advance.stop()
 
     def _answer_wrong(self) -> None:
         """Answer the open question wrongly."""
@@ -459,12 +459,12 @@ class Workbench:
         assert question is not None
         button = next(
             b
-            for b in view.answer_controls.buttons
+            for b in view.control_area.answers.buttons
             if b.text() != question.answer
         )
         view.submit(button.text(), button=button)
         # noinspection PyProtectedMember
-        view._advance.stop()
+        view.controller._advance.stop()
 
     def _pick(self) -> None:
         """Ask the learner for a question."""
