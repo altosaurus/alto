@@ -127,13 +127,22 @@ class RenderedDocsTest(unittest.TestCase):
                 assert f'id="{fragment}"' in article
 
     def test_launch_screenshot_links(self) -> None:
-        """Open the API page named by each launch diagram hotspot."""
+        """Verify each hotspot's API page or guide section."""
         regions = ROOT / "docs" / "_data" / "launch_components.json"
         for screen in json.loads(regions.read_text(encoding="utf-8")).values():
             for region in screen:
-                assert f"<h1>{region['type']}</h1>" in self.article(
-                    region["href"],
-                )
+                route, _, fragment = region["href"].partition("#")
+                article = self.article(route)
+                if fragment:
+                    anchor = re.escape(fragment)
+                    section = re.search(
+                        rf'<section id="{anchor}">(.*?)</section>',
+                        article,
+                        re.DOTALL,
+                    )
+                    assert section and region["type"] in section[1]
+                else:
+                    assert f"<h1>{region['type']}</h1>" in article
 
     def test_release_notes(self) -> None:
         """Check each version and its release link."""

@@ -310,12 +310,12 @@ def test_the_settings_pane_slides_open_and_shut(app: QApplication) -> None:
     view.show()
     assert not view.pane.isVisible() and view.pane.maximumWidth() == 0
     view.gear.setChecked(True)
-    QTest.qWait(320)
+    view._pane_anim.setCurrentTime(view._pane_anim.duration())
     assert (
         view.pane.isVisible() and view.pane.maximumWidth() == view.PANE_WIDTH
     )
     view.gear.setChecked(False)
-    QTest.qWait(320)
+    view._pane_anim.setCurrentTime(view._pane_anim.duration())
     assert view.pane.maximumWidth() == 0 and not view.pane.isVisible()
 
 
@@ -363,20 +363,24 @@ def test_the_reference_pane_slides_open_beside_the_settings_and_shuts_them(
     view = view_of(CircleOfFifths())
     view.show()
     assert view.book_btn is not None and view.reference_pane is not None
+    settings_slide = view._pane_anim
+    reference_slide = view._reference_anim
     view.gear.setChecked(True)
-    QTest.qWait(500)
+    settings_slide.setCurrentTime(settings_slide.duration())
     assert view.pane.maximumWidth() == view.PANE_WIDTH
     view.book_btn.setChecked(True)
-    QTest.qWait(500)
+    reference_slide.setCurrentTime(reference_slide.duration())
+    settings_slide.setCurrentTime(settings_slide.duration())
     assert view.reference_pane.maximumWidth() == view.REFERENCE_WIDTH
     assert view.reference_pane.isVisible() and not view.gear.isChecked()
-    QTest.qWait(500)
-    assert view.pane.maximumWidth() == 0
+    assert view.pane.maximumWidth() == 0 and view.pane.isHidden()
     view.gear.setChecked(True)
     assert not view.book_btn.isChecked()
-    QTest.qWait(500)
+    reference_slide.setCurrentTime(reference_slide.duration())
+    settings_slide.setCurrentTime(settings_slide.duration())
     assert view.reference_pane.maximumWidth() == 0
-    view.gear.setChecked(False)
+    assert view.reference_pane.isHidden() and view.pane.isVisible()
+    view.close()
 
 
 def test_a_change_in_the_settings_asks_a_new_question_straight_away(
