@@ -577,8 +577,7 @@ Select a folder title to open its overview. In the API reference, a package over
 
 On a wide screen a page with two or more `##` or `###` headings gets an "On this page" list beside it, made in the browser from those
 headings, and on a narrower one a box above the text. Nothing needs to be written for it. A page that should not have one, such as the
-home page, says `toc: false` in its front matter. `docs/api/index.md` is written by
-`scripts/api_docs.py`, so change its front matter there.
+home page, says `toc: false` in its front matter. Sphinx generates the API hierarchy from the Python package.
 
 The previous and next links at the bottom of each page follow the sidebar’s reading order.
 
@@ -619,23 +618,6 @@ reaches the site at the next build, so run the Docs workflow by hand after you p
 are made by that repository's `scripts/screenshots.py`. The plugin tests keep only the manifest of each example pack in `tests/packs/` (and the viola's animation), and make its recordings,
 photographs and icons when they run (`tests/pack_fixtures.py`), because the plugin's author provides the real ones. They also read
 the tutorial pages when they have been brought in.
-
-You need Ruby and Bundler. In `docs/`, `bundle install` once, then build one version the way the workflow does:
-
-```bash
-cd docs
-python3 ../scripts/docs_excerpts.py
-printf 'baseurl: /alto/dev\ndocs_version: dev\n' > /tmp/version.yml
-bundle exec jekyll build --destination /tmp/site/dev --config _config.yml,/tmp/version.yml
-bundle exec ruby ../scripts/docs_search.rb /tmp/site/dev
-git rev-parse --short HEAD > /tmp/site/dev/commit.txt
-python ../scripts/docs_site.py finish /tmp/site --root-files site-root --site-url https://altosaurus.github.io/alto
-```
-
-then serve `/tmp/site` under a folder called `alto` (for example `mkdir /tmp/www && ln -s /tmp/site /tmp/www/alto && python -m http.server -d /tmp/www`)
-and open `http://127.0.0.1:8000/alto/`. `tests/test_docs_site.py` checks the script and the files without needing Ruby.
-
-The excerpt step reads the ExerciseView methods in your checkout. It uses the anchors in `docs/_data/exercise_view_excerpts.json` to find each statement and its line numbers. Rerun it after editing the view to refresh a local preview. Published docs extract from the commit they link to.
 
 ### Sphinx documentation preview
 
@@ -688,19 +670,9 @@ were last updated. It only warns; set `ALTO_DOCS_STRICT=1` to make it fail.
 
 ## The API reference
 
-The pages under [API reference](../api/) (`docs/api/`) are written from the docstrings by `scripts/api_docs.py`. Each module
-has an overview that links to one page per public class or module-level function. A class page also documents its constructor
-and public methods. Each component page includes its signature, docstring, and links to its Python source. Names
-that begin with an underscore are left out. The script reads the source as text, so it needs neither Qt nor a display.
+The [API reference]({{ '/api/' | relative_url }}) is built from the Python files under `alto/`. Sphinx AutoAPI reads the source without starting Qt. Each module links to a page for each public class and module-level function. Class pages include the constructor, methods, and links to the Python source.
 
-```bash
-python scripts/api_docs.py          # rewrite docs/api
-python scripts/api_docs.py --check  # list the pages that are out of date, and change nothing
-```
-
-GitHub Pages cannot run the script, so the generated pages are committed. When you change a docstring or a public signature,
-run it and commit the pages with the change. `tests/test_api_docs.py` fails when they are out of date, so a forgotten run is
-caught by the tests, the pre-push hook and the pull request.
+Edit the Python signature or docstring, then rebuild the [local preview](#sphinx-documentation-preview) to see the change. The build generates the reference, walkthrough line numbers, and search index together. Commit the source edits. The PR preview shows their rendered pages.
 
 ## Changelog and releases
 
@@ -713,9 +685,7 @@ fixed bug) adds a line under **Unreleased** in the same pull request. Internal t
 1. Choose the version. Alto uses [semantic versioning](https://semver.org/): a new feature raises the middle number, a fix
    raises the last.
 2. In `CHANGELOG.md`, rename **Unreleased** to the version with today's date (`## [0.1.0] - 2026-12-01`), add a new empty
-   **Unreleased** above it, and update the two links at the bottom. Then run `python scripts/release_notes.py`, which rewrites
-   the Release notes page of the docs (`docs/release-notes.md`) from the changelog; `--check` says whether it is up to date, and a
-   test fails when it is not, so a changelog line always arrives with its page.
+   **Unreleased** above it, and update the two links at the bottom. The docs build reads the release notes from this changelog.
 3. Set the same version in `pyproject.toml`. `tests/test_changelog.py` fails if the changelog has no notes for it.
 4. Check that every user-facing feature in the release has a guide entry explaining where to find it and how to use it.
    Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed

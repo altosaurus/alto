@@ -29,7 +29,6 @@ def test_interactive_pages(tmp_path: Path) -> None:
     for name in (
         "getting-started.md",
         "using-alto.md",
-        "api/index.md",
         "_includes/category-pages.html",
         "plugins/detail.html",
         "assets/js/downloads.js",
@@ -42,7 +41,7 @@ def test_interactive_pages(tmp_path: Path) -> None:
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(DOCS / name, target)
     (docs / "index.md").write_text(
-        "---\ntitle: Home\npermalink: /\n---\nWelcome to Alto.\n",
+        "---\ntitle: Home\npermalink: /\ntoc: false\n---\nWelcome to Alto.\n",
         encoding="utf-8",
     )
     package = tmp_path / "alto"
@@ -67,6 +66,7 @@ def test_interactive_pages(tmp_path: Path) -> None:
         )
         guide = (out / "getting-started/index.html").read_text("utf-8")
         assert 'href="#" aria-current="page">Getting started</a>' in guide
+        assert 'content="noindex"' in guide
         breadcrumbs = guide.split('aria-label="Breadcrumb">')[1].split(
             "</nav>",
         )[0]
@@ -108,6 +108,28 @@ def test_interactive_pages(tmp_path: Path) -> None:
     assert 'data-registry="/alto/plugins.json"' in published
     assert 'data-version="latest" data-root="/alto"' in published
     assert 'src="/alto/version-switcher.js"' in published
+    home = (out / "index.html").read_text("utf-8")
+    assert '<link rel="canonical" href="https://example.org/alto/"' in home
+    assert (
+        'type="application/ld+json"' in home
+        and 'content="noindex"' not in home
+    )
+    assert 'type="application/ld+json"' not in published
+    assert 'id="page-grid" data-no-toc' in home
+    assert 'id="page-grid" data-no-toc' not in guide
+    assert re.search(r"site\.css\?v=[a-f0-9]+", home)
+    bar = home.split('<div class="top-actions">')[1].split("</header>")[0]
+    assert (
+        bar.index('role="search"')
+        < bar.index('id="version-slot"')
+        < bar.index('id="theme-button"')
+        < bar.index('class="icon-link"')
+    )
+    assert (
+        'aria-label="Color theme"' in bar
+        and 'aria-controls="theme-menu"' in bar
+    )
+    assert all(f">{name}<" in bar for name in ("Light", "Dark", "System"))
     locations = {
         loc.text for loc in ET.parse(out / "sitemap.xml").findall(".//{*}loc")
     }

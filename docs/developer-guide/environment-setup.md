@@ -87,4 +87,4 @@ The `uv sync` command above installs the application libraries and the `dev` too
 
 Setuptools builds Alto as a Python package, including the editable installation used during development. The `package` extra adds PyInstaller to bundle desktop releases. The Windows and macOS build scripts also use Pillow to convert Alto’s PNG icon to the platform’s icon format.
 
-For documentation work, Bundler installs the Ruby gems listed in `docs/Gemfile`. The `github-pages` gem supplies Jekyll and the plugins used to render the site. WEBrick serves the local preview. [Building the docs]({{ '/development/' | relative_url }}#building-the-docs)
+For documentation work, uv installs the locked `docs` dependency group. Sphinx builds the HTML and search index, MyST parses the Markdown guides, and AutoAPI reads Python signatures and docstrings. Python Liquid renders the shared figures and download links. [Building the docs]({{ '/development/' | relative_url }}#building-the-docs)

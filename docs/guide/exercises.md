@@ -168,7 +168,7 @@ a new constant, and add the dictionary entry.
    and run `python scripts/screenshots.py --only your-name`. `tests/test_docs.py` checks that every picture a page shows exists in
    both themes.
 3. **The instructions** shown behind the "?" button: override `instructions()` to return a little HTML.
-4. **The API reference:** run `python scripts/api_docs.py`.
+4. **API reference.** Rebuild the docs and check the class page for your exercise.
 5. **A line in `ARCHITECTURE.md`** only if the exercise changes the picture of how the program fits together.
 
 ## Testing it

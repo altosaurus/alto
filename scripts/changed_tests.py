@@ -43,7 +43,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS_TESTS = (
-    "tests/test_api_docs.py",
+    "tests/test_sphinx_api.py",
+    "tests/test_sphinx_guides.py",
     "tests/test_changelog.py",
     "tests/test_docs.py",
     "tests/test_docs_site.py",

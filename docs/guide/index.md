@@ -90,7 +90,7 @@ A workflow that works without an assistant:
 3. Write a failing test for the change first, in `tests/`. It tells you when you are done.
 4. Make the change. Run `pytest -x -q` often, since most mistakes show up in seconds.
 5. Run the full checks listed in [Getting oriented]({{ '/guide/orientation/' | relative_url }}) before you commit.
-6. If you change a docstring or a public signature, run `python scripts/api_docs.py`. If you change anything the user can
+6. Rebuild the [local docs preview]({{ '/development/' | relative_url }}#sphinx-documentation-preview) to review a changed docstring or signature. If you change anything the user can
    see, regenerate the screenshots with `python scripts/screenshots.py`.
 
 ## Words that come up again and again

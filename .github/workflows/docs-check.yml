@@ -57,6 +57,7 @@ jobs:
 
       - name: Check the rendered preview
         run: |
+          ALTO_DOCS_HTML=site/dev python -m unittest discover -s tests -p test_rendered_docs.py
           for page in index.html getting-started/index.html release-notes/index.html \
             developer-guide/exercise-view/index.html api/alto.ui.exercise_view/class-exerciseview/index.html \
             search/index.html searchindex.js; do test -s "site/dev/$page"; done

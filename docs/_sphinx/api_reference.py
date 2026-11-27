@@ -12,7 +12,7 @@ from pathlib import Path
 from textwrap import indent
 from typing import TYPE_CHECKING
 
-from api_docs import (
+from api_fields import (
     TABLE_SECTIONS,
     class_fields,
     decorator_names,
@@ -183,10 +183,16 @@ def overview(title: str, children: list[PythonObject]) -> str:
     lines = [heading(title, "-")]
     for obj in children:
         about = summary(obj)
+        if title == "Packages":
+            lines.append(f".. _{obj.id.replace('.', '')}:\n")
         lines.append(
             f"* :doc:`/api/{obj.id}`" + (f" — {about}" if about else ""),
         )
-    return lines[0] + "\n\n" + "\n".join(lines[1:])
+    return (
+        lines[0]
+        + "\n\n"
+        + ("\n\n" if title == "Packages" else "\n").join(lines[1:])
+    )
 
 
 def module_pages(module: PythonObject) -> dict[str, str]:

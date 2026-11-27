@@ -33,7 +33,13 @@ def guide_children(
     for doc in sorted(env.found_docs):
         path = env.doc2path(doc)
         if doc == "api/index":
-            path = app.srcdir / "api/index.md"
+            pages[doc] = {
+                "title": "API reference",
+                "nav_order": 11,
+                "nav_group": "For developers",
+                "permalink": "/api/",
+            }
+            continue
         if path.suffix in {".md", ".html"} and path.is_file():
             pages[doc] = yaml.safe_load(
                 path.read_text(encoding="utf-8").split("---", 2)[1],
@@ -113,6 +119,8 @@ def page_context(
     doctree: nodes.document | None,
 ) -> None:
     """Expose the resolved Sphinx tree to page and search templates."""
+    context["no_toc"] = "alto_no_toc" in app.env.metadata.get(pagename, {})
+    context["canonical_root"] = app.config.html_baseurl.rstrip("/")
     context["site_root"] = app.config.alto_site_root
     context["sidebar_tree"] = app.env.alto_sidebar
     if pagename == "plugins/detail" and "plugins" in app.builder.relations:

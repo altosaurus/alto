@@ -1,4 +1,4 @@
-"""Build the migrated Alto pages alongside the Jekyll site."""
+"""Build the Alto guides and API reference."""
 
 # ruff: noqa: INP001 -- Sphinx loads this configuration by path.
 

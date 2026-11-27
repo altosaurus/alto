@@ -83,7 +83,7 @@ Plugins add instruments and practice material to Alto. Each one is an instrument
 
 Choose **Tools → Plugins** to see what is installed. You can install a registered plugin by its code or a downloaded ZIP,
 update it, or uninstall it and keep your practice history. Installed exercises appear under **Instruments**.
-The [viola](docs/plugins/viola.md) and [harpsichord](docs/plugins/harpsichord.md) tutorials each build a finished example pack.
+The [viola](https://altosaurus.github.io/alto/plugins/viola/) and [harpsichord](https://altosaurus.github.io/alto/plugins/harpsichord/) tutorials each build a finished example pack.
 
 ## Spaced repetition
 
@@ -152,7 +152,7 @@ Guides for every exercise, how the practice scheduling works, the statistics, se
 [`docs/`](docs/) and published at https://altosaurus.github.io/alto/, with a version for each release and one for the development docs.
 
 To package your own instrument artwork, recordings, exercises and lessons, start with the [Plugins](docs/plugins.md) page,
-then follow the [viola](docs/plugins/viola.md) or [harpsichord](docs/plugins/harpsichord.md) plugin tutorial.
+then follow the [viola](https://altosaurus.github.io/alto/plugins/viola/) or [harpsichord](https://altosaurus.github.io/alto/plugins/harpsichord/) plugin tutorial.
 
 ## Development
 

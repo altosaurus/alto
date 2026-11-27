@@ -59,10 +59,10 @@ alto/                  the program
     ui/                everything that needs Qt
     assets/            fonts, instrument recordings, icons (ship with the package)
 tests/                 the tests, one file per area
-docs/                  this website (Jekyll, published to GitHub Pages)
+docs/                  this website (Sphinx, published to GitHub Pages)
     api/               generated API reference (do not edit by hand)
     guide/             this guide
-scripts/               screenshots.py, api_docs.py, typecheck.sh, check-docs.sh, run-tests.sh
+scripts/               screenshots.py, typecheck.sh, check-docs.sh, run-tests.sh
 ARCHITECTURE.md        a one-page map of how the pieces fit
 pyproject.toml         dependencies, entry point, pytest, Ruff, Pyright and coverage settings
 .pre-commit-config.yaml   the checks run on commit and on push
@@ -182,7 +182,7 @@ sh scripts/typecheck.sh
 .venv/bin/pytest
 ```
 
-If you changed a docstring or a public signature: `python scripts/api_docs.py`. If you changed anything visible:
+Rebuild the [local docs preview]({{ '/development/' | relative_url }}#sphinx-documentation-preview) to review a changed docstring or signature. If you changed anything visible:
 `python scripts/screenshots.py` and look at the pictures before committing them (fonts render slightly differently on every
 machine, so regenerate on the machine you normally use).
 

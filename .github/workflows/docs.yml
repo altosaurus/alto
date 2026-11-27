@@ -49,7 +49,7 @@ jobs:
           if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
             if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && git diff --quiet "${BEFORE}" "${GITHUB_SHA}" -- \
               docs ':(glob)alto/**/*.py' CHANGELOG.md pyproject.toml uv.lock \
-              scripts/{api_docs,docs_site,docs_excerpts,check_plugin_registry,tutorial_docs}.py .github/workflows/docs.yml; then
+              scripts/{docs_site,check_plugin_registry,tutorial_docs}.py .github/workflows/docs.yml; then
               build=false
             fi
           fi

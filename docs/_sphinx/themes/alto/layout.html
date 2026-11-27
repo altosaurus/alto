@@ -1,8 +1,28 @@
 {% extends "basic/layout.html" %}
 
-{% block htmltitle %}<title>{{ title|striptags|e }} · {{ project|e }}</title>{% endblock %}
+{% set page_title = "Alto: a free music theory trainer for the desktop" if pagename == root_doc else (title|striptags ~ " · " ~ project) %}
+{% set description = "Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures." %}
+{% block htmltitle %}<title>{{ page_title|e }}</title>{% endblock %}
 {% block extrahead %}
   {{ super() }}
+  <meta name="description" content="{{ description|e }}">
+  {% if pageurl %}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ project|e }}">
+  <meta property="og:title" content="{{ page_title|e }}">
+  <meta property="og:description" content="{{ description|e }}">
+  <meta property="og:url" content="{{ pageurl|e }}">
+  <meta property="og:image" content="{{ canonical_root|e }}/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  {% if pagename == root_doc and version == 'latest' %}
+  <script type="application/ld+json">
+    {{ {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": project,
+        "applicationCategory": "EducationalApplication", "operatingSystem": "Linux, Windows, macOS",
+        "description": description, "url": pageurl, "downloadUrl": "https://github.com/altosaurus/alto/releases/latest",
+        "license": "https://opensource.org/licenses/MIT", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}|tojson }}
+  </script>
+  {% endif %}
+  {% endif %}
   {% if (preview_pr or version == "dev") and pagename != "search" %}<meta name="robots" content="noindex">{% endif %}
 {% endblock %}
 {% block css %}
@@ -51,7 +71,7 @@
       </nav>
     </aside>
     <main id="content" class="content" role="main">
-      <div class="page-grid body" id="page-grid"{% if pagename in (root_doc, "plugins/detail") %} data-no-toc{% endif %}>
+      <div class="page-grid body" id="page-grid"{% if no_toc %} data-no-toc{% endif %}>
         <article>
           {% if pagename != root_doc %}
           <nav class="breadcrumbs" aria-label="Breadcrumb">

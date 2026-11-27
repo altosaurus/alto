@@ -17,6 +17,7 @@ from urllib.parse import urljoin
 import yaml
 from docutils import nodes
 from liquid import DictLoader, Environment, FileSystemLoader
+from release_notes import render as render_release_notes
 from sphinx.errors import ExtensionError
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
@@ -90,7 +91,6 @@ def render_liquid(app: Sphinx, page: dict, body: str) -> str:
         body = body.replace("site.time | date: '%s'", "'" + digest + "'")
     if "category-pages.html" in templates:
         site["pages"] = app.env.alto_nav_index
-        body = body.replace(' | where_exp: "p", "p.nav_order"', "")
     if "component-shot.html" in templates:
         data = app.srcdir / "_data/launch_components.json"
         app.env.note_dependency(data)
@@ -199,6 +199,12 @@ def prepare_guide(app: Sphinx, docname: str, source: list[str]) -> None:
     _, header, body = source[0].split("---", 2)
     page = yaml.safe_load(header)
     body = render_liquid(app, page, body)
+    if docname == "release-notes":
+        changelog = app.srcdir.parent / "CHANGELOG.md"
+        app.env.note_dependency(changelog)
+        body += "\n" + render_release_notes(
+            changelog.read_text(encoding="utf-8"),
+        )
     if docname == "plugins":
         for page_path, _ in TUTORIALS.values():
             path = app.srcdir / page_path
@@ -243,10 +249,33 @@ def prepare_guide(app: Sphinx, docname: str, source: list[str]) -> None:
         )
     # Keep the section ID independent of IDs used by interactive HTML,
     # including the plugin-details element populated by the catalog.
+    metadata = []
+    if page.get("toc") is False:
+        metadata.append("alto_no_toc: true")
     label = ""
     if docname == "plugins/detail":
-        label = "---\norphan: true\n---\n{#plugin-detail-page}\n"
-    source[0] = label + "# " + page["title"] + "\n\n" + body
+        metadata.append("orphan: true")
+        label = "{#plugin-detail-page}\n"
+    header = "---\n" + "\n".join(metadata) + "\n---\n" if metadata else ""
+    source[0] = header + label + "# " + page["title"] + "\n\n" + body
+
+
+def guide_bookmarks(app: Sphinx, tree: nodes.document, docname: str) -> None:
+    """Keep historical guide bookmarks alongside MyST section IDs."""
+    if app.env.doc2path(docname).suffix != ".md":
+        return
+    counts = {}
+    for section in tree.findall(nodes.section):
+        title = section[0]
+        if not isinstance(title, nodes.title):
+            continue
+        slug = re.sub(r"[^\w -]", "", title.astext().lower()).replace(" ", "-")
+        count = counts.get(slug, 0)
+        counts[slug] = count + 1
+        anchor = f"{slug}-{count}" if count else slug
+        if slug and anchor not in tree.ids and anchor not in section["ids"]:
+            section["ids"].append(anchor)
+            tree.ids[anchor] = section
 
 
 def home_title(app: Sphinx, tree: nodes.document, docname: str) -> None:
@@ -327,6 +356,7 @@ def setup(app: Sphinx) -> dict:
     )
     app.add_directive("platform", Platform)
     app.connect("source-read", prepare_guide)
+    app.connect("doctree-resolved", guide_bookmarks)
     app.connect("doctree-resolved", home_title)
     app.connect("build-finished", copy_assets)
     app.connect("build-finished", stable_sitemap)
