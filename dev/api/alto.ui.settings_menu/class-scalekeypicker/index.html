@@ -693,7 +693,7 @@
 <h1>ScaleKeyPicker</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="alto.ui.settings_menu.ScaleKeyPicker">
-<span id="scalekeypicker"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.settings_menu.</span></span><span class="sig-name descname"><span class="pre">ScaleKeyPicker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">major_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/229afeacd3676711f522c6f2b9ed6d7976f85d93/alto/ui/settings_menu.py#L2661"><span class="pre">Source</span></a></dt>
+<span id="scalekeypicker"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.settings_menu.</span></span><span class="sig-name descname"><span class="pre">ScaleKeyPicker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">major_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/settings_menu.py#L2661"><span class="pre">Source</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide6.QtWidgets.QTabWidget</span></code></p>
 <p>Select major and minor keys independently.</p>
 <p class="rubric">Examples</p>
@@ -731,6 +731,29 @@
 <span class="go">1</span>
 </pre></div>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.settings_menu.ScaleKeyPicker.update_summary">
+<span id="scalekeypickerupdate_summary"></span><span class="sig-name descname"><span class="pre">update_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../class-menurow/#alto.ui.settings_menu.MenuRow" title="alto.ui.settings_menu.MenuRow"><span class="pre">MenuRow</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/settings_menu.py#L2717"><span class="pre">Source</span></a></dt>
+<dd><p>Show the number of selected keys and keep one key checked.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">row</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MenuRow</span></code></p></td>
+<td><p>The menu entry that opens the picker.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Selecting one key on each tab displays “1 major · 1 minor”.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
