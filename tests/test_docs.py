@@ -19,7 +19,7 @@ import json
 import re
 from html import unescape
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import parse_qs, unquote, urlsplit
 
 from docs._sphinx.docs_excerpts import excerpts
 from PySide6.QtGui import QColor, QImage
@@ -270,17 +270,8 @@ def test_python_versions_in_readme_badge_ones_tests_run_on() -> None:
     assert minimum is not None and minimum.group(1) == tested[0]
 
 
-def test_readme_badges_name_tool_carry_logo_as_small_embedded() -> None:
-    """
-    Check the six badges with a logo: each names a real workflow (or the
-    Python versions) and carries its picture in its address.
-
-    Shields has a one-color pytest and Python logo of its own, but the
-    color ones, and the pictures for Pyright,
-    ASV and Jekyll, are not in its set. So each picture is carried in
-    the badge's address. They must stay small,
-    so that the address does, and be PNG files.
-    """
+def test_readme_badges_use_expected_workflows_and_logos() -> None:
+    """Check workflow links, the Sphinx logo, and embedded PNG sizes."""
     badges = readme_badges()
     for label, workflow in (
         ("Tests", "tests.yml"),
@@ -296,7 +287,8 @@ def test_readme_badges_name_tool_carry_logo_as_small_embedded() -> None:
             and (ROOT / ".github" / "workflows" / workflow).is_file()
         )
         assert f"/actions/workflows/{workflow}" in link or label == "Docs"
-    for label in ("Tests", "Ruff", "Pyright", "ASV", "Docs", "Python"):
+    assert parse_qs(urlsplit(badges["Docs"][0]).query)["logo"] == ["sphinx"]
+    for label in ("Tests", "Ruff", "Pyright", "ASV", "Python"):
         logo = re.search(r"[?&]logo=([^&\s]+)", badges[label][0])
         assert logo is not None, f"the {label} badge has no logo"
         image = unquote(logo.group(1))
