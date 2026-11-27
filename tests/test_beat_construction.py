@@ -21,6 +21,11 @@ from alto.exercises.library import (
     beat_positions,
 )
 from alto.settings import RHYTHM_DURATIONS
+from alto.theory.beat_placement import (
+    grade_beat_marks,
+    number_beats,
+    toggle_beat,
+)
 from alto.theory.pitch import Note
 from alto.ui.anki_exporter import card_fields
 from alto.ui.exercise_view import ExerciseView
@@ -59,6 +64,21 @@ def test_beat_positions_follow_main_pulse(
         The eighth-note slots starting a main beat.
     """
     assert beat_positions(meter) == expected
+
+
+def test_reselecting_beats_preserves_prior_selections() -> None:
+    """Keep undo order independent of score order."""
+    original = [9, 0, 6, 3]
+    removed = toggle_beat(original, slot=0)
+    restored = toggle_beat(removed, slot=0)
+    expected = beat_positions((6, 8))
+
+    assert number_beats(restored, slots_per_bar=6) == {0: 1, 3: 2, 6: 1, 9: 2}
+    assert grade_beat_marks(removed, expected=expected) == (False, "3 6 9")
+    assert grade_beat_marks(restored, expected=expected) == (True, "0 3 6 9")
+    assert original == [9, 0, 6, 3]
+    assert removed == [9, 6, 3]
+    assert restored == [9, 6, 3, 0]
 
 
 def test_generated_rhythm_has_rests_and_spans_two_bars() -> None:

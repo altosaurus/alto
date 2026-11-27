@@ -4,6 +4,20 @@
 - Use branches in the existing Alto repository for new work.
 - Do not create nested Git repositories or separate worktrees unless the user explicitly requests them.
 
+## Functional programming
+
+- Write musical calculations and answer rules as functions with explicit inputs and return values. Preserve the
+  caller’s data when deriving a new selection, layout, or grade. See `alto/theory/beat_placement.py` for an example
+  where selection order matters for Undo and score order matters for numbering.
+- Read exercise preferences when creating the question and pass the relevant values into generation helpers.
+  Use the exercise’s supplied random generator so a seed and the same options can reproduce a question.
+- Store reusable lookup results as immutable data. When practice or export needs a mutable question from a cached
+  template, give the caller its own copy, including nested note and choice lists.
+- Let widgets translate input events and apply results. Keep repaint requests, accessibility updates, signals,
+  audio playback, and persistence in the components that own them.
+- Test musical rules directly with ordinary Python values. Cover interactions such as click, keyboard, Undo, and
+  playback in the existing widget tests when those behaviors change.
+
 ## Prose style
 
 - Prefer short noun phrases for section headings in documentation, lessons, and in-app help. Name the specific topic

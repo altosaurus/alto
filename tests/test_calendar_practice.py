@@ -2598,6 +2598,35 @@ def test_notation_catalog_has_one_card_per_term(
     )
 
 
+@pytest.mark.parametrize("question_type", ["button", "staff"])
+def test_daily_notation_questions_own_their_staff(
+    question_type: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Editing a daily question must leave its cached template intact.
+
+    Parameters
+    ----------
+    question_type : str
+        Input method for the daily question.
+    monkeypatch : pytest.MonkeyPatch
+        Limit practice to one term.
+    """
+    cfg = settings.NotationSettings(
+        terms={"Koron"},
+        question_type=question_type,
+    )
+    monkeypatch.setattr(settings, "notation", cfg)
+    exercise = NotationIdentification()
+    first = next(exercise.daily_candidates(random.Random(7)))
+    original = first.to_dict()
+    first.staff.append([])
+    first.choices.clear()
+    again = next(exercise.daily_candidates(random.Random(7)))
+    assert again.to_dict() == original
+
+
 def test_unselected_notation_cards_keep_their_schedule(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -2649,6 +2678,7 @@ def test_unselected_notation_cards_keep_their_schedule(
         now=later,
     ) == (0, ex.card_count())
     cfg.terms = set()
+    assert ex.review_question(q, same_settings=False) is None
     assert learner.calendar.counts(
         ex,
         profile=learner.profile.id,

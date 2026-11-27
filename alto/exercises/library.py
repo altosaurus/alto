@@ -17,13 +17,16 @@ Construction']
 from __future__ import annotations
 
 import random
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
+from copy import deepcopy
 from dataclasses import asdict, replace
-from functools import lru_cache, partial
+from functools import lru_cache
 from itertools import accumulate
+from types import MappingProxyType
 
 from alto import settings
 from alto.exercises.base import (
+    ButtonSettings,
     ChoiceExercise,
     Exercise,
     Question,
@@ -31,8 +34,9 @@ from alto.exercises.base import (
     register,
     signature,
 )
-from alto.exercises.rhythm_equations import (
+from alto.exercises.rhythm_equations import (  # noqa: F401 (public rhythm helpers)
     counted_operands,
+    equation_question,
     equation_tokens,
     number_question,
 )
@@ -417,6 +421,7 @@ class NoteNames(ChoiceExercise):
             clef=clef,
             key=key,
             value=value,
+            cfg=cfg,
         )
 
     def card_count(self) -> int:
@@ -498,6 +503,7 @@ class NoteNames(ChoiceExercise):
                     clef=clef,
                     key=key,
                     value=rng.choice(cfg.active_values()),
+                    cfg=cfg,
                 ),
                 rng=rng,
             )
@@ -561,6 +567,7 @@ class NoteNames(ChoiceExercise):
             clef=question.clef,
             key=question.key,
             value=rng.choice(cfg.active_values()),
+            cfg=cfg,
         )
         return (
             self.limit_buttons(updated, rng=rng)
@@ -575,6 +582,7 @@ class NoteNames(ChoiceExercise):
         clef: str,
         key: int,
         value: str,
+        cfg: settings.NoteNameSettings,
     ) -> Question:
         """
         Build the prompt and answer bank for a written pitch.
@@ -589,6 +597,8 @@ class NoteNames(ChoiceExercise):
             Staff key signature.
         value : str
             Written duration.
+        cfg : NoteNameSettings
+            Enabled pitch names, octaves, and staff ranges.
 
         Returns
         -------
@@ -602,10 +612,10 @@ class NoteNames(ChoiceExercise):
         ...     clef="treble",
         ...     key=0,
         ...     value="whole",
+        ...     cfg=settings.NoteNameSettings(),
         ... ).staff[0][0].name
         'C'
         """
-        cfg = settings.note_names
         with_accidentals = self.accidentals or cfg.accidentals
         in_key = key_accidental(note.letter, count=key)
         acc = note.accidental
@@ -705,7 +715,7 @@ def _interval_starts(
     bounds: tuple[int, int],
     key: int,
     accidentals: frozenset[int],
-) -> dict[Interval, list[Note]]:
+) -> Mapping[Interval, tuple[Note, ...]]:
     """
     Find lower notes whose upper partners also fit the staff and
     accidental selection.
@@ -724,7 +734,7 @@ def _interval_starts(
 
     Returns
     -------
-    dict of Interval to list of Note
+    mapping of Interval to tuple of Note
         Possible starting notes for each playable interval.
 
     Examples
@@ -736,7 +746,7 @@ def _interval_starts(
     ...     key=0,
     ...     accidentals=frozenset({0}),
     ... )[third]
-    [Note(octave=4, letter=0, accidental=0)]
+    (Note(octave=4, letter=0, accidental=0),)
     """
     allowed = []
     for letter in range(7):
@@ -759,8 +769,8 @@ def _interval_starts(
                 if upper.accidental + sign in allowed[upper.letter]
             )
         if notes:
-            starts[iv] = notes
-    return starts
+            starts[iv] = tuple(notes)
+    return MappingProxyType(starts)
 
 
 INTERVAL_CONSONANCE_PROMPT = "Is this interval consonant or dissonant?"
@@ -1178,7 +1188,7 @@ def _interval_placement(
     key: int,
     interval: Interval,
     staff: list[list[Note]],
-    starts: dict[Interval, list[Note]],
+    starts: Mapping[Interval, tuple[Note, ...]],
 ) -> Question:
     """
     Build a placement prompt and all eligible spellings that satisfy it
@@ -1198,7 +1208,7 @@ def _interval_placement(
         Selected spelling.
     staff : list of list of Note
         Endpoints in playback order.
-    starts : dict
+    starts : mapping
         Playable lower notes for each interval on this staff.
 
     Returns
@@ -1627,6 +1637,35 @@ def _blank_scale(mode: str) -> str:
     return f"_ {scale if scale == 'minor' else scale[0].upper() + scale[1:]}"
 
 
+def _key_tonics(cfg: settings.KeySignatureSettings) -> list[str]:
+    """
+    Collect distinct tonic spellings in mode and signature order.
+
+    Parameters
+    ----------
+    cfg : KeySignatureSettings
+        Enabled modes and key signatures.
+
+    Returns
+    -------
+    list of str
+        Tonic names for the answer buttons.
+
+    Examples
+    --------
+    >>> "C" in _key_tonics(settings.KeySignatureSettings())
+    True
+    """
+    keys = cfg.active_keys()
+    return list(
+        dict.fromkeys(
+            mode_tonic(key, mode=mode).name
+            for mode in cfg.active_modes()
+            for key in keys
+        ),
+    )
+
+
 @register
 class KeySignatures(ChoiceExercise):
     """
@@ -1736,14 +1775,7 @@ class KeySignatures(ChoiceExercise):
                 f"{MODE_WORDS.get(mode, f'{mode} scale')}"
                 " has this key signature?"
             ):
-                modes = settings.key_signatures.active_modes()
-                choices = list(
-                    dict.fromkeys(
-                        mode_tonic(c, mode=selected_mode).name
-                        for selected_mode in modes
-                        for c in settings.key_signatures.active_keys()
-                    ),
-                )
+                choices = _key_tonics(settings.key_signatures)
                 updated = replace(
                     question,
                     caption=question.caption or _blank_scale(mode),
@@ -1794,6 +1826,7 @@ class KeySignatures(ChoiceExercise):
             count=count,
             clef=rng.choice(cfg.active_clefs()),
             rng=rng,
+            allowed=_key_tonics(cfg),
         )
 
     @staticmethod
@@ -1804,6 +1837,7 @@ class KeySignatures(ChoiceExercise):
         count: int,
         clef: str,
         rng: random.Random,
+        allowed: list[str],
     ) -> Question:
         """
         Show a key signature on a staff and ask for the tonic of the
@@ -1823,6 +1857,8 @@ class KeySignatures(ChoiceExercise):
         rng : random.Random
             The random number generator, used to choose the wrong
             answers. Keyword-only.
+        allowed : list of str
+            Tonic names available for this question.
 
         Returns
         -------
@@ -1839,24 +1875,12 @@ class KeySignatures(ChoiceExercise):
         ...     count=1,
         ...     clef="treble",
         ...     rng=random.Random(0),
+        ...     allowed=["C", "G"],
         ... )
         >>> q.answer, q.caption, q.show_staff
         ('G', '_ Major', True)
         """
         correct = tonic.name
-        # Offer only tonics represented by the key signatures enabled in
-        # settings.
-        # Different signatures can spell to the same tonic in some
-        # modes, so
-        # preserve order while removing duplicates.
-        enabled = settings.key_signatures.active_keys()
-        allowed = list(
-            dict.fromkeys(
-                mode_tonic(c, mode=selected_mode).name
-                for selected_mode in settings.key_signatures.active_modes()
-                for c in enabled
-            ),
-        )
         choices = pick_distractors(
             correct,
             pool=allowed,
@@ -3156,16 +3180,16 @@ class ChordQualities(ChoiceExercise):
         >>> q.answer in CHORDS
         True
         """
-        clef = rng.choice(("treble", "bass"))
-        quality = rng.choice(list(CHORDS))
-        root = _random_note(rng, clef=clef, accidentals=True)
-        lo, hi = CLEF_RANGES[clef]
-        chord = build(root, intervals=CHORDS[quality])
-        if (
-            any(abs(n.accidental) > 1 for n in chord)
-            or chord[-1].diatonic > hi.diatonic + 3
-        ):
-            return self.make_question(rng)
+        while True:
+            clef = rng.choice(("treble", "bass"))
+            quality = rng.choice(list(CHORDS))
+            root = _random_note(rng, clef=clef, accidentals=True)
+            chord = build(root, intervals=CHORDS[quality])
+            if (
+                all(abs(note.accidental) <= 1 for note in chord)
+                and chord[-1].diatonic <= CLEF_RANGES[clef][1].diatonic + 3
+            ):
+                break
         choices = list(CHORDS)
         if self.button_settings().button_mode == "limited":
             rng.shuffle(choices)
@@ -3752,7 +3776,6 @@ class KeyboardNotes(ChoiceExercise):
         True
         """
         cfg = settings.keyboard
-        naming = cfg.naming
         lo, hi = sorted((cfg.low, cfg.high))
         span = range(lo, hi + 1)
         naturals = [midi for midi in span if midi % 12 in NATURAL_LETTER_INDEX]
@@ -3761,16 +3784,60 @@ class KeyboardNotes(ChoiceExercise):
         count = rng.choice(cfg.active_keys()) if cfg.key_signature else None
         midi = rng.choice(candidates)
 
+        return self._question_for(
+            midi,
+            count=count,
+            candidates=candidates,
+            keyboard_range=(lo, hi),
+            cfg=cfg,
+        )
+
+    @staticmethod
+    def _question_for(
+        midi: int,
+        *,
+        count: int | None,
+        candidates: list[int],
+        keyboard_range: tuple[int, int],
+        cfg: settings.KeyboardSettings,
+    ) -> Question:
+        """
+        Spell a selected piano key and build its accepted answers.
+
+        Parameters
+        ----------
+        midi : int
+            The selected key.
+        count : int or None
+            Written key signature, or None for enharmonic answers.
+        candidates : list of int
+            Playable keys used to determine the available octaves.
+        keyboard_range : tuple of int
+            Inclusive bounds of the displayed keyboard.
+        cfg : KeyboardSettings
+            Naming, accidental, and octave preferences.
+
+        Returns
+        -------
+        Question
+            The highlighted key and its answer buttons.
+
+        Examples
+        --------
+        >>> q = KeyboardNotes._question_for(
+        ...     60, count=None, candidates=[60],
+        ...     keyboard_range=(60, 60),
+        ...     cfg=settings.KeyboardSettings(),
+        ... )
+        >>> q.answer
+        'C'
+        """
+        naming = cfg.naming
         spelled = [
             _spelled(midi, letter=letter, accidental=acc)
             for letter, acc in _key_spellings(midi % 12, count=count)
         ]
-        key = spelled[
-            0
-            # the key as the signature spells it (also what plays when
-            # you
-            # answer correctly)
-        ]
+        key = spelled[0]  # Use the signature’s spelling for playback.
         names = [spell(n, naming=naming, key=count or 0) for n in spelled]
         answer, accept = names[0], tuple(names[1:])
         octaves = None
@@ -3886,7 +3953,7 @@ class KeyboardNotes(ChoiceExercise):
             accept=accept,
             explanation=explanation,
             grid=grid,
-            keyboard_range=(lo, hi),
+            keyboard_range=keyboard_range,
             octaves=octaves,
             key=count or 0,
             key_staff=cfg.key_signature,
@@ -4097,6 +4164,7 @@ class NoteConstruction(Exercise):
         True
         """
         cfg = settings.construction
+        naming = settings.note_names.naming
         clef = rng.choice(cfg.active_clefs())
         notes_only = cfg.question_type == "notes"
         minor = (
@@ -4105,12 +4173,14 @@ class NoteConstruction(Exercise):
             and (not cfg.major or rng.choice((False, True)))
         )
         count = (
-            rng.choice(self._scale_keys(minor))
+            rng.choice(self._scale_keys(minor, cfg=cfg))
             if cfg.key_signature and not notes_only
             else 0
         )
-        diatonic = rng.choice(self._positions(clef, count=count, minor=minor))
-        staff_keys = self._staff_keys(count)
+        diatonic = rng.choice(
+            self._positions(clef, count=count, minor=minor, cfg=cfg),
+        )
+        staff_keys = self._staff_keys(count, keys=cfg.staff_keys)
         staff_signature = (
             rng.choice(staff_keys) if len(staff_keys) > 1 else staff_keys[0]
         )
@@ -4132,10 +4202,16 @@ class NoteConstruction(Exercise):
             count=count,
             minor=minor,
             staff_signature=staff_signature,
+            cfg=cfg,
+            naming=naming,
         )
 
     @staticmethod
-    def _scale_keys(minor: bool) -> list[int]:
+    def _scale_keys(
+        minor: bool,
+        *,
+        cfg: settings.ConstructionSettings,
+    ) -> list[int]:
         """
         Return selectable scale signatures for one mode.
 
@@ -4143,6 +4219,8 @@ class NoteConstruction(Exercise):
         ----------
         minor : bool
             Whether to use the minor key selection.
+        cfg : ConstructionSettings
+            Options for the construction exercise.
 
         Returns
         -------
@@ -4151,10 +4229,10 @@ class NoteConstruction(Exercise):
 
         Examples
         --------
-        >>> bool(NoteConstruction()._scale_keys(False))
+        >>> cfg = settings.ConstructionSettings()
+        >>> bool(NoteConstruction()._scale_keys(False, cfg=cfg))
         True
         """
-        cfg = settings.construction
         if not cfg.key_signature or cfg.question_type == "notes":
             return [0]
         return (
@@ -4164,7 +4242,7 @@ class NoteConstruction(Exercise):
         )
 
     @staticmethod
-    def _staff_keys(count: int) -> list[int]:
+    def _staff_keys(count: int, *, keys: set[int] | None) -> list[int]:
         """
         Return staff signatures allowed for a scale key.
 
@@ -4172,6 +4250,8 @@ class NoteConstruction(Exercise):
         ----------
         count : int
             Scale signature.
+        keys : set of int or None
+            Enabled staff signatures, or None to follow the scale.
 
         Returns
         -------
@@ -4181,14 +4261,19 @@ class NoteConstruction(Exercise):
 
         Examples
         --------
-        >>> bool(NoteConstruction()._staff_keys(0))
+        >>> bool(NoteConstruction()._staff_keys(0, keys=None))
         True
         """
-        keys = settings.construction.staff_keys
         return [count] if keys is None else sorted(keys) or [0]
 
     @staticmethod
-    def _positions(clef: str, *, count: int, minor: bool) -> range | list[int]:
+    def _positions(
+        clef: str,
+        *,
+        count: int,
+        minor: bool,
+        cfg: settings.ConstructionSettings,
+    ) -> range | list[int]:
         """
         Return staff positions that meet the degree selection.
 
@@ -4200,6 +4285,8 @@ class NoteConstruction(Exercise):
             Scale signature.
         minor : bool
             Whether degrees are relative to the minor tonic.
+        cfg : ConstructionSettings
+            Options for the construction exercise.
 
         Returns
         -------
@@ -4210,12 +4297,12 @@ class NoteConstruction(Exercise):
         --------
         >>> bool(
         ...     NoteConstruction()._positions(
-        ...         "treble", count=0, minor=False
+        ...         "treble", count=0, minor=False,
+        ...         cfg=settings.ConstructionSettings(),
         ...     )
         ... )
         True
         """
-        cfg = settings.construction
         low, high = settings.DEFAULT_RANGES[clef]
         positions = range(low, high + 1)
         if (
@@ -4229,10 +4316,16 @@ class NoteConstruction(Exercise):
 
     def _groups(
         self,
+        cfg: settings.ConstructionSettings,
     ) -> Iterator[tuple[str, bool, int, int, range | list[int]]]:
         """
         Group construction cards by clef, mode, scale key and staff
         signature.
+
+        Parameters
+        ----------
+        cfg : ConstructionSettings
+            Enabled clefs, modes, degrees, and signatures.
 
         Yields
         ------
@@ -4242,20 +4335,28 @@ class NoteConstruction(Exercise):
 
         Examples
         --------
-        >>> next(NoteConstruction()._groups())[
+        >>> cfg = settings.ConstructionSettings()
+        >>> next(NoteConstruction()._groups(cfg))[
         ...     0
         ... ] in settings.RANGE_KEYS
         True
         """
-        cfg = settings.construction
         modes = [False]
         if cfg.minor and cfg.question_type != "notes":
             modes = [False, True] if cfg.major else [True]
         for clef in cfg.active_clefs():
             for minor in modes:
-                for count in self._scale_keys(minor):
-                    positions = self._positions(clef, count=count, minor=minor)
-                    for staff_key in self._staff_keys(count):
+                for count in self._scale_keys(minor, cfg=cfg):
+                    positions = self._positions(
+                        clef,
+                        count=count,
+                        minor=minor,
+                        cfg=cfg,
+                    )
+                    for staff_key in self._staff_keys(
+                        count,
+                        keys=cfg.staff_keys,
+                    ):
                         yield clef, minor, count, staff_key, positions
 
     def card_count(self) -> int:
@@ -4273,8 +4374,9 @@ class NoteConstruction(Exercise):
         >>> NoteConstruction().card_count() > 0
         True
         """
-        return sum(len(positions) for *_, positions in self._groups()) * (
-            3 if settings.construction.accidentals else 1
+        cfg = settings.construction
+        return sum(len(positions) for *_, positions in self._groups(cfg)) * (
+            3 if cfg.accidentals else 1
         )
 
     def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
@@ -4301,9 +4403,10 @@ class NoteConstruction(Exercise):
         True
         """
         cfg = settings.construction
+        naming = settings.note_names.naming
         spellings = 3 if cfg.accidentals else 1
         groups = []
-        for clef, minor, count, staff_key, positions in self._groups():
+        for clef, minor, count, staff_key, positions in self._groups(cfg):
             size = len(positions) * spellings
             if size:
                 groups.append(
@@ -4338,6 +4441,8 @@ class NoteConstruction(Exercise):
                 count=count,
                 minor=minor,
                 staff_signature=staff_key,
+                cfg=cfg,
+                naming=naming,
             )
 
     def review_question(
@@ -4375,6 +4480,7 @@ class NoteConstruction(Exercise):
         if same_settings:
             return question
         cfg = settings.construction
+        naming = settings.note_names.naming
         note = question.construct
         minor = question.minor
         notes_only = cfg.question_type == "notes"
@@ -4398,10 +4504,12 @@ class NoteConstruction(Exercise):
         )
         if count not in self._scale_keys(
             minor,
-        ) or staff not in self._staff_keys(count):
+            cfg=cfg,
+        ) or staff not in self._staff_keys(count, keys=cfg.staff_keys):
             return None
         if note.diatonic not in self._positions(
             question.clef,
+            cfg=cfg,
             count=count,
             minor=minor,
         ):
@@ -4417,6 +4525,8 @@ class NoteConstruction(Exercise):
             count=count,
             minor=minor,
             staff_signature=staff,
+            cfg=cfg,
+            naming=naming,
         )
         return rebuilt if rebuilt.item_key() == question.item_key() else None
 
@@ -4428,6 +4538,8 @@ class NoteConstruction(Exercise):
         count: int,
         minor: bool,
         staff_signature: int,
+        cfg: settings.ConstructionSettings,
+        naming: str,
     ) -> Question:
         """
         Build the question for a selected placement.
@@ -4444,6 +4556,10 @@ class NoteConstruction(Exercise):
             Whether the scale is minor.
         staff_signature : int
             Signature printed on the staff.
+        cfg : ConstructionSettings
+            Options for the construction exercise.
+        naming : str
+            Selected pitch naming system.
 
         Returns
         -------
@@ -4458,10 +4574,11 @@ class NoteConstruction(Exercise):
         ...     count=0,
         ...     minor=False,
         ...     staff_signature=0,
+        ...     cfg=settings.ConstructionSettings(),
+        ...     naming="letters",
         ... ).construct.name
         'C'
         """
-        cfg = settings.construction
         notes_only = cfg.question_type == "notes"
         tonic = (
             mode_tonic(count, mode="Natural minor (Aeolian)").name
@@ -4470,7 +4587,6 @@ class NoteConstruction(Exercise):
         )
         key_name = f"{tonic} {'minor' if minor else 'major'}"
         accidental = note.accidental
-        naming = settings.note_names.naming
         if notes_only and naming in settings.DEGREE_NAMINGS:
             naming = "letters"
         name = spell(
@@ -4849,12 +4965,13 @@ class NotationIdentification(ChoiceExercise):
             "the number shown on the matching button."
         )
 
-    @classmethod
+    @staticmethod
     def _choices(
-        cls,
         part: str,
         *,
         group: str,
+        terms: set[str],
+        buttons: ButtonSettings,
         rng: random.Random,
     ) -> list[str]:
         """
@@ -4869,6 +4986,10 @@ class NotationIdentification(ChoiceExercise):
             Category containing the target. Keyword-only.
         rng : random.Random
             Source for sampling and ordering the buttons. Keyword-only.
+        terms : set of str
+            Enabled notation terms.
+        buttons : ButtonSettings
+            Answer layout and maximum button count.
 
         Returns
         -------
@@ -4880,22 +5001,17 @@ class NotationIdentification(ChoiceExercise):
         >>> "Turn" in NotationIdentification._choices(
         ...     "Turn",
         ...     group="Ornaments",
+        ...     terms={"Turn", "Trill"},
+        ...     buttons=ButtonSettings(),
         ...     rng=random.Random(0),
         ... )
         True
         """
-        cfg = cls.button_settings()
-        if cfg.button_mode == "all":
-            return [
-                term
-                for term in settings.NOTATION_TERMS
-                if term in settings.notation.terms
-            ]
-        needed = cfg.button_count - 1
+        if buttons.button_mode == "all":
+            return [term for term in settings.NOTATION_TERMS if term in terms]
+        needed = buttons.button_count - 1
         alternatives = [
-            term
-            for term in CATALOG[group]
-            if term != part and term in settings.notation.terms
+            term for term in CATALOG[group] if term != part and term in terms
         ]
         rng.shuffle(alternatives)
         if rng.random() < 0.8:
@@ -4908,8 +5024,7 @@ class NotationIdentification(ChoiceExercise):
             others = [
                 term
                 for term in settings.NOTATION_TERMS
-                if term in settings.notation.terms
-                and term not in CATALOG[group]
+                if term in terms and term not in CATALOG[group]
             ]
             alternatives.extend(
                 rng.sample(
@@ -4943,11 +5058,14 @@ class NotationIdentification(ChoiceExercise):
         >>> ex.refresh(q) == q
         True
         """
-        if all(term in settings.notation.terms for term in question.choices):
+        cfg = settings.notation
+        if all(term in cfg.terms for term in question.choices):
             return question
         return self._with_buttons(
             question,
             rng=random.Random(question.item_key()),
+            cfg=cfg,
+            buttons=self.button_settings(),
         )
 
     def make_question(self, rng: random.Random) -> Question:
@@ -4973,7 +5091,8 @@ class NotationIdentification(ChoiceExercise):
         >>> q.notation_target[0] == q.answer
         True
         """
-        if not settings.notation.terms:
+        cfg = settings.notation
+        if not cfg.terms:
             return Question(
                 "Select a notation term in Settings to continue.",
                 choices=[],
@@ -4981,9 +5100,7 @@ class NotationIdentification(ChoiceExercise):
             )
         phrase = rng.choice(self._phrases)
         selected = [
-            term
-            for term in settings.NOTATION_TERMS
-            if term in settings.notation.terms
+            term for term in settings.NOTATION_TERMS if term in cfg.terms
         ]
         repertoire = passages_by_term()
         represented = [term for term in selected if term in repertoire]
@@ -4991,8 +5108,18 @@ class NotationIdentification(ChoiceExercise):
             represented if represented and rng.random() < 0.5 else selected,
         )
         group = next(name for name, terms in CATALOG.items() if part in terms)
-        locate = settings.notation.question_type == "staff"
-        choices = [] if locate else self._choices(part, group=group, rng=rng)
+        locate = cfg.question_type == "staff"
+        choices = (
+            []
+            if locate
+            else self._choices(
+                part,
+                group=group,
+                rng=rng,
+                terms=cfg.terms,
+                buttons=self.button_settings(),
+            )
+        )
         if part in repertoire:
             passage = rng.choice(list(repertoire[part]))
             locations = repertoire[part][passage]
@@ -5144,7 +5271,13 @@ class NotationIdentification(ChoiceExercise):
         )
 
     @classmethod
-    def _examples(cls, part: str) -> dict[str, Question]:
+    def _examples(
+        cls,
+        part: str,
+        *,
+        locate: bool,
+        repertoire: dict[str, dict[str, list[int]]],
+    ) -> dict[str, Question]:
         """
         Index the current score examples for a term by their persistent
         card identities.
@@ -5153,6 +5286,10 @@ class NotationIdentification(ChoiceExercise):
         ----------
         part : str
             Enabled notation term.
+        locate : bool
+            Whether the learner marks a location on the staff.
+        repertoire : dict
+            Excerpt locations indexed by term and passage.
 
         Returns
         -------
@@ -5163,15 +5300,15 @@ class NotationIdentification(ChoiceExercise):
         --------
         >>> len(
         ...     NotationIdentification._examples(
-        ...         "Koron"
+        ...         "Koron", locate=False, repertoire={},
         ...     )
         ... ) > 0
         True
         """
-        passages = passages_by_term().get(part, {})
+        passages = repertoire.get(part, {})
         return cls._catalog(
             part,
-            locate=settings.notation.question_type == "staff",
+            locate=locate,
             passages=tuple(
                 (name, tuple(indices)) for name, indices in passages.items()
             ),
@@ -5249,10 +5386,16 @@ class NotationIdentification(ChoiceExercise):
         >>> bool(NotationIdentification().card_groups())
         True
         """
+        cfg = settings.notation
+        repertoire = passages_by_term()
         return {
             key: term
-            for term in settings.notation.terms
-            for key in self._examples(term)
+            for term in cfg.terms
+            for key in self._examples(
+                term,
+                locate=cfg.question_type == "staff",
+                repertoire=repertoire,
+            )
         }
 
     def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
@@ -5278,17 +5421,32 @@ class NotationIdentification(ChoiceExercise):
         ... ).answer in settings.notation.terms
         True
         """
-        terms = sorted(settings.notation.terms)
+        cfg = settings.notation
+        repertoire = passages_by_term()
+        buttons = self.button_settings()
+        terms = sorted(cfg.terms)
         rng.shuffle(terms)
         for term in terms:
-            example = rng.choice(list(self._examples(term).values()))
-            yield self._with_buttons(example, rng=rng)
+            examples = self._examples(
+                term,
+                locate=cfg.question_type == "staff",
+                repertoire=repertoire,
+            )
+            example = rng.choice(list(examples.values()))
+            yield self._with_buttons(
+                deepcopy(example),
+                rng=rng,
+                cfg=cfg,
+                buttons=buttons,
+            )
 
     def _with_buttons(
         self,
         question: Question,
         *,
         rng: random.Random,
+        cfg: settings.NotationSettings,
+        buttons: ButtonSettings,
     ) -> Question:
         """
         Apply the current answer controls to a notation card.
@@ -5299,6 +5457,10 @@ class NotationIdentification(ChoiceExercise):
             Playable score and target.
         rng : random.Random
             Source for the distractor selection.
+        cfg : NotationSettings
+            Enabled terms and answer method.
+        buttons : ButtonSettings
+            Answer layout and maximum button count.
 
         Returns
         -------
@@ -5310,16 +5472,24 @@ class NotationIdentification(ChoiceExercise):
         >>> ex = NotationIdentification()
         >>> q = ex.generate(random.Random(4))
         >>> ex._with_buttons(
-        ...     q, rng=random.Random(1)
+        ...     q, rng=random.Random(1),
+        ...     cfg=settings.NotationSettings(),
+        ...     buttons=ButtonSettings(),
         ... ).item_key() == q.item_key()
         True
         """
-        if settings.notation.question_type == "staff":
+        if cfg.question_type == "staff":
             return question
         group = next(
             name for name, terms in CATALOG.items() if question.answer in terms
         )
-        choices = self._choices(question.answer, group=group, rng=rng)
+        choices = self._choices(
+            question.answer,
+            group=group,
+            rng=rng,
+            terms=cfg.terms,
+            buttons=buttons,
+        )
         return replace(
             question,
             choices=choices,
@@ -5358,10 +5528,15 @@ class NotationIdentification(ChoiceExercise):
         ... ) == q
         True
         """
-        if (
-            question.answer not in settings.notation.terms
-            or question.item_key() not in self._examples(question.answer)
-        ):
+        cfg = settings.notation
+        if question.answer not in cfg.terms:
+            return None
+        examples = self._examples(
+            question.answer,
+            locate=cfg.question_type == "staff",
+            repertoire=passages_by_term(),
+        )
+        if question.item_key() not in examples:
             return None
         return (
             self.refresh(question)
@@ -5369,6 +5544,8 @@ class NotationIdentification(ChoiceExercise):
             else self._with_buttons(
                 question,
                 rng=random.Random(question.item_key()),
+                cfg=cfg,
+                buttons=self.button_settings(),
             )
         )
 
@@ -5524,13 +5701,20 @@ class BeatIdentification(ChoiceExercise):
         """
         classify = settings.beat_rhythm_component == "Beat and meter"
         meters = _BEAT_CLASSIFICATIONS if classify else BEAT_METERS
+        values = frozenset(settings.beat_note_types["beatIdentification"])
         answer, rhythm = _beat_example(
             rng,
             prefix="beatIdentification",
+            values=values,
             classify=classify,
         )
         if settings.beat_tuplets["beatIdentification"]:
-            rhythm = _identification_tuplets(rng, answer=answer, rhythm=rhythm)
+            rhythm = _identification_tuplets(
+                rng,
+                answer=answer,
+                rhythm=rhythm,
+                values=values,
+            )
         return Question(
             "What are the beat and meter?"
             if classify
@@ -5546,6 +5730,7 @@ def _identification_tuplets(
     *,
     answer: str,
     rhythm: tuple[str, ...],
+    values: frozenset[str],
 ) -> tuple[str, ...]:
     """
     Substitute complete tuplet groups at the study's event frequency.
@@ -5559,6 +5744,8 @@ def _identification_tuplets(
         signatures of equal length.
     rhythm : tuple of str
         Two measures of ordinary notes and rests in this meter.
+    values : frozenset of str
+        Enabled note types for the tuplet groups.
 
     Returns
     -------
@@ -5569,7 +5756,10 @@ def _identification_tuplets(
     --------
     >>> rhythm = ("whole", "whole")
     >>> _identification_tuplets(
-    ...     random.Random(1), answer="4/4", rhythm=rhythm
+    ...     random.Random(1),
+    ...     answer="4/4",
+    ...     rhythm=rhythm,
+    ...     values=frozenset({"quarter"}),
     ... )
     ('whole', 'whole')
     """
@@ -5596,10 +5786,7 @@ def _identification_tuplets(
         count, ordinary = settings.BEAT_TUPLET_RATIOS[kind]
         placements = []
         for value in settings.BEAT_NOTE_TYPES:
-            if (
-                value.startswith("dotted-")
-                or value not in settings.beat_note_types["beatIdentification"]
-            ):
+            if value.startswith("dotted-") or value not in values:
                 continue
             span = ordinary * settings.RHYTHM_DURATIONS[value]
             for start, offset in enumerate(offsets[:-1]):
@@ -5686,13 +5873,16 @@ def _beat_rhythm(
     return group + first + (long_note,) + second
 
 
+_BeatPattern = tuple[int, tuple[str, ...]]
+
+
 @lru_cache(maxsize=512)
 def _beat_fills(
     meter: tuple[int, int],
     *,
     values: frozenset[str],
     tuplets: bool = False,
-) -> list[list[tuple[int, tuple[str, ...]]]]:
+) -> tuple[tuple[_BeatPattern, ...], ...]:
     """
     Find patterns that leave the rest of a measure fillable.
 
@@ -5707,14 +5897,14 @@ def _beat_fills(
 
     Returns
     -------
-    list of list of tuple
+    tuple of tuple of beat patterns
         For each number of beats remaining, the playable patterns
         and their lengths in beats.
 
     Examples
     --------
     >>> _beat_fills((4, 4), values=frozenset({"whole"}))[-1]
-    [(4, ('whole',))]
+    ((4, ('whole',)),)
     """
     top, bottom = meter
     beats, unit = (top, 4) if bottom == 4 else (top // 3, 6)
@@ -5741,23 +5931,25 @@ def _beat_fills(
             patterns.append((1, ("eighth-rest", "eighth")))
         elif "quarter" in values:
             patterns.append((1, ("quarter", "eighth")))
-    fills: list[list[tuple[int, tuple[str, ...]]]] = [[]]
+    fills: list[tuple[_BeatPattern, ...]] = [()]
     for remaining in range(1, beats + 1):
         fills.append(
-            [
+            tuple(
                 (length, pattern)
                 for length, pattern in patterns
                 if length == remaining
                 or (length < remaining and fills[remaining - length])
-            ],
+            ),
         )
-    return fills
+    return tuple(fills)
 
 
 def _beat_example(
     rng: random.Random,
     *,
     prefix: str,
+    values: frozenset[str],
+    tuplets: bool = False,
     classify: bool = False,
 ) -> tuple[str, tuple[str, ...]]:
     """
@@ -5768,7 +5960,11 @@ def _beat_example(
     rng : random.Random
         Source of meter and note choices.
     prefix : str
-        Exercise whose note types apply.
+        Exercise whose default patterns apply.
+    values : frozenset of str
+        Enabled written note types.
+    tuplets : bool
+        Include construction tuplets when filling measures.
     classify : bool
         Use the meter classification as the answer.
 
@@ -5779,13 +5975,15 @@ def _beat_example(
 
     Examples
     --------
-    >>> _beat_example(random.Random(1), prefix="beatConstruction")[0]
+    >>> key = "beatConstruction"
+    >>> values = frozenset(settings.DEFAULT_BEAT_NOTE_TYPES[key])
+    >>> _beat_example(
+    ...     random.Random(1), prefix=key, values=values
+    ... )[0]
     '3/4'
     """
     meters = _BEAT_CLASSIFICATIONS if classify else BEAT_METERS
     construction = prefix == "beatConstruction"
-    values = frozenset(settings.beat_note_types[prefix])
-    tuplets = construction and settings.beat_tuplets[prefix]
     if not tuplets and values == settings.DEFAULT_BEAT_NOTE_TYPES[prefix]:
         answer = rng.choice(list(meters))
         return answer, _beat_rhythm(
@@ -5946,7 +6144,12 @@ class BeatConstruction(Exercise):
         >>> BeatConstruction().generate(random.Random(1)).prompt
         'Place the beats in both measures.'
         """
-        answer, rhythm = _beat_example(rng, prefix="beatConstruction")
+        answer, rhythm = _beat_example(
+            rng,
+            prefix="beatConstruction",
+            values=frozenset(settings.beat_note_types["beatConstruction"]),
+            tuplets=settings.beat_tuplets["beatConstruction"],
+        )
         if not any(value.endswith("-rest") for value in rhythm):
             index = rng.randrange(len(rhythm))
             values = list(rhythm)
@@ -6131,61 +6334,15 @@ class RythmicEquations(ChoiceExercise):
             for name, duration in self.durations.items()
             if name in settings.rhythm_symbols
         }
-        ordinary: dict[float, list[str]] = {}
-        tied: dict[float, list[str]] = {}
-        beamed: dict[float, list[str]] = {}
-        for name, duration in symbols.items():
-            ordinary.setdefault(duration, []).append(name)
-        if settings.rhythm_ties:
-            notes = [name for name in symbols if not name.endswith("-rest")]
-            for index, first in enumerate(notes):
-                for second in notes[index:]:
-                    duration = symbols[first] + symbols[second]
-                    tied.setdefault(duration, []).append(f"{first}~{second}")
-        if settings.rhythm_beams:
-            for name in settings.RHYTHM_BEAM_COUNTS:
-                if name in symbols:
-                    duration = 2 * symbols[name]
-                    beamed.setdefault(duration, []).append(f"{name}|{name}")
-        build = partial(
-            equation_tokens,
+        return equation_question(
             rng,
-            ordinary=ordinary,
+            symbols=symbols,
+            ties=settings.rhythm_ties,
+            beams=settings.rhythm_beams,
             left=settings.rhythm_left_operators,
             right=settings.rhythm_right_operators,
             operators=tuple(sorted(settings.rhythm_left_signs)),
             right_operators=tuple(sorted(settings.rhythm_right_signs)),
             parentheses=settings.rhythm_parentheses,
-        )
-        tokens = build(grouped=(tied, beamed))
-        if not tokens and "number" in settings.rhythm_answer_types:
-            tokens = build(grouped=(counted_operands(ordinary),))
-            if tokens:
-                return number_question(rng, tokens=tokens, ordinary=ordinary)
-        if not tokens:
-            return Question(
-                "These settings cannot form a balanced equation. "
-                "Change the operator counts, operations, or symbols.",
-                choices=[],
-                answer="",
-            )
-        if "number" in settings.rhythm_answer_types and (
-            "symbol" not in settings.rhythm_answer_types
-            or rng.choice((False, True))
-        ):
-            return number_question(rng, tokens=tokens, ordinary=ordinary)
-        blank = rng.choice(
-            [i for i, token in enumerate(tokens) if token in symbols],
-        )
-        answer = tokens[blank]
-        tokens[blank] = "_"
-        return Question(
-            " ".join(tokens),
-            choices=list(symbols),
-            answer=answer,
-            accept=tuple(
-                name
-                for name, duration in symbols.items()
-                if name != answer and duration == symbols[answer]
-            ),
+            answer_types=settings.rhythm_answer_types,
         )

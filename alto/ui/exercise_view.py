@@ -104,6 +104,7 @@ from alto.learning.calendar import (
 )
 from alto.learning.learner import PracticeComplete
 from alto.settings import spell
+from alto.theory.beat_placement import grade_beat_marks
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
     QUALITY_NAMES,
@@ -2735,11 +2736,11 @@ class ExerciseView(QWidget):
         score = self.beat_placement
         if not q or not self.answer_button.isEnabled() or self.answered:
             return
-        ok = set(score.marks) == beat_positions(BEAT_METERS[q.answer])
-        self._record(
-            ok,
-            choice=" ".join(str(slot) for slot in sorted(score.marks)),
+        ok, choice = grade_beat_marks(
+            score.marks,
+            expected=beat_positions(BEAT_METERS[q.answer]),
         )
+        self._record(ok, choice=choice)
         score.feedback = ok
         score.update()
         if ok:

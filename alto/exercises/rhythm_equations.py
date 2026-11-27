@@ -11,7 +11,7 @@ from __future__ import annotations
 import math
 import operator
 import random
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from functools import lru_cache, partial
 
 from alto import settings
@@ -399,8 +399,34 @@ def counted_operands(
     return counted
 
 
+def _blank_prompt(tokens: Sequence[str], *, blank: int) -> str:
+    """
+    Show the equation with one token hidden.
+
+    Parameters
+    ----------
+    tokens : sequence of str
+        Complete equation in score order.
+    blank : int
+        Position of the token to hide.
+
+    Returns
+    -------
+    str
+        The question prompt.
+
+    Examples
+    --------
+    >>> _blank_prompt(("half", "÷", "2", "=", "quarter"), blank=2)
+    'half ÷ _ = quarter'
+    """
+    return " ".join(
+        "_" if index == blank else token for index, token in enumerate(tokens)
+    )
+
+
 def _count_question(
-    tokens: list[str],
+    tokens: Sequence[str],
     *,
     blank: int,
     count: int,
@@ -411,7 +437,7 @@ def _count_question(
 
     Parameters
     ----------
-    tokens : list of str
+    tokens : sequence of str
         Balanced equation.
     blank : int
         Position to replace.
@@ -431,11 +457,10 @@ def _count_question(
     ...                 count=2, unit="quarter").caption
     'Count in quarter notes.'
     """
-    tokens[blank] = "_"
     name = unit.removesuffix("-rest").replace("breve", "double whole")
     name = name.replace("_", "-").replace("dotted-", "dotted ")
     return Question(
-        " ".join(tokens),
+        _blank_prompt(tokens, blank=blank),
         choices=[str(n) for n in range(1, 9)],
         answer=str(count),
         caption=f"Count in {name} notes.",
@@ -445,7 +470,7 @@ def _count_question(
 def number_question(
     rng: random.Random,
     *,
-    tokens: list[str],
+    tokens: Sequence[str],
     ordinary: dict[float, list[str]],
 ) -> Question:
     """
@@ -455,7 +480,7 @@ def number_question(
     ----------
     rng : random.Random
         Selects the blank and counting unit.
-    tokens : list of str
+    tokens : sequence of str
         Balanced equation. Each factor scales the preceding subtotal,
         with any additive prefix enclosed in parentheses.
     ordinary : dict
@@ -468,13 +493,15 @@ def number_question(
 
     Examples
     --------
-    >>> number_question(random.Random(0),
-    ...     tokens=["half", "÷", "2", "=", "quarter"],
+    >>> tokens = ["half", "÷", "2", "=", "quarter"]
+    >>> number_question(random.Random(0), tokens=tokens,
     ...     ordinary={4: ["quarter"], 8: ["half"]}).answer
     '2'
+    >>> tokens
+    ['half', '÷', '2', '=', 'quarter']
     """
-    factors = []
-    symbol_slots = []
+    factors: list[int] = []
+    symbol_slots: list[int] = []
     total = 0
     sign = "+"
     for index, token in enumerate(tokens):
@@ -507,9 +534,8 @@ def number_question(
     if factors:
         blank = rng.choice(factors)
         answer = tokens[blank]
-        tokens[blank] = "_"
         return Question(
-            " ".join(tokens),
+            _blank_prompt(tokens, blank=blank),
             choices=[str(n) for n in FACTORS],
             answer=answer,
         )
@@ -526,4 +552,111 @@ def number_question(
         blank=blank,
         count=int(duration / unit),
         unit=rng.choice(ordinary[unit]),
+    )
+
+
+def equation_question(
+    rng: random.Random,
+    *,
+    symbols: dict[str, float],
+    ties: bool,
+    beams: bool,
+    left: int,
+    right: int,
+    operators: tuple[str, ...],
+    right_operators: tuple[str, ...],
+    parentheses: bool,
+    answer_types: set[str],
+) -> Question:
+    """
+    Build a rhythm question from the enabled symbols and operations.
+
+    Parameters
+    ----------
+    rng : random.Random
+        Chooses the equation, blank, and answer type.
+    symbols : dict of str to float
+        Enabled notation and its duration in sixteenth notes.
+    ties, beams : bool
+        Allow tied or beamed operands, respectively.
+    left, right : int
+        Number of operations required on each side.
+    operators, right_operators : tuple of str
+        Allowed operations on the left and right sides.
+    parentheses : bool
+        Allow parentheses to group operations.
+    answer_types : set of str
+        Enabled answers, drawn from "symbol" and "number".
+
+    Returns
+    -------
+    Question
+        The equation with one blank, or a prompt to revise the options.
+
+    Examples
+    --------
+    >>> q = equation_question(
+    ...     random.Random(0), symbols={"quarter": 4}, ties=False,
+    ...     beams=False, left=1, right=1, operators=("+",),
+    ...     right_operators=("+",), parentheses=False,
+    ...     answer_types={"symbol"},
+    ... )
+    >>> q.answer
+    'quarter'
+    """
+    ordinary: dict[float, list[str]] = {}
+    tied: dict[float, list[str]] = {}
+    beamed: dict[float, list[str]] = {}
+    for name, duration in symbols.items():
+        ordinary.setdefault(duration, []).append(name)
+    if ties:
+        notes = [name for name in symbols if not name.endswith("-rest")]
+        for index, first in enumerate(notes):
+            for second in notes[index:]:
+                duration = symbols[first] + symbols[second]
+                tied.setdefault(duration, []).append(f"{first}~{second}")
+    if beams:
+        for name in settings.RHYTHM_BEAM_COUNTS:
+            if name in symbols:
+                duration = 2 * symbols[name]
+                beamed.setdefault(duration, []).append(f"{name}|{name}")
+    build = partial(
+        equation_tokens,
+        rng,
+        ordinary=ordinary,
+        left=left,
+        right=right,
+        operators=operators,
+        right_operators=right_operators,
+        parentheses=parentheses,
+    )
+    tokens = build(grouped=(tied, beamed))
+    if not tokens and "number" in answer_types:
+        tokens = build(grouped=(counted_operands(ordinary),))
+        if tokens:
+            return number_question(rng, tokens=tokens, ordinary=ordinary)
+    if not tokens:
+        return Question(
+            "These settings cannot form a balanced equation. "
+            "Change the operator counts, operations, or symbols.",
+            choices=[],
+            answer="",
+        )
+    if "number" in answer_types and (
+        "symbol" not in answer_types or rng.choice((False, True))
+    ):
+        return number_question(rng, tokens=tokens, ordinary=ordinary)
+    blank = rng.choice(
+        [i for i, token in enumerate(tokens) if token in symbols],
+    )
+    answer = tokens[blank]
+    return Question(
+        _blank_prompt(tokens, blank=blank),
+        choices=list(symbols),
+        answer=answer,
+        accept=tuple(
+            name
+            for name, duration in symbols.items()
+            if name != answer and duration == symbols[answer]
+        ),
     )
