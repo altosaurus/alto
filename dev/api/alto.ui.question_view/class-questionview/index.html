@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>choice_keys · Alto</title>
+<title>QuestionView · Alto</title>
   <script>
   // Apply a remembered choice before the page paints, so there is no flash of the other theme.
   try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
@@ -19,20 +19,20 @@
     <script src="../../../_static/documentation_options.js?v=a5603611"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <link rel="canonical" href="https://altosaurus.github.io/alto/api/alto.ui.exercise_view/function-choice_keys/" />
+    <link rel="canonical" href="https://altosaurus.github.io/alto/api/alto.ui.question_view/class-questionview/" />
     <link rel="icon" href="../../../_static/icon.png"/>
     <link rel="author" title="About these documents" href="../../../about/" />
     <link rel="search" title="Search" href="../../../search/" />
-    <link rel="next" title="second_row_keys" href="../function-second_row_keys/" />
-    <link rel="prev" title="alto.ui.exercise_view" href="../" />
+    <link rel="next" title="alto.ui.reference" href="../../alto.ui.reference/" />
+    <link rel="prev" title="alto.ui.question_view" href="../" />
    
   <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
-  <meta property="og:title" content="choice_keys · Alto">
+  <meta property="og:title" content="QuestionView · Alto">
   <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
-  <meta property="og:url" content="https://altosaurus.github.io/alto/api/alto.ui.exercise_view/function-choice_keys/">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/api/alto.ui.question_view/class-questionview/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
   
@@ -318,6 +318,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.answer_bank"><li><a class="row" href="../../alto.ui.answer_bank/class-answerbank/">AnswerBank</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.ui.answer_controls/">answer_controls</a>
+      <button type="button" class="nav-toggle" data-category="answer_controls" aria-controls="nav-api/alto.ui.answer_controls" aria-expanded="true" aria-label="Collapse answer_controls" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.answer_controls"><li><a class="row" href="../../alto.ui.answer_controls/function-choice_keys/">choice_keys</a></li><li><a class="row" href="../../alto.ui.answer_controls/function-second_row_keys/">second_row_keys</a></li><li><a class="row" href="../../alto.ui.answer_controls/class-answercontrols/">AnswerControls</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.app_settings/">app_settings</a>
       <button type="button" class="nav-toggle" data-category="app_settings" aria-controls="nav-api/alto.ui.app_settings" aria-expanded="true" aria-label="Collapse app_settings" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -378,11 +383,16 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.exercise_settings"><li><a class="row" href="../../alto.ui.exercise_settings/function-load_note_names/">load_note_names</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_note_names/">save_note_names</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_keyboard/">load_keyboard</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_keyboard/">save_keyboard</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_keyboard_intervals/">load_keyboard_intervals</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_keyboard_intervals/">save_keyboard_intervals</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_construction/">load_construction</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_construction/">save_construction</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_arpeggio/">load_arpeggio</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_arpeggio/">save_arpeggio</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_intervals/">load_intervals</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_key_settings/">save_key_settings</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_key_signatures/">load_key_signatures</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_key_construction/">load_key_construction</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_order_of_keys/">load_order_of_keys</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_scale_identification/">load_scale_identification</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_scale_construction/">load_scale_construction</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-saved_notation_terms/">saved_notation_terms</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_notation_terms/">load_notation_terms</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_clef_basics/">load_clef_basics</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_clef_basics/">save_clef_basics</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_circle/">load_circle</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_circle/">save_circle</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_pack_options/">load_pack_options</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-save_pack_options/">save_pack_options</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_choice_buttons/">load_choice_buttons</a></li><li><a class="row" href="../../alto.ui.exercise_settings/function-load_exercise_settings/">load_exercise_settings</a></li></ul></li><li><div class="nav-row">
-      <a class="row" href="../">exercise_view</a>
+      <a class="row" href="../../alto.ui.exercise_toolbar/">exercise_toolbar</a>
+      <button type="button" class="nav-toggle" data-category="exercise_toolbar" aria-controls="nav-api/alto.ui.exercise_toolbar" aria-expanded="true" aria-label="Collapse exercise_toolbar" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.exercise_toolbar"><li><a class="row" href="../../alto.ui.exercise_toolbar/class-exercisetoolbar/">ExerciseToolbar</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.ui.exercise_view/">exercise_view</a>
       <button type="button" class="nav-toggle" data-category="exercise_view" aria-controls="nav-api/alto.ui.exercise_view" aria-expanded="true" aria-label="Collapse exercise_view" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-api/alto.ui.exercise_view"><li><a class="row" href="#" aria-current="page">choice_keys</a></li><li><a class="row" href="../function-second_row_keys/">second_row_keys</a></li><li><a class="row" href="../function-note_name/">note_name</a></li><li><a class="row" href="../function-note_words/">note_words</a></li><li><a class="row" href="../class-exerciseview/">ExerciseView</a></li></ul></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-api/alto.ui.exercise_view"><li><a class="row" href="../../alto.ui.exercise_view/function-note_name/">note_name</a></li><li><a class="row" href="../../alto.ui.exercise_view/function-note_words/">note_words</a></li><li><a class="row" href="../../alto.ui.exercise_view/class-exerciseview/">ExerciseView</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.fingerboard/">fingerboard</a>
       <button type="button" class="nav-toggle" data-category="fingerboard" aria-controls="nav-api/alto.ui.fingerboard" aria-expanded="true" aria-label="Collapse fingerboard" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -488,6 +498,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.pictures"><li><a class="row" href="../../alto.ui.pictures/function-symbol_icon/">symbol_icon</a></li><li><a class="row" href="../../alto.ui.pictures/class-clefpictures/">ClefPictures</a></li><li><a class="row" href="../../alto.ui.pictures/class-valuepictures/">ValuePictures</a></li><li><a class="row" href="../../alto.ui.pictures/function-rhythm_picture/">rhythm_picture</a></li><li><a class="row" href="../../alto.ui.pictures/class-keysignaturepicture/">KeySignaturePicture</a></li><li><a class="row" href="../../alto.ui.pictures/class-rangepictures/">RangePictures</a></li><li><a class="row" href="../../alto.ui.pictures/class-namepicture/">NamePicture</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.ui.placement_controls/">placement_controls</a>
+      <button type="button" class="nav-toggle" data-category="placement_controls" aria-controls="nav-api/alto.ui.placement_controls" aria-expanded="true" aria-label="Collapse placement_controls" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.placement_controls"><li><a class="row" href="../../alto.ui.placement_controls/class-placementcontrols/">PlacementControls</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.plugins_dialog/">plugins_dialog</a>
       <button type="button" class="nav-toggle" data-category="plugins_dialog" aria-controls="nav-api/alto.ui.plugins_dialog" aria-expanded="true" aria-label="Collapse plugins_dialog" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -508,6 +523,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.question_preview"><li><a class="row" href="../../alto.ui.question_preview/class-questionpreview/">QuestionPreview</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../">question_view</a>
+      <button type="button" class="nav-toggle" data-category="question_view" aria-controls="nav-api/alto.ui.question_view" aria-expanded="true" aria-label="Collapse question_view" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.question_view"><li><a class="row" href="#" aria-current="page">QuestionView</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.reference/">reference</a>
       <button type="button" class="nav-toggle" data-category="reference" aria-controls="nav-api/alto.ui.reference" aria-expanded="true" aria-label="Collapse reference" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -688,28 +708,31 @@
           <nav class="breadcrumbs" aria-label="Breadcrumb">
             <ol>
               <li><a href="../../../">Home</a></li>
-              <li><a href="../../../development/">For developers</a></li><li><a href="../../">API reference</a></li><li><a href="../../alto/">alto</a></li><li><a href="../../alto.ui/">alto.ui</a></li><li><a href="../">alto.ui.exercise_view</a></li>
-              <li aria-current="page">choice_keys</li>
+              <li><a href="../../../development/">For developers</a></li><li><a href="../../">API reference</a></li><li><a href="../../alto/">alto</a></li><li><a href="../../alto.ui/">alto.ui</a></li><li><a href="../">alto.ui.question_view</a></li>
+              <li aria-current="page">QuestionView</li>
             </ol>
           </nav>
           
           
-  <section id="choice-keys">
-<h1>choice_keys</h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="alto.ui.exercise_view.choice_keys">
-<span id="choice_keys"></span><span class="sig-prename descclassname"><span class="pre">alto.ui.exercise_view.</span></span><span class="sig-name descname"><span class="pre">choice_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">choices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L184"><span class="pre">Source</span></a></dt>
-<dd><p>Choose a key for each answer button, so that every answer can be
-given from the keyboard.</p>
-<p>Nine answers or fewer take the digits 1 to 9. More than that, as on
-the piano keyboard, take the notes’ own names: the
-letter for a natural, Shift and the letter for a sharp, Ctrl and the
-letter for a flat. A minor key, such as F♯m, is
-typed the same way as the major key of its name. Any other long list
-takes 1 to 9
-and then 0, and the rest can be reached with Tab. Scale-degree banks
-use the degree digit, with Shift for a sharp,
-Ctrl for a flat, and Alt added for double alterations.</p>
+  <section id="questionview">
+<h1>QuestionView</h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="alto.ui.question_view.QuestionView">
+<span id="questionview"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.question_view.</span></span><span class="sig-name descname"><span class="pre">QuestionView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_controls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/ffdaddecfbcb2f9978b34434efcdea66d4706635/alto/ui/question_view.py#L35"><span class="pre">Source</span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide6.QtWidgets.QWidget</span></code></p>
+<p>Present a question’s music and the editor used to answer it.</p>
+<p>A question can use several displays together, such as a keyboard
+with a key signature above it. It has at most one placement editor.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">view</span> <span class="o">=</span> <span class="n">QuestionView</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s2">"C"</span><span class="p">,</span> <span class="n">show_staff</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="o">.</span><span class="n">show_question</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">interval_voices</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">staff</span><span class="p">,</span> <span class="n">StaffWidget</span><span class="p">)</span> <span class="ow">and</span> <span class="n">view</span><span class="o">.</span><span class="n">editor</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p><strong>Constructor</strong></p>
+<p>Make room for the question and its placement controls.</p>
 <table class="docutils align-default" id="id1">
 <caption><span class="caption-text">Parameters</span></caption>
 <thead>
@@ -719,13 +742,49 @@ Ctrl for a flat, and Alt added for double alterations.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">choices</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">str</span></code></p></td>
-<td><p>The answers, in the order of their buttons.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">center_controls</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Center the editor and controls together for Order of Keys.</p></td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">QuestionView</span><span class="p">()</span><span class="o">.</span><span class="n">keyboard</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.question_view.QuestionView.show_question">
+<span id="questionviewshow_question"></span><span class="sig-name descname"><span class="pre">show_question</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../alto.exercises.base/class-question/#alto.exercises.base.Question" title="alto.exercises.base.Question"><span class="pre">alto.exercises.base.Question</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_voices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/ffdaddecfbcb2f9978b34434efcdea66d4706635/alto/ui/question_view.py#L142"><span class="pre">Source</span></a></dt>
+<dd><p>Render the displays and editor requested by a question.</p>
 <table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">q</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Question</span></code></p></td>
+<td><p>Music to display and input required.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">interval_voices</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Separate the voices of an interval on the display staff.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Key Signature Construction shows both the staff and a key fork.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="alto.ui.question_view.QuestionView.note_input">
+<span id="questionviewnote_input"></span><span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">note_input</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../alto.ui.staff_input/class-staffinput/#alto.ui.staff_input.StaffInput" title="alto.ui.staff_input.StaffInput"><span class="pre">alto.ui.staff_input.StaffInput</span></a></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/ffdaddecfbcb2f9978b34434efcdea66d4706635/alto/ui/question_view.py#L291"><span class="pre">Source</span></a></dt>
+<dd><p>Access the active note placement editor.</p>
+<table class="docutils align-default" id="id3">
 <caption><span class="caption-text">Returns</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Type</p></th>
@@ -733,24 +792,57 @@ Ctrl for a flat, and Alt added for double alterations.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">str</span></code></p></td>
-<td><p>A key for each answer, such as “3” or “Shift+C”; “” for an answer that has none.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">StaffInput</span></code></p></td>
+<td><p>The editor mounted for this question.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">choice_keys</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="s2">"major"</span><span class="p">,</span> <span class="s2">"minor"</span><span class="p">,</span> <span class="s2">"diminished"</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="go">['1', '2', '3']</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">choice_keys</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="nb">list</span><span class="p">(</span><span class="s2">"CDEFGAB"</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"C♯"</span><span class="p">,</span> <span class="s2">"B♭"</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"F♯"</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="go">['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Shift+C', 'Ctrl+B', 'Shift+F']</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">choice_keys</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)])[</span><span class="mi">8</span><span class="p">:]</span>
-<span class="go">['9', '0', '', '']</span>
-</pre></div>
-</div>
+<p>Used by the note placement input handlers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="alto.ui.question_view.QuestionView.scale_input">
+<span id="questionviewscale_input"></span><span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">scale_input</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../alto.ui.staff_input/class-scaleinput/#alto.ui.staff_input.ScaleInput" title="alto.ui.staff_input.ScaleInput"><span class="pre">alto.ui.staff_input.ScaleInput</span></a></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/ffdaddecfbcb2f9978b34434efcdea66d4706635/alto/ui/question_view.py#L308"><span class="pre">Source</span></a></dt>
+<dd><p>Access the active scale or signature editor.</p>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Returns</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ScaleInput</span></code></p></td>
+<td><p>The editor mounted for this question.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Used by the scale or signature input handlers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="alto.ui.question_view.QuestionView.clef_input">
+<span id="questionviewclef_input"></span><span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clef_input</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../alto.ui.staff_input/class-clefinput/#alto.ui.staff_input.ClefInput" title="alto.ui.staff_input.ClefInput"><span class="pre">alto.ui.staff_input.ClefInput</span></a></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/ffdaddecfbcb2f9978b34434efcdea66d4706635/alto/ui/question_view.py#L325"><span class="pre">Source</span></a></dt>
+<dd><p>Access the active clef placement editor.</p>
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">Returns</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ClefInput</span></code></p></td>
+<td><p>The editor mounted for this question.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Used by the clef placement input handlers.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -763,16 +855,16 @@ Ctrl for a flat, and Alt added for double alterations.</p>
               <span class="np-label">Previous</span>
               <span class="np-title">
                 <svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>
-                alto.ui.exercise_view
+                alto.ui.question_view
                 
               </span>
             </a>
             
-            <a class="next" rel="next" href="../function-second_row_keys/">
+            <a class="next" rel="next" href="../../alto.ui.reference/">
               <span class="np-label">Next</span>
               <span class="np-title">
                 
-                second_row_keys
+                alto.ui.reference
                 <svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg>
               </span>
             </a>
