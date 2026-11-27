@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSignalBlocker, QSize, Qt
 from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -105,6 +105,7 @@ from alto.ui.pack_settings_panel import (
 from alto.ui.pictures import (
     RHYTHM_SYMBOL_NAMES,
     ClefPictures,
+    KeySignaturePicture,
     NamePicture,
     RangePictures,
     ValuePictures,
@@ -154,7 +155,7 @@ def _note_naming_page(
     back: Callable[[], None],
 ) -> tuple[dict[str, QRadioButton], QWidget]:
     """
-    Build the Note names page for a staff or keyboard exercise.
+    Build the answer type or keyboard note naming submenu.
 
     Parameters
     ----------
@@ -201,10 +202,18 @@ def _note_naming_page(
         Choosing Caret updates the preview to show numbered degrees.
         """
         if checked:
-            cfg.naming = naming
-            preview.set_naming(naming)
+            if isinstance(cfg, NoteNameSettings):
+                cfg.scale_answer = naming == "scale"
+            if naming != "scale":
+                cfg.naming = naming
+                preview.set_naming(naming)
             changed()
 
+    selected = (
+        "scale"
+        if isinstance(cfg, NoteNameSettings) and cfg.scale_answer
+        else cfg.naming
+    )
     for naming, label in NAMINGS.items():
         radio = radios[naming] = QRadioButton()
         label_with_picture(
@@ -215,46 +224,27 @@ def _note_naming_page(
         radio.setText(label.split(" (")[0])
         radio.setToolTip(degree_tooltip(label))
         group.addButton(radio)
-        radio.setChecked(naming == cfg.naming)
+        radio.setChecked(naming == selected)
         radio.toggled.connect(
             lambda checked, n=naming: select(checked, naming=n),
         )
         target = degree_layout if naming in settings.DEGREE_NAMINGS else layout
         target.addWidget(radio)
     if isinstance(cfg, NoteNameSettings):
-
-        def select_reference(minor: bool) -> None:
-            """
-            Save the staff exercise's reference scale.
-
-            Parameters
-            ----------
-            minor : bool
-                Whether to count from the natural minor tonic.
-
-            Examples
-            --------
-            Natural minor makes A the tonic for a blank signature.
-            """
-            cfg.minor_degrees = minor
-            changed()
-
-        degree_layout.addWidget(QLabel("Reference scale"))
-        reference = QButtonGroup(body)
-        for minor, label in ((False, "Major"), (True, "Natural minor")):
-            radio = QRadioButton(label)
-            reference.addButton(radio)
-            radio.setChecked(minor == cfg.minor_degrees)
-            radio.clicked.connect(
-                lambda _checked=False, selected=minor: select_reference(
-                    selected,
-                ),
-            )
-            degree_layout.addWidget(radio)
+        scale = radios["scale"] = QRadioButton("Scale")
+        label_with_picture(scale, picture=KeySignaturePicture(2), name="Scale")
+        scale.setToolTip(
+            "Choose the key from the note and its scale degree",
+        )
+        group.addButton(scale)
+        scale.setChecked(selected == "scale")
+        scale.toggled.connect(lambda checked: select(checked, naming="scale"))
+        layout.addWidget(scale)
 
     layout.addWidget(degrees)
+    layout.addStretch()
     return radios, subpage(
-        "Note names",
+        "Answer Type" if isinstance(cfg, NoteNameSettings) else "Note names",
         body=scrolling(body),
         back=back,
         fill=True,
@@ -266,10 +256,9 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
     The settings of the note identification exercise: a menu leading to
     a page for each group of settings.
 
-    Two layers: the menu (Clefs, Range, Key signatures, Note values,
-    Note names, Accidentals and Octave) and a page for
-    each. Edits are live: each changes the settings, saves them and
-    emits `changed`.
+    The menu opens pages for Clefs, Range, Staff Key, Scale Key,
+    Note values and Answer Type. Accidentals and Octave are switches.
+    Each edit saves the settings and emits `changed`.
 
     Attributes
     ----------
@@ -322,8 +311,8 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
         >>> panel = NoteNameSettingsPanel(
         ...     NoteNameSettings()
         ... )
-        >>> panel.stack.count()  # the menu and five pages
-        6
+        >>> panel.stack.count()  # the menu and six pages
+        7
         """
         super().__init__(parent)
         self.cfg: NoteNameSettings = cfg
@@ -333,12 +322,19 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
             MenuRow("Range", tall=True),
         )
         self.keys_row, self.values_row, self.names_row = (
-            MenuRow("Key signatures"),
+            MenuRow("Scale Key"),
             MenuRow("Note values"),
-            MenuRow("Note names"),
+            MenuRow("Answer Type"),
         )
-        self.keys_diagram = KeyDiagram()
-        self.keys_row.attach(self.keys_diagram)
+        self.staff_key_row = MenuRow("Staff Key")
+        self.staff_key_row.setToolTip(
+            "Signatures drawn at the start of the staff",
+        )
+        self.keys_row.setToolTip(
+            "Keys used to choose notes and identify scale degrees",
+        )
+        self.staff_keys_diagram = KeyDiagram()
+        self.staff_key_row.attach(self.staff_keys_diagram)
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
         self.range_pictures = RangePictures(max_width=px(ROW_PICTURE_WIDTH))
@@ -351,6 +347,7 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
             (
                 self.clefs_row,
                 self.range_row,
+                self.staff_key_row,
                 self.keys_row,
                 self.values_row,
                 self.names_row,
@@ -386,13 +383,24 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
 
         # layer 2: key signatures, each drawn as it would be written
         # (flats on the left, sharps on the right)
-        self.key_list = KeyChecklist(cfg.key_signatures)
-        self.key_list.changed.connect(self._keys_edited)
-        self.key_boxes = self.key_list.boxes
-        keys_page = subpage(
-            "Key signatures",
-            body=self.key_list,
+        self.staff_keys = KeyChecklist(cfg.staff_keys or {0})
+        self.staff_keys.changed.connect(self._staff_keys_edited)
+        staff_page = subpage(
+            "Staff Key",
+            body=scrolling(self.staff_keys),
             back=lambda: self._go(0),
+            fill=True,
+        )
+        major, minor = cfg.key_selections()
+        self.scale_keys = ScaleKeyPicker(major_keys=major, minor_keys=minor)
+        self.scale_keys.major_keys.changed.connect(self._keys_edited)
+        self.scale_keys.minor_keys.changed.connect(self._keys_edited)
+        self.key_boxes = self.scale_keys.major_keys.boxes
+        keys_page = subpage(
+            "Scale Key",
+            body=scrolling(self.scale_keys),
+            back=lambda: self._go(0),
+            fill=True,
         )
 
         values_page = self._values_page("Note values")
@@ -400,7 +408,7 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
         self.naming_radios, names_page = _note_naming_page(
             cfg,
             preview=self.name_picture,
-            changed=self._save_and_emit,
+            changed=self._answer_type_changed,
             back=lambda: self._go(0),
         )
 
@@ -408,13 +416,33 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
             menu,
             clefs_page,
             range_page,
+            staff_page,
             keys_page,
             values_page,
             names_page,
         ):
             self.stack.addWidget(page)
-        guard_last(list(self.key_boxes.values()))
         self._refresh_summaries()
+
+    def _answer_type_changed(self) -> None:
+        """
+        Show the controls and key selection for the new answer type.
+
+        Examples
+        --------
+        Scale answers use their own key selection.
+        """
+        major, minor = self.cfg.key_selections()
+        for checklist, selected in (
+            (self.scale_keys.major_keys, major),
+            (self.scale_keys.minor_keys, minor),
+        ):
+            for key, box in checklist.boxes.items():
+                with QSignalBlocker(box):
+                    box.setChecked(key in selected)
+        self.scale_keys.setCurrentIndex(0 if major else 1)
+        self._refresh_summaries()
+        self._save_and_emit()
 
     def _refresh_summaries(self) -> None:
         """
@@ -434,12 +462,17 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
         """
         super()._refresh_summaries()
         show_keys(
-            self.keys_row,
-            diagram=self.keys_diagram,
+            self.staff_key_row,
+            diagram=self.staff_keys_diagram,
             enabled=True,
-            keys=set(self.cfg.active_keys()),
+            keys=self.cfg.staff_keys,
         )
+        self.scale_keys.update_summary(self.keys_row)
         self.name_picture.set_naming(self.cfg.naming)
+        self.name_picture.setVisible(not self.cfg.scale_answer)
+        self.names_row.value.setText("Scale" if self.cfg.scale_answer else "")
+        self.accidentals_row.setVisible(not self.cfg.scale_answer)
+        self.octave_row.setVisible(not self.cfg.scale_answer)
 
     # key signatures / note values / note names pages
 
@@ -458,6 +491,17 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
         """
         save_note_names()
 
+    def _staff_keys_edited(self) -> None:
+        """
+        Save the signatures that can appear beside the clef.
+
+        Examples
+        --------
+        Checking two sharps adds that signature to the staff selection.
+        """
+        self.cfg.staff_keys = self.staff_keys.selected()
+        self._save_and_emit()
+
     def _keys_edited(self) -> None:
         """
         Take the checked key signatures into the settings, save them and
@@ -472,10 +516,13 @@ class NoteNameSettingsPanel(NoteAnswerSettingsPanel):
         >>> 2 in panel.cfg.key_signatures
         True
         """
-        self.cfg.key_signatures = {
-            k for k, b in self.key_boxes.items() if b.isChecked()
-        }
-        guard_last(list(self.key_boxes.values()))
+        major = self.scale_keys.major_keys.selected()
+        minor = self.scale_keys.minor_keys.selected()
+        if self.cfg.scale_answer:
+            self.cfg.scale_keys, self.cfg.scale_minor_keys = major, minor
+        else:
+            self.cfg.key_signatures, self.cfg.minor_keys = major, minor
+        self.scale_keys.update_summary(self.keys_row)
         self._save_and_emit()
 
 
@@ -2929,16 +2976,7 @@ class KeySignatureSettingsPanel(ClefsPanel):
                 settings.ScaleIdentificationSettings,
             ),
         ):
-            minor_keys = self.scale_keys.minor_keys
-            guard_last(
-                [*self.key_list.boxes.values(), *minor_keys.boxes.values()],
-            )
-            self.keys_row.value.setText(
-                f"{len(self.key_list.selected())}"
-                " major · "
-                f"{len(minor_keys.selected())}"
-                " minor",
-            )
+            self.scale_keys.update_summary(self.keys_row)
         else:
             show_keys(
                 self.keys_row,

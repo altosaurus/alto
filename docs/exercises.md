@@ -23,7 +23,7 @@ With SM-2 or FSRS, a missed card returns later. If you grade correct answers you
 
 On Linux, connect a USB MIDI keyboard or open the Virtual MIDI Piano Keyboard (VMPK). In VMPK, choose **Edit → MIDI Connections** and set **MIDI OUT Driver** to **ALSA**. In Alto, open **MIDI** in the exercise toolbar and select the keyboard’s output. VMPK may appear as **MIDI Out out**. You can play in the VMPK window while Alto receives the notes.
 
-- **Note Identification.** Play the note on the staff. Any octave counts when **Octave** is off.
+- **Note Identification.** Play the note on the staff for note-name or scale-degree answers. Any octave counts when **Octave** is off. Use the answer buttons for **Scale**.
 - **Interval Construction.** Play the missing endpoint in the requested octave. For a perfect fifth above C4, play G4.
 - **Scale Construction.** Play the scale in the requested direction. **Undo** removes the last note. The final note submits the scale unless the question asks for whole and half steps. In that case, mark the steps on screen and choose **Answer**.
 
@@ -31,7 +31,8 @@ Alto uses the exercise’s written spelling for matching pitches. On Ubuntu, ins
 
 ## Note Identification
 
-A note is drawn on a staff. Press the button with its name.
+A note is drawn on a staff. By default, press the button with its name. To practice identifying keys, choose
+**Answer Type → Scale** and use the clue beneath the note to identify the scale.
 
 In the exercise settings you can choose:
 
@@ -40,14 +41,20 @@ In the exercise settings you can choose:
   [Settings]({{ '/settings/' | relative_url }})). Each clef is shown with its name beside it. The same list is used by every
   exercise with these single-staff clefs. The staff interval exercises also offer the grand staff.
 - **Range:** the lowest and highest note that can appear, per clef.
-- **Key signatures:** which keys appear. When a key is on, the note's name has to agree with the signature.
+- **Staff Key** selects the signatures drawn after the clef. Choose zero for a blank staff signature.
+- **Scale Key** has separate **Major** and **Minor** tabs. Each lists 15 keys by name and shows their signatures. Select any mix of major and minor keys, keeping at least one checked across the two tabs. For example, with two sharps on the staff and G major in the question, F♯ is degree 7 of G major. The staff signature supplies the sharp on F.
 - **Note values:** whole notes up to thirty-second notes, and the double whole note.
-- **Note names:** letters (C D E), solfège (Do Re Mi), or the **Scale degrees** group, with **Caret**
+- **Answer Type:** choose **Scale**, letters (C D E), solfège (Do Re Mi), or the **Scale degrees** group, with **Caret**
   (1̂ 2̂ 3̂) and **Function** (Tonic, Supertonic, Mediant, and so on). Every option has a text label beside its preview.
-  Choose **Major** or **Natural minor** as the reference scale. The question names the key. With an empty key signature,
-  the choices use C major or A natural minor. Caret labels use accidental prefixes,
+  The degree question names the reference key. C major and A minor both have a blank signature, but E is degree 3 of C major and degree 5 of A natural minor. Caret labels use accidental prefixes,
   while function labels use words such as **Raised Supertonic** and **Lowered Mediant**.
-- **Accidentals:** whether notes with their own sharp, flat or natural sign appear.
+  In **Scale**, the clue pairs the degree with **M** for major or **m** for minor. Choose the tonic (the first note of the scale).
+  For F♯ with **3̂ M**, choose **D**. For G♯ with **7̂ m harmonic**, choose **A**.
+  Each selected minor key can appear as **natural**, **harmonic**, **melodic (asc.)**, or **melodic (desc.)**.
+  Melodic minor questions use only **6̂** and **7̂**. Both are raised on the way up and return to their natural minor pitches on the way down.
+  All 15 major keys are available initially in **Scale**. **Scale Key** remembers this answer type’s selections separately from note naming,
+  and **Buttons** controls how many choices appear.
+- **Accidentals** allows pitches outside the reference key in note-naming practice. A written accidental also appears whenever a pitch differs from the staff signature.
 - **Octave:** turn this on to answer with both the note name and its octave. Middle C is C4.
 
 The settings open in a pane on the right of the exercise. Each row names an option, and clicking it opens a page for
@@ -144,7 +151,7 @@ or C major when key signatures are off. When octaves are required, degree and oc
 ## Note Construction
 
 The reverse of note identification. A note name is shown, and you click the staff where that note belongs.
-It uses the **Note names** setting from Note Identification. With scale degrees selected, the question names the
+It uses the naming system selected under **Answer Type** in Note Identification. Choosing **Scale** there keeps the last naming system for Note Construction. With scale degrees selected, the question names the
 key, degree and octave. Under **Question Type**, choose **Notes Only** for note names or **Scale and Degree** to use selected keys. Switch between **Major** and **Minor** to choose signatures for each. To practice just one group, leave the other tab’s keys unchecked. Minor uses the natural minor scale.
 Under **Degrees**, check the scale degrees to practice. For example, choose D major and degree 3 to practice placing F♯.
 

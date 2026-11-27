@@ -161,6 +161,10 @@ class Question:
     staff_signature : int or None
         Override the signature shown on the staff while retaining the
         key for scale degrees. Keyword-only.
+    minor_form : str, default ""
+        Minor scale form and melodic direction for a Scale answer.
+    identify_scale : bool, default False
+        Ask for a key from a written note, mode and scale degree.
     minor : bool, default False
         Use the signature's relative minor for scale degree naming.
         Keyword-only.
@@ -291,6 +295,8 @@ class Question:
     explanation: str = ""
     key: int = 0  # key signature to draw: sharps (+) / flats (-)
     staff_signature: int | None = None
+    identify_scale: bool = False
+    minor_form: str = ""
     # interpret the signature as a natural minor key for scale degrees
     minor: bool = False
     value: str = (
@@ -659,6 +665,29 @@ class Question:
         """
         return self.construct_scale is not None or self.place_signature
 
+    @property
+    def written_key(self) -> int:
+        """
+        Return the signature drawn beside the clef.
+
+        Returns
+        -------
+        int
+            The staff override, or the question key when they match.
+
+        Examples
+        --------
+        >>> q = Question("", choices=[], answer="", key=2)
+        >>> q.written_key
+        2
+        >>> q.staff_signature = 0
+        >>> q.written_key
+        0
+        """
+        return (
+            self.key if self.staff_signature is None else self.staff_signature
+        )
+
     def check(self, choice: str) -> bool:
         """
         Report whether a chosen answer is right.
@@ -805,7 +834,10 @@ class Question:
 
         data: list[object] = [
             self.prompt,
-            self.answer,
+            # Older Scale cards stored only the tonic as their answer.
+            self.answer.partition(" ")[0]
+            if self.identify_scale
+            else self.answer,
             self.clef,
             [[spelled(n) for n in col] for col in self.staff],
             self.key,
@@ -859,6 +891,8 @@ class Question:
             data.append(["staff signature", self.staff_signature])
         if self.minor:
             data.append("minor")
+        if self.minor_form and self.minor_form != "natural":
+            data.append(["minor form", self.minor_form])
         if self.starting_slots:
             data.append(["starting slots", self.starting_slots])
         return hashlib.sha1(json.dumps(data).encode()).hexdigest()[:20]
@@ -922,6 +956,22 @@ class Question:
         True
         """
         d = dict(d)
+        if "identify_scale" not in d:
+            # Older cards identified Scale answers by their prompt.
+            d["identify_scale"] = d.get("prompt") == (
+                "Which major scale has this note at the given degree?"
+            )
+        if d["identify_scale"] and "minor_form" not in d:
+            minor = d.get("minor", False)
+            d["minor_form"] = "natural" if minor else ""
+            degree = (
+                d["caption"].removeprefix("Scale degree ").removesuffix("̂")
+            )
+            cue = "m natural" if minor else "M"
+            d["caption"] = f"{degree}̂ {cue}"
+            mode = "natural minor" if minor else "major"
+            d["choices"] = [f"{choice} {mode}" for choice in d["choices"]]
+            d["answer"] = f"{d['answer']} {mode}"
         if d.get("picture") is not None:
             picture = d["picture"]
             d["picture"] = PicturePosition(

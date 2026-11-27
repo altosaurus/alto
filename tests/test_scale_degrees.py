@@ -6,10 +6,11 @@ uses them.
 from __future__ import annotations
 
 import random
+from dataclasses import replace
 from typing import TYPE_CHECKING
 
 import pytest
-from PySide6.QtWidgets import QCheckBox, QGroupBox, QRadioButton
+from PySide6.QtWidgets import QCheckBox, QGroupBox
 
 from alto import settings
 from alto.exercises.library import (
@@ -27,7 +28,11 @@ from alto.theory.scales import (
 )
 from alto.ui import motion
 from alto.ui.degree_text import DegreeCheckBox
-from alto.ui.exercise_settings import load_keyboard, load_note_names
+from alto.ui.exercise_settings import (
+    load_keyboard,
+    load_note_names,
+    save_note_names,
+)
 from alto.ui.exercise_view import (
     ExerciseView,
     choice_keys,
@@ -361,18 +366,14 @@ def test_note_name_labels_and_degree_group(app: QApplication) -> None:
         load_note_names()
         assert settings.note_names.naming == naming
     radios["degrees"].click()
-    natural_minor = next(
-        radio
-        for radio in group.findChildren(QRadioButton)
-        if radio.text() == "Natural minor"
-    )
-    natural_minor.click()
-    settings.note_names.minor_degrees = False
+    panel.scale_keys.minor_keys.boxes[1].click()
+    panel.scale_keys.major_keys.boxes[0].click()
+    settings.note_names.minor_keys.clear()
     load_note_names()
-    assert settings.note_names.minor_degrees
+    assert settings.note_names.minor_keys == {1}
+    assert not settings.note_names.key_signatures
     exercise = NoteNames()
     settings.note_names.clefs = {"treble"}
-    settings.note_names.key_signatures = {1}
     position = Note.parse("E4").diatonic
     settings.note_names.ranges = {"treble": (position, position)}
     q = exercise.generate(random.Random(0))
@@ -592,3 +593,310 @@ def test_plain_degree_checkbox_uses_the_native_label(
         box.setChecked(True)
         box.resize(140, 32)
     assert native.grab().toImage() == degree.grab().toImage()
+
+
+def test_scale_answers_match_the_written_note_and_degree() -> None:
+    """Check every degree and key spelling across the daily catalog."""
+    cfg = settings.note_names
+    cfg.scale_answer = cfg.accidentals = cfg.require_octave = True
+    cfg.clefs, cfg.ranges = {"treble"}, {"treble": (28, 34)}
+    exercise = NoteNames()
+    assert "M means major" in exercise.instructions()
+    catalog_signature = exercise.settings_signature()
+    cards = list(exercise.daily_candidates(random.Random(4)))
+    assert exercise.card_count() == len({q.item_key() for q in cards}) == 105
+    for q in cards:
+        note = q.staff[0][0]
+        scale = build(
+            Note.parse(MAJOR_KEYS[q.key] + "4"),
+            intervals=SCALES["Major (Ionian)"],
+        )
+        degree = next(
+            i for i, pitch in enumerate(scale, 1) if pitch.name == note.name
+        )
+        assert q.caption == f"{degree}̂ M"
+        assert q.staff_signature == 0 and q.octaves is None
+        assert q.check(f"{MAJOR_KEYS[q.key]} major")
+        assert q.prompt == exercise.card_prompt(q)
+    original = cards[0]
+    cfg.scale_keys = {original.key}
+    assert exercise.settings_signature() != catalog_signature
+    refreshed = exercise.review_question(original, same_settings=False)
+    assert refreshed is not None and refreshed.choices == [original.answer]
+    cfg.scale_answer = False
+    assert exercise.review_question(original, same_settings=False) is None
+
+
+def test_scale_answer_setting_and_buttons(app: QApplication) -> None:
+    """
+    Select Scale, narrow its keys, reload it, and answer from the staff.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    cfg = settings.note_names
+    cfg.key_signatures = {-2}
+    panel = NoteNameSettingsPanel(cfg)
+    assert panel.names_row.accessibleName() == "Answer Type"
+    assert (
+        "scale" not in KeyboardSettingsPanel(settings.keyboard).naming_radios
+    )
+    panel.naming_radios["scale"].click()
+    assert panel.names_row.value.text() == "Scale"
+    assert panel.octave_row.isHidden() and panel.accidentals_row.isHidden()
+    for count, box in panel.key_boxes.items():
+        if count not in {-2, 2, 6}:
+            box.click()
+    cfg.scale_answer = False
+    cfg.scale_keys.clear()
+    load_note_names()
+    assert cfg.scale_answer and cfg.scale_keys == {-2, 2, 6}
+    assert cfg.key_signatures == {-2}
+    view = opened(NoteNames())
+    q = view.question
+    assert q and set(q.choices) == {"B♭ major", "D major", "F♯ major"}
+    assert view.staff.key == 0 and view.staff.caption == q.caption
+    assert {b.text() for b in view.buttons} == {"B♭", "D", "F♯"}
+    assert all(button.icon().isNull() for button in view.buttons)
+    view._place_midi(q.staff[0][0].midi)
+    assert not view.answered
+    next(b for b in view.buttons if b.text() == q.answer.split()[0]).click()
+    assert view.answered
+    panel.naming_radios["letters"].click()
+    assert cfg.active_keys() == [-2] and panel.key_boxes[-2].isChecked()
+    view.close()
+    panel.close()
+
+
+def test_different_staff_and_question_keys_in_the_exercise(
+    app: QApplication,
+) -> None:
+    """
+    Identify F sharp on a two-sharp staff as degree 7 in G.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    cfg = settings.note_names
+    cfg.clefs, cfg.ranges = {"treble"}, {"treble": (31, 31)}
+    cfg.staff_keys, cfg.key_signatures, cfg.naming = {2}, {1}, "degrees"
+    view = opened(NoteNames())
+    q = view.question
+    assert q and q.answer == "7̂" and "in G major" in view.prompt.text()
+    assert view.staff.key == 2 and view.staff.columns == [[Note.parse("F#4")]]
+    assert all(button.icon().isNull() for button in view.buttons)
+    view._place_midi(q.staff[0][0].midi)
+    assert view.answered
+    view.close()
+
+    cfg.scale_answer, cfg.scale_keys = True, {1}
+    view = opened(NoteNames())
+    q = view.question
+    assert q and q.check("G major") and view.staff.caption == "7̂ M"
+    assert view.staff.key == 2 and view.staff.columns == [[Note.parse("F#4")]]
+    assert view.buttons[0].icon().isNull()
+    view.close()
+
+
+def test_independent_key_selections_and_saved_cards(app: QApplication) -> None:
+    """
+    Keep each selected pair of keys through review.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    cfg = settings.note_names
+    store().setValue("noteNames/keys", "1")
+    load_note_names()
+    assert cfg.staff_keys == cfg.key_signatures == {1}
+    panel = NoteNameSettingsPanel(cfg)
+    assert panel.staff_key_row.accessibleName() == "Staff Key"
+    assert panel.keys_row.accessibleName() == "Scale Key"
+    panel.staff_keys.boxes[-1].click()
+    panel.key_boxes[2].click()
+    load_note_names()
+    assert cfg.staff_keys == {-1, 1} and cfg.key_signatures == {1, 2}
+    cfg.clefs, cfg.ranges = {"treble"}, {"treble": (28, 28)}
+    cfg.naming = "functions"
+    exercise = NoteNames()
+    cards = list(exercise.daily_candidates(random.Random(12)))
+    assert {(q.key, q.written_key) for q in cards} == {
+        (1, -1),
+        (1, 1),
+        (2, -1),
+        (2, 1),
+    }
+    assert len({q.item_key() for q in cards}) == exercise.card_count() == 4
+    for q in cards:
+        restored = type(q).from_dict(q.to_dict())
+        assert exercise.review_question(restored, same_settings=False) == q
+    original = next(q for q in cards if q.key == 1 and q.written_key == 1)
+    legacy = original.to_dict()
+    del legacy["staff_signature"], legacy["identify_scale"]
+    assert type(original).from_dict(legacy).item_key() == original.item_key()
+    cfg.staff_keys = {-1}
+    assert exercise.review_question(original, same_settings=False) is None
+    panel.naming_radios["scale"].click()
+    assert cfg.staff_keys == {-1}
+    catalog = exercise.settings_signature()
+    cfg.staff_keys.add(1)
+    assert exercise.settings_signature() != catalog
+    q = exercise.generate(random.Random(1))
+    legacy = q.to_dict()
+    del legacy["identify_scale"]
+    del legacy["minor_form"]
+    legacy["answer"] = q.answer.split()[0]
+    legacy["choices"] = [c.split()[0] for c in q.choices]
+    digit = q.caption[0]
+    for caption in (f"Scale degree {digit}", digit, f"{digit}̂"):
+        legacy["caption"] = caption
+        assert type(q).from_dict(legacy) == q
+    panel.close()
+
+
+def test_legacy_minor_reference_moves_to_minor_tab() -> None:
+    """Migrate minor degree settings and keep the staff keys."""
+    prefs = store()
+    prefs.setValue("noteNames/keys", "1,2")
+    prefs.setValue("noteNames/minorDegrees", "true")
+    cfg = settings.note_names
+    for _ in range(2):
+        load_note_names()
+        assert cfg.key_selections() == (set(), {1, 2})
+        assert cfg.staff_keys == {1, 2}
+        save_note_names()
+    assert not prefs.contains("noteNames/minorDegrees")
+
+
+def test_mixed_keys_and_minor_scale_buttons(app: QApplication) -> None:
+    """
+    Grade relative keys independently and keep minor-only Scale choices.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    cfg = settings.note_names
+    cfg.clefs, cfg.ranges = {"treble"}, {"treble": (30, 30)}
+    cfg.naming = "degrees"
+    exercise = NoteNames()
+    panel = NoteNameSettingsPanel(cfg)
+    picker = panel.scale_keys
+    assert [picker.tabText(i) for i in range(2)] == ["Major", "Minor"]
+    assert picker.major_keys.boxes[0].text() == "CM"
+    assert picker.minor_keys.boxes[0].text() == "Am"
+    picker.minor_keys.boxes[0].click()
+    assert panel.keys_row.value.text() == "1 major · 1 minor"
+    mixed_deck = exercise.settings_signature()
+    cards = list(exercise.daily_candidates(random.Random(12)))
+    assert exercise.card_count() == len({q.item_key() for q in cards}) == 2
+    major, minor = sorted(cards, key=lambda q: q.minor)
+    assert (major.answer, minor.answer) == ("3̂", "5̂")
+    assert "C major" in exercise.card_prompt(major)
+    assert "A natural minor" in exercise.card_prompt(minor)
+    picker.major_keys.boxes[0].click()
+    assert exercise.settings_signature() != mixed_deck
+    assert not picker.minor_keys.boxes[0].isEnabled()
+    assert exercise.review_question(major, same_settings=False) is None
+    assert exercise.review_question(minor, same_settings=False) == minor
+
+    panel.naming_radios["scale"].click()
+    major_scale_deck = exercise.settings_signature()
+    picker.minor_keys.boxes[0].click()
+    assert exercise.settings_signature() != major_scale_deck
+    picker.minor_keys.boxes[1].click()
+    for box in picker.major_keys.boxes.values():
+        box.click()
+    assert panel.keys_row.value.text() == "0 major · 2 minor"
+    cfg.scale_minor_keys.clear()
+    load_note_names()
+    assert cfg.key_selections() == (set(), {0, 1})
+    assert NoteNameSettingsPanel(cfg).scale_keys.currentIndex() == 1
+    cards = list(exercise.daily_candidates(random.Random(12)))
+    for q in cards:
+        assert q.minor and q.written_key == 0 and q.identify_scale
+        degree = 5 if q.key == 0 else 1
+        assert q.caption == f"{degree}̂ m {q.minor_form}"
+        mode = q.minor_form.split()[0]
+        assert set(q.choices) == {f"A {mode} minor", f"E {mode} minor"}
+    assert {q.minor_form for q in cards} == {"natural", "harmonic"}
+    assert exercise.card_count() == len({q.item_key() for q in cards}) == 4
+    view = opened(exercise)
+    q = view.question
+    assert q and q.minor and view.staff.caption == q.caption
+    assert view.prompt.isHidden()
+    assert {b.text() for b in view.buttons} == {"A", "E"}
+    assert all(b.icon().isNull() for b in view.buttons)
+    view.buttons[q.choices.index(q.answer)].click()
+    assert view.answered
+    view.close()
+    panel.close()
+
+
+def test_minor_forms_spell_raised_degrees_and_survive_review() -> None:
+    """Check minor scale spellings and both melodic directions."""
+    cfg = settings.note_names
+    cfg.clefs, cfg.ranges = {"treble"}, {"treble": (28, 34)}
+    cfg.scale_answer, cfg.scale_keys = True, set()
+    cfg.scale_minor_keys = set(range(-7, 8))
+    exercise = NoteNames()
+    rng = random.Random(7)
+    cards = list(exercise.daily_candidates(rng))
+    assert exercise.card_count() == len({q.item_key() for q in cards}) == 270
+    forms = {
+        "natural": "Natural minor (Aeolian)",
+        "harmonic": "Harmonic minor",
+        "melodic (asc.)": "Melodic minor",
+        "melodic (desc.)": "Natural minor (Aeolian)",
+    }
+    for form in forms:
+        expected = {6, 7} if form.startswith("melodic") else set(range(1, 8))
+        for key in cfg.scale_minor_keys:
+            assert {
+                int(q.caption[0])
+                for q in cards
+                if q.minor_form == form and q.key == key
+            } == expected
+    for q in cards:
+        tonic = Note.parse(q.answer.split()[0] + "4")
+        pitches = build(tonic, intervals=SCALES[forms[q.minor_form]])
+        degree = int(q.caption[0])
+        assert q.staff[0][0].name == pitches[degree - 1].name
+        assert q.caption == f"{degree}̂ m {q.minor_form}"
+        assert q.check(q.answer)
+        restored = type(q).from_dict(q.to_dict())
+        refreshed = exercise.review_question(restored, same_settings=False)
+        assert refreshed and refreshed.item_key() == q.item_key()
+    # Older melodic cards could ask degrees shared by both directions.
+    natural = next(
+        q
+        for q in cards
+        if q.minor_form == "natural" and q.caption.startswith("1̂")
+    )
+    assert (
+        exercise.review_question(
+            replace(natural, staff=[]),
+            same_settings=False,
+        )
+        is None
+    )
+    for form in ("melodic (asc.)", "melodic (desc.)"):
+        old = replace(
+            natural,
+            minor_form=form,
+            caption=f"1̂ m {form}",
+            answer=natural.answer.replace("natural", "melodic"),
+            prompt=natural.prompt.replace("natural", "melodic"),
+        )
+        for same in (True, False):
+            assert exercise.review_question(old, same_settings=same) is None
+    generated = [exercise.generate(rng) for _ in range(60)]
+    assert {q.minor_form for q in generated} == set(forms)
+    assert {q.item_key() for q in generated} <= {q.item_key() for q in cards}

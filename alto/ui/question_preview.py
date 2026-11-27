@@ -150,7 +150,9 @@ class QuestionPreview(QDialog):
             not question.caption or exercise_name == RythmicEquations.name
         ):
             prompt = QLabel(
-                "\n".join(filter(None, (question.caption, question.prompt))),
+                "\n".join(
+                    filter(None, (question.caption, question.prompt)),
+                ),
             )
             prompt.setWordWrap(True)
             prompt.setStyleSheet(css("font-size: 14pt;"))
@@ -178,7 +180,7 @@ class QuestionPreview(QDialog):
             staff.show_notes(
                 notes,
                 clef=q.clef,
-                key=q.key if q.staff_signature is None else q.staff_signature,
+                key=q.written_key,
                 value=q.value,
                 notation_excerpt=q.notation_excerpt,
                 notation_target=q.notation_target,

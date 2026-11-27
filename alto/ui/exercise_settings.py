@@ -86,8 +86,10 @@ def load_note_names() -> None:
     ):
         cfg.clefs = {"grand"}
     s.remove("noteNames/mode")
-    if list_value(s, key="noteNames/keys"):
-        cfg.key_signatures = keys_value(s, key="noteNames/keys") or {0}
+    cfg.minor_keys = keys_value(s, key="noteNames/minorKeys")
+    cfg.key_signatures = keys_value(s, key="noteNames/keys")
+    if not (cfg.key_signatures or cfg.minor_keys):
+        cfg.key_signatures = {0}
     if list_value(s, key="noteNames/values"):
         cfg.note_values = choices_value(
             s,
@@ -96,11 +98,26 @@ def load_note_names() -> None:
         ) or {"whole"}
     naming = text_value(s, key="noteNames/naming", default=cfg.naming)
     cfg.naming = naming if naming in NAMINGS else "letters"
-    cfg.minor_degrees = bool_value(
+    cfg.scale_answer = bool_value(
+        s,
+        key="noteNames/scaleAnswer",
+        default=False,
+    )
+    # Older note questions used the question key on the staff. Scale
+    # answers used a blank staff regardless of their question key.
+    cfg.staff_keys = keys_value(s, key="noteNames/staffKeys") or (
+        {0} if cfg.scale_answer else cfg.key_signatures | cfg.minor_keys
+    )
+    cfg.scale_keys = keys_value(s, key="noteNames/scaleKeys")
+    cfg.scale_minor_keys = keys_value(s, key="noteNames/scaleMinorKeys")
+    if not (cfg.scale_keys or cfg.scale_minor_keys):
+        cfg.scale_keys = set(range(-7, 8))
+    if not s.contains("noteNames/minorKeys") and bool_value(
         s,
         key="noteNames/minorDegrees",
         default=False,
-    )
+    ):
+        cfg.minor_keys, cfg.key_signatures = cfg.key_signatures, set()
     cfg.accidentals = bool_value(s, key="noteNames/accidentals", default=False)
     cfg.require_octave = bool_value(
         s,
@@ -141,17 +158,22 @@ def save_note_names() -> None:
         "noteNames/clefs",
         joined(c for c in settings.RANGE_KEYS if c in cfg.clefs),
     )
-    s.setValue("noteNames/keys", joined(cfg.active_keys()))
+    s.setValue("noteNames/keys", joined(sorted(cfg.key_signatures)))
+    save_bool(s, key="noteNames/scaleAnswer", value=cfg.scale_answer)
+    s.setValue("noteNames/staffKeys", joined(sorted(cfg.staff_keys) or [0]))
+    s.setValue("noteNames/minorKeys", joined(sorted(cfg.minor_keys)))
+    s.setValue(
+        "noteNames/scaleMinorKeys",
+        joined(sorted(cfg.scale_minor_keys)),
+    )
+    s.setValue("noteNames/scaleKeys", joined(sorted(cfg.scale_keys)))
     s.setValue("noteNames/values", joined(cfg.active_values()))
     if not s.contains("keyboard/naming"):
         # Freeze the old shared choice before the staff changes it.
         previous = text_value(s, key="noteNames/naming", default="letters")
         s.setValue("keyboard/naming", previous)
     s.setValue("noteNames/naming", cfg.naming)
-    s.setValue(
-        "noteNames/minorDegrees",
-        "true" if cfg.minor_degrees else "false",
-    )
+    s.remove("noteNames/minorDegrees")
     save_bool(s, key="noteNames/accidentals", value=cfg.accidentals)
     save_bool(s, key="noteNames/requireOctave", value=cfg.require_octave)
     s.setValue(

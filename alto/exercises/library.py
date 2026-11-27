@@ -66,6 +66,7 @@ from alto.theory.pitch import (
 from alto.theory.scales import (
     CHORDS,
     INVERSION_NAMES,
+    MINOR_KEYS,
     MODE_WORDS,
     SCALES,
     arpeggio,
@@ -251,6 +252,85 @@ def _note_card_prompt(q: Question, *, naming: str) -> str:
     return prompt
 
 
+# Classical descending melodic minor uses the natural minor pitches.
+_MINOR_SCALES = MappingProxyType(
+    {
+        "natural": "Natural minor (Aeolian)",
+        "harmonic": "Harmonic minor",
+        "melodic (asc.)": "Melodic minor",
+        "melodic (desc.)": "Natural minor (Aeolian)",
+    },
+)
+_MINOR_FORMS = tuple(_MINOR_SCALES)
+_MELODIC_MOTION_DEGREES = (6, 7)
+
+
+@lru_cache(maxsize=75)
+def _degree_pitches(key: int, *, minor_form: str) -> tuple[Note, ...]:
+    """
+    Spell the seven degrees of a scale, in degree-number order.
+
+    Parameters
+    ----------
+    key : int
+        Number of sharps or flats in the key signature.
+    minor_form : str
+        Minor form from the clue, or an empty string for major.
+
+    Returns
+    -------
+    tuple of Note
+        One pitch spelling per degree, starting with the tonic.
+
+    Examples
+    --------
+    >>> _degree_pitches(0, minor_form="harmonic")[6].name
+    'G♯'
+    """
+    tonic = (MINOR_KEYS if minor_form else MAJOR_KEYS)[key]
+    scale = _MINOR_SCALES.get(minor_form, "Major (Ionian)")
+    return tuple(build(Note.parse(f"{tonic}4"), intervals=SCALES[scale]))
+
+
+def _note_forms(
+    letter: int,
+    *,
+    key: int,
+    minor_scale: bool,
+) -> tuple[str, ...]:
+    """
+    Return the forms that can ask about this written letter.
+
+    Parameters
+    ----------
+    letter : int
+        Written letter, from zero for C to six for B.
+    key : int
+        Reference key signature.
+    minor_scale : bool
+        Whether the question asks for a minor scale name.
+
+    Returns
+    -------
+    tuple of str
+        Available forms, with an empty string for ordinary note and
+        major scale questions. Melodic directions are offered on the
+        degrees where their pitches differ.
+
+    Examples
+    --------
+    >>> _note_forms(0, key=0, minor_scale=True)  # C in A minor
+    ('natural', 'harmonic')
+    """
+    if not minor_scale:
+        return ("",)
+    tonic = _degree_pitches(key, minor_form="natural")[0]
+    degree = (letter - tonic.letter) % 7 + 1
+    if degree in _MELODIC_MOTION_DEGREES:
+        return _MINOR_FORMS
+    return ("natural", "harmonic")
+
+
 @register
 class NoteNames(ChoiceExercise):
     """
@@ -290,6 +370,8 @@ class NoteNames(ChoiceExercise):
         ... )
         'Identify the note.'
         """
+        if question.identify_scale:
+            return question.prompt
         return _note_card_prompt(question, naming=settings.note_names.naming)
 
     def practice_signature(self) -> str:
@@ -310,9 +392,48 @@ class NoteNames(ChoiceExercise):
         True
         """
         cfg = settings.note_names
+        if cfg.scale_answer:
+            scale_settings: list[object] = [
+                "scale",
+                cfg.clefs,
+                cfg.ranges,
+                sorted(cfg.scale_keys),
+                cfg.note_values,
+            ]
+            if cfg.staff_keys != {0}:
+                scale_settings.append(cfg.staff_keys)
+            if cfg.scale_minor_keys:
+                scale_settings.append(
+                    (
+                        "minor keys",
+                        cfg.scale_minor_keys,
+                        _MINOR_FORMS,
+                        _MELODIC_MOTION_DEGREES,
+                    ),
+                )
+            return signature(*scale_settings)
         parts = vars(cfg).copy()
-        if not cfg.minor_degrees or cfg.naming not in settings.DEGREE_NAMINGS:
-            del parts["minor_degrees"]
+        del (
+            parts["scale_answer"],
+            parts["scale_keys"],
+            parts["scale_minor_keys"],
+        )
+        del parts["minor_keys"]
+        if cfg.naming not in settings.DEGREE_NAMINGS:
+            parts["key_signatures"] = set(cfg.active_keys())
+        elif cfg.minor_keys:
+            if cfg.key_signatures:
+                parts["minor_keys"] = cfg.minor_keys
+            else:
+                # Retain the signature of an older minor-only deck.
+                parts["key_signatures"] = cfg.minor_keys
+                parts["minor_degrees"] = True
+        if (
+            len(cfg.staff_keys) == 1
+            and cfg.staff_keys == parts["key_signatures"]
+        ):
+            # Preserve the signature of existing single-key decks.
+            del parts["staff_keys"]
         return signature(parts, self.accidentals)
 
     def instructions(self) -> str:
@@ -332,14 +453,24 @@ class NoteNames(ChoiceExercise):
         ... )
         True
         """
+        if settings.note_names.scale_answer:
+            return (
+                "Read the note and the clue beneath it, then choose the "
+                "tonic (the first note of the scale). M means major and m "
+                "means minor. For F♯ with 3̂ M, choose D. Minor clues "
+                "specify natural, harmonic, or melodic minor. Melodic "
+                "minor questions ask about 6̂ and 7̂, the degrees that "
+                "change between ascending and descending."
+            )
         text = (
             "<b>Note Identification</b><br>A note is shown on the staff. "
             "Press the button with its name, or press the "
             "keys shown on it.<br><br>"
             "Use the sliders button to choose the clefs, the range of "
-            "notes, key signatures (the name then has to "
-            "match the signature), note values, letter, solfège or "
-            "scale-degree names, and whether sharps, flats "
+            "notes, the Staff Key drawn on the staff, and the Scale Key "
+            "used in the question. Choose note values, letter, solfège or "
+            "scale-degree names, or Scale to identify a key. "
+            "Choose whether sharps, flats "
             "and naturals appear, and whether to ask for the octave too."
         )
         if settings.note_names.naming in settings.DEGREE_NAMINGS:
@@ -403,9 +534,11 @@ class NoteNames(ChoiceExercise):
         """
         cfg = settings.note_names
         clef = rng.choice(cfg.active_clefs())
-        key = rng.choice(cfg.active_keys())
+        key, minor = rng.choice(cfg.question_keys())
         value = rng.choice(cfg.active_values())
-        with_accidentals = self.accidentals or cfg.accidentals
+        with_accidentals = (
+            self.accidentals or cfg.accidentals
+        ) and not cfg.scale_answer
 
         letter_pos = rng.randint(*cfg.range_for(clef))
         in_key = key_accidental(letter_pos % 7, count=key)
@@ -415,11 +548,19 @@ class NoteNames(ChoiceExercise):
         ):  # an explicit sign that differs from the key signature
             acc = rng.choice([a for a in (-1, 0, 1) if a != in_key])
         note = Note.from_diatonic(diatonic=letter_pos, accidental=acc)
+        forms = _note_forms(
+            note.letter,
+            key=key,
+            minor_scale=cfg.scale_answer and minor,
+        )
 
         return self._question_for(
             note=note,
             clef=clef,
             key=key,
+            minor=minor,
+            minor_form=rng.choice(forms) if cfg.scale_answer and minor else "",
+            staff_key=rng.choice(sorted(cfg.staff_keys) or [0]),
             value=value,
             cfg=cfg,
         )
@@ -432,8 +573,8 @@ class NoteNames(ChoiceExercise):
         Returns
         -------
         int
-            Each staff position contributes one spelling, or three when
-            accidentals are enabled.
+            Distinct cards across staff positions, spellings, staff keys
+            and reference keys, including each requested scale form.
 
         Examples
         --------
@@ -441,16 +582,30 @@ class NoteNames(ChoiceExercise):
         True
         """
         cfg = settings.note_names
-        positions = sum(
-            high - low + 1
-            for low, high in (
-                cfg.range_for(clef) for clef in cfg.active_clefs()
+        keys = cfg.question_keys()
+        positions = 0
+        for clef in cfg.active_clefs():
+            low, high = cfg.range_for(clef)
+            positions += sum(
+                len(
+                    _note_forms(
+                        step % 7,
+                        key=key,
+                        minor_scale=cfg.scale_answer and minor,
+                    ),
+                )
+                for key, minor in keys
+                for step in range(low, high + 1)
             )
-        )
         return (
             positions
-            * len(cfg.active_keys())
-            * (3 if self.accidentals or cfg.accidentals else 1)
+            * (len(cfg.staff_keys) or 1)
+            * (
+                3
+                if (self.accidentals or cfg.accidentals)
+                and not cfg.scale_answer
+                else 1
+            )
         )
 
     def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
@@ -481,27 +636,46 @@ class NoteNames(ChoiceExercise):
         True
         """
         cfg = settings.note_names
+        staff_keys = sorted(cfg.staff_keys) or [0]
         pitches = []
         for clef in cfg.active_clefs():
             low, high = cfg.range_for(clef)
-            for key in cfg.active_keys():
+            for key, minor in cfg.question_keys():
                 for step in range(low, high + 1):
+                    forms = _note_forms(
+                        step % 7,
+                        key=key,
+                        minor_scale=cfg.scale_answer and minor,
+                    )
                     signs = (
                         (-1, 0, 1)
-                        if self.accidentals or cfg.accidentals
+                        if (self.accidentals or cfg.accidentals)
+                        and not cfg.scale_answer
                         else (key_accidental(step % 7, count=key),)
                     )
                     pitches.extend(
-                        (clef, key, Note.from_diatonic(step, accidental=sign))
+                        (
+                            clef,
+                            key,
+                            minor,
+                            form,
+                            staff_key,
+                            Note.from_diatonic(step, accidental=sign),
+                        )
                         for sign in signs
+                        for form in forms
+                        for staff_key in staff_keys
                     )
         rng.shuffle(pitches)
-        for clef, key, note in pitches:
+        for clef, key, minor, form, staff_key, note in pitches:
             yield self.limit_buttons(
                 self._question_for(
                     note,
                     clef=clef,
                     key=key,
+                    minor=minor,
+                    minor_form=form,
+                    staff_key=staff_key,
                     value=rng.choice(cfg.active_values()),
                     cfg=cfg,
                 ),
@@ -540,22 +714,30 @@ class NoteNames(ChoiceExercise):
         ... ) == q
         True
         """
+        if not question.staff or not question.staff[0]:
+            return None
+        note = question.staff[0][0]
+        if question.minor_form not in _note_forms(
+            note.letter,
+            key=question.key,
+            minor_scale=question.identify_scale and question.minor,
+        ):
+            return None
         if same_settings:
             return self.refresh(question)
         cfg = settings.note_names
         if (
-            not question.staff
-            or not question.staff[0]
+            cfg.scale_answer != question.identify_scale
             or question.clef not in cfg.active_clefs()
-            or question.key not in cfg.active_keys()
+            or (question.key, question.minor) not in cfg.question_keys()
+            or question.written_key not in (cfg.staff_keys or {0})
         ):
             return None
-        note = question.staff[0][0]
         low, high = cfg.range_for(question.clef)
         if not low <= note.diatonic <= high:
             return None
         if not (
-            self.accidentals or cfg.accidentals
+            cfg.scale_answer or self.accidentals or cfg.accidentals
         ) and note.accidental != key_accidental(
             note.letter,
             count=question.key,
@@ -566,6 +748,9 @@ class NoteNames(ChoiceExercise):
             note,
             clef=question.clef,
             key=question.key,
+            minor=question.minor,
+            minor_form=question.minor_form,
+            staff_key=question.written_key,
             value=rng.choice(cfg.active_values()),
             cfg=cfg,
         )
@@ -581,6 +766,9 @@ class NoteNames(ChoiceExercise):
         *,
         clef: str,
         key: int,
+        minor: bool,
+        minor_form: str,
+        staff_key: int,
         value: str,
         cfg: settings.NoteNameSettings,
     ) -> Question:
@@ -594,7 +782,13 @@ class NoteNames(ChoiceExercise):
         clef : str
             Written clef.
         key : int
-            Staff key signature.
+            Reference key for the pitch and scale degree.
+        minor : bool
+            Count degrees from the natural minor tonic.
+        minor_form : str
+            Minor scale variant for Scale answers, empty otherwise.
+        staff_key : int
+            Signature drawn beside the clef.
         value : str
             Written duration.
         cfg : NoteNameSettings
@@ -611,15 +805,48 @@ class NoteNames(ChoiceExercise):
         ...     Note.parse("C4"),
         ...     clef="treble",
         ...     key=0,
+        ...     minor=False,
+        ...     minor_form="",
+        ...     staff_key=0,
         ...     value="whole",
         ...     cfg=settings.NoteNameSettings(),
         ... ).staff[0][0].name
         'C'
         """
+        tonics = MINOR_KEYS if minor else MAJOR_KEYS
+        tonic = tonics[key]
+        mode = "natural minor" if minor else "major"
+        if cfg.scale_answer:
+            pitches = _degree_pitches(key, minor_form=minor_form)
+            index = (note.letter - pitches[0].letter) % 7
+            note = replace(note, accidental=pitches[index].accidental)
+            degree = f"{index + 1}̂"
+            mode = f"{minor_form.split()[0]} minor" if minor else "major"
+            cue = f"m {minor_form}" if minor else "M"
+            direction = minor_form.partition(" ")[2]
+            scale_name = f"{tonic} {mode}"
+            description = f"{scale_name} {direction}".rstrip()
+            explanation = f"{note.name} is degree {degree} of {description}."
+            keys = cfg.scale_minor_keys if minor else cfg.scale_keys
+            choices = [
+                f"{tonics[count]} {mode}" for count in sorted(keys) or [0]
+            ]
+            return Question(
+                f"Which {mode} scale has this note at the given degree?",
+                minor=minor,
+                identify_scale=True,
+                minor_form=minor_form,
+                choices=choices,
+                answer=scale_name,
+                staff=[[note]],
+                clef=clef,
+                key=key,
+                staff_signature=staff_key,
+                value=value,
+                caption=f"{degree} {cue}",
+                explanation=explanation,
+            )
         with_accidentals = self.accidentals or cfg.accidentals
-        in_key = key_accidental(note.letter, count=key)
-        acc = note.accidental
-        minor = cfg.minor_degrees and cfg.naming in settings.DEGREE_NAMINGS
         name = spell(note, naming=cfg.naming, key=key, minor=minor)
         octaves = None
         joiner = ""
@@ -675,22 +902,18 @@ class NoteNames(ChoiceExercise):
                 }
                 grid = {c: (rows[a], l) for c, (l, a) in zip(choices, ordered)}
 
-        tonic = (
-            mode_tonic(key, mode="Natural minor (Aeolian)").name
-            if minor
-            else MAJOR_KEYS[key]
-        )
-        mode = "natural minor" if minor else "major"
         expl = []
         if cfg.naming in settings.DEGREE_NAMINGS:
             expl.append(
                 f"{note.name} is scale degree {name} in {tonic} {mode}.",
             )
         if key:
-            expl.append(f"{tonic} {mode} has {format_key_signature(key)}.")
-        if acc != in_key:
             expl.append(
-                "The accidental on the note overrides the key signature.",
+                f"The reference signature has {format_key_signature(key)}.",
+            )
+        if note.accidental != key_accidental(note.letter, count=staff_key):
+            expl.append(
+                "The written accidental overrides the staff key signature.",
             )
         return Question(
             "",
@@ -699,6 +922,7 @@ class NoteNames(ChoiceExercise):
             staff=[[note]],
             clef=clef,
             minor=minor,
+            staff_signature=staff_key if staff_key != key else None,
             explanation=" ".join(expl),
             key=key,
             value=value,

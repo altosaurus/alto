@@ -449,9 +449,10 @@ def test_the_menu_opens_each_page_and_back_returns_to_the_menu(
     for row, index in (
         (names.clefs_row, 1),
         (names.range_row, 2),
-        (names.keys_row, 3),
-        (names.values_row, 4),
-        (names.names_row, 5),
+        (names.staff_key_row, 3),
+        (names.keys_row, 4),
+        (names.values_row, 5),
+        (names.names_row, 6),
     ):
         row.click()
         slide()

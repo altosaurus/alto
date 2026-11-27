@@ -78,8 +78,8 @@ from alto.theory.pitch import (
     Note,
 )
 from alto.theory.scales import (
+    MINOR_KEYS,
     format_key_signature,
-    mode_tonic,
 )
 from alto.ui import (
     motion,
@@ -2695,10 +2695,7 @@ class ScaleKeyPicker(QTabWidget):
             allow_empty=True,
             key_names=major_names,
         )
-        minor_names = {
-            count: f"{mode_tonic(count, mode='Natural minor (Aeolian)').name}m"
-            for count in range(-7, 8)
-        }
+        minor_names = {count: f"{name}m" for count, name in MINOR_KEYS.items()}
         self.minor_keys = KeyChecklist(
             minor_keys,
             allow_empty=True,
@@ -2716,6 +2713,30 @@ class ScaleKeyPicker(QTabWidget):
             tab_layout.addStretch()
             self.addTab(tab, label)
         self.setCurrentIndex(0 if major_keys else 1)
+
+    def update_summary(self, row: MenuRow) -> None:
+        """
+        Show the number of selected keys and keep one key checked.
+
+        Parameters
+        ----------
+        row : MenuRow
+            The menu entry that opens the picker.
+
+        Examples
+        --------
+        Selecting one key on each tab displays “1 major · 1 minor”.
+        """
+        guard_last(
+            [
+                *self.major_keys.boxes.values(),
+                *self.minor_keys.boxes.values(),
+            ],
+        )
+        row.value.setText(
+            f"{len(self.major_keys.selected())} major · "
+            f"{len(self.minor_keys.selected())} minor",
+        )
 
 
 class ChoiceChecklist(QWidget):
