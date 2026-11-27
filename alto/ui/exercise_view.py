@@ -103,6 +103,7 @@ from alto.learning.calendar import (
     ReviewInterval,
 )
 from alto.learning.learner import PracticeComplete
+from alto.learning.practice_session import PracticeSession
 from alto.settings import spell
 from alto.theory.beat_placement import grade_beat_marks
 from alto.theory.pitch import (
@@ -446,6 +447,8 @@ class ExerciseView(QWidget):
         random.
     rng : random.Random
         The random number generator for new questions.
+    session : PracticeSession
+        Attempt count, score, and retry status for this exercise.
     correct : int
         Questions answered right on the first try.
     total : int
@@ -556,12 +559,9 @@ class ExerciseView(QWidget):
         # at random
         self.learner = learner
         self.rng = rng or random.Random()
-        self.correct = self.total = self.streak = 0
+        self.session = PracticeSession()
         self.question: Question | None = None
-        self.answered = False
         self.shuffle_answers = False
-        self.missed = False
-        self._attempts = 0  # answers given to the question on screen
         self._clock = (
             time.monotonic()
         )  # when the last answer was given, or the question appeared
@@ -836,70 +836,19 @@ class ExerciseView(QWidget):
         self._advance.timeout.connect(self._advance_question)
         self._anims: list[QVariantAnimation] = []
 
-        top = QHBoxLayout()
-        self.lesson_back_button = QPushButton("← Back to lesson")
-        self.lesson_back_button.hide()
-        top.addWidget(self.lesson_back_button)
-        top.addStretch()
-        top.addWidget(self.queue_counts)
-        top.addWidget(self.score)
-        self.help_btn = HelpButton(exercise.instructions)
-        top.addWidget(self.help_btn)
         reference = reference_panel_for(exercise)
-        self.book_btn: QToolButton | None = None
-        self.reference_pane: QFrame | None = None
         self._reference = reference
+        self.reference_pane: QFrame | None = None
         if reference is not None:
             reference.lesson_requested.connect(self.lesson_requested)
-        if (
-            reference is not None
-            # an experiment: a book beside the help that opens what
-            # there is
-            # to look up, in a pane on the right
-        ):
-            book = QToolButton()
-            set_svg_icon(book, BOOK)
-            book.setIconSize(QSize(px(24), px(24)))
-            book.setCheckable(True)
-            book.setAutoRaise(True)
-            book.setToolTip("Reference")
-            book.setAccessibleName("Reference")
-            book.toggled.connect(
-                self._toggle_reference,
-            )  # the pane it opens is built below
-            top.addWidget(book)
-            self.book_btn = book
-        self.midi_input = None
-        if isinstance(
-            exercise,
-            (NoteNames, IntervalConstruction, ScaleConstruction),
-        ) and sys.platform.startswith("linux"):
-            self.midi_input = MidiInput()
-            self.midi_input.note_pressed.connect(self._place_midi)
-            top.addWidget(self.midi_input)
-        self.sound_btn = QToolButton()
-        self.sound_btn.setAutoRaise(True)
-        self.sound_btn.setIconSize(QSize(px(24), px(24)))
-        self.sound_btn.clicked.connect(self._toggle_sound)
-        self._show_sound_state()
-        top.addWidget(self.sound_btn)
         self.settings_panel = settings_panel_for(
             exercise,
             learner=self.learner,
         )
-        if self.settings_panel:
-            self.gear = QToolButton()
-            set_svg_icon(self.gear, SLIDERS)
-            self.gear.setIconSize(QSize(px(24), px(24)))
-            self.gear.setCheckable(True)
-            self.gear.setAutoRaise(True)
-            self.gear.setToolTip("Exercise settings")
-            self.gear.setAccessibleName("Exercise settings")
-            top.addWidget(self.gear)
         main = QWidget()
         lay = QVBoxLayout(main)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.addLayout(top)
+        lay.addLayout(self._build_toolbar())
         self.prompt.setAlignment(
             Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
         )
@@ -1112,7 +1061,8 @@ class ExerciseView(QWidget):
                 self.circle.update,
             )  # a new look keeps the question
             self.settings_panel.restyled.connect(self._redraw_keyboards)
-        if reference is not None and self.book_btn is not None:
+        book = self.book_btn
+        if reference is not None and book is not None:
             ref_pane = QFrame()
             ref_pane.setObjectName("settingsPane")
             ref_pane.setFrameShape(QFrame.Shape.StyledPanel)
@@ -1174,6 +1124,150 @@ class ExerciseView(QWidget):
             Qt.FocusPolicy.ClickFocus,
         )  # the screen can be given the keyboard when it opens
         self.next_question()
+
+    def _build_toolbar(self) -> QHBoxLayout:
+        """
+        Build the row of exercise controls above the staff.
+
+        Returns
+        -------
+        QHBoxLayout
+            The row to add to the exercise's main layout.
+
+        Examples
+        --------
+        Note Identification shows its score and help button in this row.
+        """
+        top = QHBoxLayout()
+        self.lesson_back_button = QPushButton("← Back to lesson")
+        self.lesson_back_button.hide()
+        top.addWidget(self.lesson_back_button)
+        top.addStretch()
+        top.addWidget(self.queue_counts)
+        top.addWidget(self.score)
+        self.help_btn = HelpButton(self.exercise.instructions)
+        top.addWidget(self.help_btn)
+        self.book_btn: QToolButton | None = None
+        if self._reference is not None:
+            book = QToolButton()
+            set_svg_icon(book, BOOK)
+            book.setIconSize(QSize(px(24), px(24)))
+            book.setCheckable(True)
+            book.setAutoRaise(True)
+            book.setToolTip("Reference")
+            book.setAccessibleName("Reference")
+            book.toggled.connect(self._toggle_reference)
+            top.addWidget(book)
+            self.book_btn = book
+        self.midi_input = None
+        if isinstance(
+            self.exercise,
+            (NoteNames, IntervalConstruction, ScaleConstruction),
+        ) and sys.platform.startswith("linux"):
+            self.midi_input = MidiInput()
+            self.midi_input.note_pressed.connect(self._place_midi)
+            top.addWidget(self.midi_input)
+        self.sound_btn = QToolButton()
+        self.sound_btn.setAutoRaise(True)
+        self.sound_btn.setIconSize(QSize(px(24), px(24)))
+        self.sound_btn.clicked.connect(self._toggle_sound)
+        self._show_sound_state()
+        top.addWidget(self.sound_btn)
+        if self.settings_panel:
+            self.gear = QToolButton()
+            set_svg_icon(self.gear, SLIDERS)
+            self.gear.setIconSize(QSize(px(24), px(24)))
+            self.gear.setCheckable(True)
+            self.gear.setAutoRaise(True)
+            self.gear.setToolTip("Exercise settings")
+            self.gear.setAccessibleName("Exercise settings")
+            top.addWidget(self.gear)
+        return top
+
+    @property
+    def answered(self) -> bool:
+        """
+        Read the current question's status from the practice session.
+
+        Returns
+        -------
+        bool
+            Whether this question is finished.
+
+        Examples
+        --------
+        >>> ExerciseView(NoteNames()).answered
+        False
+        """
+        return self.session.answered
+
+    @property
+    def missed(self) -> bool:
+        """
+        Read the current question's status from the practice session.
+
+        Returns
+        -------
+        bool
+            Whether an attempt on this question was incorrect.
+
+        Examples
+        --------
+        >>> ExerciseView(NoteNames()).missed
+        False
+        """
+        return self.session.missed
+
+    @property
+    def total(self) -> int:
+        """
+        Read the exercise score from the practice session.
+
+        Returns
+        -------
+        int
+            Questions scored in this exercise.
+
+        Examples
+        --------
+        >>> ExerciseView(NoteNames()).total
+        0
+        """
+        return self.session.total
+
+    @property
+    def correct(self) -> int:
+        """
+        Read the exercise score from the practice session.
+
+        Returns
+        -------
+        int
+            Questions answered correctly on the first attempt.
+
+        Examples
+        --------
+        >>> ExerciseView(NoteNames()).correct
+        0
+        """
+        return self.session.correct
+
+    @property
+    def streak(self) -> int:
+        """
+        Read the exercise score from the practice session.
+
+        Returns
+        -------
+        int
+            Consecutive correct first attempts.
+
+        Examples
+        --------
+        >>> ExerciseView(NoteNames()).streak
+        0
+        """
+        return self.session.streak
 
     def _application_state_changed(self, state: Qt.ApplicationState) -> None:
         """
@@ -1714,9 +1808,9 @@ class ExerciseView(QWidget):
                 bool(q.choices)
                 or (empty_sample is not None and bool(empty_sample.choices)),
             )
-        self.answered = False
-        self.missed = False
-        self._attempts = 0
+        self.session = self.session.new_question(
+            available=empty_sample is None,
+        )
         self._clock = time.monotonic()
         self._timing_valid = True
         self._pair_token += 1  # cancels a pending 'try again' reset
@@ -2054,7 +2148,6 @@ class ExerciseView(QWidget):
                 self.octave_box.addWidget(number_bank, 1)
         if empty_sample is not None:
             self.question = None
-            self.answered = True
             self.next_button.setText("Check again")
             self.next_button.show()
         self._show_review_interval()
@@ -3731,36 +3824,37 @@ class ExerciseView(QWidget):
         >>> view.total, view.correct, view.streak
         (1, 1, 1)
         """
-        self._attempts += 1
+        progress = self.session.after_attempt(
+            ok,
+            calendar_review=self._scheduler_mode in CALENDAR_SCHEDULERS,
+            shuffle=self.shuffle_answers,
+        )
+        if progress is self.session:
+            return
         now = time.monotonic()
-        seconds, self._clock = (
-            now - self._clock,
-            now,
-        )  # the first answer is timed from the question appearing
+        assigned = None
         if self.learner and self.question:
             assigned = self.learner.record(
                 self.exercise,
                 question=self.question,
                 answer=choice,
                 correct=ok,
-                attempt_no=self._attempts,
-                seconds=seconds,
+                attempt_no=progress.attempts,
+                seconds=now - self._clock,
                 preview=self._review_preview,
                 passing_previews=self._speed_previews,
                 self_grading=self._self_grading,
                 timing_valid=self._timing_valid,
             )
-            if assigned is not None:
-                self._display_interval(
-                    f"{assigned.rating.name} · {assigned.duration}",
-                )
-            if not ok:
-                self.review_interval.hide()
-                self._keyboard_interval_row.hide()
-        if not self.missed:  # only the first attempt counts toward the score
-            self.total += 1
-            self.correct += ok
-            self.streak = self.streak + 1 if ok else 0
+        self.session = progress
+        self._clock = now
+        if assigned is not None:
+            self._display_interval(
+                f"{assigned.rating.name} · {assigned.duration}",
+            )
+        if not ok and self.learner:
+            self.review_interval.hide()
+            self._keyboard_interval_row.hide()
 
     def _pick(
         self,
@@ -4098,15 +4192,12 @@ class ExerciseView(QWidget):
         A missed SM-2 card receives a fresh first attempt when its
         scheduled retry comes due.
         """
-        self.missed = True
-        calendar_review = self._scheduler_mode in CALENDAR_SCHEDULERS
-        if calendar_review or self.shuffle_answers:
-            self.answered = True
+        if self.answered:
             for button in self.buttons:
                 button.setEnabled(False)
             self.prompt.setText(
                 "Incorrect. This card will return for review."
-                if calendar_review
+                if self._scheduler_mode in CALENDAR_SCHEDULERS
                 else "Incorrect.",
             )
             self.prompt.show()
@@ -4148,7 +4239,6 @@ class ExerciseView(QWidget):
         """
         q = self.question
         assert q is not None
-        self.answered = True
         mode = (
             "Wait"
             if self._self_grading
@@ -4323,7 +4413,7 @@ class ExerciseView(QWidget):
         ...     ScaleIdentification(),
         ...     rng=random.Random(2),
         ... )
-        >>> view.answered = True
+        >>> view._record(True)
         >>> view._light_answer_notes(2)
         >>> list(view.staff.column_colors)
         [2]
@@ -4378,7 +4468,9 @@ class ExerciseView(QWidget):
         >>> view = ExerciseView(
         ...     NoteNames(), rng=random.Random(1)
         ... )
-        >>> view.total, view.correct = 4, 3
+        >>> for correct in (True, True, True, False):
+        ...     view.next_question()
+        ...     view._record(correct)
         >>> view._update_score()
         >>> view.score.text()
         '3/4 (75%)   streak 0'
@@ -4409,7 +4501,7 @@ class ExerciseView(QWidget):
         if self.isVisible():
             key = (
                 self.question.item_key()
-                if self.question is not None and self._attempts == 0
+                if self.question is not None and self.session.attempts == 0
                 else None
             )
             counts, current = self.learner.calendar.study_counts(

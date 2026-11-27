@@ -19,7 +19,7 @@
   ],
   "exercise-view-anatomy": [
     {"label": "Staff", "type": "StaffWidget", "href": "/api/alto.ui.staff/class-staffwidget/", "rect": [9.5,8.1,50.9,53.8]},
-    {"label": "Toolbar", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/class-exerciseview/", "rect": [0.9,1.1,68,6.3]},
+    {"label": "Toolbar", "type": "ExerciseView._build_toolbar()", "href": "/developer-guide/exercise-view/#toolbar", "rect": [0.9,1.1,68,6.3]},
     {"label": "Answer controls", "type": "DegreeButton", "href": "/api/alto.ui.degree_text/class-degreebutton/", "rect": [3.1,63.9,63.6,7.1], "label_below": true},
     {"label": "Settings pane", "type": "NoteNameSettingsPanel", "href": "/api/alto.ui.settings_panel/class-notenamesettingspanel/", "rect": [69.5,1.4,29.6,97.1]}
   ],

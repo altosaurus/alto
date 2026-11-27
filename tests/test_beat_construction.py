@@ -521,7 +521,10 @@ def test_note_highlights_skip_rests_and_cross_the_barline(
     view.question = replace(view.question, answer="3/4", rhythm=rhythm)
     score = view.beat_placement
     score.reset(rhythm, meter=(3, 4))
-    view.answered = True
+    score.marks = sorted(beat_positions(BEAT_METERS["3/4"]))
+    score.changed.emit()
+    view.answer_button.click()
+    assert view.answered
     columns = []
     for index in range(len(rhythm)):
         view._light_answer_notes(index)

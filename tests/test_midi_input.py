@@ -181,7 +181,7 @@ def test_identify_played_note(
     midi.note_pressed.emit(target.midi)
     assert (
         view.answered
-        and view._attempts == 2
+        and view.session.attempts == 2
         and (view.correct, view.total) == (0, 1)
     )
     if octave:

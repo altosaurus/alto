@@ -1,6 +1,6 @@
 {
   "staff": ["next_question", "self.staff.show_notes("],
-  "toolbar": ["__init__", "top.addWidget(self.score)", "top.addWidget(self.help_btn)"],
+  "toolbar": ["_build_toolbar", "top = QHBoxLayout()", "top.addWidget(self.help_btn)"],
   "answer": ["next_question", "choice=c, btn=b: self.submit(", "self.choice_box.addWidget(b, row, col)"],
   "panel": ["__init__", "self.settings_panel = settings_panel_for("],
   "signals": ["__init__", "self.gear.toggled.connect(", "self.settings_panel.changed.connect("]
