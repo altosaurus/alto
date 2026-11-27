@@ -44,6 +44,22 @@ class RenderedDocsTest(unittest.TestCase):
             .split("</article>")[0]
         )
 
+    def test_browser_asset_licenses(self) -> None:
+        """Check the local license links in each docs version."""
+        site = Path(os.environ["ALTO_DOCS_HTML"])
+        article = self.article("credits")
+        for path, holder in (
+            ("LICENSE", "MIT License"),
+            ("_static/Sphinx-LICENSE.txt", "Sphinx team"),
+            ("assets/vendor/snowball-3.0.1/COPYING.txt", "Dr Martin Porter"),
+            ("_static/Pygments-LICENSE.txt", "respective authors"),
+            ("assets/vendor/temml-0.14.0/LICENSE", "Ron Kok"),
+            ("assets/vendor/temml-0.14.0/LICENSE-KaTeX", "Khan Academy"),
+        ):
+            assert f'href="../{path}"' in article
+            notice = (site / path).read_text(encoding="utf-8")
+            assert holder in notice and "AS IS" in notice
+
     def test_public_components(self) -> None:
         """Check the module links and public method anchors."""
         index = self.article("api")

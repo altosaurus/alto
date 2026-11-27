@@ -96,6 +96,9 @@ Algorithm SM-2, © SuperMemo World, 1991. [SuperMemo](https://www.supermemo.com/
   license and where to get the source of the version in the installers are installed at `licenses/certifi/`.
 - The Linux Qt libraries use ICU (Unicode License), and the Windows and Mac installers contain OpenSSL (Apache License 2.0). `licenses/README.txt` lists each of these components with its version and the files of its
   license.
+- The documentation distributes Sphinx theme and search assets (BSD-2-Clause), the Snowball English search stemmer
+  (BSD-3-Clause), and a Pygments stylesheet (BSD-2-Clause). Each rendered site's **License and credits** page links
+  to the full notices included in that version.
 - The documentation uses Temml by Ron Kok (MIT) to show mathematical notation. Temml is derived from KaTeX, by Khan Academy
   and other contributors (MIT). Both licenses are in `docs/assets/vendor/temml-0.14.0/`.
 - pytest (MIT) and NumPy (BSD-3-Clause) are used for tests only, and neither is part of the desktop installers.

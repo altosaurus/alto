@@ -11,6 +11,7 @@ import re
 import subprocess
 import tomllib
 import xml.etree.ElementTree as ET
+from importlib.metadata import distribution
 from typing import TYPE_CHECKING
 from urllib.parse import urljoin
 
@@ -286,9 +287,30 @@ def home_title(app: Sphinx, tree: nodes.document, docname: str) -> None:
 
 
 def copy_assets(app: Sphinx, exception: Exception | None) -> None:
-    """Publish images and downloads at their existing URLs."""
-    if exception is None and app.builder.format == "html":
-        copy_asset(app.srcdir / "assets", app.outdir / "assets", force=True)
+    """
+    Publish guide assets and notices for bundled browser code.
+
+    Raises
+    ------
+    ExtensionError
+        A dependency's distribution is missing its license text.
+    """
+    if exception is not None or app.builder.format != "html":
+        return
+    copy_asset(app.srcdir / "assets", app.outdir / "assets", force=True)
+    for package, filename in (
+        ("Sphinx", "LICENSE.rst"),
+        ("Pygments", "LICENSE"),
+    ):
+        notice = distribution(package).read_text(f"licenses/{filename}")
+        if not notice:
+            raise ExtensionError(
+                f"Missing license in the installed {package} distribution",
+            )
+        (app.outdir / "_static" / f"{package}-LICENSE.txt").write_text(
+            notice,
+            encoding="utf-8",
+        )
 
 
 def stable_sitemap(app: Sphinx, exception: Exception | None) -> None:

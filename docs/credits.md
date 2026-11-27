@@ -6,7 +6,7 @@ permalink: /credits/
 ---
 ## License
 
-Alto's own code is released under the [MIT License](https://github.com/altosaurus/alto/blob/main/LICENSE). You can use,
+Alto's own code is released under the [MIT License]({{ '/LICENSE' | relative_url }}). You can use,
 change and share it freely, including in other projects.
 
 The bundled music fonts, recordings, and score transcriptions each carry the terms listed below.
@@ -58,6 +58,16 @@ Windows mark is four squares. The marks belong to their owners and are shown onl
 ## Software
 
 Alto uses [PySide6](https://doc.qt.io/qtforpython-6/) (Qt for Python, LGPL-3.0).
+
+The documentation ships theme and search files from Sphinx, English search code from Snowball,
+and syntax-highlighting styles from Pygments. Each version of the site includes their copyright notices
+and license terms. [Sphinx (BSD-2-Clause)]({{ '/_static/Sphinx-LICENSE.txt' | relative_url }}) ·
+[Snowball (BSD-3-Clause)]({{ '/assets/vendor/snowball-3.0.1/COPYING.txt' | relative_url }}) ·
+[Pygments (BSD-2-Clause)]({{ '/_static/Pygments-LICENSE.txt' | relative_url }})
+
+Temml renders the mathematical notation and incorporates code from KaTeX.
+[Temml (MIT)]({{ '/assets/vendor/temml-0.14.0/LICENSE' | relative_url }}) ·
+[KaTeX (MIT)]({{ '/assets/vendor/temml-0.14.0/LICENSE-KaTeX' | relative_url }})
 
 The complete list, with license texts, is in
 [THIRD_PARTY_NOTICES.md](https://github.com/altosaurus/alto/blob/main/THIRD_PARTY_NOTICES.md) in the repository.

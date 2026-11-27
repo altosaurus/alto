@@ -49,6 +49,7 @@ templates_path = ["templates", "../_includes"]
 html_theme_path = ["themes"]
 html_theme = "alto"
 html_static_path = ["../assets/css", "../assets/js"]
+html_extra_path = ["../../LICENSE"]
 html_favicon = "../assets/img/icon.png"
 html_permalinks = False
 html_show_sourcelink = False
