@@ -228,6 +228,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.learning.learner"><li><a class="row" href="../../alto.learning.learner/class-practicecomplete/">PracticeComplete</a></li><li><a class="row" href="../../alto.learning.learner/class-learner/">Learner</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.learning.practice_session/">practice_session</a>
+      <button type="button" class="nav-toggle" data-category="practice_session" aria-controls="nav-api/alto.learning.practice_session" aria-expanded="true" aria-label="Collapse practice_session" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.learning.practice_session"><li><a class="row" href="../../alto.learning.practice_session/class-practicesession/">PracticeSession</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.learning.response_times/">response_times</a>
       <button type="button" class="nav-toggle" data-category="response_times" aria-controls="nav-api/alto.learning.response_times" aria-expanded="true" aria-label="Collapse response_times" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -693,7 +698,7 @@
 <h1>ToggleRow</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="alto.ui.settings_menu.ToggleRow">
-<span id="togglerow"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.settings_menu.</span></span><span class="sig-name descname"><span class="pre">ToggleRow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/settings_menu.py#L1253"><span class="pre">Source</span></a></dt>
+<span id="togglerow"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.settings_menu.</span></span><span class="sig-name descname"><span class="pre">ToggleRow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/settings_menu.py#L1253"><span class="pre">Source</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../class-menurow/#alto.ui.settings_menu.MenuRow" title="alto.ui.settings_menu.MenuRow"><code class="xref py py-class docutils literal notranslate"><span class="pre">MenuRow</span></code></a></p>
 <p>A menu row with a switch that changes a setting in place instead of
 opening a page.</p>
@@ -749,7 +754,7 @@ opening a page.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.settings_menu.ToggleRow.isOn">
-<span id="togglerowison"></span><span class="sig-name descname"><span class="pre">isOn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/settings_menu.py#L1327"><span class="pre">Source</span></a></dt>
+<span id="togglerowison"></span><span class="sig-name descname"><span class="pre">isOn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/settings_menu.py#L1327"><span class="pre">Source</span></a></dt>
 <dd><p>Report whether the switch is on.</p>
 <table class="docutils align-default" id="id3">
 <caption><span class="caption-text">Returns</span></caption>
@@ -773,7 +778,7 @@ opening a page.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.settings_menu.ToggleRow.setOn">
-<span id="togglerowseton"></span><span class="sig-name descname"><span class="pre">setOn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">on</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/settings_menu.py#L1344"><span class="pre">Source</span></a></dt>
+<span id="togglerowseton"></span><span class="sig-name descname"><span class="pre">setOn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">on</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/settings_menu.py#L1344"><span class="pre">Source</span></a></dt>
 <dd><p>Set the switch without announcing it, as when a setting is
 loaded.</p>
 <table class="docutils align-default" id="id4">

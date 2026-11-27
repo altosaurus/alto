@@ -228,6 +228,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.learning.learner"><li><a class="row" href="../../alto.learning.learner/class-practicecomplete/">PracticeComplete</a></li><li><a class="row" href="../../alto.learning.learner/class-learner/">Learner</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.learning.practice_session/">practice_session</a>
+      <button type="button" class="nav-toggle" data-category="practice_session" aria-controls="nav-api/alto.learning.practice_session" aria-expanded="true" aria-label="Collapse practice_session" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.learning.practice_session"><li><a class="row" href="../../alto.learning.practice_session/class-practicesession/">PracticeSession</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.learning.response_times/">response_times</a>
       <button type="button" class="nav-toggle" data-category="response_times" aria-controls="nav-api/alto.learning.response_times" aria-expanded="true" aria-label="Collapse response_times" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -693,7 +698,7 @@
 <h1>ExerciseView</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView">
-<span id="exerciseview"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.exercise_view.</span></span><span class="sig-name descname"><span class="pre">ExerciseView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../alto.exercises.base/class-exercise/#alto.exercises.base.Exercise" title="alto.exercises.base.Exercise"><span class="pre">alto.exercises.base.Exercise</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtWidgets.QWidget</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">alto.learning.Learner</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L432"><span class="pre">Source</span></a></dt>
+<span id="exerciseview"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.exercise_view.</span></span><span class="sig-name descname"><span class="pre">ExerciseView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../alto.exercises.base/class-exercise/#alto.exercises.base.Exercise" title="alto.exercises.base.Exercise"><span class="pre">alto.exercises.base.Exercise</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtWidgets.QWidget</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">alto.learning.Learner</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L433"><span class="pre">Source</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide6.QtWidgets.QWidget</span></code></p>
 <p>The screen for practicing one exercise.</p>
 <table class="docutils align-default" id="id1">
@@ -725,79 +730,83 @@
 <td><p><code class="docutils literal notranslate"><span class="pre">random.Random</span></code></p></td>
 <td><p>The random number generator for new questions.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">correct</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">session</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PracticeSession</span></code></p></td>
+<td><p>Attempt count, score, and retry status for this exercise.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">correct</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
 <td><p>Questions answered right on the first try.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">total</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">total</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
 <td><p>Questions answered.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">streak</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">streak</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
 <td><p>Right answers in a row.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">question</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">question</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Question</span> <span class="pre">or</span> <span class="pre">None</span></code></p></td>
 <td><p>The question on screen.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">answered</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">answered</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
 <td><p>True once this showing is finished, including a miss in SM-2 or FSRS.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">missed</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">missed</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
 <td><p>True once the question has been answered wrong, so it no longer counts toward the score.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">buttons</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">buttons</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">QPushButton</span></code></p></td>
 <td><p>The answer buttons on screen.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">settings_panel</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">settings_panel</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ExerciseSettingsPanel</span></code></p></td>
 <td><p>The exercise’s settings, including how to advance after a correct answer.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">staff</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">staff</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">StaffWidget</span></code></p></td>
 <td><p>Shows the notes of a question.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">keyboard</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">keyboard</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">KeyboardWidget</span></code></p></td>
 <td><p>Shows the key of a keyboard question.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">input_staff</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">input_staff</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">StaffInput</span></code></p></td>
 <td><p>The staff to click, for “place this note” questions.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">clef_input</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">clef_input</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ClefInput</span></code></p></td>
 <td><p>The blank staff a clef is put on, for “place this clef” questions.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scale_input</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scale_input</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ScaleInput</span></code></p></td>
 <td><p>The staff to click, for “place the notes of this scale” questions.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fork</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fork</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">KeyFork</span></code></p></td>
 <td><p>The fork to pick a key signature on, for “build this key signature” questions.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">answer_button</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">answer_button</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">QPushButton</span></code></p></td>
 <td><p>Hands in what was built with the fork or placed on the scale staff.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">book_btn</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">book_btn</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">QToolButton</span> <span class="pre">or</span> <span class="pre">None</span></code></p></td>
 <td><p>Opens the exercise’s reference in a pane on the right; None for an exercise that has none.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">reference_pane</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reference_pane</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">QFrame</span> <span class="pre">or</span> <span class="pre">None</span></code></p></td>
 <td><p>The pane that holds the reference.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lesson_requested</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lesson_requested</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Signal</span></code></p></td>
 <td><p>Emitted with a lesson’s key when the reference pane’s lesson button is pressed.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shuffle_requested</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shuffle_requested</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Signal</span></code></p></td>
 <td><p>Emitted when answer feedback ends or Next is clicked during shuffled practice.</p></td>
 </tr>
@@ -853,12 +862,132 @@
 <span class="go">True</span>
 </pre></div>
 </div>
+<dl class="py property">
+<dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.answered">
+<span id="exerciseviewanswered"></span><span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">answered</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1194"><span class="pre">Source</span></a></dt>
+<dd><p>Read the current question’s status from the practice session.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Returns</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Whether this question is finished.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">())</span><span class="o">.</span><span class="n">answered</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.missed">
+<span id="exerciseviewmissed"></span><span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">missed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1211"><span class="pre">Source</span></a></dt>
+<dd><p>Read the current question’s status from the practice session.</p>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Returns</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Whether an attempt on this question was incorrect.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">())</span><span class="o">.</span><span class="n">missed</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.total">
+<span id="exerciseviewtotal"></span><span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">total</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1228"><span class="pre">Source</span></a></dt>
+<dd><p>Read the exercise score from the practice session.</p>
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">Returns</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>Questions scored in this exercise.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">())</span><span class="o">.</span><span class="n">total</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.correct">
+<span id="exerciseviewcorrect"></span><span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">correct</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1245"><span class="pre">Source</span></a></dt>
+<dd><p>Read the exercise score from the practice session.</p>
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-text">Returns</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>Questions answered correctly on the first attempt.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">())</span><span class="o">.</span><span class="n">correct</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.streak">
+<span id="exerciseviewstreak"></span><span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">streak</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1262"><span class="pre">Source</span></a></dt>
+<dd><p>Read the exercise score from the practice session.</p>
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-text">Returns</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>Consecutive correct first attempts.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">())</span><span class="o">.</span><span class="n">streak</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.hideEvent">
-<span id="exerciseviewhideevent"></span><span class="sig-name descname"><span class="pre">hideEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtGui.QHideEvent</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L1196"><span class="pre">Source</span></a></dt>
+<span id="exerciseviewhideevent"></span><span class="sig-name descname"><span class="pre">hideEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtGui.QHideEvent</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1296"><span class="pre">Source</span></a></dt>
 <dd><p>Pause automatic advancement and answer timing while browsing
 another page.</p>
-<table class="docutils align-default" id="id3">
+<table class="docutils align-default" id="id8">
 <caption><span class="caption-text">Parameters</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
@@ -886,10 +1015,10 @@ another page.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.showEvent">
-<span id="exerciseviewshowevent"></span><span class="sig-name descname"><span class="pre">showEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtGui.QShowEvent</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L1225"><span class="pre">Source</span></a></dt>
+<span id="exerciseviewshowevent"></span><span class="sig-name descname"><span class="pre">showEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtGui.QShowEvent</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1325"><span class="pre">Source</span></a></dt>
 <dd><p>Resume the exercise’s answer clock and pending advance when it
 reappears.</p>
-<table class="docutils align-default" id="id4">
+<table class="docutils align-default" id="id9">
 <caption><span class="caption-text">Parameters</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
@@ -918,10 +1047,10 @@ reappears.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.settings_state">
-<span id="exerciseviewsettings_state"></span><span class="sig-name descname"><span class="pre">settings_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L1359"><span class="pre">Source</span></a></dt>
+<span id="exerciseviewsettings_state"></span><span class="sig-name descname"><span class="pre">settings_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1459"><span class="pre">Source</span></a></dt>
 <dd><p>Remember the exercise settings pane, selected page, and scroll
 position before a theme rebuild.</p>
-<table class="docutils align-default" id="id5">
+<table class="docutils align-default" id="id10">
 <caption><span class="caption-text">Returns</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Type</p></th>
@@ -946,10 +1075,10 @@ position before a theme rebuild.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.restore_settings_state">
-<span id="exerciseviewrestore_settings_state"></span><span class="sig-name descname"><span class="pre">restore_settings_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L1390"><span class="pre">Source</span></a></dt>
+<span id="exerciseviewrestore_settings_state"></span><span class="sig-name descname"><span class="pre">restore_settings_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1490"><span class="pre">Source</span></a></dt>
 <dd><p>Restore exercise settings navigation immediately after
 rebuilding the view.</p>
-<table class="docutils align-default" id="id6">
+<table class="docutils align-default" id="id11">
 <caption><span class="caption-text">Parameters</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
@@ -978,7 +1107,7 @@ rebuilding the view.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.scheduling_changed">
-<span id="exerciseviewscheduling_changed"></span><span class="sig-name descname"><span class="pre">scheduling_changed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L1562"><span class="pre">Source</span></a></dt>
+<span id="exerciseviewscheduling_changed"></span><span class="sig-name descname"><span class="pre">scheduling_changed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1662"><span class="pre">Source</span></a></dt>
 <dd><p>Refresh the visible exercise or invalidate its queue until it is
 reopened.</p>
 <p class="rubric">Examples</p>
@@ -988,7 +1117,7 @@ previously opened exercise.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.next_question">
-<span id="exerciseviewnext_question"></span><span class="sig-name descname"><span class="pre">next_question</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L1627"><span class="pre">Source</span></a></dt>
+<span id="exerciseviewnext_question"></span><span class="sig-name descname"><span class="pre">next_question</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L1727"><span class="pre">Source</span></a></dt>
 <dd><p>Show the next question: its staff, keyboard or text, and a fresh
 set of answer buttons.</p>
 <p class="rubric">Examples</p>
@@ -1010,10 +1139,10 @@ set of answer buttons.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.eventFilter">
-<span id="exercisevieweventfilter"></span><span class="sig-name descname"><span class="pre">eventFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">watched</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtCore.QObject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtCore.QEvent</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L3364"><span class="pre">Source</span></a></dt>
+<span id="exercisevieweventfilter"></span><span class="sig-name descname"><span class="pre">eventFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">watched</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtCore.QObject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtCore.QEvent</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L3463"><span class="pre">Source</span></a></dt>
 <dd><p>Handle staff clicks in notation questions and forward wheel
 turns to the fork or clef staff.</p>
-<table class="docutils align-default" id="id7">
+<table class="docutils align-default" id="id12">
 <caption><span class="caption-text">Parameters</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
@@ -1032,7 +1161,7 @@ turns to the fork or clef staff.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id8">
+<table class="docutils align-default" id="id13">
 <caption><span class="caption-text">Returns</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Type</p></th>
@@ -1077,14 +1206,14 @@ turns to the fork or clef staff.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="alto.ui.exercise_view.ExerciseView.submit">
-<span id="exerciseviewsubmit"></span><span class="sig-name descname"><span class="pre">submit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">choice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">button</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtWidgets.QPushButton</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/b73f34590ea42d5423761e440a721ccd208e2dc9/alto/ui/exercise_view.py#L3915"><span class="pre">Source</span></a></dt>
+<span id="exerciseviewsubmit"></span><span class="sig-name descname"><span class="pre">submit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">choice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">button</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtWidgets.QPushButton</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/cf667a8a40a516c239e41fcca442089fb27f397c/alto/ui/exercise_view.py#L4015"><span class="pre">Source</span></a></dt>
 <dd><p>Check an answer chosen with a button or by clicking the
 notation.</p>
 <p>A correct answer uses the selected Next Question setting. An
 incorrect button flashes red.
 In SM-2 and FSRS the card returns at its scheduled retry time.
 ASRS and ARTS allow another answer on the same showing.</p>
-<table class="docutils align-default" id="id9">
+<table class="docutils align-default" id="id14">
 <caption><span class="caption-text">Parameters</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
