@@ -25,6 +25,7 @@ from sphinx import addnodes
 if TYPE_CHECKING:
     from autoapi._objects import PythonObject
     from sphinx.application import Sphinx
+    from sphinx.config import Config
     from sphinx.environment import BuildEnvironment
 
 
@@ -86,15 +87,8 @@ def field_tables(
     lines[:] = "\n\n".join(parts).splitlines() + [""]
 
 
-def source_urls(app: Sphinx) -> dict[str, str]:
-    """
-    Locate committed Python files at their last revision.
-
-    Returns
-    -------
-    dict
-        Repository paths and GitHub URLs for clean files.
-    """
+def configure_source_urls(app: Sphinx, config: Config) -> None:
+    """Link clean files to the PR merge or their last local revision."""
     repo = app.srcdir.parent
     tracked = subprocess.run(
         ["git", "ls-files", "--", "alto"],
@@ -104,25 +98,34 @@ def source_urls(app: Sphinx) -> dict[str, str]:
         check=False,
     )
     if tracked.returncode:
-        return {}
+        return
     modified = subprocess.check_output(
         ["git", "diff", "--name-only", "HEAD", "--", "alto"],
         cwd=repo,
         text=True,
     ).splitlines()
+    merge = (
+        config.alto_source_revision
+        if config.html_context.get("preview_pr")
+        else ""
+    )
     urls = {}
     for path in set(tracked.stdout.splitlines()).difference(modified):
-        if path.endswith(".py"):
-            revision = subprocess.check_output(
+        if not path.endswith(".py"):
+            continue
+        revision = (
+            merge
+            or subprocess.check_output(
                 ["git", "log", "-1", "--format=%H", "HEAD", "--", path],
                 cwd=repo,
                 text=True,
             ).strip()
-            if revision:
-                urls[path] = (
-                    f"https://github.com/altosaurus/alto/blob/{revision}/{path}"
-                )
-    return urls
+        )
+        if revision:
+            urls[path] = (
+                f"https://github.com/altosaurus/alto/blob/{revision}/{path}"
+            )
+    config.alto_source_urls = urls
 
 
 def tree(paths: list[str]) -> str:
@@ -415,7 +418,8 @@ def setup(app: Sphinx) -> dict[str, bool]:
     dict
         Sphinx extension metadata.
     """
-    app.add_config_value("alto_source_urls", source_urls(app), "env")
+    app.add_config_value("alto_source_urls", {}, "env")
+    app.connect("config-inited", configure_source_urls)
     app.connect("builder-inited", generate_pages, priority=600)
     app.connect("autodoc-process-docstring", field_tables, priority=400)
     app.connect("env-get-outdated", remove_obsolete_pages)

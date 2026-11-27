@@ -226,7 +226,9 @@ def test_each_main_pull_request_builds_a_read_only_docs_preview() -> None:
         "actions/upload-artifact@" in workflow and "secrets." not in workflow
     )
     assert (
-        "jekyll build" in workflow
+        "sphinx-build -W -b dirhtml" in workflow
+        and '-D alto_source_revision="$GITHUB_SHA"' in workflow
+        and "ref: ${{ github.sha }}" in workflow
         and "contents: read" in workflow
         and "gh-pages" not in workflow.replace("the Docs workflow", "")
     )

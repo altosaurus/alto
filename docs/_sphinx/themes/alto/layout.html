@@ -1,6 +1,10 @@
 {% extends "basic/layout.html" %}
 
 {% block htmltitle %}<title>{{ title|striptags|e }} · {{ project|e }}</title>{% endblock %}
+{% block extrahead %}
+  {{ super() }}
+  {% if preview_pr and pagename != "search" %}<meta name="robots" content="noindex">{% endif %}
+{% endblock %}
 {% block css %}
   {% include "theme-init.html" %}
   {{ super() }}
@@ -18,11 +22,18 @@
           <input name="q" type="search" enterkeyhint="search" placeholder="Search docs" aria-label="Search documentation">
         </div>
       </form>
+      {% if preview_pr %}
+      <a class="dd-btn pr-link" href="{{ pathto(root_doc) }}" aria-label="Documentation preview for PR #{{ preview_pr|e }}">
+        <svg class="i" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M6 7v10m7-12h1a4 4 0 0 1 4 4v8M15 2l-3 3 3 3"/></svg>
+        pr #{{ preview_pr|e }}
+      </a>
+      {% else %}
       <div class="version"><span class="version-name">{{ version }}</span></div>
+      {% endif %}
       {% include "header-actions.html" %}
     </div>
   </header>
-  {% if version == 'dev' %}
+  {% if version == 'dev' and not preview_pr %}
     <div class="version-banner" role="note">This is the development version, which has changes that are not in a release.</div>
   {% endif %}
 {% endblock %}

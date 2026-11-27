@@ -4,7 +4,7 @@ parent: developer-guide
 order: 1
 permalink: /developer-guide/application-launch/
 ---
-The first window you see depends on who has used Alto before. On a new installation, Alto asks for a name. On the next launch, it can open directly to the exercise catalog. To see where those paths diverge, open `alto/__main__.py` in your editor and follow one launch through `main()`. [Module source on GitHub](https://github.com/altosaurus/alto/blob/main/alto/__main__.py)
+The first window you see depends on who has used Alto before. On a new installation, Alto asks for a name. On the next launch, it can open directly to the exercise catalog. To see where those paths diverge, open `alto/__main__.py` in your editor and follow one launch through `main()`. [Module source on GitHub](https://github.com/altosaurus/alto/blob/{{ site.source_revision | default: 'main' }}/alto/__main__.py)
 
 ## A first run from the terminal
 

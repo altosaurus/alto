@@ -20,6 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -32,40 +33,42 @@ jobs:
       - name: Bring in the plugin tutorials
         run: python3 scripts/tutorial_docs.py all
 
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/setup-python@v5
         with:
-          ruby-version: "3.3"
-          bundler-cache: true
-          working-directory: docs
+          python-version: "3.13"
+
+      - name: Install uv
+        run: python -m pip install uv==0.11.11
 
       - name: Build the docs
         env:
-          BUNDLE_GEMFILE: ${{ github.workspace }}/docs/Gemfile
           PR: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          PREVIEW_REPOSITORY=$(cat .github/docs-preview-repository)
-          host="https://${PREVIEW_REPOSITORY%/*}.github.io"
-          root="/${PREVIEW_REPOSITORY#*/}/pr-$PR"
-          release=$(python3 scripts/docs_site.py latest $(git tag --list 'v*'))
-          printf 'url: %s\nsite_root: %s\nbaseurl: %s/dev\ndocs_version: dev\napp_version: "%s"\n' \
-            "$host" "$root" "$root" "${release#v}" > version.yml
-          printf 'preview_pr: %s\n' "$PR" >> version.yml
-          printf 'source_revision: "%s"\n' "$(git rev-parse HEAD)" >> version.yml
-          python3 scripts/docs_excerpts.py
-          bundle exec jekyll build --source docs --destination site/dev --config docs/_config.yml,version.yml
-          bundle exec ruby scripts/docs_search.rb site/dev
+          repository=$(cat .github/docs-preview-repository)
+          site_url="https://${repository%/*}.github.io/${repository#*/}/pr-$PR"
+          release=$(python scripts/docs_site.py latest $(git tag --list 'v*'))
+          uv run --isolated --locked --only-group docs --python 3.13 sphinx-build -W -b dirhtml \
+            -d "$RUNNER_TEMP/doctrees" -c docs/_sphinx \
+            -D html_context.preview_pr="$PR" -D alto_source_revision="$GITHUB_SHA" \
+            -D alto_app_version="${release#v}" docs site/dev
           printf '%s\n' "$HEAD_SHA" > site/dev/commit.txt
-          python3 scripts/docs_site.py finish site --root-files docs/site-root --site-url "$host$root"
+          python scripts/docs_site.py finish site --root-files docs/site-root --site-url "$site_url"
 
-      - name: Check that the pages are there
+      - name: Check the rendered preview
         run: |
-          for page in index getting-started release-notes; do test -s "site/dev/${page}.html" || test -s "site/dev/${page}/index.html"; done
+          for page in index.html getting-started/index.html release-notes/index.html \
+            developer-guide/exercise-view/index.html api/alto.ui.exercise_view/class-exerciseview/index.html \
+            search/index.html searchindex.js; do test -s "site/dev/$page"; done
+          for page in developer-guide/exercise-view api/alto.ui.exercise_view/class-exerciseview; do
+            grep -Fq "blob/$GITHUB_SHA/alto/ui/exercise_view.py#L" "site/dev/$page/index.html"
+          done
 
       - name: Save the rendered preview
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: docs-preview
           path: site/
+          include-hidden-files: false
           retention-days: 3
           if-no-files-found: error

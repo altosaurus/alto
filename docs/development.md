@@ -72,7 +72,7 @@ On pull requests, GitHub selects pytest and coverage using the changes since the
 Ruff and Pyright run on pull requests that change Python source, type stubs, or inputs to the
 respective tool. For example, a Ruff configuration change runs Ruff, a change to
 `scripts/typecheck.sh` runs Pyright, and a change to `pyproject.toml` runs both.
-The Docs check builds the site for changes under `docs/`, to `CHANGELOG.md`, or to its workflow.
+The Docs check builds a Sphinx preview for every pull request targeting `main`.
 
 Pushes to `main` run the full suite on every supported Python version, along with Ruff, Pyright,
 and coverage. A new push to a pull request cancels its previous run.
@@ -588,7 +588,7 @@ On a PR’s **Conversation** tab, click **View rendered documentation** in the G
 The **docs/preview** check links to the same site. After each push, the bot updates its comment with the commit
 it verified. If the build or deployment fails, the link opens the run log.
 
-**Docs check** builds the proposed merge with read-only permissions. **Publish docs preview** runs from the default
+**Docs check** builds the proposed merge with Sphinx and read-only permissions. The walkthrough and API source links open the merge commit on GitHub. **Publish docs preview** runs from the default
 branch, finds the open PR and its current head through GitHub, and publishes the rendered files to the preview fork.
 The preview for PR 97, for example, is served at `https://genedan.github.io/alto/pr-97/dev/`.
 Previously published previews remain accessible after the PR closes.
@@ -603,7 +603,7 @@ the `main` branch. Use a preview hostname separate from the production site, sin
 The plugin tutorials are not stored in Alto. They live in
 [`altosaurus/viola-plugin-tutorial`](https://github.com/altosaurus/viola-plugin-tutorial) and
 [`altosaurus/harpsichord-plugin-tutorial`](https://github.com/altosaurus/harpsichord-plugin-tutorial), which mirror the paths
-of `docs/`. The Docs and Docs check workflows run `scripts/tutorial_docs.py` before Jekyll. It copies in each tutorial page and
+of `docs/`. The Docs and Docs check workflows run `scripts/tutorial_docs.py` before building the site. It copies in each tutorial page and
 only the files that page refers to: the artwork it links, and both themes of each screenshot. The download is a release asset
 of the tutorial repository, which its Release workflow builds when a tag is pushed, so the site links to it and does not host
 it. Nothing else in a tutorial repository is published. Run it once before a local build to see the pages. It clones both

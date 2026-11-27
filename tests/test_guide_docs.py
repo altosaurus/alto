@@ -123,8 +123,7 @@ def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(
     page: Path,
 ) -> None:
     """
-    Allow relative links and screenshot includes in the guide, and flag
-    other Liquid delimiters.
+    Allow site links, revision-specific source links, and screenshots.
 
     Parameters
     ----------
@@ -132,6 +131,11 @@ def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(
         The guide page, supplied by the parametrisation.
     """
     text = LINK.sub("", page.read_text(encoding="utf-8"))
+    text = text.replace(
+        "https://github.com/altosaurus/alto/blob/"
+        "{{ site.source_revision | default: 'main' }}/",
+        "",
+    )
     text = re.sub(
         (
             '^{% include shot\\.html src="[\\w-]+\\.png" alt="[^"{}\\n]+"(?: '
