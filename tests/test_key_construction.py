@@ -535,6 +535,8 @@ def test_the_arrow_keys_move_the_circle_too(app: QApplication) -> None:
             ),
         )
     assert fork.value == -1
+    assert not fork.move_selection("pageup")
+    assert fork.value == -1
 
 
 def test_a_locked_fork_ignores_the_mouse_the_wheel_and_the_keys(
