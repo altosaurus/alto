@@ -32,6 +32,7 @@ from alto.exercises.library import (
     NoteNames,
     RythmicEquations,
 )
+from alto.learning import Database, Learner
 from alto.theory.pitch import Note
 from alto.ui import motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR
@@ -48,7 +49,6 @@ if TYPE_CHECKING:
         Exercise,
         Question,
     )
-    from alto.learning import Learner
 
 
 def view_of(
@@ -310,12 +310,12 @@ def test_the_settings_pane_slides_open_and_shut(app: QApplication) -> None:
     view.show()
     assert not view.pane.isVisible() and view.pane.maximumWidth() == 0
     view.gear.setChecked(True)
-    QTest.qWait(320)
+    view._pane_anim.setCurrentTime(view._pane_anim.duration())
     assert (
         view.pane.isVisible() and view.pane.maximumWidth() == view.PANE_WIDTH
     )
     view.gear.setChecked(False)
-    QTest.qWait(320)
+    view._pane_anim.setCurrentTime(view._pane_anim.duration())
     assert view.pane.maximumWidth() == 0 and not view.pane.isVisible()
 
 
@@ -363,20 +363,24 @@ def test_the_reference_pane_slides_open_beside_the_settings_and_shuts_them(
     view = view_of(CircleOfFifths())
     view.show()
     assert view.book_btn is not None and view.reference_pane is not None
+    settings_slide = view._pane_anim
+    reference_slide = view._reference_anim
     view.gear.setChecked(True)
-    QTest.qWait(500)
+    settings_slide.setCurrentTime(settings_slide.duration())
     assert view.pane.maximumWidth() == view.PANE_WIDTH
     view.book_btn.setChecked(True)
-    QTest.qWait(500)
+    reference_slide.setCurrentTime(reference_slide.duration())
+    settings_slide.setCurrentTime(settings_slide.duration())
     assert view.reference_pane.maximumWidth() == view.REFERENCE_WIDTH
     assert view.reference_pane.isVisible() and not view.gear.isChecked()
-    QTest.qWait(500)
-    assert view.pane.maximumWidth() == 0
+    assert view.pane.maximumWidth() == 0 and view.pane.isHidden()
     view.gear.setChecked(True)
     assert not view.book_btn.isChecked()
-    QTest.qWait(500)
+    reference_slide.setCurrentTime(reference_slide.duration())
+    settings_slide.setCurrentTime(settings_slide.duration())
     assert view.reference_pane.maximumWidth() == 0
-    view.gear.setChecked(False)
+    assert view.reference_pane.isHidden() and view.pane.isVisible()
+    view.close()
 
 
 def test_a_change_in_the_settings_asks_a_new_question_straight_away(
@@ -939,7 +943,9 @@ def test_a_second_submit_after_the_question_is_answered_is_ignored(
     app : QApplication
         The shared Qt application.
     """
-    view = view_of(KeySignatures(), seed=2)
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    view = view_of(KeySignatures(), seed=2, learner=learner)
     q = asked(view)
     right = next(b for b in view.buttons if b.text() == q.answer)
     right.click()
@@ -947,6 +953,10 @@ def test_a_second_submit_after_the_question_is_answered_is_ignored(
         q.answer,
         button=right,
     )  # the button is disabled and the question answered
+    # The shared recording path also rejects a duplicate graded answer.
+    view._record(True, choice=q.answer)
+    assert db.conn.execute("SELECT COUNT(*) FROM attempts").fetchone()[0] == 1
+    assert view.session.attempts == 1
     assert (view.correct, view.total) == (1, 1)
     view._advance.stop()
 

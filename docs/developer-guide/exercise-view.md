@@ -32,7 +32,7 @@ The staff stores the pitches in columns, sizes itself to fit the music, and requ
 
 #### 2. Toolbar
 
-The constructor places the score, help button, and exercise tools in a horizontal row above the staff. The sliders button stays checked while the settings pane is open. Its toggle signal tells the view when to expand or collapse the pane. [View constructor]({{ '/api/alto.ui.exercise_view/class-exerciseview/' | relative_url }})
+`ExerciseView._build_toolbar()` builds a horizontal row for the score, help button, and exercise tools. The constructor adds that row above the staff. The stretch after **Back to lesson** pushes the score and remaining controls to the right. The sliders button opens and closes the settings pane.
 
 {% include exercise-view-source.html name="toolbar" %}
 
@@ -77,9 +77,9 @@ self.settings_panel.parentWidget() is self.pane
 
 Set a breakpoint in `ExerciseView.submit()` and click the name of the note you see. The button passes its choice string to `submit()`, which calls `q.check(choice)`. For the middle C example, clicking **C** succeeds. The staff drawing has already done its job by this point. The comparison uses the answer stored in the question. [ExerciseView.submit]({{ '/api/alto.ui.exercise_view/class-exerciseview/#exerciseviewsubmit' | relative_url }}) · [Question.check]({{ '/api/alto.exercises.base/class-question/#questioncheck' | relative_url }})
 
-Step into `_record()`. It increments the attempt number and passes the question, submitted answer, correctness, and elapsed time to `Learner.record()` for the active profile. Every graded attempt goes into the history. Only the first attempt on this showing counts toward the view’s score and streak. [Learner.record]({{ '/api/alto.learning.learner/class-learner/#learnerrecord' | relative_url }})
+Step into `_record()`. The view asks `PracticeSession.after_attempt()` for the updated attempt count, score, and retry decision. With an active profile, the view also passes the attempt number, submitted answer, and elapsed time to the learner. Try a wrong answer and then a correct retry in ordinary practice. The history shows two attempts, and the score shows one missed question. [PracticeSession]({{ '/api/alto.learning.practice_session/class-practicesession/' | relative_url }}) · [Learner.record]({{ '/api/alto.learning.learner/class-learner/#learnerrecord' | relative_url }})
 
-A correct answer reaches `_finish_answer()`, which marks it answered and plays the note when sound is on. Try a wrong button on another question. It flashes red, and `_after_miss()` consults the practice mode. In ordinary ASRS or ARTS practice you can try another button on the same note. With SM-2 or FSRS, the scheduler brings the missed card back for review. [Practice modes]({{ '/practice/' | relative_url }})
+A correct answer finishes the question. The view plays the note when sound is on. Try a wrong button on another question. It flashes red, and the view reads the session’s decision. In ordinary ASRS or ARTS practice you can try another button on the same note. In shuffle mode the miss ends that turn. With SM-2 or FSRS, the scheduler brings the missed card back for review. [Practice modes]({{ '/practice/' | relative_url }})
 
 ## A two-part answer
 

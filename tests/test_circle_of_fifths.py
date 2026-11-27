@@ -1338,7 +1338,11 @@ def test_a_two_name_answer_is_recorded_once_with_both_names(
         view.next_question()
     q = view.question
     assert q is not None and q.required
-    for name in q.required:
+    first, *remaining = q.required
+    button(view, first).click()
+    assert view.session.attempts == view.total == 0
+    assert not view.answered
+    for name in remaining:
         button(view, name).click()
     finish(view)
     rows = db.conn.execute("SELECT answer, correct FROM attempts").fetchall()

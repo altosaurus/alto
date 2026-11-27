@@ -116,7 +116,7 @@ def shown() -> set[str]:
     return found
 
 
-def test_launch_screens_link_visible_regions_to_api_classes() -> None:
+def test_launch_screens_link_visible_regions_to_their_code() -> None:
     """
     Check the paired images, region bounds, and destination of each link
     in the launch guide.
@@ -137,8 +137,23 @@ def test_launch_screens_link_visible_regions_to_api_classes() -> None:
                 screen,
                 region,
             )
-            module, slug = region["href"].strip("/").split("/")[1:]
             name = region["type"]
+            if name.endswith("()"):
+                page, section = region["href"].split("#")
+                guide = (ROOT / "docs" / (page.strip("/") + ".md")).read_text()
+                assert f'exercise-view-source.html name="{section}"' in guide
+                selections = json.loads(
+                    (
+                        ROOT / "docs/_data/exercise_view_excerpts.json"
+                    ).read_text(),
+                )
+                assert name == f"ExerciseView.{selections[section][0]}()"
+                assert section in excerpts(
+                    (ROOT / "alto/ui/exercise_view.py").read_text(),
+                    selections=selections,
+                )
+                continue
+            module, slug = region["href"].strip("/").split("/")[1:]
             assert slug == f"class-{name.lower()}"
             source = ROOT.joinpath(*module.split(".")).with_suffix(".py")
             assert any(
@@ -200,7 +215,7 @@ def test_exercise_view_screenshot_labels_the_visible_widgets() -> None:
     )
     assert [region["type"] for region in regions[screen]] == [
         "StaffWidget",
-        "ExerciseView",
+        "ExerciseView._build_toolbar()",
         "DegreeButton",
         "NoteNameSettingsPanel",
     ]
