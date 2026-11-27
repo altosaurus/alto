@@ -18,6 +18,7 @@ from PySide6.QtCore import (
     Qt,
 )
 from PySide6.QtGui import (
+    QColor,
     QKeyEvent,
     QMouseEvent,
     QWheelEvent,
@@ -40,6 +41,7 @@ from alto.theory.scales import format_key_signature
 from alto.ui import exercise_settings as es
 from alto.ui import motion
 from alto.ui import settings_panel as sp
+from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.exercise_page import ExercisePage
 from alto.ui.home import (
     EXERCISE_ICONS,
@@ -992,3 +994,12 @@ def test_the_settings_pane_saves_under_its_own_name(app: QApplication) -> None:
         and -6 not in settings.key_construction.keys
     )
     assert settings.key_signatures.keys == set(range(-7, 8))
+
+
+@pytest.mark.usefixtures("app")
+def test_standalone_fork_flash_reaches_feedback_color() -> None:
+    """Finish the fade on the feedback color."""
+    fork = KeyFork()
+    animation = fork.flash()
+    animation.setCurrentTime(animation.duration())
+    assert fork._marker_color == QColor(CORRECT_ANSWER_COLOR)

@@ -644,6 +644,7 @@ def test_notes_are_spoken_with_their_signs_in_words() -> None:
     Check the words a screen reader is given for a note.
     """
     assert note_words(Note.parse("F#4")) == "F sharp 4"
+    assert note_words(Note.parse("F#4"), naming="degrees") == "F sharp 4"
     assert note_words(Note.parse("Bb3")) == "B flat 3"
     assert note_words(Note.parse("C4")) == "C 4"
     assert note_name(Note.parse("F#4")) == "F♯4"

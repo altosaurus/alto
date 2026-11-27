@@ -8,9 +8,11 @@ from PySide6.QtTest import QSignalSpy
 
 from alto.exercises.base import Question
 from alto.exercises.library import BeatIdentification, NoteNames
+from alto.theory.pitch import Note
 from alto.ui import motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.exercise_controller import AnswerResult, ExerciseController
+from alto.ui.exercise_feedback import ExerciseFeedback
 from alto.ui.exercise_view import ExerciseView
 
 
@@ -67,6 +69,8 @@ def test_passive_view_emits_input_without_grading() -> None:
     question = Question("", choices=["C", "D"], answer="C")
     view.show_question(question)
     selected = QSignalSpy(view.control_area.answers.choice_selected)
+    view.question_view.key_action("up")
+    assert selected.count() == 0
     view.control_area.answers.buttons[0].click()
     assert selected.at(0) == ["C"]
     assert view.session.attempts == 0
@@ -105,6 +109,15 @@ def test_controller_connects_displayed_choices_to_grading() -> None:
 def test_late_feedback_on_an_empty_display() -> None:
     """Ignore feedback after the last question leaves the screen."""
     view = ExerciseView(NoteNames())
+    music = view.question_view
+    music.beats_changed.emit()
+    music.pick_accidental(1)
+    music.move_caret(1)
+    music.place_here()
+    music.enter_midi_note(Note.parse("C4"))
+    music.show_result(AnswerResult("note", False, "C", hint="Try again"))
+    music.reset_placement("note")
+    assert music.placement_hint == ""
     view.show_selection({"name": "C"})
     view.show_result(AnswerResult("choice", True, "C"), "Wait")
     view.show_retry("pair")
@@ -122,6 +135,19 @@ def test_late_feedback_on_an_empty_display() -> None:
     assert view.question_view.displayed_question is notice
     assert view.question_view.interactive_question is None
     assert view.question_view.prompt.text() == notice.prompt
+
+
+@pytest.mark.usefixtures("app")
+def test_playback_requires_a_correct_answer_and_current_question() -> None:
+    """Ignore late or incorrect feedback before starting playback."""
+    controller = ExerciseController(NoteNames(), rng=random.Random(1))
+    view = ExerciseView(controller.exercise)
+    feedback = ExerciseFeedback(view, controller=controller)
+    feedback.play(AnswerResult("choice", True, "C"), mode="Wait")
+    assert feedback.generation == -1
+    controller.next_question()
+    feedback.play(AnswerResult("choice", False, "D"), mode="Wait")
+    assert feedback.generation == -1
 
 
 @pytest.mark.usefixtures("app")
