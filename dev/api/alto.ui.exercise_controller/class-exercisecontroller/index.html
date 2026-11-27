@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>note_name · Alto</title>
+<title>ExerciseController · Alto</title>
   <script>
   // Apply a remembered choice before the page paints, so there is no flash of the other theme.
   try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
@@ -19,20 +19,20 @@
     <script src="../../../_static/documentation_options.js?v=a5603611"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <link rel="canonical" href="https://altosaurus.github.io/alto/api/alto.ui.exercise_view/function-note_name/" />
+    <link rel="canonical" href="https://altosaurus.github.io/alto/api/alto.ui.exercise_controller/class-exercisecontroller/" />
     <link rel="icon" href="../../../_static/icon.png"/>
     <link rel="author" title="About these documents" href="../../../about/" />
     <link rel="search" title="Search" href="../../../search/" />
-    <link rel="next" title="note_words" href="../function-note_words/" />
-    <link rel="prev" title="alto.ui.exercise_view" href="../" />
+    <link rel="next" title="alto.ui.exercise_feedback" href="../../alto.ui.exercise_feedback/" />
+    <link rel="prev" title="FeedbackAnimations" href="../class-feedbackanimations/" />
    
   <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
-  <meta property="og:title" content="note_name · Alto">
+  <meta property="og:title" content="ExerciseController · Alto">
   <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
-  <meta property="og:url" content="https://altosaurus.github.io/alto/api/alto.ui.exercise_view/function-note_name/">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/api/alto.ui.exercise_controller/class-exercisecontroller/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
   
@@ -293,6 +293,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.theory.key_signatures"><li><a class="row" href="../../alto.theory.key_signatures/function-key_signature_positions/">key_signature_positions</a></li><li><a class="row" href="../../alto.theory.key_signatures/function-written_signature/">written_signature</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.theory.note_naming/">note_naming</a>
+      <button type="button" class="nav-toggle" data-category="note_naming" aria-controls="nav-api/alto.theory.note_naming" aria-expanded="true" aria-label="Collapse note_naming" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.theory.note_naming"><li><a class="row" href="../../alto.theory.note_naming/function-spell/">spell</a></li><li><a class="row" href="../../alto.theory.note_naming/function-note_name/">note_name</a></li><li><a class="row" href="../../alto.theory.note_naming/function-note_words/">note_words</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.theory.pitch/">pitch</a>
       <button type="button" class="nav-toggle" data-category="pitch" aria-controls="nav-api/alto.theory.pitch" aria-expanded="true" aria-label="Collapse pitch" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -358,6 +363,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.colors"><li><a class="row" href="../../alto.ui.colors/function-blend/">blend</a></li><li><a class="row" href="../../alto.ui.colors/function-blend_name/">blend_name</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.ui.control_area/">control_area</a>
+      <button type="button" class="nav-toggle" data-category="control_area" aria-controls="nav-api/alto.ui.control_area" aria-expanded="true" aria-label="Collapse control_area" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.control_area"><li><a class="row" href="../../alto.ui.control_area/class-controlarea/">ControlArea</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.database_page/">database_page</a>
       <button type="button" class="nav-toggle" data-category="database_page" aria-controls="nav-api/alto.ui.database_page" aria-expanded="true" aria-label="Collapse database_page" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -378,6 +388,21 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.engraving"><li><a class="row" href="../../alto.ui.engraving/function-notation_glyph/">notation_glyph</a></li><li><a class="row" href="../../alto.ui.engraving/function-staff_line_width/">staff_line_width</a></li><li><a class="row" href="../../alto.ui.engraving/function-ledger_width/">ledger_width</a></li><li><a class="row" href="../../alto.ui.engraving/function-fill_path/">fill_path</a></li><li><a class="row" href="../../alto.ui.engraving/function-draw_note/">draw_note</a></li><li><a class="row" href="../../alto.ui.engraving/function-draw_beamed_notes/">draw_beamed_notes</a></li><li><a class="row" href="../../alto.ui.engraving/function-draw_clef/">draw_clef</a></li><li><a class="row" href="../../alto.ui.engraving/function-accidental_width/">accidental_width</a></li><li><a class="row" href="../../alto.ui.engraving/function-draw_accidental/">draw_accidental</a></li><li><a class="row" href="../../alto.ui.engraving/function-draw_brace/">draw_brace</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../">exercise_controller</a>
+      <button type="button" class="nav-toggle" data-category="exercise_controller" aria-controls="nav-api/alto.ui.exercise_controller" aria-expanded="true" aria-label="Collapse exercise_controller" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.exercise_controller"><li><a class="row" href="../class-answerresult/">AnswerResult</a></li><li><a class="row" href="../class-feedbackanimations/">FeedbackAnimations</a></li><li><a class="row" href="#" aria-current="page">ExerciseController</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.ui.exercise_feedback/">exercise_feedback</a>
+      <button type="button" class="nav-toggle" data-category="exercise_feedback" aria-controls="nav-api/alto.ui.exercise_feedback" aria-expanded="true" aria-label="Collapse exercise_feedback" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.exercise_feedback"><li><a class="row" href="../../alto.ui.exercise_feedback/class-exercisefeedback/">ExerciseFeedback</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.ui.exercise_page/">exercise_page</a>
+      <button type="button" class="nav-toggle" data-category="exercise_page" aria-controls="nav-api/alto.ui.exercise_page" aria-expanded="true" aria-label="Collapse exercise_page" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.exercise_page"><li><a class="row" href="../../alto.ui.exercise_page/class-exercisepage/">ExercisePage</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.exercise_settings/">exercise_settings</a>
       <button type="button" class="nav-toggle" data-category="exercise_settings" aria-controls="nav-api/alto.ui.exercise_settings" aria-expanded="true" aria-label="Collapse exercise_settings" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -388,11 +413,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.exercise_toolbar"><li><a class="row" href="../../alto.ui.exercise_toolbar/class-exercisetoolbar/">ExerciseToolbar</a></li></ul></li><li><div class="nav-row">
-      <a class="row" href="../">exercise_view</a>
+      <a class="row" href="../../alto.ui.exercise_view/">exercise_view</a>
       <button type="button" class="nav-toggle" data-category="exercise_view" aria-controls="nav-api/alto.ui.exercise_view" aria-expanded="true" aria-label="Collapse exercise_view" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-api/alto.ui.exercise_view"><li><a class="row" href="#" aria-current="page">note_name</a></li><li><a class="row" href="../function-note_words/">note_words</a></li><li><a class="row" href="../class-exerciseview/">ExerciseView</a></li></ul></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-api/alto.ui.exercise_view"><li><a class="row" href="../../alto.ui.exercise_view/class-exerciseview/">ExerciseView</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.fingerboard/">fingerboard</a>
       <button type="button" class="nav-toggle" data-category="fingerboard" aria-controls="nav-api/alto.ui.fingerboard" aria-expanded="true" aria-label="Collapse fingerboard" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -528,11 +553,16 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.question_view"><li><a class="row" href="../../alto.ui.question_view/class-questionview/">QuestionView</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../../alto.ui.rating_controls/">rating_controls</a>
+      <button type="button" class="nav-toggle" data-category="rating_controls" aria-controls="nav-api/alto.ui.rating_controls" aria-expanded="true" aria-label="Collapse rating_controls" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.rating_controls"><li><a class="row" href="../../alto.ui.rating_controls/class-ratingcontrols/">RatingControls</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.reference/">reference</a>
       <button type="button" class="nav-toggle" data-category="reference" aria-controls="nav-api/alto.ui.reference" aria-expanded="true" aria-label="Collapse reference" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-api/alto.ui.reference"><li><a class="row" href="../../alto.ui.reference/class-explorablecircle/">ExplorableCircle</a></li><li><a class="row" href="../../alto.ui.reference/class-referencepanel/">ReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-clefreferencepanel/">ClefReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-scalereferencepanel/">ScaleReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-notereferencepanel/">NoteReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-pluginreferencepanel/">PluginReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/function-reference_panel_for/">reference_panel_for</a></li></ul></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-api/alto.ui.reference"><li><a class="row" href="../../alto.ui.reference/class-explorablecircle/">ExplorableCircle</a></li><li><a class="row" href="../../alto.ui.reference/class-referencepane/">ReferencePane</a></li><li><a class="row" href="../../alto.ui.reference/class-referencepanel/">ReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-clefreferencepanel/">ClefReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-scalereferencepanel/">ScaleReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-notereferencepanel/">NoteReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-pluginreferencepanel/">PluginReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/function-reference_panel_for/">reference_panel_for</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.response_times/">response_times</a>
       <button type="button" class="nav-toggle" data-category="response_times" aria-controls="nav-api/alto.ui.response_times" aria-expanded="true" aria-label="Collapse response_times" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -682,7 +712,7 @@
       <button type="button" class="nav-toggle" data-category="settings" aria-controls="nav-api/alto.settings" aria-expanded="true" aria-label="Collapse settings" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-api/alto.settings"><li><a class="row" href="../../alto.settings/function-spell/">spell</a></li><li><a class="row" href="../../alto.settings/function-diatonic_name/">diatonic_name</a></li><li><a class="row" href="../../alto.settings/class-clefchoice/">ClefChoice</a></li><li><a class="row" href="../../alto.settings/class-keychoice/">KeyChoice</a></li><li><a class="row" href="../../alto.settings/class-staffrangesettings/">StaffRangeSettings</a></li><li><a class="row" href="../../alto.settings/class-notenamesettings/">NoteNameSettings</a></li><li><a class="row" href="../../alto.settings/class-packexercisesettings/">PackExerciseSettings</a></li><li><a class="row" href="../../alto.settings/class-intervalsettings/">IntervalSettings</a></li><li><a class="row" href="../../alto.settings/function-beat_note/">beat_note</a></li><li><a class="row" href="../../alto.settings/function-key_name/">key_name</a></li><li><a class="row" href="../../alto.settings/class-keyboardsettings/">KeyboardSettings</a></li><li><a class="row" href="../../alto.settings/function-keyboard_interval_name/">keyboard_interval_name</a></li><li><a class="row" href="../../alto.settings/class-keyboardintervalsettings/">KeyboardIntervalSettings</a></li><li><a class="row" href="../../alto.settings/class-constructionsettings/">ConstructionSettings</a></li><li><a class="row" href="../../alto.settings/class-arpeggiosettings/">ArpeggioSettings</a></li><li><a class="row" href="../../alto.settings/class-keysignaturesettings/">KeySignatureSettings</a></li><li><a class="row" href="../../alto.settings/class-orderofkeyssettings/">OrderOfKeysSettings</a></li><li><a class="row" href="../../alto.settings/class-keyconstructionsettings/">KeyConstructionSettings</a></li><li><a class="row" href="../../alto.settings/class-scaleidentificationsettings/">ScaleIdentificationSettings</a></li><li><a class="row" href="../../alto.settings/class-scaleconstructionsettings/">ScaleConstructionSettings</a></li><li><a class="row" href="../../alto.settings/class-clefbasicssettings/">ClefBasicsSettings</a></li><li><a class="row" href="../../alto.settings/class-notationsettings/">NotationSettings</a></li><li><a class="row" href="../../alto.settings/class-circlesettings/">CircleSettings</a></li></ul></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-api/alto.settings"><li><a class="row" href="../../alto.settings/function-diatonic_name/">diatonic_name</a></li><li><a class="row" href="../../alto.settings/class-clefchoice/">ClefChoice</a></li><li><a class="row" href="../../alto.settings/class-keychoice/">KeyChoice</a></li><li><a class="row" href="../../alto.settings/class-staffrangesettings/">StaffRangeSettings</a></li><li><a class="row" href="../../alto.settings/class-notenamesettings/">NoteNameSettings</a></li><li><a class="row" href="../../alto.settings/class-packexercisesettings/">PackExerciseSettings</a></li><li><a class="row" href="../../alto.settings/class-intervalsettings/">IntervalSettings</a></li><li><a class="row" href="../../alto.settings/function-beat_note/">beat_note</a></li><li><a class="row" href="../../alto.settings/function-key_name/">key_name</a></li><li><a class="row" href="../../alto.settings/class-keyboardsettings/">KeyboardSettings</a></li><li><a class="row" href="../../alto.settings/function-keyboard_interval_name/">keyboard_interval_name</a></li><li><a class="row" href="../../alto.settings/class-keyboardintervalsettings/">KeyboardIntervalSettings</a></li><li><a class="row" href="../../alto.settings/class-constructionsettings/">ConstructionSettings</a></li><li><a class="row" href="../../alto.settings/class-arpeggiosettings/">ArpeggioSettings</a></li><li><a class="row" href="../../alto.settings/class-keysignaturesettings/">KeySignatureSettings</a></li><li><a class="row" href="../../alto.settings/class-orderofkeyssettings/">OrderOfKeysSettings</a></li><li><a class="row" href="../../alto.settings/class-keyconstructionsettings/">KeyConstructionSettings</a></li><li><a class="row" href="../../alto.settings/class-scaleidentificationsettings/">ScaleIdentificationSettings</a></li><li><a class="row" href="../../alto.settings/class-scaleconstructionsettings/">ScaleConstructionSettings</a></li><li><a class="row" href="../../alto.settings/class-clefbasicssettings/">ClefBasicsSettings</a></li><li><a class="row" href="../../alto.settings/class-notationsettings/">NotationSettings</a></li><li><a class="row" href="../../alto.settings/class-circlesettings/">CircleSettings</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.terms/">terms</a>
       <button type="button" class="nav-toggle" data-category="terms" aria-controls="nav-api/alto.terms" aria-expanded="true" aria-label="Collapse terms" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -708,19 +738,343 @@
           <nav class="breadcrumbs" aria-label="Breadcrumb">
             <ol>
               <li><a href="../../../">Home</a></li>
-              <li><a href="../../../development/">For developers</a></li><li><a href="../../">API reference</a></li><li><a href="../../alto/">alto</a></li><li><a href="../../alto.ui/">alto.ui</a></li><li><a href="../">alto.ui.exercise_view</a></li>
-              <li aria-current="page">note_name</li>
+              <li><a href="../../../development/">For developers</a></li><li><a href="../../">API reference</a></li><li><a href="../../alto/">alto</a></li><li><a href="../../alto.ui/">alto.ui</a></li><li><a href="../">alto.ui.exercise_controller</a></li>
+              <li aria-current="page">ExerciseController</li>
             </ol>
           </nav>
           
           
-  <section id="note-name">
-<h1>note_name</h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="alto.ui.exercise_view.note_name">
-<span id="note_name"></span><span class="sig-prename descclassname"><span class="pre">alto.ui.exercise_view.</span></span><span class="sig-name descname"><span class="pre">note_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">note</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../alto.theory.pitch/class-note/#alto.theory.pitch.Note" title="alto.theory.pitch.Note"><span class="pre">alto.theory.pitch.Note</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/ffdaddecfbcb2f9978b34434efcdea66d4706635/alto/ui/exercise_view.py#L153"><span class="pre">Source</span></a></dt>
-<dd><p>Return a note’s name as it is written, with its octave: F♯4.</p>
+  <section id="exercisecontroller">
+<h1>ExerciseController</h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController">
+<span id="exercisecontroller"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.exercise_controller.</span></span><span class="sig-name descname"><span class="pre">ExerciseController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../alto.exercises.base/class-exercise/#alto.exercises.base.Exercise" title="alto.exercises.base.Exercise"><span class="pre">alto.exercises.base.Exercise</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">alto.learning.Learner</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtCore.QObject</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L125"><span class="pre">Source</span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide6.QtCore.QObject</span></code></p>
+<p>Run an exercise independently of its widgets and playback device.</p>
 <table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Attributes</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">exercise</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Exercise</span></code></p></td>
+<td><p>Active exercise used to generate questions and grade answers.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>A controller can grade a pair of choices without a display.</p>
+<p><strong>Constructor</strong></p>
+<p>Prepare one independent run of an exercise.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">exercise</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Exercise</span></code></p></td>
+<td><p>Exercise whose questions and controls are in use.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rng</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">random.Random</span> <span class="pre">or</span> <span class="pre">None</span></code></p></td>
+<td><p>Random source for question selection.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">learner</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Learner</span> <span class="pre">or</span> <span class="pre">None</span></code></p></td>
+<td><p>Active profile and scheduler, if any.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">parent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QObject</span> <span class="pre">or</span> <span class="pre">None</span></code></p></td>
+<td><p>Qt object that owns this instance.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>A controller with a learner uses that profile’s practice
+queue.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.connect_view">
+<span id="exercisecontrollerconnect_view"></span><span class="sig-name descname"><span class="pre">connect_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../alto.ui.exercise_view/class-exerciseview/#alto.ui.exercise_view.ExerciseView" title="alto.ui.exercise_view.ExerciseView"><span class="pre">alto.ui.exercise_view.ExerciseView</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L214"><span class="pre">Source</span></a></dt>
+<dd><p>Connect learner input and practice updates to the screen.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">view</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ExerciseView</span></code></p></td>
+<td><p>Screen built for this controller’s exercise.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>A choice goes to the controller for grading. A retry reopens
+the editor on the screen.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.next_question">
+<span id="exercisecontrollernext_question"></span><span class="sig-name descname"><span class="pre">next_question</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L296"><span class="pre">Source</span></a></dt>
+<dd><p>End the previous presentation and publish a question or queue
+notice.</p>
+<p class="rubric">Examples</p>
+<p>Changing clefs starts a new question with the updated
+settings.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.advance">
+<span id="exercisecontrolleradvance"></span><span class="sig-name descname"><span class="pre">advance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L372"><span class="pre">Source</span></a></dt>
+<dd><p>Advance locally or request the next shuffled exercise.</p>
+<p class="rubric">Examples</p>
+<p>In shuffle practice, the window selects the next exercise.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.set_next_question_mode">
+<span id="exercisecontrollerset_next_question_mode"></span><span class="sig-name descname"><span class="pre">set_next_question_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L391"><span class="pre">Source</span></a></dt>
+<dd><p>Apply the selected pacing on the next submission.</p>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mode</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Selected Next Question option.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Selecting Wait keeps the current question on screen.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.scheduling_changed">
+<span id="exercisecontrollerscheduling_changed"></span><span class="sig-name descname"><span class="pre">scheduling_changed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L406"><span class="pre">Source</span></a></dt>
+<dd><p>Recheck availability when the open page can present it.</p>
+<p class="rubric">Examples</p>
+<p>A hidden page refreshes its scheduler when it becomes visible.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.set_visible">
+<span id="exercisecontrollerset_visible"></span><span class="sig-name descname"><span class="pre">set_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L419"><span class="pre">Source</span></a></dt>
+<dd><p>Pause or resume an interrupted presentation.</p>
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">visible</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Whether the learner can see the exercise.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Returning from a lesson resumes a pending advance timer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.application_state_changed">
+<span id="exercisecontrollerapplication_state_changed"></span><span class="sig-name descname"><span class="pre">application_state_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtCore.Qt.ApplicationState</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L457"><span class="pre">Source</span></a></dt>
+<dd><p>Exclude interrupted attempts from speed grading.</p>
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Qt.ApplicationState</span></code></p></td>
+<td><p>Application focus state reported by Qt.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Switching applications excludes the attempt from speed
+grading.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.review_intervals">
+<span id="exercisecontrollerreview_intervals"></span><span class="sig-name descname"><span class="pre">review_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L474"><span class="pre">Source</span></a></dt>
+<dd><p>Publish previews and retain the exact intervals offered for
+grading.</p>
+<p class="rubric">Examples</p>
+<p>A new card can show the duration of its next review.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.refresh_counts">
+<span id="exercisecontrollerrefresh_counts"></span><span class="sig-name descname"><span class="pre">refresh_counts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L518"><span class="pre">Source</span></a></dt>
+<dd><p>Publish current calendar queue counts while the page is
+visible.</p>
+<p class="rubric">Examples</p>
+<p>Starting a calendar review displays the remaining new cards.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.record">
+<span id="exercisecontrollerrecord"></span><span class="sig-name descname"><span class="pre">record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">choice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L549"><span class="pre">Source</span></a></dt>
+<dd><p>Record a graded attempt once with its elapsed active time.</p>
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ok</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Whether the submitted answer is correct.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">choice</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Submitted answer text.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>A correct retry records a second attempt at the same question.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.apply_rating">
+<span id="exercisecontrollerapply_rating"></span><span class="sig-name descname"><span class="pre">apply_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rating</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fsrs.Rating</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L594"><span class="pre">Source</span></a></dt>
+<dd><p>Apply the offered manual review rating and advance.</p>
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rating</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Rating</span></code></p></td>
+<td><p>Passing grade chosen by the learner.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Selecting Easy saves the interval offered for that grade.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.feedback_finished">
+<span id="exercisecontrollerfeedback_finished"></span><span class="sig-name descname"><span class="pre">feedback_finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L624"><span class="pre">Source</span></a></dt>
+<dd><p>Advance after feedback unless waiting for the learner.</p>
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">delay</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>Time in milliseconds after the last feedback onset.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Wait leaves the completed question visible until the learner
+advances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.select_part">
+<span id="exercisecontrollerselect_part"></span><span class="sig-name descname"><span class="pre">select_part</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L731"><span class="pre">Source</span></a></dt>
+<dd><p>Collect a named choice and its second part in either order.</p>
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">part</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Name of the answer row that produced the selection.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">text</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Text to display or the value selected for this part.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The learner may choose octave 4 before naming a middle C.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.submit_choice">
+<span id="exercisecontrollersubmit_choice"></span><span class="sig-name descname"><span class="pre">submit_choice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">choice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'choice'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L764"><span class="pre">Source</span></a></dt>
+<dd><p>Evaluate a choice or a location submitted by any input device.</p>
+<table class="docutils align-default" id="id11">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">choice</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Submitted answer text.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kind</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Input that produced this answer.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">selected</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tuple[str,</span> <span class="pre">...]</span></code></p></td>
+<td><p>Choice labels to mark when rendering this result.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>An enharmonic key can require both accepted names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.place_note">
+<span id="exercisecontrollerplace_note"></span><span class="sig-name descname"><span class="pre">place_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">note</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../alto.theory.pitch/class-note/#alto.theory.pitch.Note" title="alto.theory.pitch.Note"><span class="pre">alto.theory.pitch.Note</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L849"><span class="pre">Source</span></a></dt>
+<dd><p>Grade one spelled pitch on the construction staff.</p>
+<table class="docutils align-default" id="id12">
 <caption><span class="caption-text">Parameters</span></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
@@ -731,36 +1085,187 @@
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">note</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Note</span></code></p></td>
-<td><p>The note.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">or</span> <span class="pre">None,</span> <span class="pre">default</span> <span class="pre">None</span></code></p></td>
-<td><p>The major key signature for scale degrees. Without a key context, degrees fall back to letter names. Keyword-only.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">minor</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default</span> <span class="pre">False</span></code></p></td>
-<td><p>Use natural minor scale degrees. Keyword-only.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Returns</span></caption>
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
-<td><p>The name in the naming the app is set to, then the octave number.</p></td>
+<td><p>Spelled pitch entered by the learner.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">note_name</span><span class="p">(</span><span class="n">Note</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"F#4"</span><span class="p">))</span>
-<span class="go">'F♯4'</span>
-</pre></div>
-</div>
+<p>An interval construction can accept an enharmonic spelling.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.submit_scale">
+<span id="exercisecontrollersubmit_scale"></span><span class="sig-name descname"><span class="pre">submit_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../alto.theory.pitch/class-note/#alto.theory.pitch.Note" title="alto.theory.pitch.Note"><span class="pre">alto.theory.pitch.Note</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L901"><span class="pre">Source</span></a></dt>
+<dd><p>Check the notes and optional steps of a completed scale.</p>
+<table class="docutils align-default" id="id13">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">notes</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[Note]</span></code></p></td>
+<td><p>Pitches in the order entered on the staff.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">steps</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[str]</span></code></p></td>
+<td><p>Whole and half steps marked between notes.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Scale construction can ask for both notes and whole or half
+steps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.submit_clef">
+<span id="exercisecontrollersubmit_clef"></span><span class="sig-name descname"><span class="pre">submit_clef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L943"><span class="pre">Source</span></a></dt>
+<dd><p>Check the symbol and its position on the staff.</p>
+<table class="docutils align-default" id="id14">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">symbol</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Clef symbol entered on the staff.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">step</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>Staff position in diatonic steps from the bottom line.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>A treble clef places the G symbol on the second staff line.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.submit_fork">
+<span id="exercisecontrollersubmit_fork"></span><span class="sig-name descname"><span class="pre">submit_fork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L968"><span class="pre">Source</span></a></dt>
+<dd><p>Check the signed number of accidentals.</p>
+<table class="docutils align-default" id="id15">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">count</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>Signed number of sharps or flats.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>A count of minus two represents a two-flat key signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.submit_signature">
+<span id="exercisecontrollersubmit_signature"></span><span class="sig-name descname"><span class="pre">submit_signature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../alto.theory.pitch/class-note/#alto.theory.pitch.Note" title="alto.theory.pitch.Note"><span class="pre">alto.theory.pitch.Note</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L991"><span class="pre">Source</span></a></dt>
+<dd><p>Check the signs entered on the signature staff.</p>
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">notes</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[Note]</span></code></p></td>
+<td><p>Pitches in the order entered on the staff.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The submitted staff positions distinguish the chosen
+accidentals.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.submit_beats">
+<span id="exercisecontrollersubmit_beats"></span><span class="sig-name descname"><span class="pre">submit_beats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">marks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L1012"><span class="pre">Source</span></a></dt>
+<dd><p>Grade the positions marked across the two measures.</p>
+<table class="docutils align-default" id="id17">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">marks</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[int]</span></code></p></td>
+<td><p>Onset positions the learner marked as beats.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Beat Construction compares marked onsets across both measures.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.played_pitch">
+<span id="exercisecontrollerplayed_pitch"></span><span class="sig-name descname"><span class="pre">played_pitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L1038"><span class="pre">Source</span></a></dt>
+<dd><p>Interpret a MIDI note using the active question’s pitch
+spelling.</p>
+<table class="docutils align-default" id="id18">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pitch</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>MIDI note number, including its octave.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>MIDI note 60 can answer a question asking for middle C.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.exercise_controller.ExerciseController.locate">
+<span id="exercisecontrollerlocate"></span><span class="sig-name descname"><span class="pre">locate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/exercise_controller.py#L1108"><span class="pre">Source</span></a></dt>
+<dd><p>Translate a notation hit test into an answer for the current
+card.</p>
+<table class="docutils align-default" id="id19">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hit</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Whether the pointer hit the requested staff symbol.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Clicking the requested symbol submits its accepted answer.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -769,20 +1274,20 @@
           
           <nav class="page-nav" aria-label="Previous and next pages">
             
-            <a class="prev" rel="prev" href="../">
+            <a class="prev" rel="prev" href="../class-feedbackanimations/">
               <span class="np-label">Previous</span>
               <span class="np-title">
                 <svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>
-                alto.ui.exercise_view
+                FeedbackAnimations
                 
               </span>
             </a>
             
-            <a class="next" rel="next" href="../function-note_words/">
+            <a class="next" rel="next" href="../../alto.ui.exercise_feedback/">
               <span class="np-label">Next</span>
               <span class="np-title">
                 
-                note_words
+                alto.ui.exercise_feedback
                 <svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg>
               </span>
             </a>
