@@ -482,6 +482,8 @@ def test_the_wheel_over_the_music_or_the_answer_button_moves_the_circle(
         The shared Qt application.
     """
     view = ExerciseView(KeySignatureConstruction(), rng=random.Random(1))
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     view.show()
     here = QPointF(5, 5)
     turn = QWheelEvent(
@@ -494,10 +496,17 @@ def test_the_wheel_over_the_music_or_the_answer_button_moves_the_circle(
         Qt.ScrollPhase.NoScrollPhase,
         False,
     )
-    assert view.eventFilter(view.staff, turn) and view.fork.value == 1
-    assert view.eventFilter(view.answer_button, turn) and view.fork.value == 2
-    view.fork.hide()
-    assert not view.eventFilter(view.staff, turn) and view.fork.value == 2
+    assert view.question_view.staff is not None
+    assert view.eventFilter(view.question_view.staff, turn) and fork.value == 1
+    assert (
+        view.eventFilter(view.answer_controls.placement.answer_button, turn)
+        and fork.value == 2
+    )
+    fork.hide()
+    assert (
+        not view.eventFilter(view.question_view.staff, turn)
+        and fork.value == 2
+    )
     view.close()
 
 
@@ -629,25 +638,31 @@ def test_the_screen_shows_a_blank_staff_with_the_key_name_and_the_fork(
         The shared Qt application.
     """
     view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     view.resize(900, 700)
     view.show()
     q = view.question
     assert q is not None
     assert (
-        view.staff.isVisibleTo(view)
-        and view.staff.key == 0
-        and view.staff.columns == []
+        view.question_view.staff.isVisibleTo(view)
+        and view.question_view.staff.key == 0
+        and view.question_view.staff.columns == []
     )
     assert (
-        view.staff.caption == q.caption and view.prompt.isHidden()
+        view.question_view.staff.caption == q.caption
+        and view.prompt.isHidden()
     )  # the name is in the music, not above it
     assert (
-        view.fork.isVisibleTo(view)
-        and view.fork.value == 0
-        and view.answer_button.isVisibleTo(view)
+        fork.isVisibleTo(view)
+        and fork.value == 0
+        and view.answer_controls.placement.answer_button.isVisibleTo(view)
     )
-    assert view.answer_button.text() == "Answer"
-    assert view.buttons == [] and not view.input_staff.isVisibleTo(view)
+    assert view.answer_controls.placement.answer_button.text() == "Answer"
+    assert (
+        view.answer_controls.buttons == []
+        and view.question_view.editor is not None
+    )
 
 
 def test_other_exercises_do_not_show_the_fork(app: QApplication) -> None:
@@ -662,9 +677,40 @@ def test_other_exercises_do_not_show_the_fork(app: QApplication) -> None:
     """
     view = ExerciseView(KeySignatures(), rng=random.Random(4))
     view.show()
-    assert not view.fork.isVisibleTo(
-        view,
-    ) and not view.answer_button.isVisibleTo(view)
+    assert view.findChild(KeyFork) is None
+    assert not view.answer_controls.placement.answer_button.isVisibleTo(view)
+
+
+def test_fork_follows_the_question_type(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Add and retire the fork when one view switches question types.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Supply alternating construction and identification questions.
+    """
+    view = ExerciseView(KeySignatures(), rng=random.Random(4))
+    choice = view.question
+    assert choice is not None and view.findChild(KeyFork) is None
+    build = KeySignatureConstruction().generate(random.Random(1))
+    questions = iter((build, choice, build))
+    monkeypatch.setattr(view, "_pick_question", questions.__next__)
+    view.next_question()
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
+    view.next_question()
+    assert view.question_view.editor is None and fork.isHidden()
+    app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+    assert view.findChild(KeyFork) is None
+    view.next_question()
+    assert isinstance(view.question_view.editor, KeyFork)
+    assert view.question_view.editor.value == 0
 
 
 def test_the_staff_follows_the_fork(app: QApplication) -> None:
@@ -677,14 +723,16 @@ def test_the_staff_follows_the_fork(app: QApplication) -> None:
         The shared Qt application.
     """
     view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     q = view.question
     assert q is not None
     for value in (3, -5, 0, 7):
-        view.fork.set_value(value)
+        fork.set_value(value)
         assert (
-            view.staff.key == value
-            and view.staff.caption == q.caption
-            and view.staff.clef == q.clef
+            view.question_view.staff.key == value
+            and view.question_view.staff.caption == q.caption
+            and view.question_view.staff.clef == q.clef
         )
 
 
@@ -701,22 +749,24 @@ def test_the_staff_keeps_its_width_whatever_signature_is_picked(
         The shared Qt application.
     """
     view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     view.resize(1400, 800)
     view.show()
     widths = set()
     for value in (0, 3, -7, 7, 1, -1, 0):
-        view.fork.set_value(value, slide=False)
+        fork.set_value(value, slide=False)
         app.processEvents()
         widths.add(
             (
-                view.staff.maximumWidth(),
-                view.staff.sizeHint().width(),
-                view.staff.width(),
+                view.question_view.staff.maximumWidth(),
+                view.question_view.staff.sizeHint().width(),
+                view.question_view.staff.width(),
             ),
         )
     assert len(widths) == 1
     other = ExerciseView(KeySignatures(), rng=random.Random(4))
-    assert other.staff.key_room == 0
+    assert other.question_view.staff.key_room == 0
 
 
 def test_a_right_signature_is_scored_and_moves_on_with_no_sound(
@@ -747,24 +797,28 @@ def test_a_right_signature_is_scored_and_moves_on_with_no_sound(
         lambda streak: played.append(streak),
     )
     view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     first = view.question
     assert first is not None
-    view.fork.set_value(first.key)
-    view.answer_button.click()
+    fork.set_value(first.key)
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.answered
-        and (view.correct, view.total, view.streak) == (1, 1, 1)
-        and view.fork.locked
+        view.session.answered
+        and (view.session.correct, view.session.total, view.session.streak)
+        == (1, 1, 1)
+        and fork.locked
     )
-    view.answer_button.click()  # a second press does not score again
-    assert view.total == 1
+    # A second press does not score again.
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.total == 1
     view._advance.stop()
     view.next_question()
     assert (
         view.question is not first
-        and not view.fork.locked
-        and view.fork.value == 0
-        and view.staff.key == 0
+        and not fork.locked
+        and fork.value == 0
+        and view.question_view.staff.key == 0
     )
     assert played == []
 
@@ -782,26 +836,32 @@ def test_wrong_signature_counts_against_first_try_and_fork(
         The shared Qt application.
     """
     view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     q = view.question
     assert q is not None
-    view.fork.set_value(q.key + 1 if q.key < 7 else q.key - 1)
-    view.answer_button.click()
+    fork.set_value(q.key + 1 if q.key < 7 else q.key - 1)
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.missed
-        and not view.answered
-        and view.total == 1
-        and view.correct == 0
-        and view.streak == 0
+        view.session.missed
+        and not view.session.answered
+        and view.session.total == 1
+        and view.session.correct == 0
+        and view.session.streak == 0
     )
-    assert view.fork.locked
+    assert fork.locked
     motion.settle()
     assert (
-        not view.fork.locked and view.fork.value == 0 and view.staff.key == 0
+        not fork.locked
+        and fork.value == 0
+        and view.question_view.staff.key == 0
     )
-    view.fork.set_value(q.key)
-    view.answer_button.click()
+    fork.set_value(q.key)
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.answered and view.total == 1 and view.correct == 0
+        view.session.answered
+        and view.session.total == 1
+        and view.session.correct == 0
     )  # only the first try counts toward the score
     view._advance.stop()
 
@@ -825,14 +885,16 @@ def test_every_try_is_recorded_with_the_signature_that_was_built(
         rng=random.Random(4),
         learner=learner,
     )
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     q = view.question
     assert q is not None
     wrong = q.key + 1 if q.key < 7 else q.key - 1
-    view.fork.set_value(wrong)
-    view.answer_button.click()
+    fork.set_value(wrong)
+    view.answer_controls.placement.answer_button.click()
     motion.settle()
-    view.fork.set_value(q.key)
-    view.answer_button.click()
+    fork.set_value(q.key)
+    view.answer_controls.placement.answer_button.click()
     view._advance.stop()
     rows = db.conn.execute(
         "SELECT answer, correct FROM attempts ORDER BY id",
@@ -856,9 +918,11 @@ def test_a_changed_setting_gives_a_fresh_blank_question(
         The shared Qt application.
     """
     view = ExerciseView(KeySignatureConstruction(), rng=random.Random(4))
-    view.fork.set_value(5)
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
+    fork.set_value(5)
     view.settings_panel.changed.emit()
-    assert view.fork.value == 0 and view.staff.key == 0
+    assert fork.value == 0 and view.question_view.staff.key == 0
 
 
 # -- the home page and the settings

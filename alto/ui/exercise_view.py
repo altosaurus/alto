@@ -15,7 +15,7 @@ Examples
 ... )
 >>> # noinspection PyUnresolvedReferences
 >>> view.question.answer in [
-...     button.text() for button in view.buttons
+...     button.text() for button in view.answer_controls.buttons
 ... ]
 True
 """
@@ -24,7 +24,6 @@ from __future__ import annotations
 
 import math
 import random
-import re
 import sys
 import time
 from dataclasses import replace
@@ -54,7 +53,6 @@ from PySide6.QtGui import (
     QWheelEvent,
 )
 from PySide6.QtWidgets import (
-    QAbstractButton,
     QApplication,
     QButtonGroup,
     QFrame,
@@ -73,7 +71,6 @@ from PySide6.QtWidgets import (
 from alto import settings as app_settings
 from alto.audio import DEFAULT_NOTE_GAP_MS, MELODIC_INTERVAL_GAP_MS, sounds
 from alto.exercises.base import (
-    ChoiceExercise,
     Exercise,
     PicturePosition,
     Question,
@@ -85,8 +82,6 @@ from alto.exercises.library import (
     BeatIdentification,
     IntervalConstruction,
     IntervalNames,
-    KeyboardIntervals,
-    NotationIdentification,
     NoteNames,
     OrderOfKeys,
     RythmicEquations,
@@ -108,49 +103,36 @@ from alto.settings import spell
 from alto.theory.beat_placement import grade_beat_marks
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
-    QUALITY_NAMES,
     Interval,
     Note,
 )
 from alto.theory.scales import format_key_signature
 from alto.ui import motion
-from alto.ui.answer_bank import AnswerBank
+from alto.ui.answer_controls import AnswerControls
+from alto.ui.answer_controls import choice_keys as choice_keys
+from alto.ui.answer_controls import second_row_keys as second_row_keys
 from alto.ui.circle import FifthsCircle
 from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
 from alto.ui.degree_text import (
-    DegreeButton,
     DegreeLabel,
 )
-from alto.ui.fingerboard import FingerboardWidget
-from alto.ui.icons import (
-    BOOK,
-    SLIDERS,
-    SPEAKER_MUTED,
-    SPEAKER_ON,
-    set_palette_icon,
-    set_svg_icon,
-)
+from alto.ui.exercise_toolbar import ExerciseToolbar
+from alto.ui.icons import set_palette_icon
 from alto.ui.key_fork import (
-    MAX_ACCIDENTALS,
     KeyFork,
 )
-from alto.ui.keyboard import KeyboardWidget
-from alto.ui.meter_staff import BeatPlacementStaff, MeterButton, MeterStaff
-from alto.ui.midi_input import MidiInput
+from alto.ui.meter_staff import BeatPlacementStaff, MeterStaff
 from alto.ui.pictures import (
-    RHYTHM_SYMBOL_NAMES,
-    ValuePictures,
     rhythm_picture,
     symbol_icon,
 )
+from alto.ui.question_view import QuestionView
 from alto.ui.reference import reference_panel_for
 from alto.ui.settings_panel import settings_panel_for
 from alto.ui.staff import (
     CORNER_RADIUS,
-    MAX_STEP,
     StaffWidget,
     clef_targets,
-    keyboard_key_staff,
 )
 from alto.ui.staff_input import (
     ClefInput,
@@ -159,7 +141,6 @@ from alto.ui.staff_input import (
     StaffInput,
 )
 from alto.ui.staff_playback import StaffPlayback
-from alto.ui.widgets import HelpButton, PracticeCounts
 from alto.ui.zoom import css, px
 
 if TYPE_CHECKING:
@@ -167,156 +148,6 @@ if TYPE_CHECKING:
 
 # the time between the notes of a scale that plays after a right answer
 SCALE_GAP_MS = 280
-
-
-NOTE_CHOICE = re.compile(
-    r"^[A-G][♯♭]?m?$",
-    # an answer that is a note or key name: C, F♯, B♭, or a minor key
-    # such
-    # as F♯m
-)
-DEGREE_CHOICE = re.compile(r"^([♯♭𝄪𝄫]?)([1-7])$")
-INTERVAL_QUALITY_SYMBOLS = {
-    name: symbol for symbol, name in QUALITY_NAMES.items()
-}
-
-
-def choice_keys(choices: list[str]) -> list[str]:
-    """
-    Choose a key for each answer button, so that every answer can be
-    given from the keyboard.
-
-    Nine answers or fewer take the digits 1 to 9. More than that, as on
-    the piano keyboard, take the notes' own names: the
-    letter for a natural, Shift and the letter for a sharp, Ctrl and the
-    letter for a flat. A minor key, such as F♯m, is
-    typed the same way as the major key of its name. Any other long list
-    takes 1 to 9
-    and then 0, and the rest can be reached with Tab. Scale-degree banks
-    use the degree digit, with Shift for a sharp,
-    Ctrl for a flat, and Alt added for double alterations.
-
-    Parameters
-    ----------
-    choices : list of str
-        The answers, in the order of their buttons.
-
-    Returns
-    -------
-    list of str
-        A key for each answer, such as "3" or "Shift+C"; "" for an
-        answer that has none.
-
-    Examples
-    --------
-    >>> choice_keys(
-    ...     ["major", "minor", "diminished"]
-    ... )
-    ['1', '2', '3']
-    >>> choice_keys(
-    ...     list("CDEFGAB") + ["C♯", "B♭"] + ["F♯"]
-    ... )
-    ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Shift+C', 'Ctrl+B', 'Shift+F']
-    >>> choice_keys([str(n) for n in range(12)])[8:]
-    ['9', '0', '', '']
-    """
-    if len(choices) <= 9:
-        return [str(i + 1) for i in range(len(choices))]
-    function_degrees = {
-        name: str(index)
-        for index, name in enumerate(app_settings.DEGREE_FUNCTIONS, start=1)
-    }
-    degrees = []
-    for choice in choices:
-        plain = choice.replace("̂", "")
-        sign = plain[0] if plain and plain[0] in "♯♭𝄪𝄫" else ""
-        label = plain[len(sign) :]
-        for alteration, prefix in app_settings.FUNCTION_ALTERATIONS.items():
-            if prefix and plain.startswith(prefix):
-                sign, label = (
-                    ACCIDENTAL_SYMBOLS[alteration],
-                    plain[len(prefix) :],
-                )
-                break
-        degrees.append(
-            DEGREE_CHOICE.fullmatch(sign + function_degrees.get(label, label)),
-        )
-    if all(degrees):
-        modifiers = {
-            "": "",
-            "♯": "Shift+",
-            "♭": "Ctrl+",
-            "𝄪": "Alt+Shift+",
-            "𝄫": "Alt+Ctrl+",
-        }
-        return [
-            modifiers[match[1]] + match[2]
-            for match in degrees
-            if match is not None
-        ]
-    if all(NOTE_CHOICE.match(c) for c in choices):
-        keys = []
-        for c in choices:
-            sign = (
-                c[1] if len(c) > 1 and c[1] in "♯♭" else ""
-            )  # a trailing m only says that the key is minor
-            keys.append(
-                c[0]
-                if not sign
-                else f"{'Shift' if sign == '♯' else 'Ctrl'}+{c[0]}",
-            )
-        return keys
-    return [*"123456789", "0", *[""] * (len(choices) - 10)]
-
-
-def second_row_keys(
-    first: list[str],
-    *,
-    labels: list[str],
-) -> list[str]:
-    """
-    Choose a key for each button of the second row of a two-part answer,
-    such as the octave or the inversion.
-
-    They must not be keys that the first row has. When the first row
-    uses the digits the second row takes the home row,
-    A S D F and so on; when the first row uses letters (the notes'
-    names) it takes the digits, and an octave that is a single
-    digit takes that digit.
-
-    Parameters
-    ----------
-    first : list of str
-        The keys of the first row, as `choice_keys` chose them.
-    labels : list of str
-        The text of each button of the second row. Keyword-only.
-
-    Returns
-    -------
-    list of str
-        A key for each button; "" for one that has none.
-
-    Examples
-    --------
-    >>> second_row_keys(
-    ...     ["1", "2", "3"],
-    ...     labels=[
-    ...         "root position",
-    ...         "1st inversion",
-    ...     ],
-    ... )
-    ['A', 'S']
-    >>> second_row_keys(
-    ...     ["C", "Shift+C"], labels=["3", "4", "5"]
-    ... )
-    ['3', '4', '5']
-    """
-    if any(k.split("+")[-1].isalpha() for k in first):
-        return [
-            label if label in "123456789" and len(label) == 1 else ""
-            for label in labels
-        ]
-    return [*"ASDFGHJKL"][: len(labels)] + [""] * max(0, len(labels) - 9)
 
 
 def note_name(
@@ -449,46 +280,17 @@ class ExerciseView(QWidget):
         The random number generator for new questions.
     session : PracticeSession
         Attempt count, score, and retry status for this exercise.
-    correct : int
-        Questions answered right on the first try.
-    total : int
-        Questions answered.
-    streak : int
-        Right answers in a row.
     question : Question or None
         The question on screen.
-    answered : bool
-        True once this showing is finished, including a miss in SM-2 or
-        FSRS.
-    missed : bool
-        True once the question has been answered wrong, so it no longer
-        counts toward the score.
-    buttons : list of QPushButton
-        The answer buttons on screen.
+    answer_controls : AnswerControls
+        Presents the choices or placement actions for this question.
     settings_panel : ExerciseSettingsPanel
         The exercise's settings, including how to advance after a
         correct answer.
-    staff : StaffWidget
-        Shows the notes of a question.
-    keyboard : KeyboardWidget
-        Shows the key of a keyboard question.
-    input_staff : StaffInput
-        The staff to click, for "place this note" questions.
-    clef_input : ClefInput
-        The blank staff a clef is put on, for "place this clef"
-        questions.
-    scale_input : ScaleInput
-        The staff to click, for "place the notes of this scale"
-        questions.
-    fork : KeyFork
-        The fork to pick a key signature on, for "build this key
-        signature" questions.
-    answer_button : QPushButton
-        Hands in what was built with the fork or placed on the scale
-        staff.
-    book_btn : QToolButton or None
-        Opens the exercise's reference in a pane on the right; None for
-        an exercise that has none.
+    question_view : QuestionView
+        Displays the question and its placement editor.
+    toolbar : ExerciseToolbar
+        Shows progress and provides the exercise controls.
     reference_pane : QFrame or None
         The pane that holds the reference.
     lesson_requested : Signal
@@ -517,9 +319,6 @@ class ExerciseView(QWidget):
     PANE_WIDTH = 290
     # Right-hand reference pane width.
     REFERENCE_WIDTH = 400
-    # the answer buttons are never spread wider than this, however wide
-    # the window
-    CHOICE_MAX_WIDTH = 760
 
     def __init__(
         self,
@@ -578,7 +377,6 @@ class ExerciseView(QWidget):
         self._hidden_at: float | int | None = None
         self._advance_remaining = -1
 
-        self.score = QLabel()
         self._speed_previews: dict[Rating, ReviewInterval] | None = None
         self._review_preview: ReviewInterval | None = None
         self._self_grading = False
@@ -588,15 +386,15 @@ class ExerciseView(QWidget):
         self.review_interval.setAlignment(
             Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
         )
-        self.queue_counts = PracticeCounts()
-        self.queue_counts.hide()
         self._count_timer = QTimer(self)
         self._count_timer.setInterval(30_000)
         self._count_timer.timeout.connect(self._refresh_queue_counts)
         self.prompt = DegreeLabel()
         self.prompt.setStyleSheet(css("font-size: 16pt;"))
-        self.staff = StaffWidget(max_step=MAX_STEP)
-        self.staff.interval_voices = exercise.interval_voices
+        self.question_view = QuestionView(
+            center_controls=isinstance(exercise, OrderOfKeys),
+        )
+        self.question_view.widget_created.connect(self._connect_music_widget)
         self._answer_playback = StaffPlayback(
             self,
             highlight=self._light_answer_notes,
@@ -604,50 +402,6 @@ class ExerciseView(QWidget):
         self._immediate_playback = StaffPlayback(
             self,
         )  # Continues across questions and stops when the view closes.
-        self.keyboard = KeyboardWidget()
-        self.fingerboard = FingerboardWidget()
-        self.circle = FifthsCircle()  # for questions on the circle of fifths
-        self.fork = KeyFork()  # for 'build this key signature' questions
-        self.fork.changed.connect(self._fork_changed)
-        # Undo and Answer, under whatever is built: the fork, or the
-        # scale on the staff
-        self.answer_row = QWidget()
-        answer_lay = QHBoxLayout(self.answer_row)
-        answer_lay.setContentsMargins(0, 0, 0, 0)
-        self.undo_button = QPushButton(
-            "Undo",
-        )  # takes back the last note or step of a scale
-        self.undo_button.setMinimumHeight(px(40))
-        motion.set_shortcut(self.undo_button, key="Backspace")
-        self.undo_button.clicked.connect(self._undo_scale_note)
-        self.place_button = QPushButton(
-            "Place note",
-        )  # puts the note at the caret on the staff, or marks the next step
-        self.place_button.setMinimumHeight(px(40))
-        # Return does the next thing: place, then Answer once everything
-        # is placed
-        motion.set_shortcut(self.place_button, key="Return")
-        self.place_button.clicked.connect(self._place_here)
-        self.answer_button = QPushButton(
-            "Answer",
-        )  # hands in the signature picked on the fork, or the scale placed
-        self.answer_button.setMinimumHeight(px(40))
-        motion.set_shortcut(self.answer_button, key="Return")
-        self.answer_button.clicked.connect(self._answer)
-        self.staff.installEventFilter(
-            self,
-        )  # the wheel over the music or Answer moves the fork's circle too
-        self.answer_button.installEventFilter(self)
-        answer_lay.addWidget(self.undo_button)
-        answer_lay.addWidget(self.place_button, 1)
-        answer_lay.addWidget(self.answer_button, 1)
-        self.input_staff = StaffInput()  # for 'place this note' questions
-        self.input_staff.placed.connect(self._place)
-        self.input_staff.accidental_cycled.connect(self._cycle_accidental)
-        self.input_staff.caret_moved.connect(self._update_placement_status)
-        self.clef_input = ClefInput()  # for 'place this clef' questions
-        self.clef_input.placed.connect(self._place_clef)
-        self.clef_input.changed.connect(self._show_placement_rows)
         # a button for each clef symbol, under the staff, as another way
         # to choose one
         self.symbol_row = QWidget()
@@ -674,23 +428,16 @@ class ExerciseView(QWidget):
                 " (or turn the mouse wheel, or use Left and Right)",
             )
             button.clicked.connect(
-                lambda _=False, chosen=symbol: self.clef_input.select(chosen),
+                lambda _=False, chosen=symbol: (
+                    self.question_view.clef_input.select(
+                        chosen,
+                    )
+                ),
             )
             self.symbol_group.addButton(button)
             self.symbol_buttons[symbol] = button
             symbol_lay.addWidget(button)
         symbol_lay.addStretch()
-        self.scale_input = (
-            SignatureInput()
-            if isinstance(exercise, OrderOfKeys)
-            else ScaleInput()
-        )
-        self.scale_input.notes_changed.connect(self._scale_changed)
-        self.scale_input.accidental_cycled.connect(self._cycle_accidental)
-        self.scale_input.accidental_stepped.connect(
-            self._cycle_accidental,
-        )  # the mouse wheel steps through them too
-        self.scale_input.caret_moved.connect(self._update_placement_status)
         # says what the next click or key press will do, for those who
         # cannot see the staff
         self.place_status = DegreeLabel()
@@ -801,30 +548,14 @@ class ExerciseView(QWidget):
             motion.set_shortcut(b, key=step)
             b.setStyleSheet(css("font-size: 15pt; font-weight: bold;"))
             b.clicked.connect(
-                lambda _=False, s=step: self.scale_input.set_pending_step(s),
+                lambda _=False, s=step: (
+                    self.question_view.scale_input.set_pending_step(s)
+                ),
             )
             self.step_group.addButton(b)
             self.step_buttons[step] = b
             srow.addWidget(b, 1)
         self.step_buttons["W"].setChecked(True)
-        self.scale_input.step_selected.connect(self._show_step)
-        self.key_staff = keyboard_key_staff()
-        # holds the answer buttons, with room around them and a widest
-        # it will be
-        self.choice_area = QWidget()
-        self.choice_area.setMaximumWidth(px(self.CHOICE_MAX_WIDTH))
-        self.choice_box = QGridLayout(self.choice_area)
-        self.choice_box.setContentsMargins(
-            16,
-            8,
-            16,
-            8,
-        )
-        self.choice_box.setSpacing(10)
-        self.interval_answers = AnswerBank(
-            show_all_rows=isinstance(exercise, RythmicEquations),
-        )
-        self.interval_answers.hide()
         # counts questions, so a pending 'try again' reset can tell it
         # is out of date
         self._pair_token = 0
@@ -854,7 +585,27 @@ class ExerciseView(QWidget):
         main = QWidget()
         lay = QVBoxLayout(main)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.addLayout(self._build_toolbar())
+        self.toolbar = ExerciseToolbar(
+            exercise.instructions,
+            has_reference=reference is not None,
+            has_midi=sys.platform.startswith("linux")
+            and isinstance(
+                exercise,
+                (NoteNames, IntervalConstruction, ScaleConstruction),
+            ),
+        )
+        lay.addWidget(self.toolbar)
+        self.score = self.toolbar.score
+        self.queue_counts = self.toolbar.queue_counts
+        self.lesson_back_button = self.toolbar.lesson_back_button
+        self.help_btn = self.toolbar.help_btn
+        self.gear = self.toolbar.gear
+        self.sound_btn = self.toolbar.sound_btn
+        self.midi_input = self.toolbar.midi_input
+        self.sound_btn.clicked.connect(self._toggle_sound)
+        self._show_sound_state()
+        if self.midi_input is not None:
+            self.midi_input.note_pressed.connect(self._place_midi)
         self.prompt.setAlignment(
             Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
         )
@@ -921,30 +672,8 @@ class ExerciseView(QWidget):
             self.rhythm_scroll.viewport().setAutoFillBackground(False)
             rhythm_widget.installEventFilter(self)
             self.rhythm_scroll.installEventFilter(self)
-            lay.addWidget(self.rhythm_scroll)
-        placement_layout = lay
-        if isinstance(self.scale_input, SignatureInput):
-            signature_area = QWidget()
-            placement_layout = QVBoxLayout(signature_area)
-            placement_layout.setContentsMargins(0, 0, 0, 0)
-            lay.addWidget(
-                signature_area,
-                alignment=Qt.AlignmentFlag.AlignHCenter,
-            )
-        self._music_layout = QGridLayout()
-        placement_layout.addLayout(self._music_layout)
-        visuals = (
-            self.staff,
-            self.circle,
-            self.fork,
-            self.input_staff,
-            self.scale_input,
-            self.clef_input,
-            self.key_staff,
-        )
-        for row, visual in enumerate(visuals):
-            self._music_layout.addWidget(visual, row, 0)
-        self._music_layout.addWidget(
+            self.question_view.rows.insertWidget(0, self.rhythm_scroll)
+        self.question_view.grid.addWidget(
             self.review_interval,
             0,
             1,
@@ -952,14 +681,15 @@ class ExerciseView(QWidget):
             1,
             Qt.AlignmentFlag.AlignBottom,
         )
-        placement_layout.addWidget(self.symbol_row)
-        placement_layout.addWidget(self.place_status)
-        placement_layout.addWidget(self.pitch_row)
-        placement_layout.addWidget(self.accidental_row)
-        placement_layout.addWidget(self.step_row)
-        placement_layout.addWidget(self.answer_row)
-        lay.addWidget(self.keyboard)
-        lay.addWidget(self.fingerboard)
+        for control in (
+            self.symbol_row,
+            self.place_status,
+            self.pitch_row,
+            self.accidental_row,
+            self.step_row,
+        ):
+            self.question_view.controls.addWidget(control)
+        lay.addWidget(self.question_view)
         self._keyboard_interval_row = QWidget()
         self._keyboard_interval_layout = QHBoxLayout(
             self._keyboard_interval_row,
@@ -967,25 +697,30 @@ class ExerciseView(QWidget):
         self._keyboard_interval_layout.setContentsMargins(0, 0, 0, 0)
         self._keyboard_interval_row.installEventFilter(self)
         lay.addWidget(self._keyboard_interval_row)
-        answers = QWidget()
-        answers.setMaximumWidth(px(self.CHOICE_MAX_WIDTH))
-        answer_layout = QVBoxLayout(answers)
-        answer_layout.setContentsMargins(0, 0, 0, 0)
-        self.quality_label = QLabel("Quality")
-        answer_layout.addWidget(self.quality_label)
-        answer_layout.addWidget(self.choice_area)
-        answer_layout.addWidget(self.interval_answers)
-        self.interval_label = QLabel("Interval")
-        answer_layout.addWidget(self.interval_label)
-        self.octave_row = (
-            QWidget()
-        )  # shown only when the answer has a second part
-        self.octave_box = QHBoxLayout(self.octave_row)
-        self.octave_box.setContentsMargins(0, 4, 0, 0)
-        answer_layout.addWidget(self.octave_row)
+        self.answer_controls = AnswerControls(exercise)
+        self.answer_controls.placement.undo_button.clicked.connect(
+            self._undo_scale_note,
+        )
+        self.answer_controls.placement.place_button.clicked.connect(
+            self._place_here,
+        )
+        self.answer_controls.placement.answer_button.clicked.connect(
+            self._answer,
+        )
+        self.answer_controls.placement.answer_button.installEventFilter(self)
+        self.answer_controls.choice_selected.connect(
+            lambda choice, button: self.submit(choice, button=button),
+        )
+        self.answer_controls.part_selected.connect(
+            lambda part, text, button: self._pick(
+                part,
+                text=text,
+                button=button,
+            ),
+        )
         answer_row = QHBoxLayout()
         answer_row.addStretch(1)
-        answer_row.addWidget(answers, 100)
+        answer_row.addWidget(self.answer_controls, 100)
         answer_row.addStretch(1)
         lay.addLayout(answer_row)
         self.rating_row = QWidget()
@@ -1063,12 +798,10 @@ class ExerciseView(QWidget):
             self.settings_panel.changed.connect(
                 self.next_question,
             )  # apply new settings right away
-            self.settings_panel.restyled.connect(
-                self.circle.update,
-            )  # a new look keeps the question
             self.settings_panel.restyled.connect(self._redraw_keyboards)
-        book = self.book_btn
+        book = self.toolbar.book_btn
         if reference is not None and book is not None:
+            book.toggled.connect(self._toggle_reference)
             ref_pane = QFrame()
             ref_pane.setObjectName("settingsPane")
             ref_pane.setFrameShape(QFrame.Shape.StyledPanel)
@@ -1101,7 +834,6 @@ class ExerciseView(QWidget):
             self._reference_anim.setDuration(220)
             self._reference_anim.setEasingCurve(QEasingCurve.Type.OutCubic)
             self._reference_anim.finished.connect(self._reference_settled)
-        self.buttons: list[QPushButton] = []
         self._arrow_keys = [
             self._bind(
                 sequence,
@@ -1130,150 +862,6 @@ class ExerciseView(QWidget):
             Qt.FocusPolicy.ClickFocus,
         )  # the screen can be given the keyboard when it opens
         self.next_question()
-
-    def _build_toolbar(self) -> QHBoxLayout:
-        """
-        Build the row of exercise controls above the staff.
-
-        Returns
-        -------
-        QHBoxLayout
-            The row to add to the exercise's main layout.
-
-        Examples
-        --------
-        Note Identification shows its score and help button in this row.
-        """
-        top = QHBoxLayout()
-        self.lesson_back_button = QPushButton("← Back to lesson")
-        self.lesson_back_button.hide()
-        top.addWidget(self.lesson_back_button)
-        top.addStretch()
-        top.addWidget(self.queue_counts)
-        top.addWidget(self.score)
-        self.help_btn = HelpButton(self.exercise.instructions)
-        top.addWidget(self.help_btn)
-        self.book_btn: QToolButton | None = None
-        if self._reference is not None:
-            book = QToolButton()
-            set_svg_icon(book, BOOK)
-            book.setIconSize(QSize(px(24), px(24)))
-            book.setCheckable(True)
-            book.setAutoRaise(True)
-            book.setToolTip("Reference")
-            book.setAccessibleName("Reference")
-            book.toggled.connect(self._toggle_reference)
-            top.addWidget(book)
-            self.book_btn = book
-        self.midi_input = None
-        if isinstance(
-            self.exercise,
-            (NoteNames, IntervalConstruction, ScaleConstruction),
-        ) and sys.platform.startswith("linux"):
-            self.midi_input = MidiInput()
-            self.midi_input.note_pressed.connect(self._place_midi)
-            top.addWidget(self.midi_input)
-        self.sound_btn = QToolButton()
-        self.sound_btn.setAutoRaise(True)
-        self.sound_btn.setIconSize(QSize(px(24), px(24)))
-        self.sound_btn.clicked.connect(self._toggle_sound)
-        self._show_sound_state()
-        top.addWidget(self.sound_btn)
-        if self.settings_panel:
-            self.gear = QToolButton()
-            set_svg_icon(self.gear, SLIDERS)
-            self.gear.setIconSize(QSize(px(24), px(24)))
-            self.gear.setCheckable(True)
-            self.gear.setAutoRaise(True)
-            self.gear.setToolTip("Exercise settings")
-            self.gear.setAccessibleName("Exercise settings")
-            top.addWidget(self.gear)
-        return top
-
-    @property
-    def answered(self) -> bool:
-        """
-        Read the current question's status from the practice session.
-
-        Returns
-        -------
-        bool
-            Whether this question is finished.
-
-        Examples
-        --------
-        >>> ExerciseView(NoteNames()).answered
-        False
-        """
-        return self.session.answered
-
-    @property
-    def missed(self) -> bool:
-        """
-        Read the current question's status from the practice session.
-
-        Returns
-        -------
-        bool
-            Whether an attempt on this question was incorrect.
-
-        Examples
-        --------
-        >>> ExerciseView(NoteNames()).missed
-        False
-        """
-        return self.session.missed
-
-    @property
-    def total(self) -> int:
-        """
-        Read the exercise score from the practice session.
-
-        Returns
-        -------
-        int
-            Questions scored in this exercise.
-
-        Examples
-        --------
-        >>> ExerciseView(NoteNames()).total
-        0
-        """
-        return self.session.total
-
-    @property
-    def correct(self) -> int:
-        """
-        Read the exercise score from the practice session.
-
-        Returns
-        -------
-        int
-            Questions answered correctly on the first attempt.
-
-        Examples
-        --------
-        >>> ExerciseView(NoteNames()).correct
-        0
-        """
-        return self.session.correct
-
-    @property
-    def streak(self) -> int:
-        """
-        Read the exercise score from the practice session.
-
-        Returns
-        -------
-        int
-            Consecutive correct first attempts.
-
-        Examples
-        --------
-        >>> ExerciseView(NoteNames()).streak
-        0
-        """
-        return self.session.streak
 
     def _application_state_changed(self, state: Qt.ApplicationState) -> None:
         """
@@ -1443,18 +1031,7 @@ class ExerciseView(QWidget):
         ... )
         True
         """
-        set_svg_icon(
-            self.sound_btn,
-            SPEAKER_ON if sounds.enabled else SPEAKER_MUTED,
-        )
-        self.sound_btn.setToolTip(
-            "Sound on (click to mute)"
-            if sounds.enabled
-            else "Muted (click to unmute)",
-        )
-        self.sound_btn.setAccessibleName(
-            "Sound on" if sounds.enabled else "Sound muted",
-        )
+        self.toolbar.set_sound_enabled(sounds.enabled)
 
     def settings_state(self) -> tuple[bool, int, int] | None:
         """
@@ -1544,8 +1121,8 @@ class ExerciseView(QWidget):
         >>> view._pane_anim.endValue()
         290
         """
-        if open_ and self.book_btn is not None:
-            self.book_btn.setChecked(
+        if open_ and self.toolbar.book_btn is not None:
+            self.toolbar.book_btn.setChecked(
                 False,
             )  # the two panes share the right-hand side
         self._pane_anim.stop()
@@ -1655,7 +1232,10 @@ class ExerciseView(QWidget):
         if self.learner is None:
             return self.exercise.generate(self.rng)
         avoid = self.question.item_key() if self.question else None
-        if self._scheduler_mode in CALENDAR_SCHEDULERS and not self.missed:
+        if (
+            self._scheduler_mode in CALENDAR_SCHEDULERS
+            and not self.session.missed
+        ):
             avoid = None
         return self.learner.pick(self.exercise, rng=self.rng, avoid=avoid)
 
@@ -1690,7 +1270,7 @@ class ExerciseView(QWidget):
             return
         if (
             self.shuffle_answers
-            and self.answered
+            and self.session.answered
             and self.question is not None
         ):
             self.shuffle_requested.emit()
@@ -1738,8 +1318,8 @@ class ExerciseView(QWidget):
         >>> view.next_question()
         >>> # noinspection PyUnresolvedReferences
         >>> (
-        ...     view.answered,
-        ...     len(view.buttons)
+        ...     view.session.answered,
+        ...     len(view.answer_controls.buttons)
         ...     == len(view.question.choices),
         ... )
         (False, True)
@@ -1754,8 +1334,8 @@ class ExerciseView(QWidget):
             animation.deleteLater()
         self._anims.clear()
         self.next_button.hide()
-        self.answer_button.setStyleSheet("")
-        self.place_button.setStyleSheet("")
+        self.answer_controls.placement.answer_button.setStyleSheet("")
+        self.answer_controls.placement.place_button.setStyleSheet("")
         self._scheduler_mode = (
             self.learner.mode if self.learner else DEFAULT_SCHEDULER
         )
@@ -1823,7 +1403,6 @@ class ExerciseView(QWidget):
         # 'name' / 'octave' -> (text, button), for two-part answers
         self._pending = {}
         self._busy = False
-        self.staff.column_colors.clear()
         prompt = q.prompt
         if (
             isinstance(self.exercise, NoteNames)
@@ -1881,283 +1460,74 @@ class ExerciseView(QWidget):
                 )
         if isinstance(self.exercise, (BeatConstruction, BeatIdentification)):
             self.rhythm_scroll.horizontalScrollBar().setValue(0)
-        construct = q.construct is not None
-        scale = q.places_sequence
-        clef = bool(q.place_clef)
-        self.staff.setVisible(
-            (bool(q.staff) or q.show_staff)
-            and not construct
-            and not scale
-            and not clef,
+        self._found = set()
+        self.question_view.show_question(
+            q,
+            interval_voices=self.exercise.interval_voices,
         )
-        self.fork.setVisible(q.build_key)
-        self.circle.setVisible(q.circle is not None)
-        if q.circle is not None:
-            self.circle.set_question(q)
-        self._found = (
-            set()
-        )  # the right answers given so far to a question that needs several
-        if q.build_key:
-            self.fork.locked = False
-            self.fork.set_marker_color(None)
-            self.fork.set_value(0, slide=False)
-        self.input_staff.setVisible(construct)
-        self.scale_input.setVisible(scale)
-        self.clef_input.setVisible(clef)
-        self.symbol_row.setVisible(clef)
-        if clef:
-            self.clef_input.reset(
-                list(app_settings.CLEF_SYMBOLS),
-                caption=q.caption,
-            )
-        staff_key = q.written_key
-        if construct:
-            self.input_staff.reset(
-                q.clef,
-                key=staff_key,
-                caption=q.caption,
-                placement=q,
-            )
-        if q.construct_scale is not None:
-            self.scale_input.reset_scale(
-                q.clef,
-                slots=len(q.construct_scale),
-                caption=q.caption,
-                with_steps=q.construct_steps is not None,
-                key=q.key,
-            )
-        if construct or scale:
-            for b in self.accidental_buttons.values():
-                b.setChecked(False)
+        self.symbol_row.setVisible(bool(q.place_clef))
+        if q.construct is not None or q.places_sequence:
+            for button in self.accidental_buttons.values():
+                button.setChecked(False)
         if q.place_signature:
-            assert isinstance(self.scale_input, SignatureInput)
-            self.scale_input.reset_signature(
-                q.clef,
-                key=q.key,
-                caption=q.caption,
-                starting_slots=q.starting_slots,
-            )
             self._set_accidental(-1 if q.starting_slots and q.key < 0 else 1)
         self._show_placement_rows()
-        self.keyboard.setVisible(
-            q.keyboard is not None or bool(q.keyboard_notes),
+        visible_staff = (
+            self.question_view.note_input
+            if q.construct is not None
+            else self.question_view.staff
         )
-        position = q.fingerboard or q.picture
-        self.fingerboard.show_position(position)
-        self.fingerboard.setVisible(position is not None)
-        self.key_staff.setVisible(q.key_staff)
-        self.key_staff.show_notes([], clef="treble", key=q.key)
-        self.keyboard.max_key_width = px(
-            30.0 if q.key_staff else 38.0,
-        )  # leave room for the staff above
-        if q.keyboard_notes:
-            self.keyboard.show_keys(
-                [note.midi for note in q.keyboard_notes],
-                span=q.keyboard_range,
-            )
-        else:
-            self.keyboard.show_key(
-                q.keyboard.midi if q.keyboard else None,
-                span=q.keyboard_range,
-            )
-        self.staff.key_room = (
-            MAX_ACCIDENTALS if q.build_key else 0
-        )  # the staff does not change width as the signature does
-        self.staff.show_notes(
-            q.staff,
-            clef=q.clef,
-            key=0 if q.build_key else staff_key,
-            value=q.value,
-            notation_excerpt=q.notation_excerpt,
-            notation_target=q.notation_target,
-            locate_notation=q.notation_target is not None and not q.choices,
-            caption=q.caption,
-        )
-        visible_staff = self.input_staff if construct else self.staff
         self.prompt.setMaximumWidth(
             visible_staff.maximumWidth()
-            if not visible_staff.isHidden()
-            else px(self.CHOICE_MAX_WIDTH),
+            if visible_staff is not None
+            else self.answer_controls.maximumWidth(),
         )
-        for b in self.buttons:
-            b.setShortcut(
-                QKeySequence(),
-                # a button waiting to be deleted must not share its key
-                # with
-                # the new one
-            )
-            b.hide()
-            b.deleteLater()
-        self.buttons = []
-        for col in range(self.choice_box.columnCount()):
-            self.choice_box.setColumnStretch(col, 0)
-        interval_bank = (
-            isinstance(self.exercise, KeyboardIntervals)
-            and not q.octaves
-            and (
-                app_settings.keyboard_intervals.all_interval_buttons
-                or len(q.choices) > 6
-            )
+        self.answer_controls.show_question(
+            q,
+            named_meter=named_meter,
+            locate_notation=bool(
+                self.question_view.staff
+                and self.question_view.staff.locate_notation,
+            ),
         )
-        if isinstance(self.exercise, IntervalNames):
-            interval_bank = (
-                app_settings.intervals.button_mode == "all"
-                or len(q.choices) > 6
-            )
-        if isinstance(self.exercise, ChoiceExercise):
-            interval_bank = len(q.choices) > 6 and (
-                not q.grid or isinstance(self.exercise, NotationIdentification)
-            )
-            interval_bank = interval_bank or named_meter or q.identify_scale
-            self.interval_answers.setAccessibleName("Answer choices")
-        compact_intervals = isinstance(
-            self.exercise,
-            KeyboardIntervals,
-        ) and bool(q.octaves)
-        scale_buttons = bool(q.octaves) and q.second_label == "Mode"
-        self.quality_label.setText("Tonic" if scale_buttons else "Quality")
-        self.quality_label.setVisible(compact_intervals or scale_buttons)
-        self.interval_label.setText(
-            "Interval" if compact_intervals else q.second_label,
-        )
-        self.interval_label.setVisible(bool(q.octaves))
-        self.choice_area.setVisible(
-            not interval_bank and not self.staff.locate_notation,
-        )
-        self.interval_answers.setVisible(interval_bank and bool(q.choices))
-        labels = (
-            [choice.partition(" ")[0] for choice in q.choices]
-            if q.identify_scale
-            else q.choices
-        )
-        if (
-            isinstance(self.exercise, RythmicEquations)
-            and q.answer.isdecimal()
-        ):
-            keys = q.choices
-        else:
-            keys = choice_keys(labels)
-        for i, c in enumerate(q.choices):
-            if (
-                isinstance(self.exercise, BeatIdentification)
-                and not named_meter
-            ):
-                b = MeterButton(c, meter=BEAT_METERS[c])
-                b.setMinimumHeight(px(50))
-            else:
-                b = DegreeButton(labels[i])
-                b.setMinimumHeight(px(40))
-            if (
-                isinstance(self.exercise, RythmicEquations)
-                and c in RHYTHM_SYMBOL_NAMES
-            ):
-                b.setAccessibleName(RHYTHM_SYMBOL_NAMES[c])
-                b.setText("")
-                b.setIcon(ValuePictures.icon(c))
-                b.setIconSize(QSize(px(32), px(64)))
-            if (
-                isinstance(self.exercise, IntervalNames)
-                and c in INTERVAL_QUALITY_SYMBOLS
-            ):
-                b.setText(INTERVAL_QUALITY_SYMBOLS[c])
-                b.setAccessibleName(c)
-            for function in app_settings.DEGREE_FUNCTIONS:
-                if c.endswith(function):
-                    prefix = c[: -len(function)].rstrip()
-                    if prefix:
-                        b.setText(f"{prefix}\n{function}")
-                    b.setMinimumHeight(px(56))
-                    b.setAccessibleName(c)
-                    break
-            if keys[i]:  # every answer can be given from the keyboard
-                motion.set_shortcut(b, key=keys[i])
-                b.setToolTip(f"Key {keys[i]}")
-            if q.octaves:
-                b.setCheckable(True)
-                b.clicked.connect(
-                    lambda _=False, choice=c, btn=b: self._pick(
-                        "name",
-                        text=choice,
-                        button=btn,
-                    ),
-                )
-            else:
-                b.clicked.connect(
-                    lambda _=False, choice=c, btn=b: self.submit(
-                        choice,
-                        button=btn,
-                    ),
-                )
-            row, col = q.grid[c] if q.grid else (0, i)
-            if not interval_bank:
-                self.choice_box.addWidget(b, row, col)
-            self.buttons.append(b)
-        bank_positions = (
-            [q.grid[c] for c in q.choices]
-            if interval_bank
-            and isinstance(self.exercise, IntervalNames)
-            and q.grid
-            else None
-        )
-        self.interval_answers.set_buttons(
-            list(self.buttons) if interval_bank else [],
-            positions=bank_positions,
-        )
-        if not interval_bank:
-            for col in {
-                (q.grid[c][1] if q.grid else i)
-                for i, c in enumerate(q.choices)
-            }:
-                self.choice_box.setColumnStretch(col, 1)  # equal-width columns
-        while self.octave_box.count():
-            item = self.octave_box.takeAt(0)
-            widget = item.widget() if item is not None else None
-            if isinstance(widget, QAbstractButton):
-                widget.setShortcut(QKeySequence())
-            if widget is not None:
-                widget.deleteLater()
-        self.octave_row.setVisible(bool(q.octaves))
-        if q.octaves:
-            second_keys = second_row_keys(keys, labels=q.octaves)
-            wrap_second = scale_buttons or (
-                isinstance(self.exercise, KeyboardIntervals)
-                and len(q.octaves) > 10
-            )
-            number_bank = AnswerBank() if wrap_second else None
-            number_buttons = []
-            for i, octave in enumerate(q.octaves):
-                b = QPushButton(octave)
-                b.setMinimumHeight(px(40))
-                if second_keys[i]:  # a key that the first row does not use
-                    motion.set_shortcut(b, key=second_keys[i])
-                    b.setToolTip(f"Key {second_keys[i]}")
-                b.setCheckable(True)
-                b.clicked.connect(
-                    lambda _=False, text=octave, btn=b: self._pick(
-                        "octave",
-                        text=text,
-                        button=btn,
-                    ),
-                )
-                if number_bank is None:
-                    self.octave_box.addWidget(b, 1)
-                else:
-                    number_buttons.append(b)
-                self.buttons.append(b)
-            if number_bank is not None:
-                number_bank.setAccessibleName(
-                    "Mode buttons"
-                    if scale_buttons
-                    else "Interval number buttons",
-                )
-                number_bank.set_buttons(number_buttons)
-                self.octave_box.addWidget(number_bank, 1)
         if empty_sample is not None:
             self.question = None
             self.next_button.setText("Check again")
             self.next_button.show()
         self._show_review_interval()
         self._update_score()
+
+    def _connect_music_widget(self, widget: QWidget) -> None:
+        """
+        Connect a newly mounted music widget to the exercise controls.
+
+        Parameters
+        ----------
+        widget : QWidget
+            Display staff or editor created for the current question.
+
+        Examples
+        --------
+        Placing a note on the input staff submits it to this view.
+        """
+        if isinstance(widget, StaffInput):
+            widget.accidental_cycled.connect(self._cycle_accidental)
+            widget.caret_moved.connect(self._update_placement_status)
+            if isinstance(widget, ScaleInput):
+                widget.notes_changed.connect(self._scale_changed)
+                widget.accidental_stepped.connect(self._cycle_accidental)
+                widget.step_selected.connect(self._show_step)
+            else:
+                widget.placed.connect(self._place)
+        elif isinstance(widget, ClefInput):
+            widget.placed.connect(self._place_clef)
+            widget.changed.connect(self._show_placement_rows)
+        elif isinstance(widget, KeyFork):
+            widget.changed.connect(self._fork_changed)
+        elif isinstance(widget, FifthsCircle):
+            self.settings_panel.restyled.connect(widget.update)
+        elif isinstance(widget, StaffWidget):
+            widget.installEventFilter(self)
 
     def _show_review_interval(self) -> None:
         """
@@ -2173,7 +1543,7 @@ class ExerciseView(QWidget):
         self._speed_previews = None
         self.review_interval.hide()
         self._keyboard_interval_row.hide()
-        self._music_layout.setAlignment(Qt.AlignmentFlag(0))
+        self.question_view.grid.setAlignment(Qt.AlignmentFlag(0))
         if (
             self._self_grading
             or self.question is None
@@ -2221,7 +1591,7 @@ class ExerciseView(QWidget):
         --------
         A correct timed answer can display “Easy · 4 days”.
         """
-        staff = self.keyboard.isHidden()
+        staff = self.question_view.keyboard is None
         if len(intervals) == 1:
             heading = "Next interval:"
             text = ("\n" if staff else " ").join((heading, intervals[0]))
@@ -2241,8 +1611,8 @@ class ExerciseView(QWidget):
             self.review_interval.setAlignment(
                 Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom,
             )
-            self._music_layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-            self._music_layout.addWidget(
+            self.question_view.grid.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+            self.question_view.grid.addWidget(
                 self.review_interval,
                 0,
                 1,
@@ -2272,9 +1642,11 @@ class ExerciseView(QWidget):
         A short keyboard stays centered with the interval row ending
         beneath its right edge.
         """
+        if self.question_view.keyboard is None:
+            return
         width = self._keyboard_interval_row.width()
         margin = min(
-            (width - self.keyboard.full_width()) // 2,
+            (width - self.question_view.keyboard.full_width()) // 2,
             width - self.review_interval.sizeHint().width(),
         )
         self._keyboard_interval_layout.setContentsMargins(
@@ -2341,7 +1713,7 @@ class ExerciseView(QWidget):
         >>> view = ExerciseView(
         ...     NoteNames(), rng=random.Random(1)
         ... )
-        >>> view._flash(view.buttons[0])
+        >>> view._flash(view.answer_controls.buttons[0])
         >>> len(view._anims)
         1
         """
@@ -2368,11 +1740,12 @@ class ExerciseView(QWidget):
             if button is not None:
                 button.setStyleSheet(self._style(c))
             if staff:
-                self.staff.set_note_color(c if t > 0 else None)
-                if self.question and (
-                    self.question.keyboard or self.question.keyboard_notes
-                ):
-                    self.keyboard.set_highlight_color(
+                if self.question_view.staff is not None:
+                    self.question_view.staff.set_note_color(
+                        c if t > 0 else None,
+                    )
+                if self.question_view.keyboard is not None:
+                    self.question_view.keyboard.set_highlight_color(
                         c
                         if t > 0
                         else self.palette().color(
@@ -2383,35 +1756,6 @@ class ExerciseView(QWidget):
         anim.valueChanged.connect(step)
         self._anims.append(anim)
         anim.start()
-
-    def _input(self) -> StaffInput:
-        """
-        Return the staff the learner is clicking: the one for a scale,
-        or the one for a single note.
-
-        Returns
-        -------
-        StaffInput
-            `scale_input` while a scale is asked for, otherwise
-            `input_staff`.
-
-        Examples
-        --------
-        >>> from alto.exercises.library import (
-        ...     NoteConstruction,
-        ... )
-        >>> view = ExerciseView(
-        ...     NoteConstruction(), rng=random.Random(2)
-        ... )
-        >>> view._input() is view.input_staff
-        True
-        """
-        q = self.question
-        return (
-            self.scale_input
-            if q is not None and q.places_sequence
-            else self.input_staff
-        )
 
     def _set_accidental(self, accidental: int | None) -> None:
         """
@@ -2434,17 +1778,17 @@ class ExerciseView(QWidget):
         ... )
         >>> view._set_accidental(1)
         >>> (
-        ...     view.input_staff.accidental,
+        ...     view.question_view.note_input.accidental,
         ...     view.accidental_buttons[1].isChecked(),
         ... )
         (1, True)
         >>> view._set_accidental(None)
-        >>> view.input_staff.accidental is None
+        >>> view.question_view.note_input.accidental is None
         True
         """
         for a, b in self.accidental_buttons.items():
             b.setChecked(accidental is not None and a == accidental)
-        staff = self._input()
+        staff = self.question_view.note_input
         staff.accidental = accidental
         staff.refresh_preview()
         self._update_placement_status()
@@ -2470,12 +1814,12 @@ class ExerciseView(QWidget):
         ...     NoteConstruction(), rng=random.Random(2)
         ... )
         >>> view.accidental_buttons[-1].click()
-        >>> view.input_staff.accidental
+        >>> view.question_view.note_input.accidental
         -1
         >>> view.accidental_buttons[
         ...     -1
         ... ].click()  # clicking the lit one again clears it
-        >>> view.input_staff.accidental is None
+        >>> view.question_view.note_input.accidental is None
         True
         """
         lit = self.accidental_buttons[
@@ -2509,7 +1853,7 @@ class ExerciseView(QWidget):
         ... )
         >>> # not a "place this note" question: nothing happens
         >>> view._cycle_accidental()
-        >>> view.input_staff.accidental is None
+        >>> view.question_view.editor is None
         True
         >>> from alto.exercises.library import (
         ...     ScaleConstruction,
@@ -2521,12 +1865,14 @@ class ExerciseView(QWidget):
         >>> view._cycle_accidental(
         ...     -1
         ... )  # back from no sign goes around to the flat
-        >>> view.scale_input.accidental
+        >>> view.question_view.scale_input.accidental
         -1
         """
         q = self.question
         if q and q.place_signature:
-            self._set_accidental(-1 if self.scale_input.accidental == 1 else 1)
+            self._set_accidental(
+                -1 if self.question_view.scale_input.accidental == 1 else 1,
+            )
         elif (
             q
             and (q.construct is not None or q.construct_scale is not None)
@@ -2544,7 +1890,7 @@ class ExerciseView(QWidget):
             )  # without a key a natural is the same as no sign
             if isinstance(self.exercise, IntervalConstruction):
                 order.extend([2, -2])
-            current = self._input().accidental
+            current = self.question_view.note_input.accidental
             self._set_accidental(
                 order[(order.index(current) + direction) % len(order)]
                 if current in order
@@ -2578,7 +1924,9 @@ class ExerciseView(QWidget):
         anim.setStartValue(0.0)
         anim.setEndValue(1.0)
         anim.valueChanged.connect(
-            lambda t: self._input().set_note_color(blend(start, b=end, t=t)),
+            lambda t: self.question_view.note_input.set_note_color(
+                blend(start, b=end, t=t),
+            ),
         )
         self._anims.append(anim)
         anim.start()
@@ -2604,7 +1952,7 @@ class ExerciseView(QWidget):
             or QApplication.activePopupWidget()
         ):
             return
-        if q is None or self.answered or self._busy:
+        if q is None or self.session.answered or self._busy:
             return
         if (
             isinstance(self.exercise, NoteNames)
@@ -2613,7 +1961,7 @@ class ExerciseView(QWidget):
             and q.staff[0]
         ):
             self._identify_midi(pitch, question=q)
-        elif q.construct_scale and not self.scale_input.complete:
+        elif q.construct_scale and not self.question_view.scale_input.complete:
             spelling = next(
                 (n for n in q.construct_scale if n.pitch_class == pitch % 12),
                 None,
@@ -2626,8 +1974,8 @@ class ExerciseView(QWidget):
                 if spelling is not None
                 else Note.parse(app_settings.key_name(pitch))
             )
-            self.scale_input.place_next(note)
-            if self.scale_input.done:
+            self.question_view.scale_input.place_next(note)
+            if self.question_view.scale_input.done:
                 self._check_scale()
         elif q.construct is not None:
             note = q.construct
@@ -2666,7 +2014,7 @@ class ExerciseView(QWidget):
         ):
             played = app_settings.key_name(pitch)
             self.submit(f"Played {played}", button=None)
-            if not self.answered:
+            if not self.session.answered:
                 self.prompt.setText(f"Played {played}. Try again. {prompt}")
                 self.prompt.show()
             return
@@ -2677,9 +2025,9 @@ class ExerciseView(QWidget):
             if question.octaves
             else question.answer
         )
-        self.buttons[question.choices.index(name)].click()
+        self.answer_controls.buttons[question.choices.index(name)].click()
         if question.octaves:
-            self.buttons[
+            self.answer_controls.buttons[
                 len(question.choices) + question.octaves.index(octave)
             ].click()
 
@@ -2707,13 +2055,13 @@ class ExerciseView(QWidget):
         ... )
         >>> # noinspection PyTypeChecker,PyUnresolvedReferences
         >>> view._place(view.question.construct)
-        >>> view.answered, view.correct
+        >>> view.session.answered, view.session.correct
         (True, 1)
         >>> view._advance.stop()
         >>> sounds.enabled = True
         """
         q = self.question
-        if not q or q.construct is None or self.answered or self._busy:
+        if not q or q.construct is None or self.session.answered or self._busy:
             return
         ok = q.check_placed(note)
         self._record(
@@ -2724,11 +2072,11 @@ class ExerciseView(QWidget):
                 minor=q.minor,
             ),
         )
-        self.input_staff.locked = True
-        self.input_staff.show_note(note)
+        self.question_view.note_input.locked = True
+        self.question_view.note_input.show_note(note)
         if ok:
             self._finish_answer(
-                self.place_button,
+                self.answer_controls.placement.place_button,
                 notes=q.placement_columns(note),
             )
         else:
@@ -2749,11 +2097,11 @@ class ExerciseView(QWidget):
                     token != self._pair_token
                 ):  # a new question replaced this one
                     return
-                self.input_staff.locked = False
-                self.input_staff.show_note(None)
+                self.question_view.note_input.locked = False
+                self.question_view.note_input.show_note(None)
                 self._busy = False
                 # the note at the caret comes back, for the keyboard
-                self.input_staff.refresh_preview()
+                self.question_view.note_input.refresh_preview()
                 self._show_placement_rows()
 
             self._after_miss(retry)
@@ -2775,32 +2123,34 @@ class ExerciseView(QWidget):
         ...     rng=random.Random(2),
         ... )
         >>> # noinspection PyUnresolvedReferences
-        >>> view.fork.set_value(
+        >>> assert isinstance(view.question_view.editor, KeyFork)
+        >>> view.question_view.editor.set_value(
         ...     view.question.key, slide=False
         ... )
         >>> view._answer()
-        >>> view.answered
+        >>> view.session.answered
         True
         >>> view._advance.stop()
         """
         q = self.question
         if q and isinstance(self.exercise, BeatConstruction):
             self._check_beats()
-        elif q and q.build_key:
-            self._check_built()
+        elif q and isinstance(self.question_view.editor, KeyFork):
+            self._check_built(self.question_view.editor)
         elif q and q.place_clef:
-            self.clef_input.place_caret()
+            self.question_view.clef_input.place_caret()
         elif (
             q
             and q.place_signature
-            and self.answer_button.isEnabled()
-            and not self.answered
+            and self.answer_controls.placement.answer_button.isEnabled()
+            and not self.session.answered
         ):
-            assert isinstance(self.scale_input, SignatureInput)
+            editor = self.question_view.scale_input
+            assert isinstance(editor, SignatureInput)
             choice = (
                 " ".join(
                     str(note)
-                    for note in self.scale_input.entered_signature()
+                    for note in editor.entered_signature()
                     if note is not None
                 )
                 or "No accidentals"
@@ -2808,15 +2158,19 @@ class ExerciseView(QWidget):
             ok = q.check(choice)
             self._record(ok, choice=choice)
             if ok:
-                self.scale_input.locked = True
-                self._finish_answer(self.answer_button)
+                self.question_view.scale_input.locked = True
+                self._finish_answer(
+                    self.answer_controls.placement.answer_button,
+                )
                 self._show_placement_rows()
             else:
-                self.scale_input.set_note_color(QColor("#c62828"))
-                self.answer_button.setEnabled(False)
+                self.question_view.scale_input.set_note_color(
+                    QColor("#c62828"),
+                )
+                self.answer_controls.placement.answer_button.setEnabled(False)
                 self._after_miss()
-                if self.answered:
-                    self.scale_input.locked = True
+                if self.session.answered:
+                    self.question_view.scale_input.locked = True
                     self._show_placement_rows()
                 else:
                     self.place_status.setText(
@@ -2839,12 +2193,16 @@ class ExerciseView(QWidget):
         ...     BeatConstruction(), rng=random.Random(1)
         ... )
         >>> view._check_beats()  # an empty response is not submitted
-        >>> view.answered
+        >>> view.session.answered
         False
         """
         q = self.question
         score = self.beat_placement
-        if not q or not self.answer_button.isEnabled() or self.answered:
+        if (
+            not q
+            or not self.answer_controls.placement.answer_button.isEnabled()
+            or self.session.answered
+        ):
             return
         ok, choice = grade_beat_marks(
             score.marks,
@@ -2854,7 +2212,7 @@ class ExerciseView(QWidget):
         score.feedback = ok
         score.update()
         if ok:
-            self._finish_answer(self.answer_button)
+            self._finish_answer(self.answer_controls.placement.answer_button)
         else:
             self._after_miss()
         self._show_placement_rows()
@@ -2876,15 +2234,16 @@ class ExerciseView(QWidget):
         ... )
         >>> view._set_accidental(1)
         >>> view._scale_changed()
+        >>> actions = view.answer_controls.placement
         >>> (
-        ...     view.scale_input.accidental is None,
-        ...     view.answer_button.isEnabled(),
+        ...     view.question_view.scale_input.accidental is None,
+        ...     actions.answer_button.isEnabled(),
         ... )
         (True, False)
         """
         if self.question and self.question.place_signature:
-            self.scale_input.set_note_color(None)
-        elif self.scale_input.accidental is not None:
+            self.question_view.scale_input.set_note_color(None)
+        elif self.question_view.scale_input.accidental is not None:
             self._set_accidental(None)
         self._show_placement_rows()
 
@@ -2910,10 +2269,11 @@ class ExerciseView(QWidget):
         ...     rng=random.Random(2),
         ... )
         >>> view._show_placement_rows()
+        >>> actions = view.answer_controls.placement
         >>> (
         ...     view.step_row.isHidden(),
-        ...     view.answer_button.isEnabled(),
-        ...     view.place_button.isEnabled(),
+        ...     actions.answer_button.isEnabled(),
+        ...     actions.place_button.isEnabled(),
         ... )
         (True, False, True)
         """
@@ -2927,20 +2287,30 @@ class ExerciseView(QWidget):
         )
         clef = bool(q.place_clef)
         beats = isinstance(self.exercise, BeatConstruction) and bool(q.rhythm)
-        staff = self._input()
-        placing_notes = note or (sequence and not self.scale_input.complete)
-        steps_turn = sequence and self.scale_input.placing_steps
-        live = not self.answered and not self._busy
+        placing_notes = note or (
+            sequence and not self.question_view.scale_input.complete
+        )
+        steps_turn = sequence and self.question_view.scale_input.placing_steps
+        live = not self.session.answered and not self._busy
         for (
             symbol,
             button,
         ) in (
             self.symbol_buttons.items()
         ):  # one for each symbol that can be chosen, the chosen one pressed
-            button.setVisible(clef and symbol in self.clef_input.options)
-            button.setChecked(symbol == self.clef_input.selected)
+            button.setVisible(
+                clef and symbol in self.question_view.clef_input.options,
+            )
+            button.setChecked(
+                clef and symbol == self.question_view.clef_input.selected,
+            )
             button.setEnabled(live)
-        self.answer_row.setVisible(note or sequence or fork or clef or beats)
+        self.answer_controls.placement.show_actions(
+            q,
+            live=live,
+            sequence=self.question_view.scale_input if sequence else None,
+            beats=self.beat_placement if beats else None,
+        )
         self.place_status.setVisible(note or sequence or beats)
         self.pitch_row.setVisible(placing_notes and not q.place_signature)
         self.accidental_buttons[0].setVisible(not q.place_signature)
@@ -2949,37 +2319,9 @@ class ExerciseView(QWidget):
             q.place_signature or (q.accidentals and placing_notes),
         )
         self.step_row.setVisible(steps_turn)
-        self.undo_button.setVisible(sequence or beats)
-        self.place_button.setVisible(note or sequence)
-        label = (
-            "Place sign"
-            if q.place_signature
-            else "Mark step"
-            if steps_turn
-            else "Place note"
-        )
-        if self.place_button.text() != label:
-            self.place_button.setText(label)
-            motion.set_shortcut(
-                self.place_button,
-                key="P" if q.place_signature else "Return",
-            )
-        self.place_button.setEnabled(
-            live and not (sequence and self.scale_input.done),
-        )
-        self.answer_button.setVisible(sequence or fork or clef or beats)
-        self.answer_button.setEnabled(
-            live
-            and (fork or clef or q.place_signature or self.scale_input.done),
-        )
-        self.undo_button.setEnabled(live and bool(self.scale_input.notes))
         if beats:
             score = self.beat_placement
             score.setEnabled(live)
-            self.answer_button.setEnabled(
-                live and bool(score.marks) and score.feedback is not False,
-            )
-            self.undo_button.setEnabled(live and bool(score.marks))
             count = len(score.marks)
             if score.feedback is False:
                 self.place_status.setText("Check where each beat begins.")
@@ -2992,12 +2334,12 @@ class ExerciseView(QWidget):
                     "Mark each beat, including the start of each measure.",
                 )
         for key in self._arrow_keys:
-            key.setEnabled(note or sequence or fork or clef)
+            key.setEnabled(self.question_view.editor is not None)
         for key in self._letter_keys:
             key.setEnabled(placing_notes and not fork)
         if note or sequence:
             action = "place the scale" if sequence else "place the note"
-            staff.setAccessibleName(
+            self.question_view.note_input.setAccessibleName(
                 "Staff: write the key signature"
                 if q.place_signature
                 else f"Staff: {action}",
@@ -3019,7 +2361,7 @@ class ExerciseView(QWidget):
         ... )
         >>> view.place_status.text()
         'Press ↑ or ↓ to choose a note, then Return to place it.'
-        >>> view.input_staff.move_cursor(0)
+        >>> view.question_view.note_input.move_cursor(0)
         >>> view.place_status.text().startswith(
         ...     "Note to place: "
         ... )
@@ -3030,7 +2372,7 @@ class ExerciseView(QWidget):
         self.place_status.setAccessibleDescription(spoken)
         q = self.question
         if q is not None and (q.construct is not None or q.places_sequence):
-            self._input().setAccessibleDescription(spoken)
+            self.question_view.note_input.setAccessibleDescription(spoken)
 
     def _placement_text(self) -> tuple[str, str]:
         """
@@ -3060,7 +2402,7 @@ class ExerciseView(QWidget):
         if q is None or (q.construct is None and not q.places_sequence):
             return "", ""
         if self._busy and q.construct and q.staff:
-            placed = self.input_staff.columns[-1][-1]
+            placed = self.question_view.note_input.columns[-1][-1]
             right_position = any(
                 q.check_placed(
                     Note.from_diatonic(placed.diatonic, accidental=sign),
@@ -3073,14 +2415,14 @@ class ExerciseView(QWidget):
                 else "Check the staff position."
             )
             return text, text
-        if self.answered and self.missed:
+        if self.session.answered and self.session.missed:
             return "", ""
-        staff = self._input()
+        staff = self.question_view.note_input
         if q.place_signature:
             caret = staff.caret_note()
-            if self.answered:
+            if self.session.answered:
                 text = "Correct."
-            elif self.scale_input.complete:
+            elif self.question_view.scale_input.complete:
                 text = "Seven signs placed. Press Answer to submit."
             elif caret:
                 text = f"Next sign: {caret}. Press P to place it."
@@ -3091,12 +2433,12 @@ class ExerciseView(QWidget):
                 )
             return text, text
         if q.construct_scale is not None:
-            if self.scale_input.placing_steps:
+            if self.question_view.scale_input.placing_steps:
                 number, of = (
-                    len(self.scale_input.steps) + 1,
-                    self.scale_input.slots - 1,
+                    len(self.question_view.scale_input.steps) + 1,
+                    self.question_view.scale_input.slots - 1,
                 )
-                pending = self.scale_input.pending_step
+                pending = self.question_view.scale_input.pending_step
                 words = "a whole step" if pending == "W" else "a half step"
                 return (
                     (
@@ -3118,16 +2460,16 @@ class ExerciseView(QWidget):
                         ". Press W or H to choose, then Return to mark it."
                     ),
                 )
-            if self.scale_input.done:
+            if self.question_view.scale_input.done:
                 return (
                     "Everything is placed. Press Return to answer.",
                     "Everything is placed. Press Return to answer.",
                 )
             head = (
                 "Note "
-                f"{len(self.scale_input.notes) + 1}"
+                f"{len(self.question_view.scale_input.notes) + 1}"
                 " of "
-                f"{self.scale_input.slots}"
+                f"{self.question_view.scale_input.slots}"
             )
         else:
             head = "Note to place"
@@ -3185,36 +2527,37 @@ class ExerciseView(QWidget):
         ...     rng=random.Random(2),
         ... )
         >>> view._key_action("up")
-        >>> view.fork.value
+        >>> assert isinstance(view.question_view.editor, KeyFork)
+        >>> view.question_view.editor.value
         1
         """
         q = self.question
-        if q is None or self.answered or self._busy:
+        if q is None or self.session.answered or self._busy:
             return
-        if q.build_key:
-            step = {"up": 1, "right": 1, "down": -1, "left": -1}.get(name)
-            if not self.fork.locked:
-                if step is not None:
-                    self.fork.set_value(self.fork.value + step)
-                elif (
-                    name == "home"
-                ):  # back to the natural sign, no sharps or flats
-                    self.fork.set_value(0)
+        if isinstance(self.question_view.editor, KeyFork):
+            self.question_view.editor.move_selection(name)
             return
         if q.place_clef:
             if name in {"up", "down"}:
-                self.clef_input.move_caret(1 if name == "up" else -1)
+                self.question_view.clef_input.move_caret(
+                    1 if name == "up" else -1,
+                )
             elif name in {"left", "right"}:
-                self.clef_input.step_symbol(1 if name == "right" else -1)
+                self.question_view.clef_input.step_symbol(
+                    1 if name == "right" else -1,
+                )
             return
         if q.construct is None and not q.places_sequence:
             return
-        if q.construct_scale is not None and self.scale_input.placing_steps:
+        if (
+            q.construct_scale is not None
+            and self.question_view.scale_input.placing_steps
+        ):
             if (
                 name in {"up", "down", "left", "right"}
-                and not self.scale_input.locked
+                and not self.question_view.scale_input.locked
             ):
-                self.scale_input.toggle_step()
+                self.question_view.scale_input.toggle_step()
         elif name in {"up", "down", "pageup", "pagedown"}:
             self._move_caret(
                 {"up": 1, "down": -1, "pageup": 7, "pagedown": -7}[name],
@@ -3244,21 +2587,24 @@ class ExerciseView(QWidget):
         ...     NoteConstruction(), rng=random.Random(2)
         ... )
         >>> view._move_caret(1)
-        >>> view.input_staff.caret is not None
+        >>> view.question_view.note_input.caret is not None
         True
         """
         q = self.question
         if (
             q is None
-            or self.answered
+            or self.session.answered
             or self._busy
             or (q.construct is None and not q.places_sequence)
         ):
             return
-        if q.places_sequence and not self.scale_input.placing_steps:
-            self.scale_input.move_cursor(steps)
+        if (
+            q.places_sequence
+            and not self.question_view.scale_input.placing_steps
+        ):
+            self.question_view.scale_input.move_cursor(steps)
         elif q.construct is not None:
-            self.input_staff.move_cursor(steps)
+            self.question_view.note_input.move_cursor(steps)
 
     def _jump_to_letter(self, letter: int) -> None:
         """
@@ -3279,16 +2625,19 @@ class ExerciseView(QWidget):
         ...     NoteConstruction(), rng=random.Random(2)
         ... )
         >>> view._jump_to_letter(4)
-        >>> view.input_staff.caret % 7  # G is the fifth letter from C
+        >>> view.question_view.note_input.caret % 7  # G, starting at C
         4
         """
         q = self.question
-        if q is None or self.answered or self._busy:
+        if q is None or self.session.answered or self._busy:
             return
-        if q.places_sequence and not self.scale_input.placing_steps:
-            self.scale_input.jump_to_letter(letter)
+        if (
+            q.places_sequence
+            and not self.question_view.scale_input.placing_steps
+        ):
+            self.question_view.scale_input.jump_to_letter(letter)
         elif q.construct is not None:
-            self.input_staff.jump_to_letter(letter)
+            self.question_view.note_input.jump_to_letter(letter)
 
     def _place_here(self) -> None:
         """
@@ -3305,18 +2654,18 @@ class ExerciseView(QWidget):
         ...     NoteConstruction(), rng=random.Random(2)
         ... )
         >>> view._place_here()  # the note at the starting place
-        >>> view.total
+        >>> view.session.total
         1
         >>> view._advance.stop()
         >>> sounds.enabled = True
         """
         q = self.question
-        if q is None or self.answered or self._busy:
+        if q is None or self.session.answered or self._busy:
             return
         if q.places_sequence:
-            self.scale_input.place_caret()
+            self.question_view.scale_input.place_caret()
         elif q.construct is not None:
-            self.input_staff.place_caret()
+            self.question_view.note_input.place_caret()
 
     def _show_step(self, step: str) -> None:
         """
@@ -3359,18 +2708,18 @@ class ExerciseView(QWidget):
         ...     ScaleConstruction(),
         ...     rng=random.Random(2),
         ... )
-        >>> view.scale_input.notes.append(
+        >>> view.question_view.scale_input.notes.append(
         ...     Note.parse("C4")
         ... )
         >>> view._undo_scale_note()
-        >>> view.scale_input.notes
+        >>> view.question_view.scale_input.notes
         []
         """
-        if not self.answered and not self._busy:
+        if not self.session.answered and not self._busy:
             if isinstance(self.exercise, BeatConstruction):
                 self.beat_placement.undo()
             else:
-                self.scale_input.undo()
+                self.question_view.scale_input.undo()
 
     def _check_scale(self) -> None:
         """
@@ -3391,11 +2740,11 @@ class ExerciseView(QWidget):
         ...     rng=random.Random(2),
         ... )
         >>> # noinspection PyTypeChecker,PyUnresolvedReferences
-        >>> view.scale_input.notes = list(
+        >>> view.question_view.scale_input.notes = list(
         ...     view.question.construct_scale
         ... )
         >>> view._check_scale()
-        >>> view.answered, view.correct
+        >>> view.session.answered, view.session.correct
         (True, 1)
         >>> view._advance.stop()
         >>> sounds.enabled = True
@@ -3404,14 +2753,14 @@ class ExerciseView(QWidget):
         if (
             not q
             or q.construct_scale is None
-            or self.answered
+            or self.session.answered
             or self._busy
-            or not self.scale_input.done
+            or not self.question_view.scale_input.done
         ):
             return
         notes, steps, clef, caption = (
-            list(self.scale_input.notes),
-            list(self.scale_input.steps),
+            list(self.question_view.scale_input.notes),
+            list(self.question_view.scale_input.steps),
             q.clef,
             q.caption,
         )
@@ -3422,10 +2771,10 @@ class ExerciseView(QWidget):
             ok,
             choice=f"{answer} | {' '.join(steps)}" if with_steps else answer,
         )
-        self.scale_input.locked = True
+        self.question_view.scale_input.locked = True
         if ok:
             self._finish_answer(
-                self.answer_button,
+                self.answer_controls.placement.answer_button,
                 notes=[[note] for note in notes],
             )
         else:
@@ -3446,7 +2795,7 @@ class ExerciseView(QWidget):
                     token != self._pair_token
                 ):  # a new question replaced this one
                     return
-                self.scale_input.reset_scale(
+                self.question_view.scale_input.reset_scale(
                     clef,
                     slots=len(notes),
                     caption=caption,
@@ -3500,9 +2849,11 @@ class ExerciseView(QWidget):
         ...     Qt.ScrollPhase.NoScrollPhase,
         ...     False,
         ... )
-        >>> view.eventFilter(view.answer_button, turn)
+        >>> answer = view.answer_controls.placement.answer_button
+        >>> view.eventFilter(answer, turn)
         True
-        >>> view.fork.value
+        >>> assert isinstance(view.question_view.editor, KeyFork)
+        >>> view.question_view.editor.value
         1
         """
         if (
@@ -3532,27 +2883,28 @@ class ExerciseView(QWidget):
             event.type() == QEvent.Type.MouseButtonPress
             and isinstance(event, QMouseEvent)
             and event.button() == Qt.MouseButton.LeftButton
-            and watched is self.staff
-            and self.staff.locate_notation
-            and not self.answered
+            and self.question_view.staff is not None
+            and watched is self.question_view.staff
+            and self.question_view.staff.locate_notation
+            and not self.session.answered
             and self.question
         ):
             choice = (
                 self.question.answer
-                if self.staff.hits_notation(event.position().toPoint())
+                if self.question_view.staff.hits_notation(
+                    event.position().toPoint(),
+                )
                 else "Incorrect location"
             )
             self.submit(choice, button=None)
             return True
         if isinstance(event, QWheelEvent) and watched in (
-            self.staff,
-            self.answer_button,
+            self.question_view.staff,
+            self.answer_controls.placement.answer_button,
         ):
-            if self.fork.isVisible():
-                self.fork.wheelEvent(event)
-                return True
-            if self.clef_input.isVisible():
-                self.clef_input.wheelEvent(event)
+            editor = self.question_view.editor
+            if isinstance(editor, (KeyFork, ClefInput)) and editor.isVisible():
+                editor.wheelEvent(event)
                 return True
         return super().eventFilter(watched, event)
 
@@ -3596,18 +2948,18 @@ class ExerciseView(QWidget):
         ...         )
         ...     )[0]
         ... )
-        >>> view.answered, view.correct
+        >>> view.session.answered, view.session.correct
         (True, 1)
         >>> view._advance.stop()
         """
         q = self.question
-        if not q or not q.place_clef or self.answered or self._busy:
+        if not q or not q.place_clef or self.session.answered or self._busy:
             return
         ok = (symbol, step) in clef_targets(q.place_clef)
         self._record(ok, choice=f"{symbol} clef at {step}")
-        self.clef_input.locked = True
+        self.question_view.clef_input.locked = True
         if ok:
-            self._finish_answer(self.answer_button)
+            self._finish_answer(self.answer_controls.placement.answer_button)
         else:
             self._flash_clef("#c62828")
             self._busy = True
@@ -3626,8 +2978,8 @@ class ExerciseView(QWidget):
                     token != self._pair_token
                 ):  # a new question replaced this one
                     return
-                self.clef_input.locked = False
-                self.clef_input.clear_placed()
+                self.question_view.clef_input.locked = False
+                self.question_view.clef_input.clear_placed()
                 self._busy = False
                 self._show_placement_rows()
 
@@ -3662,7 +3014,9 @@ class ExerciseView(QWidget):
         anim.setStartValue(0.0)
         anim.setEndValue(1.0)
         anim.valueChanged.connect(
-            lambda t: self.clef_input.set_clef_color(blend(start, b=end, t=t)),
+            lambda t: self.question_view.clef_input.set_clef_color(
+                blend(start, b=end, t=t),
+            ),
         )
         self._anims.append(anim)
         anim.start()
@@ -3686,13 +3040,14 @@ class ExerciseView(QWidget):
         ...     KeySignatureConstruction(),
         ...     rng=random.Random(2),
         ... )
-        >>> view.fork.set_value(-3)
-        >>> view.staff.key
+        >>> assert isinstance(view.question_view.editor, KeyFork)
+        >>> view.question_view.editor.set_value(-3)
+        >>> view.question_view.staff.key
         -3
         """
         q = self.question
-        if q and q.build_key:
-            self.staff.show_notes(
+        if q and q.build_key and self.question_view.staff is not None:
+            self.question_view.staff.show_notes(
                 q.staff,
                 clef=q.clef,
                 key=count,
@@ -3700,13 +3055,18 @@ class ExerciseView(QWidget):
                 caption=q.caption,
             )
 
-    def _check_built(self) -> None:
+    def _check_built(self, fork: KeyFork) -> None:
         """
         Check the signature picked on the fork against the one asked
         for.
 
         A correct signature uses the selected Next Question setting. A
         wrong signature turns the circle red.
+
+        Parameters
+        ----------
+        fork : KeyFork
+            The active key signature picker.
 
         Examples
         --------
@@ -3718,25 +3078,26 @@ class ExerciseView(QWidget):
         ...     rng=random.Random(2),
         ... )
         >>> # noinspection PyUnresolvedReferences
-        >>> view.fork.set_value(
+        >>> assert isinstance(view.question_view.editor, KeyFork)
+        >>> view.question_view.editor.set_value(
         ...     view.question.key, slide=False
         ... )
-        >>> view._check_built()
-        >>> view.answered, view.correct
+        >>> view._answer()
+        >>> view.session.answered, view.session.correct
         (True, 1)
         >>> view._advance.stop()
         """
         q = self.question
-        if not q or not q.build_key or self.answered or self._busy:
+        if not q or not q.build_key or self.session.answered or self._busy:
             return
-        count = self.fork.value
+        count = fork.value
         ok = q.check_built(count)
         self._record(ok, choice=format_key_signature(count))
-        self.fork.locked = True
+        fork.locked = True
         if ok:
-            self._finish_answer(self.answer_button)
+            self._finish_answer(self.answer_controls.placement.answer_button)
         else:
-            self._flash_fork("#c62828")
+            self._anims.append(fork.flash("#c62828"))
             self._busy = True
             token = self._pair_token
 
@@ -3753,51 +3114,13 @@ class ExerciseView(QWidget):
                     token != self._pair_token
                 ):  # a new question replaced this one
                     return
-                self.fork.set_marker_color(None)
-                self.fork.set_value(0)
-                self.fork.locked = False
+                fork.reset(slide=True)
                 self._busy = False
                 self._show_placement_rows()
 
             self._after_miss(retry)
         self._show_placement_rows()
         self._update_score()
-
-    def _flash_fork(self, target: str = CORRECT_ANSWER_COLOR) -> None:
-        """
-        Fade the fork's circle from the ink color to a color.
-
-        Parameters
-        ----------
-        target : str
-            The feedback color. Defaults to the correct-answer green.
-
-        Examples
-        --------
-        >>> from alto.exercises.library import (
-        ...     KeySignatureConstruction,
-        ... )
-        >>> view = ExerciseView(
-        ...     KeySignatureConstruction(),
-        ...     rng=random.Random(2),
-        ... )
-        >>> view._flash_fork("#c62828")
-        >>> len(view._anims)
-        1
-        """
-        end, start = (
-            QColor(target),
-            self.palette().color(QPalette.ColorRole.Highlight),
-        )
-        anim = QVariantAnimation(self)
-        anim.setDuration(180)
-        anim.setStartValue(0.0)
-        anim.setEndValue(1.0)
-        anim.valueChanged.connect(
-            lambda t: self.fork.set_marker_color(blend(start, b=end, t=t)),
-        )
-        self._anims.append(anim)
-        anim.start()
 
     def _record(
         self,
@@ -3827,7 +3150,8 @@ class ExerciseView(QWidget):
         ...     NoteNames(), rng=random.Random(1)
         ... )
         >>> view._record(True, choice="C")
-        >>> view.total, view.correct, view.streak
+        >>> session = view.session
+        >>> session.total, session.correct, session.streak
         (1, 1, 1)
         """
         progress = self.session.after_attempt(
@@ -3902,7 +3226,7 @@ class ExerciseView(QWidget):
         ... )
         >>> by_text = {
         ...     button_.text(): button_
-        ...     for button_ in view.buttons
+        ...     for button_ in view.answer_controls.buttons
         ... }
         >>> view._pick(
         ...     "name", text=kind, button=by_text[kind]
@@ -3912,12 +3236,12 @@ class ExerciseView(QWidget):
         ...     text=inversion,
         ...     button=by_text[inversion],
         ... )
-        >>> view.answered
+        >>> view.session.answered
         True
         >>> view._advance.stop()
         >>> sounds.enabled = True
         """
-        if self.answered or self._busy:
+        if self.session.answered or self._busy:
             return
         previous = self._pending.get(part)
         if previous and previous[1] is not button:
@@ -3945,7 +3269,7 @@ class ExerciseView(QWidget):
         ... )
         >>> by_text = {
         ...     button.text(): button
-        ...     for button in view.buttons
+        ...     for button in view.answer_controls.buttons
         ... }
         >>> # noinspection PyUnresolvedReferences
         >>> wrong_kind = next(
@@ -3967,7 +3291,7 @@ class ExerciseView(QWidget):
         ...     ),
         ... }
         >>> view._submit_pair()
-        >>> view.missed
+        >>> view.session.missed
         True
         >>> sounds.enabled = True
         """
@@ -4045,27 +3369,27 @@ class ExerciseView(QWidget):
         >>> # noinspection PyUnresolvedReferences
         >>> wrong = next(
         ...     b
-        ...     for b in view.buttons
+        ...     for b in view.answer_controls.buttons
         ...     if b.text() != question.answer
         ... )
         >>> view.submit(wrong.text(), button=wrong)
-        >>> view.missed, wrong.isEnabled()
+        >>> view.session.missed, wrong.isEnabled()
         (True, False)
         >>> # noinspection PyUnresolvedReferences
         >>> right = next(
         ...     b
-        ...     for b in view.buttons
+        ...     for b in view.answer_controls.buttons
         ...     if b.text() == question.answer
         ... )
         >>> # noinspection PyUnresolvedReferences
         >>> view.submit(question.answer, button=right)
-        >>> view.answered
+        >>> view.session.answered
         True
         >>> view._advance.stop()
         >>> sounds.enabled = True
         """
         if (
-            self.answered
+            self.session.answered
             or not self.question
             or (button is not None and not button.isEnabled())
         ):
@@ -4079,7 +3403,10 @@ class ExerciseView(QWidget):
             button.setEnabled(False)
             if not q.complete(self._found):
                 self._flash(button)
-                self.circle.set_subtitle("and its other name")
+                if self.question_view.circle is not None:
+                    self.question_view.circle.set_subtitle(
+                        "and its other name",
+                    )
                 return
             choice = " ".join(name for name in q.required)
         self._record(ok, choice=choice)
@@ -4108,6 +3435,7 @@ class ExerciseView(QWidget):
             notes = q.sounding_columns()
             if (
                 isinstance(self.exercise, IntervalNames)
+                and self.question_view.staff is not None
                 and q.prompt in INTERVAL_INVERSION_PROMPTS.values()
             ):
                 first, second = (note for column in q.staff for note in column)
@@ -4126,7 +3454,7 @@ class ExerciseView(QWidget):
                         if first == high and first != second
                         else [[high], [raised]]
                     )
-                self.staff.show_notes(
+                self.question_view.staff.show_notes(
                     notes,
                     clef=q.clef,
                     key=q.key,
@@ -4141,8 +3469,8 @@ class ExerciseView(QWidget):
                 notes = [[Note.parse(position.note)]]
             self._finish_answer(button, notes=notes)
         else:
-            if q.circle is not None:
-                self.circle.flash_wrong()
+            if self.question_view.circle is not None:
+                self.question_view.circle.flash_wrong()
             if button is None:
                 self.prompt.setText(f"Try again. {q.prompt}")
             else:
@@ -4169,9 +3497,10 @@ class ExerciseView(QWidget):
             isinstance(self.exercise, PackExercise)
             and self.exercise.is_keyboard
             and picture is not None
+            and self.question_view.fingerboard is not None
             and picture.keys
         ):
-            self.fingerboard.show_position(
+            self.question_view.fingerboard.show_position(
                 replace(picture, span=self.exercise.chosen_span()),
             )
 
@@ -4198,8 +3527,8 @@ class ExerciseView(QWidget):
         A missed SM-2 card receives a fresh first attempt when its
         scheduled retry comes due.
         """
-        if self.answered:
-            for button in self.buttons:
+        if self.session.answered:
+            for button in self.answer_controls.buttons:
                 button.setEnabled(False)
             self.prompt.setText(
                 "Incorrect. This card will return for review."
@@ -4280,12 +3609,12 @@ class ExerciseView(QWidget):
                 mode == "Wait" and not self._self_grading,
             )
             if mode == "Wait":
-                for answer in self.buttons:
+                for answer in self.answer_controls.buttons:
                     answer.setEnabled(False)
             for choice in buttons:
                 self._flash(choice)
-            if q.circle is not None:
-                self.circle.reveal()
+            if self.question_view.circle is not None:
+                self.question_view.circle.reveal()
         if isinstance(self.exercise, BeatConstruction):
             playback = (
                 self._immediate_playback
@@ -4304,12 +3633,14 @@ class ExerciseView(QWidget):
             gap = DEFAULT_NOTE_GAP_MS
             if scale:
                 gap = SCALE_GAP_MS
-            elif not immediate and (q.fingerboard or q.picture):
-                gap = self.fingerboard.feedback_gap_ms()
-            elif self.staff.interval_voices and len(notes) == 2:
+            elif not immediate and self.question_view.fingerboard is not None:
+                gap = self.question_view.fingerboard.feedback_gap_ms()
+            elif self.exercise.interval_voices and len(notes) == 2:
                 gap = MELODIC_INTERVAL_GAP_MS
             instrument = self.exercise.sound_instrument(
-                self.fingerboard.sound_key,
+                self.question_view.fingerboard.sound_key
+                if self.question_view.fingerboard
+                else None,
             )  # the choice made a moment ago counts
             if immediate and self.shuffle_answers:
                 sounds.play_notes(
@@ -4332,15 +3663,18 @@ class ExerciseView(QWidget):
                 )
             return
         if self.exercise.has_sound and q.picture is None:
-            sounds.play_correct(self.streak)
+            sounds.play_correct(self.session.streak)
         if immediate:
             return
-        if q.picture is not None:
-            self.fingerboard.animate_silent_answer(600)
+        if (
+            q.picture is not None
+            and self.question_view.fingerboard is not None
+        ):
+            self.question_view.fingerboard.animate_silent_answer(600)
         elif q.place_clef:
             self._flash_clef()
-        elif q.build_key:
-            self._flash_fork()
+        elif isinstance(self.question_view.editor, KeyFork):
+            self._anims.append(self.question_view.editor.flash())
         elif q.construct is not None or q.places_sequence:
             self._flash_note()
         else:
@@ -4421,11 +3755,11 @@ class ExerciseView(QWidget):
         ... )
         >>> view._record(True)
         >>> view._light_answer_notes(2)
-        >>> list(view.staff.column_colors)
+        >>> list(view.question_view.staff.column_colors)
         [2]
         """
         q = self.question
-        if q is None or not self.answered:
+        if q is None or not self.session.answered:
             return
         if isinstance(self.exercise, BeatConstruction):
             column = (
@@ -4438,22 +3772,25 @@ class ExerciseView(QWidget):
                 self._advance_after_feedback(0)
             return
         green = QColor(CORRECT_ANSWER_COLOR)
-        if q.fingerboard or q.picture:
-            self.fingerboard.set_sounding(index is not None)
-        elif q.keyboard_notes or q.keyboard is not None:
-            self.keyboard.set_highlight_color(
+        if self.question_view.fingerboard is not None:
+            self.question_view.fingerboard.set_sounding(index is not None)
+        elif self.question_view.keyboard is not None:
+            self.question_view.keyboard.set_highlight_color(
                 green
                 if index is not None
                 else self.palette().color(QPalette.ColorRole.Highlight),
             )
         else:
             staff = (
-                self._input()
+                self.question_view.note_input
                 if q.construct is not None or q.construct_scale is not None
-                else self.staff
+                else self.question_view.staff
             )
-            staff.column_colors = {index: green} if index is not None else {}
-            staff.update()
+            if staff is not None:
+                staff.column_colors = (
+                    {index: green} if index is not None else {}
+                )
+                staff.update()
         if index is None:
             delay = (
                 400
@@ -4481,10 +3818,7 @@ class ExerciseView(QWidget):
         >>> view.score.text()
         '3/4 (75%)   streak 0'
         """
-        pct = f"{100 * self.correct / self.total:.0f}%" if self.total else "–"
-        self.score.setText(
-            f"{self.correct}/{self.total} ({pct})   streak {self.streak}",
-        )
+        self.toolbar.show_score(self.session)
         self._refresh_queue_counts()
 
     def _refresh_queue_counts(self) -> None:

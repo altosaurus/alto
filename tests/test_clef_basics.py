@@ -27,6 +27,7 @@ from alto.ui import exercise_settings as es
 from alto.ui import motion
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import ExerciseView
+from alto.ui.key_fork import KeyFork
 from alto.ui.staff import (
     StaffWidget,
     clef_targets,
@@ -270,24 +271,27 @@ def test_baritone_clef_either_f_clef_on_middle_line_or_c_clef_on(
     for symbol, step in sorted(clef_targets("baritone")):
         view = clef_view()
         choose(view, symbol)
-        click(view.clef_input, step=step)
-        assert view.answered and view.correct == 1, (symbol, step)
+        click(view.question_view.clef_input, step=step)
+        assert view.session.answered and view.session.correct == 1, (
+            symbol,
+            step,
+        )
         view._advance.stop()
     view = clef_view()
     choose(view, "C")
     click(
-        view.clef_input,
+        view.question_view.clef_input,
         step=4,
     )  # the C clef on the middle line is the alto clef, not the baritone
-    assert not view.answered
-    view.clef_input.locked, view._busy = False, False
-    view.clef_input.clear_placed()
+    assert not view.session.answered
+    view.question_view.clef_input.locked, view._busy = False, False
+    view.question_view.clef_input.clear_placed()
     choose(view, "F")
     click(
-        view.clef_input,
+        view.question_view.clef_input,
         step=8,
     )  # nor is the F clef on the top line: that is the subbass clef
-    assert not view.answered
+    assert not view.session.answered
 
 
 def test_the_wheel_and_a_right_click_choose_the_symbol(
@@ -456,9 +460,9 @@ def choose(view: ExerciseView, symbol: str) -> None:
         "G", "C" or "F".
     """
     for _ in range(3):
-        if view.clef_input.selected == symbol:
+        if view.question_view.clef_input.selected == symbol:
             return
-        view.clef_input.step_symbol(1)
+        view.question_view.clef_input.step_symbol(1)
 
 
 def test_screen_shows_clef_staff_buttons_and_question_under(
@@ -476,18 +480,22 @@ def test_screen_shows_clef_staff_buttons_and_question_under(
     view = clef_view()
     name = settings.CLEF_NAMES[asked_of(view).place_clef].lower()
     assert (
-        view.clef_input.caption == f"Place the {name} clef."
+        view.question_view.clef_input.caption == f"Place the {name} clef."
     )  # under the staff, in the white area
     assert not view.prompt.isVisible()  # and not above the music
-    assert view.clef_input.isVisible() and view.clef_input.options == [
-        "G",
-        "C",
-        "F",
-    ]  # always the three symbols
     assert (
-        not view.staff.isVisible()
-        and not view.fork.isVisible()
-        and not view.input_staff.isVisible()
+        view.question_view.clef_input.isVisible()
+        and view.question_view.clef_input.options
+        == [
+            "G",
+            "C",
+            "F",
+        ]
+    )  # always the three symbols
+    assert (
+        view.question_view.staff is None
+        and view.findChild(KeyFork) is None
+        and view.question_view.editor is view.question_view.clef_input
     )
     assert [b.accessibleName() for b in view.symbol_buttons.values()] == [
         "G clef",
@@ -502,9 +510,13 @@ def test_screen_shows_clef_staff_buttons_and_question_under(
         all(b.isVisible() for b in view.symbol_buttons.values())
         and view.symbol_buttons["G"].isChecked()
     )
-    assert view.answer_button.isVisible() and view.answer_button.isEnabled()
     assert (
-        not view.place_button.isVisible() and not view.undo_button.isVisible()
+        view.answer_controls.placement.answer_button.isVisible()
+        and view.answer_controls.placement.answer_button.isEnabled()
+    )
+    assert (
+        not view.answer_controls.placement.place_button.isVisible()
+        and not view.answer_controls.placement.undo_button.isVisible()
     )
 
 
@@ -523,12 +535,12 @@ def test_the_buttons_choose_the_symbol_and_follow_the_wheel(
     view = clef_view()
     view.symbol_buttons["F"].click()
     assert (
-        view.clef_input.selected == "F"
+        view.question_view.clef_input.selected == "F"
         and view.symbol_buttons["F"].isChecked()
     )
-    view.clef_input.wheelEvent(turn(120))
+    view.question_view.clef_input.wheelEvent(turn(120))
     assert (
-        view.clef_input.selected == "G"
+        view.question_view.clef_input.selected == "G"
         and view.symbol_buttons["G"].isChecked()
         and not view.symbol_buttons["F"].isChecked()
     )
@@ -551,9 +563,13 @@ def test_the_right_symbol_in_the_right_place_is_correct(
     view = clef_view()
     symbol, step = min(clef_targets(asked_of(view).place_clef))
     choose(view, symbol)
-    click(view.clef_input, step=step)
-    assert (view.answered, view.correct, view.total) == (True, 1, 1)
-    assert view.clef_input.locked
+    click(view.question_view.clef_input, step=step)
+    assert (
+        view.session.answered,
+        view.session.correct,
+        view.session.total,
+    ) == (True, 1, 1)
+    assert view.question_view.clef_input.locked
     view._advance.stop()
 
 
@@ -573,16 +589,21 @@ def test_the_mezzo_soprano_clef_is_the_c_symbol_on_the_second_line(
     view = clef_view()
     assert asked_of(view).place_clef == "mezzo"
     choose(view, "C")
-    click(view.clef_input, step=4)  # the middle line is the alto clef
-    assert not view.answered and view.missed
-    view.clef_input.locked, view._busy = False, False
-    view.clef_input.clear_placed()
-    click(view.clef_input, step=3)  # a space is not the line
-    assert not view.answered
-    view.clef_input.locked, view._busy = False, False
-    view.clef_input.clear_placed()
-    click(view.clef_input, step=2)
-    assert view.answered and view.total == 1  # only the first try counted
+    click(
+        view.question_view.clef_input,
+        step=4,
+    )  # the middle line is the alto clef
+    assert not view.session.answered and view.session.missed
+    view.question_view.clef_input.locked, view._busy = False, False
+    view.question_view.clef_input.clear_placed()
+    click(view.question_view.clef_input, step=3)  # a space is not the line
+    assert not view.session.answered
+    view.question_view.clef_input.locked, view._busy = False, False
+    view.question_view.clef_input.clear_placed()
+    click(view.question_view.clef_input, step=2)
+    assert (
+        view.session.answered and view.session.total == 1
+    )  # only the first try counted
     view._advance.stop()
 
 
@@ -601,25 +622,33 @@ def test_a_wrong_place_or_a_wrong_symbol_is_wrong_and_can_be_tried_again(
     view = clef_view()
     symbol, step = min(clef_targets(asked_of(view).place_clef))
     choose(view, symbol)
-    click(view.clef_input, step=step + 1)
-    assert (view.answered, view.missed, view.correct, view.total) == (
+    click(view.question_view.clef_input, step=step + 1)
+    assert (
+        view.session.answered,
+        view.session.missed,
+        view.session.correct,
+        view.session.total,
+    ) == (
         False,
         True,
         0,
         1,
     )
     assert (
-        view.clef_input.locked and not view.answer_button.isEnabled()
+        view.question_view.clef_input.locked
+        and not view.answer_controls.placement.answer_button.isEnabled()
     )  # the retry has not cleared it yet
     motion.settle()
-    assert not view.clef_input.locked and not view._busy
+    assert not view.question_view.clef_input.locked and not view._busy
     other = next(s for s in ("G", "C", "F") if s != symbol)
     choose(view, other)
     click(
-        view.clef_input,
+        view.question_view.clef_input,
         step=step,
     )  # another symbol in that place is not the clef asked for
-    assert not view.answered and view.total == 1  # only the first try counts
+    assert (
+        not view.session.answered and view.session.total == 1
+    )  # only the first try counts
 
 
 def test_the_ledger_lines_are_allowed_but_never_right(
@@ -635,9 +664,11 @@ def test_the_ledger_lines_are_allowed_but_never_right(
         The shared Qt application.
     """
     view = clef_view()
-    click(view.clef_input, step=12)
+    click(view.question_view.clef_input, step=12)
     assert (
-        view.clef_input.placed_step == 12 and not view.answered and view.missed
+        view.question_view.clef_input.placed_step == 12
+        and not view.session.answered
+        and view.session.missed
     )
 
 
@@ -656,19 +687,19 @@ def test_the_arrow_keys_and_answer_work_without_the_mouse(
     view = clef_view()
     symbol, step = min(clef_targets(asked_of(view).place_clef))
     for _ in range(3):
-        if view.clef_input.selected == symbol:
+        if view.question_view.clef_input.selected == symbol:
             break
         view._key_action("right")
-    assert view.clef_input.selected == symbol
+    assert view.question_view.clef_input.selected == symbol
     view._key_action("up")
-    assert view.clef_input.caret == 5
+    assert view.question_view.clef_input.caret == 5
     for _ in range(
         abs(step - 5),
     ):  # on from the place the Up key reached, to the place asked for
         view._key_action("up" if step > 5 else "down")
-    assert view.clef_input.caret == step
+    assert view.question_view.clef_input.caret == step
     view._answer()
-    assert view.answered
+    assert view.session.answered
     view._advance.stop()
 
 
@@ -683,9 +714,12 @@ def test_the_wheel_over_answer_chooses_the_symbol(app: QApplication) -> None:
         The shared Qt application.
     """
     view = clef_view()
-    first = view.clef_input.selected
-    assert view.eventFilter(view.answer_button, turn(120))
-    assert view.clef_input.selected != first
+    first = view.question_view.clef_input.selected
+    assert view.eventFilter(
+        view.answer_controls.placement.answer_button,
+        turn(120),
+    )
+    assert view.question_view.clef_input.selected != first
 
 
 def test_other_exercises_do_not_show_the_clef_staff(app: QApplication) -> None:
@@ -704,7 +738,8 @@ def test_other_exercises_do_not_show_the_clef_staff(app: QApplication) -> None:
         view = ExerciseView(cls(), rng=random.Random(1))
         view.show()
         assert (
-            not view.clef_input.isVisible() and not view.symbol_row.isVisible()
+            not isinstance(view.question_view.editor, ClefInput)
+            and not view.symbol_row.isVisible()
         ), cls.name
         view.close()
 
@@ -797,17 +832,20 @@ def test_the_identification_screen_draws_the_clef_and_buttons_name_the_clefs(
     view.show()
     q = asked_of(view)
     assert (
-        view.staff.isVisible()
-        and view.staff.clef == q.clef
-        and view.staff.caption == "Which clef is this?"
+        view.question_view.staff.isVisible()
+        and view.question_view.staff.clef == q.clef
+        and view.question_view.staff.caption == "Which clef is this?"
     )
-    assert not view.staff.clef_hidden and not view.prompt.isVisible()
     assert (
-        not view.clef_input.isVisible()
-        and not view.symbol_row.isVisible()
-        and not view.answer_row.isVisible()
+        not view.question_view.staff.clef_hidden
+        and not view.prompt.isVisible()
     )
-    assert [b.text() for b in view.buttons] == [
+    assert (
+        not isinstance(view.question_view.editor, ClefInput)
+        and not view.symbol_row.isVisible()
+        and not view.answer_controls.placement.isVisible()
+    )
+    assert [b.text() for b in view.answer_controls.buttons] == [
         "Alto",
         "Tenor",
         "French violin",
@@ -831,19 +869,22 @@ def test_the_answer_buttons_have_room_around_them_and_a_widest_area(
     view = ExerciseView(ClefBasics(), rng=random.Random(2))
     view.resize(1800, 700)
     view.show()
-    assert view.choice_area.width() <= ExerciseView.CHOICE_MAX_WIDTH
-    margins = view.choice_box.contentsMargins()
+    assert (
+        view.answer_controls.choice_area.width()
+        <= view.answer_controls.maximumWidth()
+    )
+    margins = view.answer_controls.choice_box.contentsMargins()
     assert (
         margins.left() > 0
         and margins.top() > 0
-        and view.choice_box.spacing() > 0
+        and view.answer_controls.choice_box.spacing() > 0
     )  # padding around them
-    rows = {b.geometry().y() for b in view.buttons}
+    rows = {b.geometry().y() for b in view.answer_controls.buttons}
     assert (
-        len(view.buttons) == 9 and len(rows) == 2
+        len(view.answer_controls.buttons) == 9 and len(rows) == 2
     )  # nine clefs in two rows of five and four, not one long row
-    left = view.choice_area.mapTo(view, QPoint()).x()
-    right = view.width() - left - view.choice_area.width()
+    left = view.answer_controls.choice_area.mapTo(view, QPoint()).x()
+    right = view.width() - left - view.answer_controls.choice_area.width()
     assert abs(left - right) <= 40  # in the middle
 
 
@@ -864,16 +905,18 @@ def test_pressing_the_right_name_is_correct_and_a_wrong_one_is_not(
     view = ExerciseView(ClefBasics(), rng=random.Random(3))
     view.show()
     answer = asked_of(view).answer
-    wrong = next(b for b in view.buttons if b.text() != answer)
+    wrong = next(b for b in view.answer_controls.buttons if b.text() != answer)
     wrong.click()
     assert (
-        not view.answered
-        and view.missed
-        and view.total == 1
-        and view.correct == 0
+        not view.session.answered
+        and view.session.missed
+        and view.session.total == 1
+        and view.session.correct == 0
     )
-    next(b for b in view.buttons if b.text() == answer).click()
-    assert view.answered and view.total == 1  # only the first try counted
+    next(b for b in view.answer_controls.buttons if b.text() == answer).click()
+    assert (
+        view.session.answered and view.session.total == 1
+    )  # only the first try counted
     view._advance.stop()
 
 

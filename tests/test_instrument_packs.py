@@ -876,8 +876,8 @@ def test_author_walkthrough(
     q = view.question
     assert q is not None and q.answer == "E"
     assert (
-        view.fingerboard.position == q.fingerboard
-        and not view.fingerboard.isHidden()
+        view.question_view.fingerboard.position == q.fingerboard
+        and not view.question_view.fingerboard.isHidden()
     )
     assert "D4" in exercise.instructions()
     assert view.settings_panel.choice_buttons_row is not None
@@ -888,12 +888,20 @@ def test_author_walkthrough(
         "play",
         lambda notes, **kwargs: played.append((notes, kwargs["instrument"])),
     )
-    view.submit("E", button=next(b for b in view.buttons if b.text() == "E"))
+    view.submit(
+        "E",
+        button=next(
+            b for b in view.answer_controls.buttons if b.text() == "E"
+        ),
+    )
     assert played == [([[Note.parse("E4")]], "pack.my-strings.studio-viola")]
     view._light_answer_notes(0)
-    assert view.fingerboard.sounding
+    assert view.question_view.fingerboard.sounding
     view._light_answer_notes(None)
-    assert not view.fingerboard.sounding and not view.next_button.isHidden()
+    assert (
+        not view.question_view.fingerboard.sounding
+        and not view.next_button.isHidden()
+    )
     preview = QuestionPreview(exercise.name, question=q)
     board = preview.findChild(FingerboardWidget)
     assert board is not None and board.position == q.fingerboard
@@ -1230,12 +1238,16 @@ def test_animation_follows_answer_mode(
     view = ExerciseView(exercise, rng=random.Random(42))
     view.show()
     view.settings_panel.next_question_mode = mode
-    board = view.fingerboard
+    board = view.question_view.fingerboard
     question = view.question
     assert question and not board.sounding
     view.submit(
         question.answer,
-        button=next(b for b in view.buttons if b.text() == question.answer),
+        button=next(
+            b
+            for b in view.answer_controls.buttons
+            if b.text() == question.answer
+        ),
     )
     if mode == "Immediately":
         assert (
@@ -1317,9 +1329,9 @@ def test_third_party_zip_owns_art_audio_and_exercises(
     model = INSTALLED["pack.test-studio.two-string"]
     assert model.strings[0].point(12) == (150, 25)
     view = ExerciseView(exercise, rng=random.Random(3))
-    assert view.fingerboard.model is model
-    view.fingerboard.resize(300, 155)
-    board = view.fingerboard.grab().toImage()
+    assert view.question_view.fingerboard.model is model
+    view.question_view.fingerboard.resize(300, 155)
+    board = view.question_view.fingerboard.grab().toImage()
     assert any(
         board.pixelColor(x, y).name() == "#ba157a"
         for x in range(0, 300, 5)
@@ -1341,7 +1353,12 @@ def test_third_party_zip_owns_art_audio_and_exercises(
     monkeypatch.setattr(sounds, "_play_sequence", seen)
     old_instrument = sounds.instrument
     view.settings_panel.next_question_mode = "Wait"
-    view.submit("D", button=next(b for b in view.buttons if b.text() == "D"))
+    view.submit(
+        "D",
+        button=next(
+            b for b in view.answer_controls.buttons if b.text() == "D"
+        ),
+    )
     assert (
         seen.call_args.args == (model.key,)
         and sounds.instrument == old_instrument
@@ -1943,17 +1960,25 @@ def test_picture_questions_without_strings(
             assert not buttons
             view = ExerciseView(exercise, rng=random.Random(1))
             view.question = card
-            view.fingerboard.show_position(card.picture)
+            view.question_view.fingerboard.show_position(card.picture)
             view.settings_panel.next_question_mode = "Wait"
             view.submit(
                 card.answer,
                 button=next(
-                    b for b in view.buttons if b.text() == card.answer
+                    b
+                    for b in view.answer_controls.buttons
+                    if b.text() == card.answer
                 ),
             )
-            assert view.fingerboard._movie.state() == QMovie.MovieState.Running
+            assert (
+                view.question_view.fingerboard._movie.state()
+                == QMovie.MovieState.Running
+            )
             QTest.qWait(700)
-            assert not view.fingerboard.sounding and view.question is card
+            assert (
+                not view.question_view.fingerboard.sounding
+                and view.question is card
+            )
 
 
 @pytest.mark.parametrize(

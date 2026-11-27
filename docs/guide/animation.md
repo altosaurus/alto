@@ -173,12 +173,12 @@ the test takes, until the test calls `motion.settle()`. That runs everything wai
 looks like this:
 
 ```python
-view.answer_button.click()
+view.answer_controls.placement.answer_button.click()
 assert (
-    view.missed and view.scale_input.locked
+    view.session.missed and view.question_view.scale_input.locked
 )  # the wrong-answer feedback is showing
 motion.settle()  # the feedback ends
-assert not view.scale_input.locked  # cleared to try again
+assert not view.question_view.scale_input.locked  # cleared to try again
 ```
 
 There is no wait to guess at, so the test is as fast on a slow machine as on a fast one, and it cannot fail because a

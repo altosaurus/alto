@@ -62,14 +62,14 @@ def test_play_interval(
     assert midi is not None
     view.hide()
     view._place_midi(66)
-    assert view.total == 0
+    assert view.session.total == 0
     view.show()
     view.question = None
     view._place_midi(66)
-    assert view.total == 0
+    assert view.session.total == 0
     view.question = q
     view._place_midi(54)
-    assert view.correct == 0 and view.total == 1
+    assert view.session.correct == 0 and view.session.total == 1
     app.processEvents()
     view.next_question()
     q = view.question
@@ -87,11 +87,17 @@ def test_play_interval(
     )
     process.write(b"128:0 Note on 1, note 66, ")
     assert process.waitForReadyRead(2000)
-    assert view.total == 1
+    assert view.session.total == 1
     process.write(b"velocity 100\n")
     assert process.waitForReadyRead(2000)
-    assert view.answered and (view.correct, view.total) == (1, 2)
-    assert q.placement_columns(Note.parse("Gb4")) == view.input_staff.columns
+    assert view.session.answered and (
+        view.session.correct,
+        view.session.total,
+    ) == (1, 2)
+    assert (
+        q.placement_columns(Note.parse("Gb4"))
+        == view.question_view.note_input.columns
+    )
     process.write(b"  0:1 Port unsubscribed     128:0 -> 130:0\n")
     assert process.waitForReadyRead(2000)
     assert "disconnected" in midi.toolTip()
@@ -172,17 +178,21 @@ def test_identify_played_note(
     assert midi is not None and q is not None
     target = q.staff[0][0]
     if octave:
-        view.buttons[-1].click()  # MIDI replaces an unfinished mouse answer.
+        view.answer_controls.buttons[
+            -1
+        ].click()  # MIDI replaces an unfinished mouse answer.
     midi.note_pressed.emit(target.midi + (12 if octave else 1))
     assert (
-        view.total == 1 and view.missed and "Try again" in view.prompt.text()
+        view.session.total == 1
+        and view.session.missed
+        and "Try again" in view.prompt.text()
     )
     midi.note_pressed.emit(target.midi + (0 if octave else 12))
     midi.note_pressed.emit(target.midi)
     assert (
-        view.answered
+        view.session.answered
         and view.session.attempts == 2
-        and (view.correct, view.total) == (0, 1)
+        and (view.session.correct, view.session.total) == (0, 1)
     )
     if octave:
         assert view._pending["octave"][0] == str(target.octave)
@@ -218,19 +228,24 @@ def test_play_scale(app: QApplication, steps: bool) -> None:
         if all(note.pitch_class != n % 12 for note in scale)
     )
     midi.note_pressed.emit(foreign)
-    assert view.scale_input.notes[-1].midi == foreign
-    view.undo_button.click()
-    assert not view.scale_input.notes
+    assert view.question_view.scale_input.notes[-1].midi == foreign
+    view.answer_controls.placement.undo_button.click()
+    assert not view.question_view.scale_input.notes
     for note in scale:
         midi.note_pressed.emit(note.midi + (0 if steps else 12))
-    assert [n.name for n in view.scale_input.notes] == [n.name for n in scale]
+    assert [n.name for n in view.question_view.scale_input.notes] == [
+        n.name for n in scale
+    ]
     if steps:
-        assert not view.answered and q.construct_steps
+        assert not view.session.answered and q.construct_steps
         midi.note_pressed.emit(60)
-        assert not view.scale_input.steps
+        assert not view.question_view.scale_input.steps
         for step in q.construct_steps:
             view.step_buttons[step].click()
-            view.place_button.click()
-        view.answer_button.click()
-    assert view.answered and view.total == view.correct == 1
+            view.answer_controls.placement.place_button.click()
+        view.answer_controls.placement.answer_button.click()
+    assert (
+        view.session.answered
+        and view.session.total == view.session.correct == 1
+    )
     view.close()

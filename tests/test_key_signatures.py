@@ -293,12 +293,14 @@ def test_a_signature_is_drawn_and_a_right_answer_makes_no_sound(
     q = view.question
     assert q is not None
     assert (
-        view.staff.isVisibleTo(view)
-        and view.staff.key == q.key
-        and view.staff.clef == q.clef
+        view.question_view.staff.isVisibleTo(view)
+        and view.question_view.staff.key == q.key
+        and view.question_view.staff.clef == q.clef
     )
-    next(b for b in view.buttons if b.text() == q.answer).click()
-    assert view.answered
+    next(
+        b for b in view.answer_controls.buttons if b.text() == q.answer
+    ).click()
+    assert view.session.answered
     view._advance.stop()
     assert played == []  # neither a tone nor the ordinary chime
 
@@ -546,7 +548,7 @@ def test_the_kind_of_scale_is_written_under_the_staff_not_above_it(
         q = view.question
         assert q is not None
         assert (
-            view.staff.caption == q.caption
+            view.question_view.staff.caption == q.caption
             and view.prompt.isHidden() == bool(q.caption or not q.prompt)
         )
         view.next_question()

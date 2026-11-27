@@ -315,8 +315,8 @@ def test_the_exercise_has_a_reference_pane_that_opens_the_lesson(
     window.show()
     window.open_exercise(ClefBasics)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView) and view.book_btn is not None
-    view.book_btn.setChecked(True)
+    assert isinstance(view, ExerciseView) and view.toolbar.book_btn is not None
+    view.toolbar.book_btn.setChecked(True)
     assert (
         isinstance(view._reference, ClefReferencePanel)
         and not view._reference.lesson_button.isHidden()

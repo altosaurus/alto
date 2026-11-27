@@ -503,20 +503,31 @@ def test_exercise_view_scores_the_time_signature(app: QApplication) -> None:
     assert view.beat_staff.isVisible()
     assert not view.beat_staff._signature_visible
     assert len(view.beat_staff._measures) == 2
-    assert not view.staff.isVisible()
+    assert view.question_view.staff is None
     assert view.settings_panel is not None
     assert view.settings_panel.choice_buttons_row is not None
-    assert {button.text() for button in view.buttons} == set(question.choices)
-    assert all(isinstance(button, MeterButton) for button in view.buttons)
-    assert all(
-        button.accessibleName() == button.text() for button in view.buttons
+    assert {button.text() for button in view.answer_controls.buttons} == set(
+        question.choices,
     )
-    assert all(not button.shortcut().isEmpty() for button in view.buttons)
+    assert all(
+        isinstance(button, MeterButton)
+        for button in view.answer_controls.buttons
+    )
+    assert all(
+        button.accessibleName() == button.text()
+        for button in view.answer_controls.buttons
+    )
+    assert all(
+        not button.shortcut().isEmpty()
+        for button in view.answer_controls.buttons
+    )
     correct = next(
-        button for button in view.buttons if button.text() == question.answer
+        button
+        for button in view.answer_controls.buttons
+        if button.text() == question.answer
     )
     correct.click()
-    assert view.answered
+    assert view.session.answered
     view.close()
 
 
@@ -575,15 +586,17 @@ def test_rhythm_component_menu_and_review(app: QApplication) -> None:
     assert panel.stack.currentIndex() == 0 and view.question is question
     view.gear.click()
     motion.settle()
-    assert view.interval_answers.isVisible()
+    assert view.answer_controls.interval_answers.isVisible()
     assert all(
         button.isVisible()
         and not isinstance(button, MeterButton)
         and not button.shortcut().isEmpty()
-        for button in view.buttons
+        for button in view.answer_controls.buttons
     )
-    next(b for b in view.buttons if b.text() == question.answer).click()
-    assert view.answered
+    next(
+        b for b in view.answer_controls.buttons if b.text() == question.answer
+    ).click()
+    assert view.session.answered
 
     settings.beat_rhythm_component = "Time signature"
     load_exercise_settings()

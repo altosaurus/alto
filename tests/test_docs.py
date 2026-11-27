@@ -215,8 +215,8 @@ def test_exercise_view_screenshot_labels_the_visible_widgets() -> None:
     )
     assert [region["type"] for region in regions[screen]] == [
         "StaffWidget",
-        "ExerciseView._build_toolbar()",
-        "DegreeButton",
+        "ExerciseToolbar",
+        "AnswerControls",
         "NoteNameSettingsPanel",
     ]
 

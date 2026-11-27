@@ -86,7 +86,7 @@ def test_submit_edit_and_retry(app: QApplication) -> None:
     view.settings_panel.next_question_mode = "Wait"
     view.show()
     app.processEvents()
-    staff = view.scale_input
+    staff = view.question_view.scale_input
     assert isinstance(staff, SignatureInput)
     assert (
         staff.key == 0
@@ -95,7 +95,7 @@ def test_submit_edit_and_retry(app: QApplication) -> None:
         and staff.caption == "B♭ major"
     )
     assert (
-        view.staff.isHidden()
+        view.question_view.staff is None
         and view.prompt.isHidden()
         and view.accidental_buttons[0].isHidden()
     )
@@ -127,37 +127,39 @@ def test_submit_edit_and_retry(app: QApplication) -> None:
     for pitches in (["B2"], ["E3", "B2"], ["B3", "E3"], ["B2", "E3", "A2"]):
         for pitch in pitches:
             click(pitch)
-        view.answer_button.click()
+        view.answer_controls.placement.answer_button.click()
         assert (
-            view.missed
-            and not view.answered
-            and not view.answer_button.isEnabled()
+            view.session.missed
+            and not view.session.answered
+            and not view.answer_controls.placement.answer_button.isEnabled()
         )
         assert "Try again" in view.place_status.text()
         for _ in pitches:
-            view.undo_button.click()
+            view.answer_controls.placement.undo_button.click()
     view._key_action("right")
     assert staff.accidental == 1
     click("B2")
     click("E3")
-    view.answer_button.click()
-    assert not view.answered
-    view.undo_button.click()
-    view.undo_button.click()
+    view.answer_controls.placement.answer_button.click()
+    assert not view.session.answered
+    view.answer_controls.placement.undo_button.click()
+    view.answer_controls.placement.undo_button.click()
     view._key_action("left")
     click("B2")
     click("E3")
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.answered
+        view.session.answered
         and staff.locked
-        and view.total == 1
-        and view.correct == 0
+        and view.session.total == 1
+        and view.session.correct == 0
     )
     assert not view.next_button.isHidden()
     view.next_button.click()
     assert (
-        not staff.notes and not staff.locked and view.answer_button.isEnabled()
+        not staff.notes
+        and not staff.locked
+        and view.answer_controls.placement.answer_button.isEnabled()
     )
     view.close()
 
@@ -185,7 +187,7 @@ def test_keyboard_entry_and_blank_signature(
     assert QTest.qWaitForWindowActive(view)
     view.setFocus()
     app.processEvents()
-    staff = view.scale_input
+    staff = view.question_view.scale_input
     assert isinstance(staff, SignatureInput) and view.question
     if view.question.key:
         QTest.mouseMove(
@@ -209,12 +211,12 @@ def test_keyboard_entry_and_blank_signature(
             )  # Qt animates buttons activated through their shortcut.
         assert len(staff.notes) == abs(view.question.key)
         assert (
-            not view.place_button.isEnabled()
+            not view.answer_controls.placement.place_button.isEnabled()
             and "Seven signs placed" in view.place_status.text()
         )
     QTest.keyClick(view, Qt.Key.Key_Return)
     QTest.qWait(160)
-    assert view.answered and view.correct == 1
+    assert view.session.answered and view.session.correct == 1
     view.close()
 
 
@@ -343,7 +345,10 @@ def test_settings_filter_and_restore_questions(
         view.question.caption,
         view.question.answer,
     ) == ("alto", "C Dorian", "B♭3 E♭4")
-    assert view.scale_input.key == 0 and view.scale_input.caption == "C Dorian"
+    assert (
+        view.question_view.scale_input.key == 0
+        and view.question_view.scale_input.caption == "C Dorian"
+    )
     selected = exercise.settings_signature()
     assert (
         selected and settings.key_signatures == settings.KeySignatureSettings()
@@ -433,16 +438,19 @@ def test_fill_gaps_and_undo(
     q.starting_slots = [1, 3]
     monkeypatch.setattr(exercise, "generate", lambda rng: q)
     view = ExerciseView(exercise)
-    staff = view.scale_input
+    staff = view.question_view.scale_input
     assert isinstance(staff, SignatureInput)
     view.settings_panel.next_question_mode = "Wait"
     b, e, a, d = [Note.parse(n) for n in ("Bb4", "Eb5", "Ab4", "Db5")]
     assert staff.entered_signature() == [None, e, None, d, None, None, None]
-    assert staff.accidental == -1 and not view.undo_button.isEnabled()
+    assert (
+        staff.accidental == -1
+        and not view.answer_controls.placement.undo_button.isEnabled()
+    )
     staff.place_next(a)
-    view.answer_button.click()
-    assert view.missed and not view.answered
-    view.undo_button.click()
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.missed and not view.session.answered
+    view.answer_controls.placement.undo_button.click()
     assert staff.entered_signature() == [None, e, None, d, None, None, None]
     staff.place_next(b)
     staff._redraw(a)
@@ -452,8 +460,8 @@ def test_fill_gaps_and_undo(
         staff.entered_signature() == [b, e, a, d, None, None, None]
         and not staff.complete
     )
-    view.answer_button.click()
-    assert view.answered
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.answered
     view.next_button.click()
     assert staff.entered_signature() == [None, e, None, d, None, None, None]
 
@@ -474,24 +482,24 @@ def test_seventh_sharp_in_six_sharp_key(start: int, app: QApplication) -> None:
     cfg = settings.order_of_keys
     cfg.keys, cfg.starting_accidentals = {6}, {start}
     view = ExerciseView(OrderOfKeys(), rng=random.Random(10))
-    staff = view.scale_input
+    staff = view.question_view.scale_input
     assert isinstance(staff, SignatureInput) and view.question
     signs = key_signatures.written_signature(view.question.clef, key=7)
     for i, sign in enumerate(signs):
         if i not in view.question.starting_slots:
-            assert view.place_button.isEnabled()
+            assert view.answer_controls.placement.place_button.isEnabled()
             staff.place_next(sign)
     assert (
         staff.entered_signature() == signs
-        and not view.place_button.isEnabled()
+        and not view.answer_controls.placement.place_button.isEnabled()
     )
-    assert not view.missed
-    view.answer_button.click()
-    assert view.missed and not view.answered
-    view.undo_button.click()
+    assert not view.session.missed
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.missed and not view.session.answered
+    view.answer_controls.placement.undo_button.click()
     assert staff.entered_signature() == [*signs[:6], None]
-    view.answer_button.click()
-    assert view.answered
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.answered
 
 
 @pytest.mark.parametrize("count", [-7, 7])
@@ -515,10 +523,11 @@ def test_fully_given_signature(count: int, app: QApplication) -> None:
         and view.question.starting_slots == list(range(7))
     )
     assert (
-        not view.place_button.isEnabled() and not view.undo_button.isEnabled()
+        not view.answer_controls.placement.place_button.isEnabled()
+        and not view.answer_controls.placement.undo_button.isEnabled()
     )
-    view.answer_button.click()
-    assert view.correct == 1 and view.answered
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.correct == 1 and view.session.answered
 
 
 def test_starting_accidentals_menu(app: QApplication) -> None:

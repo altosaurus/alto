@@ -65,7 +65,7 @@ def test_placement_and_sounding_notes(
     view.settings_panel.next_question_mode = "Wait"
     view.show()
     app.processEvents()
-    q, staff = view.question, view.input_staff
+    q, staff = view.question, view.question_view.note_input
     assert q is not None and q.construct is not None
     first, target = q.staff[0][0], q.construct
     assert (
@@ -99,8 +99,8 @@ def test_placement_and_sounding_notes(
     with patch.object(sounds, "_play_sequence") as play:
         QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=point)
         assert (
-            view.answered
-            and view.correct == 1
+            view.session.answered
+            and view.session.correct == 1
             and view.next_button.isVisible()
         )
         assert staff.columns == q.staff
@@ -210,19 +210,25 @@ def test_settings_retries_and_export(
         view._place(wrong)
         assert (
             hint in view.place_status.text()
-            and view.input_staff.columns[0][0] == first
+            and view.question_view.note_input.columns[0][0] == first
         )
         motion.settle()
-        assert not view.input_staff.locked and view.input_staff.columns == [
-            [first],
-        ]
+        assert (
+            not view.question_view.note_input.locked
+            and view.question_view.note_input.columns
+            == [
+                [first],
+            ]
+        )
     alternate = next(
         Note.from_diatonic(target.diatonic, accidental=a)
         for a in (-1, 0, 1)
         if str(Note.from_diatonic(target.diatonic, accidental=a)) in q.accept
     )
     view._place(alternate)
-    assert view.answered and view.input_staff.columns == [[first, alternate]]
+    assert view.session.answered and view.question_view.note_input.columns == [
+        [first, alternate],
+    ]
     preview = QuestionPreview(view.exercise.name, question=q)
     assert all(
         name in preview._answer_text() for name in (q.answer, *q.accept)

@@ -182,10 +182,13 @@ def test_exercise_and_saved_preview_show_and_play_both_notes(
     question = view.question
     assert question is not None
     expected = {note.midi for note in question.keyboard_notes}
-    assert view.keyboard.isVisible() and not view.staff.isVisible()
+    assert (
+        view.question_view.keyboard.isVisible()
+        and view.question_view.staff is None
+    )
     assert {
-        view.keyboard.highlight,
-    } | view.keyboard.additional_highlights == expected
+        view.question_view.keyboard.highlight,
+    } | view.question_view.keyboard.additional_highlights == expected
     preview = QuestionPreview(
         view.exercise.name,
         question=Question.from_dict(question.to_dict()),
@@ -194,10 +197,12 @@ def test_exercise_and_saved_preview_show_and_play_both_notes(
     assert keyboard is not None
     assert {keyboard.highlight} | keyboard.additional_highlights == expected
     right = next(
-        button for button in view.buttons if button.text() == question.answer
+        button
+        for button in view.answer_controls.buttons
+        if button.text() == question.answer
     )
     right.click()
-    assert view.answered and played == [[question.keyboard_notes]]
+    assert view.session.answered and played == [[question.keyboard_notes]]
     view._advance.stop()
     view.close()
     preview.close()
@@ -786,7 +791,7 @@ def test_all_interval_buttons_option_saved_and_keeps_answer(
     view = ExerciseView(KeyboardIntervals(), rng=random.Random(21))
     panel = view.settings_panel
     assert isinstance(panel, KeyboardIntervalSettingsPanel)
-    assert len(view.buttons) == 6
+    assert len(view.answer_controls.buttons) == 6
     signature = view.exercise.settings_signature()
     panel.button_modes["all"].click()
     app.processEvents()
@@ -795,14 +800,21 @@ def test_all_interval_buttons_option_saved_and_keeps_answer(
         panel.cfg.all_interval_buttons
         and view.exercise.settings_signature() != signature
     )
-    assert [button.text() for button in view.buttons] == expected
+    assert [
+        button.text() for button in view.answer_controls.buttons
+    ] == expected
     view.next_question()
-    assert [button.text() for button in view.buttons] == expected
+    assert [
+        button.text() for button in view.answer_controls.buttons
+    ] == expected
     panel.cfg.all_interval_buttons = False
     load_keyboard_intervals()
     assert panel.cfg.all_interval_buttons
     panel.button_modes["limited"].click()
-    assert not panel.cfg.all_interval_buttons and len(view.buttons) == 6
+    assert (
+        not panel.cfg.all_interval_buttons
+        and len(view.answer_controls.buttons) == 6
+    )
     view.close()
 
 
@@ -827,9 +839,9 @@ def test_full_interval_answer_bank_scrolls_wraps_and_accepts_answers(
     view.resize(600, 650)
     view.show()
     app.processEvents()
-    bank = view.interval_answers
-    assert len(view.buttons) == 87 and [
-        button.text() for button in view.buttons
+    bank = view.answer_controls.interval_answers
+    assert len(view.answer_controls.buttons) == 87 and [
+        button.text() for button in view.answer_controls.buttons
     ] == list(settings.KEYBOARD_INTERVAL_NAMES)
     assert bank.isVisible() and bank.height() <= 240
     assert bank.verticalScrollBar().maximum() > 0
@@ -840,7 +852,7 @@ def test_full_interval_answer_bank_scrolls_wraps_and_accepts_answers(
     assert view.question is not None
     right = next(
         button
-        for button in view.buttons
+        for button in view.answer_controls.buttons
         if button.text() == view.question.answer
     )
     bank.ensureWidgetVisible(right)
@@ -851,13 +863,13 @@ def test_full_interval_answer_bank_scrolls_wraps_and_accepts_answers(
         .contains(right.mapTo(bank.viewport(), right.rect().center()))
     )
     right.click()
-    assert view.answered
+    assert view.session.answered
     view._advance.stop()
     panel = view.settings_panel
     assert isinstance(panel, KeyboardIntervalSettingsPanel)
     panel.button_modes["limited"].click()
     app.processEvents()
-    assert len(view.buttons) == 6 and not bank.isVisible()
+    assert len(view.answer_controls.buttons) == 6 and not bank.isVisible()
     view.close()
 
 
@@ -910,25 +922,35 @@ def test_button_count_is_editable_saved_and_preserved_across_all_buttons_mode(
     view = ExerciseView(KeyboardIntervals(), rng=random.Random(6))
     panel = view.settings_panel
     assert isinstance(panel, KeyboardIntervalSettingsPanel)
-    assert panel.button_count.text() == "6" and len(view.buttons) == 6
+    assert (
+        panel.button_count.text() == "6"
+        and len(view.answer_controls.buttons) == 6
+    )
     before = view.exercise.settings_signature()
     panel.button_count.setFocus()
     panel.button_count.selectAll()
     QTest.keyClicks(panel.button_count, "9")
     QTest.keyClick(panel.button_count, Qt.Key.Key_Return)
     app.processEvents()
-    assert panel.cfg.button_count == 9 and len(view.buttons) == 9
+    assert (
+        panel.cfg.button_count == 9 and len(view.answer_controls.buttons) == 9
+    )
     assert view.exercise.settings_signature() != before
-    assert view.interval_answers.isVisibleTo(view)
+    assert view.answer_controls.interval_answers.isVisibleTo(view)
     panel.button_count_down.click()
-    assert panel.cfg.button_count == 8 and len(view.buttons) == 8
+    assert (
+        panel.cfg.button_count == 8 and len(view.answer_controls.buttons) == 8
+    )
     panel.button_modes["all"].click()
-    assert not panel.button_count.isEnabled() and len(view.buttons) == 12
+    assert (
+        not panel.button_count.isEnabled()
+        and len(view.answer_controls.buttons) == 12
+    )
     panel.button_modes["limited"].click()
     assert (
         panel.button_count.isEnabled()
         and panel.button_count.text() == "8"
-        and len(view.buttons) == 8
+        and len(view.answer_controls.buttons) == 8
     )
     panel.cfg.button_count = 2
     load_keyboard_intervals()
@@ -972,15 +994,17 @@ def test_compact_interval_answers_accept_two_clicks(
     assert view.question is not None
     for spelling in view.question.answer.split(" / "):
         view.next_question()
-        buttons = {button.text(): button for button in view.buttons}
+        buttons = {
+            button.text(): button for button in view.answer_controls.buttons
+        }
         quality, number = buttons[spelling[0]], buttons[spelling[1:]]
         first, second = (
             (number, quality) if number_first else (quality, number)
         )
         first.click()
-        assert not view.answered
+        assert not view.session.answered
         second.click()
-        assert view.answered
+        assert view.session.answered
         view._advance.stop()
     view.close()
 
@@ -1022,7 +1046,7 @@ def test_compact_mode_is_saved_and_replaces_full_answer_buttons(
     assert panel.cfg.compact_buttons
     panel.button_modes["limited"].click()
     assert view.question is not None and not view.question.octaves
-    assert len(view.buttons) == 6
+    assert len(view.answer_controls.buttons) == 6
     view.close()
 
 

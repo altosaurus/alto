@@ -423,8 +423,8 @@ def test_the_reference_pane_has_a_button_that_opens_the_lesson(
     window.show()
     window.open_exercise(CircleOfFifths)
     view = window.stack.currentWidget()
-    assert isinstance(view, ExerciseView) and view.book_btn is not None
-    view.book_btn.setChecked(True)
+    assert isinstance(view, ExerciseView) and view.toolbar.book_btn is not None
+    view.toolbar.book_btn.setChecked(True)
     assert (
         view._reference is not None
         and not view._reference.lesson_button.isHidden()
@@ -466,9 +466,9 @@ def test_the_note_references_connect_the_related_exercises(
         exercise = window.stack.currentWidget()
         assert (
             isinstance(exercise, ExerciseView)
-            and exercise.book_btn is not None
+            and exercise.toolbar.book_btn is not None
         )
-        exercise.book_btn.click()
+        exercise.toolbar.book_btn.click()
         reference = exercise._reference
         assert reference is not None and reference.isVisible()
         assert any(
@@ -585,7 +585,9 @@ def test_key_signature_lesson_matches_note_identification_volume(
         if index:
             view.next_question()
         next(
-            button for button in view.buttons if button.text() == note.name
+            button
+            for button in view.answer_controls.buttons
+            if button.text() == note.name
         ).click()
         view._advance.stop()
     assert len(played) == 2 and played == lesson_output
@@ -815,9 +817,9 @@ def test_lesson_and_both_practice_links(
         exercise = window.stack.currentWidget()
         assert (
             isinstance(exercise, ExerciseView)
-            and exercise.book_btn is not None
+            and exercise.toolbar.book_btn is not None
         )
-        exercise.book_btn.click()
+        exercise.toolbar.book_btn.click()
         assert exercise._reference is not None
         exercise._reference.lesson_button.click()
         page = window.stack.currentWidget()

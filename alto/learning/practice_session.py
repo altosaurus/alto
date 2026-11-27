@@ -10,6 +10,22 @@ class PracticeSession:
     """
     Track the exercise score and attempts on the current question.
 
+    Attributes
+    ----------
+    correct : int
+        Questions answered correctly on the first attempt.
+    total : int
+        Questions with at least one graded attempt.
+    streak : int
+        Consecutive questions answered correctly on the first attempt.
+    attempts : int
+        Graded attempts on the current question.
+    missed : bool
+        Whether any attempt on the current question was incorrect.
+    answered : bool
+        Whether the current question is closed to further attempts.
+        Also true when the review queue is empty.
+
     Examples
     --------
     >>> session = PracticeSession().after_attempt(

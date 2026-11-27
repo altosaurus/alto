@@ -583,8 +583,12 @@ def test_exercise_view_records_each_answer_with_its_timing() -> None:
     view = ExerciseView(KeySignatures(), rng=random.Random(7), learner=learner)
     q = view.question
     assert q is not None
-    wrong = next(b for b in view.buttons if b.text() != q.answer)
-    right = next(b for b in view.buttons if b.text() == q.answer)
+    wrong = next(
+        b for b in view.answer_controls.buttons if b.text() != q.answer
+    )
+    right = next(
+        b for b in view.answer_controls.buttons if b.text() == q.answer
+    )
     wrong.click()
     right.click()
     rows = learner.db.attempts(learner.profile.id, exercise="KeySignatures")
