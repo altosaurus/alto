@@ -508,10 +508,14 @@ class ExerciseView(QWidget):
     '0/0 (–)   streak 0'
     """
 
+    # Forwards signal to open a lesson.
     lesson_requested = Signal(str)
+    # Signal to advance the exercise on shuffle mode.
     shuffle_requested = Signal()
 
+    # Right-hand pane width.
     PANE_WIDTH = 290
+    # Right-hand reference pane width.
     REFERENCE_WIDTH = 400
     # the answer buttons are never spread wider than this, however wide
     # the window
@@ -569,7 +573,9 @@ class ExerciseView(QWidget):
         app = QGuiApplication.instance()
         assert isinstance(app, QGuiApplication)
         app.applicationStateChanged.connect(self._application_state_changed)
-        self._hidden_at: float | None = None
+        # Saves the clock if the exercise is interrupted, to be resumed
+        # later.
+        self._hidden_at: float | int | None = None
         self._advance_remaining = -1
 
         self.score = QLabel()
