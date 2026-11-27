@@ -33,6 +33,7 @@ from alto.settings import (
     RHYTHM_DURATIONS,
     beat_note,
 )
+from alto.theory.beat_placement import number_beats, toggle_beat
 from alto.ui import engraving
 from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.notation import current
@@ -910,14 +911,7 @@ class BeatPlacementStaff(MeterStaff):
         >>> staff.beat_numbers()
         {0: 1, 4: 2, 8: 1, 10: 2}
         """
-        return {
-            slot: number
-            for _, measure in groupby(
-                sorted(self.marks),
-                key=lambda slot: slot // self.slots_per_bar,
-            )
-            for number, slot in enumerate(measure, 1)
-        }
+        return number_beats(self.marks, slots_per_bar=self.slots_per_bar)
 
     def position(self, slot: int) -> QPointF:
         """
@@ -980,10 +974,7 @@ class BeatPlacementStaff(MeterStaff):
         >>> staff.marks
         [0]
         """
-        if self.active_slot in self.marks:
-            self.marks.remove(self.active_slot)
-        else:
-            self.marks.append(self.active_slot)
+        self.marks[:] = toggle_beat(self.marks, slot=self.active_slot)
         self.feedback = None
         self._announce()
         self.update()
