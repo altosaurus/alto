@@ -9,11 +9,15 @@
   if (!article || !rail || !grid) { return; }
   if (grid.hasAttribute("data-no-toc")) { return; }  // a page can opt out with `toc: false` in its front matter
 
-  var heads = Array.prototype.slice.call(article.querySelectorAll("h2, h3")).filter(function (h) {
-    return !h.classList.contains("no-toc");  // a heading can opt out with `{: .no-toc}` under it
+  var heads = Array.prototype.slice.call(article.querySelectorAll("h2, h3, dl.py.method > dt.sig[id]")).filter(function (h) {
+    return !h.classList.contains("no-toc") && !h.parentElement.matches("section.no-toc");  // a heading can opt out with `{: .no-toc}` under it
   });
   if (heads.length < 2) { return; }
 
+  var labels = heads.map(function (h) {
+    var method = h.querySelector(".sig-name");
+    return method ? method.textContent : h.textContent;
+  });
   var used = {};
   function slug(text) {
     var base = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "section";
@@ -22,19 +26,24 @@
     used[name] = true;
     return name;
   }
-  heads.forEach(function (h) {
-    if (!h.id) { h.id = slug(h.textContent); } else { used[h.id] = true; }
+  var targets = heads.map(function (h) {
+    // Sphinx puts the fragment on the enclosing section. Jekyll puts it on the heading.
+    var section = h.parentElement;
+    var id = h.id || (section.matches("section[id]") && section.firstElementChild === h && section.id);
+    if (!id) { h.id = id = slug(h.textContent); }
+    used[id] = true;
+    return id;
   });
 
   function links() {
     var list = document.createElement("ul");
-    heads.forEach(function (h) {
+    heads.forEach(function (h, i) {
       var item = document.createElement("li");
       var a = document.createElement("a");
-      a.href = "#" + h.id;
-      a.textContent = h.textContent;
+      a.href = "#" + targets[i];
+      a.textContent = labels[i];
       if (h.tagName === "H3") { a.className = "sub"; }
-      a.setAttribute("data-toc-for", h.id);
+      a.setAttribute("data-toc-for", targets[i]);
       item.appendChild(a);
       list.appendChild(item);
     });
@@ -61,7 +70,7 @@
   var first = article.querySelector("h1");
   var anchor = first ? (first.closest(".hero") || first) : null;  // on the home page the title is inside the hero
   anchor = article.querySelector(".os-picker") || anchor;
-  if (anchor && anchor.nextSibling) { article.insertBefore(inline, anchor.nextSibling); } else { article.insertBefore(inline, article.firstChild); }
+  if (anchor) { anchor.after(inline); } else { article.prepend(inline); }
   inline.addEventListener("click", function (event) { if (event.target.closest("a")) { inline.open = false; } });
 
   grid.classList.add("has-toc");
@@ -73,9 +82,9 @@
     heads.forEach(function (h, i) { if (h.getBoundingClientRect().top <= 96) { current = i; } });
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) { current = heads.length - 1; }
     Array.prototype.forEach.call(document.querySelectorAll("[data-toc-for]"), function (a) {
-      a.classList.toggle("on", a.getAttribute("data-toc-for") === heads[current].id);
+      a.classList.toggle("on", a.getAttribute("data-toc-for") === targets[current]);
     });
-    here.textContent = heads[current].textContent;
+    here.textContent = labels[current];
   }
   window.addEventListener("scroll", function () { if (!pending) { pending = true; window.requestAnimationFrame(update); } }, { passive: true });
   window.addEventListener("resize", update);
