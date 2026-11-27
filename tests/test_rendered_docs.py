@@ -23,6 +23,11 @@ class RenderedDocsTest(unittest.TestCase):
         """
         Read the page at a directory URL.
 
+        Parameters
+        ----------
+        route : str
+            Page path relative to the rendered documentation root.
+
         Returns
         -------
         str
