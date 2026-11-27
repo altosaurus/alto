@@ -104,7 +104,7 @@ def test_correct_review_interval_layout(
                 label.text() == f"Next interval: {interval}"
                 and label.alignment() & Qt.AlignmentFlag.AlignRight
             )
-            keyboard = view.keyboard
+            keyboard = view.question_view.keyboard
             origin = keyboard.mapTo(view, QPoint())
             right = (
                 origin.x()
@@ -118,16 +118,16 @@ def test_correct_review_interval_layout(
             assert abs(top_left.x() + label.width() - right) <= 1
             assert (
                 top_left.y() + label.height()
-                <= view.choice_area.mapTo(view, QPoint()).y()
+                <= view.answer_controls.choice_area.mapTo(view, QPoint()).y()
             )
         else:
             assert (
                 label.text() == f"Next interval:\n{interval}"
                 and label.alignment() & Qt.AlignmentFlag.AlignLeft
             )
-            bottom_right = view.staff.mapTo(
+            bottom_right = view.question_view.staff.mapTo(
                 view,
-                view.staff.rect().bottomRight(),
+                view.question_view.staff.rect().bottomRight(),
             )
             assert 0 < top_left.x() - bottom_right.x() <= 16
             assert top_left.y() + label.height() - 1 == bottom_right.y()
@@ -674,8 +674,8 @@ def test_missed_calendar_card_returns_in_the_open_exercise(
     view.submit("wrong", button=None)
     view.submit(first.answer, button=None)
     assert (
-        view.answered
-        and view.missed
+        view.session.answered
+        and view.session.missed
         and db.count_attempts(learner.profile.id) == 1
     )
     if next_mode == "Wait":
@@ -743,10 +743,15 @@ def test_missed_signature_waits_through_navigation(
     view.show()
     first = view.question
     assert first is not None
-    view.answer_button.click()  # Submit the blank staff for G major.
-    assert view.answered and view.missed and view.scale_input.locked
+    # Submit the blank staff for G major.
+    view.answer_controls.placement.answer_button.click()
     assert (
-        not view.answer_button.isEnabled()
+        view.session.answered
+        and view.session.missed
+        and view.question_view.scale_input.locked
+    )
+    assert (
+        not view.answer_controls.placement.answer_button.isEnabled()
         and "Incorrect" in view.prompt.text()
     )
     view.next_button.click()
@@ -759,7 +764,7 @@ def test_missed_signature_waits_through_navigation(
         view.question is not None
         and view.question.item_key() == first.item_key()
     )
-    assert not view.scale_input.locked
+    assert not view.question_view.scale_input.locked
     view.close()
 
 
@@ -2177,7 +2182,7 @@ def test_scheduler_controls(
     view.submit(q.answer, button=None)
     view.next_question()
     assert view.question is None and view.next_button.text() == "Check again"
-    assert view.prompt.isVisible() and not view.buttons
+    assert view.prompt.isVisible() and not view.answer_controls.buttons
     window.show_home()
     assert (
         "0 new cards available, 0 incorrect cards awaiting a correct "
@@ -2528,10 +2533,10 @@ def test_adding_a_notation_symbol_after_exhausting_the_deck(
     q = view.question
     assert q is not None and q.answer == "Vertical turn"
     if question_type == "button":
-        view.buttons[0].click()
+        view.answer_controls.buttons[0].click()
     else:
         view.submit(q.answer, button=None)
-    assert view.answered
+    assert view.session.answered
     view.next_question()
     assert view.question is None
     assert learner.calendar.counts(

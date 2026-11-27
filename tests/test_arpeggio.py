@@ -440,7 +440,7 @@ def press(
     text : str
         The button's text.
     """
-    next(b for b in view.buttons if b.text() == text).click()
+    next(b for b in view.answer_controls.buttons if b.text() == text).click()
 
 
 def test_choosing_the_type_and_the_inversion_answers_the_question(
@@ -458,9 +458,12 @@ def test_choosing_the_type_and_the_inversion_answers_the_question(
     # noinspection PyUnresolvedReferences
     kind, inversion = q.answer.split(q.joiner)
     press(view, text=kind)
-    assert not view.answered  # one part is not an answer yet
+    assert not view.session.answered  # one part is not an answer yet
     press(view, text=inversion)
-    assert view.answered and (view.correct, view.total) == (1, 1)
+    assert view.session.answered and (
+        view.session.correct,
+        view.session.total,
+    ) == (1, 1)
 
 
 def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(
@@ -482,10 +485,10 @@ def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(
     press(view, text=inversion)
     press(view, text=wrong)
     assert (
-        view.missed
-        and not view.answered
-        and view.total == 1
-        and view.correct == 0
+        view.session.missed
+        and not view.session.answered
+        and view.session.total == 1
+        and view.session.correct == 0
     )
     motion.settle()  # the wrong-answer feedback ends
     assert view._pending == {} and not view._busy
@@ -494,7 +497,7 @@ def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(
         view,
         text=inversion,
     )  # trying again works, but it still counts as missed
-    assert view.answered and view.correct == 0
+    assert view.session.answered and view.session.correct == 0
 
 
 def test_the_inversion_row_is_labeled_inversion(view: ExerciseView) -> None:
@@ -508,17 +511,20 @@ def test_the_inversion_row_is_labeled_inversion(view: ExerciseView) -> None:
     """
     view.show()
     QApplication.processEvents()
-    assert view.interval_label.text() == "Inversion"
-    assert view.interval_label.isVisible()
-    label_bottom = view.interval_label.mapTo(
+    assert view.answer_controls.interval_label.text() == "Inversion"
+    assert view.answer_controls.interval_label.isVisible()
+    label_bottom = view.answer_controls.interval_label.mapTo(
         view,
-        QPoint(0, view.interval_label.height()),
+        QPoint(0, view.answer_controls.interval_label.height()),
     ).y()
-    buttons_top = view.octave_row.mapTo(view, QPoint(0, 0)).y()
+    buttons_top = view.answer_controls.octave_row.mapTo(view, QPoint(0, 0)).y()
     assert label_bottom <= buttons_top
     assert all(
-        not isinstance(view.octave_box.itemAt(i).widget(), QLabel)
-        for i in range(view.octave_box.count())
+        not isinstance(
+            view.answer_controls.octave_box.itemAt(i).widget(),
+            QLabel,
+        )
+        for i in range(view.answer_controls.octave_box.count())
     )
 
 

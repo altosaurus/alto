@@ -307,7 +307,7 @@ def test_chromatic_degree_and_octave_shortcuts_answer_the_question(
     view = opened(KeyboardNotes())
     press(view, "Shift+1")
     press(view, "A")
-    assert view.answered and not view.missed
+    assert view.session.answered and not view.session.missed
     view.close()
 
 
@@ -328,8 +328,8 @@ def test_construction_degree_caption_is_shown_on_the_staff(
     settings.construction.keys = {-2}
     view = ExerciseView(NoteConstruction(), rng=random.Random(4))
     assert view.question is not None
-    assert view.input_staff.caption == view.question.prompt
-    assert view.input_staff.caption == "B♭M 6̂₃"
+    assert view.question_view.note_input.caption == view.question.prompt
+    assert view.question_view.note_input.caption == "B♭M 6̂₃"
     assert view.prompt.isHidden()
     preview = QuestionPreview("Note Construction", question=view.question)
     # noinspection PyProtectedMember
@@ -460,7 +460,7 @@ def test_function_notation_uses_degree_shortcuts_and_accessible_names(
     view = opened(KeyboardNotes())
     press(view, "Shift+1")
     press(view, "A")
-    assert view.answered and not view.missed
+    assert view.session.answered and not view.session.missed
     assert (
         note_words(Note.parse("F4"), key=1) == "lowered leading tone, octave 4"
     )
@@ -514,17 +514,19 @@ def test_function_buttons_fit_the_answer_area(app: QApplication) -> None:
     assert max(col for _, col in question.grid.values()) == 3
     assert all(
         button.width() >= button.minimumSizeHint().width()
-        for button in view.buttons
+        for button in view.answer_controls.buttons
     )
     assert all(
         button.height() >= button.minimumSizeHint().height()
-        for button in view.buttons
+        for button in view.answer_controls.buttons
     )
     assert all(
-        button.geometry().right() < view.choice_area.width()
-        for button in view.buttons
+        button.geometry().right() < view.answer_controls.choice_area.width()
+        for button in view.answer_controls.buttons
     )
-    assert any("Lowered\n" in button.text() for button in view.buttons)
+    assert any(
+        "Lowered\n" in button.text() for button in view.answer_controls.buttons
+    )
     keys = choice_keys(question.choices)
     assert len(set(keys)) == len(keys)
     view.close()
@@ -657,13 +659,26 @@ def test_scale_answer_setting_and_buttons(app: QApplication) -> None:
     view = opened(NoteNames())
     q = view.question
     assert q and set(q.choices) == {"B♭ major", "D major", "F♯ major"}
-    assert view.staff.key == 0 and view.staff.caption == q.caption
-    assert {b.text() for b in view.buttons} == {"B♭", "D", "F♯"}
-    assert all(button.icon().isNull() for button in view.buttons)
+    assert (
+        view.question_view.staff.key == 0
+        and view.question_view.staff.caption == q.caption
+    )
+    assert {b.text() for b in view.answer_controls.buttons} == {
+        "B♭",
+        "D",
+        "F♯",
+    }
+    assert all(
+        button.icon().isNull() for button in view.answer_controls.buttons
+    )
     view._place_midi(q.staff[0][0].midi)
-    assert not view.answered
-    next(b for b in view.buttons if b.text() == q.answer.split()[0]).click()
-    assert view.answered
+    assert not view.session.answered
+    next(
+        b
+        for b in view.answer_controls.buttons
+        if b.text() == q.answer.split()[0]
+    ).click()
+    assert view.session.answered
     panel.naming_radios["letters"].click()
     assert cfg.active_keys() == [-2] and panel.key_boxes[-2].isChecked()
     view.close()
@@ -687,18 +702,34 @@ def test_different_staff_and_question_keys_in_the_exercise(
     view = opened(NoteNames())
     q = view.question
     assert q and q.answer == "7̂" and "in G major" in view.prompt.text()
-    assert view.staff.key == 2 and view.staff.columns == [[Note.parse("F#4")]]
-    assert all(button.icon().isNull() for button in view.buttons)
+    assert (
+        view.question_view.staff.key == 2
+        and view.question_view.staff.columns
+        == [
+            [Note.parse("F#4")],
+        ]
+    )
+    assert all(
+        button.icon().isNull() for button in view.answer_controls.buttons
+    )
     view._place_midi(q.staff[0][0].midi)
-    assert view.answered
+    assert view.session.answered
     view.close()
 
     cfg.scale_answer, cfg.scale_keys = True, {1}
     view = opened(NoteNames())
     q = view.question
-    assert q and q.check("G major") and view.staff.caption == "7̂ M"
-    assert view.staff.key == 2 and view.staff.columns == [[Note.parse("F#4")]]
-    assert view.buttons[0].icon().isNull()
+    assert (
+        q and q.check("G major") and view.question_view.staff.caption == "7̂ M"
+    )
+    assert (
+        view.question_view.staff.key == 2
+        and view.question_view.staff.columns
+        == [
+            [Note.parse("F#4")],
+        ]
+    )
+    assert view.answer_controls.buttons[0].icon().isNull()
     view.close()
 
 
@@ -830,12 +861,12 @@ def test_mixed_keys_and_minor_scale_buttons(app: QApplication) -> None:
     assert exercise.card_count() == len({q.item_key() for q in cards}) == 4
     view = opened(exercise)
     q = view.question
-    assert q and q.minor and view.staff.caption == q.caption
+    assert q and q.minor and view.question_view.staff.caption == q.caption
     assert view.prompt.isHidden()
-    assert {b.text() for b in view.buttons} == {"A", "E"}
-    assert all(b.icon().isNull() for b in view.buttons)
-    view.buttons[q.choices.index(q.answer)].click()
-    assert view.answered
+    assert {b.text() for b in view.answer_controls.buttons} == {"A", "E"}
+    assert all(b.icon().isNull() for b in view.answer_controls.buttons)
+    view.answer_controls.buttons[q.choices.index(q.answer)].click()
+    assert view.session.answered
     view.close()
     panel.close()
 

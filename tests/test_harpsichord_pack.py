@@ -422,14 +422,16 @@ def test_answering_plays_both_keys(
     card = exercise.cards[0]
     view = ExerciseView(exercise, rng=random.Random(1))
     view.question = card
-    view.fingerboard.show_position(card.picture)
+    view.question_view.fingerboard.show_position(card.picture)
     view.settings_panel.next_question_mode = "Wait"
     played = Mock()
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(view._answer_playback, "play", played)
     view.submit(
         card.answer,
-        button=next(b for b in view.buttons if b.text() == card.answer),
+        button=next(
+            b for b in view.answer_controls.buttons if b.text() == card.answer
+        ),
     )
     notes = played.call_args.args[0]
     assert card.picture is not None
@@ -734,7 +736,7 @@ def test_manuals_follow_the_range_while_it_is_dragged(
     view.show()
     panel = view.settings_panel
     assert isinstance(panel, PackKeyboardSettingsPanel)
-    manual = view.fingerboard._manuals[LOWER]
+    manual = view.question_view.fingerboard._manuals[LOWER]
     assert (manual.lo, manual.hi) == (48, 72)
     asked = view.question
     panel._set_keys(36, 84)
@@ -940,7 +942,9 @@ def test_changing_the_sound_applies_to_the_question_on_screen(
     assert card is not None
     view.submit(
         card.answer,
-        button=next(b for b in view.buttons if b.text() == card.answer),
+        button=next(
+            b for b in view.answer_controls.buttons if b.text() == card.answer
+        ),
     )
     assert played.call_args.kwargs["instrument"] == "horn"
     settings.pack_exercises.pop(cls.__name__, None)

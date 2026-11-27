@@ -85,6 +85,7 @@ from alto.ui.home import (
     EXERCISE_ICONS,
     ExerciseCard,
 )
+from alto.ui.key_fork import KeyFork
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.store import store
 from keys import (
@@ -209,7 +210,7 @@ def button(
     QPushButton
         The button.
     """
-    return next(b for b in view.buttons if b.text() == text)
+    return next(b for b in view.answer_controls.buttons if b.text() == text)
 
 
 def double_name_question(
@@ -1128,26 +1129,26 @@ def test_the_screen_shows_the_circle_for_each_kind_with_its_buttons_under_it(
     view, q = screen(kind)
     view.show()
     assert (
-        view.circle.isVisibleTo(view)
-        and view.circle.kind == kind
-        and view.circle.title == q.caption
+        view.question_view.circle.isVisibleTo(view)
+        and view.question_view.circle.kind == kind
+        and view.question_view.circle.title == q.caption
     )
-    assert view.circle.target == (q.circle_ring, q.circle)
+    assert view.question_view.circle.target == (q.circle_ring, q.circle)
     assert (
-        not view.staff.isVisibleTo(view)
-        and not view.fork.isVisibleTo(view)
+        view.question_view.staff is None
+        and view.findChild(KeyFork) is None
         and view.prompt.isHidden()
     )
-    assert [b.text() for b in view.buttons] == q.choices
+    assert [b.text() for b in view.answer_controls.buttons] == q.choices
     if q.grid is not None:
         for name, (row, column) in q.grid.items():
-            item = view.choice_box.itemAtPosition(row, column)
+            item = view.answer_controls.choice_box.itemAtPosition(row, column)
             assert item is not None
             widget = item.widget()
             assert isinstance(widget, QPushButton) and widget.text() == name
     other = ExerciseView(NoteNames(), rng=random.Random(4))
     other.show()
-    assert not other.circle.isVisibleTo(other)
+    assert other.question_view.circle is None
 
 
 def test_a_right_answer_with_one_name_lights_the_cell_and_moves_on(
@@ -1176,19 +1177,23 @@ def test_a_right_answer_with_one_name_lights_the_cell_and_moves_on(
             and first.circle is not None
             and not first.required
         )
-        before = view.correct
+        before = view.session.correct
         button(view, first.answer).click()
         assert (
-            view.answered
-            and view.correct == before + 1
-            and view.circle._glow >= 0.0
+            view.session.answered
+            and view.session.correct == before + 1
+            and view.question_view.circle._glow >= 0.0
         )
         if kind == "numeral":
-            assert view.circle.numerals == cells_of_key(first.circle_key or 0)
+            assert view.question_view.circle.numerals == cells_of_key(
+                first.circle_key or 0,
+            )
         else:
             assert (
-                view.circle.shown[first.circle_ring] == {first.circle}
-                or first.circle in view.circle.shown[first.circle_ring]
+                view.question_view.circle.shown[first.circle_ring]
+                == {first.circle}
+                or first.circle
+                in view.question_view.circle.shown[first.circle_ring]
             )
         finish(view)
 
@@ -1210,19 +1215,19 @@ def test_a_key_with_two_names_needs_two_buttons(app: QApplication) -> None:
         first, second = q.required
         button(view, first).click()
         assert (
-            not view.answered
-            and not view.missed
+            not view.session.answered
+            and not view.session.missed
             and not button(view, first).isEnabled()
         )
         assert (
-            view.total == 0 and view.correct == 0
+            view.session.total == 0 and view.session.correct == 0
         )  # nothing is scored on a half answer
-        assert view.circle.subtitle == "and its other name"
+        assert view.question_view.circle.subtitle == "and its other name"
         button(view, second).click()
         assert (
-            view.answered
-            and not view.missed
-            and (view.correct, view.total) == (1, 1)
+            view.session.answered
+            and not view.session.missed
+            and (view.session.correct, view.session.total) == (1, 1)
         )
         finish(view)
 
@@ -1241,7 +1246,11 @@ def test_the_two_names_can_be_pressed_in_either_order(
     view, q = double_name_question("major", seed=7)
     for name in reversed(q.required):
         button(view, name).click()
-    assert view.answered and not view.missed and view.correct == 1
+    assert (
+        view.session.answered
+        and not view.session.missed
+        and view.session.correct == 1
+    )
     finish(view)
 
 
@@ -1262,26 +1271,35 @@ def test_wrong_name_in_middle_of_two_misses_question_but_keeps(
     view, q = double_name_question("major")
     first, second = q.required
     button(view, first).click()
-    wrong = next(b for b in view.buttons if b.text() not in q.required)
+    wrong = next(
+        b for b in view.answer_controls.buttons if b.text() not in q.required
+    )
     wrong.click()
     assert (
-        view.missed
-        and not view.answered
-        and (view.total, view.correct, view.streak) == (1, 0, 0)
+        view.session.missed
+        and not view.session.answered
+        and (view.session.total, view.session.correct, view.session.streak)
+        == (1, 0, 0)
     )
     assert (
-        view.circle._warning is not None
+        view.question_view.circle._warning is not None
         and not wrong.isEnabled()
         and not button(view, first).isEnabled()
     )
     motion.settle()
-    assert view.circle._warning is None and view.circle.target == (
-        "outer",
-        q.circle,
+    assert (
+        view.question_view.circle._warning is None
+        and view.question_view.circle.target
+        == (
+            "outer",
+            q.circle,
+        )
     )
     button(view, second).click()
     assert (
-        view.answered and view.correct == 0 and view.total == 1
+        view.session.answered
+        and view.session.correct == 0
+        and view.session.total == 1
     )  # only the first try counts toward the score
     finish(view)
 
@@ -1297,14 +1315,16 @@ def test_a_wrong_first_name_misses_at_once(app: QApplication) -> None:
         The shared Qt application.
     """
     view, q = double_name_question("minor")
-    wrong = next(b for b in view.buttons if b.text() not in q.required)
+    wrong = next(
+        b for b in view.answer_controls.buttons if b.text() not in q.required
+    )
     wrong.click()
     assert (
-        view.missed
-        and (view.total, view.correct) == (1, 0)
-        and view.circle._warning is not None
+        view.session.missed
+        and (view.session.total, view.session.correct) == (1, 0)
+        and view.question_view.circle._warning is not None
     )
-    assert view.circle._warning[:2] == ("inner", q.circle)
+    assert view.question_view.circle._warning[:2] == ("inner", q.circle)
     finish(view)
 
 
@@ -1340,8 +1360,8 @@ def test_a_two_name_answer_is_recorded_once_with_both_names(
     assert q is not None and q.required
     first, *remaining = q.required
     button(view, first).click()
-    assert view.session.attempts == view.total == 0
-    assert not view.answered
+    assert view.session.attempts == view.session.total == 0
+    assert not view.session.answered
     for name in remaining:
         button(view, name).click()
     finish(view)
@@ -1362,24 +1382,27 @@ def test_numeral_question_flashes_ring_asked_and_shows_all_six(
         The shared Qt application.
     """
     view, q = screen("numeral")
-    wrong = next(b for b in view.buttons if b.text() != q.answer)
+    wrong = next(
+        b for b in view.answer_controls.buttons if b.text() != q.answer
+    )
     wrong.click()
     assert (
-        view.missed
-        and view.circle._warning is not None
-        and view.circle._warning[:2] == (q.circle_ring, q.circle)
+        view.session.missed
+        and view.question_view.circle._warning is not None
+        and view.question_view.circle._warning[:2] == (q.circle_ring, q.circle)
     )
     assert (
-        view.circle.signature == SIGNATURES[q.circle_key or 0]
+        view.question_view.circle.signature == SIGNATURES[q.circle_key or 0]
     )  # its staff was there all along
     motion.settle()
     button(view, q.answer).click()
     assert (
-        view.answered
-        and len(view.circle.numerals) == 6
-        and view.circle.numerals == cells_of_key(q.circle_key or 0)
+        view.session.answered
+        and len(view.question_view.circle.numerals) == 6
+        and view.question_view.circle.numerals
+        == cells_of_key(q.circle_key or 0)
     )
-    assert view.circle.subtitle == " ".join(NUMERALS)
+    assert view.question_view.circle.subtitle == " ".join(NUMERALS)
     finish(view)
 
 
@@ -1398,25 +1421,33 @@ def test_a_wrong_answer_flashes_the_cell_and_can_be_tried_again(
     view, q = screen("major")
     wrong = next(
         b
-        for b in view.buttons
+        for b in view.answer_controls.buttons
         if b.text() not in q.required and b.text() != q.answer
     )
     wrong.click()
     assert (
-        view.missed
-        and not view.answered
-        and (view.total, view.correct, view.streak) == (1, 0, 0)
+        view.session.missed
+        and not view.session.answered
+        and (view.session.total, view.session.correct, view.session.streak)
+        == (1, 0, 0)
     )
-    assert view.circle._warning is not None and view.circle._warning[:2] == (
-        "outer",
-        q.circle,
+    assert (
+        view.question_view.circle._warning is not None
+        and view.question_view.circle._warning[:2]
+        == (
+            "outer",
+            q.circle,
+        )
     )
-    assert not wrong.isEnabled() and view.circle.shown["outer"] == set()
+    assert (
+        not wrong.isEnabled()
+        and view.question_view.circle.shown["outer"] == set()
+    )
     motion.settle()
-    assert view.circle._warning is None
+    assert view.question_view.circle._warning is None
     for name in q.required or (q.answer,):
         button(view, name).click()
-    assert view.answered and view.correct == 0
+    assert view.session.answered and view.session.correct == 0
     finish(view)
 
 
@@ -1476,11 +1507,11 @@ def test_each_kind_is_answered_from_the_keyboard_alone(
         keys = choice_keys(q.choices)
         for name in q.required or (q.answer,):
             press(view, keys[q.choices.index(name)])
-        assert view.answered and not view.missed, q.prompt
+        assert view.session.answered and not view.session.missed, q.prompt
         two += bool(q.required)
         finish(view)
         view.next_question()
-    assert view.correct == 20 and (kind == "numeral" or two > 0)
+    assert view.session.correct == 20 and (kind == "numeral" or two > 0)
 
 
 # -- the options

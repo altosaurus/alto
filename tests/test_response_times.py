@@ -368,7 +368,7 @@ def test_passing_intervals_on_the_question(
         top = label.mapTo(view, QPoint())
         if exercise in (KeyboardNotes, KeyboardIntervals):
             assert label.text() == "    ".join(labels)
-            keyboard = view.keyboard
+            keyboard = view.question_view.keyboard
             bottom = keyboard.mapTo(view, keyboard.rect().bottomLeft())
             assert top.y() > bottom.y()
             right = (
@@ -386,7 +386,10 @@ def test_passing_intervals_on_the_question(
                 label.accessibleName()
                 == f"Next intervals: {', '.join(reversed(labels))}"
             )
-            corner = view.staff.mapTo(view, view.staff.rect().bottomRight())
+            corner = view.question_view.staff.mapTo(
+                view,
+                view.question_view.staff.rect().bottomRight(),
+            )
             assert (
                 0 < top.x() - corner.x() <= 16
                 and top.y() + label.height() - 1 == corner.y()

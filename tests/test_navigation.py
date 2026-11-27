@@ -412,7 +412,7 @@ def test_switching_lists_preserves_the_exercise(window: MainWindow) -> None:
     view = window.stack.currentWidget()
     assert isinstance(view, ExerciseView) and view.question is not None
     question = view.question
-    view.buttons[0].click()
+    view.answer_controls.buttons[0].click()
     # noinspection PyProtectedMember
     selected = dict(view._pending)
     window.home.mode_control.buttons[1].click()
@@ -448,8 +448,10 @@ def test_tiles_pause_question_advancement_and_answer_timing(
     view = window.stack.currentWidget()
     assert isinstance(view, ExerciseView) and view.question is not None
     question = view.question
-    view.buttons[question.choices.index(question.answer)].click()
-    assert view.answered
+    view.answer_controls.buttons[
+        question.choices.index(question.answer)
+    ].click()
+    assert view.session.answered
     # noinspection PyProtectedMember
     clock = view._clock
     window.view_button.click()
@@ -692,7 +694,7 @@ def test_tiles_have_a_back_button_for_the_current_exercise(
     view = window.stack.currentWidget()
     assert isinstance(view, ExerciseView)
     question = view.question
-    view.buttons[0].click()
+    view.answer_controls.buttons[0].click()
     # noinspection PyProtectedMember
     selected = dict(view._pending)
     window.view_button.click()
@@ -887,7 +889,7 @@ def test_shuffle_uses_matching_exercises_from_another_category(
     assert window.nav.currentItem() is window._items[KeyboardIntervals]
     second.settings_panel.next_question_mode = "Immediately"
     second.submit("wrong", button=None)
-    assert second.answered and second._advance.isActive()
+    assert second.session.answered and second._advance.isActive()
     shuffled = QSignalSpy(second.shuffle_requested)
     motion.settle()  # the next question comes, from the other exercise
     assert shuffled.count() == 1
@@ -903,7 +905,7 @@ def test_shuffle_uses_matching_exercises_from_another_category(
     current.settings_panel.next_question_mode = "Immediately"
     current.submit(current.question.answer, button=None)
     motion.settle()  # the next question comes
-    assert window._exercise_page is current and not current.answered
+    assert window._exercise_page is current and not current.session.answered
     shuffle.click()
     assert window._exercise_page is current and current.shuffle_answers
     window.rebuild()
@@ -1457,7 +1459,7 @@ def test_search_does_not_answer_or_replace_active_question_and(
     assert (
         window.stack.currentWidget() is view
         and view.question is question
-        and not view.answered
+        and not view.session.answered
     )
     window.view_button.click()
     assert window.search_field.text() == "clef"

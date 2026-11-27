@@ -355,18 +355,23 @@ def test_view_rejects_extra_marks_and_grades_a_correct_set(
     score = view.beat_placement
     assert score._signature_visible
     assert len(score._measures) == 2
-    assert not view.answer_button.isEnabled()
-    assert not view.buttons and view.place_button.isHidden()
+    controls = view.answer_controls.placement
+    assert controls.answer_button.parentWidget() is controls
+    assert not controls.answer_button.isEnabled()
+    assert (
+        not view.answer_controls.buttons
+        and view.answer_controls.placement.place_button.isHidden()
+    )
     for slot in sorted(beat_positions(BEAT_METERS[question.answer]) | {1}):
         QTest.mouseClick(
             score,
             Qt.MouseButton.LeftButton,
             pos=score.position(slot).toPoint(),
         )
-    view.answer_button.click()
-    assert view.missed and score.feedback is False
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.missed and score.feedback is False
     assert not score.grab().isNull()
-    assert not view.answer_button.isEnabled()
+    assert not view.answer_controls.placement.answer_button.isEnabled()
     view.next_question()
     question = view.question
     assert question is not None
@@ -377,7 +382,7 @@ def test_view_rejects_extra_marks_and_grades_a_correct_set(
             Qt.MouseButton.LeftButton,
             pos=score.position(slot).toPoint(),
         )
-    view.undo_button.click()
+    view.answer_controls.placement.undo_button.click()
     last = max(beat_positions(BEAT_METERS[question.answer]))
     assert last not in score.marks
     QTest.mouseClick(
@@ -387,7 +392,7 @@ def test_view_rejects_extra_marks_and_grades_a_correct_set(
     )
     score.setFocus()
     QTest.keyClick(score, Qt.Key.Key_Return)
-    assert view.answered and score.feedback is True
+    assert view.session.answered and score.feedback is True
     assert not score.isEnabled()
     assert not score.grab().isNull()
     view.close()
@@ -466,7 +471,7 @@ def test_correct_answer_taps_the_written_rhythm(
         Qt.MouseButton.LeftButton,
         pos=score.position(1).toPoint(),
     )
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     playback.assert_not_called()
     view.next_question()
     # Restore the seeded question before grading.
@@ -476,7 +481,7 @@ def test_correct_answer_taps_the_written_rhythm(
     strong = beat_positions(BEAT_METERS[answer])
     score.marks = sorted(strong)
     score.changed.emit()
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     playback.assert_called_once()
     durations = playback.call_args.args[0]
     levels = playback.call_args.kwargs["levels"]
@@ -523,8 +528,8 @@ def test_note_highlights_skip_rests_and_cross_the_barline(
     score.reset(rhythm, meter=(3, 4))
     score.marks = sorted(beat_positions(BEAT_METERS["3/4"]))
     score.changed.emit()
-    view.answer_button.click()
-    assert view.answered
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.answered
     columns = []
     for index in range(len(rhythm)):
         view._light_answer_notes(index)
@@ -557,7 +562,7 @@ def test_muted_rhythm_still_highlights_and_clears_on_exit(
     score = view.beat_placement
     score.marks = sorted(beat_positions(BEAT_METERS[view.question.answer]))
     score.changed.emit()
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert score.playback_column == 0
     view.hide()
     assert score.playback_column is None

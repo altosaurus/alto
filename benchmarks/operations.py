@@ -435,7 +435,7 @@ class Workbench:
         for cls in self.exercises:
             self.window.open_exercise(cls)
             view = self._view()
-            if view.buttons:
+            if view.answer_controls.buttons:
                 return
 
     def _answer_right(self) -> None:
@@ -443,7 +443,11 @@ class Workbench:
         view = self._view()
         question = view.question
         assert question is not None
-        button = next(b for b in view.buttons if b.text() == question.answer)
+        button = next(
+            b
+            for b in view.answer_controls.buttons
+            if b.text() == question.answer
+        )
         view.submit(question.answer, button=button)
         # noinspection PyProtectedMember
         view._advance.stop()
@@ -453,7 +457,11 @@ class Workbench:
         view = self._view()
         question = view.question
         assert question is not None
-        button = next(b for b in view.buttons if b.text() != question.answer)
+        button = next(
+            b
+            for b in view.answer_controls.buttons
+            if b.text() != question.answer
+        )
         view.submit(button.text(), button=button)
         # noinspection PyProtectedMember
         view._advance.stop()

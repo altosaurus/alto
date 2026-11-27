@@ -48,7 +48,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from alto.ui.colors import blend
+from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
 from alto.ui.zoom import px
 
 MAX_ACCIDENTALS = 7  # a signature has at most seven sharps or flats
@@ -495,6 +495,89 @@ class KeyFork(QWidget):
             ),
         )
 
+    def reset(self, *, slide: bool = False) -> None:
+        """
+        Unlock the fork and return its marker to the natural sign.
+
+        Parameters
+        ----------
+        slide : bool, default False
+            Slide back to zero when offering another attempt.
+
+        Examples
+        --------
+        A new question starts at zero with no feedback color.
+        """
+        self.locked = False
+        self._wheel = 0
+        self.set_marker_color(None)
+        self.set_value(0, slide=slide)
+        if not slide:
+            self._slide.stop()
+            self._marker = node_position(0)
+
+    def move_selection(self, name: str) -> bool:
+        """
+        Apply an arrow or Home command to the selected signature.
+
+        Parameters
+        ----------
+        name : str
+            Lowercase key name from the widget or an exercise shortcut.
+
+        Returns
+        -------
+        bool
+            Whether the fork handled the key.
+
+        Examples
+        --------
+        >>> fork = KeyFork()
+        >>> fork.move_selection("left"), fork.value
+        (True, -1)
+        """
+        if self.locked:
+            return False
+        if name in ("up", "right"):
+            self.set_value(self.value + 1)
+        elif name in ("down", "left"):
+            self.set_value(self.value - 1)
+        elif name == "home":
+            self.set_value(0)
+        else:
+            return False
+        return True
+
+    def flash(self, target: str = CORRECT_ANSWER_COLOR) -> QVariantAnimation:
+        """
+        Fade the marker from its normal highlight to the feedback color.
+
+        Parameters
+        ----------
+        target : str
+            Feedback color for the graded answer.
+
+        Returns
+        -------
+        QVariantAnimation
+            Running animation for the view to cancel on a new question.
+
+        Examples
+        --------
+        A wrong signature flashes red before a retry.
+        """
+        start = self.palette().color(QPalette.ColorRole.Highlight)
+        end = QColor(target)
+        animation = QVariantAnimation(self)
+        animation.setDuration(180)
+        animation.setStartValue(0.0)
+        animation.setEndValue(1.0)
+        animation.valueChanged.connect(
+            lambda t: self.set_marker_color(blend(start, b=end, t=t)),
+        )
+        animation.start()
+        return animation
+
     def set_value(
         self,
         value: int,
@@ -855,16 +938,9 @@ class KeyFork(QWidget):
         >>> fork.value
         1
         """
-        step = {
-            Qt.Key.Key_Up: 1,
-            Qt.Key.Key_Right: 1,
-            Qt.Key.Key_Down: -1,
-            Qt.Key.Key_Left: -1,
-        }.get(Qt.Key(event.key()))
-        if step is None or self.locked:
+        name = Qt.Key(event.key()).name.removeprefix("Key_").lower()
+        if not self.move_selection(name):
             super().keyPressEvent(event)
-            return
-        self.set_value(self.value + step)
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """

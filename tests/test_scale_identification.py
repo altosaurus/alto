@@ -155,9 +155,11 @@ def test_replacement_keeps_the_icon_and_shows_an_answerable_staff(
     assert EXERCISE_ICONS["ScaleIdentification"] == icons.EXERCISE_SCALES
     view = ExerciseView(ScaleIdentification(), rng=random.Random(5))
     view.show()
-    assert view.question is not None and view.staff.isVisible()
-    view.buttons[view.question.choices.index(view.question.answer)].click()
-    assert view.answered
+    assert view.question is not None and view.question_view.staff.isVisible()
+    view.answer_controls.buttons[
+        view.question.choices.index(view.question.answer)
+    ].click()
+    assert view.session.answered
 
 
 def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(
@@ -195,11 +197,13 @@ def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(
         and len(view.question.octaves or []) == 7
     )
     tonic, mode = view.question.answer.split(" ", 1)
-    buttons = {button.text(): button for button in view.buttons}
+    buttons = {
+        button.text(): button for button in view.answer_controls.buttons
+    }
     buttons[mode].click()
-    assert not view.answered
+    assert not view.session.answered
     buttons[tonic].click()
-    assert view.answered
+    assert view.session.answered
     view.close()
 
 
@@ -332,20 +336,28 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
     view.show()
     question = view.question
     assert question is not None
-    view.buttons[question.choices.index(question.answer)].click()
+    view.answer_controls.buttons[
+        question.choices.index(question.answer)
+    ].click()
     assert played == [column[0].midi for column in question.staff]
-    assert view.answered and not view._advance.isActive()
-    assert not view.staff.column_colors and view.staff.note_color is None
+    assert view.session.answered and not view._advance.isActive()
+    assert (
+        not view.question_view.staff.column_colors
+        and view.question_view.staff.note_color is None
+    )
     for index in range(8):
         callbacks[0](index)
-        assert list(view.staff.column_colors) == [index]
-        assert view.staff.note_color is None and not view._advance.isActive()
+        assert list(view.question_view.staff.column_colors) == [index]
+        assert (
+            view.question_view.staff.note_color is None
+            and not view._advance.isActive()
+        )
         assert view.question is question
     callbacks[0](None)
     assert (
         view._advance.isActive()
-        and not view.staff.column_colors
-        and view.staff.note_color is None
+        and not view.question_view.staff.column_colors
+        and view.question_view.staff.note_color is None
     )
     view.hide()
     callbacks[0](
@@ -356,7 +368,10 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
     assert view._advance.isActive()
     view.next_question()
     callbacks[0](3)
-    assert not view.staff.column_colors and view.staff.note_color is None
+    assert (
+        not view.question_view.staff.column_colors
+        and view.question_view.staff.note_color is None
+    )
 
 
 def test_descending_scale_from_saved_minor_only_keys() -> None:

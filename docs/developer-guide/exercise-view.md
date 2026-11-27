@@ -14,7 +14,7 @@ Open **Note Identification** from the exercise catalog. You’ll follow one writ
 
 {% include first-question-c4.html %}
 
-Start in `MainWindow.open_exercise()`. On the first visit, the selected tile supplies the exercise class, `NoteNames`. The window constructs `ExerciseView(cls(), learner=self.learner)`. The view builds its staff, controls, and settings pane, then calls `next_question()`. [MainWindow.open_exercise]({{ '/api/alto.ui.main_window/class-mainwindow/#mainwindowopen_exercise' | relative_url }}) · [ExerciseView.next_question]({{ '/api/alto.ui.exercise_view/class-exerciseview/#exerciseviewnext_question' | relative_url }})
+Start in `MainWindow.open_exercise()`. On the first visit, the selected tile supplies the exercise class, `NoteNames`. The window constructs `ExerciseView(cls(), learner=self.learner)`. The view builds its question view, controls, and settings pane, then calls `next_question()`. [MainWindow.open_exercise]({{ '/api/alto.ui.main_window/class-mainwindow/#mainwindowopen_exercise' | relative_url }}) · [ExerciseView.next_question]({{ '/api/alto.ui.exercise_view/class-exerciseview/#exerciseviewnext_question' | relative_url }})
 
 ### ExerciseView components
 
@@ -24,7 +24,7 @@ Open **Exercise settings** with the sliders button. The view stacks the toolbar,
 
 #### 1. Staff
 
-The view creates the staff once and adds it to the music area. Each new question reuses that widget and supplies the pitches to draw, along with their clef, key signature, and note value.
+`ExerciseView.question` holds the current `Question`. The view passes it to `question_view.show_question()` for display. For Note Identification, `QuestionView` mounts a staff and draws the written pitches, clef, key signature, and note value. A keyboard question can show the keys alongside a key signature. Construction questions select an editor for placing notes, clefs, scales, or signatures. Consecutive questions that use the same display reuse its widget. [QuestionView]({{ '/api/alto.ui.question_view/class-questionview/' | relative_url }})
 
 {% include exercise-view-source.html name="staff" %}
 
@@ -32,15 +32,19 @@ The staff stores the pitches in columns, sizes itself to fit the music, and requ
 
 #### 2. Toolbar
 
-`ExerciseView._build_toolbar()` builds a horizontal row for the score, help button, and exercise tools. The constructor adds that row above the staff. The stretch after **Back to lesson** pushes the score and remaining controls to the right. The sliders button opens and closes the settings pane.
+`ExerciseView` creates an `ExerciseToolbar` and places it above the staff. The toolbar owns the score, help button, and exercise tools. It shows the book button when the exercise has a reference and the MIDI selector when the exercise supports MIDI on Linux. Clicking the sliders button tells the view to open or close the settings pane. [ExerciseToolbar]({{ '/api/alto.ui.exercise_toolbar/class-exercisetoolbar/' | relative_url }})
 
 {% include exercise-view-source.html name="toolbar" %}
 
 #### 3. Answer controls
 
-The view starts with an empty grid below the staff. For each question, it clears the previous buttons and adds one per letter choice. Each button remembers its own letter and submits it as soon as the learner clicks. The question supplies the grid positions when it needs a particular layout. [Answer button]({{ '/api/alto.ui.degree_text/class-degreebutton/' | relative_url }}) · [Answer submission]({{ '/api/alto.ui.exercise_view/class-exerciseview/#exerciseviewsubmit' | relative_url }})
+The numbered region is `view.answer_controls`, the shared answer area beneath the question. In Note Identification it displays one button per letter. Clicking a letter sends the choice and its button to `ExerciseView.submit()` for grading. With the Octave option enabled, the widget adds a second row and reports each selection to the view, which grades the pair once both parts are chosen. Each new question replaces the choices and their keyboard shortcuts. [AnswerControls]({{ '/api/alto.ui.answer_controls/class-answercontrols/' | relative_url }}) · [Answer submission]({{ '/api/alto.ui.exercise_view/class-exerciseview/#exerciseviewsubmit' | relative_url }})
 
 {% include exercise-view-source.html name="answer" %}
+
+Construction questions can ask the learner to place an answer in the music. The active control is available as `view.question_view.editor`. For example, a Key Signature Construction question requests a fork for choosing the number of sharps or flats. The question view creates it on demand and resets it for the next key signature. [KeyFork]({{ '/api/alto.ui.key_fork/class-keyfork/' | relative_url }})
+
+For construction questions, the same answer area displays its `PlacementControls` row. In Scale Construction, **Place note** enters each note and **Answer** submits the completed scale. In Beat Construction, marking the first beat enables **Undo** and **Answer**. The widget manages the buttons and their shortcuts, and `ExerciseView` handles grading. [PlacementControls]({{ '/api/alto.ui.placement_controls/class-placementcontrols/' | relative_url }})
 
 #### 4. Settings pane
 
@@ -68,8 +72,8 @@ q.octaves  # None while Octave is off
 For middle C with letter names, `q.answer` is `"C"`. Step to the end of `next_question()` and compare the live widgets with the question you inspected above. With the settings shown, all three expressions should return `True`. [Question fields]({{ '/api/alto.exercises.base/class-question/' | relative_url }})
 
 ```python
-self.staff.columns == q.staff
-[button.text() for button in self.buttons] == q.choices
+self.question_view.staff.columns == q.staff
+[button.text() for button in self.answer_controls.buttons] == q.choices
 self.settings_panel.parentWidget() is self.pane
 ```
 
@@ -79,7 +83,7 @@ Set a breakpoint in `ExerciseView.submit()` and click the name of the note you s
 
 Step into `_record()`. The view asks `PracticeSession.after_attempt()` for the updated attempt count, score, and retry decision. With an active profile, the view also passes the attempt number, submitted answer, and elapsed time to the learner. Try a wrong answer and then a correct retry in ordinary practice. The history shows two attempts, and the score shows one missed question. [PracticeSession]({{ '/api/alto.learning.practice_session/class-practicesession/' | relative_url }}) · [Learner.record]({{ '/api/alto.learning.learner/class-learner/#learnerrecord' | relative_url }})
 
-A correct answer finishes the question. The view plays the note when sound is on. Try a wrong button on another question. It flashes red, and the view reads the session’s decision. In ordinary ASRS or ARTS practice you can try another button on the same note. In shuffle mode the miss ends that turn. With SM-2 or FSRS, the scheduler brings the missed card back for review. [Practice modes]({{ '/practice/' | relative_url }})
+A correct answer finishes the question. The view plays the note when sound is on and passes the current session to the toolbar to display the score and streak. Try a wrong button on another question. It flashes red. Inspect `view.session` to see whether that miss finished the question. In ordinary ASRS or ARTS practice you can try another button on the same note. In shuffle mode the miss ends that turn. With SM-2 or FSRS, the scheduler brings the missed card back for review. [Practice modes]({{ '/practice/' | relative_url }})
 
 ## A two-part answer
 

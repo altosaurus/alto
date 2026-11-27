@@ -56,6 +56,7 @@ from alto.ui.home import (
     EXERCISE_ICONS,
     ExerciseCard,
 )
+from alto.ui.key_fork import KeyFork
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.staff import (
     BOTTOM_LINE,
@@ -182,13 +183,13 @@ def place_scale(
     for note in notes:
         implied = key_accidental(
             note.letter,
-            count=view.scale_input.key,
+            count=view.question_view.scale_input.key,
         )  # what the staff's signature already says
         # noinspection PyProtectedMember
         view._set_accidental(
             None if note.accidental == implied else note.accidental,
         )
-        click(view.scale_input, note)
+        click(view.question_view.scale_input, note)
 
 
 def ready_scale(
@@ -595,25 +596,25 @@ def test_the_screen_shows_a_blank_staff_with_the_scale_name_and_the_buttons(
     q = view.question
     assert q is not None
     assert (
-        view.scale_input.isVisibleTo(view)
-        and view.scale_input.caption == q.caption
+        view.question_view.scale_input.isVisibleTo(view)
+        and view.question_view.scale_input.caption == q.caption
         and view.prompt.isHidden()
     )
     assert (
-        not view.staff.isVisibleTo(view)
-        and not view.input_staff.isVisibleTo(view)
-        and not view.fork.isVisibleTo(view)
+        view.question_view.staff is None
+        and view.question_view.editor is view.question_view.scale_input
+        and view.findChild(KeyFork) is None
     )
     assert (
         view.accidental_row.isVisibleTo(view)
-        and view.undo_button.isVisibleTo(view)
-        and view.answer_button.isVisibleTo(view)
+        and view.answer_controls.placement.undo_button.isVisibleTo(view)
+        and view.answer_controls.placement.answer_button.isVisibleTo(view)
     )
     assert (
-        view.answer_button.text() == "Answer"
-        and not view.answer_button.isEnabled()
+        view.answer_controls.placement.answer_button.text() == "Answer"
+        and not view.answer_controls.placement.answer_button.isEnabled()
     )
-    assert view.buttons == []
+    assert view.answer_controls.buttons == []
 
 
 def test_the_answer_waits_until_every_note_is_placed(
@@ -633,14 +634,15 @@ def test_the_answer_waits_until_every_note_is_placed(
     q = view.question
     assert q is not None and q.construct_scale is not None
     place_scale(view, notes=q.construct_scale[:7])
-    assert not view.answer_button.isEnabled()
-    view.answer_button.click()  # nothing to hand in yet
-    assert view.total == 0
+    assert not view.answer_controls.placement.answer_button.isEnabled()
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.total == 0
     place_scale(view, notes=q.construct_scale[7:])
-    assert view.answer_button.isEnabled()
-    view.undo_button.click()
+    assert view.answer_controls.placement.answer_button.isEnabled()
+    view.answer_controls.placement.undo_button.click()
     assert (
-        len(view.scale_input.notes) == 7 and not view.answer_button.isEnabled()
+        len(view.question_view.scale_input.notes) == 7
+        and not view.answer_controls.placement.answer_button.isEnabled()
     )
 
 
@@ -658,15 +660,15 @@ def test_the_sign_is_used_up_by_each_note(app: QApplication) -> None:
     view.resize(1000, 700)
     view.accidental_buttons[1].click()
     assert (
-        view.scale_input.accidental == 1
+        view.question_view.scale_input.accidental == 1
         and view.accidental_buttons[1].isChecked()
     )
-    click(view.scale_input, Note.parse("F4"))
+    click(view.question_view.scale_input, Note.parse("F4"))
     assert (
-        view.scale_input.accidental is None
+        view.question_view.scale_input.accidental is None
         and not view.accidental_buttons[1].isChecked()
     )
-    assert str(view.scale_input.notes[0]) == "F♯4"
+    assert str(view.question_view.scale_input.notes[0]) == "F♯4"
 
 
 def test_right_click_steps_through_no_sign_sharp_and_flat(
@@ -686,13 +688,13 @@ def test_right_click_steps_through_no_sign_sharp_and_flat(
     seen = []
     for _ in range(4):
         click(
-            view.scale_input,
+            view.question_view.scale_input,
             Note.parse("C4"),
             button=Qt.MouseButton.RightButton,
         )
-        seen.append(view.scale_input.accidental)
+        seen.append(view.question_view.scale_input.accidental)
     assert seen == [1, -1, None, 1]
-    assert view.scale_input.notes == []
+    assert view.question_view.scale_input.notes == []
 
 
 @pytest.mark.parametrize("has_sound", [True, False])
@@ -727,24 +729,26 @@ def test_a_right_scale_is_scored_plays_the_scale_and_moves_on(
     first = view.question
     assert first is not None and first.construct_scale is not None
     place_scale(view, notes=first.construct_scale)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.answered
-        and (view.correct, view.total, view.streak) == (1, 1, 1)
-        and view.scale_input.locked
+        view.session.answered
+        and (view.session.correct, view.session.total, view.session.streak)
+        == (1, 1, 1)
+        and view.question_view.scale_input.locked
     )
     assert played == (
         [[[n] for n in first.construct_scale]] if has_sound else []
     )
     assert view._advance.isActive() == (not has_sound)
-    view.answer_button.click()  # a second press does not score again
-    assert view.total == 1
+    # A second press does not score again.
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.total == 1
     view._advance.stop()
     view.next_question()
     assert (
         view.question is not first
-        and view.scale_input.notes == []
-        and not view.scale_input.locked
+        and view.question_view.scale_input.notes == []
+        and not view.question_view.scale_input.locked
     )
 
 
@@ -768,15 +772,17 @@ def test_the_notes_turn_green_one_by_one_as_the_scale_plays(
     view, _ = ready_scale(monkeypatch, gap_ms=40)
     lit: list[tuple[int, ...]] = []
     view._answer_playback.step.connect(
-        lambda _: lit.append(tuple(view.scale_input.column_colors)),
+        lambda _: lit.append(
+            tuple(view.question_view.scale_input.column_colors),
+        ),
     )
     assert (
-        view.scale_input.note_color is None
-        and view.scale_input.column_colors == {}
+        view.question_view.scale_input.note_color is None
+        and view.question_view.scale_input.column_colors == {}
     )  # black until the scale plays
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.scale_input.note_color is None
+        view.question_view.scale_input.note_color is None
     )  # the notes are not turned green all at once: only as they sound
     QTest.qWait(600)
     assert lit == [(i,) for i in range(8)] + [()]
@@ -801,13 +807,17 @@ def test_the_notes_turn_green_on_time_even_with_the_sound_off(
         test.
     """
     view, first = ready_scale(monkeypatch, gap_ms=60)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     QTest.qWait(150)
     assert (
-        0 < len(view.scale_input.column_colors) < 8 and view.question is first
+        0 < len(view.question_view.scale_input.column_colors) < 8
+        and view.question is first
     )  # part way through, on this question
     QTest.qWait(60 * 8 + 700)
-    assert view.question is not first and view.scale_input.column_colors == {}
+    assert (
+        view.question is not first
+        and view.question_view.scale_input.column_colors == {}
+    )
 
 
 @pytest.mark.motion  # about the timing of the notes as the scale plays
@@ -828,13 +838,14 @@ def test_a_scale_that_was_playing_does_not_color_the_next_questions_staff(
         test.
     """
     view, _ = ready_scale(monkeypatch, gap_ms=60)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     QTest.qWait(100)
     # a new question, while the old scale is still playing
     view.settings_panel.changed.emit()
     QTest.qWait(300)
     assert (
-        view.scale_input.column_colors == {} and view.scale_input.notes == []
+        view.question_view.scale_input.column_colors == {}
+        and view.question_view.scale_input.notes == []
     )
     view._advance.stop()
 
@@ -870,11 +881,11 @@ def test_a_right_scale_on_another_octave_is_marked_right_and_plays_as_placed(
         for n in q.construct_scale
     ]
     place_scale(view, notes=higher)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.answered
-        and not view.missed
-        and (view.correct, view.total) == (1, 1)
+        view.session.answered
+        and not view.session.missed
+        and (view.session.correct, view.session.total) == (1, 1)
     )
     assert heard == [[[n] for n in higher]]
     view._advance.stop()
@@ -901,23 +912,29 @@ def test_wrong_scale_counts_against_first_try_and_staff_cleared(
         for n in q.construct_scale
     ]
     place_scale(view, notes=wrong)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.missed
-        and not view.answered
-        and (view.total, view.correct, view.streak) == (1, 0, 0)
+        view.session.missed
+        and not view.session.answered
+        and (view.session.total, view.session.correct, view.session.streak)
+        == (1, 0, 0)
     )
-    assert view.scale_input.locked and not view.answer_button.isEnabled()
+    assert (
+        view.question_view.scale_input.locked
+        and not view.answer_controls.placement.answer_button.isEnabled()
+    )
     motion.settle()
     assert (
-        not view.scale_input.locked
-        and view.scale_input.notes == []
-        and view.scale_input.caption == q.caption
+        not view.question_view.scale_input.locked
+        and view.question_view.scale_input.notes == []
+        and view.question_view.scale_input.caption == q.caption
     )
     place_scale(view, notes=q.construct_scale)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.answered and view.total == 1 and view.correct == 0
+        view.session.answered
+        and view.session.total == 1
+        and view.session.correct == 0
     )  # only the first try counts toward the score
     view._advance.stop()
 
@@ -948,10 +965,10 @@ def test_every_try_is_recorded_with_the_notes_that_were_placed(
         Note.from_diatonic(n.diatonic, accidental=0) for n in q.construct_scale
     ]
     place_scale(view, notes=wrong)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     motion.settle()
     place_scale(view, notes=q.construct_scale)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     view._advance.stop()
     rows = db.conn.execute(
         "SELECT answer, correct FROM attempts ORDER BY id",
@@ -976,10 +993,13 @@ def test_a_changed_setting_gives_a_fresh_blank_staff(
     """
     view = ExerciseView(ScaleConstruction(), rng=random.Random(4))
     view.resize(1000, 700)
-    click(view.scale_input, Note.parse("C4"))
-    assert view.scale_input.notes
+    click(view.question_view.scale_input, Note.parse("C4"))
+    assert view.question_view.scale_input.notes
     view.settings_panel.changed.emit()
-    assert view.scale_input.notes == [] and not view.answer_button.isEnabled()
+    assert (
+        view.question_view.scale_input.notes == []
+        and not view.answer_controls.placement.answer_button.isEnabled()
+    )
 
 
 def test_other_exercises_do_not_show_the_scale_staff(
@@ -996,10 +1016,11 @@ def test_other_exercises_do_not_show_the_scale_staff(
     """
     view = ExerciseView(NoteConstruction(), rng=random.Random(4))
     view.show()
-    assert not view.scale_input.isVisibleTo(
-        view,
-    ) and not view.undo_button.isVisibleTo(view)
-    assert view.input_staff.isVisibleTo(view)
+    assert not isinstance(
+        view.question_view.editor,
+        ScaleInput,
+    ) and not view.answer_controls.placement.undo_button.isVisibleTo(view)
+    assert view.question_view.note_input.isVisibleTo(view)
 
 
 # -- the preview, the home page and the settings
@@ -1497,7 +1518,7 @@ def test_wheel_cycles_none_sharp_flat_and_round_again_and_sign(
     """
     view = ExerciseView(ScaleConstruction(), rng=random.Random(4))
     view.resize(1000, 700)
-    staff = view.scale_input
+    staff = view.question_view.scale_input
     seen = []
     for delta in (120, 120, 120, 120, -120, -120, -120):
         roll(staff, delta=delta)
@@ -1539,10 +1560,10 @@ def test_a_step_wheel_turn_does_not_change_the_sign(app: QApplication) -> None:
     """
     view, _ = view_with_steps()
     view._set_accidental(None)
-    roll(view.scale_input, delta=120)
+    roll(view.question_view.scale_input, delta=120)
     assert (
-        view.scale_input.pending_step == "H"
-        and view.scale_input.accidental is None
+        view.question_view.scale_input.pending_step == "H"
+        and view.question_view.scale_input.accidental is None
     )
 
 
@@ -1753,18 +1774,22 @@ def test_the_screen_shows_the_step_buttons_only_while_steps_are_marked(
     assert view.step_row.isVisibleTo(
         view,
     ) and not view.accidental_row.isVisibleTo(view)
-    assert not view.answer_button.isEnabled()  # the steps are still to come
+    assert (
+        not view.answer_controls.placement.answer_button.isEnabled()
+    )  # the steps are still to come
     assert [view.step_buttons[s].text() for s in "WH"] == [
         "W",
         "H",
     ] and view.step_buttons["W"].isChecked()
-    mark(view.scale_input, ["W"] * 7)
+    mark(view.question_view.scale_input, ["W"] * 7)
     assert (
-        not view.step_row.isVisibleTo(view) and view.answer_button.isEnabled()
+        not view.step_row.isVisibleTo(view)
+        and view.answer_controls.placement.answer_button.isEnabled()
     )
-    view.undo_button.click()
+    view.answer_controls.placement.undo_button.click()
     assert (
-        view.step_row.isVisibleTo(view) and not view.answer_button.isEnabled()
+        view.step_row.isVisibleTo(view)
+        and not view.answer_controls.placement.answer_button.isEnabled()
     )
 
 
@@ -1783,25 +1808,26 @@ def test_step_buttons_choose_step_and_follow_wheel_and_right(
     view, _ = view_with_steps()
     view.step_buttons["H"].click()
     assert (
-        view.scale_input.pending_step == "H"
+        view.question_view.scale_input.pending_step == "H"
         and view.step_buttons["H"].isChecked()
     )
-    click(view.scale_input, Note.parse("C4"))
+    click(view.question_view.scale_input, Note.parse("C4"))
     assert (
-        view.scale_input.steps == ["H"] and view.step_buttons["W"].isChecked()
+        view.question_view.scale_input.steps == ["H"]
+        and view.step_buttons["W"].isChecked()
     )  # used up: back to whole
-    roll(view.scale_input, delta=120)
+    roll(view.question_view.scale_input, delta=120)
     assert (
-        view.scale_input.pending_step == "H"
+        view.question_view.scale_input.pending_step == "H"
         and view.step_buttons["H"].isChecked()
     )
     click(
-        view.scale_input,
+        view.question_view.scale_input,
         Note.parse("C4"),
         button=Qt.MouseButton.RightButton,
     )
     assert (
-        view.scale_input.pending_step == "W"
+        view.question_view.scale_input.pending_step == "W"
         and view.step_buttons["W"].isChecked()
     )
 
@@ -1822,9 +1848,12 @@ def test_the_right_notes_and_the_right_steps_are_right(
     learner = Learner(db, profile=db.add_profile("Ada"))
     view, q = view_with_steps(learner=learner)
     assert q.construct_steps is not None
-    mark(view.scale_input, q.construct_steps)
-    view.answer_button.click()
-    assert view.answered and (view.correct, view.total) == (1, 1)
+    mark(view.question_view.scale_input, q.construct_steps)
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.answered and (
+        view.session.correct,
+        view.session.total,
+    ) == (1, 1)
     view._advance.stop()
     row = db.conn.execute("SELECT answer, correct FROM attempts").fetchone()
     assert row[1] == 1 and row[0].endswith(f"| {' '.join(q.construct_steps)}")
@@ -1845,17 +1874,17 @@ def test_wrong_steps_make_the_scale_wrong_even_with_the_right_notes(
     view, q = view_with_steps()
     assert q.construct_steps is not None
     mark(
-        view.scale_input,
+        view.question_view.scale_input,
         ["H" if s == "W" else "W" for s in q.construct_steps],
     )
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.missed
-        and not view.answered
-        and (view.total, view.correct) == (1, 0)
+        view.session.missed
+        and not view.session.answered
+        and (view.session.total, view.session.correct) == (1, 0)
     )
     motion.settle()
-    staff = view.scale_input
+    staff = view.question_view.scale_input
     assert (
         staff.notes == []
         and staff.steps == []
@@ -1867,9 +1896,9 @@ def test_wrong_steps_make_the_scale_wrong_even_with_the_right_notes(
     ) and not view.step_row.isVisibleTo(view)  # back to placing notes
     place_scale(view, notes=q.construct_scale or [])
     mark(staff, q.construct_steps)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.answered and view.correct == 0
+        view.session.answered and view.session.correct == 0
     )  # only the first try counts toward the score
     view._advance.stop()
 
@@ -1892,9 +1921,9 @@ def test_wrong_notes_make_the_scale_wrong_even_with_the_right_steps(
         view,
         notes=[Note.from_diatonic(n.diatonic + 1) for n in q.construct_scale],
     )
-    mark(view.scale_input, q.construct_steps)
-    view.answer_button.click()
-    assert view.missed and not view.answered
+    mark(view.question_view.scale_input, q.construct_steps)
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.missed and not view.session.answered
     motion.settle()
     view._advance.stop()
 
@@ -1920,9 +1949,9 @@ def test_a_scale_on_another_octave_with_its_steps_is_right(
             for n in q.construct_scale
         ],
     )
-    mark(view.scale_input, q.construct_steps)
-    view.answer_button.click()
-    assert view.answered and not view.missed
+    mark(view.question_view.scale_input, q.construct_steps)
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.answered and not view.session.missed
     view._advance.stop()
 
 
@@ -1946,9 +1975,9 @@ def test_the_wedges_turn_green_with_the_notes_as_the_scale_plays(
     monkeypatch.setattr("alto.ui.exercise_view.SCALE_GAP_MS", 40)
     view, q = view_with_steps()
     assert q.construct_steps is not None
-    mark(view.scale_input, q.construct_steps)
-    staff = view.scale_input
-    view.answer_button.click()
+    mark(view.question_view.scale_input, q.construct_steps)
+    staff = view.question_view.scale_input
+    view.answer_controls.placement.answer_button.click()
     view._advance.stop()
     QTest.qWait(40 * 3 + 20)
     greens = set(staff.column_colors)
@@ -2204,21 +2233,21 @@ def test_natural_needed_for_note_staff_flattens_and_right_signs(
     assert (
         q.construct_scale is not None
         and q.key == -2
-        and view.scale_input.key == -2
+        and view.question_view.scale_input.key == -2
     )
     place_scale(
         view,
         notes=q.construct_scale,
     )  # E and B with a natural sign each, the rest with none
-    assert [str(n) for n in view.scale_input.notes] == [
+    assert [str(n) for n in view.question_view.scale_input.notes] == [
         str(n) for n in q.construct_scale
     ]
     assert (
-        view.scale_input.notes[2].accidental == 0
-        and view.scale_input.notes[6].accidental == 0
+        view.question_view.scale_input.notes[2].accidental == 0
+        and view.question_view.scale_input.notes[6].accidental == 0
     )
-    view.answer_button.click()
-    assert view.answered and not view.missed
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.answered and not view.session.missed
     view._advance.stop()
 
 
@@ -2238,10 +2267,10 @@ def test_leaving_out_the_naturals_gives_a_different_scale(
     assert q.construct_scale is not None
     for note in q.construct_scale:
         click(
-            view.scale_input,
+            view.question_view.scale_input,
             note,
         )  # no sign chosen: each takes what the staff's signature says
-    assert [n.name for n in view.scale_input.notes] == [
+    assert [n.name for n in view.question_view.scale_input.notes] == [
         "C",
         "D",
         "E♭",
@@ -2251,11 +2280,12 @@ def test_leaving_out_the_naturals_gives_a_different_scale(
         "B♭",
         "C",
     ]
-    view.answer_button.click()
-    assert view.missed and not view.answered
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.missed and not view.session.answered
     motion.settle()
     assert (
-        view.scale_input.notes == [] and view.scale_input.key == -2
+        view.question_view.scale_input.notes == []
+        and view.question_view.scale_input.key == -2
     )  # cleared, with the signature still on the staff
     view._advance.stop()
 
@@ -2278,15 +2308,15 @@ def test_natural_one_of_signs_wheel_and_right_click_step_through(
     seen = []
     for _ in range(5):
         click(
-            view.scale_input,
+            view.question_view.scale_input,
             Note.parse("C4"),
             button=Qt.MouseButton.RightButton,
         )
-        seen.append(view.scale_input.accidental)
+        seen.append(view.question_view.scale_input.accidental)
     assert seen == [1, -1, 0, None, 1]
-    roll(view.scale_input, delta=-120)
+    roll(view.question_view.scale_input, delta=-120)
     assert (
-        view.scale_input.accidental is None
+        view.question_view.scale_input.accidental is None
     )  # one notch back from a sharp: no sign
 
 
@@ -2304,10 +2334,13 @@ def test_a_retry_keeps_the_staffs_signature_and_the_steps_still_work_with_it(
     """
     settings.scale_construction.staff_keys = {3}
     view, q = view_with_steps()
-    assert q.construct_steps is not None and view.scale_input.key == 3
-    mark(view.scale_input, q.construct_steps)
-    view.answer_button.click()
-    assert view.answered
+    assert (
+        q.construct_steps is not None
+        and view.question_view.scale_input.key == 3
+    )
+    mark(view.question_view.scale_input, q.construct_steps)
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.answered
     view._advance.stop()
 
 
@@ -2702,13 +2735,15 @@ def test_the_octave_is_scored_on_the_screen(app: QApplication) -> None:
             for n in q.construct_scale
         ],
     )
-    view.answer_button.click()
-    assert view.missed and not view.answered  # right notes, wrong octave
+    view.answer_controls.placement.answer_button.click()
+    assert (
+        view.session.missed and not view.session.answered
+    )  # right notes, wrong octave
     motion.settle()
     place_scale(view, notes=q.construct_scale)
-    view.answer_button.click()
+    view.answer_controls.placement.answer_button.click()
     assert (
-        view.answered and view.correct == 0
+        view.session.answered and view.session.correct == 0
     )  # only the first try counts toward the score
     view._advance.stop()
 

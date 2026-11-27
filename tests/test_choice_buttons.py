@@ -6,11 +6,11 @@ stored preferences.
 import random
 
 import pytest
-from PySide6.QtWidgets import QApplication, QRadioButton
+from PySide6.QtWidgets import QApplication, QPushButton, QRadioButton
 
 from alto import settings
 from alto.exercises import REGISTRY
-from alto.exercises.base import ChoiceExercise, Exercise
+from alto.exercises.base import ChoiceExercise, Exercise, Question
 from alto.exercises.library import (
     ChordQualities,
     ClefBasics,
@@ -18,6 +18,7 @@ from alto.exercises.library import (
     NotationIdentification,
 )
 from alto.ui import motion
+from alto.ui.answer_controls import AnswerControls
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.exercise_settings import load_choice_buttons
 from alto.ui.exercise_view import ExerciseView
@@ -143,3 +144,75 @@ def test_saved_button_modes_are_independent_and_resilient() -> None:
     ) == ("limited", 9)
     assert chord.settings_signature() != chord.practice_signature()
     assert len(chord.generate(random.Random(4)).choices) > 5
+
+
+def test_answer_controls_replace_choices_and_emit_each_answer_part(
+    app: QApplication,
+) -> None:
+    """
+    Report the clicked choice when the same controls change modes.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared application.
+    """
+    controls = AnswerControls(KeyboardNotes())
+    choices: list[tuple[str, QPushButton]] = []
+    parts: list[tuple[str, str, QPushButton]] = []
+    controls.choice_selected.connect(
+        lambda choice, button: choices.append((choice, button)),
+    )
+    controls.part_selected.connect(
+        lambda part, choice, button: parts.append((part, choice, button)),
+    )
+    single = Question("", choices=["C", "D"], answer="D")
+    controls.show_question(single, named_meter=False, locate_notation=False)
+    old = controls.buttons[1]
+    old.click()
+    assert choices == [("D", old)]
+    pair = Question("", choices=["C"], octaves=["4"], answer="C4")
+    controls.show_question(pair, named_meter=False, locate_notation=False)
+    assert old.isHidden() and old.shortcut().isEmpty()
+    name, octave = controls.buttons
+    octave.click()
+    name.click()
+    assert parts == [("octave", "4", octave), ("name", "C", name)]
+    assert len(choices) == 1
+
+
+def test_clef_questions_switch_modes_in_one_answer_area(
+    app: QApplication,
+) -> None:
+    """
+    Switch between identifying and placing clefs in the same widget.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared application.
+    """
+    settings.clef_basics.question_type = "identification"
+    view = ExerciseView(ClefBasics(), rng=random.Random(1))
+    view.show()
+    controls = view.answer_controls
+    choices = list(controls.buttons)
+    assert choices and all(controls.isAncestorOf(b) for b in choices)
+    assert controls.placement.isHidden()
+
+    settings.clef_basics.question_type = "construction"
+    view.next_question()
+    assert view.answer_controls is controls
+    assert controls.placement.parentWidget() is controls
+    assert controls.placement.answer_button.isVisibleTo(view)
+    assert controls.choice_area.isHidden() and not controls.buttons
+    assert all(b.isHidden() and b.shortcut().isEmpty() for b in choices)
+
+    settings.clef_basics.question_type = "identification"
+    view.next_question()
+    app.processEvents()
+    assert view.answer_controls is controls and controls.placement.isHidden()
+    assert controls.buttons and all(
+        b.isVisibleTo(view) for b in controls.buttons
+    )
+    view.close()

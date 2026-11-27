@@ -224,8 +224,8 @@ def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
         and set(q.choices) <= {"m6", "P4", "d5"}
     )
     assert view.prompt.text() == q.prompt
-    view.buttons[q.choices.index(q.answer)].click()
-    assert view.answered
+    view.answer_controls.buttons[q.choices.index(q.answer)].click()
+    assert view.session.answered
     cfg.inversions = False
     load_intervals()
     assert cfg.inversions and Question.from_dict(q.to_dict()).check(q.answer)
@@ -280,28 +280,38 @@ def test_interval_playback_spacing(
         feedback = (
             [[high, raised]] if display == "Harmonic" else [[raised], [high]]
         )
-    assert view.staff.columns == q.staff
+    assert view.question_view.staff.columns == q.staff
     preview = QuestionPreview(
         IntervalNames.name,
         question=Question.from_dict(q.to_dict()),
     )
     with patch.object(sounds, "_play_sequence") as play:
         next(
-            button for button in view.buttons if button.text() == q.answer
+            button
+            for button in view.answer_controls.buttons
+            if button.text() == q.answer
         ).click()
         on_step = play.call_args.kwargs["on_step"]
-        assert not view.staff.column_colors and not view._advance.isActive()
+        assert (
+            not view.question_view.staff.column_colors
+            and not view._advance.isActive()
+        )
         for index, notes in enumerate(feedback):
             on_step(index)
             assert (
-                view.staff.column_colors == {index: QColor("#2e7d32")}
-                and view.staff.columns[index] == notes
+                view.question_view.staff.column_colors
+                == {index: QColor("#2e7d32")}
+                and view.question_view.staff.columns[index] == notes
             )
             assert (
-                view.staff.note_color is None and not view._advance.isActive()
+                view.question_view.staff.note_color is None
+                and not view._advance.isActive()
             )
         on_step(None)
-        assert not view.staff.column_colors and view._advance.isActive()
+        assert (
+            not view.question_view.staff.column_colors
+            and view._advance.isActive()
+        )
         next(
             button
             for button in preview.findChildren(QPushButton)
@@ -338,15 +348,19 @@ def test_new_interval_question_stops_previous_highlight(
     assert q is not None
     with patch.object(sounds, "_play_sequence") as play:
         next(
-            button for button in view.buttons if button.text() == q.answer
+            button
+            for button in view.answer_controls.buttons
+            if button.text() == q.answer
         ).click()
         play.call_args.kwargs["on_step"](0)
-        assert view.staff.column_colors == {0: QColor("#2e7d32")}
+        assert view.question_view.staff.column_colors == {0: QColor("#2e7d32")}
         panel = view.settings_panel
         assert isinstance(panel, IntervalSettingsPanel)
         panel.quality_modes["interval"].click()
-    assert view.question is not q and not view.staff.column_colors
-    assert not view._advance.isActive() and not view.answered
+    assert (
+        view.question is not q and not view.question_view.staff.column_colors
+    )
+    assert not view._advance.isActive() and not view.session.answered
     view.close()
 
 
@@ -751,16 +765,23 @@ def test_quality_submenu_and_saved_switch(app: QApplication) -> None:
     radios[2].click()
     assert [radio.isChecked() for radio in radios] == [False, False, True]
     assert view.question.prompt == "What is the interval quality?"
-    assert [b.text() for b in view.buttons] == ["A", "M", "P", "m", "d"]
+    assert [b.text() for b in view.answer_controls.buttons] == [
+        "A",
+        "M",
+        "P",
+        "m",
+        "d",
+    ]
     assert all(
-        b.accessibleName() == QUALITY_NAMES[b.text()] for b in view.buttons
+        b.accessibleName() == QUALITY_NAMES[b.text()]
+        for b in view.answer_controls.buttons
     )
     next(
         b
-        for b in view.buttons
+        for b in view.answer_controls.buttons
         if QUALITY_NAMES[b.text()] == view.question.answer
     ).click()
-    assert view.answered
+    assert view.session.answered
     next(
         b for b in page.findChildren(QToolButton) if "Back" in b.text()
     ).click()
@@ -777,16 +798,16 @@ def test_quality_submenu_and_saved_switch(app: QApplication) -> None:
     )
     cfg.button_mode, cfg.button_count = "limited", 2
     view.next_question()
-    assert len(view.buttons) == 2
+    assert len(view.answer_controls.buttons) == 2
     assert [
-        QUALITY_NAMES[b.text()] for b in view.buttons
+        QUALITY_NAMES[b.text()] for b in view.answer_controls.buttons
     ] == view.question.choices
     next(
         b
-        for b in view.buttons
+        for b in view.answer_controls.buttons
         if QUALITY_NAMES[b.text()] == view.question.answer
     ).click()
-    assert view.answered
+    assert view.session.answered
     view.close()
 
 
@@ -901,7 +922,8 @@ def test_limited_interval_buttons_use_quality_rows(app: QApplication) -> None:
     view.show()
     app.processEvents()
     positions = {
-        button.text(): (button.y(), button.x()) for button in view.buttons
+        button.text(): (button.y(), button.x())
+        for button in view.answer_controls.buttons
     }
     assert list(positions) == ["A3", "M3", "P4", "m3", "d3"]
     assert list(positions.values()) == sorted(positions.values())
@@ -935,7 +957,7 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
     original = view.question
     panel.buttons_row.click()
     motion.settle()
-    assert view.question is original and len(view.buttons) == 6
+    assert view.question is original and len(view.answer_controls.buttons) == 6
     page = panel.stack.currentWidget()
     assert page is not None
     modes = {b.text(): b for b in page.findChildren(QRadioButton)}
@@ -947,7 +969,7 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
     )
     count.setCurrentIndex(count.findData(3))
     assert (
-        len(view.buttons) == 3
+        len(view.answer_controls.buttons) == 3
         and view.question.answer in view.question.choices
     )
     modes["All"].click()
@@ -958,7 +980,7 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
         ["m2", "m3", "m6", "m7"],
         ["d2", "d3", "d4", "d5", "d6", "d7", "d8"],
     ]
-    bank = view.interval_answers
+    bank = view.answer_controls.interval_answers
     assert bank.isVisible() and [b.text() for b in bank.buttons] == [
         name for group in groups for name in group
     ]
@@ -972,8 +994,10 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
             for upper, lower in pairwise(groups)
         )
         assert bank.horizontalScrollBar().maximum() == 0
-    view.buttons[view.question.choices.index(view.question.answer)].click()
-    assert view.answered
+    view.answer_controls.buttons[
+        view.question.choices.index(view.question.answer)
+    ].click()
+    assert view.session.answered
     cfg.__init__()
     load_intervals()
     assert (cfg.button_mode, cfg.button_count) == ("all", 3)
@@ -984,7 +1008,7 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(
     assert (
         count.isVisible()
         and count.currentData() == 3
-        and len(view.buttons) == 3
+        and len(view.answer_controls.buttons) == 3
     )
     assert view.exercise.settings_signature() != all_signature
     view.close()
@@ -1030,13 +1054,15 @@ def test_note_value_picker_and_saved_interval_staff(
         "eighth",
     ]
     q = view.question
-    assert q is not None and q.value == view.staff.value == "eighth"
+    assert (
+        q is not None and q.value == view.question_view.staff.value == "eighth"
+    )
     saved = Question.from_dict(q.to_dict())
     preview = QuestionPreview(IntervalNames.name, question=saved)
     staff = preview.findChild(StaffWidget)
     assert staff is not None
-    staff.resize(view.staff.size())
-    expected = view.staff.grab().toImage()
+    staff.resize(view.question_view.staff.size())
+    expected = view.question_view.staff.grab().toImage()
     assert staff.grab().toImage() == expected
     staff.show_notes(
         saved.staff,

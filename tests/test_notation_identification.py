@@ -126,20 +126,21 @@ def test_notation_question_in_the_exercise(
     question = view.question
     assert (
         question is not None
-        and view.staff.notation_target == question.notation_target
+        and view.question_view.staff.notation_target
+        == question.notation_target
     )
     before = (
-        view.staff.grab()
+        view.question_view.staff.grab()
         .toImage()
         .convertToFormat(QImage.Format.Format_RGBA8888)
     )
-    view.buttons[question.choices.index(term)].click()
-    assert view.answered and view.correct == 1
+    view.answer_controls.buttons[question.choices.index(term)].click()
+    assert view.session.answered and view.session.correct == 1
     view._advance.stop()
     animation = view._anims[-1]
     animation.setCurrentTime(animation.duration())
     after = (
-        view.staff.grab()
+        view.question_view.staff.grab()
         .toImage()
         .convertToFormat(QImage.Format.Format_RGBA8888)
     )
@@ -226,7 +227,10 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(
     panel.terms.boxes["Clef"].click()
     assert panel.terms_row.value.text() == "1 selected"
     assert view.question is not None and view.question.answer == "Notehead"
-    assert view.question.choices == ["Notehead"] and len(view.buttons) == 1
+    assert (
+        view.question.choices == ["Notehead"]
+        and len(view.answer_controls.buttons) == 1
+    )
     assert panel.terms.boxes["Notehead"].isEnabled()
     assert exercise.settings_signature() != pair_signature
     settings.notation.terms = set(settings.NOTATION_TERMS)
@@ -281,10 +285,10 @@ def test_select_none_clears_and_restores_notation_terms(
         and "Select a notation term" in view.prompt.text()
     )
     assert (
-        view.staff.isHidden()
-        and not view.buttons
+        view.question_view.staff is None
+        and not view.answer_controls.buttons
         and not view._advance.isActive()
-        and view.total == 0
+        and view.session.total == 0
     )
 
     settings.notation.terms = set(settings.NOTATION_TERMS)
@@ -463,7 +467,10 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     q = view.question
     assert q is not None and q.answer == term and q.notation_target
     assert term.lower() in q.prompt and q.prompt.startswith("Click")
-    assert not view.buttons and view.choice_area.isHidden()
+    assert (
+        not view.answer_controls.buttons
+        and view.answer_controls.choice_area.isHidden()
+    )
     assert exercise.settings_signature() != button_signature
     assert "click" in exercise.instructions()
     assert (
@@ -479,7 +486,8 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
     view.resize(900, 600)
     view.show()
     app.processEvents()
-    staff = view.staff
+    staff = view.question_view.staff
+    assert staff is not None
     before = (
         staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
     )
@@ -511,25 +519,27 @@ def test_click_on_staff_practice(app: QApplication, term: str) -> None:
 
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=QPoint(12, 12))
     assert (
-        view.missed and not view.answered and "Try again" in view.prompt.text()
+        view.session.missed
+        and not view.session.answered
+        and "Try again" in view.prompt.text()
     )
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=target)
     assert (
-        view.answered
+        view.session.answered
         and view._advance.isActive()
-        and view.total == 1
-        and view.correct == 0
+        and view.session.total == 1
+        and view.session.correct == 0
     )
     view.next_question()
     panel.types["button"].click()
     assert (
         exercise.settings_signature() == button_signature
-        and len(view.buttons) == 1
+        and len(view.answer_controls.buttons) == 1
     )
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=target)
-    assert not view.answered
-    view.buttons[0].click()
-    assert view.answered and view.correct == 1
+    assert not view.session.answered
+    view.answer_controls.buttons[0].click()
+    assert view.session.answered and view.session.correct == 1
 
 
 def test_hover_previews_the_component_that_a_staff_click_would_select(
@@ -550,7 +560,8 @@ def test_hover_previews_the_component_that_a_staff_click_would_select(
     view.resize(800, 600)
     view.show()
     app.processEvents()
-    staff = view.staff
+    staff = view.question_view.staff
+    assert staff is not None
     q = view.question
     assert q is not None and staff.hasMouseTracking()
     preview = StaffWidget()
@@ -599,14 +610,14 @@ def test_hover_previews_the_component_that_a_staff_click_would_select(
         QTest.mouseMove(staff, point)
         assert np.array_equal(blue_ink(staff), expected)
         assert staff.hits_notation(point) == (target == q.notation_target)
-        assert view.total == 0 and view.question is q
+        assert view.session.total == 0 and view.question is q
 
     app.sendEvent(staff, QEvent(QEvent.Type.Leave))
     assert not blue_ink(staff).any()
     QTest.mouseMove(staff, QPoint(10, 10))
     assert not blue_ink(staff).any()
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=point)
-    assert view.answered and view.correct == 1
+    assert view.session.answered and view.session.correct == 1
     view._advance.stop()
     view._anims[-1].setCurrentTime(view._anims[-1].duration())
     QTest.mouseMove(staff, point)
@@ -774,7 +785,8 @@ def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
         and question.notation_excerpt
         and not question.choices
     )
-    staff = view.staff
+    staff = view.question_view.staff
+    assert staff is not None
     assert staff.excerpt
     target = next(
         i
@@ -803,7 +815,7 @@ def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
         assert staff._notation_at(point) == ("Accent", target)
         assert not staff.hits_notation(QPoint(0, 0))
     QTest.mouseClick(staff, Qt.MouseButton.LeftButton, pos=point)
-    assert view.answered and view.correct == 1
+    assert view.session.answered and view.session.correct == 1
     view._advance.stop()
     view._anims[-1].setCurrentTime(view._anims[-1].duration())
     assert staff._clicked_component == ("Accent", target)

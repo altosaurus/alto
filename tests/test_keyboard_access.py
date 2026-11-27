@@ -56,6 +56,7 @@ from alto.ui.exercise_view import (
     second_row_keys,
 )
 from alto.ui.home import ExerciseCard
+from alto.ui.key_fork import KeyFork
 from alto.ui.main_window import MainWindow
 from alto.ui.staff_input import (
     ScaleInput,
@@ -88,7 +89,7 @@ def reach(
         If the keys cannot reach it.
     """
     # noinspection PyProtectedMember
-    staff = view._input()
+    staff = view.question_view.note_input
     press(
         view,
         "ABCDEFG"[(target.letter - 5) % 7],
@@ -180,7 +181,7 @@ def test_every_answer_button_of_every_exercise_has_a_key(
     )
     view = ExerciseView(cls(), rng=random.Random(2))
     for _ in range(30):
-        buttons = [b for b in view.buttons if b.isEnabled()]
+        buttons = [b for b in view.answer_controls.buttons if b.isEnabled()]
         keys = [b.shortcut().toString() for b in buttons]
         assert all(keys), (
             cls.name,
@@ -206,7 +207,7 @@ def test_a_key_answers_the_question_in_a_choice_exercise(
     q = view.question
     assert q is not None
     press(view, str(q.choices.index(q.answer) + 1))
-    assert view.answered and view.correct == 1
+    assert view.session.answered and view.session.correct == 1
     view._advance.stop()
 
 
@@ -227,10 +228,10 @@ def test_the_notes_of_a_keyboard_are_typed_by_name(app: QApplication) -> None:
         assert q is not None
         key = choice_keys(q.choices)[q.choices.index(q.answer)]
         press(view, key)
-        assert view.answered, (q.answer, key)
+        assert view.session.answered, (q.answer, key)
         view._advance.stop()
         view.next_question()
-    assert view.correct == 25
+    assert view.session.correct == 25
 
 
 def test_the_octave_of_a_keyboard_note_is_typed_as_its_number(
@@ -257,7 +258,7 @@ def test_the_octave_of_a_keyboard_note_is_typed_as_its_number(
         )
         press(view, choice_keys(q.choices)[q.choices.index(name)])
         press(view, octave)
-        assert view.answered, q.answer
+        assert view.session.answered, q.answer
         view._advance.stop()
         view.next_question()
 
@@ -281,7 +282,7 @@ def test_a_two_part_answer_is_given_with_the_number_keys_then_the_home_row(
         kind, inversion = q.answer.split(q.joiner)
         press(view, str(q.choices.index(kind) + 1))
         press(view, "ASDF"[q.octaves.index(inversion)])
-        assert view.answered, q.answer
+        assert view.session.answered, q.answer
         view._advance.stop()
         view.next_question()
 
@@ -459,12 +460,12 @@ def test_note_construction_screen_buttons_for_everything_staff(
     assert (
         view.pitch_row.isVisibleTo(view)
         and view.accidental_row.isVisibleTo(view)
-        and view.place_button.isVisibleTo(view)
+        and view.answer_controls.placement.place_button.isVisibleTo(view)
     )
     assert (
         not view.step_row.isVisibleTo(view)
-        and not view.answer_button.isVisibleTo(view)
-        and not view.undo_button.isVisible()
+        and not view.answer_controls.placement.answer_button.isVisibleTo(view)
+        and not view.answer_controls.placement.undo_button.isVisible()
     )
     assert [b.text() for b in view.pitch_buttons.values()] == [
         "Octave ↓",
@@ -496,10 +497,10 @@ def test_a_note_is_placed_with_the_keyboard_alone(app: QApplication) -> None:
         assert q is not None and q.construct is not None
         reach(view, q.construct)
         press(view, "Return")
-        assert view.answered and not view.missed, q.answer
+        assert view.session.answered and not view.session.missed, q.answer
         view._advance.stop()
         view.next_question()
-    assert view.correct == 12
+    assert view.session.correct == 12
 
 
 def test_a_note_is_placed_with_the_buttons_alone(app: QApplication) -> None:
@@ -518,7 +519,7 @@ def test_a_note_is_placed_with_the_buttons_alone(app: QApplication) -> None:
     for _ in range(10):
         q = view.question
         assert q is not None and q.construct is not None
-        staff = view.input_staff
+        staff = view.question_view.note_input
         view.pitch_buttons[
             "higher"
         ].click()  # the caret appears at its starting place
@@ -532,11 +533,11 @@ def test_a_note_is_placed_with_the_buttons_alone(app: QApplication) -> None:
             view.pitch_buttons["lower"].click()
         if q.construct.accidental:
             view.accidental_buttons[q.construct.accidental].click()
-        view.place_button.click()
-        assert view.answered and not view.missed, q.answer
+        view.answer_controls.placement.place_button.click()
+        assert view.session.answered and not view.session.missed, q.answer
         view._advance.stop()
         view.next_question()
-    assert view.correct == 10
+    assert view.session.correct == 10
 
 
 def test_a_wrong_note_is_cleared_and_the_caret_comes_back_for_another_try(
@@ -555,22 +556,28 @@ def test_a_wrong_note_is_cleared_and_the_caret_comes_back_for_another_try(
     q = view.question
     assert q is not None and q.construct is not None
     press(view, "Up")
-    while view.input_staff.caret_note() == q.construct:
+    while view.question_view.note_input.caret_note() == q.construct:
         press(view, "Up")  # make sure it is not the note asked for
-    caret = view.input_staff.caret
+    caret = view.question_view.note_input.caret
     press(view, "Return")
     assert (
-        view.missed and not view.answered and not view.place_button.isEnabled()
+        view.session.missed
+        and not view.session.answered
+        and not view.answer_controls.placement.place_button.isEnabled()
     )
     motion.settle()  # the wrong-answer feedback ends
-    assert view.place_button.isEnabled() and not view.input_staff.locked
     assert (
-        view.input_staff.caret == caret and len(view.input_staff.columns) == 1
+        view.answer_controls.placement.place_button.isEnabled()
+        and not view.question_view.note_input.locked
+    )
+    assert (
+        view.question_view.note_input.caret == caret
+        and len(view.question_view.note_input.columns) == 1
     )  # the caret's note is back
     reach(view, q.construct)
     press(view, "Return")
     assert (
-        view.answered and view.correct == 0
+        view.session.answered and view.session.correct == 0
     )  # only the first try counts toward the score
     view._advance.stop()
 
@@ -592,7 +599,7 @@ def test_the_line_under_the_staff_says_what_comes_next_and_is_spoken_in_words(
     assert view.place_status.text().startswith("Note 1 of 8: press ↑ or ↓")
     press(view, "G")
     shown, spoken = view._placement_text()
-    note = view.scale_input.caret_note()
+    note = view.question_view.scale_input.caret_note()
     assert (
         note is not None
         and shown == f"Note 1 of 8: {note_name(note)}"
@@ -600,9 +607,12 @@ def test_the_line_under_the_staff_says_what_comes_next_and_is_spoken_in_words(
     )
     assert (
         view.place_status.accessibleDescription() == spoken
-        and view.scale_input.accessibleDescription() == spoken
+        and view.question_view.scale_input.accessibleDescription() == spoken
     )
-    assert view.scale_input.accessibleName() == "Staff: place the scale"
+    assert (
+        view.question_view.scale_input.accessibleName()
+        == "Staff: place the scale"
+    )
     q = view.question
     assert q is not None and q.construct_scale is not None
     for note in q.construct_scale:
@@ -660,26 +670,26 @@ def test_a_whole_scale_is_built_and_answered_with_the_keyboard_alone(
         for note in q.construct_scale:
             reach(view, note)
             press(view, "Return")
-        assert view.scale_input.notes == q.construct_scale
+        assert view.question_view.scale_input.notes == q.construct_scale
         assert view.step_row.isVisibleTo(
             view,
         ) and not view.pitch_row.isVisibleTo(view)
         assert (
-            view.place_button.text() == "Mark step"
-            and not view.answer_button.isEnabled()
+            view.answer_controls.placement.place_button.text() == "Mark step"
+            and not view.answer_controls.placement.answer_button.isEnabled()
         )
         for step in q.construct_steps:
             press(view, step)  # W or H
             press(view, "Return")
         assert (
-            view.answer_button.isEnabled()
-            and not view.place_button.isEnabled()
+            view.answer_controls.placement.answer_button.isEnabled()
+            and not view.answer_controls.placement.place_button.isEnabled()
         )
         press(view, "Return")  # Return answers, now that everything is placed
-        assert view.answered and not view.missed
+        assert view.session.answered and not view.session.missed
         view._advance.stop()
         view.next_question()
-    assert view.correct == 4
+    assert view.session.correct == 4
 
 
 def test_return_places_and_then_answers_and_never_both(
@@ -702,18 +712,30 @@ def test_return_places_and_then_answers_and_never_both(
         and q.construct_scale is not None
         and q.construct_steps is not None
     )
-    assert view.place_button.isEnabled() and not view.answer_button.isEnabled()
+    assert (
+        view.answer_controls.placement.place_button.isEnabled()
+        and not view.answer_controls.placement.answer_button.isEnabled()
+    )
     for note in q.construct_scale:
-        assert view.place_button.isEnabled() ^ view.answer_button.isEnabled()
+        assert (
+            view.answer_controls.placement.place_button.isEnabled()
+            ^ view.answer_controls.placement.answer_button.isEnabled()
+        )
         reach(view, note)
         press(view, "Return")
     for step in q.construct_steps:
-        assert view.place_button.isEnabled() ^ view.answer_button.isEnabled()
+        assert (
+            view.answer_controls.placement.place_button.isEnabled()
+            ^ view.answer_controls.placement.answer_button.isEnabled()
+        )
         press(view, step)
         press(view, "Return")
-    assert view.answer_button.isEnabled() and not view.place_button.isEnabled()
+    assert (
+        view.answer_controls.placement.answer_button.isEnabled()
+        and not view.answer_controls.placement.place_button.isEnabled()
+    )
     press(view, "Return")
-    assert view.answered
+    assert view.session.answered
     view._advance.stop()
 
 
@@ -739,7 +761,7 @@ def test_a_whole_scale_is_built_and_answered_with_the_buttons_alone(
         and q.construct_scale is not None
         and q.construct_steps is not None
     )
-    staff = view.scale_input
+    staff = view.question_view.scale_input
     for note in q.construct_scale:
         view.pitch_buttons["higher"].click()
         while note.diatonic - (staff.caret or 0) >= 7:
@@ -753,22 +775,24 @@ def test_a_whole_scale_is_built_and_answered_with_the_buttons_alone(
         implied = key_accidental(note.letter, count=staff.key)
         if note.accidental != implied:
             view.accidental_buttons[note.accidental].click()
-        view.place_button.click()
+        view.answer_controls.placement.place_button.click()
     assert staff.notes == q.construct_scale
-    view.undo_button.click()  # takes back the last note ...
+    view.answer_controls.placement.undo_button.click()
     assert len(staff.notes) == 7 and view.pitch_row.isVisibleTo(view)
     view.pitch_buttons["octave_up"].click()
     view.pitch_buttons["octave_down"].click()
-    # ... and it is put back at the caret, which was left where that
-    # note was
-    view.place_button.click()
+    # The caret stays on the undone note.
+    view.answer_controls.placement.place_button.click()
     assert staff.notes == q.construct_scale
     for step in q.construct_steps:
         view.step_buttons[step].click()
-        view.place_button.click()
-    assert staff.steps == q.construct_steps and view.answer_button.isEnabled()
-    view.answer_button.click()
-    assert view.answered and not view.missed
+        view.answer_controls.placement.place_button.click()
+    assert (
+        staff.steps == q.construct_steps
+        and view.answer_controls.placement.answer_button.isEnabled()
+    )
+    view.answer_controls.placement.answer_button.click()
+    assert view.session.answered and not view.session.missed
     view._advance.stop()
 
 
@@ -789,11 +813,11 @@ def test_backspace_takes_back_the_last_thing_placed(app: QApplication) -> None:
         reach(view, note)
         press(view, "Return")
     press(view, "Backspace")
-    assert len(view.scale_input.notes) == 2
+    assert len(view.question_view.scale_input.notes) == 2
     press(view, "Backspace")
     press(view, "Backspace")
     press(view, "Backspace")  # nothing left to take back
-    assert view.scale_input.notes == []
+    assert view.question_view.scale_input.notes == []
 
 
 def test_place_keeps_its_return_key_when_its_label_changes(
@@ -816,19 +840,22 @@ def test_place_keeps_its_return_key_when_its_label_changes(
     q = view.question
     assert q is not None and q.construct_scale is not None
     assert (
-        view.place_button.text() == "Place note"
-        and view.place_button.shortcut().toString() == "Return"
+        view.answer_controls.placement.place_button.text() == "Place note"
+        and view.answer_controls.placement.place_button.shortcut().toString()
+        == "Return"
     )
     for note in q.construct_scale:
-        view.scale_input.place_next(note)
+        view.question_view.scale_input.place_next(note)
     assert (
-        view.place_button.text() == "Mark step"
-        and view.place_button.shortcut().toString() == "Return"
+        view.answer_controls.placement.place_button.text() == "Mark step"
+        and view.answer_controls.placement.place_button.shortcut().toString()
+        == "Return"
     )
-    view.scale_input.undo()
+    view.question_view.scale_input.undo()
     assert (
-        view.place_button.text() == "Place note"
-        and view.place_button.shortcut().toString() == "Return"
+        view.answer_controls.placement.place_button.text() == "Place note"
+        and view.answer_controls.placement.place_button.shortcut().toString()
+        == "Return"
     )
 
 
@@ -854,12 +881,12 @@ def test_the_arrow_keys_switch_the_step_while_steps_are_marked(
     seen = []
     for key in ("Up", "Down", "Left", "Right"):
         press(view, key)
-        seen.append(view.scale_input.pending_step)
+        seen.append(view.question_view.scale_input.pending_step)
     assert seen == ["H", "W", "H", "W"]
     press(view, "PgUp")
     assert (
-        view.scale_input.pending_step == "W"
-        and len(view.scale_input.notes) == 8
+        view.question_view.scale_input.pending_step == "W"
+        and len(view.question_view.scale_input.notes) == 8
     )
     press(view, "H")
     assert view.step_buttons["H"].isChecked()
@@ -882,6 +909,8 @@ def test_the_key_signature_is_built_and_answered_with_the_keyboard_alone(
         The shared Qt application.
     """
     view = opened(KeySignatureConstruction())
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     for _ in range(10):
         q = view.question
         assert q is not None
@@ -889,12 +918,12 @@ def test_the_key_signature_is_built_and_answered_with_the_keyboard_alone(
         key = {True: "Up", False: "Down"}[q.key > 0]
         for _ in range(abs(q.key)):
             press(view, key)
-        assert view.fork.value == q.key and view.staff.key == q.key
+        assert fork.value == q.key and view.question_view.staff.key == q.key
         press(view, "Return")
-        assert view.answered and not view.missed, q.caption
+        assert view.session.answered and not view.session.missed, q.caption
         view._advance.stop()
         view.next_question()
-    assert view.correct == 10
+    assert view.session.correct == 10
 
 
 def test_the_fork_arrows_all_work_and_the_buttons_are_right(
@@ -910,6 +939,8 @@ def test_the_fork_arrows_all_work_and_the_buttons_are_right(
         The shared Qt application.
     """
     view = opened(KeySignatureConstruction())
+    fork = view.question_view.editor
+    assert isinstance(fork, KeyFork)
     for key, expected in (
         ("Right", 1),
         ("Right", 2),
@@ -919,11 +950,11 @@ def test_the_fork_arrows_all_work_and_the_buttons_are_right(
         ("Home", 0),
     ):
         press(view, key)
-        assert view.fork.value == expected, key
+        assert fork.value == expected, key
     assert (
-        view.answer_button.isVisibleTo(view)
-        and view.answer_button.isEnabled()
-        and not view.place_button.isVisibleTo(view)
+        view.answer_controls.placement.answer_button.isVisibleTo(view)
+        and view.answer_controls.placement.answer_button.isEnabled()
+        and not view.answer_controls.placement.place_button.isVisibleTo(view)
     )
 
 
@@ -956,10 +987,12 @@ def test_the_staff_keys_only_work_when_the_exercise_has_the_keyboard(
     box.setFocus()
     press(host, "Up")
     press(host, "G")
-    assert view.input_staff.caret is None  # the keys went to the text box
+    assert (
+        view.question_view.note_input.caret is None
+    )  # the keys went to the text box
     view.setFocus()
     press(host, "Up")
-    assert view.input_staff.caret is not None
+    assert view.question_view.note_input.caret is not None
 
 
 def test_the_staff_keys_are_off_in_the_exercises_that_do_not_use_them(
@@ -980,10 +1013,10 @@ def test_the_staff_keys_are_off_in_the_exercises_that_do_not_use_them(
     )
     assert not view.pitch_row.isVisibleTo(
         view,
-    ) and not view.place_button.isVisibleTo(view)
+    ) and not view.answer_controls.placement.place_button.isVisibleTo(view)
     press(view, "Up")
     press(view, "C")
-    assert view.total == 0
+    assert view.session.total == 0
     view2 = opened(NoteConstruction())
     assert all(k.isEnabled() for k in view2._arrow_keys) and all(
         k.isEnabled() for k in view2._letter_keys
@@ -1011,11 +1044,14 @@ def test_the_keys_do_nothing_once_the_question_is_answered(
     assert q is not None and q.construct is not None
     reach(view, q.construct)
     press(view, "Return")
-    assert view.answered
-    caret = view.input_staff.caret
+    assert view.session.answered
+    caret = view.question_view.note_input.caret
     for key in ("Up", "PgUp", "G", "Return"):
         press(view, key)
-    assert view.input_staff.caret == caret and view.total == 1
+    assert (
+        view.question_view.note_input.caret == caret
+        and view.session.total == 1
+    )
     view._advance.stop()
 
 
@@ -1044,7 +1080,7 @@ def test_opening_an_exercise_gives_it_the_keyboard(app: QApplication) -> None:
     QTest.qWait(50)
     assert QApplication.focusWidget() is view
     press(window, "Up")
-    assert view.input_staff.caret is not None
+    assert view.question_view.note_input.caret is not None
 
 
 def test_buttons_with_no_text_have_a_name_for_a_screen_reader(
@@ -1105,11 +1141,14 @@ def test_the_buttons_say_their_keys(app: QApplication) -> None:
         s: b.shortcut().toString() for s, b in view.step_buttons.items()
     } == {"W": "W", "H": "H"}
     assert (
-        view.place_button.shortcut().toString()
+        view.answer_controls.placement.place_button.shortcut().toString()
         == "Return"
-        == view.answer_button.shortcut().toString()
+        == view.answer_controls.placement.answer_button.shortcut().toString()
     )
-    assert view.undo_button.shortcut().toString() == "Backspace"
+    assert (
+        view.answer_controls.placement.undo_button.shortcut().toString()
+        == "Backspace"
+    )
     for name, button in view.pitch_buttons.items():
         assert "arrow" in button.toolTip() or "Page" in button.toolTip(), name
 

@@ -5,6 +5,7 @@ __pycache__/
 .ruff_cache/
 .mcp.json
 CLAUDE.md
+/HANDOFF.md
 alto.egg-info/
 .coverage
 coverage.xml
