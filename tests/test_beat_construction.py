@@ -9,6 +9,8 @@ from typing import TYPE_CHECKING
 from unittest.mock import Mock
 
 import pytest
+from hypothesis import example, given, note
+from hypothesis import strategies as st
 from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
 
@@ -105,6 +107,60 @@ def test_generated_rhythm_has_rests_and_spans_two_bars() -> None:
             "half" if denominator == 4 else "dotted-half"
         )
     assert seen == set(BEAT_METERS)
+
+
+@pytest.mark.parametrize("tuplets", [False, True], ids=["ordinary", "tuplets"])
+@example(note_types={"eighth"}, seed=7)  # simple meter
+@example(note_types={"eighth"}, seed=5)  # compound meter
+@given(
+    note_types=st.sets(st.sampled_from(settings.BEAT_NOTE_TYPES), min_size=1),
+    seed=st.integers(),
+)
+def test_generated_rhythm_fills_each_measure(
+    tuplets: bool,
+    note_types: set[str],
+    seed: int,
+) -> None:
+    """
+    Check both barlines using the written durations in the score.
+
+    Parameters
+    ----------
+    tuplets : bool
+        Enables triplets in simple meter and duplets in compound meter.
+    note_types : set of str
+        Nonempty selection from the exercise's Note Type settings.
+    seed : int
+        Replays the generated meter, rhythm, and rest placement.
+    """
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setitem(settings.beat_note_types, "beatConstruction", note_types)
+        patch.setitem(settings.beat_tuplets, "beatConstruction", tuplets)
+        question = BeatConstruction().generate(random.Random(seed))
+
+    note(f"{question.answer}, tuplets={tuplets}, rhythm={question.rhythm}")
+    top, bottom = BEAT_METERS[question.answer]
+    bar = Fraction(16 * top, bottom)  # durations are in sixteenth notes
+    prefix, ratio = (
+        ("triplet-", Fraction(2, 3))
+        if bottom == 4
+        else ("duplet-", Fraction(3, 2))
+    )
+    assert any(token.endswith("-rest") for token in question.rhythm)
+    ends = []
+    elapsed = Fraction(0)
+    for token in question.rhythm:
+        written = token.removesuffix("-rest")
+        is_tuplet = written.startswith(prefix)
+        value = written.removeprefix(prefix)
+        assert value in note_types
+        assert tuplets or not is_tuplet
+        duration = Fraction(RHYTHM_DURATIONS[value])
+        elapsed += duration * ratio if is_tuplet else duration
+        ends.append(elapsed)
+
+    assert bar in ends
+    assert elapsed == 2 * bar
 
 
 @pytest.mark.parametrize(("seed", "count"), [(7, 3), (5, 2)])
