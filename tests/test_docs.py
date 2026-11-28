@@ -317,6 +317,10 @@ def test_readme_badges_use_expected_workflows_and_logos() -> None:
         assert image.startswith("data:image/png;base64,")
         data = base64.b64decode(image.split(",", 1)[1])
         assert data.startswith(b"\x89PNG\r\n\x1a\n") and len(data) < 2000
+        if label == "Tested with Hypothesis":
+            dragonfly = QImage.fromData(data)
+            assert not dragonfly.isNull()
+            assert dragonfly.pixelColor(0, 0).alpha() == 0
         assert (
             len(logo.group(1)) < 2000
         )  # the whole address stays short enough for GitHub to fetch it
