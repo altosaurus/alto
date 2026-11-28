@@ -4,14 +4,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ReferencePane · Alto</title>
+<title>SidePane · Alto</title>
   <script>
   // Apply a remembered choice before the page paints, so there is no flash of the other theme.
   try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
 </script>
   
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/site.css?v=1b22aaff" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/site.css?v=5957ee74" />
     <link rel="stylesheet" type="text/css" href="../../../_static/api.css?v=25e21200" />
     <link rel="stylesheet" type="text/css" href="../../../_static/navigation.css?v=547812f5" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
@@ -19,20 +19,20 @@
     <script src="../../../_static/documentation_options.js?v=a5603611"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <link rel="canonical" href="https://altosaurus.github.io/alto/api/alto.ui.reference/class-referencepane/" />
+    <link rel="canonical" href="https://altosaurus.github.io/alto/api/alto.ui.side_pane/class-sidepane/" />
     <link rel="icon" href="../../../_static/icon.png"/>
     <link rel="author" title="About these documents" href="../../../about/" />
     <link rel="search" title="Search" href="../../../search/" />
-    <link rel="next" title="ReferencePanel" href="../class-referencepanel/" />
-    <link rel="prev" title="ExplorableCircle" href="../class-explorablecircle/" />
+    <link rel="next" title="alto.ui.staff" href="../../alto.ui.staff/" />
+    <link rel="prev" title="alto.ui.side_pane" href="../" />
    
   <meta name="description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
-  <meta property="og:title" content="ReferencePane · Alto">
+  <meta property="og:title" content="SidePane · Alto">
   <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
-  <meta property="og:url" content="https://altosaurus.github.io/alto/api/alto.ui.reference/class-referencepane/">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/api/alto.ui.side_pane/class-sidepane/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
   
@@ -327,7 +327,7 @@
       <button type="button" class="nav-toggle" data-category="answer_controls" aria-controls="nav-api/alto.ui.answer_controls" aria-expanded="true" aria-label="Collapse answer_controls" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-api/alto.ui.answer_controls"><li><a class="row" href="../../alto.ui.answer_controls/function-choice_keys/">choice_keys</a></li><li><a class="row" href="../../alto.ui.answer_controls/function-second_row_keys/">second_row_keys</a></li><li><a class="row" href="../../alto.ui.answer_controls/class-answercontrols/">AnswerControls</a></li></ul></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-api/alto.ui.answer_controls"><li><a class="row" href="../../alto.ui.answer_controls/function-choice_keys/">choice_keys</a></li><li><a class="row" href="../../alto.ui.answer_controls/function-second_row_keys/">second_row_keys</a></li><li><a class="row" href="../../alto.ui.answer_controls/function-feedback_style/">feedback_style</a></li><li><a class="row" href="../../alto.ui.answer_controls/class-answercontrols/">AnswerControls</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.app_settings/">app_settings</a>
       <button type="button" class="nav-toggle" data-category="app_settings" aria-controls="nav-api/alto.ui.app_settings" aria-expanded="true" aria-label="Collapse app_settings" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -558,11 +558,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.rating_controls"><li><a class="row" href="../../alto.ui.rating_controls/class-ratingcontrols/">RatingControls</a></li></ul></li><li><div class="nav-row">
-      <a class="row" href="../">reference</a>
+      <a class="row" href="../../alto.ui.reference/">reference</a>
       <button type="button" class="nav-toggle" data-category="reference" aria-controls="nav-api/alto.ui.reference" aria-expanded="true" aria-label="Collapse reference" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-api/alto.ui.reference"><li><a class="row" href="../class-explorablecircle/">ExplorableCircle</a></li><li><a class="row" href="#" aria-current="page">ReferencePane</a></li><li><a class="row" href="../class-referencepanel/">ReferencePanel</a></li><li><a class="row" href="../class-clefreferencepanel/">ClefReferencePanel</a></li><li><a class="row" href="../class-scalereferencepanel/">ScaleReferencePanel</a></li><li><a class="row" href="../class-notereferencepanel/">NoteReferencePanel</a></li><li><a class="row" href="../class-pluginreferencepanel/">PluginReferencePanel</a></li><li><a class="row" href="../function-reference_panel_for/">reference_panel_for</a></li></ul></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-api/alto.ui.reference"><li><a class="row" href="../../alto.ui.reference/class-explorablecircle/">ExplorableCircle</a></li><li><a class="row" href="../../alto.ui.reference/class-referencepanel/">ReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-clefreferencepanel/">ClefReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-scalereferencepanel/">ScaleReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-notereferencepanel/">NoteReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/class-pluginreferencepanel/">PluginReferencePanel</a></li><li><a class="row" href="../../alto.ui.reference/function-reference_panel_for/">reference_panel_for</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.response_times/">response_times</a>
       <button type="button" class="nav-toggle" data-category="response_times" aria-controls="nav-api/alto.ui.response_times" aria-expanded="true" aria-label="Collapse response_times" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -588,6 +588,11 @@
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
     </div><ul class="kids" id="nav-api/alto.ui.settings_panel"><li><a class="row" href="../../alto.ui.settings_panel/class-notenamesettingspanel/">NoteNameSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-keyboardsettingspanel/">KeyboardSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-noteconstructionsettingspanel/">NoteConstructionSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-intervalsettingspanel/">IntervalSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-keyboardintervalsettingspanel/">KeyboardIntervalSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-arpeggiosettingspanel/">ArpeggioSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-keysignaturesettingspanel/">KeySignatureSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-notationsettingspanel/">NotationSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-clefbasicssettingspanel/">ClefBasicsSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/function-settings_inversion_names/">settings_inversion_names</a></li><li><a class="row" href="../../alto.ui.settings_panel/class-circlesettingspanel/">CircleSettingsPanel</a></li><li><a class="row" href="../../alto.ui.settings_panel/function-settings_panel_for/">settings_panel_for</a></li></ul></li><li><div class="nav-row">
+      <a class="row" href="../">side_pane</a>
+      <button type="button" class="nav-toggle" data-category="side_pane" aria-controls="nav-api/alto.ui.side_pane" aria-expanded="true" aria-label="Collapse side_pane" hidden>
+        <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
+      </button>
+    </div><ul class="kids" id="nav-api/alto.ui.side_pane"><li><a class="row" href="#" aria-current="page">SidePane</a></li></ul></li><li><div class="nav-row">
       <a class="row" href="../../alto.ui.staff/">staff</a>
       <button type="button" class="nav-toggle" data-category="staff" aria-controls="nav-api/alto.ui.staff" aria-expanded="true" aria-label="Collapse staff" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -738,19 +743,22 @@
           <nav class="breadcrumbs" aria-label="Breadcrumb">
             <ol>
               <li><a href="../../../">Home</a></li>
-              <li><a href="../../../development/">For developers</a></li><li><a href="../../">API reference</a></li><li><a href="../../alto/">alto</a></li><li><a href="../../alto.ui/">alto.ui</a></li><li><a href="../">alto.ui.reference</a></li>
-              <li aria-current="page">ReferencePane</li>
+              <li><a href="../../../development/">For developers</a></li><li><a href="../../">API reference</a></li><li><a href="../../alto/">alto</a></li><li><a href="../../alto.ui/">alto.ui</a></li><li><a href="../">alto.ui.side_pane</a></li>
+              <li aria-current="page">SidePane</li>
             </ol>
           </nav>
           
           
-  <section id="referencepane">
-<h1>ReferencePane</h1>
+  <section id="sidepane">
+<h1>SidePane</h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="alto.ui.reference.ReferencePane">
-<span id="referencepane"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.reference.</span></span><span class="sig-name descname"><span class="pre">ReferencePane</span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/1e358815a2a9b3108f4edf364383db616190eb0d/alto/ui/reference.py#L512"><span class="pre">Source</span></a></dt>
+<dt class="sig sig-object py" id="alto.ui.side_pane.SidePane">
+<span id="sidepane"></span><span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">alto.ui.side_pane.</span></span><span class="sig-name descname"><span class="pre">SidePane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtWidgets.QWidget</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toggle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PySide6.QtWidgets.QToolButton</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/f7801225beaad29ab0a3aaf6ba3c5eff3d6fdba9/alto/ui/side_pane.py#L24"><span class="pre">Source</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide6.QtWidgets.QFrame</span></code></p>
-<p>Collapsible frame shared by the exercise reference panels.</p>
+<p>Hold a panel beside the exercise and slide it open or closed.</p>
+<p>The toolbar button that controls the pane stays in step with it:
+checking the button opens the pane, and the pane’s collapse button
+unchecks it.</p>
 <table class="docutils align-default" id="id1">
 <caption><span class="caption-text">Attributes</span></caption>
 <thead>
@@ -760,16 +768,135 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">REFERENCE_WIDTH</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">open_width</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
 <td><p>Width of the open pane at 100% zoom, in pixels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">collapse_button</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QToolButton</span></code></p></td>
+<td><p>Closes the pane from its top corner.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">animation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QPropertyAnimation</span></code></p></td>
+<td><p>Slides the pane’s maximum width between closed and open.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>The book button opens this pane to display the exercise reference.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QLabel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toggle</span> <span class="o">=</span> <span class="n">QToolButton</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toggle</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span> <span class="o">=</span> <span class="n">SidePane</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">QLabel</span><span class="p">(</span><span class="s2">"Settings"</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">open_width</span><span class="o">=</span><span class="mi">290</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">toggle</span><span class="o">=</span><span class="n">toggle</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">label</span><span class="o">=</span><span class="s2">"Collapse exercise settings"</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span><span class="o">.</span><span class="n">set_open</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span><span class="o">.</span><span class="n">isHidden</span><span class="p">(),</span> <span class="n">pane</span><span class="o">.</span><span class="n">maximumWidth</span><span class="p">()</span> <span class="o">==</span> <span class="n">px</span><span class="p">(</span><span class="mi">290</span><span class="p">)</span>
+<span class="go">(False, True)</span>
+</pre></div>
+</div>
 <p><strong>Constructor</strong></p>
-<p>Prepare the styled frame at its collapsed width.</p>
+<p>Place the content below a collapse button and start closed.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">content</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QWidget</span></code></p></td>
+<td><p>Panel shown in the pane. It fills the height of the pane, so a long page can scroll.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">open_width</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>Width of the open pane at 100% zoom, in pixels.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">toggle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QToolButton</span></code></p></td>
+<td><p>Checkable toolbar button that opens and closes the pane.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">label</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Tooltip and accessible name of the collapse button.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The pane starts hidden at zero width, so it takes no space and
+cannot be tabbed into.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.side_pane.SidePane.slide">
+<span id="sidepaneslide"></span><span class="sig-name descname"><span class="pre">slide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">open_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/f7801225beaad29ab0a3aaf6ba3c5eff3d6fdba9/alto/ui/side_pane.py#L113"><span class="pre">Source</span></a></dt>
+<dd><p>Animate the pane open or closed from its current width.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">open_</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Whether the pane ends open.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QLabel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span> <span class="o">=</span> <span class="n">SidePane</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">QLabel</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">open_width</span><span class="o">=</span><span class="mi">290</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">toggle</span><span class="o">=</span><span class="n">QToolButton</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">label</span><span class="o">=</span><span class="s2">"Collapse"</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span><span class="o">.</span><span class="n">slide</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span><span class="o">.</span><span class="n">animation</span><span class="o">.</span><span class="n">endValue</span><span class="p">()</span> <span class="o">==</span> <span class="n">px</span><span class="p">(</span><span class="mi">290</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="alto.ui.side_pane.SidePane.set_open">
+<span id="sidepaneset_open"></span><span class="sig-name descname"><span class="pre">set_open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">open_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span> <a class="reference external" href="https://github.com/altosaurus/alto/blob/f7801225beaad29ab0a3aaf6ba3c5eff3d6fdba9/alto/ui/side_pane.py#L141"><span class="pre">Source</span></a></dt>
+<dd><p>Open or close the pane at once, without the slide.</p>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Parameters</span></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">open_</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>Whether the pane is open.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QLabel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span> <span class="o">=</span> <span class="n">SidePane</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">QLabel</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">open_width</span><span class="o">=</span><span class="mi">290</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">toggle</span><span class="o">=</span><span class="n">QToolButton</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">label</span><span class="o">=</span><span class="s2">"Collapse"</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span><span class="o">.</span><span class="n">set_open</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pane</span><span class="o">.</span><span class="n">isHidden</span><span class="p">(),</span> <span class="n">pane</span><span class="o">.</span><span class="n">maximumWidth</span><span class="p">()</span>
+<span class="go">(True, 0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -778,20 +905,20 @@
           
           <nav class="page-nav" aria-label="Previous and next pages">
             
-            <a class="prev" rel="prev" href="../class-explorablecircle/">
+            <a class="prev" rel="prev" href="../">
               <span class="np-label">Previous</span>
               <span class="np-title">
                 <svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>
-                ExplorableCircle
+                alto.ui.side_pane
                 
               </span>
             </a>
             
-            <a class="next" rel="next" href="../class-referencepanel/">
+            <a class="next" rel="next" href="../../alto.ui.staff/">
               <span class="np-label">Next</span>
               <span class="np-title">
                 
-                ReferencePanel
+                alto.ui.staff
                 <svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg>
               </span>
             </a>
