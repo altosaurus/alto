@@ -9,6 +9,10 @@ Alto uses [semantic versioning](https://semver.org/).
 
 - In Note Identification, choose **Answer Type → Scale** to identify a scale from a written note, its degree and a major or minor cue. **Staff Key** controls the signature drawn beside the clef, and **Scale Key** uses the Major and Minor tabs from Scale Construction to select reference keys.
 
+### Fixed
+
+- Note Identification remembers treble ranges that extend above C7 when Alto reopens.
+
 ## [0.0.3] - 2026-11-25
 
 ### Added

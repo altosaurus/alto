@@ -71,7 +71,7 @@ def test_the_note_name_settings_are_saved_and_read_back() -> None:
         "solfege",
         True,
     )
-    cfg.ranges = {"treble": (30, 40), "bass": (15, 25)}
+    cfg.ranges = {"treble": (22, 51), "bass": (15, 25), "alto": (7, 30)}
     es.save_note_names()
     cfg.__init__()  # back to the defaults
     es.load_note_names()
@@ -84,7 +84,11 @@ def test_the_note_name_settings_are_saved_and_read_back() -> None:
         and cfg.naming == "solfege"
         and cfg.accidentals
     )
-    assert cfg.ranges == {"treble": (30, 40), "bass": (15, 25)}
+    assert cfg.ranges == {
+        "treble": (22, 51),
+        "bass": (15, 25),
+        "alto": (7, 30),
+    }
 
 
 def test_bad_saved_note_name_settings_fall_back_to_sensible_ones() -> None:
