@@ -303,7 +303,14 @@ def test_readme_badges_use_expected_workflows_and_logos() -> None:
         )
         assert f"/actions/workflows/{workflow}" in link or label == "Docs"
     assert parse_qs(urlsplit(badges["Docs"][0]).query)["logo"] == ["sphinx"]
-    for label in ("Tests", "Ruff", "Pyright", "ASV", "Python"):
+    for label in (
+        "Tests",
+        "Tested with Hypothesis",
+        "Ruff",
+        "Pyright",
+        "ASV",
+        "Python",
+    ):
         logo = re.search(r"[?&]logo=([^&\s]+)", badges[label][0])
         assert logo is not None, f"the {label} badge has no logo"
         image = unquote(logo.group(1))
