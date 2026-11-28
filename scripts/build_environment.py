@@ -21,6 +21,12 @@ def prepare(source: Path, *, environment: Path, report: Path) -> None:
         New virtual environment used by this platform's build script.
     report : Path
         Destination for the interpreter and distribution versions.
+
+    Examples
+    --------
+    From a Linux build directory containing a source checkout, call
+    ``prepare(Path("source"), environment=Path("venv").resolve(),
+    report=Path("linux-packages.json"))`` before running PyInstaller.
     """
     subprocess.run(
         [
