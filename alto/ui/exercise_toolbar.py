@@ -158,6 +158,46 @@ class ExerciseToolbar(QWidget):
             f"{correct}/{total} ({percent})   streak {session.streak}",
         )
 
+    def show_counts(  # noqa: PLR0917 (Qt signal arguments)
+        self,
+        counts: tuple[int, int, int] | None,
+        current: str | None,
+    ) -> None:
+        """
+        Display the calendar queue counts for this exercise.
+
+        Parameters
+        ----------
+        counts : tuple[int, int, int] or None
+            Review, new, and incorrect card counts, or None outside a
+            calendar review.
+        current : str or None
+            Queue containing the current card.
+
+        Examples
+        --------
+        >>> toolbar = ExerciseToolbar(
+        ...     lambda: "",
+        ...     has_reference=False,
+        ...     has_midi=False,
+        ... )
+        >>> toolbar.show_counts((3, 2, 1), "new")
+        >>> toolbar.queue_counts.isHidden()
+        False
+        >>> toolbar.show_counts(None, None)
+        >>> toolbar.queue_counts.isHidden()
+        True
+        """
+        if counts is None:
+            self.queue_counts.hide()
+            return
+        self.queue_counts.set_counts(
+            counts,
+            studying=True,
+            current=current,
+        )
+        self.queue_counts.show()
+
     def set_sound_enabled(self, enabled: bool) -> None:
         """
         Show the current sound state on the speaker button.

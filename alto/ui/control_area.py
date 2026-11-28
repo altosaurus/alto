@@ -14,6 +14,7 @@ from alto.ui.zoom import px
 
 if TYPE_CHECKING:
     from alto.exercises.base import Exercise, Question
+    from alto.ui.exercise_controller import AnswerResult
 
 
 class ControlArea(QWidget):
@@ -106,3 +107,36 @@ class ControlArea(QWidget):
             named_meter=named_meter,
             locate_notation=locate_notation,
         )
+
+    def feedback_buttons(
+        self,
+        result: AnswerResult,
+        *,
+        q: Question,
+    ) -> list[QPushButton]:
+        """
+        Find the visible controls that submitted a graded answer.
+
+        Parameters
+        ----------
+        result : AnswerResult
+            Outcome of the submitted answer.
+        q : Question
+            Displayed question, with its choices in button order.
+
+        Returns
+        -------
+        list of QPushButton
+            Buttons that show the answer's feedback.
+
+        Examples
+        --------
+        A placed note is marked on the Place button, and a two-part
+        answer on one button in each row.
+        """
+        placement = self.answers.placement
+        if result.kind == "note":
+            return [placement.place_button]
+        if result.kind in ("fork", "clef", "beats", "scale", "signature"):
+            return [placement.answer_button]
+        return self.answers.buttons_for(q, selected=result.selected)

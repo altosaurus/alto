@@ -40,7 +40,10 @@ from alto.theory.note_naming import DEGREE_NAMINGS, note_name, note_words
 from alto.theory.pitch import ACCIDENTAL_SYMBOLS, Note
 from alto.ui import motion
 from alto.ui.circle import FifthsCircle
-from alto.ui.colors import CORRECT_ANSWER_COLOR
+from alto.ui.colors import (
+    CORRECT_ANSWER_COLOR,
+    blend,
+)
 from alto.ui.degree_text import DegreeLabel
 from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.icons import set_palette_icon
@@ -95,7 +98,7 @@ class QuestionView(QWidget):
     widget_created = Signal(QWidget)
     caret_moved = Signal(int)
     accidental_selected = Signal(int)
-    beats_changed = Signal()
+    placement_changed = Signal()
 
     def __init__(
         self,
@@ -568,6 +571,10 @@ class QuestionView(QWidget):
                     self.editor.step_selected.connect(self.show_step)
             elif isinstance(self.editor, KeyFork):
                 self.editor.changed.connect(self.fork_changed)
+            if isinstance(self.editor, ScaleInput):
+                self.editor.notes_changed.connect(self._scale_changed)
+            elif isinstance(self.editor, ClefInput):
+                self.editor.changed.connect(self.update_placement)
             self.grid.addWidget(self.editor, 2, 0)
             self.widget_created.emit(self.editor)
             self.editor.show()
@@ -872,7 +879,7 @@ class QuestionView(QWidget):
         elif isinstance(exercise, (BeatConstruction, BeatIdentification)):
             if isinstance(exercise, BeatConstruction):
                 self.beat_placement = BeatPlacementStaff()
-                self.beat_placement.changed.connect(self.beats_changed.emit)
+                self.beat_placement.changed.connect(self.update_placement)
                 self.beat_placement.cursor_moved.connect(
                     lambda p: self.rhythm_scroll.ensureVisible(
                         round(p.x()),
@@ -1200,6 +1207,210 @@ class QuestionView(QWidget):
         q = self.interactive_question
         if q is not None and (q.construct is not None or q.places_sequence):
             self.note_input.setAccessibleDescription(spoken)
+
+    @property
+    def accepts_input(self) -> bool:
+        """
+        Report whether the learner can still answer the question.
+
+        Returns
+        -------
+        bool
+            True while a question is open and no feedback is showing.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> QuestionView(NoteNames()).accepts_input
+        False
+        """
+        return (
+            self.interactive_question is not None
+            and not self.progress.answered
+            and not self.busy
+        )
+
+    @property
+    def places_notes(self) -> bool:
+        """
+        Report whether the editor is waiting for a note.
+
+        Returns
+        -------
+        bool
+            True for a note to place, or a scale or signature that still
+            has notes to place.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> QuestionView(NoteNames()).places_notes
+        False
+        """
+        q = self.displayed_question
+        if q is None:
+            return False
+        return q.construct is not None or (
+            q.places_sequence and not self.scale_input.complete
+        )
+
+    @property
+    def accepts_letters(self) -> bool:
+        """
+        Report whether a letter key can move the caret to a note.
+
+        Returns
+        -------
+        bool
+            True while notes are being placed on the staff.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> QuestionView(NoteNames()).accepts_letters
+        False
+        """
+        q = self.displayed_question
+        return q is not None and self.places_notes and not q.build_key
+
+    def update_placement(self) -> None:
+        """
+        Show the rows and status for what the editor is waiting for,
+        then report that the placement changed.
+
+        For a note or a scale on the staff the pitch and sign buttons
+        show while notes are being placed, the whole and half step
+        buttons while steps are, and neither once everything is down.
+
+        Examples
+        --------
+        >>> import random
+        >>> from alto.exercises.library import (
+        ...     ScaleConstruction,
+        ... )
+        >>> from alto.ui.exercise_page import ExercisePage
+        >>> view = ExercisePage(
+        ...     ScaleConstruction(),
+        ...     rng=random.Random(2),
+        ... )
+        >>> view.question_view.update_placement()
+        >>> actions = view.control_area.answers.placement
+        >>> (
+        ...     view.question_view.step_row.isHidden(),
+        ...     actions.answer_button.isEnabled(),
+        ...     actions.place_button.isEnabled(),
+        ... )
+        (True, False, True)
+        """
+        q = self.displayed_question
+        if q is None:
+            return
+        note, sequence = q.construct is not None, q.places_sequence
+        clef = bool(q.place_clef)
+        beat_editor = self.active_beat_editor
+        placing_notes = self.places_notes
+        live = self.accepts_input
+        # One button for each symbol that can be chosen, the chosen one
+        # pressed.
+        for symbol, button in self.symbol_buttons.items():
+            button.setVisible(clef and symbol in self.clef_input.options)
+            button.setChecked(clef and symbol == self.clef_input.selected)
+            button.setEnabled(live)
+        self.place_status.setVisible(
+            note or sequence or beat_editor is not None,
+        )
+        self.pitch_row.setVisible(placing_notes and not q.place_signature)
+        self.accidental_buttons[0].setVisible(not q.place_signature)
+        self.accidental_row.setEnabled(live and placing_notes)
+        self.accidental_row.setVisible(
+            q.place_signature or (q.accidentals and placing_notes),
+        )
+        self.step_row.setVisible(
+            sequence and self.scale_input.placing_steps,
+        )
+        if beat_editor is not None:
+            beat_editor.setEnabled(live)
+            self.place_status.setText(self._beat_status(beat_editor))
+        if note or sequence:
+            action = "place the scale" if sequence else "place the note"
+            self.note_input.setAccessibleName(
+                "Staff: write the key signature"
+                if q.place_signature
+                else f"Staff: {action}",
+            )
+            self.update_placement_status()
+        self.placement_changed.emit()
+
+    @staticmethod
+    def _beat_status(editor: BeatPlacementStaff) -> str:
+        """
+        Describe the beats marked so far, or their feedback.
+
+        Parameters
+        ----------
+        editor : BeatPlacementStaff
+            Staff where the learner marks the beats.
+
+        Returns
+        -------
+        str
+            Status line shown under the staff.
+
+        Examples
+        --------
+        >>> QuestionView._beat_status(BeatPlacementStaff())
+        'Mark each beat, including the start of each measure.'
+        """
+        if editor.feedback is False:
+            return "Check where each beat begins."
+        if editor.feedback:
+            return "Correct."
+        if editor.marks:
+            return f"Beats marked: {len(editor.marks)}"
+        return "Mark each beat, including the start of each measure."
+
+    def _scale_changed(self) -> None:
+        """
+        Get ready for what comes next on the scale staff: the sign is
+        used up, and the right rows are shown.
+
+        Examples
+        --------
+        >>> import random
+        >>> from alto.exercises.library import (
+        ...     ScaleConstruction,
+        ... )
+        >>> from alto.ui.exercise_page import ExercisePage
+        >>> view = ExercisePage(
+        ...     ScaleConstruction(),
+        ...     rng=random.Random(2),
+        ... )
+        >>> music = view.question_view
+        >>> music.set_accidental(1)
+        >>> emitted = music.scale_input.notes_changed.emit()
+        >>> music.scale_input.accidental is None
+        True
+        """
+        q = self.interactive_question
+        if q and q.place_signature:
+            self.scale_input.set_note_color(None)
+        elif self.scale_input.accidental is not None:
+            self.set_accidental(None)
+        self.update_placement()
+
+    def restyle(self) -> None:
+        """
+        Draw the question's pictures again after a setting changed how
+        they look.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> QuestionView(NoteNames()).restyle()
+        """
+        self.redraw_keyboards()
+        if self.circle is not None:
+            self.circle.update()
 
     def placement_text(self) -> tuple[str, str]:
         """
@@ -1679,6 +1890,172 @@ class QuestionView(QWidget):
                 with_steps=q.construct_steps is not None,
                 key=q.key,
             )
+
+    @staticmethod
+    def _ink_fade(
+        paint: Callable[[QColor], None],
+        *,
+        target: str,
+    ) -> Callable[[float], None]:
+        """
+        Prepare a fade from the staff's black ink to a feedback color.
+
+        Parameters
+        ----------
+        paint : callable
+            Applies one color to the notation being faded.
+        target : str
+            Color at the end of the fade.
+
+        Returns
+        -------
+        callable
+            Paints the notation for a fade position from 0 to 1.
+
+        Examples
+        --------
+        >>> painted = []
+        >>> step = QuestionView._ink_fade(
+        ...     painted.append,
+        ...     target="#c62828",
+        ... )
+        >>> step(1.0)
+        >>> painted[0].name()
+        '#c62828'
+        """
+        end, start = QColor(target), QColor("black")
+        return lambda t: paint(blend(start, b=end, t=t))
+
+    def answer_fade(
+        self,
+        kind: str,
+        *,
+        target: str = CORRECT_ANSWER_COLOR,
+    ) -> Callable[[float], None] | None:
+        """
+        Prepare a feedback fade for an answer placed in the editor.
+
+        Parameters
+        ----------
+        kind : str
+            Type of the graded answer.
+        target : str
+            Color at the end of the fade.
+
+        Returns
+        -------
+        callable or None
+            Paints the placed note, clef, or fork marker for a fade
+            position from 0 to 1, or None when the answer was not
+            placed in an editor.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> QuestionView(NoteNames()).answer_fade("choice") is None
+        True
+        """
+        if kind in ("note", "scale"):
+            return self._ink_fade(
+                self.note_input.set_note_color,
+                target=target,
+            )
+        if kind == "fork" and isinstance(self.editor, KeyFork):
+            return self.editor.marker_fade(target)
+        if kind == "clef":
+            return self._ink_fade(
+                self.clef_input.set_clef_color,
+                target=target,
+            )
+        return None
+
+    def music_fade(
+        self,
+        *,
+        target: str = CORRECT_ANSWER_COLOR,
+    ) -> Callable[[float], None]:
+        """
+        Prepare a feedback fade for the question's notes or keys.
+
+        Parameters
+        ----------
+        target : str
+            Color at the end of the fade.
+
+        Returns
+        -------
+        callable
+            Colors the staff's notes and the keyboard's highlighted key
+            for a fade position from 0 to 1. Position 0 restores their
+            usual colors.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> view = QuestionView(NoteNames())
+        >>> view.music_fade()(1.0)
+        """
+        end, start = QColor(target), QColor("black")
+
+        def step(t: float) -> None:
+            """
+            Color the notes and keys for one position of the fade.
+
+            Parameters
+            ----------
+            t : float
+                Fade position, from 0 at the usual colors to 1 at the
+                target.
+
+            Examples
+            --------
+            Halfway through, a note is half black and half the target
+            color.
+            """
+            color = blend(start, b=end, t=t)
+            if self.staff is not None:
+                self.staff.set_note_color(color if t > 0 else None)
+            if self.keyboard is not None:
+                self.keyboard.set_highlight_color(
+                    color
+                    if t > 0
+                    else self.palette().color(QPalette.ColorRole.Highlight),
+                )
+
+        return step
+
+    def silent_fade(self) -> Callable[[float], None] | None:
+        """
+        Prepare the feedback for a correct answer that has no sound.
+
+        A fingerboard picture starts its own overlay animation instead.
+
+        Returns
+        -------
+        callable or None
+            Paints the placed answer or the question's music for a fade
+            position from 0 to 1, or None when there is no question or
+            the fingerboard animates itself.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> QuestionView(NoteNames()).silent_fade() is None
+        True
+        """
+        q = self.interactive_question
+        if q is None:
+            return None
+        if q.picture is not None and self.fingerboard is not None:
+            self.fingerboard.animate_silent_answer(600)
+            return None
+        if q.place_clef:
+            return self.answer_fade("clef")
+        if isinstance(self.editor, KeyFork):
+            return self.answer_fade("fork")
+        if q.construct is not None or q.places_sequence:
+            return self.answer_fade("note")
+        return self.music_fade()
 
     def light_answer_notes(self, index: int | None) -> None:
         """

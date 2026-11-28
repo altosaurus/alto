@@ -1,7 +1,7 @@
 {
   "staff": ["show_question", "self.question_view.show_question("],
-  "toolbar": ["_create_toolbar", "return ExerciseToolbar("],
+  "toolbar": ["__init__", "self.toolbar = ExerciseToolbar("],
   "answer": ["show_question", "self.control_area.show_question("],
   "panel": ["__init__", "self.settings_panel = settings_panel or settings_panel_for("],
-  "signals": ["_create_settings_pane", "self.toolbar.gear.toggled.connect(", "self.settings_panel.restyled.connect("]
+  "signals": ["_create_side_panes", "settings = SidePane(", "self.settings_panel.restyled.connect("]
 }
