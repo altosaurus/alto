@@ -8,6 +8,7 @@ SECTION = re.compile(r"^(?P<title>[A-Z][A-Za-z ]+)\n-{3,}$", re.MULTILINE)
 TABLE_SECTIONS = {
     "Parameters": "Parameter",
     "Attributes": "Attribute",
+    "Properties": "Property",
     "Returns": "Name",
 }
 
@@ -44,8 +45,7 @@ def split_sections(doc: str) -> dict[str, str]:
 
 def entries(text: str) -> list[tuple[str, str, str]]:
     r"""
-    Read the entries of a Parameters, Attributes, Returns or Raises
-    section.
+    Read named fields and return or exception types from a section.
 
     Parameters
     ----------

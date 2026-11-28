@@ -107,10 +107,13 @@ class ExerciseView(QWidget):
     """
     The screen for practicing one exercise.
 
-    Attributes
+    Properties
     ----------
     session : PracticeSession
-        Last progress snapshot rendered by the view.
+        Read-only progress snapshot for the displayed question.
+
+    Attributes
+    ----------
     control_area : ControlArea
         Holds answer choices, placement actions, ratings, and Next.
     settings_pane : QFrame
@@ -1079,7 +1082,7 @@ class ExerciseView(QWidget):
                 self.question_view.place_status.setText(
                     "Check where each beat begins.",
                 )
-            elif beat_editor.feedback is True:
+            elif beat_editor.feedback:
                 self.question_view.place_status.setText("Correct.")
             elif count:
                 self.question_view.place_status.setText(
