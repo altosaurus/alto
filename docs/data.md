@@ -1,5 +1,5 @@
 ---
-title: Your data
+title: Database
 nav_order: 8
 nav_group: Using Alto
 permalink: /data/
@@ -9,6 +9,34 @@ Everything Alto stores is on your own computer.
 - Alto has no accounts, no sync and no analytics.
 - Your name is only a label for a profile in a local file.
 - On supported installations Alto contacts GitHub to check for releases. You can turn off daily checks in **Settings → Updates**.
+
+## Browsing the database
+
+Open the database using the button next to the statistics button at the upper right of the main window. It shows a read-only view of what is stored and never changes anything. Use **← Back** or <kbd>Esc</kbd> to return to the page you came from.
+
+{% include shot.html src="database.png" alt="The Answers table with the next review date in the Due column at the right" %}
+
+Three tables are available:
+
+- **Answers:** every answer the active profile has given, newest first, with the question, your answer, whether it was right, the attempt number and the time.
+- **Questions** shows each question’s strain, answer counts, typical response time, and last practice time.
+- **Profiles:** everyone who has a profile, with how many answers and questions each has.
+
+In both **Answers** and **Questions**, **Due** shows the next review in local time for the selected SM-2 or FSRS schedule. All answers to the same question show its current due date. A dash means the question has no due date under the current scheduler.
+
+{% include shot.html src="database-questions.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" caption="Last seen records when you practiced the question. Due shows when the scheduler wants to show it again." %}
+
+Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are
+limited to the newest 10,000 rows each; the line above the table says when that applies.
+
+### Previewing a question
+
+Double-click a row in Answers or Questions to see that question as the exercise showed it, with its answer.
+Choose the **Question Statistics** bar chart icon in the upper-right corner to graph your practice history for that question. Each point represents one time you were asked.
+The speed graph shows seconds to your first answer. The accuracy graph shows the percentage answered correctly on the first try
+up to that point. Hover over a point for its value. You can also open these graphs from an answer in [Statistics]({{ '/statistics/' | relative_url }}).
+
+{% include shot.html src="question-preview.png" alt="A popup showing a chord on a staff with its answer and what was answered" caption="The preview shows the notes, the correct answer, what you answered and how long it took. Play sounds the notes." %}
 
 ## Where it is
 
@@ -40,7 +68,7 @@ your usual configuration location.
 | `daily_reviews` | Completed calendar reviews by profile, exercise, and day. |
 
 Because it is a normal SQLite file, you can open it with any SQLite tool if you want to run your own queries. Close Alto
-first. Alto's own [database browser]({{ '/statistics/' | relative_url }}) is read-only.
+first. Alto's own [database browser](#browsing-the-database) is read-only.
 
 ## Anki decks
 

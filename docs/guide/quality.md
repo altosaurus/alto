@@ -137,7 +137,7 @@ Alto is installed from source today. When you want to cut a release:
 3. **Migrations.** If the database changed, confirm the migration works on a copy of a real older database, and say in the notes to
    copy `alto.db` first.
 4. Refresh and review the screenshots in both themes using the [pre-release checklist]({{ '/development/' | relative_url }}#pre-release-checklist).
-   Regenerate the API pages and check that [Your data]({{ '/data/' | relative_url }}) is current.
+   Regenerate the API pages and check that [Database]({{ '/data/' | relative_url }}) is current.
 5. **Check license compliance** on the Linux tarball, Windows installer, and final stapled macOS DMG before tagging.
    Record the results for each platform in the release PR. If you added fonts or recordings, verify their redistribution
    terms and update `THIRD_PARTY_NOTICES.md`. Follow the [release license compliance check]({{ '/development/' | relative_url }}#license-compliance).

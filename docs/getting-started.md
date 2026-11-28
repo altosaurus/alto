@@ -242,7 +242,7 @@ Quit Alto. {% if mac_file != empty %}For a disk image installation, move **Alto*
 Your practice history is stored separately in `~/Library/Application Support/Alto/alto.db`.
 </div>
 
-To keep a copy of your practice history and settings, choose **Export backup…** in Alto before uninstalling. [Your data]({{ '/data/' | relative_url }})
+To keep a copy of your practice history and settings, choose **Export backup…** in Alto before uninstalling. [Database]({{ '/data/' | relative_url }})
 
 ## First launch
 

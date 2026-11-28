@@ -62,10 +62,10 @@ topics:
 - **Spaced repetition.** ASRS and ARTS use your accuracy and response time to choose the next exercise question. SM-2 and FSRS schedule a due date for each review. [Compare the four algorithms]({{ '/practice/' | relative_url }}).
 - **MIDI keyboard input.** On Linux, play answers on a USB MIDI keyboard or use the Virtual MIDI Piano Keyboard (VMPK) to practice notes, intervals, and scales. [MIDI setup]({{ '/exercises/' | relative_url }}#midi-keyboard-input).
 - **Anki-compatible decks.** Add music theory to your usual Anki reviews by exporting just the exercises you want, such as interval identification in bass clef. [Anki export guide]({{ '/data/' | relative_url }}#anki-decks).
-- **Statistics and a database browser.** Charts of accuracy, speed and volume, plus a calendar heatmap of a year of practice, filterable by exercise and timeframe, plus a table view of everything stored. [Statistics]({{ '/statistics/' | relative_url }}).
+- **Statistics and a database browser.** Charts of accuracy, speed and volume, plus a calendar heatmap of a year of practice, filterable by exercise and timeframe, plus a table view of everything stored. [Statistics]({{ '/statistics/' | relative_url }}) · [Database]({{ '/data/' | relative_url }}).
 - **Notation and keyboards your way.** Eleven notation styles, including Finale Maestro, Leland, Bravura and two handwritten jazz styles, and eleven keyboard looks from a modern piano to a French harpsichord. [Settings]({{ '/settings/' | relative_url }}).
 - **Plugins for more instruments.** An instrument pack adds artwork, recordings, exercises, lessons and glossary entries in one ZIP: name the notes on a viola fingerboard, find the interval between two highlighted harpsichord keys, or label an instrument's parts. Install one with a registration code or from a file under Tools → Plugins, and uninstall it without losing your practice history. [Plugins]({{ '/plugins/' | relative_url }}).
-- **Local and private.** Your history is one file on your computer. [Your data]({{ '/data/' | relative_url }}).
+- **Local and private.** Your history is one file on your computer. [Database]({{ '/data/' | relative_url }}).
 - **Free and open source** under the MIT License.
 
 {% include shot.html src="stats.png" alt="The statistics page with summary tiles and charts of accuracy, speed and volume" caption="Statistics for a demo profile: how often you are right, how fast, and how much you practice." %}

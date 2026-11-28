@@ -142,7 +142,7 @@ If Pyright is wrong about one line, silence just that line with `# pyright: igno
 Alto's history and settings are kept by name, so a clone run with `python -m alto` shares them with an installed Alto. To
 keep them apart, run the clone with `sh scripts/dev.sh`. It sets `ALTO_HOME` to `~/.alto-dev` (or to a folder you choose),
 where the clone has its own database and settings. The first run also adds "Alto (dev)" to the application menu, with the
-clone's icon, so the dock shows the development copy on its own and not grouped with the installed one. See [Your data]({{ '/data/' | relative_url }}).
+clone's icon, so the dock shows the development copy on its own and not grouped with the installed one. See [Database]({{ '/data/' | relative_url }}).
 
 ## Pre-commit
 
