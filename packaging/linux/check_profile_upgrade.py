@@ -26,6 +26,26 @@ CLOCK = "2026-11-25 12:02:00"
 NOW = datetime.fromisoformat(CLOCK + "+00:00").timestamp()
 
 
+def children(node: Atspi.Accessible) -> Iterator[Atspi.Accessible]:
+    """
+    Enumerate controls with the AT-SPI API available on Ubuntu 22.04.
+
+    Parameters
+    ----------
+    node : Atspi.Accessible
+        Parent control.
+
+    Yields
+    ------
+    Atspi.Accessible
+        Each child still present in the application.
+    """
+    for index in range(node.get_child_count()):
+        child = node.get_child_at_index(index)
+        if child is not None:
+            yield child
+
+
 class Desktop:
     """Operate the controls exposed by the running Qt application."""
 
@@ -67,14 +87,14 @@ class Desktop:
             if self.process.poll() is not None:
                 raise RuntimeError(f"Alto exited while waiting for {name}")
             try:
-                for app in Atspi.get_desktop(0):
+                for app in children(Atspi.get_desktop(0)):
                     if app.get_process_id() != self.process.pid:
                         continue
                     app.clear_cache()
-                    pending = list(app)
+                    pending = list(children(app))
                     while pending:
                         node = pending.pop()
-                        pending.extend(node)
+                        pending.extend(children(node))
                         if node.get_role() == role and (
                             node.get_state_set().contains(
                                 Atspi.StateType.SHOWING,
