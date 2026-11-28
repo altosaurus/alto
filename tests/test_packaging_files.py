@@ -10,7 +10,11 @@ settings that must not change.
 
 from __future__ import annotations
 
+import hashlib
+import os
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -21,6 +25,8 @@ ROOT = Path(__file__).resolve().parent.parent
 WORKFLOWS = ROOT / ".github" / "workflows"
 INSTALLER = ROOT / "packaging" / "windows" / "alto.iss"
 RELEASE = (WORKFLOWS / "release.yml").read_text(encoding="utf-8")
+DOWNLOAD = (ROOT / "scripts/download-candidate.sh").read_text(encoding="utf-8")
+PUBLISH = (ROOT / "scripts/publish-candidate.sh").read_text(encoding="utf-8")
 BUILD = (WORKFLOWS / "build-packages.yml").read_text(encoding="utf-8")
 
 
@@ -46,8 +52,8 @@ def test_release_never_pre_release_because_update_check_skips() -> None:
     Check that a release is a normal one: the update check asks for the
     latest release, which skips pre-releases.
     """
-    assert "gh release create" in RELEASE
-    assert "--prerelease" not in RELEASE and "--draft" not in RELEASE
+    assert "gh release create" in PUBLISH and "--draft --verify-tag" in PUBLISH
+    assert "--draft=false --prerelease=false" in PUBLISH
 
 
 def test_release_made_only_for_tag_exists_and_only_publisher_can() -> None:
@@ -62,18 +68,25 @@ def test_release_made_only_for_tag_exists_and_only_publisher_can() -> None:
         triggers["push"]["tags"] == ["v*"] and "workflow_dispatch" in triggers
     )
     assert data["permissions"] == {"contents": "read"}
-    assert data["jobs"]["publish"]["permissions"] == {"contents": "write"}
+    assert data["jobs"]["publish"]["permissions"] == {
+        "actions": "read",
+        "contents": "write",
+    }
     assert data["jobs"]["publish"]["if"] == (
         "github.event_name == 'push' && github.ref_type == 'tag'"
     )
     assert (
-        set(data["jobs"]["publish"]["needs"]) == {"sign-windows", "macos"}
+        "needs" not in data["jobs"]["publish"]
+        and "workflow_dispatch" in data["jobs"]["check"]["if"]
+        and "refs/heads/main" in data["jobs"]["check"]["if"]
+        and set(data["jobs"]["candidate"]["needs"])
+        == {"sign-windows", "macos"}
         and data["jobs"]["macos"]["needs"] == "check"
         and data["jobs"]["macos"]["with"] == {"macos_notarize": True}
         and data["jobs"]["sign-windows"]["needs"] == "build"
         and data["jobs"]["build"]["needs"] == "check"
     )
-    assert "--verify-tag" in RELEASE
+    assert "--verify-tag" in PUBLISH
     assert all(
         "permissions" not in job
         for name, job in data["jobs"].items()
@@ -98,12 +111,12 @@ def test_release_publishes_the_verified_windows_installer() -> None:
     assert steps[-1]["with"]["name"] == "windows-signed"
     downloads = [
         step["with"]
-        for step in jobs["publish"]["steps"]
+        for step in jobs["candidate"]["steps"]
         if step.get("uses", "").startswith("actions/download-artifact@")
     ]
     assert downloads == [
         {
-            "pattern": "{linux,*-sources-*}",
+            "pattern": "{linux,*-sources-*,versions-*}",
             "path": "packages",
         },
         {"name": "windows-signed", "path": "dist"},
@@ -111,13 +124,68 @@ def test_release_publishes_the_verified_windows_installer() -> None:
     ]
 
 
+@pytest.mark.skipif(
+    os.name == "nt"
+    or any(shutil.which(tool) is None for tool in ("bash", "sha256sum", "jq")),
+    reason="The publisher runs on a Linux runner.",
+)
+@pytest.mark.parametrize("changed", [False, True])
+def test_draft_is_published_only_with_reviewed_hashes(
+    tmp_path: Path,
+    changed: bool,
+) -> None:
+    """
+    Exercise promotion of a draft with a matching or changed asset.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Temporary candidate, draft, and GitHub CLI fixture.
+    changed : bool
+        Whether GitHub reports a different hash for the uploaded file.
+    """
+    contents = b"reviewed source archive"
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "source.tar").write_bytes(contents)
+    digest = hashlib.sha256(b"changed" if changed else contents).hexdigest()
+    gh = tmp_path / "gh"
+    gh.write_text(
+        """#!/bin/sh
+case "$*" in
+    *"--json isDraft"*) echo true ;;
+    *"--json assets"*) echo source.tar ;;
+    *"--json apiUrl"*) echo release-url ;;
+    "api --paginate release-url/assets") echo "$ASSETS" ;;
+    "release edit v1.0.0 --draft=false --prerelease=false") touch public ;;
+    *) exit 2 ;;
+esac
+""",
+        encoding="utf-8",
+    )
+    gh.chmod(0o755)
+    result = subprocess.run(
+        ["bash", ROOT / "scripts/publish-candidate.sh"],
+        cwd=tmp_path,
+        env={
+            **os.environ,
+            "PATH": str(tmp_path) + os.pathsep + os.environ["PATH"],
+            "GITHUB_REF_NAME": "v1.0.0",
+            "RUNNER_TEMP": str(tmp_path),
+            "ASSETS": f'[{{"name":"source.tar","digest":"sha256:{digest}"}}]',
+        },
+        check=False,
+    )
+    assert result.returncode == int(changed)
+    assert (tmp_path / "public").exists() == (not changed)
+
+
 def test_release_checks_tag_against_version_and_changelog_before() -> None:
     """
-    Check that the first job compares the tag with pyproject.toml's
-    version and asks the changelog script for its notes.
+    Check the tag against the version and require release notes.
     """
     assert 'tomllib.load(open("pyproject.toml"' in RELEASE
-    assert '"${GITHUB_REF_NAME}" != "v${version}"' in RELEASE
+    assert '"$GITHUB_REF_NAME" != "v$version"' in DOWNLOAD
     assert "scripts/changelog_section.py" in RELEASE
 
 
@@ -150,7 +218,7 @@ def test_linux_package_built_on_old_ubuntu_with_python_shipped() -> None:
     """
     assert "runs-on: ubuntu-22.04" in BUILD
     assert (
-        BUILD.count('python-version: "3.13"') == 2
+        BUILD.count("python-version-file: packaging/python-version") == 2
     )  # for Linux and for Windows
 
 
@@ -168,13 +236,15 @@ def test_installer_and_workflows_agree_on_names_of_what_built() -> None:
     assert "path: dist/alto-*.tar.gz" in BUILD
     assert BUILD.count("path: dist/qt-sources/*.tar.xz") == 2
     assert "path: dist/alto-*-library-sources.tar" in BUILD
-    release_files = (
-        "dist/alto-*.tar.gz dist/alto-*-setup.exe "
-        "dist/alto-*-macos-arm64.dmg dist/*-everywhere-src-*.tar.xz "
-        "dist/alto-*-library-sources.tar"
-    )
-    assert release_files + " dist/SHA256SUMS" in RELEASE
-    assert "sha256sum alto-* *-everywhere-src-*.tar.xz > SHA256SUMS" in RELEASE
+    for suffix in (
+        "linux-x86_64.tar.gz",
+        "windows-x64-setup.exe",
+        "macos-arm64.dmg",
+        "linux-x86_64-library-sources.tar",
+    ):
+        assert f"alto-$version-{suffix}" in RELEASE
+    assert "qt-everywhere-src-*.tar.xz" in RELEASE
+    assert "pyside-setup-everywhere-src-*.tar.xz" in RELEASE
     assert "alto-$Version-windows-x64-setup.exe" in (
         ROOT / "scripts" / "build-windows.ps1"
     ).read_text(encoding="utf-8")
@@ -529,7 +599,7 @@ def test_the_release_is_signed_and_the_signature_is_published_with_it() -> (
     data = yaml.safe_load(RELEASE)
     assert (
         "scripts/sign_release.py dist/SHA256SUMS" in RELEASE
-        and "dist/SHA256SUMS.sig" in RELEASE
+        and "SHA256SUMS.sig" in RELEASE
     )
     assert (
         RELEASE.count("secrets.ALTO_SIGNING_KEY") == 2

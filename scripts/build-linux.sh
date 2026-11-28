@@ -25,8 +25,7 @@ mkdir -p "$WORK" "$ROOT/dist"
 mkdir -p "$WORK/source"
 tar -C "$ROOT" --exclude=.git --exclude=.venv --exclude=.package-build --exclude=dist --exclude=build --exclude=__pycache__ \
     --exclude=alto.egg-info -cf - . | tar -C "$WORK/source" -xf -
-"$PYTHON" -m venv "$WORK/venv"
-"$WORK/venv/bin/pip" install --quiet "$WORK/source[package]"
+"$PYTHON" "$ROOT/scripts/build_environment.py" "$WORK/source" "$WORK/venv" "$ROOT/dist/linux-packages.json"
 (cd "$WORK" && ALTO_SYSTEM_LIBRARIES="$WORK/system-libraries.json" "$WORK/venv/bin/pyinstaller" --noconfirm --clean --log-level WARN \
     --distpath "$WORK/dist" --workpath "$WORK/work" "$ROOT/packaging/alto.spec")
 FROZEN="$WORK/dist/alto"
@@ -71,17 +70,24 @@ fi
 
 PACKAGE="$WORK/$NAME"
 mkdir -p "$PACKAGE/icons"
-cp -R "$FROZEN" "$PACKAGE/alto"
+mv "$FROZEN" "$PACKAGE/alto"
 cp "$ROOT/packaging/linux/install.sh" "$ROOT/packaging/linux/README.txt" "$PACKAGE/"
 cp "$ROOT/LICENSE" "$ROOT/THIRD_PARTY_NOTICES.md" "$PACKAGE/"
 cp "$ROOT/alto/assets/icon-256.png" "$ROOT/alto/assets/icon.png" "$PACKAGE/icons/"
-# Install into a disposable prefix and compare the license files with the build wheels.
-ALTO_PREFIX="$WORK/install-check" XDG_DATA_HOME="$WORK/install-check/share" sh "$PACKAGE/install.sh" install
+tar -C "$WORK" -czf "$ROOT/dist/$NAME.tar.gz" "$NAME"
+mkdir "$WORK/unpacked"
+tar -C "$WORK/unpacked" -xzf "$ROOT/dist/$NAME.tar.gz"
+# Install from the final archive into a disposable prefix and compare the license files with the build wheels.
+ALTO_PREFIX="$WORK/install-check" XDG_DATA_HOME="$WORK/install-check/share" sh "$WORK/unpacked/$NAME/install.sh" install
+"$WORK/install-check/opt/alto/alto" --self-test
 "$WORK/venv/bin/python" "$ROOT/packaging/dependency_licenses.py" verify "$WORK/install-check/opt/alto"
+"$WORK/venv/bin/python" "$ROOT/packaging/verify_qt_sources.py" "$WORK/install-check/opt/alto/licenses/Qt/README.txt" "$ROOT/dist/qt-sources"
+mkdir "$WORK/check-sources"
+tar -C "$WORK/check-sources" -xf "$ROOT/dist/$NAME-library-sources.tar"
+(cd "$WORK/check-sources" && sha256sum --strict --check SHA256SUMS)
 [ -s "$WORK/install-check/opt/alto/licenses/Linux/README.txt" ] || {
     echo "The installed copy has no licenses/Linux/README.txt." >&2
     exit 1
 }
-tar -C "$WORK" -czf "$ROOT/dist/$NAME.tar.gz" "$NAME"
 (cd "$ROOT/dist" && sha256sum "$NAME.tar.gz" >"$NAME.tar.gz.sha256")
 echo "Wrote dist/$NAME.tar.gz ($(du -h "$ROOT/dist/$NAME.tar.gz" | cut -f1)), its .sha256 and dist/$NAME-library-sources.tar"

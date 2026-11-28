@@ -11,10 +11,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 cd "$ROOT"
-"${PYTHON:-python3}" -m venv "$WORK/venv"
+"${PYTHON:-python3}" "$ROOT/scripts/build_environment.py" "$ROOT" "$WORK/venv" "$ROOT/dist/macos-packages.json"
 PYTHON="$WORK/venv/bin/python"
-# Pillow converts Alto's existing PNG icon to the macOS icon format at build time.
-"$PYTHON" -m pip install --quiet '.[package]' pillow
 VERSION="$("$PYTHON" -c 'from importlib.metadata import version; print(version("alto"))')"
 # Resolve distribution metadata from the installed wheel, outside the source checkout.
 cd "$WORK"

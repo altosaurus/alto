@@ -52,9 +52,8 @@ robocopy $Root (Join-Path $Work "source") /E /XD .git .venv .package-build dist 
 if ($LASTEXITCODE -ge 8) { throw "Copying the source failed (robocopy exit code $LASTEXITCODE)" }
 $global:LASTEXITCODE = 0
 
-Run $Python @("-m", "venv", (Join-Path $Work "venv"))
+Run $Python @((Join-Path $Root "scripts/build_environment.py"), (Join-Path $Work "source"), (Join-Path $Work "venv"), (Join-Path $Root "dist/windows-packages.json"))
 $Py = Join-Path $Work "venv\Scripts\python.exe"
-Run $Py @("-m", "pip", "install", "--quiet", ((Join-Path $Work "source") + "[package]"), "pillow")
 
 # The program's icon, an .ico with several sizes, made from the PNG the app already ships.
 $Icon = Join-Path $Work "alto.ico"

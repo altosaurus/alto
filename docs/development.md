@@ -697,14 +697,17 @@ fixed bug) adds a line under **Unreleased** in the same pull request. Internal t
    For screenshots using `component-shot.html`, check that the image dimensions match the captures and each clickable region covers its component.
    Run `sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py` and include the
    updated images and any caption or region corrections in the release PR.
-6. Build all three desktop downloads from the same versioned candidate commit. The release PR builds unsigned Linux and Windows
-   candidates. Run **Package** on that branch with `macos_test` enabled for the Apple Silicon test ZIP. For signing rehearsals,
-   run **Release** on the approved `main` commit for Windows and **Package** on that same commit with `macos_notarize` enabled for the Mac.
-   Complete the [license compliance check](#license-compliance) on the Linux tarball, Windows installer, and final
-   stapled macOS DMG. Record the results and artifact checksums for each platform in the release PR. Resolve any findings
-   before tagging.
-7. After reviewing the PR and completing the signing rehearsals on the approved merge commit, tag that commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
-   the tag starts the **Release** workflow (see below), which publishes the downloads.
+6. After merging the release PR, run **Release** manually on the versioned `main` commit. Download the
+   **release-candidate** artifact from that run. Check its ZIP SHA-256 against the run summary, unpack it,
+   and run `sha256sum --strict --check SHA256SUMS` inside. Confirm `SOURCE-COMMIT` and review the three
+   `*-packages.json` inventories. Complete the [license compliance check](#license-compliance) using the
+   included Linux tarball, signed Windows installer, stapled macOS DMG, and source archives. Record the run,
+   artifact ID, ZIP checksum, and review results in the release PR.
+7. Copy the entire `Candidate: <artifact-id> <zip-sha256>` annotation from the reviewed run summary.
+   Tag the commit recorded in `SOURCE-COMMIT`. For example, substitute the reviewed values in
+   `git tag -a v0.1.0 <source-commit> -m 'Candidate: <artifact-id> <zip-sha256>'` and run
+   `git push origin v0.1.0`. The tag workflow verifies the candidate and compares every uploaded asset's
+   SHA-256 before making the release public. If the artifact expires before tagging, build and review a new candidate.
 
 Publish a release as a normal release, not a pre-release: the update check asks GitHub for the latest release, which leaves
 pre-releases out, and compares version numbers (`0.10.0` is newer than `0.9.0`), so a tag must be plain numbers such as `v0.1.0`.
@@ -733,9 +736,8 @@ prints the version of the copy you run.
 - **Windows upgrade terms.** Upgrade from the previous release with no recorded acceptance of the current Microsoft terms.
   Exercise both choices through Alto's updater. Declining must preserve the old installation, and accepting must complete
   the upgrade and record acceptance.
-- **Release evidence.** Record the workflow run, commit, artifact SHA-256s and results. The publishing tag triggers a fresh
-  build. Verify that the signed `SHA256SUMS` covers the exact desktop downloads and source companions, and repeat the
-  applicable checks on any files whose hashes differ from the reviewed copies.
+- **Release evidence.** Keep the review tied to the candidate ZIP identified by the annotated tag.
+  The signed `SHA256SUMS` covers the desktop downloads, source companions, source commit, and version inventories.
 
 ## Building the Linux download
 
@@ -744,8 +746,7 @@ sh scripts/build-linux.sh                       # dist/alto-<version>-linux-<arc
 PYTHON=/path/to/python3.13 sh scripts/build-linux.sh
 ```
 
-The script makes a clean virtual environment under `.package-build/`, installs Alto and PyInstaller (the `package` extra in
-`pyproject.toml`) in it, freezes Alto with `packaging/alto.spec`, and packs the result with `packaging/linux/install.sh`, a
+The script uses uv to install the locked `package` extra in a clean environment under `.package-build/`, freezes Alto with `packaging/alto.spec`, and packs the result with `packaging/linux/install.sh`, a
 README, the license and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
 frozen program says `Alto <version>` and that it opens its window (under Qt's offscreen platform, with its own data folder, so a
 real profile is never touched).
@@ -769,7 +770,7 @@ To try a build without touching your own install, extract it and run `./alto/alt
 
 ## Building the Windows installer, and the release workflow
 
-`scripts\build-windows.ps1` builds `dist\alto-<version>-windows-x64-setup.exe`. It needs Windows, Python 3.13 and
+`scripts\build-windows.ps1` builds `dist\alto-<version>-windows-x64-setup.exe`. It needs Windows, uv, Python 3.13 and
 [Inno Setup 6](https://jrsoftware.org/isinfo.php). Like the Linux script it freezes Alto with `packaging/alto.spec` and checks that the
 program starts; then it compiles `packaging/windows/alto.iss` and tries the installer for real: a silent install, a run, a silent
 uninstall that must keep the data, and an uninstall with `/PURGE=1` that must remove it. That test uses the real `%APPDATA%\Alto`, so
@@ -787,14 +788,14 @@ dependency.
 
 ### Windows installer signing
 
-For a signing rehearsal, run **Release** manually on `main`. Download the **windows-signed** artifact and compare its
+To build a signed candidate, run **Release** manually on `main`. Download the **windows-signed** artifact and compare its
 SHA-256 with the signing job summary. On Windows, open **Properties → Digital Signatures** on the downloaded installer
 and inspect the publisher and timestamp. The **windows** artifact contains the unsigned build used as input.
 
 The signing job uses the `windows-signing` GitHub environment. Its federated credential authenticates the job to Azure
 with `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID`. The environment variables
 `AZURE_SIGNING_ENDPOINT`, `AZURE_SIGNING_ACCOUNT_NAME`, and `AZURE_CERTIFICATE_PROFILE_NAME` select the signing profile.
-For a release tag, the publisher downloads the verified installer before calculating and signing the release checksums.
+The candidate job includes that signed installer in the release checksums.
 
 ### Signing releases, once
 
@@ -818,17 +819,15 @@ newer installer over a running Alto with the arguments Alto uses, and checks tha
 Alto opened again. What cannot be tested before a release exists is a copy checking a real release, which first happens when a
 release newer than the installed one is published; try the update on a real Linux and a real Windows machine then.
 
-Three GitHub workflows do the building:
+### Release workflows
 
-- **Build packages** (`build-packages.yml`) builds and tests both packages: the Linux download on Ubuntu 22.04 and the Windows
-  installer on a Windows runner, both with Python 3.13. The other two call it.
-- **Package** runs it on a pull request that changes `packaging/`, the build scripts, `pyproject.toml` or the assets, so a break
-  shows before a release. It publishes nothing.
-- **Release** runs when a tag such as `v0.1.0` is pushed. It first checks that the tag is `v` plus the version in `pyproject.toml` and
-  that `CHANGELOG.md` has notes for it. It builds Linux, signs Windows, and calls **Package** to sign and notarize the Apple Silicon DMG.
-  It publishes all three downloads, the matching source archives, signed checksums, and changelog notes. A manual run on `main` also signs and verifies the Windows installer and keeps it as a rehearsal artifact.
-
-The release is a normal one and never a pre-release, because Alto's update check asks GitHub for the latest release.
+- **Build packages** builds and tests the Linux download and Windows installer. All desktop runners use the
+  CPython patch in `packaging/python-version` and the wheel versions in `uv.lock`. Update the lock with `uv lock`
+  when changing dependencies. The separate **Tests** workflow resolves the newest allowed versions with pip.
+- **Package** also builds the Apple Silicon test ZIP on packaging pull requests. The candidate workflow calls it
+  to sign and notarize the Mac disk image.
+- **Release** builds the candidate on manual dispatch from `main`. A version tag promotes the reviewed downloads
+  and matching sources to a normal GitHub release using the [pre-release checklist](#pre-release-checklist).
 
 ## Reporting problems
 
