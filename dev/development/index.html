@@ -1548,14 +1548,17 @@ Exclude the <a class="reference external" href="../developer-guide/ui-style-guid
 For screenshots using <code class="docutils literal notranslate"><span class="pre">component-shot.html</span></code>, check that the image dimensions match the captures and each clickable region covers its component.
 Run <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">scripts/run-tests.sh</span> <span class="pre">tests/test_docs.py</span> <span class="pre">tests/test_docs_site.py</span> <span class="pre">tests/test_guide_docs.py</span></code> and include the
 updated images and any caption or region corrections in the release PR.</p></li>
-<li><p>Build all three desktop downloads from the same versioned candidate commit. The release PR builds unsigned Linux and Windows
-candidates. Run <strong>Package</strong> on that branch with <code class="docutils literal notranslate"><span class="pre">macos_test</span></code> enabled for the Apple Silicon test ZIP. For signing rehearsals,
-run <strong>Release</strong> on the approved <code class="docutils literal notranslate"><span class="pre">main</span></code> commit for Windows and <strong>Package</strong> on that same commit with <code class="docutils literal notranslate"><span class="pre">macos_notarize</span></code> enabled for the Mac.
-Complete the <a class="reference external" href="#license-compliance">license compliance check</a> on the Linux tarball, Windows installer, and final
-stapled macOS DMG. Record the results and artifact checksums for each platform in the release PR. Resolve any findings
-before tagging.</p></li>
-<li><p>After reviewing the PR and completing the signing rehearsals on the approved merge commit, tag that commit and push the tag: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">tag</span> <span class="pre">v0.1.0</span> <span class="pre">&amp;&amp;</span> <span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">v0.1.0</span></code>. Pushing
-the tag starts the <strong>Release</strong> workflow (see below), which publishes the downloads.</p></li>
+<li><p>After merging the release PR, run <strong>Release</strong> manually on the versioned <code class="docutils literal notranslate"><span class="pre">main</span></code> commit. Download the
+<strong>release-candidate</strong> artifact from that run. Check its ZIP SHA-256 against the run summary, unpack it,
+and run <code class="docutils literal notranslate"><span class="pre">sha256sum</span> <span class="pre">--strict</span> <span class="pre">--check</span> <span class="pre">SHA256SUMS</span></code> inside. Confirm <code class="docutils literal notranslate"><span class="pre">SOURCE-COMMIT</span></code> and review the three
+<code class="docutils literal notranslate"><span class="pre">*-packages.json</span></code> inventories. Complete the <a class="reference external" href="#license-compliance">license compliance check</a> using the
+included Linux tarball, signed Windows installer, stapled macOS DMG, and source archives. Record the run,
+artifact ID, ZIP checksum, and review results in the release PR.</p></li>
+<li><p>Copy the entire <code class="docutils literal notranslate"><span class="pre">Candidate:</span> <span class="pre">&lt;artifact-id&gt;</span> <span class="pre">&lt;zip-sha256&gt;</span></code> annotation from the reviewed run summary.
+Tag the commit recorded in <code class="docutils literal notranslate"><span class="pre">SOURCE-COMMIT</span></code>. For example, substitute the reviewed values in
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">tag</span> <span class="pre">-a</span> <span class="pre">v0.1.0</span> <span class="pre">&lt;source-commit&gt;</span> <span class="pre">-m</span> <span class="pre">'Candidate:</span> <span class="pre">&lt;artifact-id&gt;</span> <span class="pre">&lt;zip-sha256&gt;'</span></code> and run
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">v0.1.0</span></code>. The tag workflow verifies the candidate and compares every uploaded asset’s
+SHA-256 before making the release public. If the artifact expires before tagging, build and review a new candidate.</p></li>
 </ol>
 <p>Publish a release as a normal release, not a pre-release: the update check asks GitHub for the latest release, which leaves
 pre-releases out, and compares version numbers (<code class="docutils literal notranslate"><span class="pre">0.10.0</span></code> is newer than <code class="docutils literal notranslate"><span class="pre">0.9.0</span></code>), so a tag must be plain numbers such as <code class="docutils literal notranslate"><span class="pre">v0.1.0</span></code>.</p>
@@ -1583,9 +1586,8 @@ original disk image and app.</p></li>
 <li><p><strong>Windows upgrade terms.</strong> Upgrade from the previous release with no recorded acceptance of the current Microsoft terms.
 Exercise both choices through Alto’s updater. Declining must preserve the old installation, and accepting must complete
 the upgrade and record acceptance.</p></li>
-<li><p><strong>Release evidence.</strong> Record the workflow run, commit, artifact SHA-256s and results. The publishing tag triggers a fresh
-build. Verify that the signed <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> covers the exact desktop downloads and source companions, and repeat the
-applicable checks on any files whose hashes differ from the reviewed copies.</p></li>
+<li><p><strong>Release evidence.</strong> Keep the review tied to the candidate ZIP identified by the annotated tag.
+The signed <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> covers the desktop downloads, source companions, source commit, and version inventories.</p></li>
 </ul>
 </section>
 </section>
@@ -1596,8 +1598,7 @@ applicable checks on any files whose hashes differ from the reviewed copies.</p>
 <span class="nv">PYTHON</span><span class="o">=</span>/path/to/python3.13<span class="w"> </span>sh<span class="w"> </span>scripts/build-linux.sh
 </pre></div>
 </div>
-<p>The script makes a clean virtual environment under <code class="docutils literal notranslate"><span class="pre">.package-build/</span></code>, installs Alto and PyInstaller (the <code class="docutils literal notranslate"><span class="pre">package</span></code> extra in
-<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>) in it, freezes Alto with <code class="docutils literal notranslate"><span class="pre">packaging/alto.spec</span></code>, and packs the result with <code class="docutils literal notranslate"><span class="pre">packaging/linux/install.sh</span></code>, a
+<p>The script uses uv to install the locked <code class="docutils literal notranslate"><span class="pre">package</span></code> extra in a clean environment under <code class="docutils literal notranslate"><span class="pre">.package-build/</span></code>, freezes Alto with <code class="docutils literal notranslate"><span class="pre">packaging/alto.spec</span></code>, and packs the result with <code class="docutils literal notranslate"><span class="pre">packaging/linux/install.sh</span></code>, a
 README, the license and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
 frozen program says <code class="docutils literal notranslate"><span class="pre">Alto</span> <span class="pre">&lt;version&gt;</span></code> and that it opens its window (under Qt’s offscreen platform, with its own data folder, so a
 real profile is never touched).</p>
@@ -1619,7 +1620,7 @@ If a build misbehaves on another distribution, check which libraries it loads, a
 </section>
 <section id="building-the-windows-installer-and-the-release-workflow">
 <h2>Building the Windows installer, and the release workflow</h2>
-<p><code class="docutils literal notranslate"><span class="pre">scripts\build-windows.ps1</span></code> builds <code class="docutils literal notranslate"><span class="pre">dist\alto-&lt;version&gt;-windows-x64-setup.exe</span></code>. It needs Windows, Python 3.13 and
+<p><code class="docutils literal notranslate"><span class="pre">scripts\build-windows.ps1</span></code> builds <code class="docutils literal notranslate"><span class="pre">dist\alto-&lt;version&gt;-windows-x64-setup.exe</span></code>. It needs Windows, uv, Python 3.13 and
 <a class="reference external" href="https://jrsoftware.org/isinfo.php">Inno Setup 6</a>. Like the Linux script it freezes Alto with <code class="docutils literal notranslate"><span class="pre">packaging/alto.spec</span></code> and checks that the
 program starts; then it compiles <code class="docutils literal notranslate"><span class="pre">packaging/windows/alto.iss</span></code> and tries the installer for real: a silent install, a run, a silent
 uninstall that must keep the data, and an uninstall with <code class="docutils literal notranslate"><span class="pre">/PURGE=1</span></code> that must remove it. That test uses the real <code class="docutils literal notranslate"><span class="pre">%APPDATA%\Alto</span></code>, so
@@ -1635,13 +1636,13 @@ The build test runs that step once with <code class="docutils literal notranslat
 dependency.</p>
 <section id="windows-installer-signing">
 <h3>Windows installer signing</h3>
-<p>For a signing rehearsal, run <strong>Release</strong> manually on <code class="docutils literal notranslate"><span class="pre">main</span></code>. Download the <strong>windows-signed</strong> artifact and compare its
+<p>To build a signed candidate, run <strong>Release</strong> manually on <code class="docutils literal notranslate"><span class="pre">main</span></code>. Download the <strong>windows-signed</strong> artifact and compare its
 SHA-256 with the signing job summary. On Windows, open <strong>Properties → Digital Signatures</strong> on the downloaded installer
 and inspect the publisher and timestamp. The <strong>windows</strong> artifact contains the unsigned build used as input.</p>
 <p>The signing job uses the <code class="docutils literal notranslate"><span class="pre">windows-signing</span></code> GitHub environment. Its federated credential authenticates the job to Azure
 with <code class="docutils literal notranslate"><span class="pre">AZURE_CLIENT_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">AZURE_TENANT_ID</span></code>, and <code class="docutils literal notranslate"><span class="pre">AZURE_SUBSCRIPTION_ID</span></code>. The environment variables
 <code class="docutils literal notranslate"><span class="pre">AZURE_SIGNING_ENDPOINT</span></code>, <code class="docutils literal notranslate"><span class="pre">AZURE_SIGNING_ACCOUNT_NAME</span></code>, and <code class="docutils literal notranslate"><span class="pre">AZURE_CERTIFICATE_PROFILE_NAME</span></code> select the signing profile.
-For a release tag, the publisher downloads the verified installer before calculating and signing the release checksums.</p>
+The candidate job includes that signed installer in the release checksums.</p>
 </section>
 <section id="signing-releases-once">
 <h3>Signing releases, once</h3>
@@ -1663,17 +1664,18 @@ bundled Python cannot count on the system for, and the signature check). Both bu
 newer installer over a running Alto with the arguments Alto uses, and checks that the old one closed, the new one was installed and
 Alto opened again. What cannot be tested before a release exists is a copy checking a real release, which first happens when a
 release newer than the installed one is published; try the update on a real Linux and a real Windows machine then.</p>
-<p>Three GitHub workflows do the building:</p>
+</section>
+<section id="release-workflows">
+<h3>Release workflows</h3>
 <ul class="simple">
-<li><p><strong>Build packages</strong> (<code class="docutils literal notranslate"><span class="pre">build-packages.yml</span></code>) builds and tests both packages: the Linux download on Ubuntu 22.04 and the Windows
-installer on a Windows runner, both with Python 3.13. The other two call it.</p></li>
-<li><p><strong>Package</strong> runs it on a pull request that changes <code class="docutils literal notranslate"><span class="pre">packaging/</span></code>, the build scripts, <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> or the assets, so a break
-shows before a release. It publishes nothing.</p></li>
-<li><p><strong>Release</strong> runs when a tag such as <code class="docutils literal notranslate"><span class="pre">v0.1.0</span></code> is pushed. It first checks that the tag is <code class="docutils literal notranslate"><span class="pre">v</span></code> plus the version in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> and
-that <code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code> has notes for it. It builds Linux, signs Windows, and calls <strong>Package</strong> to sign and notarize the Apple Silicon DMG.
-It publishes all three downloads, the matching source archives, signed checksums, and changelog notes. A manual run on <code class="docutils literal notranslate"><span class="pre">main</span></code> also signs and verifies the Windows installer and keeps it as a rehearsal artifact.</p></li>
+<li><p><strong>Build packages</strong> builds and tests the Linux download and Windows installer. All desktop runners use the
+CPython patch in <code class="docutils literal notranslate"><span class="pre">packaging/python-version</span></code> and the wheel versions in <code class="docutils literal notranslate"><span class="pre">uv.lock</span></code>. Update the lock with <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">lock</span></code>
+when changing dependencies. The separate <strong>Tests</strong> workflow resolves the newest allowed versions with pip.</p></li>
+<li><p><strong>Package</strong> also builds the Apple Silicon test ZIP on packaging pull requests. The candidate workflow calls it
+to sign and notarize the Mac disk image.</p></li>
+<li><p><strong>Release</strong> builds the candidate on manual dispatch from <code class="docutils literal notranslate"><span class="pre">main</span></code>. A version tag promotes the reviewed downloads
+and matching sources to a normal GitHub release using the <a class="reference external" href="#pre-release-checklist">pre-release checklist</a>.</p></li>
 </ul>
-<p>The release is a normal one and never a pre-release, because Alto’s update check asks GitHub for the latest release.</p>
 </section>
 </section>
 <section id="reporting-problems">
