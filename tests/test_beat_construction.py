@@ -243,7 +243,7 @@ def test_staffless_notes_use_staff_spacing(app: QApplication) -> None:
             [[Note.parse("E4")]] * 2,
             value=symbol.value.removesuffix("-rest"),
         )
-        first, second = staff._lesson_systems(800)[0].centers
+        first, second = staff.lesson_systems(800)[0].centers
         assert centers[index + 1] - centers[index] == pytest.approx(
             second - first,
         )

@@ -1856,7 +1856,7 @@ class MainWindow(QMainWindow):
                 if self._overlay.terms.currentItem()
                 else "",
                 self._overlay.activity_switch.current(),
-                getattr(self._overlay, "_example_index", 0),
+                self._overlay.example_index,
                 self._overlay.definition.verticalScrollBar().value(),
             )
             if isinstance(self._overlay, GlossaryPage)
@@ -1951,11 +1951,7 @@ class MainWindow(QMainWindow):
                     if page.terms.item(row).text() == term:
                         page.terms.setCurrentRow(row)
                         break
-                page.activity_switch.set_current(mode)
-                page._show_activities(mode)
-                page._example_index = example
-                if term:
-                    page._update_example()
+                page.restore_view(mode=mode, example=example)
                 QTimer.singleShot(
                     0,
                     page,

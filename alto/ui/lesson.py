@@ -513,7 +513,7 @@ class StepView(QWidget):
                 staff.lesson_peers.update(
                     peer for peer in comparisons if peer is not staff
                 )
-                staff._fit_width()
+                staff.fit_width()
             self.illustration = _IllustratedStep(
                 text,
                 staves=self.staves,

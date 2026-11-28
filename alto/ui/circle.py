@@ -1335,7 +1335,7 @@ class FifthsCircle(QWidget):
             font = current_style().font
             left = center.x() - r * 0.55
             # noinspection PyProtectedMember
-            StaffWidget._draw_clef(
+            StaffWidget.draw_clef(
                 p,
                 clef="treble",
                 x=left,
