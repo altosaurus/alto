@@ -697,6 +697,8 @@ fixed bug) adds a line under **Unreleased** in the same pull request. Internal t
    For screenshots using `component-shot.html`, check that the image dimensions match the captures and each clickable region covers its component.
    Run `sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py` and include the
    updated images and any caption or region corrections in the release PR.
+   Confirm that the [upgrade fixture](https://github.com/altosaurus/alto/tree/main/tests/fixtures)
+   comes from the previous stable desktop release. The Linux package job opens it, answers its due card, and reopens it.
 6. After merging the release PR, run **Release** manually on the versioned `main` commit. Download the
    **release-candidate** artifact from that run. Check its ZIP SHA-256 against the run summary, unpack it,
    and run `sha256sum --strict --check SHA256SUMS` inside. Confirm `SOURCE-COMMIT` and review the three

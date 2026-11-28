@@ -29,7 +29,6 @@ from alto.exercises.base import REGISTRY, ChoiceExercise
 from alto.exercises.packs import PackExercise
 from alto.settings import (
     CLEFS,
-    DEFAULT_RANGES,
     MAX_DIATONIC,
     MIN_DIATONIC,
     NAMINGS,
@@ -134,8 +133,13 @@ def load_note_names() -> None:
             lo, hi = (int(x) for x in span.split("-"))
         except ValueError:
             continue
-        if key in DEFAULT_RANGES and MIN_DIATONIC <= lo <= hi <= MAX_DIATONIC:
-            cfg.ranges[key] = (lo, hi)
+        if key in RANGE_LIMITS:
+            minimum, maximum = RANGE_LIMITS[key]
+            # Keep ranges accepted by the earlier C1–C7 loader.
+            if minimum <= lo <= hi <= maximum or (
+                MIN_DIATONIC <= lo <= hi <= MAX_DIATONIC
+            ):
+                cfg.ranges[key] = (lo, hi)
 
 
 def save_note_names() -> None:
