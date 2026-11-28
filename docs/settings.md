@@ -173,4 +173,4 @@ Changing a setting starts a new question right away, and the settings are rememb
 ## Where settings are stored
 
 Settings are kept by Qt in your user configuration (for example `~/.config/alto/alto.conf` on Linux), separate from your
-practice history. See [Your data]({{ '/data/' | relative_url }}).
+practice history. See [Database]({{ '/data/' | relative_url }}).

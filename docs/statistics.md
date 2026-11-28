@@ -1,15 +1,13 @@
 ---
-title: Statistics and database
+title: Statistics
 nav_order: 5
 nav_group: Using Alto
 permalink: /statistics/
 ---
-## Statistics
-
 Open **Statistics** using the chart button at the upper right of the main window. They always show the active
 profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page you came from.
 
-### Filters
+## Filters
 
 - **Exercise:** all exercises, or any one of them.
 - **Timeframe:** today, the last 7, 30 or 90 days, the last year, or all time.
@@ -18,7 +16,7 @@ profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page 
 
 Choose **Response-time distribution…** below the speed chart to see the recent times used for automatic grading. The tool opens on the selected exercise and uses its latest 100 eligible answers across timeframes. [Response-time grading]({{ '/practice/' | relative_url }}#response-time-grading).
 
-### What you see
+## What you see
 
 - **Summary tiles:** questions answered, how often the first answer was right, the typical time to a first answer,
   attempts per question, days practiced, and time spent practicing. A single answer counts for at most two minutes of
@@ -34,7 +32,7 @@ Choose **Response-time distribution…** below the speed chart to see the recent
   timeframe.
 - **Questions that need practice:** the questions with the highest strain, how often you missed them, and how many times you have answered them.
 
-### Pointing and clicking
+## Pointing and clicking
 
 Every chart responds to the pointer. **Hover** a bar, a point, an exercise row or a calendar day and it brightens while the
 rest of the chart fades back, with its numbers in a tooltip. **Click** one and the answers behind it are listed in a panel under the charts:
@@ -45,7 +43,7 @@ rest of the chart fades back, with its numbers in a tooltip. **Click** one and t
 
 The clicked element stays bright and the rest stay faded while the panel is open. Click it again, or press **Close**, to put the panel away; it
 also closes when you change the exercise or the timeframe, because its numbers would no longer match. Periods and days with no
-answers cannot be clicked. The list has the same columns as the database browser below, sorts when you click a heading, and
+answers cannot be clicked. The list has the same columns as the [database browser]({{ '/data/' | relative_url }}#browsing-the-database), sorts when you click a heading, and
 **double-clicking** a row previews the question. It shows the newest 500 answers, and says when there are more.
 
 Double-click any cell in **Questions that need practice** to open the saved question and its answer.
@@ -55,31 +53,3 @@ The **Question Statistics** button on the card opens that question’s speed and
 
 A question counts as **right** only if your first answer was right. That is the same rule the
 [practice scheduler]({{ '/practice/' | relative_url }}) uses, so the numbers match what Alto thinks about your progress.
-
-## Browsing the database
-
-The database button next to the statistics button opens a read-only view of what is stored. It never changes anything.
-
-{% include shot.html src="database.png" alt="The Answers table with the next review date in the Due column at the right" %}
-
-Three tables are available:
-
-- **Answers:** every answer the active profile has given, newest first, with the question, your answer, whether it was right, the attempt number and the time.
-- **Questions** shows each question’s strain, answer counts, typical response time, and last practice time.
-- **Profiles:** everyone who has a profile, with how many answers and questions each has.
-
-In both **Answers** and **Questions**, **Due** shows the next review in local time for the selected SM-2 or FSRS schedule. All answers to the same question show its current due date. A dash means the question has no due date under the current scheduler.
-
-{% include shot.html src="database-questions.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" caption="Last seen records when you practiced the question. Due shows when the scheduler wants to show it again." %}
-
-Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are
-limited to the newest 10,000 rows each; the line above the table says when that applies.
-
-### Previewing a question
-
-Double-click a row in Answers or Questions to see that question as the exercise showed it, with its answer.
-Choose the **Question Statistics** bar chart icon in the upper-right corner to graph your practice history for that question. Each point represents one time you were asked.
-The speed graph shows seconds to your first answer. The accuracy graph shows the percentage answered correctly on the first try
-up to that point. Hover over a point for its value. You can also open these graphs from an answer in Statistics.
-
-{% include shot.html src="question-preview.png" alt="A popup showing a chord on a staff with its answer and what was answered" caption="The preview shows the notes, the correct answer, what you answered and how long it took. Play sounds the notes." %}

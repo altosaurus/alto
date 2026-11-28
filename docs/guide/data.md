@@ -16,7 +16,7 @@ database structure without losing anyone's practice history.
 | **Preferences** | `QSettings("alto", "alto")`, in the user's configuration folder | `alto/ui/store.py` and the `save_*` functions in `alto/ui/exercise_settings.py` and the theme, notation, keyboard and instrument modules | theme, notation font, keyboard style, instrument, each exercise's settings, sidebar width, the profile used last |
 
 The split is by *nature*: history is a large and growing table of facts you can query, so it belongs in a database.
-Preferences are a few dozen small values, so they belong in the platform's settings mechanism. [Your data]({{ '/data/' | relative_url }})
+Preferences are a few dozen small values, so they belong in the platform's settings mechanism. [Database]({{ '/data/' | relative_url }})
 tells users where both are. The settings objects in `alto/settings.py` are plain data and never save themselves; saving is a UI
 concern, so `alto/learning`, `alto/exercises` and `alto/theory` never touch the disk except through `Database`.
 
