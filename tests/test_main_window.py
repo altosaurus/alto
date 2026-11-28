@@ -1782,7 +1782,9 @@ def test_theme_changes_preserve_the_exercise_settings_pane(
     panel.stack.setCurrentIndex(page_index)
     view.toolbar.gear.setChecked(opened)
     if opened:
-        view._pane_anim.setCurrentTime(view._pane_anim.duration())
+        view.settings_pane.animation.setCurrentTime(
+            view.settings_pane.animation.duration(),
+        )
     app.processEvents()
     scroll = panel.stack.currentWidget().findChild(QScrollArea)
     if scroll is not None:

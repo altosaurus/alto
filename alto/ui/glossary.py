@@ -1388,6 +1388,7 @@ class GlossaryPage(QWidget):
     def __init__(self) -> None:
         """Build the glossary and select its first term."""
         super().__init__()
+        self._example_index = 0
         layout = QHBoxLayout(self)
         sidebar = QWidget()
         sidebar.setMaximumWidth(px(210))
@@ -1558,6 +1559,48 @@ class GlossaryPage(QWidget):
         self._update_example()
         self.definition_area.verticalScrollBar().setValue(0)
         self._show_activities(self.activity_switch.current())
+
+    @property
+    def example_index(self) -> int:
+        """
+        Read which of the selected term's examples is showing.
+
+        Returns
+        -------
+        int
+            Count of steps taken through the examples.
+
+        Examples
+        --------
+        >>> from alto.ui.glossary import GlossaryPage
+        >>> GlossaryPage().example_index
+        0
+        """
+        return self._example_index
+
+    def restore_view(self, *, mode: int, example: int) -> None:
+        """
+        Return the selected term to an earlier tab and example.
+
+        Parameters
+        ----------
+        mode : int
+            Related activities tab: 0 for exercises, 1 for lessons.
+        example : int
+            Example position, as read from `example_index`.
+
+        Examples
+        --------
+        >>> from alto.ui.glossary import GlossaryPage
+        >>> page = GlossaryPage()
+        >>> page.restore_view(mode=1, example=1)
+        >>> page.activity_switch.current(), page.example_index
+        (1, 1)
+        """
+        self.activity_switch.set_current(mode)
+        self._show_activities(mode)
+        self._example_index = example
+        self._update_example()
 
     def _show_activities(self, mode: int) -> None:
         """

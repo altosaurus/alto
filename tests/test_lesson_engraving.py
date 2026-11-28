@@ -66,7 +66,7 @@ def test_excerpt_ink_stays_put(
     narrow = staff.grab().toImage()
     staff.resize(480, staff.height())
     wide = staff.grab().toImage()
-    (row,) = staff._lesson_systems(480)
+    (row,) = staff.lesson_systems(480)
     assert row.right < 230
     assert narrow == wide
     assert row.right + staff.side <= wide.width() < row.right + staff.side + 1
@@ -112,7 +112,7 @@ def test_local_accidentals_clear_chords_and_captions(
     for style in BY_KEY.values():
         staff.notation_style = style
         _repaint_staffs()
-        (row,) = staff._lesson_systems(staff.width())
+        (row,) = staff.lesson_systems(staff.width())
         near, far = row.signs[0]
         assert far < near < 0
         assert row.caption_rect.top() > row.bottoms["bass"] + staff.GAP
@@ -141,7 +141,7 @@ def test_lesson_scale_wrap_keeps_each_labeled_step(app: QApplication) -> None:
     staff.resize(180, staff.height())
     staff.column_colors[3] = staff.palette().highlight().color()
     staff.show()
-    wrapped = staff._lesson_systems(staff.width())
+    wrapped = staff.lesson_systems(staff.width())
     assert len(wrapped) > 1
     assert all(
         row.right + staff.side <= staff.width()
@@ -156,7 +156,7 @@ def test_lesson_scale_wrap_keeps_each_labeled_step(app: QApplication) -> None:
     narrow_height = staff.height()
     assert not staff.grab().isNull()
     staff.resize(520, narrow_height)
-    assert len(staff._lesson_systems(520)) == 1
+    assert len(staff.lesson_systems(520)) == 1
     assert staff.height() < narrow_height
     staff.close()
 
@@ -175,8 +175,8 @@ def test_lesson_engraving_entry_points(app: QApplication) -> None:
     assert all(staff.lesson_layout for staff in first.staves)
     upper, lower = first.staves
     assert (
-        upper._lesson_systems(300)[0].centers
-        == lower._lesson_systems(300)[0].centers
+        upper.lesson_systems(300)[0].centers
+        == lower.lesson_systems(300)[0].centers
     )
     question = StepView(
         next(step for step in KEY_SIGNATURES.steps if step.task_staff),
@@ -214,7 +214,7 @@ def test_signature_and_local_natural_gaps(app: QApplication) -> None:
     natural_width = engraving.accidental_width(font="bravura", sign=0, gap=8)
     assert second["x"] - (first["x"] + sharp_width) == pytest.approx(2)
     assert natural["x"] - (second["x"] + sharp_width) == pytest.approx(12)
-    (row,) = staff._lesson_systems(staff.width())
+    (row,) = staff.lesson_systems(staff.width())
     # Whole noteheads are centered on their column. Their left and right
     # clearances determine the staff end.
     left_edge = natural["x"] + natural_width + 2
@@ -243,11 +243,11 @@ def test_caption_fits_the_lesson_paper_at_each_width(
     )
     staff.show()
     staff.resize(520, staff.height())
-    (wide,) = staff._lesson_systems(staff.width())
+    (wide,) = staff.lesson_systems(staff.width())
     assert wide.caption_rect.right() > wide.right
     assert staff.width() == wide.caption_rect.right() + staff.side
     staff.resize(staff.minimumWidth(), staff.height())
-    (narrow,) = staff._lesson_systems(staff.width())
+    (narrow,) = staff.lesson_systems(staff.width())
     assert narrow.caption_rect.height() > wide.caption_rect.height()
     assert narrow.caption_rect.right() + staff.side <= staff.width()
     assert narrow.caption_rect.bottom() + staff.GAP <= staff.height()

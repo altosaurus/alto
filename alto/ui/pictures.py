@@ -144,7 +144,7 @@ def symbol_icon(
     painter = QPainter(pixmap)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
     # noinspection PyProtectedMember
-    StaffWidget._draw_clef(
+    StaffWidget.draw_clef(
         painter,
         clef=clef,
         x=(height - 3.2 * gap) / 2,
@@ -705,7 +705,7 @@ class ClefPictures(_Picture):
                 color=line,
             )
             # noinspection PyProtectedMember
-            StaffWidget._draw_clef(
+            StaffWidget.draw_clef(
                 p,
                 clef=clef,
                 x=x + 3,
@@ -768,7 +768,7 @@ class ClefPictures(_Picture):
                 color=line,
             )
             # noinspection PyProtectedMember
-            StaffWidget._draw_clef(
+            StaffWidget.draw_clef(
                 p,
                 clef=clef,
                 x=x + 8,
@@ -786,7 +786,7 @@ class ClefPictures(_Picture):
             width=0.65,
         )
         # noinspection PyProtectedMember
-        StaffWidget._brace(
+        StaffWidget.draw_brace(
             p,
             x=x + 4,
             y0=tops[0],
@@ -988,7 +988,7 @@ class ValuePictures(_Picture):
             # drawn by the same routine as the staff, so the symbol
             # matches the one in the exercise
             # noinspection PyProtectedMember
-            StaffWidget._note(
+            StaffWidget.draw_value(
                 p,
                 x=x + (self.W / 2 if wide else self.HEAD_X),
                 y=y,
@@ -1449,7 +1449,7 @@ class RangePictures(_Picture):
             )
         # a whole note, a little larger than the staff gap so it reads
         # noinspection PyProtectedMember
-        StaffWidget._note(
+        StaffWidget.draw_value(
             p,
             x=x,
             y=y,
@@ -1502,7 +1502,7 @@ class RangePictures(_Picture):
                         color=line,
                     )
                     # noinspection PyProtectedMember
-                    StaffWidget._draw_clef(
+                    StaffWidget.draw_clef(
                         p,
                         clef=name,
                         x=x + 8,
@@ -1520,7 +1520,7 @@ class RangePictures(_Picture):
                     width=0.65,
                 )
                 # noinspection PyProtectedMember
-                StaffWidget._brace(
+                StaffWidget.draw_brace(
                     p,
                     x=x + 5,
                     y0=7,
@@ -1541,7 +1541,7 @@ class RangePictures(_Picture):
                     color=line,
                 )
                 # noinspection PyProtectedMember
-                StaffWidget._draw_clef(
+                StaffWidget.draw_clef(
                     p,
                     clef=clef,
                     x=x + 3,
@@ -1704,7 +1704,7 @@ class NamePicture(_Picture):
             color=line,
         )
         # noinspection PyProtectedMember
-        StaffWidget._draw_clef(
+        StaffWidget.draw_clef(
             p,
             clef="treble",
             x=2.5,
@@ -1738,7 +1738,7 @@ class NamePicture(_Picture):
                     width=0.65,
                 )
             # noinspection PyProtectedMember
-            StaffWidget._note(
+            StaffWidget.draw_value(
                 p,
                 x=x,
                 y=y,

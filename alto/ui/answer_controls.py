@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 
 from PySide6.QtCore import QSize, Signal
-from PySide6.QtGui import QKeySequence
+from PySide6.QtGui import QColor, QKeySequence
 from PySide6.QtWidgets import (
     QAbstractButton,
     QGridLayout,
@@ -30,6 +31,10 @@ from alto.theory.note_naming import DEGREE_FUNCTIONS, FUNCTION_ALTERATIONS
 from alto.theory.pitch import ACCIDENTAL_SYMBOLS, QUALITY_NAMES
 from alto.ui import motion
 from alto.ui.answer_bank import AnswerBank
+from alto.ui.colors import (
+    CORRECT_ANSWER_COLOR,
+    blend,
+)
 from alto.ui.degree_text import DegreeButton
 from alto.ui.meter_staff import MeterButton
 from alto.ui.pictures import RHYTHM_SYMBOL_NAMES, ValuePictures
@@ -184,6 +189,33 @@ def second_row_keys(
             for label in labels
         ]
     return [*"ASDFGHJKL"][: len(labels)] + [""] * max(0, len(labels) - 9)
+
+
+def feedback_style(color: QColor) -> str:
+    """
+    Build the style sheet that colors an answer button for feedback.
+
+    Parameters
+    ----------
+    color : QColor
+        Background behind the button's white text.
+
+    Returns
+    -------
+    str
+        Style sheet for the button in its enabled and disabled states.
+
+    Examples
+    --------
+    >>> sheet = feedback_style(QColor("#c62828"))
+    >>> "background: #c62828" in sheet, "color: white" in sheet
+    (True, True)
+    """
+    return (
+        "QPushButton, QPushButton:disabled { background: "
+        f"{color.name()}"
+        "; color: white; }"
+    )
 
 
 class AnswerControls(QWidget):
@@ -526,3 +558,158 @@ class AnswerControls(QWidget):
             )
             number_bank.set_buttons(number_buttons)
             self.octave_box.addWidget(number_bank, 1)
+
+    def buttons_for(
+        self,
+        q: Question,
+        *,
+        selected: tuple[str, ...],
+    ) -> list[QPushButton]:
+        """
+        Find the buttons for the submitted parts of an answer.
+
+        Parameters
+        ----------
+        q : Question
+            Displayed question, with its choices in button order.
+        selected : tuple of str
+            Submitted choice, followed by the second part of a
+            two-part answer.
+
+        Returns
+        -------
+        list of QPushButton
+            One button for each submitted part, or none when nothing
+            was chosen.
+
+        Examples
+        --------
+        A two-part answer finds one button in each row.
+        """
+        if not selected:
+            return []
+        first = self.buttons[q.choices.index(selected[0])]
+        if q.octaves and len(selected) == 2:
+            second = len(q.choices) + q.octaves.index(selected[1])
+            return [
+                first,
+                self.buttons[second],
+            ]
+        return [first]
+
+    def show_selection(self, q: Question, *, parts: dict[str, str]) -> None:
+        """
+        Check the chosen name and the chosen second part.
+
+        Parameters
+        ----------
+        q : Question
+            Displayed question, with its choices in button order.
+        parts : dict[str, str]
+            Chosen values keyed by answer part.
+
+        Examples
+        --------
+        Choosing the octave first keeps it checked while the name is
+        pending.
+        """
+        labels = [*q.choices, *(q.octaves or ())]
+        for i, (button, label) in enumerate(
+            zip(self.buttons, labels, strict=True),
+        ):
+            part = "name" if i < len(q.choices) else "octave"
+            button.setChecked(parts.get(part) == label)
+
+    def disable_choices(self) -> None:
+        """
+        Stop every answer button from accepting another choice.
+
+        Examples
+        --------
+        A closed question keeps its buttons visible but unavailable.
+        """
+        for button in self.buttons:
+            button.setEnabled(False)
+
+    def clear_selection(self) -> None:
+        """
+        Uncheck the chosen buttons and remove their feedback color.
+
+        Examples
+        --------
+        After an incorrect pair, both rows accept a new selection.
+        """
+        for button in self.buttons:
+            if button.isChecked():
+                button.setStyleSheet("")
+                button.setChecked(False)
+
+    @staticmethod
+    def mark(button: QPushButton, *, color: str) -> None:
+        """
+        Color a button for feedback without a fade.
+
+        Parameters
+        ----------
+        button : QPushButton
+            Answer or placement button to color.
+        color : str
+            Final feedback color.
+
+        Examples
+        --------
+        >>> choice = QPushButton("C")
+        >>> AnswerControls.mark(choice, color="#c62828")
+        >>> "#c62828" in choice.styleSheet()
+        True
+        """
+        button.setStyleSheet(feedback_style(QColor(color)))
+
+    @staticmethod
+    def fade(
+        button: QPushButton,
+        *,
+        target: str = CORRECT_ANSWER_COLOR,
+    ) -> Callable[[float], None]:
+        """
+        Prepare a fade of a button from black to a feedback color.
+
+        Parameters
+        ----------
+        button : QPushButton
+            Answer or placement button to color.
+        target : str
+            Color at the end of the fade.
+
+        Returns
+        -------
+        callable
+            Colors the button for a fade position from 0 to 1.
+
+        Examples
+        --------
+        >>> choice = QPushButton("C")
+        >>> paint = AnswerControls.fade(choice, target="#c62828")
+        >>> paint(1.0)
+        >>> "#c62828" in choice.styleSheet()
+        True
+        """
+        end, start = QColor(target), QColor("black")
+
+        def step(t: float) -> None:
+            """
+            Color the button for one position of the fade.
+
+            Parameters
+            ----------
+            t : float
+                Fade position, from 0 at black to 1 at the target.
+
+            Examples
+            --------
+            Halfway through, the button is half black and half the
+            target color.
+            """
+            button.setStyleSheet(feedback_style(blend(start, b=end, t=t)))
+
+        return step

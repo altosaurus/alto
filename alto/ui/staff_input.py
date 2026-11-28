@@ -885,7 +885,7 @@ class ScaleInput(StaffInput):
             self.wedge_colors[len(self.steps)] = PREVIEW
             self.wedges.append(self.pending_step)
         self.wedges += [""] * (self.slots - 1 - len(self.wedges))
-        self._fit_width()
+        self.fit_width()
         self.update()
 
     def show_note(
@@ -1896,7 +1896,7 @@ class ClefInput(StaffWidget):
         reference = (
             2 * engraving.CLEF_SIGNS[clef][1]
         )  # where that clef has its own reference line
-        self._draw_clef(
+        self.draw_clef(
             p,
             clef=clef,
             x=left,

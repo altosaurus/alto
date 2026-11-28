@@ -110,7 +110,7 @@ def test_late_feedback_on_an_empty_display() -> None:
     """Ignore feedback after the last question leaves the screen."""
     view = ExerciseView(NoteNames())
     music = view.question_view
-    music.beats_changed.emit()
+    music.update_placement()
     music.pick_accidental(1)
     music.move_caret(1)
     music.place_here()

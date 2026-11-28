@@ -18,7 +18,7 @@ Start in `MainWindow.open_exercise()`. On the first visit, the selected tile sup
 
 ### ExerciseView components
 
-Open **Exercise settings** with the sliders button. In the constructor, each assignment names a component of the screen. Follow its factory method to see how it is configured. The main area stacks the toolbar, question view, and answer controls on the left, and the settings pane opens on the right. The numbers below match the screenshot. Select a line number beside an excerpt to open that line on GitHub.
+Open **Exercise settings** with the sliders button. In the constructor, each assignment names a component of the screen. Follow the assignment, or its factory method, to see how the component is configured. The main area stacks the toolbar, question view, and answer controls on the left, and the settings pane opens on the right. The numbers below match the screenshot. Select a line number beside an excerpt to open that line on GitHub.
 
 {% include component-shot.html screen="exercise-view-anatomy" labels=true width=982 height=614 alt="Note Identification with the staff on the left, the exercise toolbar above it, letter-name answer controls below it, and the settings pane open on the right." %}
 
@@ -52,7 +52,7 @@ The page asks the settings panel factory for the controls that belong to the act
 
 {% include exercise-view-source.html name="panel" %}
 
-The settings pane factory places the panel inside a frame and hides it until the learner opens it. The toolbar toggle animates the frame’s width. Restyling the panel redraws the keyboard. Changing a question option, such as the clef, asks the controller for a new question.
+The view places the panel in a `SidePane`, which stays hidden until the learner opens it. The toolbar toggle animates the pane’s width. Restyling the panel redraws the question’s keyboard and circle. [SidePane]({{ '/api/alto.ui.side_pane/class-sidepane/' | relative_url }}) Changing a question option, such as the clef, asks the controller for a new question.
 
 {% include exercise-view-source.html name="signals" %}
 

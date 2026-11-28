@@ -172,6 +172,7 @@ select = [
     "ISC",  # a string split over lines inside a list must be wrapped in brackets, so a missing comma cannot hide in it
     "TID252",  # absolute imports only: `from alto.ui.store import store`, never `from .store import store`
     "PLC0415",  # every import is at the top of its file, not inside a function
+    "SLF001",  # no access to another object's protected members
     "PLR0917",  # only the first parameter may be positional; the rest are keyword-only, so calls name their arguments
     # Every module, class, function and method has a NumPy-style docstring that describes each parameter and the return value,
     # and every signature is annotated. Packages not yet documented are excluded below, and each line goes when its package is done.
@@ -221,6 +222,13 @@ max-doc-length = 72  # W505 covers docstrings and standalone comments.
 "tests/**" = [
     "PLR0917",  # pytest passes fixtures to test functions as plain parameters
     "D200",  # a test's summary and Parameters stay on separate lines, even when there are no parameters
+    "SLF001",  # tests reach into widgets to set up and check their state
+]
+"scripts/**" = [
+    "SLF001",  # development tools reach into the window to stage it
+]
+"benchmarks/**" = [
+    "SLF001",  # benchmarks time internal operations directly
 ]
 
 [tool.ruff.lint.flake8-bugbear]

@@ -255,7 +255,7 @@ class ExerciseController(QObject):
         view.question_view.location_selected.connect(self.locate)
         self.progress_changed.connect(view.show_progress)
         self.question_started.connect(view.show_question)
-        self.queue_changed.connect(view.show_counts)
+        self.queue_changed.connect(view.toolbar.show_counts)
         self.intervals_changed.connect(view.question_view.show_intervals)
         self.ratings_changed.connect(
             view.control_area.ratings.show_ratings,

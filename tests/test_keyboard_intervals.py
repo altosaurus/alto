@@ -661,7 +661,9 @@ def open_interval_options(
     )
     view.toolbar.gear.setChecked(True)
     # noinspection PyProtectedMember
-    view._pane_anim.setCurrentTime(view._pane_anim.duration())
+    view.settings_pane.animation.setCurrentTime(
+        view.settings_pane.animation.duration(),
+    )
     panel.stack.setCurrentIndex(2)
     app.processEvents()
     return view, panel

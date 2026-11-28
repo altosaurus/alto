@@ -440,7 +440,7 @@ def _lesson_note_bounds(
     """
     picture = QPicture()
     with QPainter(picture) as painter:
-        StaffWidget._note(
+        StaffWidget.draw_value(
             painter,
             x=0,
             y=0,
@@ -500,7 +500,7 @@ def _lesson_header_bounds(
     picture = QPicture()
     with QPainter(picture) as painter:
         if not hidden:
-            StaffWidget._draw_clef(
+            StaffWidget.draw_clef(
                 painter,
                 clef=clef,
                 x=0,
@@ -711,7 +711,7 @@ class StaffWidget(QWidget):
         ] = []
         # draw the staff without its clef, for a clef the learner places
         self.clef_hidden = False
-        self._fit_height("treble")
+        self.fit_height("treble")
         self.setSizePolicy(
             QSizePolicy.Policy.Expanding,
             QSizePolicy.Policy.Preferred,
@@ -797,13 +797,13 @@ class StaffWidget(QWidget):
             caption,
         )
         self.note_color = None
-        self._fit_height(clef)
-        self._fit_width()
+        self.fit_height(clef)
+        self.fit_width()
         if self.excerpt:
             self.setMaximumWidth(px(760))
         self.update()
 
-    def _fit_width(self) -> None:
+    def fit_width(self) -> None:
         """
         Size lesson paper to its music and caption, or limit exercise
         columns using `max_step`.
@@ -830,7 +830,7 @@ class StaffWidget(QWidget):
         if self.lesson_layout:
             # A note or chord and its opening signature must fit
             # together on one line.
-            smallest = self._lesson_systems(1)
+            smallest = self.lesson_systems(1)
             self.setMinimumWidth(
                 math.ceil(
                     max(
@@ -842,7 +842,7 @@ class StaffWidget(QWidget):
             )
             # A short example asks for just enough paper for the
             # unwrapped music and caption.
-            (full,) = self._lesson_systems(
+            (full,) = self.lesson_systems(
                 16777215,
             )  # Qt's maximum widget dimension
             self.setMaximumWidth(
@@ -940,7 +940,7 @@ class StaffWidget(QWidget):
             )
             previous, previous_clef = note, clef
 
-    def _lesson_systems(
+    def lesson_systems(
         self,
         width: int,
         *,
@@ -967,7 +967,7 @@ class StaffWidget(QWidget):
         --------
         >>> StaffWidget(
         ...     lesson_layout=True
-        ... )._lesson_systems(280)[0].right < 280
+        ... ).lesson_systems(280)[0].right < 280
         True
         """
         gap = self.GAP
@@ -1010,7 +1010,7 @@ class StaffWidget(QWidget):
             --------
             >>> StaffWidget(
             ...     lesson_layout=True
-            ... )._lesson_systems(300)[0].key_step > 0
+            ... ).lesson_systems(300)[0].key_step > 0
             True
             """
             if font:
@@ -1082,7 +1082,7 @@ class StaffWidget(QWidget):
         first_center = 0.0
         if align:
             for peer in self.lesson_peers:
-                other = peer._lesson_systems(width, align=False)[0]
+                other = peer.lesson_systems(width, align=False)[0]
                 first_center = max(first_center, other.centers[0])
         for index, (start, end, offsets) in enumerate(column_metrics):
             center = opening + _FIRST_NOTE_GAP * gap - start
@@ -1149,9 +1149,9 @@ class StaffWidget(QWidget):
             self.lesson_layout
             and event.size().width() != event.oldSize().width()
         ):
-            self._fit_height(self.clef)
+            self.fit_height(self.clef)
 
-    def _fit_height(self, clef: str) -> None:
+    def fit_height(self, clef: str) -> None:
         """
         Set the height the staff needs for its clef.
 
@@ -1165,13 +1165,13 @@ class StaffWidget(QWidget):
         >>> staff = StaffWidget()
         >>> staff.minimumHeight()
         330
-        >>> staff._fit_height("grand")
+        >>> staff.fit_height("grand")
         >>> staff.minimumHeight()
         450
         """
         if self.lesson_layout:
             self.setFixedHeight(
-                math.ceil(self._lesson_systems(self.width())[-1].height),
+                math.ceil(self.lesson_systems(self.width())[-1].height),
             )
             return
         grand_height = 2 * self.margin + 8 + GRAND_BETWEEN  # in gaps
@@ -1592,9 +1592,7 @@ class StaffWidget(QWidget):
             CORNER_RADIUS,
         )  # the rounded "paper" behind the music
         rows = (
-            self._lesson_systems(self.width())
-            if self.lesson_layout
-            else [None]
+            self.lesson_systems(self.width()) if self.lesson_layout else [None]
         )
         for row in rows:
             self._draw_system(
@@ -1670,7 +1668,7 @@ class StaffWidget(QWidget):
                     QPointF(right, bottom - i * gap),
                 )
             if not self.clef_hidden:
-                self._draw_clef(
+                self.draw_clef(
                     p,
                     clef=clef,
                     x=left + (gap if row else 8),
@@ -1698,7 +1696,7 @@ class StaffWidget(QWidget):
         if grand:
             ys = list(staves.values())
             p.drawLine(QPointF(left, ys[0] - 4 * gap), QPointF(left, ys[1]))
-            self._brace(
+            self.draw_brace(
                 p,
                 x=left - 3,
                 y0=ys[0] - 4 * gap,
@@ -1856,7 +1854,7 @@ class StaffWidget(QWidget):
                             flag_color=ink(("Flag", ci)) or ncol,
                         )
                     else:
-                        self._note(
+                        self.draw_value(
                             p,
                             x=x,
                             y=y,
@@ -2058,7 +2056,7 @@ class StaffWidget(QWidget):
                 p.drawRect(rect)
                 p.drawText(rect, Qt.AlignmentFlag.AlignCenter, "A")
             else:
-                self._note(
+                self.draw_value(
                     p,
                     x=left + gap / 2,
                     y=y,
@@ -2218,7 +2216,7 @@ class StaffWidget(QWidget):
         p.drawText(label, Qt.AlignmentFlag.AlignCenter, text)
 
     @staticmethod
-    def _note(
+    def draw_value(
         p: QPainter,
         *,
         x: float,
@@ -2262,7 +2260,7 @@ class StaffWidget(QWidget):
         ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
-        >>> StaffWidget._note(
+        >>> StaffWidget.draw_value(
         ...     painter,
         ...     x=50,
         ...     y=50,
@@ -2318,7 +2316,7 @@ class StaffWidget(QWidget):
             )
 
     @staticmethod
-    def _draw_clef(
+    def draw_clef(
         p: QPainter,
         *,
         clef: str,
@@ -2361,7 +2359,7 @@ class StaffWidget(QWidget):
         ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
-        >>> StaffWidget._draw_clef(
+        >>> StaffWidget.draw_clef(
         ...     painter,
         ...     clef="treble",
         ...     x=10,
@@ -2418,7 +2416,7 @@ class StaffWidget(QWidget):
         p.restore()
 
     @staticmethod
-    def _brace(
+    def draw_brace(
         p: QPainter,
         *,
         x: float,
@@ -2458,7 +2456,7 @@ class StaffWidget(QWidget):
         ... )
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
-        >>> StaffWidget._brace(
+        >>> StaffWidget.draw_brace(
         ...     painter,
         ...     x=40,
         ...     y0=10,
@@ -2668,8 +2666,8 @@ def _repaint_staffs() -> None:
     for w in QApplication.allWidgets():
         if isinstance(w, StaffWidget):
             if w.lesson_layout:
-                w._fit_width()
-                w._fit_height(w.clef)
+                w.fit_width()
+                w.fit_height(w.clef)
             w.update()
 
 

@@ -36,6 +36,7 @@ from PySide6.QtCore import (
     QPropertyAnimation,
     QSize,
     Qt,
+    QTimer,
     QVariantAnimation,
     Signal,
 )
@@ -66,7 +67,10 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings
-from alto.exercises.base import ButtonSettings
+from alto.exercises.base import (
+    ButtonSettings,
+    Question,
+)
 from alto.learning.calendar import CALENDAR_SCHEDULERS
 from alto.settings import (
     NOTE_VALUES,
@@ -1605,6 +1609,77 @@ class ExerciseSettingsPanel(QWidget):
             self._next_question_mode = mode
             self.next_question_mode_changed.emit(mode)
 
+    def _current_scroll(
+        self,
+    ) -> tuple[QStackedWidget | None, QScrollArea | None]:
+        """
+        Find the panel's page stack and the scroll area of its page.
+
+        Returns
+        -------
+        tuple of QStackedWidget or None and QScrollArea or None
+            The stack, when the panel has pages, and the scroll area on
+            the page showing, when it scrolls.
+
+        Examples
+        --------
+        >>> ExerciseSettingsPanel()._current_scroll()
+        (None, None)
+        """
+        stack = self.findChild(QStackedWidget)
+        page = stack.currentWidget() if stack is not None else self
+        scroll = page.findChild(QScrollArea) if page is not None else None
+        return stack, scroll
+
+    def page_state(self) -> tuple[int, int]:
+        """
+        Read which page of the settings is showing, and how far down.
+
+        Returns
+        -------
+        tuple of int
+            Page index and vertical scroll position.
+
+        Examples
+        --------
+        >>> ExerciseSettingsPanel().page_state()
+        (0, 0)
+        """
+        stack, scroll = self._current_scroll()
+        return (
+            stack.currentIndex() if stack is not None else 0,
+            scroll.verticalScrollBar().value() if scroll is not None else 0,
+        )
+
+    def restore_page_state(self, *, index: int, position: int) -> None:
+        """
+        Return to a page of the settings and its scroll position.
+
+        The scroll position is applied once the page has its layout.
+
+        Parameters
+        ----------
+        index : int
+            Page index, as read by `page_state`. An index outside the
+            stack is ignored.
+        position : int
+            Vertical scroll position on that page.
+
+        Examples
+        --------
+        >>> panel = ExerciseSettingsPanel()
+        >>> panel.restore_page_state(index=3, position=40)
+        >>> panel.page_state()
+        (0, 0)
+        """
+        stack = self.findChild(QStackedWidget)
+        if stack is not None and 0 <= index < stack.count():
+            stack.setCurrentIndex(index)
+        _, scroll = self._current_scroll()
+        if scroll is not None:
+            bar = scroll.verticalScrollBar()
+            QTimer.singleShot(0, scroll, lambda: bar.setValue(position))
+
     def _build_menu(self) -> tuple[QWidget, QVBoxLayout]:
         """
         Set up the sliding stack and create its Settings menu.
@@ -1664,6 +1739,40 @@ class ExerciseSettingsPanel(QWidget):
             self.limits_row.value.setText(f"{new} new · {reviews} reviews")
         elif self.stack.currentIndex() == self.limits_page:
             self.stack.setCurrentIndex(0)
+
+    def show_question(
+        self,
+        q: Question,
+        *,
+        empty_sample: Question | None,
+        scheduler_mode: str,
+        self_grading: bool,
+    ) -> None:
+        """
+        Fit the settings to the question being asked.
+
+        Parameters
+        ----------
+        q : Question
+            Question being asked.
+        empty_sample : Question or None
+            Example that lays out an empty review queue.
+        scheduler_mode : str
+            Scheduler selected for this practice session.
+        self_grading : bool
+            Whether the learner chooses a passing grade.
+
+        Examples
+        --------
+        The choice buttons setting is offered only for a question that
+        is answered with buttons.
+        """
+        self.refresh_limits(scheduler_mode, self_grading=self_grading)
+        if self.choice_buttons_row is not None:
+            self.choice_buttons_row.setVisible(
+                bool(q.choices)
+                or (empty_sample is not None and bool(empty_sample.choices)),
+            )
 
     def _go(self, index: int) -> None:
         """

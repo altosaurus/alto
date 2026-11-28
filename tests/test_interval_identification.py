@@ -205,7 +205,9 @@ def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
         and view.toolbar.gear is not None
     )
     view.toolbar.gear.click()
-    view._pane_anim.setCurrentTime(view._pane_anim.duration())
+    view.settings_pane.animation.setCurrentTime(
+        view.settings_pane.animation.duration(),
+    )
     row = panel.inversions_row
     assert not row.isOn()
     for width, height in ((900, 480), (1300, 900)):
@@ -395,7 +397,9 @@ def test_display_choices_stay_together_as_the_exercise_grows(
         and view.toolbar.gear is not None
     )
     view.toolbar.gear.click()
-    view._pane_anim.setCurrentTime(view._pane_anim.duration())
+    view.settings_pane.animation.setCurrentTime(
+        view.settings_pane.animation.duration(),
+    )
     panel.display_row.click()
     assert panel.stack._slide is not None
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
@@ -513,7 +517,9 @@ def test_accidental_picker_persistence_and_impossible_interval(
     view.setStyleSheet(app_style(view.palette()))
     view.show()
     view.toolbar.gear.click()
-    view._pane_anim.setCurrentTime(view._pane_anim.duration())
+    view.settings_pane.animation.setCurrentTime(
+        view.settings_pane.animation.duration(),
+    )
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel)
     panel.accidentals_row.click()

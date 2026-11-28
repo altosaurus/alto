@@ -415,13 +415,17 @@ def test_the_settings_pane_slides_open_and_shut(app: QApplication) -> None:
         and view.settings_pane.maximumWidth() == 0
     )
     view.toolbar.gear.setChecked(True)
-    view._pane_anim.setCurrentTime(view._pane_anim.duration())
+    view.settings_pane.animation.setCurrentTime(
+        view.settings_pane.animation.duration(),
+    )
     assert (
         view.settings_pane.isVisible()
         and view.settings_pane.maximumWidth() == view.settings_panel.PANE_WIDTH
     )
     view.toolbar.gear.setChecked(False)
-    view._pane_anim.setCurrentTime(view._pane_anim.duration())
+    view.settings_pane.animation.setCurrentTime(
+        view.settings_pane.animation.duration(),
+    )
     assert (
         view.settings_pane.maximumWidth() == 0
         and not view.settings_pane.isVisible()
@@ -474,18 +478,15 @@ def test_the_reference_pane_slides_open_beside_the_settings_and_shuts_them(
     assert (
         view.toolbar.book_btn is not None and view.reference_pane is not None
     )
-    settings_slide = view._pane_anim
-    reference_slide = view._reference_anim
+    settings_slide = view.settings_pane.animation
+    reference_slide = view.reference_pane.animation
     view.toolbar.gear.setChecked(True)
     settings_slide.setCurrentTime(settings_slide.duration())
     assert view.settings_pane.maximumWidth() == view.settings_panel.PANE_WIDTH
     view.toolbar.book_btn.setChecked(True)
     reference_slide.setCurrentTime(reference_slide.duration())
     settings_slide.setCurrentTime(settings_slide.duration())
-    assert (
-        view.reference_pane.maximumWidth()
-        == view.reference_pane.REFERENCE_WIDTH
-    )
+    assert view.reference_pane.maximumWidth() == view.reference_pane.open_width
     assert (
         view.reference_pane.isVisible() and not view.toolbar.gear.isChecked()
     )
@@ -1371,7 +1372,7 @@ def test_rhythm_settings_apply_symbols_and_grouped_notes(
 def test_keyboard_feedback_colors_the_key_during_the_flash() -> None:
     """A keyboard question uses the staff feedback color on its key."""
     view = view_of(KeyboardNotes())
-    view._flash(None, target="#c62828", staff=True)
+    view._request_fade(view.question_view.music_fade(target="#c62828"))
     animation = view.controller.animations.tracked[-1]
     animation.setCurrentTime(animation.duration())
     assert view.question_view.keyboard.highlight_color.name() == "#c62828"

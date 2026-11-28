@@ -27,31 +27,23 @@ import sys
 from typing import TYPE_CHECKING
 
 from PySide6.QtCore import (
-    QEasingCurve,
     QEvent,
     QMetaMethod,
     QObject,
-    QPropertyAnimation,
     Qt,
-    QTimer,
     Signal,
 )
 from PySide6.QtGui import (
     QColor,
     QHideEvent,
     QKeySequence,
-    QPalette,
     QShortcut,
     QShowEvent,
     QWheelEvent,
 )
 from PySide6.QtWidgets import (
-    QFrame,
     QHBoxLayout,
-    QLayout,
     QPushButton,
-    QScrollArea,
-    QStackedWidget,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -69,10 +61,8 @@ from alto.exercises.library import (
 )
 from alto.learning.calendar import DEFAULT_SCHEDULER
 from alto.learning.practice_session import PracticeSession
-from alto.ui.circle import FifthsCircle
 from alto.ui.colors import (
     CORRECT_ANSWER_COLOR,
-    blend,
 )
 from alto.ui.control_area import ControlArea
 from alto.ui.exercise_toolbar import ExerciseToolbar
@@ -81,21 +71,20 @@ from alto.ui.key_fork import (
 )
 from alto.ui.question_view import QuestionView
 from alto.ui.reference import (
-    ReferencePane,
+    REFERENCE_WIDTH,
     reference_panel_for,
 )
 from alto.ui.settings_panel import (
     ExerciseSettingsPanel,
     settings_panel_for,
 )
+from alto.ui.side_pane import SidePane
 from alto.ui.staff import (
     StaffWidget,
 )
 from alto.ui.staff_input import (
     ClefInput,
-    ScaleInput,
 )
-from alto.ui.zoom import px
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -107,14 +96,17 @@ class ExerciseView(QWidget):
     """
     The screen for practicing one exercise.
 
-    Attributes
+    Properties
     ----------
     session : PracticeSession
-        Last progress snapshot rendered by the view.
+        Read-only progress snapshot for the displayed question.
+
+    Attributes
+    ----------
     control_area : ControlArea
         Holds answer choices, placement actions, ratings, and Next.
-    settings_pane : QFrame
-        Collapsible frame that holds the exercise settings panel.
+    settings_pane : SidePane
+        Collapsible pane that holds the exercise settings panel.
     settings_panel : ExerciseSettingsPanel
         The exercise's settings, including how to advance after a
         correct answer.
@@ -124,7 +116,7 @@ class ExerciseView(QWidget):
         Shows progress and provides the exercise controls.
     reference_panel : ReferencePanel or None
         Exercise reference content, including links to lessons.
-    reference_pane : ReferencePane or None
+    reference_pane : SidePane or None
         The pane that holds the reference.
 
     Examples
@@ -171,11 +163,22 @@ class ExerciseView(QWidget):
 
         self.reference_panel = reference_panel_for(exercise)
         self.settings_panel = settings_panel or settings_panel_for(exercise)
-        self.toolbar = self._create_toolbar(exercise)
+        self.toolbar = ExerciseToolbar(
+            instructions=exercise.instructions,
+            has_reference=self.reference_panel is not None,
+            has_midi=sys.platform.startswith("linux")
+            and isinstance(
+                exercise,
+                (
+                    NoteNames,
+                    IntervalConstruction,
+                    ScaleConstruction,
+                ),
+            ),
+        )
         self.question_view = self._create_question_view(exercise)
         self.control_area = self._create_control_area(exercise)
-        self.settings_pane = self._create_settings_pane()
-        self.reference_pane = self._create_reference_pane()
+        self.settings_pane, self.reference_pane = self._create_side_panes()
 
         outer = QHBoxLayout(self)
         outer.addWidget(self._create_main_area(), 1)
@@ -201,34 +204,6 @@ class ExerciseView(QWidget):
         """
         return self.question_view.progress
 
-    def _create_toolbar(self, exercise: Exercise) -> ExerciseToolbar:
-        """
-        Build the toolbar for the active exercise.
-
-        Parameters
-        ----------
-        exercise : Exercise
-            Exercise whose controls are being built.
-
-        Returns
-        -------
-        ExerciseToolbar
-            Toolbar with the tools available for this exercise.
-
-        Examples
-        --------
-        Exercises with a reference show a book button.
-        """
-        return ExerciseToolbar(
-            exercise.instructions,
-            has_reference=self.reference_panel is not None,
-            has_midi=sys.platform.startswith("linux")
-            and isinstance(
-                exercise,
-                (NoteNames, IntervalConstruction, ScaleConstruction),
-            ),
-        )
-
     def _create_question_view(self, exercise: Exercise) -> QuestionView:
         """
         Build the question view and connect its signals.
@@ -252,7 +227,7 @@ class ExerciseView(QWidget):
             center_controls=isinstance(exercise, OrderOfKeys),
         )
         view.widget_created.connect(self._connect_music_widget)
-        view.beats_changed.connect(self._show_placement_rows)
+        view.placement_changed.connect(self._show_placement_actions)
         return view
 
     def _create_control_area(self, exercise: Exercise) -> ControlArea:
@@ -309,109 +284,95 @@ class ExerciseView(QWidget):
         lay.addStretch()
         return main
 
-    def _create_settings_pane(self) -> QFrame:
+    def _create_side_panes(self) -> tuple[SidePane, SidePane | None]:
         """
-        Build the collapsible pane for exercise settings.
+        Build the settings pane and, when there is one, the reference
+        pane, each opened by its toolbar button.
+
+        The two panes share the right-hand side, so opening one closes
+        the other.
 
         Returns
         -------
-        QFrame
-            Settings frame connected to the toolbar toggle.
+        tuple of SidePane and SidePane or None
+            The settings pane, and the reference pane for exercises
+            with a reference.
 
         Examples
         --------
-        The sliders button opens the pane.
+        >>> import random
+        >>> from alto.exercises.library import CircleOfFifths
+        >>> from alto.ui.exercise_page import ExercisePage
+        >>> view = ExercisePage(CircleOfFifths(), rng=random.Random(1))
+        >>> view.toolbar.gear.setChecked(True)
+        >>> view.toolbar.book_btn.setChecked(True)
+        >>> view.toolbar.gear.isChecked()
+        False
         """
-        pane = QFrame()
-        pane.setObjectName("settingsPane")
-        pane.setFrameShape(QFrame.Shape.StyledPanel)
-        pane.setMinimumWidth(0)
-        pane.setMaximumWidth(0)
-        pane_lay = QVBoxLayout(pane)
-        pane_lay.setSizeConstraint(
-            QLayout.SizeConstraint.SetNoConstraint,
-        )  # let the pane shrink to zero while animating
-        settings_header = QHBoxLayout()
-        settings_header.addStretch()
-        self.settings_collapse = QToolButton()
-        self.settings_collapse.setText("−")
-        self.settings_collapse.setAutoRaise(True)
-        self.settings_collapse.setToolTip("Collapse exercise settings")
-        self.settings_collapse.setAccessibleName(
-            "Collapse exercise settings",
-        )
-        self.settings_collapse.clicked.connect(
-            lambda: self.toolbar.gear.setChecked(False),
-        )
-        settings_header.addWidget(self.settings_collapse)
-        pane_lay.addLayout(settings_header)
-        self.settings_panel.setFixedWidth(
-            px(self.settings_panel.PANE_WIDTH - 2 * 9),
-        )
-        pane_lay.addWidget(
+        gear = self.toolbar.gear
+        settings = SidePane(
             self.settings_panel,
-            1,
-        )  # fill the pane so long pages (Range) can scroll
-        pane.hide()
-        self._pane_anim = QPropertyAnimation(
-            pane,
-            b"maximumWidth",
-            self,
+            open_width=self.settings_panel.PANE_WIDTH,
+            toggle=gear,
+            label="Collapse exercise settings",
         )
-        self._pane_anim.setDuration(220)
-        self._pane_anim.setEasingCurve(QEasingCurve.Type.OutCubic)
-        self._pane_anim.finished.connect(self._pane_settled)
-        self.toolbar.gear.toggled.connect(self._toggle_pane)
-        self.settings_panel.restyled.connect(
-            self.question_view.redraw_keyboards,
+        self.settings_panel.restyled.connect(self.question_view.restyle)
+        book = self.toolbar.book_btn
+        if self.reference_panel is None or book is None:
+            return settings, None
+        reference = SidePane(
+            self.reference_panel,
+            open_width=REFERENCE_WIDTH,
+            toggle=book,
+            label="Collapse reference",
         )
-        return pane
+        gear.toggled.connect(self._closer(book))
+        book.toggled.connect(self._closer(gear))
+        return settings, reference
 
-    def _create_reference_pane(self) -> ReferencePane | None:
+    @staticmethod
+    def _closer(other: QToolButton) -> Callable[[bool], None]:
         """
-        Build the collapsible reference pane when one is available.
+        Make a slot that unchecks another pane's button when a pane
+        opens.
+
+        Parameters
+        ----------
+        other : QToolButton
+            Toolbar button of the pane to close.
 
         Returns
         -------
-        ReferencePane or None
-            Reference frame for exercises with a reference panel.
+        callable
+            Unchecks `other` when called with True.
 
         Examples
         --------
-        The book button opens the pane.
+        >>> button = QToolButton()
+        >>> button.setCheckable(True)
+        >>> button.setChecked(True)
+        >>> ExerciseView._closer(button)(True)
+        >>> button.isChecked()
+        False
         """
-        reference = self.reference_panel
-        book = self.toolbar.book_btn
-        if reference is None or book is None:
-            return None
-        book.toggled.connect(self._toggle_reference)
-        ref_pane = ReferencePane()
-        book_lay = QVBoxLayout(ref_pane)
-        book_lay.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
-        reference_header = QHBoxLayout()
-        reference_header.addStretch()
-        self.reference_collapse = QToolButton()
-        self.reference_collapse.setText("−")
-        self.reference_collapse.setAutoRaise(True)
-        self.reference_collapse.setToolTip("Collapse reference")
-        self.reference_collapse.setAccessibleName("Collapse reference")
-        self.reference_collapse.clicked.connect(
-            lambda: book.setChecked(False),
-        )
-        reference_header.addWidget(self.reference_collapse)
-        book_lay.addLayout(reference_header)
-        reference.setFixedWidth(px(ref_pane.REFERENCE_WIDTH - 2 * 9))
-        book_lay.addWidget(reference, 1)
-        ref_pane.hide()
-        self._reference_anim = QPropertyAnimation(
-            ref_pane,
-            b"maximumWidth",
-            self,
-        )
-        self._reference_anim.setDuration(220)
-        self._reference_anim.setEasingCurve(QEasingCurve.Type.OutCubic)
-        self._reference_anim.finished.connect(self._reference_settled)
-        return ref_pane
+
+        def close(opened: bool) -> None:
+            """
+            Close the other pane if this one opened.
+
+            Parameters
+            ----------
+            opened : bool
+                Whether this pane's button was checked.
+
+            Examples
+            --------
+            Closing a pane leaves the other one as it was.
+            """
+            if opened:
+                other.setChecked(False)
+
+        return close
 
     def _bind_placement_shortcuts(self) -> None:
         """
@@ -465,9 +426,11 @@ class ExerciseView(QWidget):
         >>> from alto.ui.exercise_page import ExercisePage
         >>> view = ExercisePage(NoteNames())
         >>> view.show()
+        >>> reports = []
+        >>> connection = view.visibility_changed.connect(reports.append)
         >>> view.hide()
-        >>> view.controller._advance.isActive()
-        False
+        >>> reports
+        [False]
         """
         self.visibility_changed.emit(False)
         super().hideEvent(event)
@@ -486,11 +449,13 @@ class ExerciseView(QWidget):
         >>> from alto.exercises.library import NoteNames
         >>> from alto.ui.exercise_page import ExercisePage
         >>> view = ExercisePage(NoteNames())
+        >>> reports = []
+        >>> connection = view.visibility_changed.connect(reports.append)
         >>> view.show()
         >>> view.hide()
         >>> view.show()
-        >>> view.controller._hidden_at is None
-        True
+        >>> reports
+        [True, False, True]
         """
         self.visibility_changed.emit(True)
         super().showEvent(event)
@@ -542,16 +507,16 @@ class ExerciseView(QWidget):
         binding.activated.connect(action)
         return binding
 
-    def settings_state(self) -> tuple[bool, int, int] | None:
+    def settings_state(self) -> tuple[bool, int, int]:
         """
         Remember the exercise settings pane, selected page, and scroll
         position before a theme rebuild.
 
         Returns
         -------
-        tuple of (bool, int, int) or None
+        tuple of (bool, int, int)
             Whether the pane is open, its page index, and its vertical
-            scroll position; None without settings.
+            scroll position.
 
         Examples
         --------
@@ -563,17 +528,8 @@ class ExerciseView(QWidget):
         ... ).settings_state()
         (False, 0, 0)
         """
-        panel = self.settings_panel
-        if panel is None or self.toolbar.gear is None:
-            return None
-        stack = panel.findChild(QStackedWidget)
-        page = stack.currentWidget() if stack is not None else panel
-        scroll = page.findChild(QScrollArea) if page is not None else None
-        return (
-            self.toolbar.gear.isChecked(),
-            stack.currentIndex() if stack is not None else 0,
-            (scroll.verticalScrollBar().value() if scroll is not None else 0),
-        )
+        index, position = self.settings_panel.page_state()
+        return self.toolbar.gear.isChecked(), index, position
 
     def restore_settings_state(self, state: tuple[bool, int, int]) -> None:
         """
@@ -598,142 +554,10 @@ class ExerciseView(QWidget):
         >>> view.settings_state()
         (True, 0, 0)
         """
-        panel = self.settings_panel
-        if panel is None or self.toolbar.gear is None:
-            return
         open_, index, position = state
-        stack = panel.findChild(QStackedWidget)
-        if stack is not None and 0 <= index < stack.count():
-            stack.setCurrentIndex(index)
+        self.settings_panel.restore_page_state(index=index, position=position)
         self.toolbar.gear.setChecked(open_)
-        self._pane_anim.stop()
-        self.settings_pane.setMaximumWidth(
-            px(panel.PANE_WIDTH) if open_ else 0,
-        )
-        self.settings_pane.setVisible(open_)
-        page = stack.currentWidget() if stack is not None else panel
-        scroll = page.findChild(QScrollArea) if page is not None else None
-        if scroll is not None:
-            bar = scroll.verticalScrollBar()
-            QTimer.singleShot(0, scroll, lambda: bar.setValue(position))
-
-    def _toggle_pane(self, open_: bool) -> None:
-        """
-        Slide the settings pane open or closed.
-
-        Parameters
-        ----------
-        open_ : bool
-            True to open it, False to close it.
-
-        Examples
-        --------
-        >>> import random
-        >>> from alto.exercises.library import NoteNames
-        >>> from alto.ui.exercise_page import ExercisePage
-        >>> view = ExercisePage(
-        ...     NoteNames(), rng=random.Random(1)
-        ... )
-        >>> view._toggle_pane(True)
-        >>> view._pane_anim.endValue()
-        290
-        """
-        if open_ and self.toolbar.book_btn is not None:
-            self.toolbar.book_btn.setChecked(
-                False,
-            )  # the two panes share the right-hand side
-        self._pane_anim.stop()
-        self.settings_pane.show()
-        self._pane_anim.setStartValue(self.settings_pane.maximumWidth())
-        self._pane_anim.setEndValue(
-            px(self.settings_panel.PANE_WIDTH) if open_ else 0,
-        )
-        self._pane_anim.start()
-
-    def _pane_settled(self) -> None:
-        """
-        Hide the pane once it has finished sliding shut.
-
-        Examples
-        --------
-        >>> import random
-        >>> from alto.exercises.library import NoteNames
-        >>> from alto.ui.exercise_page import ExercisePage
-        >>> view = ExercisePage(
-        ...     NoteNames(), rng=random.Random(1)
-        ... )
-        >>> view._pane_settled()  # the pane starts closed
-        >>> view.settings_pane.isVisible()
-        False
-        """
-        if self.settings_pane.maximumWidth() == 0:
-            self.settings_pane.hide()
-
-    def _toggle_reference(self, open_: bool) -> None:
-        """
-        Slide the reference pane open or closed.
-
-        Opening it closes the settings pane, as they share the
-        right-hand side.
-
-        Parameters
-        ----------
-        open_ : bool
-            True to open it, False to close it.
-
-        Examples
-        --------
-        >>> import random
-        >>> from alto.exercises.library import (
-        ...     CircleOfFifths,
-        ... )
-        >>> from alto.ui.exercise_page import ExercisePage
-        >>> view = ExercisePage(
-        ...     CircleOfFifths(), rng=random.Random(1)
-        ... )
-        >>> view._toggle_reference(True)
-        >>> view._reference_anim.endValue()
-        400
-        """
-        if open_ and self.settings_panel:
-            self.toolbar.gear.setChecked(False)
-        pane = self.reference_pane
-        if pane is None:
-            return
-        self._reference_anim.stop()
-        pane.show()
-        self._reference_anim.setStartValue(pane.maximumWidth())
-        self._reference_anim.setEndValue(
-            px(pane.REFERENCE_WIDTH) if open_ else 0,
-        )
-        self._reference_anim.start()
-
-    def _reference_settled(self) -> None:
-        """
-        Hide the reference pane once it has finished sliding shut.
-
-        Examples
-        --------
-        >>> import random
-        >>> from alto.exercises.library import (
-        ...     CircleOfFifths,
-        ... )
-        >>> from alto.ui.exercise_page import ExercisePage
-        >>> view = ExercisePage(
-        ...     CircleOfFifths(), rng=random.Random(1)
-        ... )
-        >>> view._reference_settled()  # the pane starts closed
-        >>> (
-        ...     view.reference_pane is not None
-        ...     and view.reference_pane.isVisible()
-        ... )
-        False
-        """
-        if (
-            self.reference_pane is not None
-            and self.reference_pane.maximumWidth() == 0
-        ):
-            self.reference_pane.hide()
+        self.settings_pane.set_open(open_)
 
     def show_question(  # noqa: PLR0917 (Qt signal arguments)
         self,
@@ -761,24 +585,18 @@ class ExerciseView(QWidget):
         A scale construction question mounts a scale editor.
         """
         self.replacing_question.emit()
-        self.settings_panel.refresh_limits(
-            scheduler_mode,
+        self.settings_panel.show_question(
+            q,
+            empty_sample=empty_sample,
+            scheduler_mode=scheduler_mode,
             self_grading=self_grading,
         )
-        if (
-            self.settings_panel is not None
-            and self.settings_panel.choice_buttons_row is not None
-        ):
-            self.settings_panel.choice_buttons_row.setVisible(
-                bool(q.choices)
-                or (empty_sample is not None and bool(empty_sample.choices)),
-            )
         named_meter = self.question_view.show_question(
             q,
             answer_width=self.control_area.answers.maximumWidth(),
             empty_queue=empty_sample is not None,
         )
-        self._show_placement_rows()
+        self.question_view.update_placement()
         self.control_area.show_question(
             q,
             named_meter=named_meter,
@@ -791,7 +609,7 @@ class ExerciseView(QWidget):
 
     def _connect_music_widget(self, widget: QWidget) -> None:
         """
-        Connect a newly mounted music widget to the exercise controls.
+        Let a newly mounted staff pass the mouse wheel to the editor.
 
         Parameters
         ----------
@@ -800,45 +618,10 @@ class ExerciseView(QWidget):
 
         Examples
         --------
-        Placing a note on the input staff submits it to this view.
+        Scrolling over the written staff turns the key fork.
         """
-        if isinstance(widget, ScaleInput):
-            widget.notes_changed.connect(self._scale_changed)
-        elif isinstance(widget, ClefInput):
-            widget.changed.connect(self._show_placement_rows)
-        elif isinstance(widget, FifthsCircle):
-            self.settings_panel.restyled.connect(widget.update)
-        elif isinstance(widget, StaffWidget):
+        if isinstance(widget, StaffWidget):
             widget.installEventFilter(self)
-
-    @staticmethod
-    def _style(color: QColor) -> str:
-        """
-        Return the style sheet that colors an answer button.
-
-        Parameters
-        ----------
-        color : QColor
-            The background color, with white text on it.
-
-        Returns
-        -------
-        str
-            Qt style sheet text.
-
-        Examples
-        --------
-        >>> ExerciseView._style(
-        ...     QColor(CORRECT_ANSWER_COLOR)
-        ... )
-        'QPushButton, QPushButton:disabled { background: #2e7d32; color:
-        white; }'
-        """
-        return (
-            "QPushButton, QPushButton:disabled { background: "
-            f"{color.name()}"
-            "; color: white; }"
-        )
 
     def _request_fade(self, step: Callable[[float], None]) -> None:
         """
@@ -858,249 +641,44 @@ class ExerciseView(QWidget):
         else:
             step(1.0)
 
-    def _flash(
-        self,
-        button: QPushButton | None,
-        *,
-        target: str = CORRECT_ANSWER_COLOR,
-        staff: bool = False,
-    ) -> None:
+    def _show_placement_actions(self) -> None:
         """
-        Fade a button (and optionally the notes) from the staff's ink to
-        a color over a short time.
+        Let Place and Answer work when they can, and switch the editor's
+        keys on for the questions that use them.
 
-        Parameters
-        ----------
-        button : QPushButton or None
-            The button to color, if the learner used one.
-        target : str
-            The feedback color. Defaults to the correct-answer green.
-            Keyword-only.
-        staff : bool, default False
-            Also color the notes on the staff, or the highlighted key.
-            Keyword-only.
+        Place does the next thing, and Answer takes over from it once
+        everything is placed. For a key signature on the fork only
+        Answer shows.
 
         Examples
         --------
         >>> import random
-        >>> from alto.exercises.library import NoteNames
+        >>> from alto.exercises.library import KeySignatureConstruction
         >>> from alto.ui.exercise_page import ExercisePage
         >>> view = ExercisePage(
-        ...     NoteNames(), rng=random.Random(1)
-        ... )
-        >>> view._flash(view.control_area.answers.buttons[0])
-        >>> len(view.controller.animations.tracked)
-        1
-        """
-        end, start = QColor(target), QColor("black")
-
-        def step(t: float) -> None:
-            """
-            Set the colors for one moment of the fade.
-
-            Parameters
-            ----------
-            t : float
-                How far through the fade: 0 at the start, 1 at the end.
-
-            Examples
-            --------
-            >>> step(0.5)  # doctest: +SKIP
-            """
-            c = blend(start, b=end, t=t)
-            if button is not None:
-                button.setStyleSheet(self._style(c))
-            if staff:
-                if self.question_view.staff is not None:
-                    self.question_view.staff.set_note_color(
-                        c if t > 0 else None,
-                    )
-                if self.question_view.keyboard is not None:
-                    self.question_view.keyboard.set_highlight_color(
-                        c
-                        if t > 0
-                        else self.palette().color(
-                            QPalette.ColorRole.Highlight,
-                        ),
-                    )
-
-        self._request_fade(step)
-
-    def _flash_note(self, target: str = CORRECT_ANSWER_COLOR) -> None:
-        """
-        Fade the placed note from the staff's ink to a color.
-
-        Parameters
-        ----------
-        target : str
-            The feedback color. Defaults to the correct-answer green.
-
-        Examples
-        --------
-        >>> import random
-        >>> from alto.exercises.library import (
-        ...     NoteConstruction,
-        ... )
-        >>> from alto.ui.exercise_page import ExercisePage
-        >>> view = ExercisePage(
-        ...     NoteConstruction(), rng=random.Random(2)
-        ... )
-        >>> view._flash_note("#c62828")
-        >>> len(view.controller.animations.tracked)
-        1
-        """
-        end, start = QColor(target), QColor("black")
-        self._request_fade(
-            lambda t: self.question_view.note_input.set_note_color(
-                blend(start, b=end, t=t),
-            ),
-        )
-
-    def _scale_changed(self) -> None:
-        """
-        Get ready for what comes next on the scale staff: the sign is
-        used up, and the right buttons are shown.
-
-        Examples
-        --------
-        >>> import random
-        >>> from alto.exercises.library import (
-        ...     ScaleConstruction,
-        ... )
-        >>> from alto.ui.exercise_page import ExercisePage
-        >>> view = ExercisePage(
-        ...     ScaleConstruction(),
+        ...     KeySignatureConstruction(),
         ...     rng=random.Random(2),
         ... )
-        >>> view.question_view.set_accidental(1)
-        >>> view._scale_changed()
-        >>> actions = view.control_area.answers.placement
         >>> (
-        ...     view.question_view.scale_input.accidental is None,
-        ...     actions.answer_button.isEnabled(),
+        ...     all(bound.isEnabled() for bound in view._arrow_keys),
+        ...     any(bound.isEnabled() for bound in view._letter_keys),
         ... )
         (True, False)
         """
-        q = self.question_view.interactive_question
-        if q and q.place_signature:
-            self.question_view.scale_input.set_note_color(None)
-        elif self.question_view.scale_input.accidental is not None:
-            self.question_view.set_accidental(None)
-        self._show_placement_rows()
-
-    def _show_placement_rows(self) -> None:
-        """
-        Show the buttons for what the question is waiting for, and let
-        Place and Answer work when they can.
-
-        For a note or a scale on the staff the pitch and sign buttons
-        show while notes are being placed, the whole and half
-        step buttons while steps are, and neither once everything is
-        down. Place does the next thing, and Answer takes over
-        from it once everything is placed. For a key signature on the
-        fork only Answer shows.
-
-        Examples
-        --------
-        >>> import random
-        >>> from alto.exercises.library import (
-        ...     ScaleConstruction,
-        ... )
-        >>> from alto.ui.exercise_page import ExercisePage
-        >>> view = ExercisePage(
-        ...     ScaleConstruction(),
-        ...     rng=random.Random(2),
-        ... )
-        >>> view._show_placement_rows()
-        >>> actions = view.control_area.answers.placement
-        >>> (
-        ...     view.question_view.step_row.isHidden(),
-        ...     actions.answer_button.isEnabled(),
-        ...     actions.place_button.isEnabled(),
-        ... )
-        (True, False, True)
-        """
-        q = self.question_view.displayed_question
+        music = self.question_view
+        q = music.displayed_question
         if q is None:
             return
-        note, sequence, fork = (
-            q.construct is not None,
-            q.places_sequence,
-            q.build_key,
-        )
-        clef = bool(q.place_clef)
-        beat_editor = self.question_view.active_beat_editor
-        placing_notes = note or (
-            sequence and not self.question_view.scale_input.complete
-        )
-        steps_turn = sequence and self.question_view.scale_input.placing_steps
-        live = (
-            self.question_view.interactive_question is not None
-            and not self.session.answered
-            and not self.question_view.busy
-        )
-        for (
-            symbol,
-            button,
-        ) in (
-            self.question_view.symbol_buttons.items()
-        ):  # one for each symbol that can be chosen, the chosen one pressed
-            button.setVisible(
-                clef and symbol in self.question_view.clef_input.options,
-            )
-            button.setChecked(
-                clef and symbol == self.question_view.clef_input.selected,
-            )
-            button.setEnabled(live)
         self.control_area.answers.placement.show_actions(
             q,
-            live=live,
-            sequence=self.question_view.scale_input if sequence else None,
-            beats=beat_editor,
+            live=music.accepts_input,
+            sequence=music.scale_input if q.places_sequence else None,
+            beats=music.active_beat_editor,
         )
-        self.question_view.place_status.setVisible(
-            note or sequence or beat_editor is not None,
-        )
-        self.question_view.pitch_row.setVisible(
-            placing_notes and not q.place_signature,
-        )
-        self.question_view.accidental_buttons[0].setVisible(
-            not q.place_signature,
-        )
-        self.question_view.accidental_row.setEnabled(live and placing_notes)
-        self.question_view.accidental_row.setVisible(
-            q.place_signature or (q.accidentals and placing_notes),
-        )
-        self.question_view.step_row.setVisible(steps_turn)
-        if beat_editor is not None:
-            beat_editor.setEnabled(live)
-            count = len(beat_editor.marks)
-            if beat_editor.feedback is False:
-                self.question_view.place_status.setText(
-                    "Check where each beat begins.",
-                )
-            elif beat_editor.feedback is True:
-                self.question_view.place_status.setText("Correct.")
-            elif count:
-                self.question_view.place_status.setText(
-                    f"Beats marked: {count}",
-                )
-            else:
-                self.question_view.place_status.setText(
-                    "Mark each beat, including the start of each measure.",
-                )
         for key in self._arrow_keys:
-            key.setEnabled(self.question_view.editor is not None)
+            key.setEnabled(music.editor is not None)
         for key in self._letter_keys:
-            key.setEnabled(placing_notes and not fork)
-        if note or sequence:
-            action = "place the scale" if sequence else "place the note"
-            self.question_view.note_input.setAccessibleName(
-                "Staff: write the key signature"
-                if q.place_signature
-                else f"Staff: {action}",
-            )
-            self.question_view.update_placement_status()
+            key.setEnabled(music.accepts_letters)
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: PLR0917  (Qt calls it with both)
         """
@@ -1160,36 +738,6 @@ class ExerciseView(QWidget):
                 return True
         return super().eventFilter(watched, event)
 
-    def _flash_clef(self, target: str = CORRECT_ANSWER_COLOR) -> None:
-        """
-        Fade the placed clef from black to a color.
-
-        Parameters
-        ----------
-        target : str
-            The feedback color. Defaults to the correct-answer green.
-
-        Examples
-        --------
-        >>> import random
-        >>> from alto.exercises.library import (
-        ...     ClefBasics,
-        ... )
-        >>> from alto.ui.exercise_page import ExercisePage
-        >>> view = ExercisePage(
-        ...     ClefBasics(), rng=random.Random(2)
-        ... )
-        >>> view._flash_clef("#c62828")
-        >>> len(view.controller.animations.tracked)
-        1
-        """
-        end, start = QColor(target), QColor("black")
-        self._request_fade(
-            lambda t: self.question_view.clef_input.set_clef_color(
-                blend(start, b=end, t=t),
-            ),
-        )
-
     def show_progress(self, session: PracticeSession, busy: bool) -> None:  # noqa: PLR0917 (Qt signal arguments)
         """
         Display the score and remember whether input is available.
@@ -1209,35 +757,6 @@ class ExerciseView(QWidget):
         self.question_view.busy = busy
         self.toolbar.show_score(session)
 
-    def show_counts(  # noqa: PLR0917 (Qt signal arguments)
-        self,
-        counts: tuple[int, int, int] | None,
-        current: str | None,
-    ) -> None:
-        """
-        Display the calendar queue counts for this exercise.
-
-        Parameters
-        ----------
-        counts : tuple[int, int, int] or None
-            Review, new, and incorrect card counts.
-        current : str or None
-            Queue containing the current card.
-
-        Examples
-        --------
-        A calendar review shows the three queue counts in the toolbar.
-        """
-        if counts is None:
-            self.toolbar.queue_counts.hide()
-        else:
-            self.toolbar.queue_counts.set_counts(
-                counts,
-                studying=True,
-                current=current,
-            )
-            self.toolbar.queue_counts.show()
-
     def show_selection(self, parts: dict[str, str]) -> None:
         """
         Check the selected name and octave or other second answer
@@ -1254,15 +773,8 @@ class ExerciseView(QWidget):
         pending.
         """
         q = self.question_view.interactive_question
-        if q is None:
-            return
-        labels = [*q.choices, *(q.octaves or ())]
-        for i, (button, label) in enumerate(
-            zip(self.control_area.answers.buttons, labels, strict=True),
-        ):
-            button.setChecked(
-                parts.get("name" if i < len(q.choices) else "octave") == label,
-            )
+        if q is not None:
+            self.control_area.answers.show_selection(q, parts=parts)
 
     def show_partial(self, choice: str) -> None:
         """
@@ -1281,53 +793,12 @@ class ExerciseView(QWidget):
         """
         q = self.question_view.interactive_question
         if q:
-            button = self.control_area.answers.buttons[q.choices.index(choice)]
-            button.setEnabled(False)
-            self._flash(button)
+            answers = self.control_area.answers
+            for button in answers.buttons_for(q, selected=(choice,)):
+                button.setEnabled(False)
+                self._request_fade(answers.fade(button))
             if self.question_view.circle is not None:
                 self.question_view.circle.set_subtitle("and its other name")
-
-    def _feedback_buttons(
-        self,
-        result: AnswerResult,
-        *,
-        q: Question,
-    ) -> list[QPushButton]:
-        """
-        Find the visible controls identified by a graded answer.
-
-        Parameters
-        ----------
-        result : AnswerResult
-            Outcome of the submitted answer.
-        q : Question
-            Displayed question with its choices in presentation order.
-
-        Returns
-        -------
-        list of QPushButton
-            Buttons corresponding to the submitted values.
-
-        Examples
-        --------
-        A two-part answer marks one button in each row.
-        """
-        if result.kind == "note":
-            return [self.control_area.answers.placement.place_button]
-        if result.kind in ("fork", "clef", "beats", "scale", "signature"):
-            return [self.control_area.answers.placement.answer_button]
-        if result.selected:
-            buttons = self.control_area.answers.buttons
-            first = buttons[q.choices.index(result.selected[0])]
-            if q.octaves and len(result.selected) == 2:
-                return [
-                    first,
-                    buttons[
-                        len(q.choices) + q.octaves.index(result.selected[1])
-                    ],
-                ]
-            return [first]
-        return []
 
     def show_result(self, result: AnswerResult, mode: str) -> None:  # noqa: PLR0917 (Qt signal arguments)
         """
@@ -1350,7 +821,8 @@ class ExerciseView(QWidget):
         if q is None:
             return
         kind = result.kind
-        buttons = self._feedback_buttons(result, q=q)
+        answers = self.control_area.answers
+        buttons = self.control_area.feedback_buttons(result, q=q)
         self.question_view.show_result(result)
         if result.correct:
             if kind == "choice" and q.required:
@@ -1358,20 +830,17 @@ class ExerciseView(QWidget):
                     button.setEnabled(False)
             if mode == "Immediately":
                 for button in buttons:
-                    button.setStyleSheet(
-                        self._style(QColor(CORRECT_ANSWER_COLOR)),
-                    )
+                    answers.mark(button, color=CORRECT_ANSWER_COLOR)
             else:
                 if mode == "Wait":
-                    for button in self.control_area.answers.buttons:
-                        button.setEnabled(False)
+                    answers.disable_choices()
                 for button in buttons:
-                    self._flash(button)
+                    self._request_fade(answers.fade(button))
                 if self.question_view.circle is not None:
                     self.question_view.circle.reveal()
         else:
             self._show_incorrect(result, buttons=buttons)
-        self._show_placement_rows()
+        self.question_view.update_placement()
         if (
             kind == "signature"
             and not result.correct
@@ -1408,32 +877,33 @@ class ExerciseView(QWidget):
         assert q is not None
         if self.question_view.circle:
             self.question_view.circle.flash_wrong()
-        if result.kind in ("note", "scale"):
-            self._flash_note("#c62828")
-        elif result.kind == "fork" and isinstance(
-            self.question_view.editor,
-            KeyFork,
-        ):
-            self._request_fade(
-                self.question_view.editor.marker_fade("#c62828"),
-            )
-        elif result.kind == "clef":
-            self._flash_clef("#c62828")
+        fade = self.question_view.answer_fade(result.kind, target="#c62828")
+        if fade is not None:
+            self._request_fade(fade)
         elif result.kind == "signature":
             self.question_view.scale_input.set_note_color(QColor("#c62828"))
         elif result.kind == "pair":
             for button in buttons:
-                self._flash(button, target="#c62828")
+                self._request_fade(
+                    self.control_area.answers.fade(
+                        button,
+                        target="#c62828",
+                    ),
+                )
         elif result.kind == "choice":
             for button in buttons:
                 button.clearFocus()
                 button.setEnabled(False)
-                self._flash(button, target="#c62828")
+                self._request_fade(
+                    self.control_area.answers.fade(
+                        button,
+                        target="#c62828",
+                    ),
+                )
         elif result.kind in ("notation", "midi"):
             self.question_view.show_prompt(f"Try again. {q.prompt}")
         if self.session.answered:
-            for button in self.control_area.answers.buttons:
-                button.setEnabled(False)
+            self.control_area.answers.disable_choices()
 
     def show_retry(self, kind: str) -> None:
         """
@@ -1453,11 +923,8 @@ class ExerciseView(QWidget):
             return
         self.question_view.reset_placement(kind)
         if kind == "pair":
-            for button in self.control_area.answers.buttons:
-                if button.isChecked():
-                    button.setStyleSheet("")
-                    button.setChecked(False)
-        self._show_placement_rows()
+            self.control_area.answers.clear_selection()
+        self.question_view.update_placement()
 
     def show_silent_feedback(self) -> None:
         """
@@ -1467,19 +934,6 @@ class ExerciseView(QWidget):
         --------
         A correct clef placement flashes the clef symbol.
         """
-        q = self.question_view.interactive_question
-        if q is None:
-            return
-        if (
-            q.picture is not None
-            and self.question_view.fingerboard is not None
-        ):
-            self.question_view.fingerboard.animate_silent_answer(600)
-        elif q.place_clef:
-            self._flash_clef()
-        elif isinstance(self.question_view.editor, KeyFork):
-            self._request_fade(self.question_view.editor.marker_fade())
-        elif q.construct is not None or q.places_sequence:
-            self._flash_note()
-        else:
-            self._flash(None, staff=True)
+        fade = self.question_view.silent_fade()
+        if fade is not None:
+            self._request_fade(fade)

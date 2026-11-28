@@ -89,13 +89,13 @@ A **closure** is a function defined inside another function that remembers the o
 constantly for Qt callbacks, because a callback has to remember something:
 
 ```python
-def _flash(self, button, *, target):
+def fade(button, *, target):
     end, start = QColor(target), QColor("black")
 
     def step(t: float) -> None:  # remembers `button`, `start` and `end`
-        button.setStyleSheet(self._style(blend(start, b=end, t=t)))
+        button.setStyleSheet(feedback_style(blend(start, b=end, t=t)))
 
-    anim.valueChanged.connect(step)
+    return step
 ```
 
 When a lambda is created in a loop, beware **late binding**: `lambda: self.show(i)` looks `i` up when called, not when

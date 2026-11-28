@@ -92,10 +92,11 @@ and the final state is set in `finished`, not assumed, so the widgets always end
 
 ### Opening and closing a pane: animate a limit
 
-The exercise's settings pane opens by animating `maximumWidth` of the pane from 0 to the zoom-adjusted `ExerciseSettingsPanel.PANE_WIDTH` (`QPropertyAnimation(self.settings_pane,
-b"maximumWidth", self)`, 220 ms, `OutCubic`). The layout does the rest: as the pane's allowed width grows, the layout gives it
+The exercise's settings and reference panes are each a `SidePane`. A pane opens by animating its `maximumWidth` from 0 to the
+zoom-adjusted open width, such as `ExerciseSettingsPanel.PANE_WIDTH` (`QPropertyAnimation(self, b"maximumWidth", self)`, 220 ms,
+`OutCubic`). The layout does the rest: as the pane's allowed width grows, the layout gives it
 the room and shrinks its neighbor. This is a common Qt trick: **animate a constraint, not a position**, and let the layout
-move everything. The pane is hidden when it finishes at zero (`_pane_settled`) so it takes no space and cannot be tabbed into.
+move everything. The pane is hidden when it finishes at zero (`SidePane._settled`) so it takes no space and cannot be tabbed into.
 
 ### The sidebar: animate the splitter
 
@@ -117,10 +118,12 @@ make every switch slide.
 
 ### The right/wrong flash: animate a color
 
-`ExerciseView._flash` fades an answer button from black to the correct-answer green in 180 ms. Calling it without a
+`AnswerControls.fade` fades an answer button from black to the correct-answer green in 180 ms. Calling it without a
 target uses `CORRECT_ANSWER_COLOR` from `alto/ui/colors.py`. The wrong-answer handler passes red explicitly.
-The flash uses `QVariantAnimation` with a start of 0.0 and an end of 1.0 and in its callback computes `blend(start, b=end, t=t)`
-and sets the button's style sheet from the result. The view requests a fade with a callback that paints each frame. The practice controller runs the animation and cancels outstanding fades before new answers appear. A standalone preview applies the final color immediately.
+`QuestionView.answer_fade` and `QuestionView.music_fade` do the same for a placed answer and for the question's notes or keys.
+Each returns a step: a callback that computes `blend(start, b=end, t=t)` for a position from 0.0 to 1.0 and paints the result.
+The view passes the step to the practice controller, which drives it with a `QVariantAnimation` and cancels outstanding fades
+before new answers appear. A standalone preview applies the final color immediately.
 
 Pass the answered notes to `ExerciseView._finish_answer`, grouped by onset. In **After Animation** and **Wait**,
 the playback callback colors each sounding staff column or piano key green and clears the highlight at the end.
