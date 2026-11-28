@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Your data · Alto</title>
+<title>Database · Alto</title>
   <script>
   // Apply a remembered choice before the page paints, so there is no flash of the other theme.
   try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
@@ -30,7 +30,7 @@
   
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
-  <meta property="og:title" content="Your data · Alto">
+  <meta property="og:title" content="Database · Alto">
   <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux, Windows, and Apple Silicon Macs. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/data/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/assets/img/note-identification.png">
@@ -142,7 +142,7 @@
       <button type="button" class="nav-toggle" data-category="Using Alto" aria-controls="nav-using-alto" aria-expanded="true" aria-label="Collapse Using Alto" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-using-alto"><li><a class="row" href="../getting-started/">Getting started</a></li><li><a class="row" href="../exercises/">Exercises</a></li><li><a class="row" href="../practice/">Spaced Repetition</a></li><li><a class="row" href="../statistics/">Statistics and database</a></li><li><a class="row" href="../lessons/">Lessons</a></li><li><a class="row" href="../settings/">Settings</a></li><li><a class="row" href="../shortcuts/">Shortcuts</a></li><li><a class="row" href="#" aria-current="page">Your data</a></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-using-alto"><li><a class="row" href="../getting-started/">Getting started</a></li><li><a class="row" href="../exercises/">Exercises</a></li><li><a class="row" href="../practice/">Spaced Repetition</a></li><li><a class="row" href="../statistics/">Statistics</a></li><li><a class="row" href="../lessons/">Lessons</a></li><li><a class="row" href="../settings/">Settings</a></li><li><a class="row" href="../shortcuts/">Shortcuts</a></li><li><a class="row" href="#" aria-current="page">Database</a></li><li><div class="nav-row">
       <a class="row" href="../plugins/">Plugins</a>
       <button type="button" class="nav-toggle" data-category="Plugins" aria-controls="nav-plugins" aria-expanded="true" aria-label="Collapse Plugins" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -744,19 +744,51 @@
             <ol>
               <li><a href="../">Home</a></li>
               <li><a href="../using-alto/">Using Alto</a></li>
-              <li aria-current="page">Your data</li>
+              <li aria-current="page">Database</li>
             </ol>
           </nav>
           
           
-  <section class="tex2jax_ignore mathjax_ignore" id="your-data">
-<h1>Your data</h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="database">
+<h1>Database</h1>
 <p>Everything Alto stores is on your own computer.</p>
 <ul class="simple">
 <li><p>Alto has no accounts, no sync and no analytics.</p></li>
 <li><p>Your name is only a label for a profile in a local file.</p></li>
 <li><p>On supported installations Alto contacts GitHub to check for releases. You can turn off daily checks in <strong>Settings → Updates</strong>.</p></li>
 </ul>
+<section id="browsing-the-database">
+<h2>Browsing the database</h2>
+<p>Open the database using the button next to the statistics button at the upper right of the main window. It shows a read-only view of what is stored and never changes anything. Use <strong>← Back</strong> or <kbd>Esc</kbd> to return to the page you came from.</p>
+<figure class="shot">
+  <img class="for-light" src="../assets/img/database.png" alt="The Answers table with the next review date in the Due column at the right" loading="lazy">
+  <img class="for-dark" src="../assets/img/database-dark.png" alt="The Answers table with the next review date in the Due column at the right" loading="lazy">
+  
+</figure><p>Three tables are available:</p>
+<ul class="simple">
+<li><p><strong>Answers:</strong> every answer the active profile has given, newest first, with the question, your answer, whether it was right, the attempt number and the time.</p></li>
+<li><p><strong>Questions</strong> shows each question’s strain, answer counts, typical response time, and last practice time.</p></li>
+<li><p><strong>Profiles:</strong> everyone who has a profile, with how many answers and questions each has.</p></li>
+</ul>
+<p>In both <strong>Answers</strong> and <strong>Questions</strong>, <strong>Due</strong> shows the next review in local time for the selected SM-2 or FSRS schedule. All answers to the same question show its current due date. A dash means the question has no due date under the current scheduler.</p>
+<figure class="shot">
+  <img class="for-light" src="../assets/img/database-questions.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" loading="lazy">
+  <img class="for-dark" src="../assets/img/database-questions-dark.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" loading="lazy">
+  <figcaption>Last seen records when you practiced the question. Due shows when the scheduler wants to show it again.</figcaption>
+</figure><p>Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are
+limited to the newest 10,000 rows each; the line above the table says when that applies.</p>
+<section id="previewing-a-question">
+<h3>Previewing a question</h3>
+<p>Double-click a row in Answers or Questions to see that question as the exercise showed it, with its answer.
+Choose the <strong>Question Statistics</strong> bar chart icon in the upper-right corner to graph your practice history for that question. Each point represents one time you were asked.
+The speed graph shows seconds to your first answer. The accuracy graph shows the percentage answered correctly on the first try
+up to that point. Hover over a point for its value. You can also open these graphs from an answer in <a class="reference external" href="../statistics/">Statistics</a>.</p>
+<figure class="shot">
+  <img class="for-light" src="../assets/img/question-preview.png" alt="A popup showing a chord on a staff with its answer and what was answered" loading="lazy">
+  <img class="for-dark" src="../assets/img/question-preview-dark.png" alt="A popup showing a chord on a staff with its answer and what was answered" loading="lazy">
+  <figcaption>The preview shows the notes, the correct answer, what you answered and how long it took. Play sounds the notes.</figcaption>
+</figure></section>
+</section>
 <section id="where-it-is">
 <h2>Where it is</h2>
 <p>Your practice history, profiles included, is one <a class="reference external" href="https://www.sqlite.org/">SQLite</a> file named <code class="docutils literal notranslate"><span class="pre">alto.db</span></code>:</p>
@@ -817,7 +849,7 @@ your usual configuration location.</p>
 </tbody>
 </table>
 <p>Because it is a normal SQLite file, you can open it with any SQLite tool if you want to run your own queries. Close Alto
-first. Alto’s own <a class="reference external" href="../statistics/">database browser</a> is read-only.</p>
+first. Alto’s own <a class="reference external" href="#browsing-the-database">database browser</a> is read-only.</p>
 </section>
 <section id="anki-decks">
 <h2>Anki decks</h2>

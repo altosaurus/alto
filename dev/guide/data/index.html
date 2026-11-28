@@ -142,7 +142,7 @@
       <button type="button" class="nav-toggle" data-category="Using Alto" aria-controls="nav-using-alto" aria-expanded="true" aria-label="Collapse Using Alto" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
       </button>
-    </div><ul class="kids" id="nav-using-alto"><li><a class="row" href="../../getting-started/">Getting started</a></li><li><a class="row" href="../../exercises/">Exercises</a></li><li><a class="row" href="../../practice/">Spaced Repetition</a></li><li><a class="row" href="../../statistics/">Statistics and database</a></li><li><a class="row" href="../../lessons/">Lessons</a></li><li><a class="row" href="../../settings/">Settings</a></li><li><a class="row" href="../../shortcuts/">Shortcuts</a></li><li><a class="row" href="../../data/">Your data</a></li><li><div class="nav-row">
+    </div><ul class="kids" id="nav-using-alto"><li><a class="row" href="../../getting-started/">Getting started</a></li><li><a class="row" href="../../exercises/">Exercises</a></li><li><a class="row" href="../../practice/">Spaced Repetition</a></li><li><a class="row" href="../../statistics/">Statistics</a></li><li><a class="row" href="../../lessons/">Lessons</a></li><li><a class="row" href="../../settings/">Settings</a></li><li><a class="row" href="../../shortcuts/">Shortcuts</a></li><li><a class="row" href="../../data/">Database</a></li><li><div class="nav-row">
       <a class="row" href="../../plugins/">Plugins</a>
       <button type="button" class="nav-toggle" data-category="Plugins" aria-controls="nav-plugins" aria-expanded="true" aria-label="Collapse Plugins" hidden>
         <svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg>
@@ -778,7 +778,7 @@ database structure without losing anyone’s practice history.</p>
 </tbody>
 </table>
 <p>The split is by <em>nature</em>: history is a large and growing table of facts you can query, so it belongs in a database.
-Preferences are a few dozen small values, so they belong in the platform’s settings mechanism. <a class="reference external" href="../../data/">Your data</a>
+Preferences are a few dozen small values, so they belong in the platform’s settings mechanism. <a class="reference external" href="../../data/">Database</a>
 tells users where both are. The settings objects in <code class="docutils literal notranslate"><span class="pre">alto/settings.py</span></code> are plain data and never save themselves; saving is a UI
 concern, so <code class="docutils literal notranslate"><span class="pre">alto/learning</span></code>, <code class="docutils literal notranslate"><span class="pre">alto/exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">alto/theory</span></code> never touch the disk except through <code class="docutils literal notranslate"><span class="pre">Database</span></code>.</p>
 </section>
