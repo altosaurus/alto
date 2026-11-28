@@ -14,6 +14,8 @@ from datetime import datetime
 from pathlib import Path
 
 import gi
+from Xlib import X, Xatom, display
+from Xlib.protocol.event import ClientMessage
 
 gi.require_version("Atspi", "2.0")
 from gi.repository import Atspi, GLib  # noqa: E402
@@ -132,6 +134,43 @@ class Desktop:
         assert control.do_action(0), f"Could not activate {name}"
 
 
+def close_window(pid: int) -> None:
+    """
+    Send the window manager's close request on the private X display.
+
+    Parameters
+    ----------
+    pid : int
+        Process that owns the Alto window.
+
+    Raises
+    ------
+    RuntimeError
+        If the process has no visible application window.
+    """
+    with closing(display.Display()) as screen:
+        owner = screen.intern_atom("_NET_WM_PID")
+        delete = screen.intern_atom("WM_DELETE_WINDOW")
+        for window in screen.screen().root.query_tree().children:
+            prop = window.get_full_property(owner, Xatom.CARDINAL)
+            if (
+                prop is not None
+                and prop.value[0] == pid
+                and window.get_attributes().map_state == X.IsViewable
+                and delete in (window.get_wm_protocols() or ())
+            ):
+                window.send_event(
+                    ClientMessage(
+                        window=window,
+                        client_type=screen.intern_atom("WM_PROTOCOLS"),
+                        data=(32, [delete, X.CurrentTime, 0, 0, 0]),
+                    ),
+                )
+                screen.sync()
+                return
+    raise RuntimeError("Alto has no visible window to close")
+
+
 @contextmanager
 def launch(executable: Path, *, home: Path) -> Iterator[Desktop]:
     """
@@ -168,21 +207,7 @@ def launch(executable: Path, *, home: Path) -> Iterator[Desktop]:
                 role=Atspi.Role.PUSH_BUTTON,
             )
             yield desktop
-            subprocess.run(
-                [
-                    "xdotool",
-                    "search",
-                    "--onlyvisible",
-                    "--pid",
-                    str(process.pid),
-                    "--name",
-                    "Music Theory",
-                    "windowfocus",
-                    "key",
-                    "ctrl+q",
-                ],
-                check=True,
-            )
+            close_window(process.pid)
             assert process.wait(timeout=15) == 0
         finally:
             if process.poll() is None:
@@ -241,7 +266,7 @@ def check(executable: Path, *, home: Path) -> None:
         alto.press("Collapse exercise settings")
         alto.press("E")
         # Qt activates an accessible button asynchronously. Let the
-        # answer finish before issuing the learner's Quit shortcut.
+        # answer finish before closing the application.
         deadline = time.monotonic() + 10
         with closing(sqlite3.connect(uri, uri=True)) as db:
             while db.execute(history).fetchall() == original:
