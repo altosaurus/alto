@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Audit the unpacked Mac application and its source downloads."""
 
-import hashlib
 import re
 import subprocess
 import sys
@@ -75,18 +74,15 @@ def check(app: Path, *, sources: Path) -> None:
             n.endswith("qt_attribution.json") for n in archive.namelist()
         ):
             raise ValueError("Invalid Qt notice archive")
-    archives = sorted(sources.glob("*-everywhere-src-*.tar.xz"))
-    if len(archives) != 2:
-        raise ValueError("Expected separate Qt and Qt for Python sources")
-    readme = (qt / "README.txt").read_text()
-    for source in archives:
-        with source.open("rb") as stream:
-            digest = hashlib.file_digest(stream, "sha256").hexdigest()
-        if not re.search(
-            re.escape(source.name) + r"\n[^\n]+\nSHA-256 " + digest,
-            readme,
-        ):
-            raise ValueError(f"Source mismatch: {source.name}")
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "packaging/verify_qt_sources.py"),
+            str(qt / "README.txt"),
+            str(sources),
+        ],
+        check=True,
+    )
     print(
         f"Verified {len(native)} Mach-O files, assets, and Qt distribution.",
     )
