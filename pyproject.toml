@@ -69,6 +69,7 @@ dev = [
     "asv>=0.6",
     "diff-cover>=9.2",
     "numpy>=1.26",  # for the tests' image and sound checks and scripts/excerpt_hit_map.py; Alto itself does not use it
+    "hypothesis>=6",
 ]
 package = [
     "pyinstaller>=6.10",  # to build the Linux and Windows downloads: see scripts/build-linux.sh

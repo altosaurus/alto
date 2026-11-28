@@ -303,13 +303,24 @@ def test_readme_badges_use_expected_workflows_and_logos() -> None:
         )
         assert f"/actions/workflows/{workflow}" in link or label == "Docs"
     assert parse_qs(urlsplit(badges["Docs"][0]).query)["logo"] == ["sphinx"]
-    for label in ("Tests", "Ruff", "Pyright", "ASV", "Python"):
+    for label in (
+        "Tests",
+        "Tested with Hypothesis",
+        "Ruff",
+        "Pyright",
+        "ASV",
+        "Python",
+    ):
         logo = re.search(r"[?&]logo=([^&\s]+)", badges[label][0])
         assert logo is not None, f"the {label} badge has no logo"
         image = unquote(logo.group(1))
         assert image.startswith("data:image/png;base64,")
         data = base64.b64decode(image.split(",", 1)[1])
         assert data.startswith(b"\x89PNG\r\n\x1a\n") and len(data) < 2000
+        if label == "Tested with Hypothesis":
+            dragonfly = QImage.fromData(data)
+            assert not dragonfly.isNull()
+            assert dragonfly.pixelColor(0, 0).alpha() == 0
         assert (
             len(logo.group(1)) < 2000
         )  # the whole address stays short enough for GitHub to fetch it

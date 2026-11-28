@@ -73,6 +73,7 @@ The `uv sync` command above installs the application libraries and the `dev` too
 | Package | Use in Alto |
 | --- | --- |
 | pytest | Runs the test suite, including executable examples in docstrings. |
+| Hypothesis | Generates note selections and seeds for Beat Construction tests and reduces failures to reproducible examples. |
 | pytest-xdist | Runs tests across multiple worker processes to shorten the suite’s runtime. |
 | pytest-cov | Measures which lines of code the tests execute. |
 | diff-cover | Checks test coverage on lines changed by a patch. |
